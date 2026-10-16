@@ -1,0 +1,154 @@
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme : Type → Type → Type
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound : {Symbol Guard A : Type} →
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.weaken : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {code : MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A} {budget larger : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme code budget →
+    budget ≤ larger → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme code larger
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.weaken' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.bind : ∀ {Symbol Guard A B : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {code : MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {next : A → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard B} {first second : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme code first →
+    (∀ (value : A), MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) second) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (code.bind next) (first + second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.bind' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.pure : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard) (value : A)
+  (budget : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+    (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value) budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.pure' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.fail : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard)
+  (failure : MicroCFTA.SourceRecursiveIntersectionKernel.Failure) (budget : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+    (MicroCFTA.SourceRecursiveIntersectionCode.Code.fail failure) budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.fail' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.node : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard}
+  {next :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  scheme.nodeInputs request →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request next) (scheme.nodeCost request + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.node' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.edge : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard}
+  {next :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  scheme.edgeInputs request →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.edge request next) (scheme.edgeCost request + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.edge' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk_sum : ∀ {Symbol Guard A B : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  (call : A → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard B) (cost : A → Nat) (values : List A),
+  (∀ (value : A),
+      value ∈ values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (call value) (cost value)) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.walk call values) (List.map cost values).sum
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk_sum' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk : ∀ {Symbol Guard A B : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  (call : A → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard B) (values : List A) (perCall : Nat),
+  (∀ (value : A),
+      value ∈ values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (call value) perCall) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.walk call values) (perCall * values.length)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard} {X : Type}
+  (job : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard X)
+  {next : X → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A} {own tail : Nat},
+  (∀ (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe job heap) +
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe job heap) ≤
+        own) →
+    (∀ (value : X), MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.work job next) (own + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeNode : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  {next :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.Code.work (MicroCFTA.InternedConstructorTemplates.makeNode edges) next)
+      (1 + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeNode' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeEdge : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard} (symbol : Symbol)
+  (guard : Guard) (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  {next :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.Code.work
+        (MicroCFTA.InternedConstructorTemplates.makeEdge symbol guard values) next)
+      (1 + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeEdge' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound : {A : Type} →
+  [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceEqualityNativeDemand.Control A → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound.weaken : ∀ {A : Type}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {scheme :
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {control : MicroCFTA.SourceEqualityNativeDemand.Control A} {budget larger : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control budget →
+    budget ≤ larger → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control larger
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound.weaken' does not depend on any axioms

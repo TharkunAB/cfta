@@ -1,0 +1,25 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeProfile.lean:239:55: error: Application type mismatch: The argument
+  ih
+has type
+  (List.map
+        (fun first =>
+          (List.filter (fun second => decide (first.entry.key.symbol = second.entry.key.symbol)) right).length)
+        rest).sum ≤
+    rest.length * right.length
+but is expected to have type
+  (List.map
+        (fun first =>
+          (List.filter (fun second => decide (first.entry.key.symbol = second.entry.key.symbol)) right).length)
+        rest).sum ≤
+    right.length
+in the application
+  Nat.add_le_add ?m.49 ih
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeProfile.lean:239:27: error: Application type mismatch: The argument
+  List.length_filter_le ?m.47 ?m.48
+has type
+  (List.filter ?m.47 ?m.48).length ≤ List.length ?m.48
+but is expected to have type
+  (List.filter (fun second => decide (first.entry.key.symbol = second.entry.key.symbol)) right).length ≤
+    rest.length * right.length
+in the application
+  Nat.add_le_add (List.length_filter_le ?m.47 ?m.48)

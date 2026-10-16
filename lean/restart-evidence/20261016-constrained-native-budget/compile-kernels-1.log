@@ -1,0 +1,60 @@
+lean/restart-evidence/20261016-constrained-native-budget/compile-kernels.lean:25:0: warning: automatically included section variable(s) unused in theorem `NativeBudgetCompileChecks.numerical_expansion`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-constrained-native-budget/compile-kernels.lean:37:105: error: Expected type must not contain free variables
+  [nullary symbol, nullary symbol].length ≤ 2
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+lean/restart-evidence/20261016-constrained-native-budget/compile-kernels.lean:37:117: error: Expected type must not contain free variables
+  [nullary symbol, nullary symbol].length ≤ 2
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+lean/restart-evidence/20261016-constrained-native-budget/compile-kernels.lean:53:0: warning: automatically included section variable(s) unused in theorem `NativeBudgetCompileChecks.nullary_children`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-constrained-native-budget/compile-kernels.lean:63:0: warning: automatically included section variable(s) unused in theorem `NativeBudgetCompileChecks.arbitrary_sentinel`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-constrained-native-budget/compile-kernels.lean:68:0: warning: automatically included section variable(s) unused in theorem `NativeBudgetCompileChecks.mismatch_driver`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'NativeBudgetCompileChecks.numerical_expansion' does not depend on any axioms
+@numerical_expansion : ∀ [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)],
+  nodeBudget 2 3 2 = 209 ∧ edgeBudget 2 3 2 = 628
+'NativeBudgetCompileChecks.repeated_row_expansion' depends on axioms: [propext, sorryAx, Quot.sound]
+@repeated_row_expansion : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol),
+  Bound (scheme 2 0) (compileRows emptyDomain [nullary symbol, nullary symbol] [nullary symbol, nullary symbol]) 5
+'NativeBudgetCompileChecks.guarded_node_expansion' depends on axioms: [propext, Quot.sound]
+@guarded_node_expansion : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol),
+  Bound (scheme 1 1) (compileNode { domain := emptyDomain, left := leaf symbol 20, right := leaf symbol 21 }) 3
+'NativeBudgetCompileChecks.nullary_children' depends on axioms: [propext, Quot.sound]
+@nullary_children : ∀ [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol)
+  (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula),
+  Bound (scheme 0 0) (SourceEqualityNativeCheckedCode.children emptyDomain (nullary symbol) (nullary symbol) combined) 1
+'NativeBudgetCompileChecks.arbitrary_sentinel' depends on axioms: [propext, Quot.sound]
+@arbitrary_sentinel : ∀ [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : EdgeRequest Symbol Guard), Bound (scheme 0 0) (SourceEqualityNativeCheckedCode.sentinel request.left) 1
+'NativeBudgetCompileChecks.mismatch_driver' depends on axioms: [propext, Classical.choice, Quot.sound]
+@mismatch_driver : ∀ [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat} (rows arity : Nat)
+  (request : EdgeRequest Symbol Guard),
+  EdgeInputs rows arity request →
+    ∀ (before : SourceEqualityNativeDemand.State width) (handle : Nat),
+      request.left.children.length ≠ request.right.children.length →
+        ControlBound (scheme rows arity)
+          (SourceEqualityNativeDemand.Control.code
+            ((SourceEqualityNativeCheckedCode.sentinel request.left).bind fun result =>
+              Code.finishEdge handle result (Code.pure result)))
+          (edgeCost rows arity request)

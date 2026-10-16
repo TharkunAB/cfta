@@ -1,0 +1,44 @@
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:9:63: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.fresh`
+
+Note: Inferred this name from the expected resulting type of `.fresh`:
+  Reference
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:11:85: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.fresh`
+
+Note: Inferred this name from the expected resulting type of `.fresh`:
+  Reference
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:13:72: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.fresh`
+
+Note: Inferred this name from the expected resulting type of `.fresh`:
+  Reference
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:24:62: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:25:58: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:16:8: warning: declaration uses `sorry`
+'MicroCFTA.NativeProfileKernels.nested_inventory_profile' depends on axioms: [propext, sorryAx, Quot.sound]
+nested_inventory_profile : limits root = (3, 2) ∧ NodeShape 3 2 root ∧ NodeShape 3 2 leaf
+'MicroCFTA.NativeProfileKernels.duplicate_pairs_count' depends on axioms: [propext, sorryAx, Quot.sound]
+duplicate_pairs_count : (SourceRecursiveIntersectionKernel.pairs [row, row] [row, row]).length = 4 ∧
+  (SourceRecursiveIntersectionKernel.pairs [row, row] [row, row]).length ≤ 2 * 2
+'MicroCFTA.NativeProfileKernels.joined_child_profiles' depends on axioms: [propext, Quot.sound]
+@joined_child_profiles : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] {rows arity : Nat}
+  {left right : Value Symbol Guard},
+  NodeShape rows arity left →
+    NodeShape rows arity right →
+      ∀ {a b : EdgeValue Symbol Guard},
+        a ∈ InternedEdgeResidency.nodeEdges left →
+          b ∈ InternedEdgeResidency.nodeEdges right →
+            ∀ {child : Value Symbol Guard × Value Symbol Guard},
+              child ∈ a.children.zip b.children →
+                (SourceRecursiveIntersectionKernel.pairs (InternedEdgeResidency.nodeEdges left)
+                        (InternedEdgeResidency.nodeEdges right)).length ≤
+                    rows * rows ∧
+                  a.children.length ≤ arity ∧
+                    b.children.length ≤ arity ∧ NodeShape rows arity child.fst ∧ NodeShape rows arity child.snd
+'MicroCFTA.NativeProfileKernels.repeated_roots_common_profile' depends on axioms: [propext, sorryAx, Quot.sound]
+repeated_roots_common_profile : childrenLimits [root, leaf, root] = (3, 2) ∧ NodeShape 4 7 root ∧ NodeShape 4 7 leaf
+'MicroCFTA.NativeProfileKernels.constructed_profile' depends on axioms: [propext, Quot.sound]
+@constructed_profile : ∀ {Symbol Guard : Type} [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (expression : InternedNestedConstruction.Syntax Symbol Guard),
+  SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+    ∃ value heap,
+      InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap ∧
+        SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧ NodeShape (limits value).fst (limits value).snd value

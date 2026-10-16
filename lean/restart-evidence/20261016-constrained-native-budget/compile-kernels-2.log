@@ -1,0 +1,26 @@
+'NativeBudgetCompileChecks.numerical_expansion' does not depend on any axioms
+numerical_expansion : nodeBudget 2 3 2 = 209 ∧ edgeBudget 2 3 2 = 628
+'NativeBudgetCompileChecks.repeated_row_expansion' depends on axioms: [propext, Quot.sound]
+@repeated_row_expansion : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol),
+  Bound (scheme 2 0) (compileRows emptyDomain [nullary symbol, nullary symbol] [nullary symbol, nullary symbol]) 5
+'NativeBudgetCompileChecks.guarded_node_expansion' depends on axioms: [propext, Quot.sound]
+@guarded_node_expansion : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol),
+  Bound (scheme 1 1) (compileNode { domain := emptyDomain, left := leaf symbol 20, right := leaf symbol 21 }) 3
+'NativeBudgetCompileChecks.nullary_children' depends on axioms: [propext, Quot.sound]
+@nullary_children : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol)
+  (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula),
+  Bound (scheme 0 0) (SourceEqualityNativeCheckedCode.children emptyDomain (nullary symbol) (nullary symbol) combined) 1
+'NativeBudgetCompileChecks.arbitrary_sentinel' depends on axioms: [propext, Quot.sound]
+@arbitrary_sentinel : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (request : EdgeRequest Symbol Guard),
+  Bound (scheme 0 0) (SourceEqualityNativeCheckedCode.sentinel request.left) 1
+'NativeBudgetCompileChecks.mismatch_driver' depends on axioms: [propext, Classical.choice, Quot.sound]
+@mismatch_driver : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat} (rows arity : Nat)
+  (request : EdgeRequest Symbol Guard),
+  EdgeInputs rows arity request →
+    ∀ (before : SourceEqualityNativeDemand.State width) (handle : Nat),
+      request.left.children.length ≠ request.right.children.length →
+        ControlBound (scheme rows arity)
+          (SourceEqualityNativeDemand.Control.code
+            ((SourceEqualityNativeCheckedCode.sentinel request.left).bind fun result =>
+              Code.finishEdge handle result (Code.pure result)))
+          (edgeCost rows arity request)

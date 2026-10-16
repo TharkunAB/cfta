@@ -1,0 +1,242 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape : {Symbol Guard : Type} →
+  Nat → Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape : {Symbol Guard : Type} →
+  Nat → Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit value →
+    @LE.le.{0} Nat instLENat rowLimit largerRows →
+      @LE.le.{0} Nat instLENat arityLimit largerArity →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard largerRows largerArity value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard rowLimit arityLimit edges →
+    @LE.le.{0} Nat instLENat rowLimit largerRows →
+      @LE.le.{0} Nat instLENat arityLimit largerArity →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard largerRows largerArity edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard rowLimit arityLimit edge →
+    @LE.le.{0} Nat instLENat rowLimit largerRows →
+      @LE.le.{0} Nat instLENat arityLimit largerArity →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard largerRows largerArity edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard rowLimit arityLimit values →
+    @LE.le.{0} Nat instLENat rowLimit largerRows →
+      @LE.le.{0} Nat instLENat arityLimit largerArity →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard largerRows largerArity
+          values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.member : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard rowLimit arityLimit edges →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard rowLimit arityLimit edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.member : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard rowLimit arityLimit values →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.rows' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.rows : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit
+      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard rowLimit arityLimit edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.nodeEdges' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.nodeEdges : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard rowLimit arityLimit
+      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.length' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.length : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit value →
+    @LE.le.{0} Nat instLENat
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value))
+      rowLimit
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.arity' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.arity : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard rowLimit arityLimit edge →
+    @LE.le.{0} Nat instLENat
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+      arityLimit
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.children' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.children : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard rowLimit arityLimit edge →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard rowLimit arityLimit
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.child' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.child : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit value →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value) edge →
+        ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) child →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit
+              child
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.domain' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.domain' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard rowLimit arityLimit edges →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.domain' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard rowLimit arityLimit edge →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge Symbol Guard edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.domain' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard rowLimit arityLimit values →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_self' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_self : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard
+      (@Prod.fst.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits Symbol Guard value))
+      (@Prod.snd.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits Symbol Guard value))
+      value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rows_shape_self' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rows_shape_self : ∀ {Symbol Guard : Type}
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape Symbol Guard
+      (@Prod.fst.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits Symbol Guard edges))
+      (@Prod.snd.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits Symbol Guard edges))
+      edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edge_shape_self' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edge_shape_self : ∀ {Symbol Guard : Type}
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge Symbol Guard edge →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape Symbol Guard
+      (@Prod.fst.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits Symbol Guard edge))
+      (@Prod.snd.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits Symbol Guard edge))
+      edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.children_shape_self' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.children_shape_self : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard
+      (@Prod.fst.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits Symbol Guard values))
+      (@Prod.snd.{0, 0} Nat Nat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits Symbol Guard values))
+      values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_of_root' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_of_root : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard
+          (@Prod.fst.{0, 0} Nat Nat
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits Symbol Guard values))
+          (@Prod.snd.{0, 0} Nat Nat
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits Symbol Guard values))
+          value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_le' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_le : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  (left right : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0}
+      (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Symbol Guard inst left right))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left)
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_bound' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_bound : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq.{1} Symbol]
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit left →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rowLimit arityLimit right →
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0}
+          (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Symbol Guard inst
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard left)
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard right)))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) rowLimit rowLimit)

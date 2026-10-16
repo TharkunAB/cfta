@@ -1,0 +1,24 @@
+@checked_children_budget : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (scheme : Scheme Symbol Guard)
+  (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey) (left right : EdgeValue Symbol Guard)
+  (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) (perChild : Nat),
+  (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+      pair ∈ left.children.zip right.children →
+        scheme.nodeInputs { domain := domain, left := pair.fst, right := pair.snd }) →
+    (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+        pair ∈ left.children.zip right.children →
+          scheme.nodeCost { domain := domain, left := pair.fst, right := pair.snd } ≤ perChild) →
+      Bound scheme (SourceEqualityNativeCheckedCode.children domain left right combined)
+        (perChild * (left.children.zip right.children).length + 1)
+'MicroCFTA.NativeBudgetCodeKernels.checked_children_budget' depends on axioms: [propext, Quot.sound]
+@rejected_has_no_child_budget : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (left : EdgeValue Symbol Guard),
+  have scheme :=
+    { nodeInputs := fun x => False, edgeInputs := fun x => False, nodeCost := fun x => 999, edgeCost := fun x => 999 };
+  Bound scheme (SourceEqualityNativeCheckedCode.sentinel left) 1
+'MicroCFTA.NativeBudgetCodeKernels.rejected_has_no_child_budget' depends on axioms: [propext, Quot.sound]
+@edge_then_node_budget : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (scheme : Scheme Symbol Guard) (symbol : Symbol)
+  (guard : Guard) (values : List (Value Symbol Guard)),
+  Bound scheme (Code.work (makeEdge symbol guard values) fun edge => Code.work (makeNode [edge]) Code.pure) 2
+'MicroCFTA.NativeBudgetCodeKernels.edge_then_node_budget' depends on axioms: [propext, Quot.sound]
+@no_unchecked_read : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (scheme : Scheme Symbol Guard) (name budget : Nat),
+  ¬Bound scheme (Code.read name fun value => Code.pure value) budget
+'MicroCFTA.NativeBudgetCodeKernels.no_unchecked_read' does not depend on any axioms

@@ -1,0 +1,95 @@
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:8:17: error: unexpected token ':='; expected command
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:10:63: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat Reference 19
+numerals are polymorphic in Lean, but the numeral `19` cannot be used in a context where the expected type is
+  Reference
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:12:85: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat Reference 21
+numerals are polymorphic in Lean, but the numeral `21` cannot be used in a context where the expected type is
+  Reference
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:14:72: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat Reference 22
+numerals are polymorphic in Lean, but the numeral `22` cannot be used in a context where the expected type is
+  Reference
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:19:20: error(lean.unknownIdentifier): Unknown identifier `Domain.Node`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:20:19: error(lean.unknownIdentifier): Unknown identifier `Domain.Edge`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:21:22: error(lean.unknownIdentifier): Unknown identifier `Domain.Node`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:22:20: error(lean.unknownIdentifier): Unknown identifier `Domain.Node`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:25:29: error: Application type mismatch: The argument
+  rootRow
+has type
+  EdgeValue Nat Nat
+but is expected to have type
+  Value ?m.65 ?m.66
+in the application
+  NodeShape.child rootRow
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:25:41: error: `simp` made no progress
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:25:98: error: `simp` made no progress
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:25:47: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:47:42: error: Application type mismatch: The argument
+  a
+has type
+  EdgeValue Symbol Guard
+but is expected to have type
+  List (EdgeValue ?m.63 ?m.64)
+in the application
+  RowsShape.member a
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:58:14: error: Application type mismatch: The argument
+  NodeShape.mono ?m.56 ?m.57 ?m.58
+has type
+  ?m.53 ≤ ?m.55 → NodeShape ?m.54 ?m.55 ?m.56
+but is expected to have type
+  NodeShape 4 7 root
+in the application
+  And.intro (NodeShape.mono ?m.56 ?m.57 ?m.58)
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:58:33: error: Expected type must not contain metavariables
+  Value ?m.50 ?m.51
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:58:45: error: Expected type must not contain metavariables
+  ?m.52 ≤ ?m.54
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:58:73: error: Expected type must not contain metavariables
+  Value ?m.59 ?m.60
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:58:85: error: Expected type must not contain metavariables
+  ?m.61 ≤ ?m.63
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:67:6: error(lean.unknownIdentifier): Unknown identifier `Domain.Node`
+'MicroCFTA.NativeProfileKernels.Domain.nested_inventory_profile' depends on axioms: [propext, sorryAx]
+nested_inventory_profile : limits root = (3, 2) ∧ NodeShape 3 2 root ∧ NodeShape 3 2 leaf
+'MicroCFTA.NativeProfileKernels.Domain.duplicate_pairs_count' depends on axioms: [propext, sorryAx, Quot.sound]
+duplicate_pairs_count : (SourceRecursiveIntersectionKernel.pairs [row, row] [row, row]).length = 4 ∧
+  (SourceRecursiveIntersectionKernel.pairs [row, row] [row, row]).length ≤ 2 * 2
+'MicroCFTA.NativeProfileKernels.Domain.joined_child_profiles' depends on axioms: [propext, sorryAx]
+@joined_child_profiles : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] {rows arity : Nat}
+  {left right : Value Symbol Guard},
+  NodeShape rows arity left →
+    NodeShape rows arity right →
+      ∀ {a b : EdgeValue Symbol Guard},
+        a ∈ InternedEdgeResidency.nodeEdges left →
+          b ∈ InternedEdgeResidency.nodeEdges right →
+            ∀ {child : Value Symbol Guard × Value Symbol Guard},
+              child ∈ a.children.zip b.children →
+                (SourceRecursiveIntersectionKernel.pairs (InternedEdgeResidency.nodeEdges left)
+                        (InternedEdgeResidency.nodeEdges right)).length ≤
+                    rows * rows ∧
+                  a.children.length ≤ arity ∧
+                    b.children.length ≤ arity ∧ NodeShape rows arity child.fst ∧ NodeShape rows arity child.snd
+'MicroCFTA.NativeProfileKernels.Domain.repeated_roots_common_profile' depends on axioms: [propext, sorryAx]
+repeated_roots_common_profile : childrenLimits [root, leaf, root] = (3, 2) ∧ NodeShape 4 7 root ∧ NodeShape 4 7 leaf
+'MicroCFTA.NativeProfileKernels.Domain.constructed_profile' depends on axioms: [propext, sorryAx, Quot.sound]
+@constructed_profile : ∀ {Symbol Guard : Type} [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (expression : InternedNestedConstruction.Syntax Symbol Guard),
+  SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+    ∃ value heap,
+      InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap ∧
+        sorry ∧ NodeShape (limits value).fst (limits value).snd value
+lean/restart-evidence/20261016-constrained-native-budget/native-profile-kernels.lean:81:0: error: Invalid name after `end`: Expected `NativeProfileKernels.Domain`, but found `MicroCFTA.NativeProfileKernels`
+
+Hint: If you meant to end the outer scope(s) `MicroCFTA.NativeProfileKernels`, you must end all the intervening scopes `MicroCFTA.NativeProfileKernels.Domain`:
+  end MicroCFTA.NativeProfileKernels.̲D̲o̲m̲a̲i̲n̲

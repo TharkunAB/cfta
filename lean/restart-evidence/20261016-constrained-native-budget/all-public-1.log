@@ -1,0 +1,886 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape : {Symbol Guard : Type} →
+  Nat → Nat → List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape : {Symbol Guard : Type} →
+  Nat → Nat → List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Nat × Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits : {Symbol Guard : Type} →
+  List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Nat × Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Nat × Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits : {Symbol Guard : Type} →
+  List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Nat × Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.mono' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+    rowLimit ≤ largerRows →
+      arityLimit ≤ largerArity →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape largerRows largerArity value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.mono' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit edges →
+    rowLimit ≤ largerRows →
+      arityLimit ≤ largerArity →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape largerRows largerArity edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.mono' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit edge →
+    rowLimit ≤ largerRows →
+      arityLimit ≤ largerArity →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape largerRows largerArity edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.mono' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.mono : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit largerRows largerArity : Nat}
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+    rowLimit ≤ largerRows →
+      arityLimit ≤ largerArity →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape largerRows largerArity values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.member : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit edges →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      edge ∈ edges → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.member : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ values → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.rows' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.rows : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List MicroCFTA.InternedBinderProtocol.Reference),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.nodeEdges' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.nodeEdges : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit
+      (MicroCFTA.InternedEdgeResidency.nodeEdges value)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.length' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.length : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+    (MicroCFTA.InternedEdgeResidency.nodeEdges value).length ≤ rowLimit
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.arity' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.arity : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit edge →
+    edge.children.length ≤ arityLimit
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.children' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.children : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit edge →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit edge.children
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.child' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.child : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      edge ∈ MicroCFTA.InternedEdgeResidency.nodeEdges value →
+        ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          child ∈ edge.children →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit child
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.domain' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.domain' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit edges →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.domain' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit edge →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.domain' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape.domain : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_self' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_self : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits value).fst
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.limits value).snd value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rows_shape_self' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rows_shape_self : ∀ {Symbol Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows edges →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits edges).fst
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.rowsLimits edges).snd edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edge_shape_self' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edge_shape_self : ∀ {Symbol Guard : Type}
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge edge →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits edge).fst
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.edgeLimits edge).snd edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.children_shape_self' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.children_shape_self : ∀ {Symbol Guard : Type}
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits values).fst
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits values).snd values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_of_root' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.node_shape_of_root : ∀ {Symbol Guard : Type}
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits values).fst
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.childrenLimits values).snd value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_le' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_le : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq Symbol] (left right : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  (MicroCFTA.SourceRecursiveIntersectionKernel.pairs left right).length ≤ left.length * right.length
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_bound' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.pairs_length_bound : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq Symbol]
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit left →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit right →
+      (MicroCFTA.SourceRecursiveIntersectionKernel.pairs (MicroCFTA.InternedEdgeResidency.nodeEdges left)
+            (MicroCFTA.InternedEdgeResidency.nodeEdges right)).length ≤
+        rowLimit * rowLimit
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme : Type → Type → Type
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound : {Symbol Guard A : Type} →
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.weaken' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.weaken : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {code : MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A} {budget larger : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme code budget →
+    budget ≤ larger → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme code larger
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.bind' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.bind : ∀ {Symbol Guard A B : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {code : MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {next : A → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard B} {first second : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme code first →
+    (∀ (value : A), MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) second) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (code.bind next) (first + second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.pure' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.pure : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard) (value : A)
+  (budget : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+    (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value) budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.fail' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.fail : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard)
+  (failure : MicroCFTA.SourceRecursiveIntersectionKernel.Failure) (budget : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+    (MicroCFTA.SourceRecursiveIntersectionCode.Code.fail failure) budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.node' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.node : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard}
+  {next :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  scheme.nodeInputs request →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request next) (scheme.nodeCost request + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.edge' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.edge : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard}
+  {next :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  scheme.edgeInputs request →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.edge request next) (scheme.edgeCost request + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk_sum' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk_sum : ∀ {Symbol Guard A B : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  (call : A → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard B) (cost : A → Nat) (values : List A),
+  (∀ (value : A),
+      value ∈ values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (call value) (cost value)) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.walk call values) (List.map cost values).sum
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.walk : ∀ {Symbol Guard A B : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  (call : A → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard B) (values : List A) (perCall : Nat),
+  (∀ (value : A),
+      value ∈ values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (call value) perCall) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.walk call values) (perCall * values.length)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard} {X : Type}
+  (job : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard X)
+  {next : X → MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A} {own tail : Nat},
+  (∀ (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe job heap) +
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe job heap) ≤
+        own) →
+    (∀ (value : X), MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.work job next) (own + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeNode' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeNode : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  {next :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.Code.work (MicroCFTA.InternedConstructorTemplates.makeNode edges) next)
+      (1 + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeEdge' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound.work_makeEdge : ∀ {Symbol Guard A : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {scheme : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard} (symbol : Symbol)
+  (guard : Guard) (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  {next :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A}
+  {tail : Nat},
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (next value) tail) →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+      (MicroCFTA.SourceRecursiveIntersectionCode.Code.work
+        (MicroCFTA.InternedConstructorTemplates.makeEdge symbol guard values) next)
+      (1 + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound : {A : Type} →
+  [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceEqualityNativeDemand.Control A → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound.weaken' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound.weaken : ∀ {A : Type}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {scheme :
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {control : MicroCFTA.SourceEqualityNativeDemand.Control A} {budget larger : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control budget →
+    budget ≤ larger → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control larger
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_positive' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_positive : ∀ (rows arity height : Nat),
+  1 ≤ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity height
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edge_positive' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edge_positive : ∀ (rows arity height : Nat),
+  1 ≤ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity height
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_succ' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_succ : ∀ (rows arity height : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity height ≤
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity (height + 1)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_mono' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_mono : ∀ (rows arity : Nat) {first last : Nat},
+  first ≤ last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity first ≤
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edge_mono' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edge_mono : ∀ (rows arity : Nat) {first last : Nat},
+  first ≤ last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity first ≤
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_step' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.node_step : ∀ (rows arity height : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity (height + 1) =
+    1 + rows * rows * MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity height
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.NodeInputs' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.NodeInputs : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.EdgeInputs' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.EdgeInputs : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.nodeCost' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.nodeCost : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.edgeCost' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.edgeCost : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme Symbol Guard
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.request_node' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.request_node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (rows arity : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.NodeInputs rows arity request →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity)
+      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.nodeCost rows arity request)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.request_edge' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.request_edge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (rows arity : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.EdgeInputs rows arity request →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity)
+      (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.edgeCost rows arity request)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.rows_bound' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.rows_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_1 : DecidableEq Symbol]
+  (rows arity : Nat) (left right : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rows arity left →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rows arity right →
+      left.length ≤ rows →
+        right.length ≤ rows →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity)
+            (MicroCFTA.SourceRecursiveIntersectionCode.compileRows MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+              right)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+              (max (MicroCFTA.MergedOrdinaryHeight.edgesHeight left)
+                  (MicroCFTA.MergedOrdinaryHeight.edgesHeight right) +
+                1))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.node_bound' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.node_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_1 : DecidableEq Symbol]
+  (rows arity : Nat) (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.NodeInputs rows arity request →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity)
+      (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.nodeCost rows arity request)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.children_bound' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.children_bound : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (rows arity : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.EdgeInputs rows arity request →
+    ∀ (combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity)
+        (MicroCFTA.SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.edgeCost rows arity request)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.sentinel_bound' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.sentinel_bound : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (rows arity : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity)
+    (MicroCFTA.SourceEqualityNativeCheckedCode.sentinel request.left)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.edgeCost rows arity request)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.body_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.body_bound : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {Output : Type} (rows arity : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.EdgeInputs rows arity request →
+    ∀
+      (resume :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.SourceRecursiveIntersectionCode.Code
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output)
+      (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+      (next : MicroCFTA.SourceEqualityNativeDemand.Control Output) (tail : Nat),
+      (∀
+          (value :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity) (resume value) tail) →
+        MicroCFTA.SourceEqualityNativeDemand.body request resume before =
+            MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.scheme rows arity) next
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.edgeCost rows arity request + tail)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetExecution.step_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetExecution.step_bound : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (scheme :
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  (∀
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      scheme.nodeInputs request →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+          (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request) (scheme.nodeCost request)) →
+    (∀ {A : Type}
+        (request :
+          MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (resume :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourceRecursiveIntersectionCode.Code
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+        {width : Nat} (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+        (next : MicroCFTA.SourceEqualityNativeDemand.Control A) (tail : Nat),
+        scheme.edgeInputs request →
+          (∀
+              (value :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (resume value) tail) →
+            MicroCFTA.SourceEqualityNativeDemand.body request resume before =
+                MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme next
+                (scheme.edgeCost request + tail)) →
+      ∀ {A : Type} (bits : Nat)
+        (source :
+          MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceRecursiveIntersectionKernel.Valid source →
+          ∀ (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+            (before after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)) (budget : Nat),
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control budget →
+                  MicroCFTA.SourceEqualityNativeDemand.step control before =
+                      MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after →
+                    ∃ remaining,
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme next
+                          remaining ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_requests control
+                                  before) +
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_requests control
+                                  before) +
+                            remaining ≤
+                          budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetExecution.prefix_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetExecution.prefix_bound : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (scheme :
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  (∀
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      scheme.nodeInputs request →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+          (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request) (scheme.nodeCost request)) →
+    (∀ {A : Type}
+        (request :
+          MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (resume :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourceRecursiveIntersectionCode.Code
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+        {width : Nat} (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+        (next : MicroCFTA.SourceEqualityNativeDemand.Control A) (tail : Nat),
+        scheme.edgeInputs request →
+          (∀
+              (value :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (resume value) tail) →
+            MicroCFTA.SourceEqualityNativeDemand.body request resume before =
+                MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme next
+                (scheme.edgeCost request + tail)) →
+      ∀ {A : Type} (bits : Nat)
+        (source :
+          MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceRecursiveIntersectionKernel.Valid source →
+          ∀ (fuel : Nat) (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+            (before after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)) (budget : Nat),
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control budget →
+                  MicroCFTA.SourceEqualityNativeDemand.Steps fuel control before next after →
+                    ∃ remaining,
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme next
+                          remaining ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel
+                                  control before) +
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel
+                                  control before) +
+                            remaining ≤
+                          budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetExecution.prefix_supplies' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetExecution.prefix_supplies : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (scheme :
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Scheme
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  (∀
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      scheme.nodeInputs request →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme
+          (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request) (scheme.nodeCost request)) →
+    (∀ {A : Type}
+        (request :
+          MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (resume :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourceRecursiveIntersectionCode.Code
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+        {width : Nat} (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+        (next : MicroCFTA.SourceEqualityNativeDemand.Control A) (tail : Nat),
+        scheme.edgeInputs request →
+          (∀
+              (value :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.Bound scheme (resume value) tail) →
+            MicroCFTA.SourceEqualityNativeDemand.body request resume before =
+                MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme next
+                (scheme.edgeCost request + tail)) →
+      ∀ {A : Type} (bits : Nat)
+        (source :
+          MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceRecursiveIntersectionKernel.Valid source →
+          ∀ (fuel : Nat) (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+            (before after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)) (budget : Nat),
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCode.ControlBound scheme control budget →
+                  MicroCFTA.SourceEqualityNativeDemand.Steps fuel control before next after →
+                    after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + budget ∧
+                      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + budget
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget : MicroCFTA.InternedConstructorTemplates.Value
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+    Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget : MicroCFTA.InternedConstructorTemplates.EdgeValue
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+    Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.node_prefix_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.node_prefix_budget : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+        MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node left →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node right →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before →
+                ∀ (fuel : Nat)
+                  (next :
+                    MicroCFTA.SourceEqualityNativeDemand.Control
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+                  MicroCFTA.SourceEqualityNativeDemand.Steps fuel
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                          MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                      before next after →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              before) +
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              before) ≤
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right ∧
+                      after.native.machine.heap.nodes.next ≤
+                          before.native.machine.heap.nodes.next +
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right ∧
+                        after.native.machine.heap.edges.next ≤
+                          before.native.machine.heap.edges.next +
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.node_prefix_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.node_prefix_capacity : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+        MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node left →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node right →
+              before.native.machine.heap.nodes.next +
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right ≤
+                  2 ^ bits →
+                before.native.machine.heap.edges.next +
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right ≤
+                    2 ^ (bits + 2) →
+                  ∀ (fuel : Nat)
+                    (next :
+                      MicroCFTA.SourceEqualityNativeDemand.Control
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+                    MicroCFTA.SourceEqualityNativeDemand.Steps fuel
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                        before next after →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edge_prefix_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edge_prefix_budget : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap left →
+        MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap right →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge left →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge right →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before →
+                ∀ (fuel : Nat)
+                  (next :
+                    MicroCFTA.SourceEqualityNativeDemand.Control
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+                  MicroCFTA.SourceEqualityNativeDemand.Steps fuel
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                          MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                      before next after →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              before) +
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              before) ≤
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget left right ∧
+                      after.native.machine.heap.nodes.next ≤
+                          before.native.machine.heap.nodes.next +
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget left right ∧
+                        after.native.machine.heap.edges.next ≤
+                          before.native.machine.heap.edges.next +
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget left right
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edge_prefix_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edge_prefix_capacity : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap left →
+        MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap right →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge left →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge right →
+              before.native.machine.heap.nodes.next +
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget left right ≤
+                  2 ^ bits →
+                before.native.machine.heap.edges.next +
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.edgeBudget left right ≤
+                    2 ^ (bits + 2) →
+                  ∀ (fuel : Nat)
+                    (next :
+                      MicroCFTA.SourceEqualityNativeDemand.Control
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+                    MicroCFTA.SourceEqualityNativeDemand.Steps fuel
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                        before next after →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after

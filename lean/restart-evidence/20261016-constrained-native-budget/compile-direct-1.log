@@ -1,0 +1,99 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:48:2: error: Type mismatch: After simplification, term
+  Bound.node inputs fun value => Bound.pure (scheme rows arity) value 0
+ has type
+  @Bound Symbol Guard (Value Symbol Guard) inst✝ (scheme rows arity) (Code.node request Code.pure)
+    ((scheme rows arity).nodeCost request)
+but is expected to have type
+  @Bound Symbol Guard (Value Symbol Guard) inst✝ (scheme rows arity)
+    (Code.node { domain := request.domain, left := request.left, right := request.right } Code.pure)
+    (nodeCost rows arity request)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:54:2: error: Type mismatch: After simplification, term
+  Bound.edge inputs fun value => Bound.pure (scheme rows arity) value 0
+ has type
+  @Bound Symbol Guard (EdgeValue Symbol Guard) inst✝ (scheme rows arity) (Code.edge request Code.pure)
+    ((scheme rows arity).edgeCost request)
+but is expected to have type
+  @Bound Symbol Guard (EdgeValue Symbol Guard) inst✝ (scheme rows arity)
+    (Code.edge { domain := request.domain, left := request.left, right := request.right } Code.pure)
+    (edgeCost rows arity request)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:78:25: error: typeclass instance problem is stuck
+  DecidableEq (EdgeKey ?m.213 ?m.214)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:113:75: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.167 ?m.168 → Value ?m.167 ?m.168 → Code ?m.167 ?m.168 ?m.169
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.167 ?m.168 →
+    Value ?m.167 ?m.168 → Machine ?m.167 ?m.168 → Result ?m.167 ?m.168 ?m.169
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:113:16: error: unsolved goals
+case neg.empty
+Symbol Guard : Type
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+rows arity : Nat
+right : Value Symbol Guard
+secondDomain : SourceCurrentAllocatedFiniteOrdinaryDomain.Node right
+leftShape :
+  SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity
+    { domain := emptyDomain, left := Value.empty, right := right }.left
+rightShape :
+  SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity
+    { domain := emptyDomain, left := Value.empty, right := right }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty Value.empty right = true
+resetCase : SourceRecursiveIntersectionControl.reset emptyDomain.key Value.empty right = false
+selfCase : ¬SourceRecursiveIntersectionControl.closedSelf Value.empty right = true
+swapCase : ¬SourceRecursiveIntersectionControl.greater Value.empty right = true
+⊢ Bound (scheme rows arity) (SourceRecursiveIntersectionCode.unsupported Value.empty right)
+    (nodeCost rows arity { domain := emptyDomain, left := Value.empty, right := right })
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:116:79: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.226 ?m.227 → Value ?m.226 ?m.227 → Code ?m.226 ?m.227 ?m.228
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.226 ?m.227 →
+    Value ?m.226 ?m.227 → Machine ?m.226 ?m.227 → Result ?m.226 ?m.227 ?m.228
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:116:20: error: unsolved goals
+case neg.ordinary.empty
+Symbol Guard : Type
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+rows arity : Nat
+left : List (EdgeValue Symbol Guard)
+first : Interned InternedBinderProtocol.NodeKey
+leftDepth : Nat
+leftFree : List InternedBinderProtocol.Reference
+leftRows : SourceCurrentAllocatedFiniteOrdinaryDomain.Rows left
+leftShape :
+  SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity
+    { domain := emptyDomain, left := Value.node first left leftDepth leftFree, right := Value.empty }.left
+rightShape :
+  SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity
+    { domain := emptyDomain, left := Value.node first left leftDepth leftFree, right := Value.empty }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty (Value.node first left leftDepth leftFree) Value.empty = true
+resetCase :
+  SourceRecursiveIntersectionControl.reset emptyDomain.key (Value.node first left leftDepth leftFree) Value.empty =
+    false
+selfCase : ¬SourceRecursiveIntersectionControl.closedSelf (Value.node first left leftDepth leftFree) Value.empty = true
+swapCase : ¬SourceRecursiveIntersectionControl.greater (Value.node first left leftDepth leftFree) Value.empty = true
+⊢ Bound (scheme rows arity)
+    (SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty)
+    (nodeCost rows arity
+      { domain := emptyDomain, left := Value.node first left leftDepth leftFree, right := Value.empty })
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:113:88: warning: This simp argument is unused:
+  Bound
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNativeBudgetCompile.lean:116:92: warning: This simp argument is unused:
+  Bound
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

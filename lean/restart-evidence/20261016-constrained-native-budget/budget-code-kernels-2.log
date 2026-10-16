@@ -1,0 +1,57 @@
+lean/restart-evidence/20261016-constrained-native-budget/budget-code-kernels.lean:26:4: error: Function expected at
+  (fun values => ?m.162) (SourceEqualityConjoinAllocation.readback combined)
+but this term has type
+  ?m.159 (SourceEqualityConjoinAllocation.readback combined)
+
+Note: Expected a function because this term is being applied to the argument
+  values
+lean/restart-evidence/20261016-constrained-native-budget/budget-code-kernels.lean:26:18: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+scheme : Scheme Symbol Guard
+domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : EdgeValue Symbol Guard
+combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+perChild : Nat
+inputs :
+  ∀ (pair : Value Symbol Guard × Value Symbol Guard),
+    pair ∈ left.children.zip right.children →
+      scheme.nodeInputs { domain := domain, left := pair.fst, right := pair.snd }
+costs :
+  ∀ (pair : Value Symbol Guard × Value Symbol Guard),
+    pair ∈ left.children.zip right.children →
+      scheme.nodeCost { domain := domain, left := pair.fst, right := pair.snd } ≤ perChild
+calls :
+  ∀ (pair : Value Symbol Guard × Value Symbol Guard),
+    pair ∈ left.children.zip right.children → Bound scheme (requestNode domain pair.fst pair.snd) perChild
+children :
+  Bound scheme (walk (fun value => requestNode domain value.fst value.snd) (left.children.zip right.children))
+    (perChild * (left.children.zip right.children).length)
+values : Guard
+⊢ ∀ (guard : ?m.181 values) (values_1 : List (Value Symbol (?m.181 values)))
+    {next : EdgeValue Symbol (?m.181 values) → Code Symbol (?m.181 values) (?m.182 values)} {tail : Nat},
+    (∀ (value : EdgeValue Symbol (?m.181 values)), Bound (?m.184 values) (next value) tail) →
+      Bound (?m.184 values) (Code.work (makeEdge left.entry.key.symbol guard values_1) next) (1 + tail)
+@checked_children_budget : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (scheme : Scheme Symbol Guard)
+  (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey) (left right : EdgeValue Symbol Guard)
+  (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) (perChild : Nat),
+  (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+      pair ∈ left.children.zip right.children →
+        scheme.nodeInputs { domain := domain, left := pair.fst, right := pair.snd }) →
+    (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+        pair ∈ left.children.zip right.children →
+          scheme.nodeCost { domain := domain, left := pair.fst, right := pair.snd } ≤ perChild) →
+      Bound scheme (SourceEqualityNativeCheckedCode.children domain left right combined)
+        (perChild * (left.children.zip right.children).length + 1)
+'MicroCFTA.NativeBudgetCodeKernels.checked_children_budget' depends on axioms: [propext, sorryAx, Quot.sound]
+@rejected_has_no_child_budget : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (left : EdgeValue Symbol Guard),
+  have scheme :=
+    { nodeInputs := fun x => False, edgeInputs := fun x => False, nodeCost := fun x => 999, edgeCost := fun x => 999 };
+  Bound scheme (SourceEqualityNativeCheckedCode.sentinel left) 1
+'MicroCFTA.NativeBudgetCodeKernels.rejected_has_no_child_budget' depends on axioms: [propext, Quot.sound]
+@edge_then_node_budget : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (scheme : Scheme Symbol Guard) (symbol : Symbol)
+  (guard : Guard) (values : List (Value Symbol Guard)),
+  Bound scheme (Code.work (makeEdge symbol guard values) fun edge => Code.work (makeNode [edge]) Code.pure) 2
+'MicroCFTA.NativeBudgetCodeKernels.edge_then_node_budget' depends on axioms: [propext, Quot.sound]
+@no_unchecked_read : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (scheme : Scheme Symbol Guard) (name budget : Nat),
+  ¬Bound scheme (Code.read name fun value => Code.pure value) budget
+'MicroCFTA.NativeBudgetCodeKernels.no_unchecked_read' does not depend on any axioms

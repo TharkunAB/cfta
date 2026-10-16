@@ -1,0 +1,40 @@
+'MicroCFTA.NativeBudgetIndependentKernels.node_initial_headroom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@node_initial_headroom : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (before : SourceEqualityNativeDemand.State (bits + 2)),
+  Good before →
+    ∀ (left right : Value Symbol Guard),
+      Available before.native.machine.heap left →
+        Available before.native.machine.heap right →
+          SourceCurrentAllocatedFiniteOrdinaryDomain.Node left →
+            SourceCurrentAllocatedFiniteOrdinaryDomain.Node right →
+              before.native.machine.heap.nodes.next + nodeBudget left right ≤ 2 ^ bits →
+                before.native.machine.heap.edges.next + nodeBudget left right ≤ 2 ^ (bits + 2) →
+                  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                      (Control.code (requestNode emptyDomain left right)) before ∧
+                    ∀ (fuel : Nat) (next : Control (Value Symbol Guard))
+                      (after : SourceEqualityNativeDemand.State (bits + 2)),
+                      SourceEqualityNativeDemand.Steps fuel (Control.code (requestNode emptyDomain left right)) before
+                          next after →
+                        Capacity bits after
+'MicroCFTA.NativeBudgetIndependentKernels.edge_initial_headroom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@edge_initial_headroom : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (before : SourceEqualityNativeDemand.State (bits + 2)),
+  Good before →
+    ∀ (left right : EdgeValue Symbol Guard),
+      EdgeResident before.native.machine.heap left →
+        EdgeResident before.native.machine.heap right →
+          SourceCurrentAllocatedFiniteOrdinaryDomain.Edge left →
+            SourceCurrentAllocatedFiniteOrdinaryDomain.Edge right →
+              before.native.machine.heap.nodes.next + edgeBudget left right ≤ 2 ^ bits →
+                before.native.machine.heap.edges.next + edgeBudget left right ≤ 2 ^ (bits + 2) →
+                  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                      (Control.code (requestEdge emptyDomain left right)) before ∧
+                    ∀ (fuel : Nat) (next : Control (EdgeValue Symbol Guard))
+                      (after : SourceEqualityNativeDemand.State (bits + 2)),
+                      SourceEqualityNativeDemand.Steps fuel (Control.code (requestEdge emptyDomain left right)) before
+                          next after →
+                        Capacity bits after
