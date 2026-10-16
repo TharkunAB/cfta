@@ -20,6 +20,7 @@ local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
 local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
 local notation "Checked" => SourceEqualityNativeDemand.State
 variable (annotation : Guard → Prop) (source : InternedConstructorTemplates.State Symbol Guard)
+section
 variable [DecidableEq (EdgeKey Symbol Guard)]
 
 /-- The two actual native controls retain the same local output contract. -/
@@ -61,12 +62,12 @@ theorem certified_bind (control : Control A) (next : A → Code Symbol Guard B)
         intermediate post (certificate.2.2.2 value after afterValid growth afterStored resident law)
         (fun result final finalValid later finalStored middle => continuation result final finalValid (growth.trans later) finalStored middle)
 
-omit [DecidableEq (EdgeKey Symbol Guard)] in
+end
+
 /-- A node's annotated return supplies its conditional cache law for any later valid input test. -/
 theorem node_law (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
     (annotated : Annotated annotation value) : NodeLaw annotation source request value := fun _ _ _ => annotated
 
-omit [DecidableEq (EdgeKey Symbol Guard)] in
 /-- A row's annotated return supplies its conditional cache law for its complete original request. -/
 theorem edge_law (request : EdgeRequest Symbol Guard) (value : EdgeValue Symbol Guard)
     (annotated : SourceCurrentHereditaryConstructors.Edge annotation value) : EdgeLaw annotation source request value := fun _ _ _ => annotated
