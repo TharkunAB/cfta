@@ -1,0 +1,145 @@
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.bind_done_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.bind_done_iff {A : Type} {width : Nat} {B : Type}
+  (first : MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome A width)
+  (next :
+    A →
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width →
+        MicroCFTA.SourceCurrentAllocatedScanWorker.Memo → MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome B width)
+  (result : B) (after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo) :
+  first.bind next = MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved ↔
+    ∃ value middle current,
+      first = MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done value middle current ∧
+        next value middle current = MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.select_done_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.select_done_iff {width : Nat}
+  (paths : MicroCFTA.EqualityNormalize.Class)
+  (first : MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedScanWorker.Result width)
+  (result : MicroCFTA.SourceCurrentAllocatedScanWorker.Result)
+  (after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.select paths first =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved ↔
+    ∃ rest,
+      first = MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done rest after saved ∧
+        result = (rest.fst, paths :: rest.snd)
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.gate_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.gate_done_stable {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {mode : Bool} {fuel larger : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo} {answer : Bool}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedScanWorker.gate mode fuel values paths before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done answer after saved)
+  (enough : fuel ≤ larger) :
+  MicroCFTA.SourceCurrentAllocatedScanWorker.gate mode larger values paths before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done answer after saved
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.query_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.query_done_stable {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h n P H N : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedScanWorker.query p h n values paths before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved)
+  (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughN : n ≤ N) :
+  MicroCFTA.SourceCurrentAllocatedScanWorker.query P H N values paths before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.decision_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.decision_done_stable
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width p h P H budget : Nat} {paths : MicroCFTA.EqualityNormalize.Class}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo} {answer : Bool}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedScanWorker.decision p h budget paths value before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done answer after saved)
+  (enoughP : p ≤ P) (enoughH : h ≤ H) :
+  MicroCFTA.SourceCurrentAllocatedScanWorker.decision P H budget paths value before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done answer after saved
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.scan_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.scan_done_stable
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s p h n G S P H N budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes : MicroCFTA.EqualityNormalize.Constraints}
+  {before after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo}
+  {result : MicroCFTA.SourceCurrentAllocatedScanWorker.Result}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values classes before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved)
+  (enoughG : g ≤ G) (enoughS : s ≤ S) (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughN : n ≤ N) :
+  MicroCFTA.SourceCurrentAllocatedScanWorker.scan G S P H N budget values classes before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved
+'MicroCFTA.SourceCurrentAllocatedScanWorkerStability.scan_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedScanWorkerStability.scan_done_unique
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s p h n G S P H N budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes : MicroCFTA.EqualityNormalize.Constraints}
+  {before after later : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {memo saved current : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo}
+  {first second : MicroCFTA.SourceCurrentAllocatedScanWorker.Result}
+  (one :
+    MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values classes before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done first after saved)
+  (two :
+    MicroCFTA.SourceCurrentAllocatedScanWorker.scan G S P H N budget values classes before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done second later current) :
+  first = second ∧ after = later ∧ saved = current

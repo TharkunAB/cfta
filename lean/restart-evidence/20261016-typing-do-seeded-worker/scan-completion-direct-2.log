@@ -1,0 +1,100 @@
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:144:106: error: unsolved goals
+case skipped
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+budget : Nat
+values : List (Value Symbol Guard)
+classes✝ selected✝ : Constraints
+before✝ after✝ : Checked width
+memo✝ saved✝ : Memo
+stopped : Option Class
+paths : Class
+heap anchor : State Symbol Guard
+classes : Constraints
+before : SourceEqualityNativeDemand.State width
+memo : SourceCurrentEmptinessMemo.Memo
+outcome : Option Class
+selected : Constraints
+after : SourceEqualityNativeDemand.State width
+saved : SourceCurrentEmptinessMemo.Memo
+primary : EndpointStatefulGateTrace.ClassTrace source reaches values paths before.native.machine.heap true heap
+secondary : SourceCurrentSecondaryTrace.ClassTrace source values paths heap true anchor
+rest :
+  Scan budget source reaches values classes (advanceHeap (advanceHeap before heap) anchor) memo outcome selected after
+    saved
+g : Nat
+primaryDone :
+  ∀ (fuel : Nat),
+    g ≤ fuel →
+      SourceCurrentAllocatedGateWorker.primary fuel values paths before =
+        SourceCurrentAllocatedGateWorker.Outcome.done true (advanceHeap before heap)
+s : Nat
+secondaryDone :
+  ∀ (fuel : Nat),
+    s ≤ fuel →
+      SourceCurrentAllocatedGateWorker.secondary fuel values paths (advanceHeap before heap) =
+        SourceCurrentAllocatedGateWorker.Outcome.done true (advanceHeap (advanceHeap before heap) anchor)
+laterG laterS p h n : Nat
+tailDone :
+  ∀ (G S P H N : Nat),
+    laterG ≤ G →
+      laterS ≤ S →
+        p ≤ P →
+          h ≤ H →
+            n ≤ N →
+              (fun g s p h n =>
+                    scan g s p h n budget values classes (advanceHeap (advanceHeap before heap) anchor) memo)
+                  G S P H N =
+                Outcome.done (outcome, selected) after saved
+G S P H N : Nat
+enoughG : max g laterG ≤ G
+enoughS : max s laterS ≤ S
+enoughP : p ≤ P
+enoughH : h ≤ H
+enoughN : n ≤ N
+first :
+  SourceCurrentAllocatedGateWorker.primary G values paths before =
+    SourceCurrentAllocatedGateWorker.Outcome.done true (advanceHeap before heap)
+second :
+  SourceCurrentAllocatedGateWorker.secondary S values paths (advanceHeap before heap) =
+    SourceCurrentAllocatedGateWorker.Outcome.done true (advanceHeap (advanceHeap before heap) anchor)
+tail :
+  (fun g s p h n => scan g s p h n budget values classes (advanceHeap (advanceHeap before heap) anchor) memo) G S P H
+      N =
+    Outcome.done (outcome, selected) after saved
+⊢ (match
+      match
+        if false = true then SourceCurrentAllocatedGateWorker.primary S values paths (advanceHeap before heap)
+        else SourceCurrentAllocatedGateWorker.Outcome.done true (advanceHeap (advanceHeap before heap) anchor) with
+      | SourceCurrentAllocatedGateWorker.Outcome.done answer after => Outcome.done answer after memo
+      | SourceCurrentAllocatedGateWorker.Outcome.failed fault after =>
+        Outcome.failed (Fault.gate paths fault) after memo with
+    | Outcome.done value state memo =>
+      if value = true then scan G S P H N budget values classes state memo
+      else
+        match query P H N values paths state memo with
+        | Outcome.done value state memo =>
+          match decision P H budget paths value state memo with
+          | Outcome.done value state memo =>
+            if value = true then Outcome.done (some paths, []) state memo
+            else scan G S P H N budget values classes state memo
+          | Outcome.failed fault state memo => Outcome.failed fault state memo
+        | Outcome.failed fault state memo => Outcome.failed fault state memo
+    | Outcome.failed fault state memo => Outcome.failed fault state memo) =
+    Outcome.done (outcome, selected) after saved
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:154:39: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [scan, gate, ite_true, first, second, Outcome.bind, tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:154:79: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [scan, gate, ite_true, ite_false, first, second, Outcome.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

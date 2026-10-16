@@ -1,0 +1,172 @@
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:61:2: error: Too many variable names provided at alternative `force`: 3 provided, but 2 expected
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:62:84: error(lean.unknownIdentifier): Unknown identifier `projected`
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:63:22: error: unsolved goals
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : List Int
+values : List (Value Symbol Guard)
+before : Checked width
+result✝ : Value Symbol Guard
+result : State Symbol Guard
+heap : SourceEqualityProjectionGraph.Forest path values before.native.machine.heap result✝ result
+p h : Nat
+stable :
+  ∀ (workerFuel headFuel : Nat),
+    p ≤ workerFuel →
+      h ≤ headFuel →
+        (fun fuel readFuel => SourceEqualityProjectionWorker.forest fuel readFuel ?m.58 ?m.59 ?m.61) workerFuel
+            headFuel =
+          SourceEqualityRequiredWorker.Result.done ?m.60 ?m.62
+P H N : Nat
+enoughP : p ≤ P
+enoughH : h ≤ H
+a✝ : 0 ≤ N
+⊢ (match SourceEqualityProjectionWorker.forest P H path values before.native.machine.heap with
+    | SourceEqualityRequiredWorker.Result.done value heap =>
+      Outcome.done value (advancePhysical before { heap := heap, equality := before.operations })
+    | SourceEqualityRequiredWorker.Result.pending key heap =>
+      Outcome.failed (Fault.projection (SourceEqualityRequiredWorker.Result.pending key heap))
+        (advancePhysical before { heap := heap, equality := before.operations })
+    | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+      Outcome.failed (Fault.projection (SourceEqualityRequiredWorker.Result.unresolved name heap))
+        (advancePhysical before { heap := heap, equality := before.operations })
+    | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+      Outcome.failed (Fault.projection (SourceEqualityRequiredWorker.Result.exhausted limit heap))
+        (advancePhysical before { heap := heap, equality := before.operations })) =
+    Outcome.done result✝ (advancePhysical before { heap := result, equality := before.operations })
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:65:28: warning: This simp argument is unused:
+  stable P H enoughP enoughH
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [operand]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:100:26: error: don't know how to synthesize implicit argument `width`
+  @Fold ?m.356 inst✝¹ inst✝ values (paths ++ [seed]) ?m.365 ?m.366 ?m.367
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ {before after : Checked width} {result : Value Symbol Guard},
+    Fold values (paths ++ [seed]) before result after →
+      StableRun (fun p h n => fold p h n values seed paths before) result after
+before after : Checked width
+result : Value Symbol Guard
+actual : Fold values (path :: paths ++ [seed]) before result after
+nonempty : paths ++ [seed] ≠ []
+next : List Int
+rest : List (List Int)
+tailShape : paths ++ [seed] = next :: rest
+value✝ : Value Symbol Guard
+middle✝ : SourceEqualityNativeDemand.State width
+tail✝ : Value Symbol Guard
+later✝ : SourceEqualityNativeDemand.State width
+fuel✝ : Nat
+remaining : Fold values (next :: rest) middle✝ tail✝ later✝
+first : Operand path values before value✝ middle✝
+native :
+  SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel✝
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain value✝ tail✝))
+    later✝ (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) after
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:100:60: error: don't know how to synthesize placeholder
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ {before after : Checked width} {result : Value Symbol Guard},
+    Fold values (paths ++ [seed]) before result after →
+      StableRun (fun p h n => fold p h n values seed paths before) result after
+before after : Checked width
+result : Value Symbol Guard
+actual : Fold values (path :: paths ++ [seed]) before result after
+nonempty : paths ++ [seed] ≠ []
+next : List Int
+rest : List (List Int)
+tailShape : paths ++ [seed] = next :: rest
+value✝ : Value Symbol Guard
+middle✝ : SourceEqualityNativeDemand.State width
+tail✝ : Value Symbol Guard
+later✝ : SourceEqualityNativeDemand.State width
+fuel✝ : Nat
+remaining : Fold values (next :: rest) middle✝ tail✝ later✝
+first : Operand path values before value✝ middle✝
+native :
+  SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel✝
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain value✝ tail✝))
+    later✝ (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) after
+⊢ SourceEqualityNativeDemand.State ?m.356
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:100:58: error: don't know how to synthesize placeholder
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ {before after : Checked width} {result : Value Symbol Guard},
+    Fold values (paths ++ [seed]) before result after →
+      StableRun (fun p h n => fold p h n values seed paths before) result after
+before after : Checked width
+result : Value Symbol Guard
+actual : Fold values (path :: paths ++ [seed]) before result after
+nonempty : paths ++ [seed] ≠ []
+next : List Int
+rest : List (List Int)
+tailShape : paths ++ [seed] = next :: rest
+value✝ : Value Symbol Guard
+middle✝ : SourceEqualityNativeDemand.State width
+tail✝ : Value Symbol Guard
+later✝ : SourceEqualityNativeDemand.State width
+fuel✝ : Nat
+remaining : Fold values (next :: rest) middle✝ tail✝ later✝
+first : Operand path values before value✝ middle✝
+native :
+  SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel✝
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain value✝ tail✝))
+    later✝ (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) after
+⊢ Value Symbol Guard
+lean/MicroCFTA/SourceCurrentAllocatedSeededWorkerCompletion.lean:100:56: error: don't know how to synthesize placeholder
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ {before after : Checked width} {result : Value Symbol Guard},
+    Fold values (paths ++ [seed]) before result after →
+      StableRun (fun p h n => fold p h n values seed paths before) result after
+before after : Checked width
+result : Value Symbol Guard
+actual : Fold values (path :: paths ++ [seed]) before result after
+nonempty : paths ++ [seed] ≠ []
+next : List Int
+rest : List (List Int)
+tailShape : paths ++ [seed] = next :: rest
+value✝ : Value Symbol Guard
+middle✝ : SourceEqualityNativeDemand.State width
+tail✝ : Value Symbol Guard
+later✝ : SourceEqualityNativeDemand.State width
+fuel✝ : Nat
+remaining : Fold values (next :: rest) middle✝ tail✝ later✝
+first : Operand path values before value✝ middle✝
+native :
+  SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel✝
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain value✝ tail✝))
+    later✝ (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) after
+⊢ SourceEqualityNativeDemand.State ?m.356

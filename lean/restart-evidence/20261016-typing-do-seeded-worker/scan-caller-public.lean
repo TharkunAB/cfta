@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentAllocatedScanWorkerActual
+set_option pp.universes true
+set_option pp.explicit true
+#print axioms MicroCFTA.SourceCurrentAllocatedScanCaller.verified
+#check @MicroCFTA.SourceCurrentAllocatedScanCaller.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedScanCaller.actual
+#check @MicroCFTA.SourceCurrentAllocatedScanCaller.actual
+#print axioms MicroCFTA.SourceCurrentAllocatedScanCaller.finite
+#check @MicroCFTA.SourceCurrentAllocatedScanCaller.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerActual.sound
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerActual.sound
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerActual.verified
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerActual.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerActual.finite
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerActual.finite

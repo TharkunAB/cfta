@@ -1,0 +1,86 @@
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:59:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  first G S P H N
+in the target expression
+  (fun g s p h n => (first g s p h n).bind (next g s p h n)) G S P H N = Outcome.done result after saved
+
+width : Nat
+A B : Type
+first : Nat → Nat → Nat → Nat → Nat → Outcome A width
+next : Nat → Nat → Nat → Nat → Nat → A → Checked width → Memo → Outcome B width
+value : A
+middle : Checked width
+current : Memo
+result : B
+after : Checked width
+saved : Memo
+g s p h n : Nat
+done : ∀ (G S P H N : Nat), g ≤ G → s ≤ S → p ≤ P → h ≤ H → n ≤ N → first G S P H N = Outcome.done value middle current
+laterG laterS laterP laterH laterN : Nat
+nextDone :
+  ∀ (G S P H N : Nat),
+    laterG ≤ G →
+      laterS ≤ S →
+        laterP ≤ P →
+          laterH ≤ H →
+            laterN ≤ N →
+              (fun g s p h n => next g s p h n value middle current) G S P H N = Outcome.done result after saved
+G S P H N : Nat
+enoughG : max g laterG ≤ G
+enoughS : max s laterS ≤ S
+enoughP : max p laterP ≤ P
+enoughH : max h laterH ≤ H
+enoughN : max n laterN ≤ N
+⊢ (fun g s p h n => (first g s p h n).bind (next g s p h n)) G S P H N = Outcome.done result after saved
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:72:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  evaluation G S P H N
+in the target expression
+  (fun g s p h n => Outcome.select paths (evaluation g s p h n)) G S P H N =
+    Outcome.done (stopped, paths :: selected) after saved
+
+width : Nat
+paths : Class
+evaluation : Nat → Nat → Nat → Nat → Nat → Outcome Result width
+stopped : Option Class
+selected : Constraints
+after : Checked width
+saved : Memo
+g s p h n : Nat
+done :
+  ∀ (G S P H N : Nat),
+    g ≤ G → s ≤ S → p ≤ P → h ≤ H → n ≤ N → evaluation G S P H N = Outcome.done (stopped, selected) after saved
+G S P H N : Nat
+enoughG : g ≤ G
+enoughS : s ≤ S
+enoughP : p ≤ P
+enoughH : h ≤ H
+enoughN : n ≤ N
+⊢ (fun g s p h n => Outcome.select paths (evaluation g s p h n)) G S P H N =
+    Outcome.done (stopped, paths :: selected) after saved
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:85:21: warning: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [gate, ite_true, returned G enoughG]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:142:55: error: Application type mismatch: The argument
+  ih
+has type
+  StableRun (fun g s p h n => scan g s p h n budget values classes (advanceHeap (advanceHeap before heap) anchor) memo)
+    (outcome, selected) after saved
+but is expected to have type
+  StableRun (fun g s p h n => ?m.149 g s p h n true (advanceHeap (advanceHeap before heap) anchor) memo) ?m.153 ?m.154
+    ?m.155
+in the application
+  bind_stable (fun x s x_1 x_2 x_3 => gate false s values paths (advanceHeap before heap) memo) ?m.149 true
+    (advanceHeap (advanceHeap before heap) anchor) memo ?m.153 ?m.154 ?m.155 second ih
+lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean:151:56: error: Application type mismatch: The argument
+  ih
+has type
+  StableRun (fun g s p h n => scan g s p h n budget values classes (advancePhysical middle later) savedMemo)
+    (outcome, selected) after saved
+but is expected to have type
+  StableRun (fun g s p h n => ?m.210 g s p h n false (advancePhysical middle later) savedMemo) ?m.214 ?m.215 ?m.216
+in the application
+  bind_stable (fun x x_1 p h x_2 => SourceCurrentAllocatedScanWorker.decision p h budget paths queryValue middle memo)
+    ?m.210 false (advancePhysical middle later) savedMemo ?m.214 ?m.215 ?m.216 decided ih

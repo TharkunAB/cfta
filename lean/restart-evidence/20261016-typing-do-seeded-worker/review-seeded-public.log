@@ -1,0 +1,225 @@
+'MicroCFTA.SourceCurrentAllocatedSeededCaller.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededCaller.verified
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before.checked result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (reads : MicroCFTA.SourceCurrentAllocatedSeededMemos.SeededReads actual memos final)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.checked.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (proper : ∀ (path : List Int), path ∈ paths → path ≠ [])
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before.checked) :
+  ∃ next,
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+        (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) final ∧
+      MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧
+        result.free = [] ∧
+          (paths ≠ [] → MicroCFTA.SourceCurrentAllocatedSeededLanguage.Includes formulas solver values paths result) ∧
+            MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedSeededCaller.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededCaller.actual
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (query : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before.checked result after)
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.checked.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (proper : ∀ (path : List Int), path ∈ paths → path ≠ [])
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before.checked) :
+  ∃ next final,
+    MicroCFTA.SourceCurrentAllocatedSeededMemos.SeededReads query memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) final ∧
+        MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧
+          result.free = [] ∧
+            (paths ≠ [] → MicroCFTA.SourceCurrentAllocatedSeededLanguage.Includes formulas solver values paths result) ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedSeededCaller.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededCaller.finite
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int))
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.checked.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (proper : ∀ (path : List Int), path ∈ paths → path ≠ [])
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before.checked) :
+  ∃ result after next final query,
+    MicroCFTA.SourceCurrentAllocatedSeededMemos.SeededReads query memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) final ∧
+        MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧
+          result.free = [] ∧
+            (paths ≠ [] → MicroCFTA.SourceCurrentAllocatedSeededLanguage.Includes formulas solver values paths result) ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.verified
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {p h n : Nat}
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.checked.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (proper : ∀ (path : List Int), path ∈ paths → path ≠ [])
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before.checked)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded p h n values paths before.checked =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after) :
+  ∃ next final query,
+    MicroCFTA.SourceCurrentAllocatedSeededMemos.SeededReads query memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) final ∧
+        MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧
+          result.free = [] ∧
+            (paths ≠ [] → MicroCFTA.SourceCurrentAllocatedSeededLanguage.Includes formulas solver values paths result) ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.finite
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int))
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.checked.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (proper : ∀ (path : List Int), path ∈ paths → path ≠ [])
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before.checked) :
+  ∃ result after next final,
+    MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun
+        (fun p h n => MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded p h n values paths before.checked) result
+        after ∧
+      ∃ query,
+        MicroCFTA.SourceCurrentAllocatedSeededMemos.SeededReads query memos final ∧
+          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+              (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) final ∧
+            MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧
+              result.free = [] ∧
+                (paths ≠ [] →
+                    MicroCFTA.SourceCurrentAllocatedSeededLanguage.Includes formulas solver values paths result) ∧
+                  MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query

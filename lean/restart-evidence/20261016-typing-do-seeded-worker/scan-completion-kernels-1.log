@@ -1,0 +1,168 @@
+'MicroCFTA.ScanWorkerCompletionKernels.actual_scan_retains_selected_occurrences' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerCompletionKernels.actual_scan_retains_selected_occurrences : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints}
+  {before after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo} {stopped : Option MicroCFTA.EqualityNormalize.Class},
+  MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget MicroCFTA.SourceMemoGate.unconstrained
+      (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values classes before memo
+      stopped selected after saved →
+    ∃ bound,
+      ∀ (fuel : Nat),
+        bound ≤ fuel →
+          MicroCFTA.SourceCurrentAllocatedScanWorker.scan fuel fuel fuel fuel fuel budget values classes before memo =
+              MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done (stopped, selected) after saved ∧
+            List.Sublist selected classes
+'MicroCFTA.ScanWorkerCompletionKernels.stopped_needs_no_suffix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerCompletionKernels.stopped_needs_no_suffix : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : MicroCFTA.EqualityNormalize.Class} (suffix : MicroCFTA.EqualityNormalize.Constraints)
+  {heap anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before middle : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {queryValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo}
+  {later :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula},
+  MicroCFTA.EndpointStatefulGateTrace.ClassTrace MicroCFTA.SourceMemoGate.unconstrained
+      (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values paths
+      before.native.machine.heap true heap →
+    MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace MicroCFTA.SourceMemoGate.unconstrained values paths heap false
+        anchor →
+      MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values (List.map (List.map Int.ofNat) paths)
+          (MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap
+            (MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap before heap) anchor)
+          queryValue middle →
+        MicroCFTA.SourceCurrentConjunctionMemo.Call budget memo queryValue
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical middle) true later saved →
+          MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun
+            (fun g s p h n =>
+              MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values (paths :: suffix) before memo)
+            (some paths, []) (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical middle later) saved
+'MicroCFTA.ScanWorkerCompletionKernels.duplicate_selected_classes_keep_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerCompletionKernels.duplicate_selected_classes_keep_order : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width}
+  {firstHeap secondHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (memo : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo),
+  MicroCFTA.EndpointStatefulGateTrace.ClassTrace MicroCFTA.SourceMemoGate.unconstrained
+      (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values paths
+      before.native.machine.heap false firstHeap →
+    MicroCFTA.EndpointStatefulGateTrace.ClassTrace MicroCFTA.SourceMemoGate.unconstrained
+        (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values paths
+        (MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap before firstHeap).native.machine.heap false
+        secondHeap →
+      MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun
+        (fun g s p h n =>
+          MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values [paths, paths] before memo)
+        (none, [paths, paths])
+        (MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap
+          (MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap before firstHeap) secondHeap)
+        memo
+'MicroCFTA.ScanWorkerCompletionKernels.warm_decision_hit_uses_no_lower_work' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerCompletionKernels.warm_decision_hit_uses_no_lower_work : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (budget : Nat) (paths : MicroCFTA.EqualityNormalize.Class)
+  (queryValue original :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo) (answer : Bool),
+  memo queryValue.referenceOf = some (original, answer) →
+    MicroCFTA.SourceCurrentAllocatedScanWorker.decision 0 0 budget paths queryValue before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done answer before memo
+'MicroCFTA.ScanWorkerCompletionKernels.empty_scan_keeps_full_state_and_fourth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerCompletionKernels.empty_scan_keeps_full_state_and_fourth : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (g s p h n budget : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo),
+  MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values [] before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done (none, []) before memo
+'MicroCFTA.ScanWorkerCompletionKernels.selected_failure_keeps_prefix_and_observation' does not depend on any axioms
+@MicroCFTA.ScanWorkerCompletionKernels.selected_failure_keeps_prefix_and_observation : ∀ {width : Nat}
+  (first second : MicroCFTA.EqualityNormalize.Class) (fault : MicroCFTA.SourceCurrentAllocatedScanWorker.Fault width)
+  (before : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo),
+  MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.select first
+      (MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.select second
+        (MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.failed fault before memo)) =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.failed
+      (MicroCFTA.SourceCurrentAllocatedScanWorker.Fault.selected first
+        (MicroCFTA.SourceCurrentAllocatedScanWorker.Fault.selected second fault))
+      before memo

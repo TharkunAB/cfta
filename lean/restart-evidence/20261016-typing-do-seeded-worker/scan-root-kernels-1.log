@@ -1,0 +1,122 @@
+'MicroCFTA.ScanWorkerRootKernels.literal_stop_refutes_original_class' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerRootKernels.literal_stop_refutes_original_class : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {g s p h n budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {paths : MicroCFTA.EqualityNormalize.Class}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+      (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+          paths ∈ classes → ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ []) →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            paths ∈ classes → MicroCFTA.EqualityNormalize.Nontrivial paths) →
+          MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges budget MicroCFTA.SourceMemoGate.unconstrained
+              (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values classes
+              before.checked before.fourth →
+            MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values classes before.checked
+                  before.fourth =
+                MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done (some paths, selected) after saved →
+              ∃ next final,
+                MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after saved before.merge) final ∧
+                  paths ∈ classes ∧
+                    ∀
+                      (ambient :
+                        MicroCFTA.InternedGuardedLanguage.Env
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                      (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (terms :
+                        List
+                          (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))),
+                      MicroCFTA.Language.All₂
+                          (MicroCFTA.InternedGuardedLanguage.meaning
+                            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                          values terms →
+                        ¬MicroCFTA.EqualityNormalize.ClassSat (MicroCFTA.Language.Term.node symbol terms) paths
+'MicroCFTA.ScanWorkerRootKernels.literal_scan_then_generated_query' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.ScanWorkerRootKernels.literal_scan_then_generated_query : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {g s p h n budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+      (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+          paths ∈ classes → ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ []) →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            paths ∈ classes → MicroCFTA.EqualityNormalize.Nontrivial paths) →
+          MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges budget MicroCFTA.SourceMemoGate.unconstrained
+              (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values classes
+              before.checked before.fourth →
+            MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values classes before.checked
+                  before.fourth =
+                MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done (outcome, selected) after saved →
+              ∀
+                (left right :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap left →
+                  MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap right →
+                    left.free = [] →
+                      right.free = [] →
+                        MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                            after →
+                          ∃ next fuel result final,
+                            MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt next.source formulas solver
+                                (next.inputs (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)) fuel left right
+                                after result final ∧
+                              MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver next final ∧
+                                result.free = [] ∧
+                                  ∀
+                                    (ambient :
+                                      MicroCFTA.InternedGuardedLanguage.Env
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                    (term :
+                                      MicroCFTA.Language.Term
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                                    MicroCFTA.InternedGuardedLanguage.meaning
+                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+                                      MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                                        MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient right term

@@ -1,0 +1,12 @@
+import MicroCFTA.SourceCurrentAllocatedSeededWorkerSound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.fold_verified
+#check @MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.fold_verified
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.fold_sound
+#check @MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.fold_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.seeded_verified
+#check @MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.seeded_verified
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.seeded_sound
+#check @MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.seeded_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.seeded_receipt
+#check @MicroCFTA.SourceCurrentAllocatedSeededWorkerSound.seeded_receipt

@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentAllocatedGateWorker
+set_option pp.universes true
+set_option pp.explicit true
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_done
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_done
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_done
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_done
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_graph
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_graph
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_graph
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_graph
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_done_stable
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_done_stable
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_done_stable
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_done_stable
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_complete
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_complete
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_complete
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_complete
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_done_unique
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_done_unique
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_done_unique
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_done_unique
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_reads
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_reads
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.primary_finite
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.primary_finite
+#print axioms MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_finite
+#check @MicroCFTA.SourceCurrentAllocatedGateWorker.secondary_finite

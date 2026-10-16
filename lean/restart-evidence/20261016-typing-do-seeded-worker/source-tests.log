@@ -1,0 +1,1210 @@
+Resolving dependencies...
+Build profile: -w ghc-9.14.1 -O0
+In order, the following will be built (use -v for more details):
+ - cfta-0.1.0.0 (lib) (configuration changed)
+ - decision-model-0.1.0.0 (lib) (configuration changed)
+ - cfta-generator-0.1.0.0 (lib) (configuration changed)
+ - cfta-0.1.0.0 (test:unit-tests) (configuration changed)
+ - decision-model-0.1.0.0 (test:decision-model-test) (configuration changed)
+ - cfta-ghc-0.1.0.0 (lib) (configuration changed)
+ - cfta-generator-0.1.0.0 (test:refinement-tests) (configuration changed)
+ - cfta-generator-0.1.0.0 (lib:hoogleplus) (configuration changed)
+ - cfta-ghc-0.1.0.0 (test:hole-fits-golden) (configuration changed)
+ - cfta-ghc-0.1.0.0 (test:ghc-fits-tests) (configuration changed)
+ - cfta-generator-0.1.0.0 (test:gen-tests) (configuration changed)
+Configuring library for cfta-0.1.0.0...
+Preprocessing library for cfta-0.1.0.0...
+Building library for cfta-0.1.0.0...
+Configuring library for decision-model-0.1.0.0...
+Preprocessing library for decision-model-0.1.0.0...
+Building library for decision-model-0.1.0.0...
+Configuring library for cfta-generator-0.1.0.0...
+Preprocessing library for cfta-generator-0.1.0.0...
+Building library for cfta-generator-0.1.0.0...
+/usr/bin/ld: warning: type and size of dynamic symbol `cftazm0zi1zi0zi0zminplace_DataziCFTAziSymbol_zdfIsStringSymbol_closure' are not defined
+Configuring test suite 'unit-tests' for cfta-0.1.0.0...
+Preprocessing test suite 'unit-tests' for cfta-0.1.0.0...
+Building test suite 'unit-tests' for cfta-0.1.0.0...
+Running 1 test suites...
+Test suite unit-tests: RUNNING...
+
+explicit-state automata
+  builds an ordinary recursive FTA [✔]
+  checks the path equalities of each constraint [✔]
+  constructs the ordinary product intersection [✔]
+  lists accepted terms by depth [✔]
+  trims dead and unreachable states [✔]
+common interned automaton engine
+  recognizes and intersects unit-constrained languages [✔]
+  imports a recursive explicit automaton as a Mu node [✔]
+  substitutes the variable of each Mu by itself as the identity [✔]
+  imports mutually recursive states with nested binders [✔]
+  builds one node for each set of bound states of a strongly connected component [✔]
+  imports a long cycle with one binder [✔]
+  imports and unfolds a two-way chain in time polynomial in its length [✔]
+  preserves recursive intersections and the explicit graph view [✔]
+  keeps a large shared graph compact through traversal [✔]
+  keeps different constraint values distinct in the caches [✔]
+  retains constraints in the explicit graph view [✔]
+  does not intersect constructors with different arities [✔]
+  rejects an open recursive node in an explicit graph view [✔]
+  unfolds a recursive node a bounded number of times and refolds it [✔]
+  imports an acyclic explicit graph and exposes it again unchanged [✔]
+  reads, requires, and finds child-index paths [✔]
+  removes an alternative that another alternative already accepts [✔]
+  removes a subsumed alternative of a recursive node and keeps its language [✔]
+templates
+  restricts an automaton and an interned graph to the matching terms [✔]
+  excludes the matching terms from an automaton and an interned graph [✔]
+  excludes the terms with a matching subterm from a recursive automaton and interned graph [✔]
+explicit-state recognition
+  rejects a transition whose guard is Bottom, as the interned view does [✔]
+  decides a deep term in linear time when a state has two transitions with one symbol [✔]
+derived datatype grammars
+  accepts a type argument that grows and then stops [✔]
+  rejects a growth that the growth limit does not allow [✔]
+  counts a growth only against the nearest type with the same constructor [✔]
+  rejects a type argument that grows without end [✔]
+  accepts exactly the encodings of the datatype's values [✔]
+random stream of union/check-equiv commands gives same result as EquivM library [✔]
+  +++ OK, passed 100 tests.
+subpath checking
+  empty path is strict subpath of nonempty [✔]
+    +++ OK, passed 100 tests; 11 discarded.
+  nothing is strict subpath of itself [✔]
+    +++ OK, passed 100 tests.
+path tries
+  fromPathTrie and toPathTrie are inverses [✔]
+    +++ OK, passed 100 tests.
+  PathTrie-based hasSubsumingMember same as set-based definition [✔]
+    +++ OK, passed 100 tests.
+PathEClass
+  the trie and the set of a PathEClass hold the same paths [✔]
+    +++ OK, passed 100 tests.
+mkEqConstraints
+  removes unitary [✔]
+    +++ OK, passed 100 tests.
+  removes empty [✔]
+    +++ OK, passed 100 tests.
+  completes equalities [✔]
+  adds congruences [✔]
+  keeps the meaning of the classes it normalizes, and of a conjunction [✔]
+    +++ OK, passed 100 tests.
+  detects contradictions from congruences [✔]
+ECTA transition annotations
+  interprets a common equality graph through the equality facade [✔]
+  displays equality nodes and edges [✔]
+  uses the same rows for an ECTA equality annotation [✔]
+Pathable
+  Node.getPath root [✔]
+  Node.getPath one-level [✔]
+  Node.getPath merges multiple branches [✔]
+  Node.modifyAtPath modifies at root [✔]
+  Node.modifyAtPath modifies at path [✔]
+hash-consing
+  similar mu-nodes created independently are equal / have equal ids [✔]
+  keeps identities from different symbol alphabets distinct [✔]
+ECTA-nodes
+  equality constraints constrain [✔]
+  reduces paths constrained by equality constraints [✔]
+  accepts requires exact term arity [✔]
+  accepts only terms that have every path of a class, as enumeration does [✔]
+  empties an edge whose class names a child that does not exist [✔]
+templates
+  restricts a constrained language and lets equality narrow a hole [✔]
+  distinguishes exact arity from an explicit prefix [✔]
+  treats <v> as an ordinary symbol [✔]
+  uses a typed alphabet without an IsString instance [✔]
+  restricting a finite ECTA agrees with filtering its terms [✔]
+    +++ OK, passed 100 tests.
+  excludes the terms under a prefix and keeps the others [✔]
+  excludes many prefixes that fix their first child, one copy for each first child [✔]
+  excluding templates from a finite ECTA agrees with filtering its terms [✔]
+    +++ OK, passed 100 tests.
+  exclude and restrict with one template keep the terms of the node with no new ambiguity [✔]
+    +++ OK, passed 100 tests (98% unambiguous input).
+  excluding templates keeps the terms that match none with no new ambiguity [✔]
+    +++ OK, passed 100 tests (98% unambiguous input).
+  excluding templates anywhere from a finite ECTA agrees with filtering its terms [✔]
+    +++ OK, passed 100 tests.
+  excluding templates anywhere keeps the terms that match nowhere with no new ambiguity [✔]
+    +++ OK, passed 100 tests (98% unambiguous input).
+  excludes a template anywhere in a recursive automaton [✔]
+  gives the template of a prefix in preorder [✔]
+  gives a template that each term with the prefix matches [✔]
+    +++ OK, passed 100 tests.
+recursive union
+  retains an enclosing reference through a nested binder [✔]
+  drops a binder's own reference at the root of its body [✔]
+  takes the least fixed point through epsilon cycles [✔]
+  intersects and restricts terms without adding a union constructor [✔]
+intersection
+  intersection commutes with terms [✔]
+    +++ OK, passed 100 tests.
+  intersect is associative [✔]
+    +++ OK, passed 100 tests.
+  intersect is commutative [✔]
+    +++ OK, passed 100 tests.
+  intersect distributes over union [✔]
+    +++ OK, passed 100 tests.
+  intersect is idempotent [✔]
+    +++ OK, passed 100 tests.
+intersection examples
+  remove leaf choice [✔]
+  remove non-leaf choice [✔]
+  add constraints [✔]
+  intersect (one-step loop) with (its own unfolding: step, one-step) [✔]
+  intersect (one-step loop) with (two-step loop) [✔]
+  intersect (one-step loop) with (one step, two-step loop) [✔]
+  intersect (one step, one-step loop) with (two-step loop) [✔]
+  intersect (one step, one-step loop) with (one step, two-step loop) [✔]
+  intersect (two-step loop) with (one step, two-step loop) [✔]
+  intersect with nested Mus [✔]
+reduction
+  keeps the merge of recursive languages fixed under repeated narrowing [✔]
+  stops a fixed point after a number of passes [✔]
+  stops on the example that needs inherited constraints [✔]
+  stops on a class over three recursive children [✔]
+  stops on classes over recursive children [✔]
+    +++ OK, passed 100 tests.
+  empties a class that ends at a constrained recursive node [✔]
+  decides the emptiness of a class at a constrained recursive node without nested intersections [✔]
+  stops when a narrowed child contains its ancestor [✔]
+  reducing child domains preserves constrained terms [✔]
+    +++ OK, passed 100 tests.
+  reducing intersected child domains preserves constrained terms [✔]
+    +++ OK, passed 100 tests.
+  reduction ends and keeps the terms when constraints reach into a recursive node [✔]
+  iterated reduction of a constraint reaches a fixpoint: buggy input 6/27/21 [✔]
+  saturated reduction means, for everything at a path, there is something matching at the other paths [✔]
+    +++ OK, passed 100 tests.
+(un)folding
+  unfolding a mu node once unfolds it once [✔]
+  recursive terms are unrolled to the depth of the constraints and no more [✔]
+  reduction stops on a domain with an epsilon reference to its binder [✔]
+  refold folds the simplest unrolled input [✔]
+  refoldEdges refolds as refold does, and gives the edge that each input edge becomes [✔]
+traversals
+  mapNodes calls its function once for each node, by count [✔]
+    +++ OK, passed 100 tests.
+  nodeCount works on a trivial recursive node [✔]
+enumeration
+  reduction preserves enumeration on nodes without mu [✔]
+    +++ OK, passed 100 tests.
+  lists the edges of a node by symbol, not in the order they were built [✔]
+  lists the edges of a node in the order of the automaton with runsInterned [✔]
+  lists with runsInterned the runs of runs, with constraints [✔]
+    +++ OK, passed 100 tests.
+  lists the edges with larger weights first, and equal weights in the canonical order [✔]
+  lists edges with one symbol by the classes of their children [✔]
+degenerate inputs
+  a non-positive unfold bound terminates [✔]
+enumerating recursive automata
+  a bare Mu truncates instead of reporting an empty language [✔]
+  stops where a constrained Mu gives its own constraints again [✔]
+  a Mu under an edge truncates the same way [✔]
+  unfolding first enumerates past the recursion [✔]
+  a recursion with no base case unfolds to nothing [✔]
+dropping constraints
+  an edge keeps its symbol and children [✔]
+  the language grows to every combination of children [✔]
+  the original language is retained [✔]
+pruning
+  an oracle that never prunes enumerates the whole language [✔]
+  rejecting the node before expansion drops the whole branch [✔]
+  rejecting a produced fragment drops only that branch [✔]
+  an oracle can suspend a check on a hole and settle it later [✔]
+  an expansion order steers which hole is expanded first [✔]
+  an oracle with monotone rejections gives the same terms in the default order and in the reversed order [✔]
+  a preference outside the candidates is ignored [✔]
+counted nested Mu
+  no Mu [✔]
+  single Mu [✔]
+  two parallel Mus [✔]
+  nested [✔]
+redundant Mu
+  redundant inner Mu is skipped even when its shape is already interned [✔]
+  redundant outer Mu is skipped [✔]
+  two redundant Mus are both skipped [✔]
+  a used outer Mu is kept [✔]
+  a used inner Mu is kept, and is not the same as reusing the outer one [✔]
+  a Mu whose body is only a variable is empty, at any nesting depth [✔]
+  keeping a redundant Mu is what createMuDontCleanup is for [✔]
+  bounds and traverses retained epsilon binder cycles through their constructor closure [✔]
+nested Mu
+  completes a closed binder whose body captures the placeholder of an enclosing binder [✔]
+  references to different Mu nodes are not confused [✔]
+terms
+  agree in equality, order, and hash with their rose trees [✔]
+    +++ OK, passed 100 tests.
+  round trip through rose trees and flatten in preorder [✔]
+    +++ OK, passed 100 tests.
+  read and edit the subterm at a path [✔]
+    +++ OK, passed 100 tests.
+  build a term from its children keyed by index in any order [✔]
+    +++ OK, passed 100 tests.
+type encoding
+  a nullary type constructor is a leaf [✔]
+  an applied type constructor keeps its arguments [✔]
+  a function type is an arrow with the arrow marker first [✔]
+  a curried function type nests its arrows to the right [✔]
+filterType
+  keeps only the terms of the requested type [✔]
+  keeps the other type when that is what is asked for [✔]
+  an unrepresented type leaves nothing [✔]
+  filtering by a type both terms could have keeps both [✔]
+reduceFully
+  is a fixpoint [✔]
+  does not change what an unconstrained node accepts [✔]
+LTA guard syntax
+  states a literal precondition without a phantom predicate child [✔]
+  rejects a child whose refinement does not establish the requirement [✔]
+  keeps syntactic equality inside the full Boolean constraint language [✔]
+  rejects equality at missing paths and accepts its negation [✔]
+  decides sparse reflexive equality without assuming distinct subtrees are equal [✔]
+  compares renamed variable leaves only inside an explicit substitution scope [✔]
+  puts cached positive equality inside the named substitution scope [✔]
+  renames nested constructor symbols and free refinement names before comparison [✔]
+  does not replace a formal leaf with the whole actual subtree [✔]
+  applies a symbol swap simultaneously within one equality scope [✔]
+  uses the first nonidentity replacement for duplicate formal names [✔]
+  applies nested equality scopes from the inner scope to the outer scope [✔]
+  retains Boolean and missing-path behavior inside equality substitution scopes [✔]
+  keeps independent actual-value scopes when intersecting guarded languages [✔]
+  decides equal compound actuals unless their identities change substitution precedence [✔]
+  preserves missing-path and formula-refutation behavior through Boolean polarity [✔]
+  rejects an equality scope whose actual or formal position is absent [✔]
+  does not capture a free refinement name when comparing quantified annotations [✔]
+  checks scoped syntactic equality without comparing huge actual value identities [✔]
+  connects a substituted node symbol to that node's refinement [✔]
+  names one term for two indexes of a contract with the same path [✔]
+  answers correctly after the solver rejects a query [✔]
+  answers correctly after a query is interrupted [✔]
+  raises TimeLimitReached when a query reaches the time limit [✔]
+  empties an edge whose guard equalities are contradictory [✔]
+refinement-labelled LTA recognition
+  accepts the transition's declared refinement [✔]
+  rejects an invented refinement on the same constructor [✔]
+  keeps arity ranked by constructor even across refinements [✔]
+  takes the union of accepting nodes as the paper's final-state set [✔]
+  gives the empty final-state set an empty denotation [✔]
+dependent LTA guards
+  keeps distinct names distinct in the solver [✔]
+  reserves the free names of ambient assumptions for fresh values [✔]
+  formula substitution
+    renames a bound nullary application without introducing a free name [✔]
+    substitutes a nullary application as a named value [✔]
+    renames a function head and substitutes its arguments simultaneously [✔]
+    reports a replacement that the named function syntax cannot apply [✔]
+    leaves the applications of a function name whose replacement is not a name [✔]
+    ignores an unsupported replacement where a function binder shadows it [✔]
+    renames a captured bound function at each application head [✔]
+    keeps the last of repeated binders effective after renaming [✔]
+    keeps the first nonidentity replacement for a duplicate name [✔]
+  substitutes the actual argument for the formal in the result type [✔]
+  keeps different actual arguments distinct [✔]
+  substitutes several actual arguments in one dependent result [✔]
+  keeps distinct actual values with the same constructor separate [✔]
+  reports unsupported fresh declarations to a simple entailment callback [✔]
+  uses one actual value when several formals refer to the same position [✔]
+  preserves ambient identity for repeated occurrences of one named leaf [✔]
+  applies a swap simultaneously instead of rewriting its replacements [✔]
+  does not swap the value assumptions of actual arguments [✔]
+  composes nested scopes from the inner scope to the outer scope [✔]
+  keeps actual refinements in their ambient environment under nested scopes [✔]
+  renames quantified binders instead of capturing the actual variable [✔]
+recursive LTAs
+  accepts cyclic languages when guards do not inspect the cycle [✔]
+  allows a guard to inspect an acyclic sibling of a recursive child [✔]
+  pruning ends and keeps a term when a guard reads a position through the recursive reference [✔]
+  pruning ends and keeps a term when an equality reads a position through the recursive reference [✔]
+  prunes an equality that reaches the recursive reference through an inner recursive node [✔]
+  decides a deep term in linear time when a node has two transitions with one symbol [✔]
+semantic refinement comparison
+  recognises strict subtyping [✔]
+  recognises logical equivalence [✔]
+  does not merge incomparable refinements [✔]
+  answers each query after Z3 rejects one [✔]
+  holds a negated contract only when the refinements refute it [✔]
+  retains the antecedent when semantic intersection succeeds [✔]
+  does not reverse a directional semantic intersection [✔]
+  reduces incomparable semantic transitions to bottom [✔]
+integer points
+  counts and decodes each formula as a search of every point does [✔]
+  ranks each point that a formula admits, and no other point [✔]
+  decodes points beyond 2^256 by count, first rank, and last rank [✔]
+lattice entailment
+  decides each implication between two point cases as a search of every point and Z3 do [✔]
+  decides an implication whatever the names of its variables [✔]
+  answers Unknown where a variable has no bound or a term is not linear [✔]
+semantic pruning
+  keeps the language when it prunes heterogeneous nodes at semantic guard positions [✔]
+  computes Figure 12's bounded denotation directly [✔]
+  keeps the language when it prunes nested semantic positions [✔]
+  retains guards through an open nested binder with an enclosing union reference [✔]
+  preserves terms with an absent path under negation [✔]
+  preserves terms with an absent path in a satisfied disjunction [✔]
+  retains optional reflexive equality until complete paths can be checked [✔]
+  keeps reflexive equality on an always-present path as a residual guard [✔]
+  removes a transition whose equalities need an absent descendant [✔]
+  keeps semantic and syntactic splits apart [✔]
+  partitions substitution positions by their value-naming symbol [✔]
+  preserves scoped syntactic equality and its Boolean forms as residual LTA guards [✔]
+  retains guards whose compound actual identities need complete terms [✔]
+  retains scopes when complete actual identities change substitution precedence [✔]
+  reports solver uncertainty when actual identities are known [✔]
+  narrows syntactic equality to the intersection of the equal positions [✔]
+  applies syntactic intersection below a nested position [✔]
+  stops narrowing three equal leaves with distinct residual guards [✔]
+  retains branch correlations when narrowing a nested equality class [✔]
+  keeps Boolean syntactic constraints in the LTA when equality classes cannot express them [✔]
+  solves nested positive conjunctions in every requirement order [✔]
+similarity and minimization
+  infers transition similarity and removes the supertype [✔]
+  rejects a similarity snapshot when transition contents change at the same addresses [✔]
+  rejects a similarity snapshot when only the root changes [✔]
+  checks snapshots even when the similarity set is empty [✔]
+  redirects incoming edges to the retained subtype target [✔]
+  keeps unrelated alternatives at a removed transition's target [✔]
+  does not give a parent the other alternatives of the representative's node [✔]
+  installs the chosen representative when removing the only root transition [✔]
+  can remove a root transition when another root derivation remains [✔]
+  keeps an accepted root representative when the other root alternative rejects every term [✔]
+  keeps each root representative after multiple scheduled removals [✔]
+  allows multiple representatives for one target and substitutes repeated nodes together [✔]
+  composes substitutions for distinct source nodes on earlier copies [✔]
+  keeps a redirected copy when its original supertype transition is removed [✔]
+  applies M-Trans transitively over one similarity snapshot [✔]
+  uses one inferred representative for overlapping subtypes [✔]
+  retains a base required by a stricter representative [✔]
+  retains a base required by a recursive alternative in the same node [✔]
+  retains a productive base when its subtype has no finite derivation [✔]
+  retains batches whose combined redirects create a dependency cycle [✔]
+  retains a batch whose copied guard would inspect a recursive node [✔]
+  retains a batch whose redirect would make children equal under a disequality [✔]
+  retains a batch whose redirect would strengthen the consequent of an entailment [✔]
+  retains a batch whose representative has a guard that rejects its terms [✔]
+  keeps the supertype when pruning leaves the representative's guard undecided [✔]
+  applies a redirect that a guard reads only through a refinement it assumes [✔]
+named guards and validation
+  reports a named guard with the wrong number of arguments [✔]
+  reports a contract that names more terms than the constructor has children [✔]
+  builds transitions from refinements and named guards [✔]
+  interprets entailments carried by interned edges [✔]
+  rejects a guard position inside a recursive node [✔]
+  rejects free recursive references [✔]
+symbols
+  agree in equality, order, and hash with their text and refinement [✔]
+    +++ OK, passed 100 tests.
+  intern one symbol for each text and refinement [✔]
+    +++ OK, passed 100 tests.
+the interned automata against Data.CFTA.Simple
+  accept the terms that the simple definition accepts, also after toFTA [✔]
+    +++ OK, passed 100 tests.
+  accept at the explicit view the terms that the simple definition accepts [✔]
+    +++ OK, passed 100 tests.
+  list at the explicit view the trees of the underlying graph up to each depth [✔]
+    +++ OK, passed 100 tests.
+  check at the explicit view the terms that the simple definition accepts and lists [✔]
+    +++ OK, passed 100 tests.
+  restrict the explicit view to a template as filtering its trees does [✔]
+    +++ OK, passed 100 tests.
+  exclude templates from the explicit view as filtering its trees does [✔]
+    +++ OK, passed 100 tests.
+  exclude templates from the explicit view and the interned view with no new ambiguity [✔]
+    +++ OK, passed 100 tests (96% unambiguous input).
+  exclude templates from the explicit view with one run for each run of the input that it keeps [✔]
+    +++ OK, passed 100 tests.
+  exclude preorder prefixes from the explicit view as excludeFTA of their templates does, with the input's runs [✔]
+    +++ OK, passed 100 tests.
+  exclude many preorder prefixes from the explicit view [✔]
+    +++ OK, passed 1 test.
+  exclude templates anywhere from the explicit view as filtering its trees does [✔]
+    +++ OK, passed 100 tests.
+  exclude templates anywhere from the explicit view with one run for each run of the input that it keeps [✔]
+    +++ OK, passed 100 tests.
+  exclude templates anywhere from the explicit view and the interned view with no new ambiguity [✔]
+    +++ OK, passed 100 tests (96% unambiguous input).
+  exclude templates anywhere from a chain whose function children no template fits [✔]
+  enumerate the terms up to each depth that the simple definition lists [✔]
+    +++ OK, passed 100 tests.
+  list with weights on the edges the runs that runs lists, in another order [✔]
+    +++ OK, passed 100 tests.
+  list in the interning order the runs that runs lists, in another order [✔]
+    +++ OK, passed 100 tests.
+  prune with an oracle as filtering the terms by the oracle does, in either expansion order [✔]
+    +++ OK, passed 100 tests.
+  intersect as the simple product does, which keeps the terms of both [✔]
+    +++ OK, passed 100 tests.
+  unite as the simple union does, which keeps the terms of either [✔]
+    +++ OK, passed 100 tests.
+  bound the depth as the simple bound does, which keeps the shallow terms [✔]
+    +++ OK, passed 100 tests.
+  restrict to a template as filtering the terms by the template does [✔]
+    +++ OK, passed 100 tests.
+  keep the language through each reduction [✔]
+    +++ OK, passed 100 tests.
+  drop the constraints to the underlying graph of the transitions that can accept [✔]
+    +++ OK, passed 100 tests.
+  unfold recursion to a part of the language that grows with the rounds [✔]
+    +++ OK, passed 100 tests.
+liquid tree automata against Data.CFTA.Simple
+  recognize the terms that the simple definition accepts [✔]
+    +++ OK, passed 100 tests.
+  denote the terms that the simple definition lists up to each depth, also after pruning [✔]
+    +++ OK, passed 100 tests.
+  minimize to a valid, productive automaton with a finite term and only original labels [✔]
+    +++ OK, passed 100 tests.
+  reduce to an automaton whose terms the input accepts, when only equal transitions are similar [✔]
+    +++ OK, passed 100 tests.
+
+Finished in 17.4512 seconds
+321 examples, 0 failures
+Test suite unit-tests: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-0.1.0.0/t/unit-tests/noopt/test/cfta-0.1.0.0-unit-tests.log
+1 of 1 test suites (1 of 1 test cases) passed.
+Configuring test suite 'decision-model-test' for decision-model-0.1.0.0...
+Preprocessing test suite 'decision-model-test' for decision-model-0.1.0.0...
+Building test suite 'decision-model-test' for decision-model-0.1.0.0...
+Running 1 test suites...
+Test suite decision-model-test: RUNNING...
+
+chunks
+  keeps a question with at most n options [✔]
+  splits a longer question into parts of equal size, each with the option none [✔]
+  makes the fewest parts [✔]
+chunked
+  gives the scores of the options without the scores of none [✔]
+  gives the scores of fixedModel for each option [✔]
+bothOrders
+  removes a bias of the position [✔]
+  keeps the scores of fixedModel [✔]
+  reverses each part inside chunked [✔]
+ranked
+  puts the highest score first, and keeps the order of equal scores [✔]
+Decision.Ollama
+  encodes a small request [✔]
+  encodes the requests of a question with 300 options as two questions of 150 options and none [✔]
+  uses the name of the question as its key in the request and in the reply [✔]
+  reads the scores of a reply in the order of the options [✔]
+  fails on a reply without the score of an option [✔]
+  fails on a reply that is not JSON [✔]
+  fails on two options with the same name [✔]
+  fails when the server refuses the connection [✔]
+  gives no scores and sends no request for a question without options [✔]
+Decision.OpenAI
+  encodes the request with the labels in the prompt [✔]
+  reads the scores from the log probabilities of the labels [✔]
+  fails when no label is one of the likeliest tokens [✔]
+  fails on a reply without log probabilities [✔]
+
+Finished in 0.0073 seconds
+22 examples, 0 failures
+Test suite decision-model-test: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/decision-model-0.1.0.0/t/decision-model-test/noopt/test/decision-model-0.1.0.0-decision-model-test.log
+1 of 1 test suites (1 of 1 test cases) passed.
+Configuring library for cfta-ghc-0.1.0.0...
+Preprocessing library for cfta-ghc-0.1.0.0...
+Building library for cfta-ghc-0.1.0.0...
+Configuring test suite 'refinement-tests' for cfta-generator-0.1.0.0...
+Preprocessing test suite 'refinement-tests' for cfta-generator-0.1.0.0...
+Building test suite 'refinement-tests' for cfta-generator-0.1.0.0...
+Running 1 test suites...
+Test suite refinement-tests: RUNNING...
+
+QuickCheck-facing LTA syntax
+  turns named lambda arguments into paths without magic indices [✔]
+  keeps explicit positions as a programmatic escape hatch [✔]
+  states ordinary preconditions in the vocabulary of a property writer [✔]
+  reports a named guard mismatch before any candidate is built [✔]
+  checks guard arity without enumerating a large child product [✔]
+accepted alternatives
+  ignores a rejected alternative [✔]
+  retains only the groups accepted by a parent guard [✔]
+  compiles a compact product without decoding members [✔]
+  preserves fresh value declarations through the compilation cache [✔]
+relational substitution identity
+  treats repeated nominal leaves as the same actual value [✔]
+  reports unavailable compound identity when distinct subtrees have matching roots [✔]
+  reports unavailable compound identity without enumerating actuals [✔]
+structural equality under explicit substitution
+  compares renamed symbols and refinements while preserving source values and witnesses [✔]
+  keeps tree shape when scoped equality occurs inside negation and disjunction [✔]
+solver compilation
+  compiles equal compound actuals unless their identities change substitution precedence [✔]
+  preserves source order when observation keys have another order [✔]
+  retains repeated source ranks after mapping their values [✔]
+  samples exact source weights across unequal and rejected branches [✔]
+  keeps the weights of an atomic choice whether or not a guard reads it [✔]
+  keeps the sizes of an atomic choice whether or not a guard reads it [✔]
+  keeps the sizes of a built source whether or not a guard reads it [✔]
+  keeps the sizes of a node with several children when a guard reads one [✔]
+  keeps the weights inside a size class of a built source whether or not a guard reads it [✔]
+  keeps the weights of each size class when the groups of a built source have several sizes [✔]
+  keeps the weights inside a size class when a guard reads one child of a pair [✔]
+  keeps the weights inside a size class when a node closes an integer leaf beside a guarded child [✔]
+  keeps the weights inside a size class when the top closes the integer leaf of a measure [✔]
+  refuses a guard that reads the children of a choice of products [✔]
+  reads the leafness of a node from its term [✔]
+  refuses an equality that reads a node whose members are leaves and non-leaves [✔]
+  refuses a guard that reads a position after a source without symbols [✔]
+  compiles a guard over, and a choice with, a large source without listing it [✔]
+  recognizes a constant-false factor without evaluating either huge product [✔]
+  skips a huge right factor after semantic rejection on the left [✔]
+  compiles leaf equality from the observed roots [✔]
+  compiles a large supported product without materialization [✔]
+  finishes shrinking a compact two-member language with 64 binary sources [✔]
+  computes a root refinement from the children's roots [✔]
+  report an undecided guard beside an equality as SolverUnknown [✔]
+  report an undecided guard with an equality under a disjunction as SolverUnknown [✔]
+  compile uniformly over a deferred constructor, weighted by the members [✔]
+  read the root of a product with one term inside a choice [✔]
+  rank the parts of a compiled import independently of interning order [✔]
+  keeps imported epsilon-union terms when a parent requests observations [✔]
+  give an empty language for an import that its condition empties [✔]
+  keeps recursive import size classes when a parent observes its root [✔]
+  compile a choice of a recursive import and a deferred node [✔]
+integer leaves
+  reports recursive open groups without losing their position keys [✔]
+  pay one for a constructor above a closed group of integer leaves [✔]
+  count one source choice for each integer leaf, wherever a constructor closes it [✔]
+  compile uniformly over integer leaves, weighted by their points [✔]
+  agree with validOutcomes, weigh their members as pools do, and rank their terms [✔]
+  rank the terms of a language too large to enumerate [✔]
+  compile with the lattice entailment as with Z3 [✔]
+  keep source order in a bare applicative spine [✔]
+  report a guard below a closed leaf and a root function over one [✔]
+  apply to the root of an import with a recursive root only [✔]
+  keep a measure through a mapped constructor [✔]
+  reject self-dependent child measures before translating parent conditions [✔]
+  retain independent symbolic measures through both parent condition forms [✔]
+  prefer exact singleton values before rejecting a self-dependent defining expression [✔]
+bounded generation from recursive LTAs
+  contains only the base transition at depth zero [✔]
+  unfolds every recursive list through the requested depth [✔]
+  keeps deterministic replay ranks after unfolding [✔]
+  counts a residual equality symbolically instead of as an FTA product [✔]
+structural automaton shrinking
+  lists the members with fewer nodes than a rank's member [✔]
+  skips dead transitions and lists every smaller pair [✔]
+  emits only accepted terms with strictly fewer tree nodes [✔]
+  keeps shrinks independent of generated and mapped values [✔]
+  does not expand huge shared trees with uniform node counts [✔]
+  counts shared selected runs beyond machine-sized node counts [✔]
+  shrinks a member with more nodes than an Int counts [✔]
+finite automaton overlap checks
+  counts shared subtrees without expanding their repeated node pairs [✔]
+  keeps the term ranks of a small shared automaton [✔]
+  deduplicates overlapping alternatives without expanding their shared subtrees [✔]
+  does not count an alternative with an empty child node [✔]
+  reports an empty root without an overlap [✔]
+the size classes of a liquid automaton
+  builds the classes of an automaton whose guard the compiler rejects [✔]
+  reports a guard that the solver cannot decide [✔]
+liquid annotations on a derived datatype
+  keeps the datatype codec and shrinks within the guarded language [✔]
+bounded LTA sources in ordinary generators
+  reads an automaton the engine can count without the solver [✔]
+  defers an automaton whose guards need the solver [✔]
+  keeps unique imported terms and repeated pool draws with their weights [✔]
+  retains an ordinary alternative when an imported bound is empty [✔]
+  skips a rejected deferred import and keeps the branch weights [✔]
+  skips deferred imports beside a known-empty child in either position [✔]
+  checks root, nested, and missing observations across an imported boundary [✔]
+  reads the bounded denotation of a scoped equality that pruning cannot discharge [✔]
+  keeps a large imported language compact without forcing source values [✔]
+  maps a shared depth-70 singleton beside an ordinary child without expanding its witness [✔]
+  counts positive and negative equality without expanding huge terms [✔]
+bounded symbolic automaton compilation
+  counts and replays exponential nested equality and disequality languages [✔]
+  groups nested observations of an exponential equality import without decoding values [✔]
+  preserves missing-path semantics in reflexive Boolean equality [✔]
+  matches the bounded denotation of recursive two-atom lists [✔]
+  counts mutually recursive and unproductive nodes at the bound [✔]
+  treats a negative bound as an empty language [✔]
+  deduplicates accepting runs and preserves replay order [✔]
+  retains distinct refinements when symbols and values coincide [✔]
+  handles negated and disjunctive equality symbolically [✔]
+  keeps both siblings equal when shrinking positive equality [✔]
+  evaluates absent paths inside negation and disjunction [✔]
+  reads the bounded denotation when compound actual identities are unavailable [✔]
+  reports an undecidable full-term guard [✔]
+  reports a solver query that reaches its time limit [✔]
+  uses the solver only during compilation [✔]
+  keeps bounded shared graphs compact without forcing a huge witness [✔]
+  orders the ranks of a shared graph by its explicit view [✔]
+solver-checked buffer programs
+  keeps exactly the symbolic indexes proved in bounds [✔]
+  proves one exact append result per pair with a contract [✔]
+  carries append refinements into a later non-empty precondition [✔]
+  gives QuickCheck a total property over an otherwise partial interpreter [✔]
+refinement preconditions on typed expressions
+  keeps exactly the arguments that prove sqrt's precondition [✔]
+  does not mistake non-negative for provably non-zero [✔]
+  samples only programs admitted by the liquid precondition [✔]
+subsumption in a typed expression language
+  keeps every actual/expected pair justified by refinement subtyping [✔]
+  admits an exact natural where a non-negative value is expected [✔]
+  rejects a merely unknown value where non-negative is expected [✔]
+refinement generators over a typed language
+  keep the well-typed terms on which a measured invariant holds, at the bound 2 [✔]
+  keep the well-typed terms on which an invariant with named measures holds, at the bound 2 [✔]
+  report a cyclic automaton [✔]
+  report a transition with a constraint [✔]
+LTA similarity minimisation
+  retains the subtype and removes its supertype [✔]
+  does not merge values from different declared similarity classes [✔]
+  keeps the earlier of equivalent entries in any interning order [✔]
+  keeps the earlier of equivalent entries after index nine [✔]
+  retains incomparable semantic representatives [✔]
+sized-vector pipelines
+  proves append, take, and zip result lengths [✔]
+  keeps exactly the safe indexes over one operation layer [✔]
+  makes the partial interpreter total for generated programs [✔]
+liquid typed stack-machine traces
+  matches the independent trace counts through length four [✔]
+  keeps the independent trace counts through length ten [✔]
+  compiles the qualified-do surface at length ten [✔]
+  retains valid structural shrinks from the relational ECTA plan [✔]
+  compiles the hand-built trace automaton to the same language [✔]
+  retains the dependent command sequences and rejects ill-typed ones [✔]
+  predicts every response and post-state before concrete execution [✔]
+  carries the final stack type as the trace result refinement [✔]
+  shrinks to smaller traces, some shorter, whose stack preconditions still hold [✔]
+  gives QuickCheck a precondition-free property over valid traces [✔]
+  keeps every reference generator in the valid trace language [✔]
+    +++ OK, passed 300 tests.
+  replays every QSM-style deletion shrink through the model [✔]
+    +++ OK, passed 100 tests.
+dependent function application
+  keeps the positive arguments x and p and prunes the negative y [✔]
+the refinement compiler against validOutcomes
+  gives the values of the candidates that pass every guard [✔]
+    +++ OK, passed 100 tests.
+  reads the children of a guard by position, as validOutcomes reads them [✔]
+    +++ OK, passed 100 tests.
+  gives the terms of an imported liquid automaton that pass every guard [✔]
+    +++ OK, passed 100 tests.
+  gives the terms of a bounded liquid import that the simple definition accepts [✔]
+    +++ OK, passed 100 tests.
+  gives the terms of an unbounded liquid import that the simple definition accepts [✔]
+    +++ OK, passed 100 tests.
+Data.CFTA.Gen.Refinement.Derive
+  derives SortedLists from annotations with the ranks of the hand-written generator [✔]
+  derives SortedLists from a HasLTA instance with the ranks of the hand-written generator [✔]
+  derives SafeDivision from a HasLTA instance with the ranks of the hand-written generator [✔]
+  derives LiquidPairs from a HasLTA instance with the ranks of the hand-written generator [✔]
+  gives the annotations of the expression language from the typed invariants, byte for byte [✔]
+  reports a node view whose constructors are in another order [✔]
+  derives RedBlackTrees with a condition on the measures of the root [✔]
+  takes a condition on the measure of the root of a Measured invariant [✔]
+  names a value of an enumeration with literal on values and on terms [✔]
+  reports a node view that does not fit its datatype [✔]
+  checks values with the functions of the invariant [✔]
+  derives RedBlackTrees with named measures with the ranks of the two-state generator [✔]
+  checks red-black trees with the named measures of the invariant [✔]
+  derives search trees with key bounds from measures with a choice [✔]
+  derives AVL trees whose measures compute the height [✔]
+  gives two fields of one type two pools with a field atom [✔]
+  derives height-balanced trees from a named measure with a conditional term [✔]
+  derives the closed terms of a language with let-binding from a free-variable bound [✔]
+  names the measure and the child of an inexact named measure [✔]
+  reports a field whose type has no integer [✔]
+  counts the sorted lists of length 3 over every integer with named measures [✔]
+  counts the sorted lists of length 3 with keys up to a million without enumeration [✔]
+  reports annotations that do not fit the datatype [✔]
+  reports field atoms that do not fit the datatype [✔]
+Data.CFTA.Gen.Synthesis.Liquid
+  keeps the states of components whose names have an at sign or a backslash [✔]
+Data.CFTA.Gen.Synthesis.Hybrid
+  solves four of Hegel's queries, and the abstracting checker accepts each solution [✔]
+  runs Hegel when the hybrid has no program [✔]
+
+Finished in 16.7375 seconds
+175 examples, 0 failures
+Test suite refinement-tests: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-generator-0.1.0.0/t/refinement-tests/noopt/test/cfta-generator-0.1.0.0-refinement-tests.log
+1 of 1 test suites (1 of 1 test cases) passed.
+Configuring library 'hoogleplus' for cfta-generator-0.1.0.0...
+Preprocessing library 'hoogleplus' for cfta-generator-0.1.0.0...
+Building library 'hoogleplus' for cfta-generator-0.1.0.0...
+Configuring test suite 'hole-fits-golden' for cfta-ghc-0.1.0.0...
+Preprocessing test suite 'hole-fits-golden' for cfta-ghc-0.1.0.0...
+Building test suite 'hole-fits-golden' for cfta-ghc-0.1.0.0...
+Running 1 test suites...
+Test suite hole-fits-golden: RUNNING...
+The messages are as in test/holes/Holes.golden.
+Test suite hole-fits-golden: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-ghc-0.1.0.0/t/hole-fits-golden/noopt/test/cfta-ghc-0.1.0.0-hole-fits-golden.log
+1 of 1 test suites (1 of 1 test cases) passed.
+Configuring test suite 'ghc-fits-tests' for cfta-ghc-0.1.0.0...
+Preprocessing test suite 'ghc-fits-tests' for cfta-ghc-0.1.0.0...
+Building test suite 'ghc-fits-tests' for cfta-ghc-0.1.0.0...
+Running 1 test suites...
+Test suite ghc-fits-tests: RUNNING...
+
+streamFits
+  finds the expected program of map, and GHC accepts its fits [✔]
+  finds the expected program of firstKey, and GHC accepts its fits [✔]
+  finds the expected program of singletonList, and GHC accepts its fits [✔]
+  finds the expected program of resolveEither, and GHC accepts its fits [✔]
+  finds the expected program of mergeEither, and GHC accepts its fits [✔]
+  finds the expected program of join, and GHC accepts its fits [✔]
+  finds the expected program of fmapFst, and GHC accepts its fits [✔]
+  finds the expected program of joinMaybe, and GHC accepts its fits [✔]
+  finds the expected program of bind, and GHC accepts its fits [✔]
+  finds the expected program of pureSingleton, and GHC accepts its fits [✔]
+  finds the expected program of map, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of firstKey, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of singletonList, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of resolveEither, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of mergeEither, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of join, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of fmapFst, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of joinMaybe, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of bind, and GHC accepts its fits, with the domains of kind Type [✔]
+  finds the expected program of pureSingleton, and GHC accepts its fits, with the domains of kind Type [✔]
+optionTypeDomains
+  proposes no maximum at a rigid goal without a given Ord, and keeps head [✔]
+  follows the instance contexts: no maximum of pairs with a rigid part, a maximum of nested pairs [✔]
+fitIgnoresPart
+  marks the fits that ignore an argument [✔]
+normal forms
+  unfold each component of base with a body, one law each [✔]
+  merge the respellings of one program, and keep the programs that differ [✔]
+  skip a fit with the normal form of an earlier fit, behind an option [✔]
+  mark a fit whose normal form drops an argument [✔]
+  stop a reduction that does not end [✔]
+ranking
+  orders the fits by the model's scores, keeps the order of equal scores, and reports a failure [✔]
+  orders the pool of a search, keeps the other fits after it, and keeps the order when the model fails [✔]
+  turns the ranking of the plugin on only with the option rank [✔]
+the fast rejects
+  keep the fit of a coercion through a newtype [✔]
+  keep the fit of a given equality [✔]
+  keep the fit of a quantified given [✔]
+synthesizeFits
+  leaves the unification variables of the goal as it found them [✔]
+
+Finished in 8.9216 seconds
+35 examples, 0 failures
+Test suite ghc-fits-tests: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-ghc-0.1.0.0/t/ghc-fits-tests/noopt/test/cfta-ghc-0.1.0.0-ghc-fits-tests.log
+1 of 1 test suites (1 of 1 test cases) passed.
+Configuring test suite 'gen-tests' for cfta-generator-0.1.0.0...
+Preprocessing test suite 'gen-tests' for cfta-generator-0.1.0.0...
+Building test suite 'gen-tests' for cfta-generator-0.1.0.0...
+Running 1 test suites...
+Test suite gen-tests: RUNNING...
+
+against a list of members
+  gives the ranks, the masses, the sizes, and the shrinks of the list [✔]
+    +++ OK, passed 100 tests.
+plan positions
+  find the size class and position of every rank of a finite plan [✔]
+structural shrinking
+  never offers a member larger than the current one across choice branches [✔]
+weighted indexed rank sources
+  preserves exact ticket weights and returns replay ranks [✔]
+  preserves weighted replay through maps and products [✔]
+  checks source metadata without evaluating callbacks [✔]
+  samples Integer ticket mass beyond the machine Int range [✔]
+datatype-derived FTA generation
+  derives one recursive grammar and preserves typed replay and shrinking [✔]
+  gives a built and an imported generator of one datatype the same sizes [✔]
+  retains record names, positions, and fully applied field types [✔]
+  reuses mutually recursive type states and accepts finite nested lists [✔]
+  requires explicit atomic domains and retains their order without duplicates [✔]
+  represents empty datatypes and rejects growing recursive type arguments [✔]
+ordinary FTA generator syntax
+  reports the error of a failed recursion through joins, groups, and lowering [✔]
+  shrinks [False, False, True] to [True] only with smallerMembers [✔]
+  counts a recursion that reads a tied recursion before its own occurrence [✔]
+  keeps a nested recursion whose finite members all use the outer occurrence [✔]
+  keeps the outer occurrence through a recursion whose finite members all use the middle occurrence [✔]
+  closes a single do binding as one direct constructor child [✔]
+  uses each do binding as one direct constructor child [✔]
+  compiles and walks a language that two alternatives reuse once [✔]
+  builds exact support accepting the term of every rank [✔]
+  closes every retained applicative alternative after grouping [✔]
+  filters recursive keys without losing their size classes or replay [✔]
+  closes grouped function spines without mixing alternative children [✔]
+  keeps recursive members whole when labels close choices and applicative spines [✔]
+ordinary FTA compilation
+  indexes recursive runs by size and bounds them by depth [✔]
+  keeps empty recursion distinct from ambiguity and counts distinct finite terms [✔]
+  compiles the common interned unit-constraint graph without ECTA [✔]
+  ranks imported alternatives in symbol order, not in interning order [✔]
+  keeps the constructors of one arity apart when the order key does not tell them apart [✔]
+  ranks alternatives with one symbol by their children, not in interning order [✔]
+  ranks alternatives with one symbol in a cyclic automaton by their children [✔]
+  shares state compilation and decoding across a large finite DAG [✔]
+  preserves ranks and structural shrinking through shared states [✔]
+  positions left-deep terms of transitions that share a symbol [✔]
+ordinary FTA integer expressions
+  has the exact structural cardinality at every bounded depth [✔]
+  decodes every rank of the depth-two language [✔]
+  keeps both reference generators in the exact-depth language [✔]
+    +++ OK, passed 500 tests.
+annotated datatype grammars
+  counts and samples equal fields without rebuilding their datatype [✔]
+  combines intersecting equality classes over three fields [✔]
+  compiles nested paths symbolically and rejects absent positions [✔]
+  keeps an exponential equal-list language compact [✔]
+  keeps an exponential nested-equality language compact [✔]
+  counts overlapping exponential languages without enumerating either one [✔]
+  agrees with bounded enumeration for intersecting nested constraints [✔]
+  leaves unobserved descendants of a symbolic selection lazy [✔]
+  shares deep equality contexts across irrelevant constructor choices [✔]
+  retains one term rank for overlapping handwritten alternatives [✔]
+ECTAGen joins
+  closes qualified do with one visible n-ary node [✔]
+  keeps relabelled recursive witnesses inside their support [✔]
+  retains matching keys in key and source order with the conditioned product PMF [✔]
+  relates different key types against the declared predicate [✔]
+  evaluates an effectful relation once per live key pair [✔]
+  evaluates an n-ary relation once per live key tuple [✔]
+  preserves and conditions source weights across related groups [✔]
+  counts the pairs that rejection of the plain product discards [✔]
+  represents the join with an ECTA equality constraint [✔]
+  reports an empty join [✔]
+  reports a relation with no accepted live keys [✔]
+  represents a relation with an ECTA equality witness [✔]
+  preserves frequency weights around already-conditioned generators [✔]
+  conjoins every declared key equality [✔]
+  samples a non-uniform join with exactly its inspected PMF [✔]
+  matches a brute-force grouped apply with weighted multiplicities [✔]
+indexed and opaque sources
+  decodes a transparent source from stable indices [✔]
+  freezes native draws as transparent ranks, including duplicates [✔]
+  uses one frozen pool on both sides of a constrained join [✔]
+  turns a non-positive pool size into an empty generator [✔]
+  reuses one indexed choice through fmap [✔]
+  exposes exact cardinality and deterministic unranking [✔]
+  finds a finite structural minimum beyond rank zero [✔]
+  returns a sampled rank that deterministically replays its value [✔]
+    +++ OK, passed 100 tests.
+  replays weighted samples even when sampling reorders branches [✔]
+    +++ OK, passed 200 tests.
+  returns construction errors through the explicit sampling API [✔]
+  samples a directly indexed source whose cardinality exceeds Int [✔]
+  keeps fromGen opaque [✔]
+  allows an opaque source to participate in a join [✔]
+    +++ OK, passed 100 tests.
+  allows an opaque source to participate in a relation [✔]
+    +++ OK, passed 100 tests.
+declared groups
+  retains source-rank order inside each computed group [✔]
+  preserves a finite source's support, ranks, and distribution [✔]
+  combines declared languages with the grouped choice weights [✔]
+  preserves construction failures and rejects opaque sources [✔]
+  merges atomic groups under a constructor at their size [✔]
+  reports finite retained-key masses conditional on size [✔]
+ranks of imported automata
+  ranks every term of compact, overlapping, nested, and mixed plans [✔]
+  ranks every term of small random acyclic automata [✔]
+information-flow expression generation
+  counts the depth-at-most-one labeled language exactly [✔]
+  annotates every program with the reference type and label [✔]
+  counts the leaking programs without enumerating them [✔]
+  finds the smallest leaking program as a query [✔]
+  cannot represent a leak under the enforcing print [✔]
+  shrinks a QuickCheck leak to the minimal program [✔]
+  samples only leak-free programs from the enforcing print [✔]
+    +++ OK, passed 500 tests.
+  agrees with the count oracle on exact counts [✔]
+  samples faithfully labeled programs from the handwritten baseline [✔]
+    +++ OK, passed 500 tests.
+  samples programs of the reference type from the practical baseline [✔]
+    +++ OK, passed 500 tests.
+  builds the surface automaton with the exact counts [✔]
+  answers the secret-branching shape as a template restriction [✔]
+  reads the restricted automaton back as a generator [✔]
+compiled rank decoding
+  decodes every rank of a mapped source [✔]
+  decodes every rank of nested uniform frequencies [✔]
+  decodes every rank of an applicative product [✔]
+  decodes every rank of a grouped ternary application tower [✔]
+  decodes every rank of a mixed-depth frequencies tower [✔]
+  agrees with unrank on every enumerated non-uniform rank [✔]
+  streams exactly the structurally smaller members in size order [✔]
+  produces exactly the structural shrink candidates of a product [✔]
+  replays sampled ranks below the Int cardinality boundary [✔]
+    +++ OK, passed 200 tests.
+  replays sampled ranks beyond the Int cardinality boundary [✔]
+    +++ OK, passed 200 tests.
+recursive generators
+  counts every size class of an unbounded language [✔]
+  declares one key for an unbounded language without enumerating it [✔]
+  reports exact retained-key masses at one recursive size [✔]
+  bounds the language to its members of at most one size [✔]
+  keeps every rank when the language is bounded [✔]
+  ranks members in size order, smallest first [✔]
+  decodes every rank of the bounded language to a distinct member [✔]
+  rejects negative recursive ranks without scanning the language [✔]
+  supports the language with one recursive automaton [✔]
+  samples within the size parameter [✔]
+    +++ OK, passed 200 tests.
+  reports the exact atomic distribution inside one recursive size [✔]
+  rejects weighted alternatives around a recursive occurrence [✔]
+  rejects a recursion that never passes through an application [✔]
+  rejects a recursion whose pays add no term node [✔]
+  reports a guarded recursion with no base as empty [✔]
+  reports a guarded grouped recursion with no base as empty [✔]
+  keeps a family whose nested finite members all use one of its keys [✔]
+  finds a key that the body reaches only through a nested recursion over another key [✔]
+  keeps an enclosing recursion that a family reaches only through another key [✔]
+  starts QuickCheck at the first live recursive size [✔]
+  hands back a body that never uses the argument [✔]
+  shrinks a failing member to the smallest of its size [✔]
+  shrinks a finite generator to its smallest counterexample [✔]
+generators read from an automaton
+  accepts exactly the language of a finite automaton [✔]
+  treats every term of a finite automaton as one atomic choice [✔]
+  keeps a large atomic automaton compact [✔]
+  makes recursive size count complete atomic commands [✔]
+  refuses atomic over a recursive or an opaque language, and accepts a bound [✔]
+  counts the size classes of a recursive automaton [✔]
+  samples only terms the automaton accepts [✔]
+    +++ OK, passed 200 tests.
+  retains the term of every member, so a bounded language is inspectable [✔]
+  inspects the members of a finite recursive bound by their terms [✔]
+  reports a recursive automaton without finite terms as empty [✔]
+  counts a finite constrained automaton and rejects a recursive one [✔]
+recursive sampling
+  preserves an atomic finite distribution and its stable ranks [✔]
+  keeps an atomic distribution beside a finite sibling [✔]
+  keeps the exact distribution when a finite generator is bounded [✔]
+  keeps an atomic distribution through a nested bound and a recursion [✔]
+  keeps an atomic distribution inside a grouped bucket [✔]
+  keeps an atomic distribution through a bounded join [✔]
+  keeps finite weights out of recursion without an atomic boundary [✔]
+  preserves atomic distributions through recurGrouped and apply [✔]
+  keeps atomic mass between recursive operation keys [✔]
+engine term ranks
+  rank the engine terms of finite generators [✔]
+  give every rank of a term, and reject a term outside the language [✔]
+  rank a deep term under a choice of labels in time linear in its depth [✔]
+  rank the size-major terms of recursive generators [✔]
+generation from equality automata against Data.CFTA.Simple
+  imports up to a depth exactly the terms of the simple definition [✔]
+    +++ OK, passed 100 tests.
+  imports an automaton without constraints as its terms, by size when it is cyclic [✔]
+    +++ OK, passed 100 tests.
+typed expression generation
+  matches the independent uniform 27,054-expression depth-two language [✔]
+  represents unary, binary, and ternary dependencies in ECTA edges [✔]
+  keeps the domain labels that close grouped do-blocks [✔]
+  keeps grouped constraints on the domain-labelled edge [✔]
+  counts the exact depth-three language without enumerating it [✔]
+  constructs the exact depth-four language from compact groups [✔]
+  retains the exact depth-four result-type groups [✔]
+  unranks representative depth-four expressions [✔]
+  counts exact depth-one coverage by result type [✔]
+  builds the uniform depth-at-most-two language with frequencies [✔]
+  counts the depth-at-most-four language without enumerating it [✔]
+  shrinks any failing expression to the minimal application [✔]
+  shrinks to the globally smallest failing member [✔]
+  counts the recursive family by structural size [✔]
+  generates exactly the first four finite size classes [✔]
+  retains one recursive automaton whose cycle carries the constraints [✔]
+  keeps every recursive group at its own result type [✔]
+  ranks the term of every depth-at-most-two rank and of recursive ranks back to the rank [✔]
+  samples only well-typed expressions from the recursive family [✔]
+    +++ OK, passed 500 tests.
+  samples only well-typed depth-at-most-four expressions [✔]
+    +++ OK, passed 1000 tests.
+  samples only well-typed depth-four expressions through ECTA [✔]
+    +++ OK, passed 1000 tests.
+  samples only well-typed exact-depth expressions through rejection [✔]
+    +++ OK, passed 500 tests.
+  samples only well-typed depth-four expressions through handwritten sharing [✔]
+    +++ OK, passed 1000 tests.
+the engine against the reference model
+  gives the kind, the error, and the counts by size of the model [✔]
+    +++ OK, passed 400 tests.
+    
+    language (400 in total):
+    21.5% error UnguardedRecursion
+    17.5% recursive
+    12.8% error EmptyGenerator
+    12.2% finite, 1 members
+    11.5% error UnboundedGenerator
+    11.5% finite, 2-10 members
+     9.2% error WeightedRecursiveAlternatives
+     2.0% finite, 11-100 members
+     1.0% error BoundedRecursiveOccurrence
+     0.5% error RecursiveOperationFamily
+     0.2% error NonPositiveWeight
+  decodes each rank to the member and the size of the model [✔]
+    +++ OK, passed 400 tests.
+    
+    language (400 in total):
+    21.5% error UnguardedRecursion
+    17.5% recursive
+    12.8% error EmptyGenerator
+    12.2% finite, 1 members
+    11.5% error UnboundedGenerator
+    11.5% finite, 2-10 members
+     9.2% error WeightedRecursiveAlternatives
+     2.0% finite, 11-100 members
+     1.0% error BoundedRecursiveOccurrence
+     0.5% error RecursiveOperationFamily
+     0.2% error NonPositiveWeight
+  gives the distribution of the model [✔]
+    +++ OK, passed 400 tests.
+    
+    language (400 in total):
+    21.5% error UnguardedRecursion
+    17.5% recursive
+    12.8% error EmptyGenerator
+    12.2% finite, 1 members
+    11.5% error UnboundedGenerator
+    11.5% finite, 2-10 members
+     9.2% error WeightedRecursiveAlternatives
+     2.0% finite, 11-100 members
+     1.0% error BoundedRecursiveOccurrence
+     0.5% error RecursiveOperationFamily
+     0.2% error NonPositiveWeight
+  shrinks to smaller ranks of members no larger [✔]
+    +++ OK, passed 400 tests.
+    
+    language (400 in total):
+    21.5% error UnguardedRecursion
+    17.5% recursive
+    12.8% error EmptyGenerator
+    12.2% finite, 1 members
+    11.5% error UnboundedGenerator
+    11.5% finite, 2-10 members
+     9.2% error WeightedRecursiveAlternatives
+     2.0% finite, 11-100 members
+     1.0% error BoundedRecursiveOccurrence
+     0.5% error RecursiveOperationFamily
+     0.2% error NonPositiveWeight
+  ranks the term of each rank back [✔]
+    +++ OK, passed 400 tests.
+    
+    language (400 in total):
+    21.5% error UnguardedRecursion
+    17.5% recursive
+    12.8% error EmptyGenerator
+    12.2% finite, 1 members
+    11.5% error UnboundedGenerator
+    11.5% finite, 2-10 members
+     9.2% error WeightedRecursiveAlternatives
+     2.0% finite, 11-100 members
+     1.0% error BoundedRecursiveOccurrence
+     0.5% error RecursiveOperationFamily
+     0.2% error NonPositiveWeight
+  gives the sizes, the counts, and the key masses of a grouped model [✔]
+    +++ OK, passed 400 tests.
+    
+    family (400 in total):
+    17.0% error UnguardedRecursion
+    15.2% recursive, 1 keys
+    11.8% finite, 1 keys
+    11.0% recursive, 0 keys
+    10.8% error EmptyGenerator
+     7.5% recursive, 2 keys
+     7.2% error WeightedRecursiveAlternatives
+     5.5% error UnboundedGenerator
+     4.2% error RecursiveOperationFamily
+     3.2% finite, 2 keys
+     2.8% recursive, 3 keys
+     2.0% error NonPositiveWeight
+     1.5% finite, 3 keys
+     0.2% error BoundedRecursiveOccurrence
+  imports every term of an automaton once [✔]
+    +++ OK, passed 400 tests.
+  gives a group of equal children its size once for each child [✔]
+    +++ OK, passed 1 test.
+  the Functor and Applicative laws
+    identity: pure id <*> v is v, rank by rank [✔]
+      +++ OK, passed 400 tests.
+    fmap f v is pure f <*> v, rank by rank [✔]
+      +++ OK, passed 400 tests.
+    homomorphism: pure f <*> pure x is pure (f x), rank by rank [✔]
+      +++ OK, passed 400 tests.
+    interchange: u <*> pure y is pure ($ y) <*> u, rank by rank [✔]
+      +++ OK, passed 400 tests.
+    composition: pure (.) <*> u <*> v <*> w is u <*> (v <*> w), size by size [✔]
+      +++ OK, passed 400 tests.
+Data.CFTA.Gen.Synthesis
+  lists the programs of Hectare's space in which each head takes all its parameters [✔]
+  parses the Hoogle+ data, and the printers give each type and program back [✔]
+  parses the Hegel data, and the printer gives each refinement type back [✔]
+  lists the programs of a query in the same order, whatever the process built before [✔]
+  lists one typed term for each program when a variable of a type domain is not determined [✔]
+Data.CFTA.Gen.Synthesis.States
+  gives the programs of the goals size by size, in the host's order [✔]
+  leaves out the programs under a prefix that the checker kills [✔]
+  gives the same programs through the automaton of each size, in the host's order [✔]
+  gives the same programs through the automaton in the enumerator's order [✔]
+  lists the programs that Hectare's rule leaves next to an emptied child [✔]
+  leaves Hectare's rule for the first argument out of the automaton, as the depth-first search does [✔]
+Data.CFTA.Gen.Typing
+  the language of the binders spike
+    gives the members of the hand-written automaton up to the bounds 2 and 3 [✔]
+    counts the terms of the recurrence up to the bound 6 [✔]
+    gives each value the rank of its term [✔]
+  typed arithmetic
+    counts the terms of the recurrence up to the bound 6 [✔]
+    gives distinct well-typed terms of a nesting up to the bound 2, as many as the recurrence [✔]
+    decodes sampled ranks to well-typed terms up to the bound 3, and ranks them back [✔]
+  inputs
+    count the programs over the inputs as the recurrence does up to the bound 6 [✔]
+    give distinct programs that type-check in the inputs, of a nesting up to the bound 2, as many as the recurrence [✔]
+    count as arguments that are static rules, which binders do not move [✔]
+  the automaton
+    reads the grammar of a datatype in the ranks of fromDatatypeUpToDepth [✔]
+    keeps the terms whose sums add equal terms, in a product with an annotated grammar [✔]
+    keeps the terms without a subterm that a template matches [✔]
+    can read the types of the states in an annotation [✔]
+  a bound on the binders
+    counts the terms of each size as a recurrence does, for both languages [✔]
+    counts the programs over inputs, which are not binders [✔]
+    gives distinct well-typed terms up to a size with the binders, as many as the recurrence [✔]
+  the rules
+    take a node view that fits the datatype [✔]
+    take a bound that is not negative [✔]
+    fit the fields of their constructor [✔]
+  the do-notation
+    gives the language of the same rules in a list, in the same order [✔]
+    reads earlier choices, and keeps the combinations that the guard accepts [✔]
+  the order of the values
+    orders the constructors of a helper type in declaration order, as fromDatatype does [✔]
+    reads only the types of the rules, so a non-regular field that no rule uses does not stop it [✔]
+Data.CFTA.Sized
+  lists the classes of a recursion with an empty class between two others [✔]
+  counts and ranks a large class with the count table [✔]
+  keeps the order of the rows with a dead transition [✔]
+  keeps the order of the rows with a repeated transition [✔]
+  lists a term that two transitions accept once [✔]
+  checks the equality constraints of a transition [✔]
+  rejects a guard beyond equality constraints [✔]
+  lists each accepted term of each size once, and ranks it [✔]
+    +++ OK, passed 300 tests.
+  agrees with the cyclic import wherever the import accepts the automaton [✔]
+    +++ OK, passed 300 tests.
+    
+    import (300 in total):
+    50.0% acyclic
+    28.0% CannotCountConstrainedEdges
+    19.7% cyclic, accepted
+     2.3% AmbiguousAutomaton
+  gives the sequence of the reference, also where it uses the count table [✔]
+    +++ OK, passed 300 tests.
+  decides the classes up to a bound as the reference builds them [✔]
+    +++ OK, passed 300 tests.
+
+Finished in 68.0528 seconds
+240 examples, 0 failures
+Test suite gen-tests: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-generator-0.1.0.0/t/gen-tests/noopt/test/cfta-generator-0.1.0.0-gen-tests.log
+1 of 1 test suites (1 of 1 test cases) passed.

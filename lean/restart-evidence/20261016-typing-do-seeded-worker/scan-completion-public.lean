@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion
+
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.bind_done_iff
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.bind_done_iff
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.bind_stable
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.bind_stable
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.select_stable
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.select_stable
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.primary_complete
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.primary_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.secondary_complete
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.secondary_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.query_complete
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.query_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.decision_complete
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.decision_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.scan_complete
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.scan_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.scan_uniform
+#check @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.scan_uniform

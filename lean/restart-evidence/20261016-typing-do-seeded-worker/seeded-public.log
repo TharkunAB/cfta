@@ -1,0 +1,359 @@
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.Fault' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorker.Fault (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.state' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.state {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width →
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.bind' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.bind {width : Nat}
+  (first : MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width)
+  (next :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width →
+        MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.operand' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorker.operand {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h : Nat) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorker.leaf {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorker.fold {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h n : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (seed : List Int) :
+  List (List Int) →
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width →
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h n : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun {width : Nat}
+  (evaluation : Nat → Nat → Nat → MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width) : Prop
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.bind_done_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.bind_done_iff {width : Nat}
+  (first : MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width)
+  (next :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width →
+        MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width) :
+  first.bind next = MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after ↔
+    ∃ value middle,
+      first = MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done value middle ∧
+        next value middle = MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.bind_stable' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.bind_stable {width : Nat}
+  (first : Nat → Nat → Nat → MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width)
+  (next :
+    Nat →
+      Nat →
+        Nat →
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width →
+              MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (middle : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width)
+  (one : MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun first value middle)
+  (two :
+    MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun (fun p h n => next p h n value middle) result
+      after) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun (fun p h n => (first p h n).bind (next p h n)) result
+    after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.operand_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.operand_complete {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {path : List Int}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand path values before result after) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun
+    (fun p h x => MicroCFTA.SourceCurrentAllocatedSeededWorker.operand p h path values before) result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.leaf_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.leaf_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {fuel : Nat}
+  {left right result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+          right))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+      after) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun
+    (fun x x_1 n => MicroCFTA.SourceCurrentAllocatedSeededWorker.leaf n left right before) result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.fold_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.fold_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {seed : List Int} {paths : List (List Int)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold values (paths ++ [seed]) before result after) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun
+    (fun p h n => MicroCFTA.SourceCurrentAllocatedSeededWorker.fold p h n values seed paths before) result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.seeded_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.seeded_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before result after) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.StableRun
+    (fun p h n => MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded p h n values paths before) result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.seeded_uniform' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion.seeded_uniform {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before result after) :
+  ∃ bound,
+    ∀ (fuel : Nat),
+      bound ≤ fuel →
+        MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded fuel fuel fuel values paths before =
+          MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.operand_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.operand_done_stable {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h P H : Nat} {path : List Int}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.operand p h path values before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after)
+  (enoughP : p ≤ P) (enoughH : h ≤ H) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.operand P H path values before =
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.leaf_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.leaf_done_stable {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {n N : Nat}
+  {left right result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.leaf n left right before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after)
+  (enough : n ≤ N) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.leaf N left right before =
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.fold_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.fold_done_stable {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h n P H N : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {seed : List Int} {paths : List (List Int)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.fold p h n values seed paths before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after)
+  (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughN : n ≤ N) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.fold P H N values seed paths before =
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.seeded_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.seeded_done_stable {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h n P H N : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded p h n values paths before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after)
+  (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughN : n ≤ N) :
+  MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded P H N values paths before =
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done result after
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.fold_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.fold_done_unique {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h n P H N : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {seed : List Int} {paths : List (List Int)}
+  {before after later : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (one :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.fold p h n values seed paths before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done first after)
+  (two :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.fold P H N values seed paths before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done second later) :
+  first = second ∧ after = later
+'MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.seeded_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededWorkerStability.seeded_done_unique {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h n P H N : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after later : MicroCFTA.SourceCurrentAllocatedSeededWorker.Checked width}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (one :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded p h n values paths before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done first after)
+  (two :
+    MicroCFTA.SourceCurrentAllocatedSeededWorker.seeded P H N values paths before =
+      MicroCFTA.SourceCurrentAllocatedSeededWorker.Outcome.done second later) :
+  first = second ∧ after = later

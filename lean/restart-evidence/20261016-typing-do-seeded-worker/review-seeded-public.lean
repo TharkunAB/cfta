@@ -1,0 +1,12 @@
+import MicroCFTA.SourceCurrentAllocatedSeededWorkerActual
+
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededCaller.verified
+#check MicroCFTA.SourceCurrentAllocatedSeededCaller.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededCaller.actual
+#check MicroCFTA.SourceCurrentAllocatedSeededCaller.actual
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededCaller.finite
+#check MicroCFTA.SourceCurrentAllocatedSeededCaller.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.verified
+#check MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.finite
+#check MicroCFTA.SourceCurrentAllocatedSeededWorkerActual.finite
