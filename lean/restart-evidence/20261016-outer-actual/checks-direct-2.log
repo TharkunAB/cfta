@@ -1,0 +1,155 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:35:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedPartialChecksComposition.0.MicroCFTA.SourceCurrentAllocatedPartialChecksComposition.stable_unique`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:83:4: error: Dependent elimination failed: Failed to solve equation
+  middle.1 = middle✝.1
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:134:4: error: Dependent elimination failed: Failed to solve equation
+  (SourceEqualityPartialNodeRebuild.modify (Value.node entry edges depth free) edges results middle.checked.native).1 =
+    (SourceEqualityPartialNodeRebuild.modify (Value.node entry edges depth free) edges results✝
+        middle✝.checked.native).1
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:162:4: error: Dependent elimination failed: Failed to solve equation
+  middle.1 = middle✝.1
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:206:14: error: Tactic `subst` failed: 'result' occurs at
+  result
+
+case children.rows_descendants
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+inherited : EqValue
+original : EdgeValue Symbol Guard
+originals results : List (EdgeValue Symbol Guard)
+narrowed result : EdgeValue Symbol Guard
+before middle afterChildren after : Caller width
+edge : EdgeCall budget { inherited := inherited, value := original } before narrowed middle
+children : Descendants budget inherited narrowed middle result afterChildren
+rest : Rows budget inherited originals afterChildren results after
+edgeChecks : Checks (edgeCallTrace edge)
+childrenChecks : Checks (descendantsTrace children)
+restChecks : Checks (rowsTrace rest)
+afterChildren✝ : Caller width
+otherRest : Rows budget inherited originals afterChildren✝ results after
+other : EdgeCall budget { inherited := inherited, value := original } before narrowed middle
+otherChildren : Descendants budget inherited narrowed middle result afterChildren✝
+left✝ : result = result
+right✝ : afterChildren = afterChildren✝
+⊢ Checks (descendantsTrace otherChildren)
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:210:14: error: Tactic `subst` failed: 'result' occurs at
+  result
+
+case children.rows_tail
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+inherited : EqValue
+original : EdgeValue Symbol Guard
+originals results : List (EdgeValue Symbol Guard)
+narrowed result : EdgeValue Symbol Guard
+before middle afterChildren after : Caller width
+edge : EdgeCall budget { inherited := inherited, value := original } before narrowed middle
+children : Descendants budget inherited narrowed middle result afterChildren
+rest : Rows budget inherited originals afterChildren results after
+edgeChecks : Checks (edgeCallTrace edge)
+childrenChecks : Checks (descendantsTrace children)
+restChecks : Checks (rowsTrace rest)
+afterChildren✝ : Caller width
+otherRest : Rows budget inherited originals afterChildren✝ results after
+other : EdgeCall budget { inherited := inherited, value := original } before narrowed middle
+otherChildren : Descendants budget inherited narrowed middle result afterChildren✝
+left✝ : result = result
+right✝ : afterChildren = afterChildren✝
+⊢ Checks (rowsTrace otherRest)
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:226:4: error: Dependent elimination failed: Failed to solve equation
+  (match
+      keepFirst middle.checked.native.machine.heap.edgeRecords
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+          constraint := edge.entry.key.constraint }
+        ((fun entry => EdgeValue.mk entry results)
+          (intern middle.checked.native.machine.heap.edges
+              { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+                constraint := edge.entry.key.constraint }).fst)
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+          constraint := edge.entry.key.constraint } with
+    | some x => x
+    | none =>
+      (fun entry => EdgeValue.mk entry results)
+        (intern middle.checked.native.machine.heap.edges
+            { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+              constraint := edge.entry.key.constraint }).fst) =
+    match
+      keepFirst middle✝.checked.native.machine.heap.edgeRecords
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+          constraint := edge.entry.key.constraint }
+        ((fun entry => EdgeValue.mk entry results✝)
+          (intern middle✝.checked.native.machine.heap.edges
+              { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+                constraint := edge.entry.key.constraint }).fst)
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+          constraint := edge.entry.key.constraint } with
+    | some x => x
+    | none =>
+      (fun entry => EdgeValue.mk entry results✝)
+        (intern middle✝.checked.native.machine.heap.edges
+            { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+              constraint := edge.entry.key.constraint }).fst
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:275:14: error: Tactic `subst` failed: 'result' occurs at
+  result
+
+case children.walk_head
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+combined : EqValue
+index : Nat
+value result : Value Symbol Guard
+values results : List (Value Symbol Guard)
+before middle after : Caller width
+head :
+  NodeCall budget { inherited := (descend before combined index).fst, value := value }
+    (descend before combined index).snd result middle
+tail : Walk budget combined (index + 1) values middle results after
+headChecks : Checks (nodeCallTrace head)
+tailChecks : Checks (walkTrace tail)
+middle✝ : Caller width
+other :
+  NodeCall budget { inherited := (descend before combined index).fst, value := value }
+    (descend before combined index).snd result middle✝
+otherTail : Walk budget combined (index + 1) values middle✝ results after
+left✝ : result = result
+right✝ : middle = middle✝
+⊢ Checks (nodeCallTrace other)
+lean/MicroCFTA/SourceCurrentAllocatedPartialChecksComposition.lean:278:14: error: Tactic `subst` failed: 'result' occurs at
+  result
+
+case children.walk_tail
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+combined : EqValue
+index : Nat
+value result : Value Symbol Guard
+values results : List (Value Symbol Guard)
+before middle after : Caller width
+head :
+  NodeCall budget { inherited := (descend before combined index).fst, value := value }
+    (descend before combined index).snd result middle
+tail : Walk budget combined (index + 1) values middle results after
+headChecks : Checks (nodeCallTrace head)
+tailChecks : Checks (walkTrace tail)
+middle✝ : Caller width
+other :
+  NodeCall budget { inherited := (descend before combined index).fst, value := value }
+    (descend before combined index).snd result middle✝
+otherTail : Walk budget combined (index + 1) values middle✝ results after
+left✝ : result = result
+right✝ : middle = middle✝
+⊢ Checks (walkTrace otherTail)

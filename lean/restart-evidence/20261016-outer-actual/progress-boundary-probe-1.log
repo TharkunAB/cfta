@@ -1,0 +1,88 @@
+lean/restart-evidence/20261016-outer-actual/progress-boundary-probe.lean:35:27: error: unexpected identifier; expected '}'
+lean/restart-evidence/20261016-outer-actual/progress-boundary-probe.lean:21:17: error: Function expected at
+  Available
+but this term has type
+  ?m.2
+
+Note: Expected a function because this term is being applied to the argument
+  before.checked.native.machine.heap
+
+Hint: The identifier `Available` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+lean/restart-evidence/20261016-outer-actual/progress-boundary-probe.lean:27:6: error: Function expected at
+  Available
+but this term has type
+  ?m.2
+
+Note: Expected a function because this term is being applied to the argument
+  running.checked.native.machine.heap
+
+Hint: The identifier `Available` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+lean/restart-evidence/20261016-outer-actual/progress-boundary-probe.lean:35:4: error: Type mismatch
+  FlatMemoThunk.setStatus
+has type
+  Nat → FlatMemoThunk.Status ?m.95 → FlatMemoThunk.State ?m.96 ?m.97 ?m.95 → FlatMemoThunk.State ?m.96 ?m.97 ?m.95
+but is expected to have type
+  FlatMemoThunk.State NodeKey NodeRequest Node
+lean/restart-evidence/20261016-outer-actual/progress-boundary-probe.lean:33:71: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+x✝ : Sort u_1
+Available : x✝
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : SourceCurrentAllocatedNativeInventoryState.Inventory
+before : Caller width
+memos : EndpointMemoGateTrace.Memos
+initial : Context formulas solver inventory before memos
+request : NodeRequest
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+available : sorry
+missing : before.nodeResults.table request.key = none
+running : Caller width :=
+  { checked := before.checked, merge := before.merge, fourth := before.fourth, nodeResults := sorry,
+    edgeResults := before.edgeResults }
+⊢ ∃ running,
+    beginNode request before = (before.nodeResults.next, FlatMemoThunk.Observation.evaluate request, running) ∧
+      Context formulas solver inventory running memos ∧
+        SourceEqualityConstraintAllocation.Ready running.checked.operations.constraints request.inherited ∧
+          sorry ∧
+            running.nodeResults.table request.key = some before.nodeResults.next ∧
+              running.nodeResults.cells before.nodeResults.next =
+                  some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+                ∀ (fuel g s r e p h m c n budget : Nat),
+                  SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget request running ∧
+                    SourceCurrentAllocatedPartialWorker.nodeCall fuel g s r e p h m c n budget request running =
+                      SourceCurrentAllocatedPartialWorker.Outcome.failed
+                        (SourceCurrentAllocatedPartialWorker.Fault.nodeMemo before.nodeResults.next
+                          FlatMemoThunk.Observation.busy)
+                        running
+'MicroCFTA.OuterProgressBoundaryProbe.fresh_owner_boundary' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.OuterProgressBoundaryProbe.fresh_owner_boundary.{u_1, u_2} [DecidableEq Symbol]
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq Node] {width : Nat} {x✝ : Sort u_1}
+  {Available : x✝} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory} {before : Caller width}
+  {memos : EndpointMemoGateTrace.Memos} (initial : Context formulas solver inventory before memos)
+  (request : NodeRequest)
+  (inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  (available : sorry) (missing : before.nodeResults.table request.key = none) :
+  ∃ running,
+    beginNode request before = (before.nodeResults.next, FlatMemoThunk.Observation.evaluate request, running) ∧
+      Context formulas solver inventory running memos ∧
+        SourceEqualityConstraintAllocation.Ready running.checked.operations.constraints request.inherited ∧
+          sorry ∧
+            running.nodeResults.table request.key = some before.nodeResults.next ∧
+              running.nodeResults.cells before.nodeResults.next =
+                  some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+                ∀ (fuel g s r e p h m c n budget : Nat),
+                  SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget request running ∧
+                    SourceCurrentAllocatedPartialWorker.nodeCall fuel g s r e p h m c n budget request running =
+                      SourceCurrentAllocatedPartialWorker.Outcome.failed
+                        (SourceCurrentAllocatedPartialWorker.Fault.nodeMemo before.nodeResults.next
+                          FlatMemoThunk.Observation.busy)
+                        running
