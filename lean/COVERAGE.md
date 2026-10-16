@@ -1,5 +1,76 @@
 # Full formalization coverage
 
+## Current source refresh and literal merge execution
+
+Source main is `ccebf0f7`, merged into formalize at `44ba7bf1`. The previous
+published checkpoint is `10b58c54`. Proof commits are `03c50a7d`, `cb2f4061`,
+and `03b48a40`. This increment adds five Lean modules.
+It changes no local Haskell behavior or test. Root FINDINGS.md retains the
+external Haskell repair registry first. Record every later repair there with
+its failure, reproducer, files, commit, checks, and upstream status.
+
+Read lean/notes-current-merge-worker.md for the current top-level proof map.
+The full objective is correspondence between the specified constrained tree
+languages and generators and the current Haskell library. Exact size classes,
+finite execution, counts, size order, both rank inverses, probability laws,
+and each transformation's stated semantics remain distinct contracts.
+There is no completed whole-library correspondence theorem.
+
+The existing Sized Exact record proves finite modeled classes, distinct
+accepted terms, exact counts, signed errors, both inverses, and ordered
+prefixes on validated original row maps under the stated guard contracts.
+The completed current outer root_exact theorem proves independent language
+equality and the full returned physical/memo invariant. It still requires a
+completed strict-read call, legitimate initial Context, allocated empty
+inherited readiness, input availability, and reached checks.
+
+SourceCurrentAllocatedMergeWorker now interprets the current allocated Code.
+It retains the exact heap, equality operations, and merge memo on success
+and failure. Top rows allocate emptyField at the reached state. Work and
+selection fuel remain separate. A positive-work ready hit needs no body fuel.
+Sound derives the same actual Run or Call. Completion derives stable bounds
+from finite graphs and proves both graph equivalences and success stability.
+
+WorkerActual.finite constructs a finite literal merge return from legitimate
+warm Context and input availability. It derives stable execution and the full
+caller Post at the same output, heap, operations, and memo. Both outer result
+families, native tables/domain cache, and fourth memo remain. The language
+law is inclusion: merge is an over-approximation. Logical global-query read
+receipts are constructed; the worker does not execute concrete host tables.
+
+SourceCurrentCurriedDefaulting models current narrowHeads with ?any priority.
+The historical filter agrees only when ?any is absent. The actual two-row
+counterexample shows an adapter boundary, not a Haskell bug. The upstream
+refresh adds root typing inputs, Binders, type domains, and deriveLTAOn.
+Broader row/closure, GHC pruning, LTA contract/codec, and generator rank
+adapters remain open. No cfta core or Sized source changes upstream.
+
+The full pinned Audit passes 2417 jobs and 57607 theorem dependency checks.
+Only the three permitted foundations and the old unused-input warning remain.
+The strict Nix all-component build passes. All six current suites pass:
+788 examples plus golden. All 15 changed Haskell files pass Fourmolu; all
+four active packages pass Cabal-gild and metadata checks. The first GMP
+linker failure is an environment PATH issue, corrected without source edits.
+Raw logs, public probes, integration kernels, independent reviews, frozen
+sources, and preservation checks are in
+lean/restart-evidence/20261016-typing-refresh-merge-worker/.
+
+Next implement literal checked Target and shared Force/Leaf, followed by
+edits, Class/Pass, conjunction, Scan, local reduction, parent, and the outer
+two-family worker. Read target-current-next.md in the evidence directory.
+Their strongest current endpoints remain relations. Retain exact failed
+states and strict source reads. Do not supply a future body success oracle.
+
+General constrained outer termination, unequal-length path classes, and
+repeated-pass convergence remain open. Current reducePartially is one pass.
+Host forcing, lazy publication, noConstraint CAF, concrete containers,
+identity lifetime, concurrency, machine bounds, solvers, random draws,
+callbacks, codecs, broader frontends, separate Sized contracts, and all older
+constructor/equality targets remain active. Preserve the optimized interned
+core and all local proofs, counterexamples, repairs, and drafts. Push verified
+formalize checkpoints regularly. No board posts or deployments. This is
+progress toward the full objective.
+
 ## Current mutual recursive reduction correctness
 
 Source main remains `8f85ddb6`. The preceding published checkpoint is

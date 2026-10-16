@@ -2,7 +2,24 @@
 
 ## Haskell fix handoff for external work
 
-Current source main is `8f85ddb6`. It is merged into `formalize` at `7dccd588`.
+Current source main is `ccebf0f7`. It is merged into `formalize` at `44ba7bf1`.
+This refresh adds typing inputs, type domains, binder bounds, and typed LTA
+refinement generators. It changes no interned core or Sized implementation.
+No local Haskell behavior repair is added. The historical repairs below
+remain upstream. The only local Haskell-tree differences are the retained
+constructor changelog entry and reproducer comment.
+
+All six current suites pass: 321 core, 237 generator, 173 refinement,
+35 GHC-fit, and 22 decision-model examples, plus the hole-fit golden check.
+This is 788 examples plus golden. The strict Nix all-component build passes.
+Fourmolu checks all 15 changed Haskell files. Cabal-gild and metadata checks
+pass for all four active packages. Evidence is in
+`lean/restart-evidence/20261016-typing-refresh-merge-worker/source-strict-build-final.log`,
+`source-tests.log`, and `source-format-metadata.log` in that directory.
+The first build encountered a Nix linker path error for GMP. The documented
+host PATH fixes that environment error. It needs no Haskell change.
+
+The previous source baseline was `8f85ddb6`, merged at `7dccd588`.
 Use the current source before applying an older repair. The entries below
 separate a behavior fix from a remaining documentation change.
 
@@ -50,12 +67,14 @@ separate a behavior fix from a remaining documentation change.
 
 PR #55 (`47b06bbe`, merged at `8f85ddb6`) exposes `typingAutomaton` and
 `fromConstructorAutomaton`. `fromTypingRules` now takes a `Typing` record.
-Nonempty root inputs and `Binders` return `NotImplemented`. The finite
+At that checkpoint, nonempty root inputs and `Binders` returned
+`NotImplemented`. PR #57 now implements inputs, and PR #59 implements
+binder bounds and removes that error constructor. The finite
 needed-type discovery repair remains in the new decoder helper. Existing
 typing proofs retain their earlier interfaces; the new public wrappers,
 validation order, and `Maybe Int` state representation need source adapters.
 
-Validation at this source refresh: the strict Nix build of all components
+Validation at the earlier PR #55 refresh: the strict Nix build of all components
 passes. All six existing suites pass: 321 core, 231 generator, 169 refinement,
 34 GHC-fit, and 22 decision-model examples, plus the hole-fit golden check.
 This is 777 examples plus golden. Five changed Haskell files pass Fourmolu.
@@ -66,6 +85,77 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current source refresh and literal merge execution
+
+Source main is `ccebf0f7`, merged into formalize at `44ba7bf1`. The previous
+published checkpoint is `10b58c54`. Proof commits are `03c50a7d`, `cb2f4061`,
+and `03b48a40`. This increment adds five Lean modules.
+It changes no local Haskell behavior or test. Root FINDINGS.md retains the
+external Haskell repair registry first. Record every later repair there with
+its failure, reproducer, files, commit, checks, and upstream status.
+
+Read lean/notes-current-merge-worker.md for the current top-level proof map.
+The full objective is correspondence between the specified constrained tree
+languages and generators and the current Haskell library. Exact size classes,
+finite execution, counts, size order, both rank inverses, probability laws,
+and each transformation's stated semantics remain distinct contracts.
+There is no completed whole-library correspondence theorem.
+
+The existing Sized Exact record proves finite modeled classes, distinct
+accepted terms, exact counts, signed errors, both inverses, and ordered
+prefixes on validated original row maps under the stated guard contracts.
+The completed current outer root_exact theorem proves independent language
+equality and the full returned physical/memo invariant. It still requires a
+completed strict-read call, legitimate initial Context, allocated empty
+inherited readiness, input availability, and reached checks.
+
+SourceCurrentAllocatedMergeWorker now interprets the current allocated Code.
+It retains the exact heap, equality operations, and merge memo on success
+and failure. Top rows allocate emptyField at the reached state. Work and
+selection fuel remain separate. A positive-work ready hit needs no body fuel.
+Sound derives the same actual Run or Call. Completion derives stable bounds
+from finite graphs and proves both graph equivalences and success stability.
+
+WorkerActual.finite constructs a finite literal merge return from legitimate
+warm Context and input availability. It derives stable execution and the full
+caller Post at the same output, heap, operations, and memo. Both outer result
+families, native tables/domain cache, and fourth memo remain. The language
+law is inclusion: merge is an over-approximation. Logical global-query read
+receipts are constructed; the worker does not execute concrete host tables.
+
+SourceCurrentCurriedDefaulting models current narrowHeads with ?any priority.
+The historical filter agrees only when ?any is absent. The actual two-row
+counterexample shows an adapter boundary, not a Haskell bug. The upstream
+refresh adds root typing inputs, Binders, type domains, and deriveLTAOn.
+Broader row/closure, GHC pruning, LTA contract/codec, and generator rank
+adapters remain open. No cfta core or Sized source changes upstream.
+
+The full pinned Audit passes 2417 jobs and 57607 theorem dependency checks.
+Only the three permitted foundations and the old unused-input warning remain.
+The strict Nix all-component build passes. All six current suites pass:
+788 examples plus golden. All 15 changed Haskell files pass Fourmolu; all
+four active packages pass Cabal-gild and metadata checks. The first GMP
+linker failure is an environment PATH issue, corrected without source edits.
+Raw logs, public probes, integration kernels, independent reviews, frozen
+sources, and preservation checks are in
+lean/restart-evidence/20261016-typing-refresh-merge-worker/.
+
+Next implement literal checked Target and shared Force/Leaf, followed by
+edits, Class/Pass, conjunction, Scan, local reduction, parent, and the outer
+two-family worker. Read target-current-next.md in the evidence directory.
+Their strongest current endpoints remain relations. Retain exact failed
+states and strict source reads. Do not supply a future body success oracle.
+
+General constrained outer termination, unequal-length path classes, and
+repeated-pass convergence remain open. Current reducePartially is one pass.
+Host forcing, lazy publication, noConstraint CAF, concrete containers,
+identity lifetime, concurrency, machine bounds, solvers, random draws,
+callbacks, codecs, broader frontends, separate Sized contracts, and all older
+constructor/equality targets remain active. Preserve the optimized interned
+core and all local proofs, counterexamples, repairs, and drafts. Push verified
+formalize checkpoints regularly. No board posts or deployments. This is
+progress toward the full objective.
 
 ## Current mutual recursive reduction correctness
 
