@@ -94,8 +94,12 @@ class Literal a where
     -- | The least and the greatest value, if the type has them.
     literalRange :: (Maybe a, Maybe a)
 
--- | The term that denotes the value.
-literal :: (Literal a) => a -> Expr
+{- | The integer that stands for the value: a term on 'Expr', and the integer
+itself on 'Integer'. So a function that is polymorphic over
+"Data.CFTA.Refinement.Symbolic" can name a value of an enumeration, as in
+@color .== literal Black@.
+-}
+literal :: (Literal a, Num e) => a -> e
 literal = fromInteger . toLiteral
 
 instance Literal Integer where

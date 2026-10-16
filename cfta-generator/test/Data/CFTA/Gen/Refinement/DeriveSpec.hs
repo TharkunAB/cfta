@@ -42,7 +42,6 @@ import Data.CFTA.Generic (HasFTA)
 import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
 import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal, Refinement, uninterpreted)
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
-import Data.CFTA.Refinement.Symbolic (Symbolic (..), larger, smaller, true, (.&&))
 
 -- | A list that its invariant keeps sorted.
 data SortedList = Nil | Cons Integer SortedList
@@ -74,6 +73,37 @@ sorted (ConsNode x restHead) = 0 .<= x .&& x .<= 1000000 .&& x .<= restHead
 data ShortNode e = ShortNil | ShortCons e
     deriving stock (Generic)
     deriving anyclass (NodeView)
+
+-- | An integer with a sign.
+data Signed = Negative Integer | Positive Integer
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | A node view with the constructors of 'Signed' in the other order. Their shapes are the same.
+data SignedNode e = PositiveNode e | NegativeNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | A row of flags.
+data Flags = NoFlags | Flag Bool Flags
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | One node of a row of flags: the flag, and the number of flags of the rest.
+data FlagsNode e = NoFlagsNode | FlagNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | Each flag is set, and the measure is the number of flags. 'literal' names 'True' on both sides.
+instance HasLTA Flags where
+    type Node Flags = FlagsNode
+    type Measures Flags = Single
+    invariant = Measured count set
+      where
+        count NoFlagsNode = 0
+        count (FlagNode _ rest) = rest + 1
+        set NoFlagsNode = true
+        set (FlagNode flag _) = flag .== literal True
 
 -- | The elements of a sorted list.
 toList :: SortedList -> [Integer]
@@ -513,6 +543,29 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         typed @Division (invariant @Division)
             `shouldBe` Right (formulas [("Divide", contract (\d -> 0 .<= d .&& d .<= 5 .&& d ./= (0 :: Expr)))])
         typed @Pair (invariant @Pair) `shouldBe` Right (formulas [("Pair", contract (\left right -> left .< (right :: Expr)))])
+    it "reports a node view whose constructors are in another order" $
+        void (deriveLTAFrom @Signed 0 (atom @Integer LTAGen.every) (Contracted (\_ -> true) :: Invariant SignedNode NoMeasures))
+            `shouldBe` Left (NodeMismatch "Negative" "the node view has PositiveNode in its place, a name that does not start with Negative")
+    it "derives RedBlackTrees with a condition on the measures of the root" $ do
+        let blackRooted root = col root .== 0 .&& bh root .<= 3
+        sameRanks redBlackTrees (deriveLTARooted @Tree 6 mempty blackRooted)
+        map (holdsRooted mempty (invariant @Tree) blackRooted) [Black Leaf Leaf, Red Leaf Leaf, Leaf]
+            `shouldBe` [True, False, True]
+    it "takes a condition on the measure of the root of a Measured invariant" $ do
+        let atoms = atom @Integer LTAGen.every
+            headAbove (Single headOf') = 999999 .<= headOf'
+        rooted <- either (fail . show) LTAGen.compile (deriveLTARooted @SortedList 8 atoms headAbove)
+        conditioned <-
+            either (fail . show) (LTAGen.compile . (`LTAGen.satisfying` (999999 .<=))) (deriveLTA @SortedList 8 atoms)
+        LTAGen.cardinality rooted `shouldBe` LTAGen.cardinality conditioned
+        map (holdsRooted atoms (invariant @SortedList) headAbove) [Cons 999999 Nil, Cons 3 Nil, Nil]
+            `shouldBe` [True, False, True]
+    it "names a value of an enumeration with literal on values and on terms" $ do
+        let atoms = atom @Bool (LTAGen.elements [False, True])
+        compiled <- either (fail . show) LTAGen.compile (deriveLTA @Flags 3 atoms)
+        LTAGen.values compiled
+            `shouldBe` Right [NoFlags, Flag True NoFlags, Flag True (Flag True NoFlags), Flag True (Flag True (Flag True NoFlags))]
+        map (holds atoms (invariant @Flags)) [Flag True NoFlags, Flag False NoFlags] `shouldBe` [True, False]
     it "reports a node view that does not fit its datatype" $ do
         let short = deriveLTAFrom @SortedList 8 (atom @Integer LTAGen.every) (Contracted (\_ -> true) :: Invariant ShortNode NoMeasures)
             flat =

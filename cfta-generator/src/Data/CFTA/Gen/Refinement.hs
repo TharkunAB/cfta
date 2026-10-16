@@ -821,7 +821,9 @@ fromDatatypeUpToDepth depth datatype =
 The solver decides every guard, condition, and contract once, and the result
 is an ordinary generator: finite, or recursive for a recursive import. The
 call fails with the 'explain' text of the error when the generator cannot be
-compiled. A product with an empty part is empty, and its other parts are not
+compiled; 'compileWith' returns the 'GenError' as a value, as in
+@withZ3 [] (\\solver -> compileWith solver generator)@, so a test can match it.
+A product with an empty part is empty, and its other parts are not
 compiled, so their errors are not reported; 'validOutcomes' reports them. Each
 free name in a refinement is an integer.
 -}

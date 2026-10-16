@@ -42,7 +42,9 @@ child: @e@ for 'Measured', the one integer of the child, and a record of
 measures for 'MeasuredBy'. So GHC checks the number of children of each
 constructor, and @-Wincomplete-patterns@ checks that the invariant covers
 each constructor. The derivation checks the node view against the datatype
-and reports 'NodeMismatch'.
+and reports 'NodeMismatch'. The name of each constructor of the view starts
+with the name of the constructor of the datatype in its place, as
+@ConsNode@ for @Cons@, so two constructors of one shape cannot change places.
 
 A datatype with several integers for each value, such as the color and the
 black height of a red-black tree, has named measures: a record whose
@@ -75,12 +77,50 @@ instance HasLTA Tree where
 The functions are polymorphic over 'Symbolic'. On 'Expr', they give the
 formulas of the generator. On 'Integer', 'holds', 'measureOf', and
 'measuresOf' run them on values, so the same text checks the values of a
-test. 'measuresAt' gives the measures of a value term, for a condition on the
-root, as in @col (measuresAt v) .== 0@.
+test.
 
-A measure can choose with 'Data.CFTA.Refinement.Symbolic.ite', and
-'Data.CFTA.Refinement.Symbolic.smaller' and
-'Data.CFTA.Refinement.Symbolic.larger' come from it. The bounds of a binary
+A condition on the root reads the measures of the root, and it is written
+once in the same way. 'deriveLTARooted' takes it, and 'holdsRooted' runs it
+on values:
+
+@
+blackRooted :: Either DeriveLTAError (LTAGen Tree)
+blackRooted = deriveLTARooted \@Tree 6 mempty (\\root -> col root .== 0 .&& bh root .<= 3)
+@
+
+The measures of a 'Measured' invariant are 'Single', as in
+@\\(Single height) -> height .<= 3@. 'measuresAt' gives the measures of a
+value term for other conditions, as in @col (measuresAt v) .== 0@.
+
+'literal' names a value of an enumeration on both sides, as in
+@color .== literal Black@. A constant in the @where@ of an instance needs a
+type signature, as @black :: (Num e) => e@: without it, the monomorphism
+restriction gives it one type, and GHC reports the two functions of the
+invariant, not the constant. A function of the @where@ that reads a parameter
+of the invariant, as @top@ in @byLength top@, needs a signature too, when
+@TypeFamilies@ or @GADTs@ turn on @MonoLocalBinds@.
+
+The class is not necessary. A top-level invariant with a type signature and
+'deriveLTAFrom' give the same generator, without the associated types, and
+one datatype can have several invariants:
+
+@
+byLength :: Invariant SortedListByNode ListMeasures
+byLength = MeasuredBy measures increasing
+  where
+    measures NilBy = ListMeasures 1000001 0
+    measures (ConsBy x rest) = ListMeasures x (size rest + 1)
+    increasing NilBy = true
+    increasing (ConsBy x rest) = x .< front rest
+
+sortedOfLength :: Either DeriveLTAError (LTAGen SortedList)
+sortedOfLength = deriveLTAFromRooted \@SortedList 8 (atom \@Integer (elements [0 .. 9])) byLength (\\root -> size root .== 3)
+@
+
+'holds', 'measuresOf', and 'holdsRooted' take such an invariant too.
+
+A measure can choose with 'ite', and 'smaller' and 'larger' come from it.
+The bounds of a binary
 search tree with the keys 0 to 3 are its least and its greatest key, with 4
 and -1 for an empty tree:
 
@@ -107,6 +147,8 @@ module Data.CFTA.Gen.Refinement.Derive (
     HasLTA (..),
     deriveLTA,
     deriveLTAFrom,
+    deriveLTARooted,
+    deriveLTAFromRooted,
     Invariant (..),
     invariantAnnotations,
 
@@ -121,6 +163,7 @@ module Data.CFTA.Gen.Refinement.Derive (
 
     -- * Values
     holds,
+    holdsRooted,
     measureOf,
     measuresOf,
 
@@ -128,12 +171,20 @@ module Data.CFTA.Gen.Refinement.Derive (
     Atoms,
     atom,
 
+    -- * The logic
+    Boolean (..),
+    Symbolic (..),
+    smaller,
+    larger,
+    literal,
+
     -- * Errors
     DeriveLTAError (..),
 ) where
 
 import Control.Monad (unless, when)
 import qualified Data.Kind as Kind
+import Data.List (isPrefixOf)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Proxy (Proxy (Proxy))
@@ -156,12 +207,12 @@ import GHC.Generics (
 import qualified GHC.Generics as Generic
 
 import Data.CFTA.Formula (Formula (Top))
-import Data.CFTA.Gen.Refinement (LTAGen)
+import Data.CFTA.Gen.Refinement (LTAGen, satisfying)
 import Data.CFTA.Gen.Refinement.Derive.Internal
 import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
 import Data.CFTA.Index (Arity (..), Depth)
-import Data.CFTA.Refinement.Expression (Expr, uninterpreted)
-import Data.CFTA.Refinement.Symbolic (Boolean (true), Symbolic (Truth))
+import Data.CFTA.Refinement.Expression (Expr, literal, uninterpreted)
+import Data.CFTA.Refinement.Symbolic (Boolean (..), Symbolic (..), larger, smaller)
 import qualified Data.CFTA.Refinement.Symbolic.Internal as Children
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -395,6 +446,32 @@ deriveLTAFrom bound atoms rules = do
     annotations <- invariantAnnotations @a rules
     deriveLTAWith @a bound atoms annotations
 
+{- | Derive the refinement generator of a datatype from its 'HasLTA' instance,
+with a condition on the measures of the root. The condition is written once,
+as the invariant is: 'holdsRooted' runs it on values. For a 'Measured'
+invariant, the measures are 'Single'; for a 'Contracted' invariant,
+'NoMeasures'.
+-}
+deriveLTARooted ::
+    forall a.
+    (HasLTA a) => Depth -> Atoms -> (forall e. (Symbolic e) => Measures a e -> Truth e) -> Either DeriveLTAError (LTAGen a)
+deriveLTARooted bound atoms = deriveLTAFromRooted bound atoms (invariant @a)
+
+-- | 'deriveLTAFrom' with a condition on the measures of the root, as for 'deriveLTARooted'.
+deriveLTAFromRooted ::
+    forall a node m.
+    (HasFTA a, NodeView node) =>
+    Depth -> Atoms -> Invariant node m -> (forall e. (Symbolic e) => m e -> Truth e) -> Either DeriveLTAError (LTAGen a)
+deriveLTAFromRooted bound atoms rules condition =
+    (`satisfying` (condition . rootMeasures rules)) <$> deriveLTAFrom bound atoms rules
+
+-- | The measures of a value term, as the invariant names them.
+rootMeasures :: Invariant node m -> Expr -> m Expr
+rootMeasures rules value = case rules of
+    Measured _ _ -> Single value
+    Contracted _ -> NoMeasures
+    MeasuredBy _ _ -> measuresAt value
+
 -- | The constructors of a datatype in declaration order, with whether each field is of the datatype itself.
 datatypeConstructors :: forall a. (HasFTA a) => [(Constructor, [Bool])]
 datatypeConstructors = case describeType (Proxy @a) of
@@ -426,6 +503,12 @@ checkNodeView names rules = case nodeShape (Proxy @node) of
         sequence_
             [ checkConstructor (constructorName constructor) children kinds
             | ((constructor, children), (_, kinds)) <- zip constructors shape
+            ]
+        sequence_
+            [ Left $ NodeMismatch name ("the node view has " <> viewName <> " in its place, a name that does not start with " <> name)
+            | ((constructor, _), (viewName, _)) <- zip constructors shape
+            , let name = constructorName constructor
+            , not (name `isPrefixOf` viewName)
             ]
   where
     expected isChild
@@ -489,6 +572,17 @@ the fields of the datatype itself with the measures.
 -}
 holds :: forall a node m. (HasFTA a, NodeView node) => Atoms -> Invariant node m -> a -> Bool
 holds atoms rules = fst . evaluate @a atoms rules . encodeTerm
+
+-- | Whether a value satisfies the invariant at each node and the condition on the measures of its root.
+holdsRooted ::
+    forall a node m.
+    (HasFTA a, NodeView node) => Atoms -> Invariant node m -> (forall e. (Symbolic e) => m e -> Truth e) -> a -> Bool
+holdsRooted atoms rules condition value = holds atoms rules value && condition rootValues
+  where
+    rootValues = case rules of
+        Measured _ _ -> Single (measureOf atoms rules value)
+        Contracted _ -> NoMeasures
+        MeasuredBy _ _ -> measuresOf atoms rules value
 
 -- | The measure of a value, for a 'Measured' invariant.
 measureOf :: forall a node. (HasFTA a, NodeView node) => Atoms -> Invariant node Single -> a -> Integer
