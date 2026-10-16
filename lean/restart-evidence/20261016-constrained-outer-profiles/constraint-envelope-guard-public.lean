@@ -1,0 +1,57 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.normalizedOccurrences
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.normalizedOccurrences
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.listStages
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.listStages
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positive_bounds
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positive_bounds
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_stages
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_stages
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_paths
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_paths
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effective
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effective
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin_complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin_complete

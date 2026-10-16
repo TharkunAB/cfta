@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassPassProfiles
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.list
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditProfiles.list

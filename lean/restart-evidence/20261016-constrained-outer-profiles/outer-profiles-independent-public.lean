@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.node_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.node_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.node_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.node_body
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.edge_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.edge_body
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.descendants
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfiles.walk

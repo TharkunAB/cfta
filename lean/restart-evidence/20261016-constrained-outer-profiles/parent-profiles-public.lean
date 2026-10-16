@@ -1,0 +1,16 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles.stage_profiles
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles.stage_profiles
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles.local_profiles
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles.local_profiles
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles.structure_from_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentProfiles.structure_from_reads

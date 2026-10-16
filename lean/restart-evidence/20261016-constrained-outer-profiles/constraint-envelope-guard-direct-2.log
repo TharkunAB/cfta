@@ -1,0 +1,28 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.lean:115:10: error: Expected type must not contain free variables
+  [[left, right]].flatten.length ≤ 4
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.lean:176:34: error: `simp` made no progress
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.lean:300:13: error: unsolved goals
+case some.none
+Formula : Type
+constraint : SourceSymbolicIndex.Constraint Formula
+limits : Limits
+input : Bounds limits constraint
+storedEnough :
+  limits.storedOccurrences ≤ (effectiveBudget limits).fst ∧ limits.storedDepth ≤ (effectiveBudget limits).snd
+found : SourceCompactGuards.positiveNormalized constraint.guard = some none
+positive :
+  SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds
+    (positiveBudget limits.guardDepth limits.guardStages).fst (positiveBudget limits.guardDepth limits.guardStages).snd
+    none
+result : Constraints
+done :
+  (match constraint.equalities, none with
+    | none, x => none
+    | x, none => none
+    | some [], some [] => some []
+    | some first, some second => SourceCompactGuards.normalize (first ++ second)) =
+    some result
+⊢ SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds (effectiveBudget limits).fst
+    (effectiveBudget limits).snd result

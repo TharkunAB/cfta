@@ -1,0 +1,570 @@
+'MicroCFTA.ParentProfilesIndependent.rejected_constructs' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@rejected_constructs : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat)
+  (original :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+  (inherited : SourceEqualityConstraintAllocation.Value) (before : SourceEqualityNativeDemand.State width)
+  (fourth : SourceCurrentEmptinessMemo.Memo)
+  (memo :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (memos : EndpointMemoGateTrace.Memos),
+  @Ready width before →
+    @At width formulas solver inventory before →
+      @Eq.{1} Bool
+          (@SourceEqualityMkEdgeAllocation.contradictory FullSyntax.Formula
+            (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@Interned.key
+                (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))))
+          true →
+        @SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original →
+          SourceCurrentEmptinessMemo.Correct formulas solver
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width before)))
+              fourth →
+            @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceEqualityNativeDemand.State.native width before)))
+                memo →
+              (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                  @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (SourceObservations.Label FullSyntax.Formula)
+                    (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas
+                      solver)
+                    ambient memo) →
+                @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceEqualityNativeDemand.State.native width before) →
+                  @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      memo →
+                    @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before) →
+                      @EndpointMemoGateTrace.Valid inst_1
+                          (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceRecursiveIntersectionThunks.State.machine width
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceEqualityNativeDemand.State.native width before)))
+                          memos →
+                        @Exists.{1} Inventory fun next =>
+                          @Exists.{0}
+                            (@SourceCurrentAllocatedParentEdge.Edge inst inst_1 inst_2 width budget
+                              (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@Interned.key
+                                  (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                              (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@Interned.key
+                                  (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                              loaded inherited
+                              (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+                              before fourth memo
+                              (@Prod.fst.{0, 1}
+                                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                (SourceEqualityNativeDemand.State width)
+                                (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                  (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@Interned.key
+                                      (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                      (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                  before))
+                              (@Prod.snd.{0, 1}
+                                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                (SourceEqualityNativeDemand.State width)
+                                (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                  (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@Interned.key
+                                      (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                      (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                  before))
+                              fourth memo)
+                            fun actual =>
+                            And
+                              (@SourceCurrentAllocatedParentEdgeActual.Reads inst inst_1 inst_2 width formulas solver
+                                budget
+                                (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@Interned.key
+                                    (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@Interned.key
+                                    (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                loaded inherited
+                                (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+                                before
+                                (@Prod.snd.{0, 1}
+                                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (SourceEqualityNativeDemand.State width)
+                                  (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                    (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@Interned.key
+                                        (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                    before))
+                                (@Prod.fst.{0, 1}
+                                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (SourceEqualityNativeDemand.State width)
+                                  (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                    (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@Interned.key
+                                        (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                    before))
+                                fourth fourth memo memo actual memos memos)
+                              (And
+                                (@SourceCurrentAllocatedParentEdge.Receipt inst_1 width formulas solver next
+                                  (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@Interned.key
+                                      (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                      (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                  (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@Interned.key
+                                      (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                      (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                  loaded inherited
+                                  (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+                                  before
+                                  (@Prod.fst.{0, 1}
+                                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    (SourceEqualityNativeDemand.State width)
+                                    (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                      (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@Interned.key
+                                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                      before))
+                                  (@Prod.snd.{0, 1}
+                                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    (SourceEqualityNativeDemand.State width)
+                                    (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                      (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@Interned.key
+                                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                      before))
+                                  fourth fourth memo memo memos)
+                                (And
+                                  (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width
+                                      (@Prod.snd.{0, 1}
+                                        (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        (SourceEqualityNativeDemand.State width)
+                                        (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                          (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@Interned.key
+                                              (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                          before))))
+                                  (And
+                                    (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceEqualityNativeDemand.State.native width
+                                        (@Prod.snd.{0, 1}
+                                          (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          (SourceEqualityNativeDemand.State width)
+                                          (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                            (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@Interned.key
+                                                (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                            before))))
+                                    (And
+                                      (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo)
+                                      (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original
+                                        (@Prod.fst.{0, 1}
+                                          (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          (SourceEqualityNativeDemand.State width)
+                                          (@SourceCurrentAllocatedMkEdge.reject inst_1 width
+                                            (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@Interned.key
+                                                (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                                            before)))))))
+'MicroCFTA.ParentProfilesIndependent.serial_same_return' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@serial_same_return : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  (firstOriginal secondOriginal :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  {budget : Nat} {firstLoaded secondLoaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+  {firstInherited secondInherited : SourceEqualityConstraintAllocation.Value}
+  {before middle after : SourceEqualityNativeDemand.State width}
+  {firstResult secondResult :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {fourth middleFourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo middleMemo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos middleMemos final : EndpointMemoGateTrace.Memos}
+  {first :
+    @SourceCurrentAllocatedParentEdge.Edge inst inst_1 inst_2 width budget
+      (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Interned.key
+          (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+      (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Interned.key
+          (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+      firstLoaded firstInherited
+      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)
+      before fourth memo firstResult middle middleFourth middleMemo}
+  {second :
+    @SourceCurrentAllocatedParentEdge.Edge inst inst_1 inst_2 width budget
+      (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Interned.key
+          (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)))
+      (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Interned.key
+          (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)))
+      secondLoaded secondInherited
+      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)
+      middle middleFourth middleMemo secondResult after savedFourth saved},
+  @SourceCurrentAllocatedParentEdgeActual.Reads inst inst_1 inst_2 width formulas solver budget
+      (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Interned.key
+          (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+      (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Interned.key
+          (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+      firstLoaded firstInherited
+      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)
+      before middle firstResult fourth middleFourth memo middleMemo first memos middleMemos →
+    @SourceCurrentAllocatedParentEdgeActual.Reads inst inst_1 inst_2 width formulas solver budget
+        (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (@Interned.key
+            (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)))
+        (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (@Interned.key
+            (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)))
+        secondLoaded secondInherited
+        (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)
+        middle after secondResult middleFourth savedFourth middleMemo saved second middleMemos final →
+      @Ready width before →
+        @At width formulas solver inventory before →
+          (@Eq.{1} Bool
+                (@SourceEqualityMkEdgeAllocation.contradictory FullSyntax.Formula
+                  (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@Interned.key
+                      (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                      (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal))))
+                false →
+              And
+                (SourceEqualityGuardReadback.Cached
+                  (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula
+                    (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@Interned.key
+                        (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))))
+                (And
+                  (@Eq.{1}
+                    (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                    (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula
+                      (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@Interned.key
+                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+                      (@SourceEqualityNativeDemand.State.operations width before).constraints)
+                    (@Except.ok.{0, 0} String
+                      (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                      (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) firstLoaded)))
+                  (And
+                    (SourceEqualityConstraintAllocation.Ready
+                      (@SourceEqualityNativeDemand.State.operations width before).constraints firstInherited)
+                    (@Values (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before)))
+                      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal))))) →
+            (@Eq.{1} Bool
+                  (@SourceEqualityMkEdgeAllocation.contradictory FullSyntax.Formula
+                    (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@Interned.key
+                        (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal))))
+                  false →
+                And
+                  (SourceEqualityGuardReadback.Cached
+                    (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula
+                      (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@Interned.key
+                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)))))
+                  (And
+                    (@Eq.{1}
+                      (Except.{0, 0} String
+                        (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                      (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula
+                        (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@Interned.key
+                            (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal)))
+                        (@SourceEqualityNativeDemand.State.operations width middle).constraints)
+                      (@Except.ok.{0, 0} String
+                        (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                        (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) secondLoaded)))
+                    (And
+                      (SourceEqualityConstraintAllocation.Ready
+                        (@SourceEqualityNativeDemand.State.operations width middle).constraints secondInherited)
+                      (@Values (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionThunks.State.machine width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width middle)))
+                        (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal))))) →
+              @SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal →
+                @SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal →
+                  SourceCurrentEmptinessMemo.Correct formulas solver
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before)))
+                      fourth →
+                    @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionThunks.State.machine width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width before)))
+                        memo →
+                      (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                          @SourceCurrentMemoMergeLanguage.CacheCovers
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                              formulas solver)
+                            ambient memo) →
+                        @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width before) →
+                          @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                            @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceEqualityNativeDemand.State.native width before) →
+                              @EndpointMemoGateTrace.Valid inst_1
+                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceRecursiveIntersectionThunks.State.machine width
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceEqualityNativeDemand.State.native width before)))
+                                  memos →
+                                @Exists.{1} Inventory fun next =>
+                                  And
+                                    (@SourceCurrentAllocatedParentEdge.Receipt inst_1 width formulas solver next
+                                      (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@Interned.key
+                                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+                                      (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@Interned.key
+                                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)))
+                                      firstLoaded firstInherited
+                                      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal)
+                                      before firstResult middle fourth middleFourth memo middleMemo middleMemos)
+                                    (And
+                                      (And
+                                        (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@SourceEqualityNativeDemand.State.native width middle))
+                                        (And
+                                          (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@SourceEqualityNativeDemand.State.native width middle))
+                                          (And
+                                            (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) middleMemo)
+                                            (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) firstOriginal
+                                              firstResult))))
+                                      (And
+                                        (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@SourceEqualityNativeDemand.State.native width after))
+                                        (And
+                                          (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@SourceEqualityNativeDemand.State.native width after))
+                                          (And
+                                            (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) saved)
+                                            (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) secondOriginal
+                                              secondResult)))))

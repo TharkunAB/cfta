@@ -1,0 +1,172 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.normalizedOccurrences' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.normalizedOccurrences : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages : {Formula : Type} →
+  MicroCFTA.SourceGuards.Guard Formula → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.listStages' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.listStages : {Formula : Type} →
+  List.{0} (MicroCFTA.SourceGuards.Guard Formula) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths : {Formula : Type} →
+  Nat → MicroCFTA.SourceGuards.Guard Formula → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget : Nat → Nat → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget_mono : ∀ (depth : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    And
+      (@LE.le.{0} Nat instLENat
+        (@Prod.fst.{0, 0} Nat Nat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget depth first))
+        (@Prod.fst.{0, 0} Nat Nat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget depth last)))
+      (@LE.le.{0} Nat instLENat
+        (@Prod.snd.{0, 0} Nat Nat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget depth first))
+        (@Prod.snd.{0, 0} Nat Nat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget depth last)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positive_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positive_bounds : ∀ {Formula : Type}
+  (guard : MicroCFTA.SourceGuards.Guard Formula) (count depth : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages Formula guard) count →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths Formula depth guard →
+      ∀ (output : Option.{0} MicroCFTA.EqualityNormalize.Constraints),
+        @Eq.{1} (Option.{0} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+            (@MicroCFTA.SourceCompactGuards.positiveNormalized Formula guard)
+            (@Option.some.{0} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) output) →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds
+            (@Prod.fst.{0, 0} Nat Nat
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget depth count))
+            (@Prod.snd.{0, 0} Nat Nat
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget depth count))
+            output
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_stages' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_stages : ∀ {Formula : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard Formula)]
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second : MicroCFTA.SourceGuards.Guard Formula) (firstCount secondCount : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages Formula first)
+      firstCount →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages Formula second)
+        secondCount →
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.stages Formula
+          (@MicroCFTA.GuardConjunction.merge Formula inst le first second))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstCount secondCount))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_paths' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.merge_paths : ∀ {Formula : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard Formula)]
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second : MicroCFTA.SourceGuards.Guard Formula) (firstDepth secondDepth : Nat),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths Formula firstDepth first →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths Formula secondDepth second →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.SamePaths Formula
+        (@Max.max.{0} Nat Nat.instMax firstDepth secondDepth)
+        (@MicroCFTA.GuardConjunction.merge Formula inst le first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits : Type
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds : {Formula : Type} →
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+    MicroCFTA.SourceSymbolicIndex.Constraint Formula → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin : ∀ {Formula : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard Formula)]
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (firstLimits secondLimits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula firstLimits first →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula secondLimits second →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits firstLimits secondLimits)
+        (@MicroCFTA.SourceEqualityConstraintConstructors.conjoin Formula inst le first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effective' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effective : ∀ {Formula : Type}
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits constraint →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds
+      (@Prod.fst.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget limits))
+      (@Prod.snd.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget limits))
+      (@MicroCFTA.SourceCompactGuards.sourceEqualities Formula constraint)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoin_complete : ∀ {Formula : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard Formula)]
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second : MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+        (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored Formula first) →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+          (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored Formula second) →
+        ∀ (firstLimits secondLimits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula firstLimits
+              (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula first) →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula secondLimits
+                (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula second) →
+              @Exists.{1} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula) fun result =>
+                @Exists.{1} MicroCFTA.SourceEqualityConstraintMemoAllocation.State fun after =>
+                  And
+                    (@Eq.{1}
+                      (Prod.{0, 0} (Except.{0, 0} String (MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula))
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+                      (@MicroCFTA.SourceEqualityConjoinAllocation.conjoin Formula inst le first second before)
+                      (@Prod.mk.{0, 0}
+                        (Except.{0, 0} String (MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula))
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (@Except.ok.{0, 0} String (MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula) result)
+                        after))
+                    (And (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid after)
+                      (And
+                        (MicroCFTA.SourceEqualityConstraintAllocation.Ready after.constraints
+                          (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored Formula result))
+                        (And (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before after)
+                          (And
+                            (MicroCFTA.SourceEqualityGuardReadback.Cached
+                              (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities Formula
+                                (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula result)))
+                            (And
+                              (@Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+                                (MicroCFTA.SourceEqualityPhysicalPayload.read
+                                  (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities Formula
+                                    (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula result)))
+                                (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint
+                                  (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored Formula
+                                      result).payload))
+                              (And
+                                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula
+                                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits firstLimits
+                                    secondLimits)
+                                  (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula result))
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds
+                                  (@Prod.fst.{0, 0} Nat Nat
+                                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits
+                                        firstLimits secondLimits)))
+                                  (@Prod.snd.{0, 0} Nat Nat
+                                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits
+                                        firstLimits secondLimits)))
+                                  (@MicroCFTA.SourceCompactGuards.sourceEqualities Formula
+                                    (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula result)))))))))

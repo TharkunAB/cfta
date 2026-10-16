@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.constructed_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.constructed_root
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.prepared_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.prepared_root
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.bounded_prepared_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.bounded_prepared_root

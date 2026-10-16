@@ -1,0 +1,19 @@
+# Independent strong-profile root review
+
+Reviewed: 2026-10-16T22:42:35+02:00.
+
+Verdict: no material defect found in the frozen 176-line `SourceCurrentAllocatedFiniteOrdinaryOuterProfileRoot.lean`, SHA-256 `dde2db40c2df68c9b305f7240e4e4bb82f8b381d2be5642c3f877ef76d60a4f0`. This review changes no production file and runs no build.
+
+`finite` calls the existing NumericRoot producer once. That call constructs its own literal StableRun, actual NodeCall, strict reads, reached Checks, Post, available result, and semantic NodeLaw. The stronger `OuterProfiles.node_call` theorem then consumes those SAME actual reads and the SAME initial state. It derives strong stores and NodeNarrow at the already constructed full return. No second execution, alternate heap, result-profile assumption, supplied successful worker, or recursive callback is introduced.
+
+`Stored` has four causal fields: native structural cells, native output profiles, Merge profiles, and outer returned structural cells. It derives the older structural invariant. It is not a quantitative profile bound on the outer result itself. `caller_stored` derives it from the logical initial native/Merge/outer tables while retaining the actual constructed heap. It does not assume profiles of future results or reset a Haskell global cache.
+
+`constructed_root` constructs the source value and heap through the existing ordinary construction endpoint. Actual field History and coverage derive its initial Context. The inherited empty constraint uses `emptyValue` from the retained field interner. Its canonical identity is not assumed zero. The actual readiness and payload equality justify the empty inherited satisfaction used to turn NodeLaw into full PCS-language equivalence for every ambient environment and term. `prepared_root` uses the exact cache returned by `prepare_complete`, through the receipt's `.done` projection and History. It does not substitute the original cache for the prepared cache.
+
+The explicit numeric Plan remains essential. The public `capacity` premise supplies it for every actual source build. Plan quantifies numeric ParentCapacity at actual reached edge-body entries. It is not a desired semantic answer or enclosing-completion assumption, but it is still a reached-entry capacity obligation. `bounded_prepared_root` derives only INITIAL node/edge Capacity from static source occurrence counts. It retains the separate Plan premise and proves no total-reduction reservation bound or final Capacity.
+
+The imported integration kernel constructs a finite actual return, then derives an exact warm hit at that SAME entire returned caller with all ten worker bounds zero. In the evaluate case, actual beginNode publishes the requested key and handle. `node_start` supplies the evaluating owner. The actual body frame preserves that exact key and owner cell before finish. `finishNode_returned` installs the same result. In the ready case, physical key/owner transport proves the actual full-state identity. ActiveFrames transports the initial all-active rank bound to the return; it does not invent forward retention of a lost pending cell. No second capacity plan or supplied warm-cell premise appears.
+
+The final canonical log reports 1572 successful jobs and only the historical unused-input dependency warning. All four public axiom/full-signature pairs and the one constructive integration pair passed with full explicit printing. Final imported logs contain no new warning, error, `sorryAx`, or omitted-term marker. Axioms are subsets of `propext`, `Classical.choice`, and `Quot.sound`.
+
+The result covers one finite ordinary pass with unrestricted guards, subject to the explicit Plan. It excludes Mu, references, and explicit unions in that domain. It does not establish hereditary raw-guard vectors, a static total root budget, repeated-pass convergence, literal Haskell lazy/concurrent execution, machine conversion, or whole-library completion.

@@ -1,0 +1,19 @@
+# Actual parent profile stores
+
+Reviewed and checked: 2026-10-16T22:36:59+02:00.
+
+The three public theorems verify supplied strict reads at their literal returned states. They derive stronger cache stores. They do not assume a capacity bound or a result profile. The source is `SourceCurrentAllocatedFiniteOrdinaryParentProfiles.lean`, SHA-256 `b596d6b280c032a14885a586dded1a64c02296d6ae11c05b565c71dc3fd71f4c`.
+
+`stage_profiles` derives the finite ordinary Scan range plan from the current coherent available input domain. The actual Scan selects every source record and retains the entire checked state. A stopped Scan is impossible. The actual Required return supplies the new inventory, physical receipt, and input domain for the actual class pass. Required changes the constructor heap and retains native cells. The pass uses the supplied global read chain at that same return. Its profile-store theorem supplies the stronger merge and native output stores.
+
+`local_profiles` follows the actual precheck branch. Early unchanged and erased-child returns retain both stores. The classes branch obtains the actual loaded precheck receipt, ordered record properties, and current operations before applying the stage theorem. It does not replace the returned equality operations with their entry value.
+
+`structure_from_reads` derives the reached range plan internally. It reuses the existing structural parent theorem for native structural stores and `EdgeNarrow`. It proves the stronger stores through the supplied local reads. For the final literal MkEdge step, it constructs only the primitive constructor receipt and aligns both its result and its full returned state with the supplied `built` equation. The constructor's exact native node and edge table equations retain `OutputStored`. The raw contradiction branch uses the actual sentinel constructor before a field load or child demand. All guard fields remain unrestricted.
+
+The public result is `NativeStored after.native ∧ OutputStored after.native ∧ Profiles saved ∧ EdgeNarrow original result`. The initial assumptions include current Ready and At, finite ordinary child domain, physical merge storage, semantic cache coverage, native structural storage, strong merge/output stores, current global validity, and fourth-memo correctness. Cached field readback, inherited readiness, and child availability apply only to the live branch. None of the three public theorems accepts headroom, a future range plan, a future profile, or a callback law.
+
+The imported checks print every public full signature and axiom set with explicit proofs, universes, deep terms, and at least one million printer steps. Three public pairs and two integration pairs passed. The only axioms are `propext`, `Classical.choice`, and `Quot.sound`. No new warning, error, `sorryAx`, or output truncation occurred. The canonical target passed all 1531 jobs. Its one replayed dependency warning is the existing unused `inputs` binding in `InternedFreshOrdinaryClosedCompletion`.
+
+`rejected_constructs` constructs its own raw rejection graph, strict reads, full parent receipt, and stronger stores without an initial child load or availability premise. `serial_same_return` threads the first actual parent's computed inventory, Ready, fourth correctness, physical storage, global validity, and derived strong stores into a second actual parent at exactly that returned checked state. Only the second reached live field and input facts remain explicit. It assumes no intermediate profile store or readiness oracle.
+
+This is preservation and structural verification for completed serial graphs with strict reads. It does not construct enclosing outer recursion, bound resource use, establish a quantitative outer return envelope, or prove Haskell lazy/concurrent execution correspondence. It does not extend the finite ordinary domain to Mu, references, or explicit unions. No Haskell behavior change or defect is claimed.
