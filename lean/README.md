@@ -1,5 +1,56 @@
 # cfta formal model
 
+## Current typed-rule graph exactness and source repair
+
+Source main is `894a74af`. It includes the typing API from `c52d5c3e` and
+merges the same recursive-field repair as local `2e25be03`. Merges `727fa870`
+and `73475670` retain both histories. All generator files have identical
+bytes before and after the second merge. The optimized interned core stays.
+Proof commits are `7871a676`, `23fa596d`, and `d1f62e7b`.
+Audit and scoped notes are in `0908f20c`. Full library scope stays active.
+
+Independent typing judgments now describe ordinary rules, exact matching
+environment positions, binder order, and positive Subterm nesting. The finite
+visited-map traversal derives exact final rows and child-key closure. The
+computed root graph accepts exactly independent empty-environment derivations
+under the stated fixed-field law. No completed graph oracle is supplied.
+The unconditional endpoint has permissive fixed-tree semantics. This proves
+supplied-rule semantics. Datatype typing and callback index fidelity still
+need constructor, schema, and codec laws. Global LawfulFixed is stronger
+than reached-only source checks. The direct field predicate does not imply it.
+
+The source repair rejects fixed values in fields of the target datatype.
+Both ill-scoped and over-bound recursive fixed-tree reproductions now return
+FieldMismatch. The existing field-mismatch example covers both cases.
+A separate reproduction still shows helper declaration-order disagreement:
+fromDatatype returns Lit Z before Lit A; fromTypingRules reverses them.
+This order defect is unresolved. Preserve the shared rank-order target.
+
+The aggregate audit passes 2,242 jobs and 55,122 dependency checks. Forty-five
+public axiom probes, nine endpoint signatures, and thirty kernel examples
+pass. Only the standard foundations and the existing unused-input warning
+occur. Strict Nix build and all six suites pass at the source refresh: 763
+examples plus golden. After repair, all 224 generator examples pass again.
+Other suites are reused because only Typing changed. Fourmolu checks three
+changed Haskell files. Cabal-gild checks four packages. Upstream then merges
+byte-identical generator files, so these source checks remain applicable.
+
+Next continue actual native query and checked constraint allocation to derive
+equality-cache Fields. Connect the new conjunction memo to a new current Scan.
+Do not supply future Fields or reuse the historical Scan as current execution.
+General constrained outer completion, lazy demand and publication, machine
+identities/capacity, concrete containers, broad API integration, and all separate
+Sized contracts remain open where recorded. Preserve older constructor and
+equality work. Read lean/notes-typing-rules.md and lean/notes-main-c52d5c3e.md.
+
+Start snapshot: /tmp/mcfta-conjunction-worklist-checkpoint-20261016-0250/
+(2,953 files). Closing: /tmp/mcfta-typing-checkpoint-20261016-0318/ (2,961 files).
+Script: /tmp/mcfta-preserve-typing-20261016.py. Evidence uses /tmp/mcfta-typing-*.
+Sixteen external marked drafts, stashes, and other worktrees are preserved.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+The last allowance observation was 81 percent and is stale. Stop owned work
+at 1 percent or less. The full-library goal remains active.
+
 ## Current allocated conjunction worklist and completed memo
 
 Source main remains `a4f38cbb`. The refresh found no new source change.
