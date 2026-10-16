@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current hereditary guard proofs add no Haskell change.
+The current shared and outer guard proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2646 jobs and 60976 dependency checks.
+The last completed pinned Lean Audit passes: 2658 jobs and 61077 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,43 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current shared and outer guard certificate retention
+
+Updated: 2026-10-16 23:21 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `56edaf31`. Proof commits are
+`35b7d962`, `d5fd539c`, `9c1d3d38`, `07607c71`, and `ac44d4c5`.
+Read `lean/notes-current-shared-guards.md` and
+`lean/restart-evidence/20261016-shared-guards/`.
+
+Twelve additive modules retain causal guard certificates through shared
+Force/Leaf slots, actual edits, the tail-first class pass, Scan/Required,
+local reduction, parents, and all eight outer read families. Actual own
+records derive class, path, and total guard-step limits from the initial
+raw vector. Parent finite resources derive their own path-depth obligation
+and retain every earlier resource conclusion at the same returned state.
+Uniform numeric parent row and sentinel-aware arity envelopes are proved.
+The root retains the entire earlier strong store and both lower guard tables.
+Its reached numeric capacity Plan remains an explicit premise.
+
+The full pinned Audit passes 2658 jobs and 61077 dependency checks.
+All 75 public axiom/full-signature pairs and 12 integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent reviews
+find no material defect. Preservation retains 8313 starting files, 2645
+older non-Audit proofs, 234 Haskell files, and 52 frozen manifests with
+415 entries. Older source, evidence, repairs, counterexamples, and drafts remain.
+
+Next derive quantitative row and arity producers for actual completed
+prefixes without resource headroom. Then produce quantitative outer owner
+certificates before finish and through exact warm readback. Derive cumulative
+initial headroom and the root Plan. Lower guard-store retention does not
+supply those outer output laws. General recursive progress, convergence,
+current frontend and runtime adapters, and complete public pipelines remain
+open. The full-library goal stays active.
+
+No Haskell change or new Haskell defect. FINDINGS keeps repair b9219b9e and
+the external handoff first. Reuse unchanged strict Nix validation: 798
+examples plus golden, Fourmolu, and Cabal-gild. Preserve the optimized core.
 
 ## Current hereditary native, Merge, and Target guards
 
