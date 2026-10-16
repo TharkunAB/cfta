@@ -29,6 +29,14 @@ The golden test suite compares the discovered laws with `test/golden/`.
 The package was imported from
 [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
 
-The environment variable `SPECFTACULAR_TESTS` sets the number of test cases (1000 by default, as in QuickSpec).
-Fewer test cases are faster, but they let more false laws through, and the prover builds on each law that it prints.
-With 100 test cases, `bench-huge-lists 7 1` prints false laws, and the rules that follow from them hide true laws such as `xs == take x xs ++ drop x xs`.
+The environment variable `SPECFTACULAR_TESTS` sets the number of random cases
+(1000 by default). The search also uses eight separately seeded random cases
+and 32 integer-boundary and list cases. These reject the recorded overflow
+and list counterexamples. Testing does not prove a law. A false law can still
+affect the rules that prune later terms.
+
+Use `A`, `B`, `C`, `D`, and `Acc` as abstract type parameters in a signature.
+Each constant must be parametric in these types. It must not inspect their
+representation or capture class dictionaries for them. Use concrete types
+such as `Int` for arithmetic and ordering. Phases 3 and 4 instantiate each
+constant separately. `SPECFTACULAR_CHECKED=1` retains runtime type checks.
