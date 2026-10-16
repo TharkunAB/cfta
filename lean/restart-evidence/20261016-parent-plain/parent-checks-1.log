@@ -1,0 +1,1159 @@
+'MicroCFTA.SourceCurrentAllocatedParentPlain.Plain' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedParentPlain.Plain : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest → Prop
+'MicroCFTA.SourceCurrentAllocatedParentPlain.resident_ranges' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedParentPlain.resident_ranges : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          @MicroCFTA.SourceCurrentAllocatedParentWorkerActual.ResidentRanges inst inst_1 inst_2 width budget request
+            before
+'MicroCFTA.SourceCurrentAllocatedParentPlain.finite' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedParentPlain.finite : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          @Exists.{1}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            fun
+              (result :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+            @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+              fun (after : MicroCFTA.SourceEqualityNativeDemand.State width) =>
+              @Exists.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo
+                fun (savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) =>
+                @Exists.{1}
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun
+                    (saved :
+                      MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                  @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                    fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                    @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos
+                      fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                      And
+                        (@MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          width
+                          (fun (g s r e p h m c n : Nat) =>
+                            @MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r e p h m c
+                              n budget
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    request.value)))
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    request.value)))
+                              request.inherited
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+                          result after savedFourth saved)
+                        (@Exists.{0}
+                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody inst inst_1 inst_2 width budget
+                            request before result
+                            (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                              saved))
+                          fun
+                            (actual :
+                              @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody inst inst_1 inst_2 width budget
+                                request before result
+                                (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                                  saved)) =>
+                          And
+                            (@MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads inst inst_1 inst_2 width
+                              formulas solver budget request before result
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                                saved)
+                              actual memos final)
+                            (And
+                              (@MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.Receipt inst_1 width formulas solver
+                                next request before result
+                                (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                                  saved)
+                                final)
+                              (And
+                                (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1 width formulas solver
+                                  next before
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                                    saved)
+                                  final)
+                                (And (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value result)
+                                  (@LE.le.{0} Nat instLENat
+                                    (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+                                    (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                      request.value))))))
+'MicroCFTA.SourceCurrentAllocatedParentPlain.done_shape' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedParentPlain.done_shape : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {budget g s r e p h m c n : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          @Eq.{2}
+              (MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                width)
+              (@MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r e p h m c n budget
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.Cache.Interned.key
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.Cache.Interned.key
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+                request.inherited
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+              (@MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome.done
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                width result after savedFourth saved) →
+            And (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value result)
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+                (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value))
+lean/restart-evidence/20261016-parent-plain/parent-checks.lean:70:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  d ≥ 0
+  d - f ≥ 0
+  b ≥ 0
+  b - 2*d ≥ 2
+  a ≥ 0
+  2*a - b ≥ -1
+where
+ a := @Nat.cast.{0} Int instNatCastInt
+  (@MicroCFTA.MergedOrdinaryHeight.edgeHeight (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+    { inherited := request.inherited, value := result }.value)
+ b := @Nat.cast.{0} Int instNatCastInt
+  (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank { inherited := inherited, value := child })
+ d := @Nat.cast.{0} Int instNatCastInt
+  (@MicroCFTA.MergedOrdinaryHeight.edgeHeight (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+ f := @Nat.cast.{0} Int instNatCastInt
+  (@MicroCFTA.MergedOrdinaryHeight.edgeHeight (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+lean/restart-evidence/20261016-parent-plain/parent-checks.lean:93:57: error: Application type mismatch: The argument
+  @MicroCFTA.SourceEqualityRequiredCache.Keeps.ready (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)))
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo))))
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects.keeps
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))
+      (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo)))
+      (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.effects inst✝¹ width formulas solver inventory₁ before
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo) memos₁
+        firstPost))
+has type
+  @MicroCFTA.SourceEqualityRequiredCache.Ready (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo))))
+but is expected to have type
+  @MicroCFTA.InternedConstructorTemplates.Grows ?m.212 ?m.213 ?m.214 ?m.215
+in the application
+  @MicroCFTA.InternedEdgeResidency.edge_grows ?m.212 ?m.213 ?m.214 ?m.215
+    (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+        (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)))
+      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+        (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo))))
+      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects.keeps
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+        (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))
+        (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo)))
+        (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.effects inst✝¹ width formulas solver inventory₁ before
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo) memos₁
+          firstPost)))
+lean/restart-evidence/20261016-parent-plain/parent-checks.lean:88:64: error: unsolved goals
+inst✝² : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+inst✝¹ :
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+inst✝ :
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+width : Nat
+formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula
+solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula
+inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+before : MicroCFTA.SourceCurrentAllocatedPartialState.State width
+memos : MicroCFTA.EndpointMemoGateTrace.Memos
+budget : Nat
+request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+initial : @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst✝¹ width formulas solver inventory before memos
+inheritedReady :
+  MicroCFTA.SourceEqualityConstraintAllocation.Ready
+    (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+    request.inherited
+resident :
+  @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+    request.value
+plain : MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request
+first :
+  MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+middle : MicroCFTA.SourceEqualityNativeDemand.State width
+firstFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo
+firstMemo :
+  MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+inventory₁ : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+memos₁ : MicroCFTA.EndpointMemoGateTrace.Memos
+firstStable :
+  @MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+    (MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    width
+    (fun (g s r e p h m c n : Nat) =>
+      @MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst✝² inst✝¹ inst✝ width g s r e p h m c n budget
+        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.Cache.Interned.key
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.Cache.Interned.key
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+        request.inherited
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+    first middle firstFourth firstMemo
+firstActual :
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody inst✝² inst✝¹ inst✝ width budget request before first
+    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo)
+firstReads :
+  @MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads inst✝² inst✝¹ inst✝ width formulas solver budget
+    request before first
+    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo) firstActual memos
+    memos₁
+firstReceipt :
+  @MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.Receipt inst✝¹ width formulas solver inventory₁ request before first
+    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo) memos₁
+firstPost :
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst✝¹ width formulas solver inventory₁ before
+    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth firstMemo) memos₁
+firstShape : MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value first
+right✝ :
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.MergedOrdinaryHeight.edgeHeight (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) first)
+    (@MicroCFTA.MergedOrdinaryHeight.edgeHeight (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+inherited₂ :
+  MicroCFTA.SourceEqualityConstraintAllocation.Ready
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.equality
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+        (@MicroCFTA.SourceCurrentAllocatedNativeEffects.physical width
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before middle firstFourth
+              firstMemo)))).constraints
+    request.inherited
+⊢ @Exists.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    fun
+      (first :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+    @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+      fun (middle : MicroCFTA.SourceEqualityNativeDemand.State width) =>
+      @Exists.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo
+        fun (firstFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) =>
+        @Exists.{1}
+          (MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun
+            (firstMemo :
+              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+          @Exists.{1}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            fun
+              (result :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+            @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+              fun (after : MicroCFTA.SourceEqualityNativeDemand.State width) =>
+              @Exists.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo
+                fun (savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) =>
+                @Exists.{1}
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun
+                    (saved :
+                      MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                  @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                    fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                    @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos
+                      fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                      And
+                        (@MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          width
+                          (fun (g s r e p h m c n : Nat) =>
+                            @MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst✝² inst✝¹ inst✝ width g s r e p h m c
+                              n budget
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    request.value)))
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    request.value)))
+                              request.inherited
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+                          first middle firstFourth firstMemo)
+                        (And
+                          (@MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width
+                            (fun (g s r e p h m c n : Nat) =>
+                              @MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst✝² inst✝¹ inst✝ width g s r e p h m
+                                c n budget
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@MicroCFTA.Cache.Interned.key
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                      request.value)))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@MicroCFTA.Cache.Interned.key
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                      request.value)))
+                                request.inherited
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                                middle firstFourth firstMemo)
+                            result after savedFourth saved)
+                          (And
+                            (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst✝¹ width formulas solver next
+                              before
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                                saved)
+                              final)
+                            (And (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value first)
+                              (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value result))))
+'ParentPlainChecks.returned_regions' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@ParentPlainChecks.returned_regions : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {budget g s r e p h m c n : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          MicroCFTA.SourceEqualityPartialPlainRegion.Children
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value) →
+            @Eq.{2}
+                (MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  width)
+                (@MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r e p h m c n budget
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.Cache.Interned.key
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.Cache.Interned.key
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+                  request.inherited
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+                (@MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome.done
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  width result after savedFourth saved) →
+              MicroCFTA.SourceEqualityPartialPlainRegion.Children
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+'ParentPlainChecks.returned_child_rank' depends on axioms: [propext, sorryAx.{u}, Classical.choice.{u}, Quot.sound.{u}]
+@ParentPlainChecks.returned_child_rank : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {budget g s r e p h m c n : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          @Eq.{2}
+              (MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                width)
+              (@MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r e p h m c n budget
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.Cache.Interned.key
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.Cache.Interned.key
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+                request.inherited
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+              (@MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome.done
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                width result after savedFourth saved) →
+            ∀ (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+              (child :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              @Membership.mem.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@List.instMembership.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+                  child →
+                @LT.lt.{0} Nat instLTNat
+                  (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank
+                    { inherited := inherited, value := child })
+                  (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request)
+'ParentPlainChecks.consecutive_parents' depends on axioms: [propext, sorryAx.{u}, Classical.choice.{u}, Quot.sound.{u}]
+@ParentPlainChecks.consecutive_parents : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          @Exists.{1}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            fun
+              (first :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+            @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+              fun (middle : MicroCFTA.SourceEqualityNativeDemand.State width) =>
+              @Exists.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo
+                fun (firstFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) =>
+                @Exists.{1}
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun
+                    (firstMemo :
+                      MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                  @Exists.{1}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    fun
+                      (result :
+                        MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                    @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+                      fun (after : MicroCFTA.SourceEqualityNativeDemand.State width) =>
+                      @Exists.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo
+                        fun (savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) =>
+                        @Exists.{1}
+                          (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          fun
+                            (saved :
+                              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                          @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                            fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                            @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos
+                              fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                              And
+                                (@MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  width
+                                  (fun (g s r e p h m c n : Nat) =>
+                                    @MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r e
+                                      p h m c n budget
+                                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (@MicroCFTA.Cache.Interned.key
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            request.value)))
+                                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (@MicroCFTA.Cache.Interned.key
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            request.value)))
+                                      request.inherited
+                                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        request.value)
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+                                  first middle firstFourth firstMemo)
+                                (And
+                                  (@MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    width
+                                    (fun (g s r e p h m c n : Nat) =>
+                                      @MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r
+                                        e p h m c n budget
+                                        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          (@MicroCFTA.Cache.Interned.key
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              request.value)))
+                                        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          (@MicroCFTA.Cache.Interned.key
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              request.value)))
+                                        request.inherited
+                                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          request.value)
+                                        middle firstFourth firstMemo)
+                                    result after savedFourth saved)
+                                  (And
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1 width formulas solver
+                                      next before
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after
+                                        savedFourth saved)
+                                      final)
+                                    (And
+                                      (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value first)
+                                      (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value
+                                        result))))
+'ParentPlainChecks.stored_owner_finish' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@ParentPlainChecks.stored_owner_finish : ∀
+  [DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        request.inherited →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+          request.value →
+        MicroCFTA.SourceCurrentAllocatedParentPlain.Plain request →
+          @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored width before →
+            ∀ (handle : Nat),
+              @Eq.{1}
+                  (Option.{0}
+                    (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                  (@MicroCFTA.FlatMemoThunk.State.cells MicroCFTA.SourceCurrentAllocatedPartialState.EdgeKey
+                    MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.edgeResults width before) handle)
+                  (@Option.some.{0}
+                    (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      request
+                      (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) →
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun
+                    (result :
+                      MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                  @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+                    fun (after : MicroCFTA.SourceEqualityNativeDemand.State width) =>
+                    @Exists.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo
+                      fun (savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) =>
+                      @Exists.{1}
+                        (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        fun
+                          (saved :
+                            MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) =>
+                        @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                          fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                          @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos
+                            fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                            And
+                              (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst width formulas solver next
+                                before
+                                (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after savedFourth
+                                  saved)
+                                final)
+                              (And
+                                (@MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored width
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge width handle result
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after
+                                      savedFourth saved)))
+                                (@MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds width
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge width handle result
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after
+                                      savedFourth saved))))
+'ParentPlainChecks.raw_reject_needs_no_field' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@ParentPlainChecks.raw_reject_needs_no_field : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (g s r e p h m c n budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    @Eq.{1} Bool
+        (@MicroCFTA.SourceEqualityMkEdgeAllocation.contradictory MicroCFTA.FullSyntax.Formula
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.Cache.Interned.key
+              (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value))))
+        Bool.true →
+      have rejected :=
+        @MicroCFTA.SourceCurrentAllocatedMkEdge.reject inst_1 width
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.Cache.Interned.key
+              (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before);
+      And
+        (@Eq.{2}
+          (MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            width)
+          (@MicroCFTA.SourceCurrentAllocatedParentWorker.edge inst inst_1 inst_2 width g s r e p h m c n budget
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.Cache.Interned.key
+                (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.Cache.Interned.key
+                (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))
+            request.inherited
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+          (@MicroCFTA.SourceCurrentAllocatedParentWorker.Outcome.done
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            width
+            (@Prod.fst.{0, 1}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (MicroCFTA.SourceEqualityNativeDemand.State width) rejected)
+            (@Prod.snd.{0, 1}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (MicroCFTA.SourceEqualityNativeDemand.State width) rejected)
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before)))
+        (And
+          (MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape request.value
+            (@Prod.fst.{0, 1}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (MicroCFTA.SourceEqualityNativeDemand.State width) rejected))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@Prod.fst.{0, 1}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.SourceEqualityNativeDemand.State width) rejected))
+            (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)))

@@ -1,0 +1,196 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainEdgeCall.lean:70:4: error: don't know how to synthesize implicit argument `started`
+  @EdgeCallReads.evaluate inst✝² inst✝¹ inst✝ width formulas solver budget owner running result middle body memos final
+    request before handle ?m.460 reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget handle : Nat
+request owner : EdgeRequest
+before running : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+plain : SourceCurrentAllocatedParentPlain.Plain request
+stored : Stored before
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+current : Context formulas solver inventory running memos
+good :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := owner, status := FlatMemoThunk.Status.evaluating }
+key : owner.key = request.key
+cell : running.edgeResults.cells handle = some { request := owner, status := FlatMemoThunk.Status.evaluating }
+components :
+  running.checked = before.checked ∧
+    running.merge = before.merge ∧ running.fourth = before.fourth ∧ running.nodeResults = before.nodeResults
+same : owner.value = request.value
+ownerPlain : SourceCurrentAllocatedParentPlain.Plain owner
+result : Edge
+checked : SourceEqualityNativeDemand.State width
+fourth : SourceCurrentEmptinessMemo.Memo
+memo : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+next : Inventory
+final : Memos
+_stable :
+  SourceCurrentAllocatedParentWorkerCompletion.StableRun
+    (fun g s r e p h m c n =>
+      SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget owner.value.entry.key.symbol
+        owner.value.entry.key.constraint owner.inherited owner.value.children running.checked running.fourth
+        running.merge)
+    result checked fourth memo
+body : EdgeBody budget owner running result (advance running checked fourth memo)
+reads : EdgeBodyReads formulas solver body memos final
+receipt :
+  SourceCurrentAllocatedPartialEdgeCall.Receipt formulas solver next owner running result
+    (advance running checked fourth memo) final
+post : Post formulas solver next running (advance running checked fourth memo) final
+shape : Shape owner.value result
+_height : MergedOrdinaryHeight.edgeHeight result ≤ MergedOrdinaryHeight.edgeHeight owner.value
+middle : Caller width := ⋯
+actual : EdgeCall budget request before result (finishEdge handle result middle) := ⋯
+bodyChecks : Checks (edgeBodyTrace body)
+finished : Post formulas solver next before (finishEdge handle result (advance running checked fourth memo)) final
+available :
+  EdgeResident (finishEdge handle result (advance running checked fourth memo)).checked.native.machine.heap result
+law : EdgeLaw formulas solver request result
+runningStored : Stored running
+middleStored : Stored middle
+storedResult : Stored (finishEdge handle result middle)
+⊢ beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainEdgeCall.lean:45:92: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget handle : Nat
+request owner : EdgeRequest
+before running : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+plain : SourceCurrentAllocatedParentPlain.Plain request
+stored : Stored before
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+current : Context formulas solver inventory running memos
+good :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := owner, status := FlatMemoThunk.Status.evaluating }
+key : owner.key = request.key
+cell : running.edgeResults.cells handle = some { request := owner, status := FlatMemoThunk.Status.evaluating }
+components :
+  running.checked = before.checked ∧
+    running.merge = before.merge ∧ running.fourth = before.fourth ∧ running.nodeResults = before.nodeResults
+same : owner.value = request.value
+ownerPlain : SourceCurrentAllocatedParentPlain.Plain owner
+result : Edge
+checked : SourceEqualityNativeDemand.State width
+fourth : SourceCurrentEmptinessMemo.Memo
+memo : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+next : Inventory
+final : Memos
+_stable :
+  SourceCurrentAllocatedParentWorkerCompletion.StableRun
+    (fun g s r e p h m c n =>
+      SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget owner.value.entry.key.symbol
+        owner.value.entry.key.constraint owner.inherited owner.value.children running.checked running.fourth
+        running.merge)
+    result checked fourth memo
+body : EdgeBody budget owner running result (advance running checked fourth memo)
+reads : EdgeBodyReads formulas solver body memos final
+receipt :
+  SourceCurrentAllocatedPartialEdgeCall.Receipt formulas solver next owner running result
+    (advance running checked fourth memo) final
+post : Post formulas solver next running (advance running checked fourth memo) final
+shape : Shape owner.value result
+_height : MergedOrdinaryHeight.edgeHeight result ≤ MergedOrdinaryHeight.edgeHeight owner.value
+middle : Caller width := advance running checked fourth memo
+actual : EdgeCall budget request before result (finishEdge handle result middle) := EdgeCall.evaluate started body
+bodyChecks : Checks (edgeBodyTrace body)
+finished : Post formulas solver next before (finishEdge handle result (advance running checked fourth memo)) final
+available :
+  EdgeResident (finishEdge handle result (advance running checked fourth memo)).checked.native.machine.heap result
+law : EdgeLaw formulas solver request result
+runningStored : Stored running
+middleStored : Stored middle
+storedResult : Stored (finishEdge handle result middle)
+⊢ ∃ result after next final actual,
+    EdgeCallReads formulas solver actual memos final ∧
+      Checks (edgeCallTrace actual) ∧
+        Post formulas solver next before after final ∧
+          EdgeResident after.checked.native.machine.heap result ∧
+            Stored after ∧ Shape request.value result ∧ EdgeLaw formulas solver request result
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainEdgeCall.lean:104:6: error: don't know how to synthesize implicit argument `started`
+  @EdgeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget request before ?m.314 result
+    (beginEdge request before).snd.snd ?m.317 memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+request : EdgeRequest
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+plain : SourceCurrentAllocatedParentPlain.Plain request
+stored : Stored before
+active : ActiveAbove (edgeRank request) before
+result : Edge
+ready : (beginEdge request before).snd.fst = FlatMemoThunk.Observation.ready result
+started :
+  beginEdge request before =
+    ((beginEdge request before).fst, FlatMemoThunk.Observation.ready result, (beginEdge request before).snd.snd)
+same : (beginEdge request before).snd.snd = before
+shape : Shape request.value result
+post : Post formulas solver inventory before (beginEdge request before).snd.snd memos
+available : EdgeResident (beginEdge request before).snd.snd.checked.native.machine.heap result
+law : EdgeLaw formulas solver request result
+actual : EdgeCall budget request before result (beginEdge request before).snd.snd := ⋯
+⊢ beginEdge request before = (?m.314, FlatMemoThunk.Observation.ready result, (beginEdge request before).snd.snd)
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainEdgeCall.lean:104:6: error: don't know how to synthesize implicit argument
+  @EdgeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget request before ?m.314 result
+    (beginEdge request before).snd.snd ?m.317 memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+request : EdgeRequest
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+plain : SourceCurrentAllocatedParentPlain.Plain request
+stored : Stored before
+active : ActiveAbove (edgeRank request) before
+result : Edge
+ready : (beginEdge request before).snd.fst = FlatMemoThunk.Observation.ready result
+started :
+  beginEdge request before =
+    ((beginEdge request before).fst, FlatMemoThunk.Observation.ready result, (beginEdge request before).snd.snd)
+same : (beginEdge request before).snd.snd = before
+shape : Shape request.value result
+post : Post formulas solver inventory before (beginEdge request before).snd.snd memos
+available : EdgeResident (beginEdge request before).snd.snd.checked.native.machine.heap result
+law : EdgeLaw formulas solver request result
+actual : EdgeCall budget request before result (beginEdge request before).snd.snd := ⋯
+⊢ Nat

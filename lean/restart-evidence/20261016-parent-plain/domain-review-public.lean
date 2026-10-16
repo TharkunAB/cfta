@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.original
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.original
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.sentinel
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.sentinel
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.regions
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.regions
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.child_region
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.child_region
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.height
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape.height
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.initial
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.initial
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.advance
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.beginNode
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.beginNode
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.finishNode
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.finishNode
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.beginEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.beginEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.finishEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.finishEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.bounds
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.bounds
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.child
+#check @MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Stored.child
