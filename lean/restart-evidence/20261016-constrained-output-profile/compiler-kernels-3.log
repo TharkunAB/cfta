@@ -1,0 +1,53 @@
+'OutputCompilerChecks.self_profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+@self_profile : ∀ [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      ∀ (entry : Interned InternedBinderProtocol.NodeKey) (rows : List Edge) (depth : Nat),
+        Available state.heap (Value.node entry rows depth []) →
+          SourceCurrentAllocatedFiniteOrdinaryDomain.Rows rows →
+            NodeCertificate
+              { domain := emptyDomain, left := Value.node entry rows depth [], right := Value.node entry rows depth [] }
+              (Value.node entry rows depth [])
+'OutputCompilerChecks.empty_rows_profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+@empty_rows_profile : ∀ [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      ∀ (first second : Interned InternedBinderProtocol.NodeKey),
+        NodeCertificate { domain := emptyDomain, left := Value.node first [] 0 [], right := Value.node second [] 0 [] }
+          Value.empty
+'OutputCompilerChecks.nullary_profile' depends on axioms: [propext, Quot.sound]
+@nullary_profile : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (left right : Interned (EdgeKey Symbol Guard))
+  (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      EdgeCertificate { domain := emptyDomain, left := EdgeValue.mk left [], right := EdgeValue.mk right [] }
+        (run (makeEdge left.key.symbol (SourceEqualityConjoinAllocation.readback combined) []) state.heap).fst
+'OutputCompilerChecks.nullary_sentinel' depends on axioms: [propext, Quot.sound]
+@nullary_sentinel : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (left right : Interned (EdgeKey Symbol Guard))
+  (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      have result :=
+        (run (makeEdge left.key.symbol SourceEqualityConstraintConstructors.top [Value.empty]) state.heap).fst;
+      EdgeShape 0 1 result ∧ result.children = [Value.empty] ∧ ¬EdgeShape 0 0 result
+'OutputCompilerChecks.guarded_compile' depends on axioms: [propext, Classical.choice, Quot.sound]
+@guarded_compile : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      Available state.heap request.left →
+        Available state.heap request.right →
+          NodeInputs request →
+            Certified (compileNode request) state fun x value =>
+              ∀ (rows arity : Nat),
+                NodeShape rows arity request.left →
+                  NodeShape rows arity request.right → NodeShape (rows * rows) (max arity 1) value
+'OutputCompilerChecks.mismatch_profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+@mismatch_profile : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat} (request : EdgeRequest Symbol Guard),
+  EdgeInputs request →
+    ∀ (before : SourceEqualityNativeDemand.State width),
+      SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+        SemanticReady before.native.machine.heap →
+          request.left.children.length ≠ request.right.children.length →
+            Certified ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure) before.native.machine
+              fun x value => EdgeCertificate request value

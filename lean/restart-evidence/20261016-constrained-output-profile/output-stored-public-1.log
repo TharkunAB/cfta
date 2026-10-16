@@ -1,0 +1,133 @@
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.NodeCertificate : {Symbol Guard : Type} →
+  MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.NodeCertificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.EdgeCertificate : {Symbol Guard : Type} →
+  MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard →
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.EdgeCertificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored : {width : Nat} →
+  {Symbol Guard : Type} → MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.initial_stored : ∀ {Symbol Guard : Type} (width : Nat)
+  (machine : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+    (MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.initial_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.advance_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+      (MicroCFTA.SourceRecursiveIntersectionThunks.advance state after)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.advance_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.lookupNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+      (MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode width request state).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.lookupNode_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.lookupEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+      (MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge width request state).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.lookupEdge_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.demandNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+      (MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle state).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.demandNode_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.demandEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+      (MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge handle state).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.demandEdge_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.finishNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    state.nodes.cells handle = some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.NodeCertificate request result →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+          (MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle result state)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.finishNode_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.finishEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored state →
+    state.edges.cells handle = some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.EdgeCertificate request result →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+          (MicroCFTA.SourceRecursiveIntersectionThunks.finishEdge handle result state)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.finishEdge_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.node_observed_ready : ∀ {width : Nat} {Symbol Guard : Type}
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode width request before =
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.NodeCertificate request result ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after ∧
+                  after = chosen ∧ MicroCFTA.InternedProbeProvenance.Available after.machine.heap result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.node_observed_ready' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.edge_observed_ready : ∀ {width : Nat} {Symbol Guard : Type}
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge width request before = (handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.EdgeCertificate request result ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after ∧
+                  after = chosen ∧ MicroCFTA.InternedEdgeResidency.EdgeResident after.machine.heap result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.edge_observed_ready' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.node_started : ∀ {width : Nat} {Symbol Guard : Type}
+  (request actual : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (before chosen running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode width request before =
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.evaluate actual, running) →
+              actual = request ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored running ∧
+                  running.nodes.cells handle =
+                    some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating }
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.node_started' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.edge_started : ∀ {width : Nat} {Symbol Guard : Type}
+  (request actual : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (before chosen running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge width request before = (handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.evaluate actual, running) →
+              actual = request ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored running ∧
+                  running.edges.cells handle =
+                    some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating }
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.edge_started' depends on axioms: [propext, Quot.sound]

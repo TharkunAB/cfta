@@ -1,0 +1,92 @@
+'ProfileBudgetIntegration.node_uniform_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ProfileBudgetIntegration.node_uniform_prefix : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits rows arity bound : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+        MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity left →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity right →
+              max (MicroCFTA.MergedOrdinaryHeight.height left) (MicroCFTA.MergedOrdinaryHeight.height right) ≤ bound →
+                before.native.machine.heap.nodes.next +
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity bound ≤
+                    2 ^ bits →
+                  before.native.machine.heap.edges.next +
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity bound ≤
+                      2 ^ (bits + 2) →
+                    ∀ (fuel : Nat)
+                      (next :
+                        MicroCFTA.SourceEqualityNativeDemand.Control
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+                      MicroCFTA.SourceEqualityNativeDemand.Steps fuel
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                          before next after →
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after ∧
+                          after.native.machine.heap.nodes.next ≤
+                              before.native.machine.heap.nodes.next +
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+                                  bound ∧
+                            after.native.machine.heap.edges.next ≤
+                              before.native.machine.heap.edges.next +
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+                                  bound
+'ProfileBudgetIntegration.edge_uniform_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ProfileBudgetIntegration.edge_uniform_prefix : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits rows arity bound : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap left →
+        MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap right →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rows arity left →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rows arity right →
+              max (MicroCFTA.MergedOrdinaryHeight.edgeHeight left) (MicroCFTA.MergedOrdinaryHeight.edgeHeight right) ≤
+                  bound →
+                before.native.machine.heap.nodes.next +
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity bound ≤
+                    2 ^ bits →
+                  before.native.machine.heap.edges.next +
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity bound ≤
+                      2 ^ (bits + 2) →
+                    ∀ (fuel : Nat)
+                      (next :
+                        MicroCFTA.SourceEqualityNativeDemand.Control
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+                      MicroCFTA.SourceEqualityNativeDemand.Steps fuel
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                          before next after →
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after ∧
+                          after.native.machine.heap.nodes.next ≤
+                              before.native.machine.heap.nodes.next +
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity
+                                  bound ∧
+                            after.native.machine.heap.edges.next ≤
+                              before.native.machine.heap.edges.next +
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.edgeBudget rows arity
+                                  bound

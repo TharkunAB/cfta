@@ -1,0 +1,77 @@
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:25:109: error: unexpected identifier; expected ')', ',' or ':'
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:24:4: error: Type mismatch
+  SourceCurrentAllocatedFiniteOrdinaryOutputConstructors.makeNode [nullary.fst, nullary.fst] nullary.snd built.left
+    linked.left ?m.139
+has type
+  RowsShape ?m.123 ?m.124 [nullary.fst, nullary.fst] →
+    [nullary.fst, nullary.fst].length ≤ ?m.123 →
+      NodeShape ?m.123 ?m.124 (run (makeNode [nullary.fst, nullary.fst]) nullary.snd).fst
+but is expected to have type
+  NodeShape 2 0 parent.fst
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:25:24: error: unsolved goals
+initial : Coherent empty
+built :
+  Coherent (run (makeEdge 7 91 []) empty).snd ∧
+    Cached (run (makeEdge 7 91 []) empty).snd ∧
+      ∀ (child : Value Nat Nat),
+        child ∈ (run (makeEdge 7 91 []) empty).fst.children → Available (run (makeEdge 7 91 []) empty).snd child
+linked :
+  Linked (run (makeEdge 7 91 []) empty).snd ∧
+    EdgeResident (run (makeEdge 7 91 []) empty).snd (run (makeEdge 7 91 []) empty).fst
+edgeProfile : EdgeShape 2 0 nullary.fst
+edge : EdgeValue Nat Nat
+member : edge = nullary.fst ∨ edge = nullary.fst
+⊢ EdgeResident nullary.snd edge
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:16:79: error: unsolved goals
+initial : Coherent empty
+built :
+  Coherent (run (makeEdge 7 91 []) empty).snd ∧
+    Cached (run (makeEdge 7 91 []) empty).snd ∧
+      ∀ (child : Value Nat Nat),
+        child ∈ (run (makeEdge 7 91 []) empty).fst.children → Available (run (makeEdge 7 91 []) empty).snd child
+linked :
+  Linked (run (makeEdge 7 91 []) empty).snd ∧
+    EdgeResident (run (makeEdge 7 91 []) empty).snd (run (makeEdge 7 91 []) empty).fst
+edgeProfile : EdgeShape 2 0 nullary.fst
+nodeProfile : NodeShape 2 0 parent.fst
+⊢ EdgeShape 2 0 nullary.fst ∧
+    NodeShape 2 0 parent.fst ∧
+      (nodeEdges parent.fst).length = 1 ∧
+        run (makeNode [nullary.fst, nullary.fst]) parent.snd = (parent.fst, parent.snd)
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:43:25: error: failed to synthesize
+  Decidable ¬EdgeShape 0 0 sentinel.fst
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:43:36: error: failed to synthesize
+  Decidable (run (makeNode [sentinel.fst]) sentinel.snd = (Value.empty, sentinel.snd))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'MicroCFTA.OutputConstructorKernels.nullary_duplicate_and_replay' depends on axioms: [propext, sorryAx, Quot.sound]
+nullary_duplicate_and_replay : EdgeShape 2 0 nullary.fst ∧
+  NodeShape 2 0 parent.fst ∧
+    (nodeEdges parent.fst).length = 1 ∧ run (makeNode [nullary.fst, nullary.fst]) parent.snd = (parent.fst, parent.snd)
+'MicroCFTA.OutputConstructorKernels.sentinel_erasure' depends on axioms: [propext, sorryAx, Quot.sound]
+sentinel_erasure : EdgeShape 0 1 sentinel.fst ∧
+  ¬EdgeShape 0 0 sentinel.fst ∧ run (makeNode [sentinel.fst]) sentinel.snd = (Value.empty, sentinel.snd)
+'MicroCFTA.OutputConstructorKernels.arbitrary_warm_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+@arbitrary_warm_node : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (edges : List (EdgeValue Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  Coherent before →
+    Linked before →
+      (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → EdgeResident before edge) →
+        RowsShape rows arity edges →
+          edges.length ≤ rows →
+            have built := run (makeNode edges) before;
+            NodeShape rows arity built.fst ∧
+              run (makeNode edges) built.snd = (built.fst, built.snd) ∧
+                NodeShape rows arity (run (makeNode edges) built.snd).fst
+'MicroCFTA.OutputConstructorKernels.ordered_child_constructor' depends on axioms: [propext, Quot.sound]
+@ordered_child_constructor : ∀ {Symbol Guard Input : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {rows arity : Nat} {inputs : List Input} {values : List (Value Symbol Guard)},
+  Language.All₂ (fun x value => NodeShape rows arity value) inputs values →
+    inputs.length ≤ arity →
+      ∀ (symbol : Symbol) (guard : Guard) (before : InternedConstructorTemplates.State Symbol Guard),
+        Coherent before →
+          Cached before →
+            (∀ (value : Value Symbol Guard), value ∈ values → Available before value) →
+              EdgeShape rows arity (run (makeEdge symbol guard values) before).fst

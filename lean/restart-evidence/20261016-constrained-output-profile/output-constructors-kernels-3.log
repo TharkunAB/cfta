@@ -1,0 +1,44 @@
+lean/restart-evidence/20261016-constrained-output-profile/output-constructors-kernels.lean:61:4: error: Tactic `rfl` failed: The left-hand side
+  run (makeNode []) sentinel.snd
+is not definitionally equal to the right-hand side
+  (Value.empty, sentinel.snd)
+
+case refine_2
+initial : Coherent empty
+available : ∀ (value : Value Nat Nat), value ∈ [Value.empty] → Available empty value
+edgeProfile : EdgeShape 0 1 (run (makeEdge 8 92 [Value.empty]) empty).fst
+children : sentinel.fst.children = [Value.empty]
+erased : makeNode ([] ++ [sentinel.fst]) = makeNode []
+⊢ run (makeNode []) sentinel.snd = (Value.empty, sentinel.snd)
+'MicroCFTA.OutputConstructorKernels.nullary_duplicate_and_replay' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+nullary_duplicate_and_replay : EdgeShape 2 0 nullary.fst ∧
+  NodeShape 2 0 parent.fst ∧
+    (canonicalEdges (surviving [nullary.fst, nullary.fst])).length = 1 ∧
+      run (makeNode [nullary.fst, nullary.fst]) parent.snd = (parent.fst, parent.snd)
+'MicroCFTA.OutputConstructorKernels.sentinel_erasure' depends on axioms: [propext, sorryAx, Quot.sound]
+sentinel_erasure : EdgeShape 0 1 sentinel.fst ∧
+  ¬EdgeShape 0 0 sentinel.fst ∧ run (makeNode [sentinel.fst]) sentinel.snd = (Value.empty, sentinel.snd)
+'MicroCFTA.OutputConstructorKernels.arbitrary_warm_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+@arbitrary_warm_node : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (edges : List (EdgeValue Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  Coherent before →
+    Linked before →
+      (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → EdgeResident before edge) →
+        RowsShape rows arity edges →
+          edges.length ≤ rows →
+            have built := run (makeNode edges) before;
+            NodeShape rows arity built.fst ∧
+              run (makeNode edges) built.snd = (built.fst, built.snd) ∧
+                NodeShape rows arity (run (makeNode edges) built.snd).fst
+'MicroCFTA.OutputConstructorKernels.ordered_child_constructor' depends on axioms: [propext, Quot.sound]
+@ordered_child_constructor : ∀ {Symbol Guard Input : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {rows arity : Nat} {inputs : List Input} {values : List (Value Symbol Guard)},
+  Language.All₂ (fun x value => NodeShape rows arity value) inputs values →
+    inputs.length ≤ arity →
+      ∀ (symbol : Symbol) (guard : Guard) (before : InternedConstructorTemplates.State Symbol Guard),
+        Coherent before →
+          Cached before →
+            (∀ (value : Value Symbol Guard), value ∈ values → Available before value) →
+              EdgeShape rows arity (run (makeEdge symbol guard values) before).fst

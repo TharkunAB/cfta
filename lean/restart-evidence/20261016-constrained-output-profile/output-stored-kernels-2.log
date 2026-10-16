@@ -1,0 +1,114 @@
+lean/restart-evidence/20261016-constrained-output-profile/output-stored-kernels.lean:33:4: error: Type mismatch: After simplification, term
+  FlatMemoThunk.demand_ready handle (finishNode handle Value.empty running).nodes request Value.empty returned
+ has type
+  FlatMemoThunk.demand handle (finishNode handle Value.empty running).nodes =
+    (FlatMemoThunk.Observation.ready Value.empty, (finishNode handle Value.empty running).nodes)
+but is expected to have type
+  ((FlatMemoThunk.demand handle (finishNode handle Value.empty running).nodes).fst,
+      { machine := (finishNode handle Value.empty running).machine,
+        nodes := (FlatMemoThunk.demand handle (finishNode handle Value.empty running).nodes).snd,
+        edges := (finishNode handle Value.empty running).edges }) =
+    (FlatMemoThunk.Observation.ready Value.empty, finishNode handle Value.empty running)
+@MicroCFTA.OutputStoredKernels.publish_empty : ∀ {Symbol Guard : Type} {width : Nat}
+  (request owner : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (before chosen running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode width request before =
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.evaluate owner, running) →
+              have final :=
+                MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle
+                  MicroCFTA.InternedConstructorTemplates.Value.empty running;
+              owner = request ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored final ∧
+                  final.edges = running.edges ∧
+                    final.nodes.cells handle =
+                        some
+                          { request := request,
+                            status :=
+                              MicroCFTA.FlatMemoThunk.Status.returned
+                                MicroCFTA.InternedConstructorTemplates.Value.empty } ∧
+                      MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle final =
+                        (MicroCFTA.FlatMemoThunk.Observation.ready MicroCFTA.InternedConstructorTemplates.Value.empty,
+                          final)
+'MicroCFTA.OutputStoredKernels.publish_empty' depends on axioms: [propext, sorryAx, Quot.sound]
+@MicroCFTA.OutputStoredKernels.serial_families : ∀ {Symbol Guard : Type} {width : Nat}
+  (before : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+    ∀ (nodeHandle edgeHandle : Nat) (nodeRequest : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+      (edgeRequest : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+      (entry : MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)),
+      before.nodes.cells nodeHandle =
+          some { request := nodeRequest, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+        before.edges.cells edgeHandle =
+            some { request := edgeRequest, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+          have middle :=
+            MicroCFTA.SourceRecursiveIntersectionThunks.finishNode nodeHandle
+              MicroCFTA.InternedConstructorTemplates.Value.empty before;
+          have result :=
+            MicroCFTA.InternedConstructorTemplates.EdgeValue.mk entry
+              [MicroCFTA.InternedConstructorTemplates.Value.empty];
+          have final := MicroCFTA.SourceRecursiveIntersectionThunks.finishEdge edgeHandle result middle;
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored final ∧
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.NodeCertificate nodeRequest
+                MicroCFTA.InternedConstructorTemplates.Value.empty ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.EdgeCertificate edgeRequest result ∧
+                final.nodes.cells nodeHandle =
+                    some
+                      { request := nodeRequest,
+                        status :=
+                          MicroCFTA.FlatMemoThunk.Status.returned MicroCFTA.InternedConstructorTemplates.Value.empty } ∧
+                  final.edges.cells edgeHandle =
+                    some { request := edgeRequest, status := MicroCFTA.FlatMemoThunk.Status.returned result }
+'MicroCFTA.OutputStoredKernels.serial_families' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.OutputStoredKernels.warm_node : ∀ {Symbol Guard : Type} {width : Nat}
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode width request before =
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+              request.domain.key.seen = [] →
+                ∀ (rows arity : Nat),
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity request.left →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity request.right →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape (rows * rows) (max arity 1)
+                          result ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after ∧
+                          after = chosen ∧ MicroCFTA.InternedProbeProvenance.Available after.machine.heap result
+'MicroCFTA.OutputStoredKernels.warm_node' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.OutputStoredKernels.warm_edge : ∀ {Symbol Guard : Type} {width : Nat}
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before →
+      MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady before.machine request →
+        MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right →
+          MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge width request before = (handle, chosen) →
+            MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge handle chosen =
+                (MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+              request.domain.key.seen = [] →
+                ∀ (rows arity : Nat),
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rows arity request.left →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rows arity request.right →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape (rows * rows) (max arity 1)
+                          result ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after ∧
+                          after = chosen ∧ MicroCFTA.InternedEdgeResidency.EdgeResident after.machine.heap result
+'MicroCFTA.OutputStoredKernels.warm_edge' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.OutputStoredKernels.nonempty_seen : ∀ {Symbol Guard : Type}
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  request.domain.key.seen ≠ [] →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.NodeCertificate request result
+'MicroCFTA.OutputStoredKernels.nonempty_seen' depends on axioms: [propext]
