@@ -1,0 +1,88 @@
+'MicroCFTA.SourceCurrentAllocatedNativeScopedMuCertificates.optional_scope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedMuCertificates.mu_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedMuCertificates.left_reference' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedMuCertificates.right_reference' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedNodeCertificates.node_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeColdClosedExact.completed_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeColdClosedExact.cold_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@optional_scope : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (pairs : List (Nat × Nat)) (pair : Nat × Nat)
+  (body value : Value Symbol Guard) (before after : Machine Symbol Guard),
+  SemanticReady before.heap →
+    Available before.heap body →
+      SourceRecursiveIntersectionResultScope.Scope (pair :: pairs) body →
+        construction (SourceRecursiveIntersectionMaybeMu.maybeMu pair body before.heap) before =
+            Result.done value after →
+          SourceRecursiveIntersectionResultScope.Scope pairs value
+@mu_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] (request : NodeRequest Symbol Guard)
+  (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    NodeReady state request →
+      SourceCurrentAllocatedNativeScopedCode.Certified (compileMu request.domain request.left request.right) state
+        fun x value => SourceRecursiveIntersectionResultScope.Scope request.domain.key.seen value
+@left_reference : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat) (other : Value Symbol Guard)
+  (state : Machine Symbol Guard),
+  SourceCurrentAllocatedNativeScopedCode.Certified (compileReference domain name other true) state fun x value =>
+    SourceRecursiveIntersectionResultScope.Scope domain.key.seen value
+@right_reference : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat) (other : Value Symbol Guard)
+  (state : Machine Symbol Guard),
+  SourceCurrentAllocatedNativeScopedCode.Certified (compileReference domain name other false) state fun x value =>
+    SourceRecursiveIntersectionResultScope.Scope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedNodeCertificates.node_certified : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      NodeReady state request →
+        SourceCurrentAllocatedNativeScopedCode.Certified (compileNode request) state fun x value =>
+          SourceRecursiveIntersectionResultScope.Scope request.domain.key.seen value
+@completed_unique : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (firstFuel secondFuel : Nat) (control : Control A) (before firstAfter secondAfter : Checked width)
+  (firstValue secondValue : A),
+  SourceEqualityNativeDemand.execute firstFuel control before = Outcome.done firstValue firstAfter →
+    SourceEqualityNativeDemand.execute secondFuel control before = Outcome.done secondValue secondAfter →
+      firstValue = secondValue ∧ firstAfter = secondAfter
+@cold_complete : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State),
+  Good { native := initial width machine, operations := operations } →
+    SemanticReady machine.heap →
+      ∀ (left right : Value Symbol Guard),
+        Original left →
+          Original right →
+            Available machine.heap left →
+              Available machine.heap right →
+                left.free = [] →
+                  right.free = [] →
+                    WordRanges (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+                        { native := initial width machine, operations := operations } →
+                      ∃ inputModel inputRanked fuel value after,
+                        (SourceCurrentAllocatedNativeContextualCompletion.Receipt fuel
+                            (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+                            { native := initial width machine, operations := operations } value after
+                            (fun final value => Available final.heap value) fun x value =>
+                            SourceCurrentAllocatedNativeContextCache.NodeLaw
+                              (view machine.heap (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+                              (SourceEqualityPCSGuard.holds formulas solver)
+                              { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right } value) ∧
+                          SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+                            SourceRecursiveIntersectionNative.Idle after.native ∧
+                              value.free = [] ∧
+                                ∀ (output : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+                                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output
+                                      value term ↔
+                                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                        output left term ∧
+                                      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                        output right term
+'cold_closed_exact_kernel' depends on axioms: [propext, Classical.choice, Quot.sound]

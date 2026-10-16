@@ -1,0 +1,172 @@
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCode.certified_bind' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.Receipt.done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.node_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.edge_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.request_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.edge_request_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.initial_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.cold_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SourceCurrentAllocatedNativeScopedCode.certified_bind : ∀ {A B : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (code : Code Symbol Guard A) (next : A → Code Symbol Guard B) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SemanticReady state.heap →
+      ∀ (intermediate : Machine Symbol Guard → A → Prop) (post : Machine Symbol Guard → B → Prop),
+        SourceCurrentAllocatedNativeScopedCode.Certified code state intermediate →
+          (∀ (value : A) (after : Machine Symbol Guard),
+              SourceRecursiveIntersectionKernel.Valid after →
+                Extension state after →
+                  SemanticReady after.heap →
+                    intermediate after value →
+                      SourceCurrentAllocatedNativeScopedCode.Certified (next value) after post) →
+            SourceCurrentAllocatedNativeScopedCode.Certified (code.bind next) state post
+@SourceCurrentAllocatedNativeScopeCompletion.Receipt.done : ∀ {A : Type} {width fuel : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {control : Control A} {before after : Checked width} {value : A}
+  {post scopePost : Machine Symbol Guard → A → Prop},
+  SourceCurrentAllocatedNativeScopeCompletion.Receipt fuel control before value after post scopePost →
+    SourceEqualityNativeDemand.execute (fuel + 1) control before = Outcome.done value after
+@SourceCurrentAllocatedNativeScopeCompletion.node_complete : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard),
+      NodeScope source request →
+        ∀ (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request))
+          (state : Checked width),
+          Good state →
+            Scoped state.native →
+              SemanticReady state.native.machine.heap →
+                SourceRecursiveIntersectionThunks.NodeReady state.native.machine request →
+                  Grows source state.native.machine.heap →
+                    Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                      ActiveAbove (view source holds) holds
+                          (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request)
+                            complete)
+                          state.native →
+                        WordRanges (Control.code (compileNode request)) state →
+                          SourceCurrentAllocatedNativeScopeCompletion.Returned (Control.code (compileNode request))
+                            state (fun after value => Available after.heap value) fun x value =>
+                            SourceCurrentAllocatedNativeScopeCache.NodeLaw request value
+@SourceCurrentAllocatedNativeScopeCompletion.edge_complete : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard),
+      EdgeScope source request →
+        ∀ (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+          (state : Checked width),
+          Good state →
+            Scoped state.native →
+              SemanticReady state.native.machine.heap →
+                SourceRecursiveIntersectionThunks.EdgeReady state.native.machine request →
+                  Grows source state.native.machine.heap →
+                    Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                      ActiveAbove (view source holds) holds
+                          (requiredFuel (view source holds)
+                            (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete)
+                          state.native →
+                        WordRanges (Control.edgeBody request Code.pure) state →
+                          SourceCurrentAllocatedNativeScopeCompletion.Returned (Control.edgeBody request Code.pure)
+                            state (fun after value => EdgeResident after.heap value) fun x value =>
+                            SourceCurrentAllocatedNativeScopeCache.EdgeLaw request value
+@SourceCurrentAllocatedNativeScopeCompletion.request_complete : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard),
+      NodeScope source request →
+        ∀ (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request))
+          (state : Checked width),
+          Good state →
+            Scoped state.native →
+              SemanticReady state.native.machine.heap →
+                SourceRecursiveIntersectionThunks.NodeReady state.native.machine request →
+                  Grows source state.native.machine.heap →
+                    Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                      ActiveAbove (view source holds) holds
+                          (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request)
+                              complete +
+                            1)
+                          state.native →
+                        WordRanges (Control.code (requestNode request.domain request.left request.right)) state →
+                          SourceCurrentAllocatedNativeScopeCompletion.Returned
+                            (Control.code (requestNode request.domain request.left request.right)) state
+                            (fun after value => Available after.heap value) fun x value =>
+                            SourceCurrentAllocatedNativeScopeCache.NodeLaw request value
+@SourceCurrentAllocatedNativeScopeCompletion.edge_request_complete : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard),
+      EdgeScope source request →
+        ∀ (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+          (state : Checked width),
+          Good state →
+            Scoped state.native →
+              SemanticReady state.native.machine.heap →
+                SourceRecursiveIntersectionThunks.EdgeReady state.native.machine request →
+                  Grows source state.native.machine.heap →
+                    Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                      ActiveAbove (view source holds) holds
+                          (requiredFuel (view source holds)
+                              (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete +
+                            1)
+                          state.native →
+                        WordRanges (Control.code (requestEdge request.domain request.left request.right)) state →
+                          SourceCurrentAllocatedNativeScopeCompletion.Returned
+                            (Control.code (requestEdge request.domain request.left request.right)) state
+                            (fun after value => EdgeResident after.heap value) fun x value =>
+                            SourceCurrentAllocatedNativeScopeCache.EdgeLaw request value
+@SourceCurrentAllocatedNativeScopeCompletion.initial_complete : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (holds : Guard → Term Symbol → Bool) (state : Checked width),
+  Good state →
+    Scoped state.native →
+      SemanticReady state.native.machine.heap →
+        SourceRecursiveIntersectionNative.Idle state.native →
+          ∀ (left right : Value Symbol Guard),
+            Original left →
+              Original right →
+                Available state.native.machine.heap left →
+                  Available state.native.machine.heap right →
+                    left.free = [] →
+                      right.free = [] →
+                        WordRanges (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state →
+                          ∃ fuel value after,
+                            (SourceCurrentAllocatedNativeScopeCompletion.Receipt fuel
+                                (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state value
+                                after (fun final value => Available final.heap value) fun x value =>
+                                SourceCurrentAllocatedNativeScopeCache.NodeLaw
+                                  { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }
+                                  value) ∧
+                              SourceRecursiveIntersectionNative.Idle after.native ∧ value.free = []
+@SourceCurrentAllocatedNativeScopeCompletion.cold_complete : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (holds : Guard → Term Symbol → Bool) (machine : Machine Symbol Guard)
+  (operations : SourceEqualityConstraintMemoAllocation.State),
+  Good { native := initial width machine, operations := operations } →
+    SemanticReady machine.heap →
+      ∀ (left right : Value Symbol Guard),
+        Original left →
+          Original right →
+            Available machine.heap left →
+              Available machine.heap right →
+                left.free = [] →
+                  right.free = [] →
+                    WordRanges (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+                        { native := initial width machine, operations := operations } →
+                      ∃ fuel value after,
+                        (SourceCurrentAllocatedNativeScopeCompletion.Receipt fuel
+                            (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+                            { native := initial width machine, operations := operations } value after
+                            (fun final value => Available final.heap value) fun x value =>
+                            SourceCurrentAllocatedNativeScopeCache.NodeLaw
+                              { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right } value) ∧
+                          SourceRecursiveIntersectionNative.Idle after.native ∧ value.free = []

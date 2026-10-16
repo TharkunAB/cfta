@@ -1,0 +1,84 @@
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.initial_scoped' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.advance_scoped' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.lookupNode_scoped' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.lookupEdge_scoped' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.demandNode_scoped' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.demandEdge_scoped' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.finishNode_scoped' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.finishEdge_scoped' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.node_observed_ready' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.edge_observed_ready' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.node_started' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopeCache.edge_started' depends on axioms: [propext, Quot.sound]
+@initial_scoped : ∀ {Symbol Guard : Type} (width : Nat) (machine : Machine Symbol Guard), Scoped (initial width machine)
+@advance_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (after : Machine Symbol Guard),
+  Scoped state → Scoped (advance state after)
+@lookupNode_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (request : NodeRequest Symbol Guard),
+  Scoped state → Scoped (lookupNode width request state).snd
+@lookupEdge_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (request : EdgeRequest Symbol Guard),
+  Scoped state → Scoped (lookupEdge width request state).snd
+@demandNode_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  Scoped state → Scoped (demandNode handle state).snd
+@demandEdge_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  Scoped state → Scoped (demandEdge handle state).snd
+@finishNode_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : NodeRequest Symbol Guard) (result : Value Symbol Guard),
+  Scoped state →
+    state.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } →
+      NodeLaw request result → Scoped (finishNode handle result state)
+@finishEdge_scoped : ∀ {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard),
+  Scoped state →
+    state.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } →
+      EdgeLaw request result → Scoped (finishEdge handle result state)
+@node_observed_ready : ∀ {width : Nat} {Symbol Guard : Type} (request : NodeRequest Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : Value Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    Scoped before →
+      NodeReady before.machine request →
+        SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+          lookupNode width request before = (NodeSelection.memoized handle, chosen) →
+            demandNode handle chosen = (FlatMemoThunk.Observation.ready result, after) →
+              NodeLaw request result ∧ Scoped after ∧ after = chosen ∧ Available after.machine.heap result
+@edge_observed_ready : ∀ {width : Nat} {Symbol Guard : Type} (request : EdgeRequest Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : EdgeValue Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    Scoped before →
+      EdgeReady before.machine request →
+        SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right →
+          lookupEdge width request before = (handle, chosen) →
+            demandEdge handle chosen = (FlatMemoThunk.Observation.ready result, after) →
+              EdgeLaw request result ∧ Scoped after ∧ after = chosen ∧ EdgeResident after.machine.heap result
+@node_started : ∀ {width : Nat} {Symbol Guard : Type} (request actual : NodeRequest Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    Scoped before →
+      NodeReady before.machine request →
+        SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+          lookupNode width request before = (NodeSelection.memoized handle, chosen) →
+            demandNode handle chosen = (FlatMemoThunk.Observation.evaluate actual, running) →
+              actual = request ∧
+                SourceCurrentAllocatedNativePhysicalCache.Valid running ∧
+                  Scoped running ∧
+                    running.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+@edge_started : ∀ {width : Nat} {Symbol Guard : Type} (request actual : EdgeRequest Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before →
+    Scoped before →
+      EdgeReady before.machine request →
+        SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right →
+          lookupEdge width request before = (handle, chosen) →
+            demandEdge handle chosen = (FlatMemoThunk.Observation.evaluate actual, running) →
+              actual = request ∧
+                SourceCurrentAllocatedNativePhysicalCache.Valid running ∧
+                  Scoped running ∧
+                    running.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }

@@ -1,0 +1,112 @@
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.node_walk_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.edge_walk_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.compileRows_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.left_union_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.right_union_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.children_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.sentinel_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.empty_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.reset_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.swap_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.self_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.repeated_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeScopedCertificates.prefix_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SourceCurrentAllocatedNativeScopedCertificates.node_walk_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {A : Type u_1} (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (operands : A → Value Symbol Guard × Value Symbol Guard) (inputs : List A) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified
+        (SourceRecursiveIntersectionCode.walk
+          (fun input => requestNode domain (operands input).fst (operands input).snd) inputs)
+        state fun after values =>
+        InternedNestedProvenance.Values after.heap values ∧
+          ∀ (value : Value Symbol Guard), value ∈ values → Scope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.edge_walk_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {A : Type u_1} (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (operands : A → EdgeValue Symbol Guard × EdgeValue Symbol Guard) (inputs : List A) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified
+        (SourceRecursiveIntersectionCode.walk
+          (fun input => requestEdge domain (operands input).fst (operands input).snd) inputs)
+        state fun after values =>
+        InternedNestedProvenance.Edges after.heap values ∧
+          ∀ (value : EdgeValue Symbol Guard),
+            value ∈ values → SourceRecursiveIntersectionResultScope.EdgeScope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.compileRows_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq Symbol] (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : List (EdgeValue Symbol Guard)) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified (compileRows domain left right) state fun x value => Scope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.left_union_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (members : List (Value Symbol Guard))
+  (right : Value Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified
+        ((SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure)
+        state fun x value => Scope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.right_union_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (members : List (Value Symbol Guard))
+  (left : Value Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified
+        ((SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+          fun values => Code.work (makeUnion values) Code.pure)
+        state fun x value => Scope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.children_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : EdgeRequest Symbol Guard) (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+  (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+        fun x value => SourceRecursiveIntersectionResultScope.EdgeScope request.domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.sentinel_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : EdgeRequest Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    Certified (SourceEqualityNativeCheckedCode.sentinel request.left) state fun x value =>
+      SourceRecursiveIntersectionResultScope.EdgeScope request.domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.empty_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (state : Machine Symbol Guard),
+  Certified (Code.pure Value.empty) state fun x value => Scope domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.reset_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  Certified (requestNode IntersectionEmptyDomain.emptyDomain request.left request.right) state fun x value =>
+    Scope request.domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.swap_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  Certified (requestNode request.domain request.right request.left) state fun x value =>
+    Scope request.domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.self_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+      SourceRecursiveIntersectionControl.Branch.self →
+    Certified (Code.pure request.left) state fun x value => Scope request.domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.repeated_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (request : NodeRequest Symbol Guard) (pair : Nat × Nat) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+      SourceRecursiveIntersectionControl.Branch.repeated pair →
+    Certified (Code.pure (SourceRecursiveIntersectionControl.repeatedValue pair)) state fun x value =>
+      Scope request.domain.key.seen value
+@SourceCurrentAllocatedNativeScopedCertificates.prefix_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} [inst_1 : DecidableEq Symbol] (request : EdgeRequest Symbol Guard)
+  (before : SourceEqualityNativeDemand.State width) (code : Code Symbol Guard (EdgeValue Symbol Guard))
+  (operations : SourceEqualityConstraintMemoAllocation.State),
+  SourceRecursiveIntersectionKernel.Valid before.native.machine →
+    SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+      SourceEqualityNativeDemand.step (SourceEqualityNativeDemand.Control.edgeBody request Code.pure) before =
+          SourceEqualityNativeDemand.Outcome.yielded (SourceEqualityNativeDemand.Control.code code)
+            { native := before.native, operations := operations } →
+        Certified code before.native.machine fun x value =>
+          SourceRecursiveIntersectionResultScope.EdgeScope request.domain.key.seen value
