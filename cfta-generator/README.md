@@ -1653,9 +1653,9 @@ and the atoms are arguments of `deriveLTA`, as the domains are arguments of
 `deriveFTAWith`, because they belong to one use of the datatype. The bound
 counts the unfoldings of each group of types that refer to each other, as
 `recurUpTo` does. `Data.CFTA.Gen.Refinement.Derive.Internal` is the level
-below: it takes the contracts and the measures of the constructors by name,
-as annotations in the expression language, for a translation that knows the
-names only at run time.
+below: it takes the contracts and the measures of each `Constructor`, as
+annotations in the expression language, for a translation that knows the
+constructors only at run time.
 
 A datatype with several integers for each value has named measures: a record
 whose selector names are the names of the measures in the logic. `MeasuredBy`
