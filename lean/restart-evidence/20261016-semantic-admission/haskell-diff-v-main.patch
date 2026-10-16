@@ -1,0 +1,29 @@
+diff --git a/cfta/CHANGELOG.md b/cfta/CHANGELOG.md
+index 40d5f471..e699ce17 100644
+--- a/cfta/CHANGELOG.md
++++ b/cfta/CHANGELOG.md
+@@ -4,6 +4,10 @@
+ 
+ Before release, the package was called `microcfta`.
+ 
++- Keep recursive constructor probes fresh relative to captured ordinary
++  references. Reuse that same probe choice when matching a Mu. This avoids
++  a pending interning lookup in a closed nested constructor expression.
++
+ - `refoldEdges` is `refold` with the edge of the result that each edge of
+   the input becomes, so that a caller can carry data about the edges of a
+   graph through `refold`, whose new edges have new identities.
+diff --git a/cfta/src/Data/CFTA/Equality/Operations.hs b/cfta/src/Data/CFTA/Equality/Operations.hs
+index c9bb92cb..3676567a 100644
+--- a/cfta/src/Data/CFTA/Equality/Operations.hs
++++ b/cfta/src/Data/CFTA/Equality/Operations.hs
+@@ -123,7 +123,8 @@ reducePartially' constraints node =
+     -- the last rule, an intersection at the end of a path can unfold the
+     -- node, and a narrowed child can then contain its own ancestor. The memo
+     -- then demands its own unfinished result. The test "stops when a narrowed
+-    -- child contains its ancestor" has such an input.
++    -- child contains its ancestor" has such an input. The standalone
++    -- reproduction is lean/repro/OuterCallerCycle.hs.
+     --
+     -- One pass ends in two cases. If no reduced path meets a recursive node,
+     -- at its end or before it, the pass unfolds nothing. An intersection is
