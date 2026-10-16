@@ -1,0 +1,307 @@
+'MicroCFTA.AllocatedMergeCompletionKernels.top_row_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.AllocatedMergeCompletionKernels.selection_then_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedMergeCompletionKernels.miss_rereads_inner_winner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedMergeCompletionKernels.warm_hit_no_selection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedMergeCompletionKernels.successful_observation_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedMergeCompletionKernels.selection_fault_preserved' depends on axioms: [propext, Quot.sound]
+@top_row_exact : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool)
+  (symbol : SourceObservations.Label FullSyntax.Formula)
+  (children :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (before : SourceCurrentAllocatedMergeGraph.State) (memo : Memo),
+  @Exists Nat fun bound =>
+    ∀ (fuel : Nat),
+      @LE.le Nat instLENat bound fuel →
+        @Eq
+          (Outcome
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (@execute
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            inst inst_1 clear fuel fuel (Code.topRow symbol children) before memo)
+          (@Outcome.done
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (@Prod.fst
+              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                inst_1
+                (@makeEdge (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) symbol top children)
+                (@SourceCurrentConjunctionRowsAllocation.State.heap (SourceObservations.Label FullSyntax.Formula)
+                  FullSyntax.Formula before)))
+            (@SourceCurrentConjunctionRowsAllocation.State.mk (SourceObservations.Label FullSyntax.Formula)
+              FullSyntax.Formula
+              (@Prod.snd
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  inst_1
+                  (@makeEdge (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) symbol top children)
+                  (@SourceCurrentConjunctionRowsAllocation.State.heap (SourceObservations.Label FullSyntax.Formula)
+                    FullSyntax.Formula before)))
+              (SourceEqualityMkEdgeAllocation.emptyField
+                (@SourceCurrentConjunctionRowsAllocation.State.equality (SourceObservations.Label FullSyntax.Formula)
+                  FullSyntax.Formula before)))
+            memo)
+@selection_then_top : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool} {selection : Nat}
+  {inputs values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SourceCurrentAllocatedMergeGraph.State}
+  {heap :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (symbol : SourceObservations.Label FullSyntax.Formula) (memo : Memo),
+  @Eq
+      (MergedSourceComparison.Result (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (List
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+      (@SourceMergedSelection.select (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst inst_1 clear selection inputs
+        (@SourceCurrentConjunctionRowsAllocation.State.heap (SourceObservations.Label FullSyntax.Formula)
+          FullSyntax.Formula before))
+      (@MergedSourceComparison.Result.done (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        values heap) →
+    @StableRun inst inst_1
+      (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      clear
+      (@Code.bind
+        (List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        (Code.select inputs) fun children => Code.topRow symbol children)
+      before memo
+      (@Prod.fst
+        (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        (@run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          inst_1
+          (@makeEdge (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            symbol top values)
+          heap))
+      (@SourceCurrentConjunctionRowsAllocation.State.mk (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+        (@Prod.snd
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            inst_1
+            (@makeEdge (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              symbol top values)
+            heap))
+        (SourceEqualityMkEdgeAllocation.emptyField
+          (@SourceCurrentConjunctionRowsAllocation.State.equality (SourceObservations.Label FullSyntax.Formula)
+            FullSyntax.Formula before)))
+      memo
+@miss_rereads_inner_winner : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool}
+  {input candidate :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after : SourceCurrentAllocatedMergeGraph.State} {memo current : Memo}
+  {entry :
+    SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Eq
+      (Option
+        (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (memo
+        (@Value.referenceOf (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) input))
+      (@none
+        (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula))) →
+    @Run inst inst_1 clear
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        (@body inst input) before memo candidate after current →
+      @Eq
+          (Option
+            (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (current
+            (@Value.referenceOf (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) input))
+          (@some
+            (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            entry) →
+        @StableCall inst inst_1 clear input before memo
+          (@SourceCurrentMemoMergeGraph.Entry.result (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry)
+          after current
+@warm_hit_no_selection : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool}
+  {input : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SourceCurrentAllocatedMergeGraph.State} {memo : Memo}
+  {entry :
+    SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Eq
+      (Option
+        (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (memo
+        (@Value.referenceOf (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) input))
+      (@some
+        (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        entry) →
+    And
+      (@Eq
+        (Outcome
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        (@call inst inst_1 clear (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) input before memo)
+        (@Outcome.done
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@SourceCurrentMemoMergeGraph.Entry.result (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry)
+          before memo))
+      (∀ (work selection : Nat),
+        @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) work →
+          @Eq
+            (Outcome
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+            (@call inst inst_1 clear work selection input before memo)
+            (@Outcome.done
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@SourceCurrentMemoMergeGraph.Entry.result (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry)
+              before memo))
+@successful_observation_unique : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool}
+  {input firstResult secondResult :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before firstAfter secondAfter : SourceCurrentAllocatedMergeGraph.State} {memo firstSaved secondSaved : Memo}
+  {firstWork firstSelection secondWork secondSelection : Nat},
+  @Eq
+      (Outcome
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (@call inst inst_1 clear firstWork firstSelection input before memo)
+      (@Outcome.done
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        firstResult firstAfter firstSaved) →
+    @Eq
+        (Outcome
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        (@call inst inst_1 clear secondWork secondSelection input before memo)
+        (@Outcome.done
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          secondResult secondAfter secondSaved) →
+      And
+        (@Eq (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          firstResult secondResult)
+        (And (@Eq SourceCurrentAllocatedMergeGraph.State firstAfter secondAfter) (@Eq Memo firstSaved secondSaved))
+@selection_fault_preserved : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool} {selection work : Nat}
+  {inputs :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SourceCurrentAllocatedMergeGraph.State} {memo : Memo} {fault : MergedSourceComparison.Fault}
+  {heap :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Eq
+      (MergedSourceComparison.Result (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (List
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+      (@SourceMergedSelection.select (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst inst_1 clear selection inputs
+        (@SourceCurrentConjunctionRowsAllocation.State.heap (SourceObservations.Label FullSyntax.Formula)
+          FullSyntax.Formula before))
+      (@MergedSourceComparison.Result.failed (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        fault heap) →
+    And
+      (@Eq
+        (Outcome
+          (List
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+        (@execute
+          (List
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          inst inst_1 clear
+          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) work
+            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          selection (Code.select inputs) before memo)
+        (@Outcome.failed
+          (List
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          fault
+          (@SourceCurrentConjunctionRowsAllocation.State.mk (SourceObservations.Label FullSyntax.Formula)
+            FullSyntax.Formula heap
+            (@SourceCurrentConjunctionRowsAllocation.State.equality (SourceObservations.Label FullSyntax.Formula)
+              FullSyntax.Formula before))
+          memo))
+      (Not
+        (@Exists
+          (List
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          fun output =>
+          @Exists SourceCurrentAllocatedMergeGraph.State fun after =>
+            @Exists Memo fun saved =>
+              @Eq
+                (Outcome
+                  (List
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+                (@execute
+                  (List
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                  inst inst_1 clear
+                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) work
+                    (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  selection (Code.select inputs) before memo)
+                (@Outcome.done
+                  (List
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                  output after saved)))

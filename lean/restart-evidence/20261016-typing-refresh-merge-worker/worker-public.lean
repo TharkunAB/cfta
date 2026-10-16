@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedMergeWorkerSound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.Fault
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.Fault
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.state
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.state
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.memo
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.memo
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.bind
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.bind
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.execute
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.execute
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.call
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.call
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.call_zero
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.call_zero
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.call_hit
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.call_hit
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.call_miss
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.call_miss
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorker.topRow_done
+#check MicroCFTA.SourceCurrentAllocatedMergeWorker.topRow_done
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.bind_done_iff
+#check MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.bind_done_iff
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.execute_sound
+#check MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.execute_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.call_sound
+#check MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.call_sound

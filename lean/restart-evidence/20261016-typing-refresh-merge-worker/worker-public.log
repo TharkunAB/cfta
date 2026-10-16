@@ -1,0 +1,168 @@
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.Fault' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedMergeWorker.Fault : Type
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome (Output : Type) : Type
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.state' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.state {Output : Type} :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output → MicroCFTA.SourceCurrentAllocatedMergeGraph.State
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.memo' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.memo {Output : Type} :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output → MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.bind' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.bind {Input Output : Type}
+  (first : MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Input)
+  (next :
+    Input →
+      MicroCFTA.SourceCurrentAllocatedMergeGraph.State →
+        MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo → MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output) :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.execute' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorker.execute {Output : Type}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) :
+  Nat →
+    Nat →
+      MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output →
+        MicroCFTA.SourceCurrentAllocatedMergeGraph.State →
+          MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo → MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.call' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorker.call
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) :
+  Nat →
+    Nat →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.SourceCurrentAllocatedMergeGraph.State →
+          MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo →
+            MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.call_zero' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorker.call_zero
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (selectionFuel : Nat)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo) :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear 0 selectionFuel input state memo =
+    MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.failed MicroCFTA.MergedSourceComparison.Fault.exhausted state
+      memo
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.call_hit' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorker.call_hit
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (remaining selectionFuel : Nat)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo)
+  (entry :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (found : memo input.referenceOf = some entry) :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear (remaining + 1) selectionFuel input state memo =
+    MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done entry.result state memo
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.call_miss' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorker.call_miss
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (remaining selectionFuel : Nat)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo)
+  (absent : memo input.referenceOf = none) :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear (remaining + 1) selectionFuel input state memo =
+    (MicroCFTA.SourceCurrentAllocatedMergeWorker.execute clear remaining selectionFuel
+          (MicroCFTA.SourceCurrentAllocatedMergeGraph.body input) state memo).bind
+      fun candidate after current =>
+      MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+        (MicroCFTA.SourceCurrentMemoMergeGraph.winner current input candidate).result after
+        (MicroCFTA.SourceCurrentMemoMergeGraph.remember current input candidate)
+'MicroCFTA.SourceCurrentAllocatedMergeWorker.topRow_done' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorker.topRow_done
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (remaining selectionFuel : Nat)
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo) :
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.execute clear (remaining + 1) selectionFuel
+      (MicroCFTA.SourceCurrentAllocatedMergeGraph.Code.topRow symbol children) state memo =
+    MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+      (MicroCFTA.InternedConstructorTemplates.run
+          (MicroCFTA.InternedConstructorTemplates.makeEdge symbol MicroCFTA.SourceCurrentAllocatedMergeGraph.top
+            children)
+          state.heap).fst
+      {
+        heap :=
+          (MicroCFTA.InternedConstructorTemplates.run
+              (MicroCFTA.InternedConstructorTemplates.makeEdge symbol MicroCFTA.SourceCurrentAllocatedMergeGraph.top
+                children)
+              state.heap).snd,
+        equality := MicroCFTA.SourceEqualityMkEdgeAllocation.emptyField state.equality }
+      memo
+'MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.bind_done_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.bind_done_iff {Input Output : Type}
+  (first : MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Input)
+  (next :
+    Input →
+      MicroCFTA.SourceCurrentAllocatedMergeGraph.State →
+        MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo → MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output)
+  (output : Output) (after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State)
+  (saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo) :
+  first.bind next = MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved ↔
+    ∃ value middle current,
+      first = MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done value middle current ∧
+        next value middle current = MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved
+'MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.execute_sound' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.execute_sound {Output : Type}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {code : MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo} {output : Output} {fuel selectionFuel : Nat}
+  (done :
+    MicroCFTA.SourceCurrentAllocatedMergeWorker.execute clear fuel selectionFuel code before memo =
+      MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved) :
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Run clear code before memo output after saved
+'MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.call_sound' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.call_sound
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo} {fuel selectionFuel : Nat}
+  (done :
+    MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear fuel selectionFuel input before memo =
+      MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved) :
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved

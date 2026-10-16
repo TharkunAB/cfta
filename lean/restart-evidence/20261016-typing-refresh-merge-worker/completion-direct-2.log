@@ -1,0 +1,38 @@
+lean/MicroCFTA/SourceCurrentAllocatedMergeWorkerCompletion.lean:200:41: error(lean.unknownIdentifier): Unknown identifier `values`
+lean/MicroCFTA/SourceCurrentAllocatedMergeWorkerCompletion.lean:196:35: error: unsolved goals
+case succ.left.succ.select.done.refl
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+workFuel : Nat
+ih :
+  (∀ {Output : Type} (code : Code Output) (before : SourceCurrentAllocatedMergeGraph.State) (memo : Memo)
+      (output : Output) (after : SourceCurrentAllocatedMergeGraph.State) (saved : Memo)
+      (selectionFuel largerWork largerSelection : Nat),
+      execute clear workFuel selectionFuel code before memo = Outcome.done output after saved →
+        workFuel ≤ largerWork →
+          selectionFuel ≤ largerSelection →
+            execute clear largerWork largerSelection code before memo = Outcome.done output after saved) ∧
+    ∀ (input : Value Symbol Guard) (before : SourceCurrentAllocatedMergeGraph.State) (memo : Memo)
+      (output : Value Symbol Guard) (after : SourceCurrentAllocatedMergeGraph.State) (saved : Memo)
+      (selectionFuel largerWork largerSelection : Nat),
+      call clear workFuel selectionFuel input before memo = Outcome.done output after saved →
+        workFuel ≤ largerWork →
+          selectionFuel ≤ largerSelection →
+            call clear largerWork largerSelection input before memo = Outcome.done output after saved
+before : SourceCurrentAllocatedMergeGraph.State
+memo : Memo
+selectionFuel largerSelection : Nat
+selectionEnough : selectionFuel ≤ largerSelection
+remaining : Nat
+enough : workFuel + 1 ≤ remaining + 1
+inputs output : List (Value Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+selected :
+  SourceMergedSelection.select clear selectionFuel inputs before.heap = MergedSourceComparison.Result.done output heap
+⊢ (match SourceMergedSelection.select clear largerSelection inputs before.heap with
+    | MergedSourceComparison.Result.done values heap =>
+      Outcome.done values { heap := heap, equality := before.equality } memo
+    | MergedSourceComparison.Result.failed fault heap =>
+      Outcome.failed fault { heap := heap, equality := before.equality } memo) =
+    Outcome.done output { heap := heap, equality := before.equality } memo

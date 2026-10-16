@@ -1,0 +1,86 @@
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_any' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_any : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?any") = true →
+    MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges =
+      List.filter (MicroCFTA.SourceCurriedDefaulting.leaf "?any") edges
+'MicroCFTA.SourceCurrentCurriedDefaulting.agrees_without_any' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.agrees_without_any : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?any") = false →
+    MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges = MicroCFTA.SourceCurriedDefaulting.narrowHeads edges
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_no_open' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_no_open : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?any") = false →
+    edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?") = false →
+      MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges = edges
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_no_default' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_no_default : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?any") = false →
+    edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?") = true →
+      edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?nodefault") = true →
+        MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges = []
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_list' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_list : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?any") = false →
+    edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?") = true →
+      edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?nodefault") = false →
+        MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges =
+          List.filter (MicroCFTA.SourceCurriedDefaulting.leaf "List") edges
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_any_member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_any_member : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  edges.any (MicroCFTA.SourceCurriedDefaulting.leaf "?any") = true →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard),
+      edge ∈ MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges ↔
+        edge ∈ edges ∧ MicroCFTA.SourceCurriedDefaulting.leaf "?any" edge = true
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_sublist' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_sublist : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  (MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges).Sublist edges
+'MicroCFTA.SourceCurrentCurriedDefaulting.narrow_idempotent' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentCurriedDefaulting.narrow_idempotent : ∀ {Guard : Type}
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue String Guard)),
+  MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads (MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges) =
+    MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads edges
+'MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_fields' does not depend on any axioms
+MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_fields : MicroCFTA.SourceCurrentCurriedDefaulting.markerFirst.fst.entry.key.symbol =
+    "?any" ∧
+  MicroCFTA.SourceCurrentCurriedDefaulting.integerSecond.fst.entry.key.symbol = "Int" ∧
+    MicroCFTA.SourceCurrentCurriedDefaulting.markerFirst.fst.entry.identity = 0 ∧
+      MicroCFTA.SourceCurrentCurriedDefaulting.integerSecond.fst.entry.identity = 1
+'MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_no_open' does not depend on any axioms
+MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_no_open : MicroCFTA.SourceCurrentCurriedDefaulting.counterexample.any
+    (MicroCFTA.SourceCurriedDefaulting.leaf "?") =
+  false
+'MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_current' does not depend on any axioms
+MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_current : MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads
+    MicroCFTA.SourceCurrentCurriedDefaulting.counterexample =
+  [MicroCFTA.SourceCurrentCurriedDefaulting.markerFirst.fst]
+'MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_changed' depends on axioms: [propext]
+MicroCFTA.SourceCurrentCurriedDefaulting.counterexample_changed : MicroCFTA.SourceCurrentCurriedDefaulting.narrowHeads
+    MicroCFTA.SourceCurrentCurriedDefaulting.counterexample ≠
+  MicroCFTA.SourceCurriedDefaulting.narrowHeads MicroCFTA.SourceCurrentCurriedDefaulting.counterexample
+lean/restart-evidence/20261016-typing-refresh-merge-worker/frontend-defaulting-public.lean:53:79: error: Type mismatch
+  rfl
+has type
+  ?m.44 = ?m.44
+but is expected to have type
+  let child := run (makeNode [integerSecond.fst]) integerSecond.snd;
+  let nonleaf := run (makeEdge "?any" () [child.fst]) child.snd;
+  narrowHeads [nonleaf.fst, integerSecond.fst] = [nonleaf.fst, integerSecond.fst]
+'MicroCFTA.CurrentCurriedDefaultingIndependent.any_overrides_head_rejection' depends on axioms: [propext, Quot.sound]
+@any_overrides_head_rejection : ∀ {Guard : Type} (edges : List (EdgeValue String Guard)),
+  edges.any (leaf "?any") = true →
+    edges.any (leaf "?") = true →
+      edges.any (leaf "?nodefault") = true → narrowHeads edges ≠ SourceCurriedDefaulting.narrowHeads edges
+'MicroCFTA.CurrentCurriedDefaultingIndependent.duplicate_occurrences' does not depend on any axioms
+duplicate_occurrences : narrowHeads [markerFirst.fst, integerSecond.fst, markerFirst.fst] =
+  [markerFirst.fst, markerFirst.fst]
+'MicroCFTA.CurrentCurriedDefaultingIndependent.physical_nonleaf' depends on axioms: [propext, sorryAx, Quot.sound]
+physical_nonleaf : have child := run (makeNode [integerSecond.fst]) integerSecond.snd;
+have nonleaf := run (makeEdge "?any" () [child.fst]) child.snd;
+narrowHeads [nonleaf.fst, integerSecond.fst] = [nonleaf.fst, integerSecond.fst]

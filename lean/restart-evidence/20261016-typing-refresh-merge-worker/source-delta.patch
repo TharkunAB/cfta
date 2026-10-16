@@ -1,0 +1,1989 @@
+diff --git a/cfta-generator/CHANGELOG.md b/cfta-generator/CHANGELOG.md
+index 6ee0ab13..d88133c0 100644
+--- a/cfta-generator/CHANGELOG.md
++++ b/cfta-generator/CHANGELOG.md
+@@ -40,10 +40,15 @@ tree automata of `cfta`, with QuickCheck integration.
+   `programRuns` list a `Space`. `libraryEncoding` chooses how a space encodes the types
+   (`Encoding`): `FirstOrder`, or `Curried`, in which a type constructor is
+   a leaf applied by `@` edges, so that a type variable of kind `* -> *`
+-  (`?Foldable t0`) ranges over a domain of type constructors. With
+-  `Curried (OnlyDefault keys)` (`Defaulting`), such a variable that a run
+-  does not determine takes only the list type, or none: marker leaves in
+-  its domain, which `runsNarrowedBy` of `cfta` reads in each run.
++  (`?Foldable t0`) ranges over a domain of type constructors. Each key of
++  the domains has its kind (`Domain`): a `HeadDomain` of type constructors
++  of kind `* -> *`, or a `TypeDomain` of types. With `Curried OnlyDefault`
++  (`Defaulting`), a variable of kind `* -> *` that a run does not determine
++  takes only the list type, or none; a variable of a `TypeDomain` that a
++  run does not determine gives one typed term. Marker leaves in the domains
++  give both, and `runsNarrowedBy` of `cfta` reads them in each run. A
++  domain type can refer to a domain (`List (?Ord x0)`); Hectare unrolls
++  such a reference to one level, below which it takes any type.
+   `parseType` and `parseProgram` read types
+   and programs in Haskell syntax, and `renderType` and `renderProgram` print
+   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
+@@ -197,6 +202,16 @@ tree automata of `cfta`, with QuickCheck integration.
+   contracts and the measures by constructor name, as annotations
+   (`contract`, `measure`, `measureNamed`, `fieldsContract`,
+   `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
++- `deriveLTAOn` and `deriveLTAOnFrom` in `Data.CFTA.Gen.Refinement.Derive`,
++  and `deriveLTAOnWith` in its internal module, derive the refinement
++  generator of the terms of an automaton over the constructors of a
++  datatype, such as a typed language of `Data.CFTA.Gen.Typing`, so that the
++  measures and the contracts of an invariant hold on its terms. Each state
++  is a `oneof` of its transitions, and each transition is the generator of
++  its constructor, as `deriveLTAWith` builds one over the field types. The
++  ranks follow the generators. An automaton with a cycle gives
++  `CyclicAutomaton`, and a transition with a constraint gives
++  `ConstrainedTransition`.
+ - `Data.CFTA.Gen.Typing`: typed languages with variables, from typing rules
+   for the constructors of a `HasFTA` datatype, by name. `rule` gives a
+   constructor a type from the types of its fields. `subterm` is a field in
+@@ -210,10 +225,12 @@ tree automata of `cfta`, with QuickCheck integration.
+   restrict, or exclude it as any `FTA`. `fromConstructorAutomaton` reads an
+   automaton over the constructors of a datatype as a `Gen Symbol a` with the
+   labels and the ranks of `fromDatatype`, and `fromTypingRules` is the two in
+-  one: the closed terms of the root types up to a bound on the nesting. It
+-  reports a name that no constructor has (`UnknownConstructors`), a rule that
+-  does not fit the fields of its constructor (`FieldMismatch`), and inputs
+-  or `Binders`, which are not implemented yet (`NotImplemented`). A field
++  one: the terms of the root types up to a bound on the nesting. The inputs
++  are the variables in scope at the root, so the terms are programs over
++  them. It reports a name that no constructor has (`UnknownConstructors`), a
++  rule that does not fit the fields of its constructor (`FieldMismatch`).
++  With `Binders`, a bound on the binders around each position, the
++  automaton is cyclic and the generator is counted by size. A field
+   that holds a subterm has the type of the datatype, so a family of mutually
+   recursive types is not a language here.
+   A fixed value in a field of the datatype gives `FieldMismatch`.
+diff --git a/cfta-generator/cfta-generator.cabal b/cfta-generator/cfta-generator.cabal
+index df8925a0..54c55e5b 100644
+--- a/cfta-generator/cfta-generator.cabal
++++ b/cfta-generator/cfta-generator.cabal
+@@ -305,6 +305,7 @@ test-suite gen-tests
+     Data.CFTA.Gen.Synthesis.StatesSpec
+     Data.CFTA.Gen.SynthesisSpec
+     Data.CFTA.Gen.TestSupport
++    Data.CFTA.Gen.TypedArithmeticLanguage
+     Data.CFTA.Gen.TypedExpressionLanguage
+     Data.CFTA.Gen.TypingSpec
+     Data.CFTA.Gen.UntypedExpressionLanguage
+@@ -359,9 +360,11 @@ test-suite refinement-tests
+     Data.CFTA.Gen.Refinement.SubsumptionTypedExpressionSpec
+     Data.CFTA.Gen.Refinement.TestSupport
+     Data.CFTA.Gen.Refinement.TypedExpressionLanguage
++    Data.CFTA.Gen.Refinement.TypedLanguageSpec
+     Data.CFTA.Gen.Synthesis.HegelBenchmarks
+     Data.CFTA.Gen.Synthesis.HybridSpec
+     Data.CFTA.Gen.Synthesis.LiquidSpec
++    Data.CFTA.Gen.TypedArithmeticLanguage
+     Data.CFTA.Gen.TypedExpressionLanguage
+ 
+   build-depends:
+diff --git a/cfta-generator/common/Data/CFTA/Gen/TypedArithmeticLanguage.hs b/cfta-generator/common/Data/CFTA/Gen/TypedArithmeticLanguage.hs
+new file mode 100644
+index 00000000..e86d6e99
+--- /dev/null
++++ b/cfta-generator/common/Data/CFTA/Gen/TypedArithmeticLanguage.hs
+@@ -0,0 +1,130 @@
++{-# LANGUAGE DeriveAnyClass #-}
++{-# LANGUAGE DeriveGeneric #-}
++{-# LANGUAGE DerivingStrategies #-}
++{-# LANGUAGE TypeApplications #-}
++
++{- | Typed arithmetic, a language of "Data.CFTA.Gen.Typing" with literals, a
++comparison, a conditional whose type is the type of its branches,
++let-binding, and variables without a type: its datatype, its rules, and a
++type checker.
++-}
++module Data.CFTA.Gen.TypedArithmeticLanguage (
++    ArithType (..),
++    Arith (..),
++    arithRules,
++    arithTyping,
++    arithLanguage,
++    arithAutomaton,
++    subterms,
++    arithType,
++    arithNesting,
++) where
++
++import GHC.Generics (Generic)
++
++import qualified Data.CFTA as FTA
++import Data.CFTA.Constraint (Constraint)
++import qualified Data.CFTA.Gen as Gen
++import Data.CFTA.Gen.Typing (
++    Bound (..),
++    Rule,
++    Typing (Typing),
++    TypingState,
++    fromTypingRules,
++    rule,
++    subterm,
++    typingAutomaton,
++    value,
++    variable,
++ )
++import Data.CFTA.Generic (Constructor, HasFTA)
++import Data.CFTA.Symbol (Symbol)
++
++-- | The types of the arithmetic language.
++data ArithType = IntType | BoolType
++    deriving stock (Eq, Ord, Show)
++
++-- | Arithmetic with literals, a comparison, a conditional, and let-binding. A variable has no type.
++data Arith
++    = Num !Int
++    | Flag !Bool
++    | Plus Arith Arith
++    | Less Arith Arith
++    | If Arith Arith Arith
++    | Var !Int
++    | Let Arith Arith
++    | Arg !Int
++    deriving stock (Eq, Ord, Show, Generic)
++    deriving anyclass (HasFTA)
++
++-- | The typing rules of 'Arith'. The type of a conditional is the type of its branches.
++arithRules :: [Rule ArithType]
++arithRules =
++    [rule "Num" [value n] IntType | n <- [0, 1 :: Int]]
++        <> [rule "Flag" [value b] BoolType | b <- [False, True]]
++        <> [ rule "Plus" [subterm [] IntType, subterm [] IntType] IntType
++           , rule "Less" [subterm [] IntType, subterm [] IntType] BoolType
++           , variable "Var" (\index _ -> [value index])
++           ]
++        <> [rule "If" [subterm [] BoolType, subterm [] typ, subterm [] typ] typ | typ <- [IntType, BoolType]]
++        <> [rule "Let" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [IntType, BoolType], typ <- [IntType, BoolType]]
++
++-- | The typed arithmetic language up to the bound.
++arithTyping :: Int -> Typing ArithType
++arithTyping bound = Typing (Nesting (fromIntegral bound)) [] [IntType, BoolType] arithRules
++
++-- | The closed well-typed arithmetic terms up to the bound, from the rules.
++arithLanguage :: Int -> Gen.Gen Symbol Arith
++arithLanguage = either (error . show) id . fromTypingRules . arithTyping
++
++-- | The automaton of the closed well-typed arithmetic terms up to the bound.
++arithAutomaton :: Int -> FTA.FTA (TypingState ArithType) Constructor Constraint
++arithAutomaton = either (error . show) id . typingAutomaton @Arith . arithTyping
++
++-- | The subterms of an arithmetic term, the term first.
++subterms :: Arith -> [Arith]
++subterms term =
++    term
++        : concatMap
++            subterms
++            ( case term of
++                Plus left right -> [left, right]
++                Less left right -> [left, right]
++                If condition yes no -> [condition, yes, no]
++                Let rhs body -> [rhs, body]
++                _ -> []
++            )
++
++-- | The type of an arithmetic term in an environment, if it has one, with the literals of the rules.
++arithType :: [ArithType] -> Arith -> Maybe ArithType
++arithType _ (Num n) = if n `elem` [0, 1] then Just IntType else Nothing
++arithType _ (Flag _) = Just BoolType
++arithType _ (Arg _) = Nothing
++arithType env (Plus left right) = do
++    IntType <- arithType env left
++    IntType <- arithType env right
++    Just IntType
++arithType env (Less left right) = do
++    IntType <- arithType env left
++    IntType <- arithType env right
++    Just BoolType
++arithType env (If condition yes no) = do
++    BoolType <- arithType env condition
++    typ <- arithType env yes
++    other <- arithType env no
++    if typ == other then Just typ else Nothing
++arithType env (Var index)
++    | index >= 0, index < length env = Just (env !! index)
++    | otherwise = Nothing
++arithType env (Let rhs body) = do
++    rhsType <- arithType env rhs
++    arithType (rhsType : env) body
++
++-- | The nesting of an arithmetic term: the constructors with subterms on the longest path.
++arithNesting :: Arith -> Int
++arithNesting term = case term of
++    Plus left right -> 1 + max (arithNesting left) (arithNesting right)
++    Less left right -> 1 + max (arithNesting left) (arithNesting right)
++    If condition yes no -> 1 + maximum (map arithNesting [condition, yes, no])
++    Let rhs body -> 1 + max (arithNesting rhs) (arithNesting body)
++    _ -> 0
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs
+index 02591640..e8bb76a7 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs
+@@ -149,6 +149,8 @@ module Data.CFTA.Gen.Refinement.Derive (
+     deriveLTAFrom,
+     deriveLTARooted,
+     deriveLTAFromRooted,
++    deriveLTAOn,
++    deriveLTAOnFrom,
+     Invariant (..),
+     invariantAnnotations,
+ 
+@@ -206,6 +208,8 @@ import GHC.Generics (
+  )
+ import qualified GHC.Generics as Generic
+ 
++import qualified Data.CFTA as FTA
++import Data.CFTA.Constraint (Constraint)
+ import Data.CFTA.Formula (Formula (Top))
+ import Data.CFTA.Gen.Refinement (LTAGen, satisfying)
+ import Data.CFTA.Gen.Refinement.Derive.Internal
+@@ -472,6 +476,30 @@ rootMeasures rules value = case rules of
+     Contracted _ -> NoMeasures
+     MeasuredBy _ _ -> measuresAt value
+ 
++{- | Derive the refinement generator of the terms of an automaton over the
++constructors of a datatype, such as the typed language of
++'Data.CFTA.Gen.Typing.typingAutomaton', from the 'HasLTA' instance. The
++invariant holds on each term. The automaton must be acyclic and without
++constraints; 'Data.CFTA.Gen.Refinement.Derive.Internal.deriveLTAOnWith' says
++how it is built.
++-}
++deriveLTAOn ::
++    forall a state.
++    (HasLTA a, Ord state) => FTA.FTA state Constructor Constraint -> Atoms -> Either DeriveLTAError (LTAGen a)
++deriveLTAOn automaton atoms = deriveLTAOnFrom automaton atoms (invariant @a)
++
++-- | 'deriveLTAOn' with an invariant over a node view of the datatype, as 'deriveLTAFrom'.
++deriveLTAOnFrom ::
++    forall a state node m.
++    (HasFTA a, Ord state, NodeView node) =>
++    FTA.FTA state Constructor Constraint ->
++    Atoms ->
++    Invariant node m ->
++    Either DeriveLTAError (LTAGen a)
++deriveLTAOnFrom automaton atoms rules = do
++    annotations <- invariantAnnotations @a rules
++    deriveLTAOnWith @a automaton atoms annotations
++
+ -- | The constructors of a datatype in declaration order, with whether each field is of the datatype itself.
+ datatypeConstructors :: forall a. (HasFTA a) => [(Constructor, [Bool])]
+ datatypeConstructors = case describeType (Proxy @a) of
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs
+index ff16dd9d..160e3a27 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs
+@@ -1,3 +1,4 @@
++{-# LANGUAGE AllowAmbiguousTypes #-}
+ {-# LANGUAGE PatternSynonyms #-}
+ 
+ {- | The level below "Data.CFTA.Gen.Refinement.Derive": the contracts and
+@@ -34,6 +35,7 @@ most the bound times. A type that is in no cycle does not use a level.
+ module Data.CFTA.Gen.Refinement.Derive.Internal (
+     -- * Annotations by constructor name
+     deriveLTAWith,
++    deriveLTAOnWith,
+     Annotation (..),
+     Contract (..),
+     Measure (..),
+@@ -57,18 +59,22 @@ module Data.CFTA.Gen.Refinement.Derive.Internal (
+ import Control.Monad (unless, zipWithM)
+ import Data.Containers.ListUtils (nubOrd)
+ import Data.Graph (SCC (..), stronglyConnComp)
++import qualified Data.Map.Lazy as LazyMap
+ import qualified Data.Map.Strict as Map
+ import Data.Maybe (fromMaybe)
+ import Data.Proxy (Proxy (Proxy))
++import qualified Data.Set as Set
+ import Data.String (fromString)
+ import Data.Typeable (TypeRep, typeRep)
+ 
++import qualified Data.CFTA as FTA
++import Data.CFTA.Constraint (Constraint, noConstraint)
+ import Data.CFTA.Formula (Formula (And, Atom, Top), Relation (Eq), conjunction)
+ import qualified Data.CFTA.Formula as Formula
+ import Data.CFTA.Gen.Error (GenError (EmptyGenerator))
+ import Data.CFTA.Gen.Internal.Types (pattern Transparent)
+ import Data.CFTA.Gen.Refinement (LTAGen, guarded, leaf, measured, measuredBy, node, oneof, satisfying)
+-import Data.CFTA.Generic (Constructor (..), Description (..), HasFTA (..))
++import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
+ import Data.CFTA.Index (ArgumentIndex (..), Arity (..), Depth)
+ import Data.CFTA.Refinement (contractTermName)
+ import Data.CFTA.Refinement.Expression (
+@@ -122,6 +128,12 @@ data DeriveLTAError
+       constructor name, the position of the field, and its type.
+       -}
+       UnmeasuredField !String !Int !TypeRep
++    | -- | The automaton of 'deriveLTAOnWith' has a cycle.
++      CyclicAutomaton
++    | {- | A transition of the automaton of 'deriveLTAOnWith' has a constraint.
++      The field is the name of its constructor.
++      -}
++      ConstrainedTransition !String
+     deriving (Eq, Show)
+ 
+ -- | Generators for atomic field types, by type.
+@@ -259,6 +271,106 @@ contract and no measure.
+ -}
+ deriveLTAWith :: forall a. (HasFTA a) => Depth -> Atoms -> [(String, Annotation)] -> Either DeriveLTAError (LTAGen a)
+ deriveLTAWith bound (Atoms atoms) named = do
++    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
++    pure $ decodeValue <$> generatorOf (buildAll derived annotationOf) (typeRep $ Proxy @a)
++  where
++    generatorOf built typ = Map.findWithDefault (maybe emptyGenerator atomGenerator $ Map.lookup typ atoms) typ built
++
++    -- The types that refer to each other unfold together, as 'recurUpTo'
++    -- unfolds one type. A group comes after the groups that it refers to.
++    buildAll derived annotationOf = foldl buildGroup Map.empty $ stronglyConnComp graph
++      where
++        graph =
++            [ (typ, typ, nubOrd [field | Alternative _ fields <- alternatives, field <- fields, Map.member field derived])
++            | (typ, alternatives) <- Map.toList derived
++            ]
++        buildGroup built (AcyclicSCC typ) = Map.insert typ (step built typ) built
++        buildGroup built (CyclicSCC types)
++            | bound < 0 = Map.union emptyGroup built
++            | otherwise = Map.union (iterate unfold (unfold emptyGroup) !! fromEnum bound) built
++          where
++            emptyGroup = Map.fromList [(typ, emptyGenerator) | typ <- types]
++            unfold previous = Map.fromList [(typ, step (Map.union previous built) typ) | typ <- types]
++        step built typ = case Map.findWithDefault [] typ derived of
++            [alternative] -> alternativeGenerator built alternative
++            alternatives -> oneof $ map (alternativeGenerator built) alternatives
++        alternativeGenerator built (Alternative constructor fields) =
++            constructorGenerator annotationOf constructor (map (`Map.member` derived) fields) (map (generatorOf built) fields)
++
++{- | Derive the refinement generator of the terms of an automaton over the
++constructors of a datatype, such as the automaton of
++'Data.CFTA.Gen.Typing.typingAutomaton'.
++
++Each state of the automaton is a 'oneof' of its transitions, in order, and
++each transition is the generator of its constructor, with the contracts and
++the measures of the annotations, over the generators of its child states, as
++'deriveLTAWith' builds a constructor over the generators of its field types.
++A transition of an atomic type, or of a type that an atom replaces, is a
++'leaf' for each of its terms, whose refinement is the integer that the atom
++gives the term. So the ranks follow the generators, as for 'deriveLTAWith',
++and they are not the ranks of 'Data.CFTA.Gen.Typing.fromConstructorAutomaton'.
++
++The automaton must be acyclic ('CyclicAutomaton'), and its transitions must
++have no constraint ('ConstrainedTransition'), because a generator has no place
++for an equality between children. The checks of 'deriveLTAWith' on the names,
++the atoms, and the annotations apply.
++-}
++deriveLTAOnWith ::
++    forall a state.
++    (HasFTA a, Ord state) =>
++    FTA.FTA state Constructor Constraint ->
++    Atoms ->
++    [(String, Annotation)] ->
++    Either DeriveLTAError (LTAGen a)
++deriveLTAOnWith automaton (Atoms atoms) named = do
++    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
++    unless (Set.null $ FTA.cyclicStates trimmed) $ Left CyclicAutomaton
++    case [constructorName symbol | FTA.Transition symbol _ constraint <- concat (Map.elems rows), constraint /= noConstraint] of
++        name : _ -> Left $ ConstrainedTransition name
++        [] -> pure ()
++    -- The automaton is acyclic, so each generator of the lazy map reads only
++    -- the generators of states below it.
++    let generators = LazyMap.map (stateGenerator derived annotationOf generators) rows
++    pure $ decodeValue <$> Map.findWithDefault emptyGenerator (FTA.initialState trimmed) generators
++  where
++    trimmed = FTA.trim automaton
++    rows = FTA.transitionTable trimmed
++
++    stateGenerator derived annotationOf generators transitions = case concatMap transitionGenerators transitions of
++        [] -> emptyGenerator
++        [generator] -> generator
++        alternatives -> oneof alternatives
++      where
++        transitionGenerators (FTA.Transition constructor children _) = case Map.lookup (constructorType constructor) atoms of
++            Just field ->
++                [ leaf term (fromString $ constructorName constructor) (.== fromInteger (integerOf field term))
++                | term <- termsOf (FTA.Transition constructor children noConstraint)
++                ]
++            Nothing ->
++                [ constructorGenerator
++                    annotationOf
++                    constructor
++                    [Map.member (fieldType field) derived | field <- constructorFields constructor]
++                    [Map.findWithDefault emptyGenerator child generators | child <- children]
++                ]
++
++    integerOf field term =
++        fromMaybe
++            (error "cfta-generator bug in Data.CFTA.Gen.Refinement.Derive: an atom without the integer of its term")
++            (atomInteger field term)
++
++    -- The terms of a transition, finitely many in an acyclic automaton.
++    termsOf (FTA.Transition constructor children _) =
++        Term.Node constructor <$> traverse (\child -> concatMap termsOf (Map.findWithDefault [] child rows)) children
++
++-- | The checked parts of a derivation: the types with constructors that no atom replaces, and the annotation of each constructor.
++data Derivation = Derivation !(Map.Map TypeRep [Alternative]) (Constructor -> Annotation)
++
++{- | Reach the types of a datatype, and check the names of the annotations, the
++atoms of the atomic types, and the arity and the parts of each annotation.
++-}
++derivation :: forall a. (HasFTA a) => Atoms -> [(String, Annotation)] -> Either DeriveLTAError Derivation
++derivation (Atoms atoms) named = do
+     reached <- reach Map.empty (describeType $ Proxy @a)
+     let derived = Map.filterWithKey (\typ _ -> not $ Map.member typ atoms) $ Map.mapMaybe id reached
+         constructors = [constructor | alternatives <- Map.elems derived, Alternative constructor _ <- alternatives]
+@@ -274,12 +386,10 @@ deriveLTAWith bound (Atoms atoms) named = do
+         | alternatives <- Map.elems derived
+         , Alternative constructor fields <- alternatives
+         ]
+-    pure $ decode <$> generatorOf (buildAll derived) (typeRep $ Proxy @a)
++    pure $ Derivation derived annotationOf
+   where
+     annotations = Map.fromListWith (flip (<>)) named
+     annotationOf constructor = Map.findWithDefault mempty (constructorName constructor) annotations
+-    empty = Transparent $ Left EmptyGenerator
+-    generatorOf built typ = Map.findWithDefault (maybe empty atomGenerator $ Map.lookup typ atoms) typ built
+ 
+     -- The reached types: the alternatives of a type with constructors, and
+     -- 'Nothing' for an atomic type.
+@@ -325,71 +435,60 @@ deriveLTAWith bound (Atoms atoms) named = do
+         measuredAlternative (Alternative alternative _) =
+             let Annotation _ measures' named' = annotationOf alternative in not (null measures' && null named')
+ 
+-    -- The types that refer to each other unfold together, as 'recurUpTo'
+-    -- unfolds one type. A group comes after the groups that it refers to.
+-    buildAll derived = foldl buildGroup Map.empty $ stronglyConnComp graph
+-      where
+-        graph =
+-            [ (typ, typ, nubOrd [field | Alternative _ fields <- alternatives, field <- fields, Map.member field derived])
+-            | (typ, alternatives) <- Map.toList derived
+-            ]
+-        buildGroup built (AcyclicSCC typ) = Map.insert typ (step built typ) built
+-        buildGroup built (CyclicSCC types)
+-            | bound < 0 = Map.union emptyGroup built
+-            | otherwise = Map.union (iterate unfold (unfold emptyGroup) !! fromEnum bound) built
+-          where
+-            emptyGroup = Map.fromList [(typ, empty) | typ <- types]
+-            unfold previous = Map.fromList [(typ, step (Map.union previous built) typ) | typ <- types]
+-        step built typ = case Map.findWithDefault [] typ derived of
+-            [alternative] -> alternativeGenerator built alternative
+-            alternatives -> oneof $ map (alternativeGenerator built) alternatives
+-        alternativeGenerator built (Alternative constructor fields) =
+-            constructorGenerator constructor (map (`Map.member` derived) fields) (map (generatorOf built) fields)
+-
+-    -- The contract conjuncts that name only one atomic field become
+-    -- conditions on that field. The other conjuncts stay in the contract.
+-    constructorGenerator constructor derivedFields generators = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
+-        _ | null generators -> leaf (Term.Node constructor []) symbol refinement
+-        ([measureAnnotation], _) -> measured symbol remaining measureAnnotation spine
+-        (_, namedMeasures@(_ : _)) -> measuredBy symbol remaining namedMeasures spine
+-        _
+-            | remainingFormula == Top -> node symbol spine
+-            | otherwise -> guarded symbol remaining spine
+-      where
+-        annotation = annotationOf constructor
+-        symbol = fromString $ constructorName constructor
+-        refinement = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
+-            ([Measure _ term], _) -> (.== term)
+-            (_, namedMeasures@(_ : _)) -> \value -> foldr1 (.&&) [uninterpreted name [value] .== term | (name, Measure _ term) <- namedMeasures]
+-            _ -> const Top
+-        conjuncts = concatMap parts [formula | Contract _ formula <- annotationContracts annotation]
+-        parts (And formulas) = concatMap parts formulas
+-        parts Top = []
+-        parts formula = [formula]
+-        fieldOf formula = case nubOrd (freeNames formula) of
+-            [name]
+-                | (position, False) : _ <-
+-                    [ (position, isDerived)
+-                    | (position, isDerived) <- zip [0 ..] derivedFields
+-                    , contractTermName (ArgumentIndex position) == name
+-                    ] ->
+-                    Just position
+-            _ -> Nothing
+-        conditions = Map.fromListWith (flip (<>)) [(position, [formula]) | formula <- conjuncts, Just position <- [fieldOf formula]]
+-        remainingFormula = conjunction [formula | formula <- conjuncts, Nothing <- [fieldOf formula]]
+-        remaining = Contract (Arity $ length generators) remainingFormula
+-        spine = Term.Node constructor <$> zipWithM conditioned [0 ..] generators
+-        conditioned position generator = case Map.lookup position conditions of
+-            Nothing -> generator
+-            Just formulas -> generator `satisfying` fieldRefinement position formulas
+-        fieldRefinement :: Int -> [Formula] -> Refinement
+-        fieldRefinement position formulas value =
+-            substitute [(contractTermName (ArgumentIndex position), value)] (conjunction formulas)
+-
+-    decode term =
+-        fromMaybe
+-            (error "cfta-generator bug in Data.CFTA.Gen.Refinement.Derive: the codec rejected a term of its own grammar")
+-            (decodeTerm term)
++-- | A generator without members.
++emptyGenerator :: LTAGen a
++emptyGenerator = Transparent $ Left EmptyGenerator
++
++-- | The value of a term of the datatype.
++decodeValue :: (HasFTA a) => Term Constructor -> a
++decodeValue term =
++    fromMaybe
++        (error "cfta-generator bug in Data.CFTA.Gen.Refinement.Derive: the codec rejected a term of its own grammar")
++        (decodeTerm term)
++
++{- | The generator of a constructor over the generators of its fields, with its
++annotation. The contract conjuncts that name only one atomic field become
++conditions on that field. The other conjuncts stay in the contract.
++-}
++constructorGenerator ::
++    (Constructor -> Annotation) -> Constructor -> [Bool] -> [LTAGen (Term Constructor)] -> LTAGen (Term Constructor)
++constructorGenerator annotationOf constructor derivedFields generators = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
++    _ | null generators -> leaf (Term.Node constructor []) symbol refinement
++    ([measureAnnotation], _) -> measured symbol remaining measureAnnotation spine
++    (_, namedMeasures@(_ : _)) -> measuredBy symbol remaining namedMeasures spine
++    _
++        | remainingFormula == Top -> node symbol spine
++        | otherwise -> guarded symbol remaining spine
++  where
++    annotation = annotationOf constructor
++    symbol = fromString $ constructorName constructor
++    refinement = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
++        ([Measure _ term], _) -> (.== term)
++        (_, namedMeasures@(_ : _)) -> \value -> foldr1 (.&&) [uninterpreted name [value] .== term | (name, Measure _ term) <- namedMeasures]
++        _ -> const Top
++    conjuncts = concatMap parts [formula | Contract _ formula <- annotationContracts annotation]
++    parts (And formulas) = concatMap parts formulas
++    parts Top = []
++    parts formula = [formula]
++    fieldOf formula = case nubOrd (freeNames formula) of
++        [name]
++            | (position, False) : _ <-
++                [ (position, isDerived)
++                | (position, isDerived) <- zip [0 ..] derivedFields
++                , contractTermName (ArgumentIndex position) == name
++                ] ->
++                Just position
++        _ -> Nothing
++    conditions = Map.fromListWith (flip (<>)) [(position, [formula]) | formula <- conjuncts, Just position <- [fieldOf formula]]
++    remainingFormula = conjunction [formula | formula <- conjuncts, Nothing <- [fieldOf formula]]
++    remaining = Contract (Arity $ length generators) remainingFormula
++    spine = Term.Node constructor <$> zipWithM conditioned [0 ..] generators
++    conditioned position generator = case Map.lookup position conditions of
++        Nothing -> generator
++        Just formulas -> generator `satisfying` fieldRefinement position formulas
++    fieldRefinement :: Int -> [Formula] -> Refinement
++    fieldRefinement position formulas value =
++        substitute [(contractTermName (ArgumentIndex position), value)] (conjunction formulas)
+ 
+ -- | The type that a description describes.
+ descriptionType :: Description -> TypeRep
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Synthesis.hs b/cfta-generator/src/Data/CFTA/Gen/Synthesis.hs
+index 6ac02338..17dc2699 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Synthesis.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Synthesis.hs
+@@ -45,6 +45,7 @@ module Data.CFTA.Gen.Synthesis (
+     Library (..),
+     Encoding (..),
+     Defaulting (..),
++    Domain (..),
+     library,
+     Query (..),
+ 
+@@ -245,14 +246,25 @@ data Encoding
+     | {- | A type constructor is a leaf, applied to its arguments one at a
+       time by @\@@ edges, so that a type variable can stand for a type
+       constructor. A type constructor whose name starts with @?@, as
+-      @?Foldable t0@, is a type variable of kind @* -> *@. The map gives, by
+-      the text after the @?@ up to the first space (the names of the
+-      variable's classes, as @Foldable@ or @Applicative,Foldable@), the
+-      types of kind @* -> *@ over which the variable ranges, as @Maybe@ or
+-      @Either e@ (each as a type constructor with one argument less than its
+-      arity).
++      @?Foldable t0@ or @?Ord t1@, is a type variable whose domain the map
++      gives, by the text after the @?@ up to the first space (the names of
++      the variable's classes, as @Foldable@ or @Applicative,Foldable@).
+       -}
+-      Curried Defaulting (Map.Map Text [Type])
++      Curried Defaulting (Map.Map Text Domain)
++    deriving (Show)
++
++-- | The types over which a variable of the curried encoding ranges.
++data Domain
++    = {- | Types of kind @* -> *@, as @Maybe@ or @Either e@ (each a type
++      constructor with one argument less than its arity), and whether the
++      list type is the variable's default under 'OnlyDefault'.
++      -}
++      HeadDomain Bool [Type]
++    | {- | Types of kind @*@, as @Int@ or @List x0@. When the program does
++      not determine such a variable, a run lists one typed term for it, not
++      one for each type ('domainMarkers').
++      -}
++      TypeDomain [Type]
+     deriving (Show)
+ 
+ {- | Which types of its domain a variable of kind @* -> *@ of the curried
+@@ -264,15 +276,13 @@ the run ties it to a type constructor, as @lookup@ ties the @t@ of
+ data Defaulting
+     = -- | Every type of its domain, so a program has a typed term for each.
+       AnyHead
+-    | {- | Only the list type, when the map gives 'True' for the key of its
+-      domain (or of one of the domains that the run intersects with it);
+-      else none, so the run is dropped. GHC's @ExtendedDefaultRules@ default
+-      such a variable to the list type when one of its classes is
+-      @Foldable@ or @Traversable@. The map has the keys of the variables of
+-      kind @* -> *@; a domain whose key it does not have, as one of kind
+-      @*@, keeps every type.
++    | {- | Only the list type, when the 'HeadDomain' of the variable (or of
++      one of the domains that the run intersects with it) has the list as
++      its default; else none, so the run is dropped. GHC's
++      @ExtendedDefaultRules@ default such a variable to the list type when
++      one of its classes is @Foldable@ or @Traversable@.
+       -}
+-      OnlyDefault (Map.Map Text Bool)
++      OnlyDefault
+     deriving (Show)
+ 
+ {- | The library of the components, with the components that only appear as
+@@ -432,8 +442,8 @@ four type variables, and each type constructor applied to as many types as
+ its arity. The arity of a type constructor is the largest number of
+ arguments that it has in the types.
+ -}
+-allCurriedTypes :: Defaulting -> [(Text, Int)] -> Node Symbol
+-allCurriedTypes defaulting constructors =
++allCurriedTypes :: Defaulting -> Bool -> [(Text, Int)] -> Node Symbol
++allCurriedTypes defaulting typeDomains constructors =
+     createMu $ \types ->
+         let ofKind missing =
+                 union $
+@@ -444,10 +454,16 @@ allCurriedTypes defaulting constructors =
+                 [arrowType types types]
+                     <> map (\name -> Node [Edge name []]) ["var1", "var2", "var3", "var4"]
+                     <> [ofKind 0]
++                    <> [anyTypeMarker | typeDomains]
+   where
+     arities = Map.toList (Map.fromListWith max [(name, arity) | (name, arity) <- constructors, not ("?" `Text.isPrefixOf` name)])
+     largest = maximum (0 : map snd arities)
+ 
++-- | Whether a domain is a 'TypeDomain'.
++isTypeDomain :: Domain -> Bool
++isTypeDomain (TypeDomain _) = True
++isTypeDomain (HeadDomain _ _) = False
++
+ -- | The type constructors of a type with their arities.
+ constructorsOf :: Type -> [(Text, Int)]
+ constructorsOf (TVar _) = []
+@@ -466,68 +482,103 @@ generalize types typ@(Node [Edge symbol _]) = case mapNodes (\node -> if isVaria
+     pathsOf variable = pathsMatching (== variable) typ
+ generalize _ typ = typ
+ 
+-{- | 'generalize' in an encoding. In the curried encoding, a type variable of
+-kind @* -> *@ is replaced by the types over which its class ranges, and the
+-equality constraints also tie its occurrences.
++{- | 'generalize' in an encoding. In the curried encoding, a curried variable
++is replaced by the node of its domain ('domainNodes'), and the equality
++constraints also tie its occurrences.
+ -}
+-generalizeWith :: Encoding -> Node Symbol -> Node Symbol -> Node Symbol
+-generalizeWith FirstOrder types typ = generalize types typ
+-generalizeWith encoding@(Curried defaulting domains) types typ@(Node [Edge symbol _]) = case mapNodes replace typ of
++generalizeWith :: Encoding -> Map.Map Text (Node Symbol) -> Node Symbol -> Node Symbol -> Node Symbol
++generalizeWith FirstOrder _ types typ = generalize types typ
++generalizeWith (Curried _ _) nodes types typ@(Node [Edge symbol _]) = case mapNodes replace typ of
+     Node [Edge _ children] -> Node [mkEdge symbol children (equalityConstraint $ mkEqConstraints $ map pathsOf variables)]
+     other -> other
+   where
+     replace node
+         | isVariable node = types
+-        | Just className <- higherClass node = domain className
++        | Just className <- higherClass node = Map.findWithDefault (union []) className nodes
+         | otherwise = node
+-    domain className =
+-        union $
+-            [ mapNodes (\node -> if isVariable node then types else node) (typeNodeWith encoding head')
+-            | head' <- Map.findWithDefault [] className domains
+-            ]
+-                <> domainMarkers defaulting className
+     variables = nubOrd $ crush (\node -> [node | isVariable node || isJust (higherClass node)]) typ
+     pathsOf variable = pathsMatching (== variable) typ
+-generalizeWith _ _ typ = typ
+-
+-{- | With 'OnlyDefault', the leaves that the domain of a curried variable has
+-beside its types, so that the intersection of domains in a run tells
+-whether the program determines the variable, and whether it has a default:
+-
+-* @?@ is in every domain of a key of the map, and in the types of kind
+-  @* -> *@ of the node of all types ('anyMarkers'), but not in a type
+-  constructor. So a run that
+-  ties the variable to a type constructor, as @Maybe@, loses it.
+-* @?nodefault@ is in a domain whose key has 'False', and in the types
+-  of kind @* -> *@ of the node of all types. So a run keeps it when no
+-  domain of the intersection has a default.
++generalizeWith _ _ _ typ = typ
++
++{- | The node of each domain of the curried encoding: its types, with their
++type variables replaced by the node of all types, and its markers
++('domainMarkers'). A curried variable in a type of a domain, as the
++@?Ord x0@ of @List (?Ord x0)@ in the domain of @Ord@, is the node of its
++own domain, unrolled to 'domainDepth' levels; below them it is the node of
++all types, which only adds types. So the domain of @Ord@ holds @(Int, Int)@
++and not a pair with a rigid part, and a deeper type takes the node of all
++types, as without the recursion.
++-}
++domainNodes :: Encoding -> Node Symbol -> Map.Map Text (Node Symbol)
++domainNodes encoding@(Curried defaulting domains) types = iterate deeper (nodesWith (const types)) !! domainDepth
++  where
++    deeper previous = nodesWith (\key -> Map.findWithDefault types key previous)
++    nodesWith argument = Map.map (nodeOf argument) domains
++    nodeOf argument found =
++        union $
++            [mapNodes (replace argument) (typeNodeWith encoding typ) | typ <- domainTypes found]
++                <> domainMarkers defaulting found
++    replace argument node
++        | isVariable node = types
++        | Just key <- higherClass node = argument key
++        | otherwise = node
++    domainTypes (HeadDomain _ types') = types'
++    domainTypes (TypeDomain types') = types'
++domainNodes FirstOrder _ = Map.empty
++
++{- | The levels to which 'domainNodes' unrolls a domain that refers to
++domains. A domain that refers to itself as a 'Mu' makes the reduction of
++some search spaces too large: firstKey at size 3 did not end its reduction
++in 30 seconds. A second level costs about 50 MB of allocation in the
++reduction of each small query, and on the queries that we measured it
++changes no rank.
++-}
++domainDepth :: Int
++domainDepth = 1
++
++{- | The leaves that the domain of a curried variable has beside its types,
++so that the intersection of domains in a run tells whether the program
++determines the variable, and whether it has a default:
++
++* @?any@ is in every 'TypeDomain', and in the node of all types when the
++  encoding has a 'TypeDomain', but not in a type constructor. So a run that
++  ties the variable to a type, as @Int@, loses it.
++* With 'OnlyDefault', @?@ is in every 'HeadDomain', and in the types of
++  kind @* -> *@ of the node of all types ('anyMarkers'), but not in a type
++  constructor. So a run that ties the variable to a type constructor, as
++  @Maybe@, loses it.
++* With 'OnlyDefault', @?nodefault@ is in a 'HeadDomain' without the list as
++  its default, and in the types of kind @* -> *@ of the node of all types.
++  So a run keeps it when no domain of the intersection has a default.
+ 
+ 'narrowHeads' reads them, and drops them, before the enumeration tries the
+ edges of a node.
+ -}
+-domainMarkers :: Defaulting -> Text -> [Node Symbol]
+-domainMarkers AnyHead _ = []
+-domainMarkers (OnlyDefault keys) key = case Map.lookup key keys of
+-    Just defaults -> [openMarker] <> [noDefaultMarker | not defaults]
+-    Nothing -> []
++domainMarkers :: Defaulting -> Domain -> [Node Symbol]
++domainMarkers _ (TypeDomain _) = [anyTypeMarker]
++domainMarkers AnyHead (HeadDomain _ _) = []
++domainMarkers OnlyDefault (HeadDomain defaults _) = [openMarker] <> [noDefaultMarker | not defaults]
+ 
+ -- | The markers of the types of kind @* -> *@ of the node of all types: both, which an intersection keeps.
+ anyMarkers :: Defaulting -> [Node Symbol]
+ anyMarkers AnyHead = []
+-anyMarkers (OnlyDefault _) = [openMarker, noDefaultMarker]
++anyMarkers OnlyDefault = [openMarker, noDefaultMarker]
+ 
+ -- | The leaves of 'domainMarkers'.
+-openMarker, noDefaultMarker :: Node Symbol
++openMarker, noDefaultMarker, anyTypeMarker :: Node Symbol
+ openMarker = Node [Edge (Symbol "?") []]
+ noDefaultMarker = Node [Edge (Symbol "?nodefault") []]
++anyTypeMarker = Node [Edge (Symbol "?any") []]
+ 
+-{- | The edges of a node of a run with 'OnlyDefault' ('domainMarkers'). A
+-node without a marker keeps its edges. A node with a marker is the domain of
+-a variable that the program does not determine: it keeps the list type when
+-it has no @?nodefault@, and no edge when it has.
++{- | The edges of a node of a run with markers ('domainMarkers'). A node
++without a marker keeps its edges. A node with a marker is the domain of a
++variable that the program does not determine. With @?any@, it keeps only
++that leaf, so the run lists one typed term. With @?@, it keeps the list
++type when it has no @?nodefault@, and no edge when it has.
+ -}
+ narrowHeads :: [Edge Symbol] -> [Edge Symbol]
+ narrowHeads edges
++    | any (leaf "?any") edges = filter (leaf "?any") edges
+     | not (any (leaf "?") edges) = edges
+     | any (leaf "?nodefault") edges = []
+     | otherwise = filter (leaf "List") edges
+@@ -681,7 +732,8 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encod
+   where
+     encoding = libraryEncoding lib
+     types = typesOf lib query
+-    component name typ = Edge (Symbol name) [generalizeWith encoding types (typeNodeWith encoding typ)]
++    nodes = domainNodes encoding types
++    component name typ = Edge (Symbol name) [generalizeWith encoding nodes types (typeNodeWith encoding typ)]
+     components = [(name, component name typ) | (name, typ, _) <- libraryGroups lib]
+     anyFunction = Node (map snd components)
+     argumentOnly = Node [component name typ | (name, typ) <- libraryArgumentOnly lib]
+@@ -741,7 +793,7 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encod
+ typesOf :: Library -> Query -> Node Symbol
+ typesOf lib query = case libraryEncoding lib of
+     FirstOrder -> allTypes constructors
+-    Curried defaulting _ -> allCurriedTypes defaulting constructors
++    Curried defaulting domains -> allCurriedTypes defaulting (any isTypeDomain domains) constructors
+   where
+     constructors =
+         nubOrd $
+@@ -843,13 +895,15 @@ distinctProgramsIn = catMaybes . programRuns FirstOrder
+ each with its program when no run before it has that program. So the
+ programs are those of 'distinctProgramsIn', and the length is the number of
+ typed terms that the enumeration lists. A typed term can repeat, as in
+-'runs'. With 'OnlyDefault', the runs are narrowed by 'narrowHeads'.
++'runs'. With markers ('domainMarkers'), the runs are narrowed by
++'narrowHeads'.
+ -}
+ programRuns :: Encoding -> Space -> [Maybe Program]
+ programRuns encoding space = go Set.empty $ map (toProgram . fst) $ listRuns "Mu" (spaceNode space)
+   where
+     listRuns = case encoding of
+-        Curried (OnlyDefault _) _ -> runsNarrowedBy (spaceOrder space) narrowHeads
++        Curried OnlyDefault _ -> runsNarrowedBy (spaceOrder space) narrowHeads
++        Curried AnyHead domains | any isTypeDomain domains -> runsNarrowedBy (spaceOrder space) narrowHeads
+         _ -> runsBy (spaceOrder space)
+     go _ [] = []
+     go seen (program : rest)
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Typing.hs b/cfta-generator/src/Data/CFTA/Gen/Typing.hs
+index 830f0d13..24007227 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Typing.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Typing.hs
+@@ -7,7 +7,8 @@ The language is the terms of a 'HasFTA' datatype that have one of some types,
+ with a nesting of at most a bound. Each rule gives a type to a constructor of
+ the datatype, by its name. A variable has a de Bruijn index: the index 0 is
+ the innermost binder. The environment of a term is the list of the types of
+-its binders, innermost first.
++its binders, innermost first, and then the inputs: the variables in scope at
++the root. With inputs, the language is the programs over those inputs.
+ 
+ @
+ data Ty = TInt | TBool
+@@ -52,9 +53,16 @@ Limits:
+ * A field that holds a subterm has the type of the datatype. A field of
+   another type holds one fixed value. So a family of mutually recursive
+   types is not a language here.
+-* The bound is on the nesting, so the language is finite. The automaton has
+-  about T^(D + 1) environments for T types and the bound D. A bound on the
+-  binders ('Binders') and inputs are not implemented yet.
++* With a bound on the nesting, the language is finite. The automaton has
++  about T^(D + 1) environments for T types and the bound D. With a bound on
++  the binders ('Binders'), the automaton is cyclic and the generator is
++  counted by size. It must give each term one typing: an automaton with two
++  runs for one term gives 'Data.CFTA.Gen.AmbiguousAutomaton'.
++
++An input is a variable, so a binder above its use moves its index up by one.
++A datatype with its own constructor for the inputs, such as @Arg !Int@, needs
++no inputs in the 'Typing': each input is a rule,
++@[rule \"Arg\" [value position] typ | (position, typ) <- zip [0 ..] inputTypes]@.
+ -}
+ module Data.CFTA.Gen.Typing (
+     -- * Rules
+@@ -146,7 +154,7 @@ data Typing ty = Typing
+     { typingBound :: !Bound
+     -- ^ The bound on the terms.
+     , typingInputs :: ![ty]
+-    -- ^ The types of the variables in scope at the root, innermost first. Not implemented yet: it must be empty.
++    -- ^ The types of the variables in scope at the root: the input @i@ has the index @i@ at the root.
+     , typingRoots :: ![ty]
+     -- ^ The types of the terms of the language.
+     , typingRules :: ![Rule ty]
+@@ -160,7 +168,11 @@ data Bound
+       field uses one level.
+       -}
+       Nesting !Depth
+-    | -- | The number of binders around each position. Not implemented yet.
++    | {- | The number of binders around each position; the inputs are not
++      binders. The terms can be of any size, so the automaton is cyclic, and
++      'fromConstructorAutomaton' gives a generator counted by size, which
++      'Data.CFTA.Gen.upToSize' bounds.
++      -}
+       Binders !Int
+     deriving (Eq, Show)
+ 
+@@ -176,20 +188,19 @@ data TypingError
+       another type than its field.
+       -}
+       FieldMismatch !String
+-    | -- | A part of 'Typing' that is not implemented yet: inputs, or a bound on the binders.
+-      NotImplemented !String
+     deriving (Eq, Show)
+ 
+ {- | A state of the automaton of a typed language: the root, a term of a type
+ in an environment, or one value. The nesting that remains is 'Just' for a
+-'Nesting' bound. The root has the transitions of the terms of each root
++'Nesting' bound and 'Nothing' for 'Binders'. The root has the transitions of the terms of each root
+ type, so a transition of the root does not say its type; its children do.
+ -}
+ data TypingState ty = Root | Goal ![ty] !ty !(Maybe Int) | Fixed !(Term Constructor)
+     deriving (Eq, Ord, Show)
+ 
+-{- | The terms of the datatype that have one of the root types, within the
+-bound. A constructor without a rule is not in the language.
++{- | The terms of the datatype that have one of the root types in the
++environment of the inputs, within the bound. A constructor without a rule is
++not in the language.
+ -}
+ fromTypingRules :: forall a ty. (HasFTA a, Ord ty) => Typing ty -> Either TypingError (Gen Symbol a)
+ fromTypingRules typing = fromConstructorAutomaton @a <$> typingAutomaton @a typing
+@@ -204,10 +215,6 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
+     let unknown = nubOrd [name | name <- map ruleName rules, Map.notMember name constructors]
+     unless (null unknown) $ Left $ UnknownConstructors unknown (map constructorName declared)
+     mapM_ checked [(name, children) | Rule name children _ <- rules]
+-    unless (null inputs) $ Left $ NotImplemented "inputs"
+-    case bound of
+-        Nesting _ -> Right ()
+-        Binders _ -> Left $ NotImplemented "a bound on the binders"
+     rows <- close Map.empty [Root]
+     pure
+         $ fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton")
+@@ -230,22 +237,27 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
+             transitions <- row state
+             close (Map.insert state transitions rows) (concatMap FTA.transitionChildren transitions <> pending)
+ 
+-    row Root = concat <$> traverse (\typ -> row (Goal [] typ nesting)) (nubOrd roots)
++    row Root = concat <$> traverse (\typ -> row (Goal inputs typ nesting)) (nubOrd roots)
+     row (Fixed term) = Right [FTA.Transition (Term.rootLabel term) (map Fixed (Term.subForest term)) noConstraint]
+     row (Goal env goal remaining) =
+         traverse
+             transition
+-            ( [(name, children) | Rule name children result <- rules, result == goal, nests children]
++            ( [(name, children) | Rule name children result <- rules, result == goal, allowed children]
+                 <> [ (name, children)
+                    | Variable name fields <- rules
+                    , (index, typ) <- zip [0 ..] env
+                    , typ == goal
+                    , let children = fields index typ
+-                   , nests children
++                   , allowed children
+                    ]
+             )
+       where
+-        nests children = maybe True (> 0) remaining || null [() | Subterm _ _ <- children]
++        -- A subterm needs a level of the nesting, and its binders must stay
++        -- within a bound on the binders. The inputs are not binders.
++        allowed children = and [maybe True (> 0) remaining && withinBinders binds | Subterm binds _ <- children]
++        withinBinders binds = case bound of
++            Nesting _ -> True
++            Binders limit -> length binds + length env - length inputs <= limit
+         transition alternative@(_, children) = do
+             constructor <- checked alternative
+             pure $ FTA.Transition constructor (map child children) noConstraint
+diff --git a/cfta-generator/test/Data/CFTA/Gen/Refinement/TypedLanguageSpec.hs b/cfta-generator/test/Data/CFTA/Gen/Refinement/TypedLanguageSpec.hs
+new file mode 100644
+index 00000000..e6566ba6
+--- /dev/null
++++ b/cfta-generator/test/Data/CFTA/Gen/Refinement/TypedLanguageSpec.hs
+@@ -0,0 +1,131 @@
++{-# LANGUAGE DeriveAnyClass #-}
++{-# LANGUAGE DeriveGeneric #-}
++{-# LANGUAGE DerivingStrategies #-}
++{-# LANGUAGE TypeApplications #-}
++
++{- | Refinement generators over the automaton of a typed language: the
++measures and the contracts of an invariant hold on the well-typed terms.
++-}
++module Data.CFTA.Gen.Refinement.TypedLanguageSpec (spec) where
++
++import Data.List (sort)
++import GHC.Generics (Generic)
++import Test.Hspec (Spec, describe, it, shouldBe)
++
++import qualified Data.CFTA as FTA
++import Data.CFTA.Constraint (equalityConstraint, noConstraint)
++import Data.CFTA.Equality.Constraint (mkEqConstraints)
++import qualified Data.CFTA.Gen as Gen
++import Data.CFTA.Gen.Refinement.Derive
++import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
++import Data.CFTA.Gen.TypedArithmeticLanguage
++import Data.CFTA.Generic (Constructor (..), HasFTA (..))
++import Data.CFTA.Path (path)
++import qualified Data.CFTA.Term as Term
++
++-- | One node of a typed arithmetic term, for one measure: the integers of the fields and of the subterms.
++data ArithNode e
++    = NumNode e
++    | FlagNode e
++    | PlusNode e e
++    | LessNode e e
++    | IfNode e e e
++    | VarNode e
++    | LetNode e e
++    | ArgNode e
++    deriving stock (Generic)
++    deriving anyclass (NodeView)
++
++{- | The sum of the literals of a term: a literal is its value, a variable is
++0, and a let is its body. A sum adds at most 1.
++-}
++smallSums :: Invariant ArithNode Single
++smallSums = Measured sumOf small
++  where
++    sumOf (NumNode n) = n
++    sumOf (PlusNode left right) = left + right
++    sumOf (LetNode _ body) = body
++    sumOf _ = 0
++    small (PlusNode left right) = left + right .<= 1
++    small _ = true
++
++-- | Two measures: the sum, as for 'smallSums', and the number of literals.
++data Sums e = Sums {total :: e, literals :: e}
++    deriving stock (Eq, Show, Generic)
++    deriving anyclass (MeasureRecord)
++
++-- | One node of a typed arithmetic term, for the named measures.
++data ArithByNode e
++    = NumBy e
++    | FlagBy e
++    | PlusBy (Sums e) (Sums e)
++    | LessBy (Sums e) (Sums e)
++    | IfBy (Sums e) (Sums e) (Sums e)
++    | VarBy e
++    | LetBy (Sums e) (Sums e)
++    | ArgBy e
++    deriving stock (Generic)
++    deriving anyclass (NodeView)
++
++-- | A sum adds at most 1, and the branches of a conditional have at most two literals.
++fewLiterals :: Invariant ArithByNode Sums
++fewLiterals = MeasuredBy measures holdsAt
++  where
++    measures (NumBy n) = Sums n 1
++    measures (PlusBy left right) = Sums (total left + total right) (literals left + literals right)
++    measures (LessBy left right) = Sums 0 (literals left + literals right)
++    measures (IfBy condition yes no) = Sums 0 (literals condition + literals yes + literals no)
++    measures (LetBy rhs body) = Sums (total body) (literals rhs + literals body)
++    measures _ = Sums 0 0
++    holdsAt (PlusBy left right) = total left + total right .<= 1
++    holdsAt (IfBy _ yes no) = literals yes + literals no .<= 2
++    holdsAt _ = true
++
++-- | The integers of the atomic fields: the literals and the indices.
++atoms :: Atoms
++atoms = atom @Int (LTAGen.elements [0, 1])
++
++-- | The members of a refinement generator, compiled, in order.
++compiledMembers :: (Ord a) => Either DeriveLTAError (LTAGen.LTAGen a) -> IO [a]
++compiledMembers derived = do
++    generator <- either (fail . show) LTAGen.compile derived
++    either (fail . show) (pure . sort) (LTAGen.values generator)
++
++-- | The members of a typed language, in order.
++typedMembers :: (Ord a) => Gen.Gen symbol a -> [a]
++typedMembers = sort . either (error . show) id . Gen.values
++
++-- | The constructor at the root of a value.
++constructorOf :: (HasFTA v) => v -> Constructor
++constructorOf = Term.rootLabel . encodeTerm
++
++spec :: Spec
++spec = describe "refinement generators over a typed language" $ do
++    it "keep the well-typed terms on which a measured invariant holds, at the bound 2" $
++        compiledMembers (deriveLTAOnFrom @Arith (arithAutomaton 2) atoms smallSums)
++            >>= (`shouldBe` filter (holds atoms smallSums) (typedMembers (arithLanguage 2)))
++    it "keep the well-typed terms on which an invariant with named measures holds, at the bound 2" $
++        compiledMembers (deriveLTAOnFrom @Arith (arithAutomaton 2) atoms fewLiterals)
++            >>= (`shouldBe` filter (holds atoms fewLiterals) (typedMembers (arithLanguage 2)))
++    it "report a cyclic automaton" $ do
++        let cyclic =
++                either (error . show) id $
++                    FTA.mkFTA
++                        (0 :: Int)
++                        [
++                            ( 0
++                            ,
++                                [ FTA.Transition (constructorOf (Plus (Num 0) (Num 0))) [0, 0] noConstraint
++                                , FTA.Transition (constructorOf (Num 0)) [1] noConstraint
++                                ]
++                            )
++                        , (1, [FTA.Transition (constructorOf (0 :: Int)) [] noConstraint])
++                        ]
++        either Just (const Nothing) (deriveLTAOnFrom @Arith cyclic atoms smallSums) `shouldBe` Just CyclicAutomaton
++    it "report a transition with a constraint" $ do
++        let equalBranches = equalityConstraint (mkEqConstraints [[path [1], path [2]]])
++            annotation _ transition
++                | constructorName (FTA.transitionSymbol transition) == "If" = equalBranches
++                | otherwise = noConstraint
++        either Just (const Nothing) (deriveLTAOnFrom @Arith (FTA.annotate annotation (arithAutomaton 1)) atoms smallSums)
++            `shouldBe` Just (ConstrainedTransition "If")
+diff --git a/cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs b/cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs
+index 723fdba9..41e68826 100644
+--- a/cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs
++++ b/cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs
+@@ -7,7 +7,7 @@ module Data.CFTA.Gen.SynthesisSpec (spec) where
+ import Control.Exception (evaluate)
+ import Data.List (find)
+ import qualified Data.Map.Strict as Map
+-import Data.Maybe (fromMaybe, mapMaybe)
++import Data.Maybe (catMaybes, fromMaybe, mapMaybe)
+ import qualified Data.Set as Set
+ import qualified Data.Text as Text
+ import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
+@@ -51,6 +51,26 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
+         forward <- mapM (listing (Text.pack "a:")) names
+         backward <- mapM (listing (Text.pack "b:")) (reverse names)
+         forward `shouldBe` reverse backward
++    it "lists one typed term for each program when a variable of a type domain is not determined" $ do
++        -- domain-f takes a variable of the domain C, and domain-x has any type,
++        -- so no part of a program fixes the variable: without the marker, each
++        -- program would have a typed term for each type of the domain.
++        let name = Text.pack
++            bool = TCons (name "Bool") []
++            classed = TCons (name "?C t0") []
++            domains = Map.singleton (name "C") (TypeDomain [TCons (name "Int") [], bool, TCons (name "List") [TVar (name "x0")]])
++            lib =
++                Library
++                    [(name "domain-f", TFun classed bool, [name "domain-f"]), (name "domain-x", TVar (name "a"), [name "domain-x"])]
++                    []
++                    []
++                    (Curried AnyHead domains)
++            listed = programRuns (libraryEncoding lib) (reduceWithOrder (rawSearchSpace lib (Query [] bool) 2))
++            f = name "domain-f"
++            x = name "domain-x"
++        -- One run for each of the three programs: domain-x can take a function type.
++        (length listed, Set.fromList (catMaybes listed))
++            `shouldBe` (3, Set.fromList [App (Var f) (Var x), App (Var x) (Var f), App (Var x) (Var x)])
+ 
+ {- | The queries of the test of the order: two small Hoogle+ queries. In the
+ order of the edge identities, each lists its programs in another order when
+diff --git a/cfta-generator/test/Data/CFTA/Gen/TypingSpec.hs b/cfta-generator/test/Data/CFTA/Gen/TypingSpec.hs
+index d6a32e70..94fcffa5 100644
+--- a/cfta-generator/test/Data/CFTA/Gen/TypingSpec.hs
++++ b/cfta-generator/test/Data/CFTA/Gen/TypingSpec.hs
+@@ -7,8 +7,10 @@ against recurrences that count the closed well-typed terms.
+ -}
+ module Data.CFTA.Gen.TypingSpec (spec) where
+ 
++import Control.Monad (replicateM)
+ import Data.Containers.ListUtils (nubOrd)
+ import Data.List (sort)
++import qualified Data.Map.Lazy as LazyMap
+ import qualified Data.Map.Strict as Map
+ import Data.Maybe (fromMaybe, isNothing)
+ import GHC.Generics (Generic)
+@@ -18,6 +20,7 @@ import qualified Data.CFTA as FTA
+ import Data.CFTA.Constraint (Constraint, conjoinConstraints, equalityConstraint, noConstraint)
+ import Data.CFTA.Equality.Constraint (mkEqConstraints)
+ import qualified Data.CFTA.Gen as Gen
++import Data.CFTA.Gen.TypedArithmeticLanguage
+ import Data.CFTA.Gen.Typing (
+     Bound (..),
+     Rule,
+@@ -28,7 +31,6 @@ import Data.CFTA.Gen.Typing (
+     fromTypingRules,
+     rule,
+     subterm,
+-    typingAutomaton,
+     value,
+     variable,
+  )
+@@ -43,7 +45,7 @@ import Data.CFTA.Generic (
+     deriveFTAWith,
+     domain,
+  )
+-import Data.CFTA.Index (Cardinality (..), Rank (..))
++import Data.CFTA.Index (Cardinality (..), Rank (..), Size (..))
+ import qualified Data.CFTA.Interned as Interned
+ import Data.CFTA.Path (path)
+ import Data.CFTA.Symbol (Symbol)
+@@ -75,14 +77,19 @@ typedRules =
+ 
+ -- | The closed well-typed terms up to the bound, from the rules.
+ typedLanguage :: Int -> Gen.Gen Symbol Typed
+-typedLanguage bound = either (error . show) id $ fromTypingRules (Typing (Nesting (fromIntegral bound)) [] [TInt, TBool] typedRules)
++typedLanguage = typedPrograms []
+ 
+-{- | The number of closed well-typed terms up to the bound, from a recurrence
+-over the environment: @count n env typ@ is the number of terms of the type in
+-the environment with a nesting of at most @n@.
++-- | The well-typed terms over the inputs up to the bound, from the rules.
++typedPrograms :: [Ty] -> Int -> Gen.Gen Symbol Typed
++typedPrograms inputTypes bound =
++    either (error . show) id $ fromTypingRules (Typing (Nesting (fromIntegral bound)) inputTypes [TInt, TBool] typedRules)
++
++{- | The number of well-typed terms over the inputs up to the bound, from a
++recurrence over the environment: @count n env typ@ is the number of terms of
++the type in the environment with a nesting of at most @n@.
+ -}
+-typedCount :: Int -> Integer
+-typedCount bound = count bound [] TInt + count bound [] TBool
++typedCount :: [Ty] -> Int -> Integer
++typedCount inputTypes bound = count bound inputTypes TInt + count bound inputTypes TBool
+   where
+     leaves env typ = 1 + fromIntegral (length (filter (== typ) env))
+     count :: Int -> [Ty] -> Ty -> Integer
+@@ -96,6 +103,32 @@ typedCount bound = count bound [] TInt + count bound [] TBool
+             TInt -> count (n - 1) env TInt * count (n - 1) env TInt
+             TBool -> count (n - 1) env TInt
+ 
++-- | The type of a typed term in an environment, if it has one.
++typeOf :: [Ty] -> Typed -> Maybe Ty
++typeOf _ TZero = Just TInt
++typeOf _ TTrue = Just TBool
++typeOf env (TAdd left right) = do
++    TInt <- typeOf env left
++    TInt <- typeOf env right
++    Just TInt
++typeOf env (TIsZero inner) = do
++    TInt <- typeOf env inner
++    Just TBool
++typeOf env (TVar index typ)
++    | index >= 0, index < length env, env !! index == typ = Just typ
++    | otherwise = Nothing
++typeOf env (TLet rhs body) = do
++    rhsType <- typeOf env rhs
++    typeOf (rhsType : env) body
++
++-- | The nesting of a typed term: the constructors with subterms on the longest path.
++nesting :: Typed -> Int
++nesting term = case term of
++    TAdd left right -> 1 + max (nesting left) (nesting right)
++    TIsZero inner -> 1 + nesting inner
++    TLet rhs body -> 1 + max (nesting rhs) (nesting body)
++    _ -> 0
++
+ -- | A state of the hand-written automaton (path (b) of the binders spike).
+ data State = HandRoot | HandTyping ![Ty] !Ty !Int | Index !Int | TypeState !Ty
+     deriving stock (Eq, Ord, Show)
+@@ -147,52 +180,13 @@ handWritten bound = decode <$> Gen.fromAutomaton (Interned.fromFTA (explicitType
+ 
+ -- * Typed arithmetic
+ 
+--- | The types of the arithmetic language.
+-data ArithType = IntType | BoolType
+-    deriving stock (Eq, Ord, Show)
+-
+--- | Arithmetic with literals, a comparison, a conditional, and let-binding. A variable has no type.
+-data Arith = Num !Int | Flag !Bool | Plus Arith Arith | Less Arith Arith | If Arith Arith Arith | Var !Int | Let Arith Arith
+-    deriving stock (Eq, Ord, Show, Generic)
+-    deriving anyclass (HasFTA)
+-
+--- | The typing rules of 'Arith'. The type of a conditional is the type of its branches.
+-arithRules :: [Rule ArithType]
+-arithRules =
+-    [rule "Num" [value n] IntType | n <- [0, 1 :: Int]]
+-        <> [rule "Flag" [value b] BoolType | b <- [False, True]]
+-        <> [ rule "Plus" [subterm [] IntType, subterm [] IntType] IntType
+-           , rule "Less" [subterm [] IntType, subterm [] IntType] BoolType
+-           , variable "Var" (\index _ -> [value index])
+-           ]
+-        <> [rule "If" [subterm [] BoolType, subterm [] typ, subterm [] typ] typ | typ <- [IntType, BoolType]]
+-        <> [rule "Let" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [IntType, BoolType], typ <- [IntType, BoolType]]
+-
+--- | The typed arithmetic language up to the bound.
+-arithTyping :: Int -> Typing ArithType
+-arithTyping bound = Typing (Nesting (fromIntegral bound)) [] [IntType, BoolType] arithRules
+-
+--- | The closed well-typed arithmetic terms up to the bound, from the rules.
+-arithLanguage :: Int -> Gen.Gen Symbol Arith
+-arithLanguage = either (error . show) id . fromTypingRules . arithTyping
+-
+--- | The automaton of the closed well-typed arithmetic terms up to the bound.
+-arithAutomaton :: Int -> FTA.FTA (TypingState ArithType) Constructor Constraint
+-arithAutomaton = either (error . show) id . typingAutomaton @Arith . arithTyping
+-
+--- | The subterms of an arithmetic term, the term first.
+-subterms :: Arith -> [Arith]
+-subterms term =
+-    term
+-        : concatMap
+-            subterms
+-            ( case term of
+-                Plus left right -> [left, right]
+-                Less left right -> [left, right]
+-                If condition yes no -> [condition, yes, no]
+-                Let rhs body -> [rhs, body]
+-                _ -> []
+-            )
++-- | The typed arithmetic over the inputs up to the bound, with the inputs as variables or as arguments.
++arithPrograms :: [ArithType] -> [ArithType] -> Int -> Gen.Gen Symbol Arith
++arithPrograms inputTypes argumentTypes bound =
++    either (error . show) id $
++        fromTypingRules (Typing (Nesting (fromIntegral bound)) inputTypes [IntType, BoolType] withArguments)
++  where
++    withArguments = arithRules <> [rule "Arg" [value position] typ | (position, typ) <- zip [0 :: Int ..] argumentTypes]
+ 
+ -- | Whether each conditional of the type 'IntType' in a well-typed term has two equal branches.
+ equalIntBranches :: [ArithType] -> Arith -> Bool
+@@ -203,42 +197,9 @@ equalIntBranches env term = case term of
+     Let rhs body -> equalIntBranches env rhs && equalIntBranches (fromMaybe (error "an ill-typed term") (arithType env rhs) : env) body
+     _ -> True
+ 
+--- | The type of an arithmetic term in an environment, if it has one, with the literals of the rules.
+-arithType :: [ArithType] -> Arith -> Maybe ArithType
+-arithType _ (Num n) = if n `elem` [0, 1] then Just IntType else Nothing
+-arithType _ (Flag _) = Just BoolType
+-arithType env (Plus left right) = do
+-    IntType <- arithType env left
+-    IntType <- arithType env right
+-    Just IntType
+-arithType env (Less left right) = do
+-    IntType <- arithType env left
+-    IntType <- arithType env right
+-    Just BoolType
+-arithType env (If condition yes no) = do
+-    BoolType <- arithType env condition
+-    typ <- arithType env yes
+-    other <- arithType env no
+-    if typ == other then Just typ else Nothing
+-arithType env (Var index)
+-    | index >= 0, index < length env = Just (env !! index)
+-    | otherwise = Nothing
+-arithType env (Let rhs body) = do
+-    rhsType <- arithType env rhs
+-    arithType (rhsType : env) body
+-
+--- | The nesting of an arithmetic term: the constructors with subterms on the longest path.
+-arithNesting :: Arith -> Int
+-arithNesting term = case term of
+-    Plus left right -> 1 + max (arithNesting left) (arithNesting right)
+-    Less left right -> 1 + max (arithNesting left) (arithNesting right)
+-    If condition yes no -> 1 + maximum (map arithNesting [condition, yes, no])
+-    Let rhs body -> 1 + max (arithNesting rhs) (arithNesting body)
+-    _ -> 0
+-
+--- | The number of closed well-typed arithmetic terms up to the bound, from a recurrence over the environment.
+-arithCount :: Int -> Integer
+-arithCount bound = count bound [] IntType + count bound [] BoolType
++-- | The number of well-typed arithmetic terms over the inputs up to the bound, from a recurrence over the environment.
++arithCount :: [ArithType] -> Int -> Integer
++arithCount inputTypes bound = count bound inputTypes IntType + count bound inputTypes BoolType
+   where
+     leaves env typ = 2 + fromIntegral (length (filter (== typ) env))
+     count :: Int -> [ArithType] -> ArithType -> Integer
+@@ -251,6 +212,109 @@ arithCount bound = count bound [] IntType + count bound [] BoolType
+       where
+         below = count (n - 1)
+ 
++-- * A bound on the binders
++
++-- | The typed arithmetic with at most the binders around each position, over the inputs.
++arithBinders :: [ArithType] -> Int -> Gen.Gen Symbol Arith
++arithBinders inputTypes limit =
++    either (error . show) id $ fromTypingRules (Typing (Binders limit) inputTypes [IntType, BoolType] arithRules)
++
++-- | The spike's language with at most the binders around each position, over the inputs.
++typedBinders :: [Ty] -> Int -> Gen.Gen Symbol Typed
++typedBinders inputTypes limit =
++    either (error . show) id $ fromTypingRules (Typing (Binders limit) inputTypes [TInt, TBool] typedRules)
++
++{- | The number of well-typed arithmetic terms of each size from 1 to the
++size, with at most the binders around each position, over the inputs. The
++size is the number of term nodes: a literal, a flag, and a variable have two.
++-}
++arithSizeCounts :: [ArithType] -> Int -> Int -> [Integer]
++arithSizeCounts inputTypes limit largest = [count size inputTypes IntType + count size inputTypes BoolType | size <- [1 .. largest]]
++  where
++    types = [IntType, BoolType]
++    count size env typ = LazyMap.findWithDefault 0 (size, env, typ) table
++    table =
++        LazyMap.fromList
++            [ ((size, env, typ), counted size env typ)
++            | size <- [0 .. largest]
++            , binders <- [0 .. limit]
++            , bound' <- replicateM binders types
++            , let env = bound' <> inputTypes
++            , typ <- types
++            ]
++    counted size env typ =
++        sum
++            [ if size == 2 then 2 + fromIntegral (length (filter (== typ) env)) else 0
++            , pairs (size - 1) env IntType IntType
++            , sum [count condition env BoolType * count yes env typ * count no env typ | (condition, yes, no) <- triples (size - 1)]
++            , sum
++                [ count rhsSize env rhs * count bodySize (rhs : env) typ
++                | length env - length inputTypes < limit
++                , rhs <- types
++                , (rhsSize, bodySize) <- splits (size - 1)
++                ]
++            ]
++    pairs size env left right = sum [count leftSize env left * count rightSize env right | (leftSize, rightSize) <- splits size]
++    splits size = [(left, size - left) | left <- [1 .. size - 1]]
++    triples size = [(first, second, size - first - second) | first <- [1 .. size - 2], second <- [1 .. size - first - 1]]
++
++{- | The number of well-typed terms of the spike's language of each size from 1
++to the size, with at most the binders around each position, over the inputs.
++A variable has three nodes: the variable, its index, and its type.
++-}
++typedSizeCounts :: [Ty] -> Int -> Int -> [Integer]
++typedSizeCounts inputTypes limit largest = [count size inputTypes TInt + count size inputTypes TBool | size <- [1 .. largest]]
++  where
++    types = [TInt, TBool]
++    count size env typ = LazyMap.findWithDefault 0 (size, env, typ) table
++    table =
++        LazyMap.fromList
++            [ ((size, env, typ), counted size env typ)
++            | size <- [0 .. largest]
++            , binders <- [0 .. limit]
++            , bound' <- replicateM binders types
++            , let env = bound' <> inputTypes
++            , typ <- types
++            ]
++    counted size env typ =
++        sum
++            [ if size == 1 then 1 else 0
++            , if size == 3 then fromIntegral (length (filter (== typ) env)) else 0
++            , case typ of
++                TInt -> sum [count left env TInt * count (size - 1 - left) env TInt | left <- [1 .. size - 2]]
++                TBool -> count (size - 1) env TInt
++            , sum
++                [ count rhsSize env rhs * count (size - 1 - rhsSize) (rhs : env) typ
++                | length env - length inputTypes < limit
++                , rhs <- types
++                , rhsSize <- [1 .. size - 2]
++                ]
++            ]
++
++-- | The largest number of binders around a position of an arithmetic term.
++arithBinderDepth :: Arith -> Int
++arithBinderDepth term = case term of
++    Let rhs body -> max (arithBinderDepth rhs) (1 + arithBinderDepth body)
++    _ -> maximum (0 : map arithBinderDepth (drop 1 (subterms' term)))
++  where
++    subterms' current =
++        current : case current of
++            Plus left right -> [left, right]
++            Less left right -> [left, right]
++            If condition yes no -> [condition, yes, no]
++            _ -> []
++
++-- | The number of term nodes of a value.
++termSize :: (HasFTA v) => v -> Int
++termSize = length . encodeTerm
++
++-- | The counts of a recursive generator at each size from 1 to the size.
++countsUpTo :: Int -> Gen.Gen symbol a -> [Integer]
++countsUpTo largest generator =
++    [ either (error . show) (\(Cardinality count) -> count) (Gen.countAtSize generator (Size (fromIntegral size)))
++    | size <- [1 .. largest]
++    ]
++
+ -- * Inspection
+ 
+ -- | The cardinality of a generator.
+@@ -294,20 +358,20 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
+             members (typedLanguage 3) `shouldBe` members (handWritten 3)
+             length (members (typedLanguage 2)) `shouldBe` 222
+         it "counts the terms of the recurrence up to the bound 6" $
+-            map (total . typedLanguage) [0 .. 6] `shouldBe` map typedCount [0 .. 6]
++            map (total . typedLanguage) [0 .. 6] `shouldBe` map (typedCount []) [0 .. 6]
+         it "gives each value the rank of its term" $ do
+             let generator = typedLanguage 2
+             mapM (Gen.rankOfValue generator) (either (error . show) id (Gen.values generator))
+                 `shouldBe` Right (map Rank [0 .. total generator - 1])
+     describe "typed arithmetic" $ do
+         it "counts the terms of the recurrence up to the bound 6" $
+-            map (total . arithLanguage) [0 .. 6] `shouldBe` map arithCount [0 .. 6]
++            map (total . arithLanguage) [0 .. 6] `shouldBe` map (arithCount []) [0 .. 6]
+         it "gives distinct well-typed terms of a nesting up to the bound 2, as many as the recurrence" $ do
+             let listed = either (error . show) id (Gen.values (arithLanguage 2))
+             filter (isNothing . arithType []) listed `shouldBe` []
+             filter ((> 2) . arithNesting) listed `shouldBe` []
+             length (nubOrd listed) `shouldBe` length listed
+-            fromIntegral (length listed) `shouldBe` arithCount 2
++            fromIntegral (length listed) `shouldBe` arithCount [] 2
+         it "decodes sampled ranks to well-typed terms up to the bound 3, and ranks them back" $ do
+             let generator = arithLanguage 3
+                 count = total generator
+@@ -316,6 +380,18 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
+             filter (isNothing . arithType []) decoded `shouldBe` []
+             filter ((> 3) . arithNesting) decoded `shouldBe` []
+             mapM (Gen.rankOfValue generator) decoded `shouldBe` Right ranks
++    describe "inputs" $ do
++        it "count the programs over the inputs as the recurrence does up to the bound 6" $ do
++            map (total . typedPrograms [TInt, TBool]) [0 .. 6] `shouldBe` map (typedCount [TInt, TBool]) [0 .. 6]
++            map (total . arithPrograms [IntType, BoolType] []) [0 .. 6] `shouldBe` map (arithCount [IntType, BoolType]) [0 .. 6]
++        it "give distinct programs that type-check in the inputs, of a nesting up to the bound 2, as many as the recurrence" $ do
++            let listed = either (error . show) id (Gen.values (typedPrograms [TInt, TBool] 2))
++            filter (isNothing . typeOf [TInt, TBool]) listed `shouldBe` []
++            filter ((> 2) . nesting) listed `shouldBe` []
++            length (nubOrd listed) `shouldBe` length listed
++            fromIntegral (length listed) `shouldBe` typedCount [TInt, TBool] 2
++        it "count as arguments that are static rules, which binders do not move" $
++            map (total . arithPrograms [] [IntType, BoolType]) [0 .. 5] `shouldBe` map (arithCount [IntType, BoolType]) [0 .. 5]
+     describe "the automaton" $ do
+         let derived = either (error . show) id $ deriveFTAWith @Arith (domain [0, 1 :: Int])
+             same left right = if left == right then Just left else Nothing
+@@ -348,17 +424,30 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
+                     _ -> noConstraint
+                 annotated = FTA.annotate annotation (arithAutomaton 2)
+             members (fromConstructorAutomaton @Arith annotated) `shouldBe` filter (equalIntBranches []) (members (arithLanguage 2))
++    describe "a bound on the binders" $ do
++        it "counts the terms of each size as a recurrence does, for both languages" $ do
++            mapM_
++                (\limit -> countsUpTo 12 (arithBinders [] limit) `shouldBe` arithSizeCounts [] limit 12)
++                [0, 1, 2]
++            mapM_
++                (\limit -> countsUpTo 12 (typedBinders [] limit) `shouldBe` typedSizeCounts [] limit 12)
++                [0, 1, 2]
++        it "counts the programs over inputs, which are not binders" $
++            countsUpTo 12 (typedBinders [TInt, TBool] 1) `shouldBe` typedSizeCounts [TInt, TBool] 1 12
++        it "gives distinct well-typed terms up to a size with the binders, as many as the recurrence" $ do
++            let listed = either (error . show) id (Gen.values (Gen.upToSize 11 (arithBinders [] 1)))
++            filter (isNothing . arithType []) listed `shouldBe` []
++            filter ((> 1) . arithBinderDepth) listed `shouldBe` []
++            filter ((> 11) . termSize) listed `shouldBe` []
++            length (nubOrd listed) `shouldBe` length listed
++            fromIntegral (length listed) `shouldBe` sum (arithSizeCounts [] 1 11)
+     describe "the rules" $ do
+         it "names only constructors of the datatype" $
+             either
+                 Just
+                 (const Nothing)
+                 (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] [rule "Num" [value (0 :: Int)] IntType, rule "Mul" [] IntType]))
+-                `shouldBe` Just (UnknownConstructors ["Mul"] ["Num", "Flag", "Plus", "Less", "If", "Var", "Let"])
+-        it "report inputs and a bound on the binders as not implemented" $ do
+-            let failure typing = either Just (const Nothing) (fromTypingRules @Arith typing)
+-            failure (Typing (Nesting 1) [IntType] [IntType] arithRules) `shouldBe` Just (NotImplemented "inputs")
+-            failure (Typing (Binders 1) [] [IntType] arithRules) `shouldBe` Just (NotImplemented "a bound on the binders")
++                `shouldBe` Just (UnknownConstructors ["Mul"] ["Num", "Flag", "Plus", "Less", "If", "Var", "Let", "Arg"])
+         it "fit the fields of their constructor" $ do
+             let mismatch given = either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] given))
+             mismatch [rule "Plus" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Plus")
+diff --git a/cfta-generator/test/RefinementSpec.hs b/cfta-generator/test/RefinementSpec.hs
+index 9369512f..6af55124 100644
+--- a/cfta-generator/test/RefinementSpec.hs
++++ b/cfta-generator/test/RefinementSpec.hs
+@@ -17,6 +17,7 @@ import qualified Data.CFTA.Gen.Refinement.SimilarityMinimizationSpec
+ import qualified Data.CFTA.Gen.Refinement.SizedVectorSpec
+ import qualified Data.CFTA.Gen.Refinement.StateMachineTraceSpec
+ import qualified Data.CFTA.Gen.Refinement.SubsumptionTypedExpressionSpec
++import qualified Data.CFTA.Gen.Refinement.TypedLanguageSpec
+ import qualified Data.CFTA.Gen.Synthesis.HybridSpec
+ import qualified Data.CFTA.Gen.Synthesis.LiquidSpec
+ 
+@@ -34,6 +35,7 @@ main = do
+         Data.CFTA.Gen.Refinement.SafeBufferSpec.spec
+         Data.CFTA.Gen.Refinement.PreconditionTypedExpressionSpec.spec
+         Data.CFTA.Gen.Refinement.SubsumptionTypedExpressionSpec.spec
++        Data.CFTA.Gen.Refinement.TypedLanguageSpec.spec
+         Data.CFTA.Gen.Refinement.SimilarityMinimizationSpec.spec
+         Data.CFTA.Gen.Refinement.SizedVectorSpec.spec
+         Data.CFTA.Gen.Refinement.StateMachineTraceSpec.spec
+diff --git a/cfta-ghc/CHANGELOG.md b/cfta-ghc/CHANGELOG.md
+index d8c9d4fa..93497a5f 100644
+--- a/cfta-ghc/CHANGELOG.md
++++ b/cfta-ghc/CHANGELOG.md
+@@ -29,7 +29,12 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
+   bound type variable of kind `Type` with classes that the instances decide
+   (`decides`) ranges over the types in scope at which each of those classes
+   can have an instance, so `maximum` does not have a rigid goal `a` without
+-  a given `Ord a`.
++  a given `Ord a`. A run that does not determine such a variable lists one
++  typed term for it. A domain follows the contexts of the instances, so the
++  domain of `Ord` holds `(a, b)` only with `a` and `b` in it; an instance
++  that is not the only one that can apply puts no class on its arguments.
++  Type domains are on by default; `--no-type-domains` and the plugin's
++  `no-type-domains` turn them off.
+ - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
+   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
+   more packages by name or identifier, more package databases, more flags,
+diff --git a/cfta-ghc/README.md b/cfta-ghc/README.md
+index fb7b5bd6..17ee8dd5 100644
+--- a/cfta-ghc/README.md
++++ b/cfta-ghc/README.md
+@@ -37,8 +37,8 @@ which gives the givens of the search. Each argument of the signature is a
+ variable that a program uses once. `-m MODULE=Q` imports a module qualified,
+ and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
+ bound the search (by default five leaves, ten fits, ten seconds).
+-`--first-order`, `--only-defaulted`, and `--type-domains` are the plugin's
+-options `first-order`, `only-defaulted`, and `type-domains` below, and
++`--first-order`, `--only-defaulted`, and `--no-type-domains` are the plugin's
++options `first-order`, `only-defaulted`, and `no-type-domains` below, and
+ `--rank`, `--rank-pool N`, `--rank-seconds S`, and `--model NAME` its ranking (see "Ranking
+ the fits with a decision model"). The figures of the search go to the
+ standard error. The Hoogle+ ladder of
+@@ -128,7 +128,7 @@ The options apply to each hole:
+ | `-fplugin-opt=Data.CFTA.GHC.HoleFits:programs=N` | none | The number of Hectare's programs. |
+ | `-fplugin-opt=Data.CFTA.GHC.HoleFits:first-order` | off | Hectare's first-order types (see Limits), in place of its curried types. |
+ | `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
+-| `-fplugin-opt=Data.CFTA.GHC.HoleFits:type-domains` | off | A variable of kind `Type` with classes that the instances decide takes only the types in scope at which those classes can have instances, so `maximum` does not have a goal `a` without `Ord a`. |
++| `-fplugin-opt=Data.CFTA.GHC.HoleFits:no-type-domains` | off | A variable of kind `Type` with classes takes any type. By default it takes only the types in scope at which the instances of those classes can hold, following the instance contexts, so `maximum` does not have a goal `a` or `(a, Int)` without `Ord a`. |
+ | `-fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off` | on | Keep the fits with the normal form of an earlier fit. |
+ | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank` | off | Order the fits with a decision model (below). |
+ | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-pool=N` | 50 | The number of fits that the model orders. |
+diff --git a/cfta-ghc/app/GhcFits.hs b/cfta-ghc/app/GhcFits.hs
+index 76b6dca0..43d5b524 100644
+--- a/cfta-ghc/app/GhcFits.hs
++++ b/cfta-ghc/app/GhcFits.hs
+@@ -4,7 +4,7 @@
+ modules, each checked in GHC's typechecker ("Data.CFTA.GHC.Fits"): a
+ synthesizer with GHC as the oracle.
+ 
+-> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE
++> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--no-type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE
+ 
+ For example:
+ 
+@@ -21,9 +21,9 @@ programs have up to five leaves, the search stops after ten fits or ten
+ seconds, Hectare's rule 'hectareAvoid' applies, and Hectare's types are
+ curried ('optionCurried'). @--first-order@ searches with Hectare's
+ first-order types, and @--only-defaulted@ gives a variable that a program
+-does not determine only its default ('optionOnlyDefaulted'). @--type-domains@
+-gives a type variable of kind @Type@ the domain of its classes
+-('optionTypeDomains'). The figures of the search go to the standard
++does not determine only its default ('optionOnlyDefaulted').
++@--no-type-domains@ gives a type variable of kind @Type@ any type, not the
++domain of its classes ('optionTypeDomains'). The figures of the search go to the standard
+ error.
+ 
+ With @--rank@, a decision model orders the programs ("Data.CFTA.GHC.Rank"):
+@@ -88,7 +88,7 @@ readCommand =
+         "--seconds" : value : rest -> number value >>= \seconds -> go (set command (\options -> options{optionSeconds = Just seconds})) rest
+         "--first-order" : rest -> go (set command (\options -> options{optionCurried = False})) rest
+         "--only-defaulted" : rest -> go (set command (\options -> options{optionCurried = True, optionOnlyDefaulted = True})) rest
+-        "--type-domains" : rest -> go (set command (\options -> options{optionCurried = True, optionTypeDomains = True})) rest
++        "--no-type-domains" : rest -> go (set command (\options -> options{optionTypeDomains = False})) rest
+         "--rank" : rest -> go command{commandRank = True} rest
+         "--rank-pool" : value : rest -> number value >>= \pool -> go (rank "--rank-pool" command (\r -> r{rankingPool = pool})) rest
+         "--rank-seconds" : value : rest -> number value >>= \seconds -> go (rank "--rank-seconds" command (\r -> r{rankingSeconds = seconds})) rest
+@@ -168,5 +168,5 @@ main = do
+         hPutStrLn stderr problem
+         hPutStrLn
+             stderr
+-            "usage: ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE"
++            "usage: ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--no-type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE"
+         exitFailure
+diff --git a/cfta-ghc/benchmarks/HectareGhc.hs b/cfta-ghc/benchmarks/HectareGhc.hs
+index eebf23e8..040c4091 100644
+--- a/cfta-ghc/benchmarks/HectareGhc.hs
++++ b/cfta-ghc/benchmarks/HectareGhc.hs
+@@ -42,8 +42,8 @@ search with Hectare's curried types; @HECTARE_GHC_FIRST_ORDER@ makes them
+ search with its first-order types ('optionCurried'), and
+ @HECTARE_GHC_DEFAULTED@ with only the default of a type variable that a
+ program does not determine ('optionOnlyDefaulted').
+-@HECTARE_GHC_TYPE_DOMAINS@ gives a type variable of kind @Type@ the domain
+-of its classes ('optionTypeDomains'). The names @hplus@ and
++@HECTARE_GHC_NO_TYPE_DOMAINS@ gives a type variable of kind @Type@ any
++type, not the domain of its classes ('optionTypeDomains'). The names @hplus@ and
+ @stackoverflow@ stand for the queries of each suite; the Stack Overflow
+ queries are the queries of Hectare's evaluation, with GHC's library of the
+ rung. Next to the Hoogle+ queries, the parent takes the names of the
+@@ -317,7 +317,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
+             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
+             firstOrder <- isJust <$> lookupEnv "HECTARE_GHC_FIRST_ORDER"
+             defaulted <- isJust <$> lookupEnv "HECTARE_GHC_DEFAULTED"
+-            typeDomains <- isJust <$> lookupEnv "HECTARE_GHC_TYPE_DOMAINS"
++            noTypeDomains <- isJust <$> lookupEnv "HECTARE_GHC_NO_TYPE_DOMAINS"
+             normalForms <- (/= Just "off") <$> lookupEnv "HECTARE_GHC_NORMAL_FORMS"
+             -- The normal forms of programs, built at the first fit.
+             normalRef <- newIORef Nothing
+@@ -345,7 +345,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
+                             , optionTrace = if tracing then Just trace else Nothing
+                             , optionCurried = not firstOrder
+                             , optionOnlyDefaulted = defaulted
+-                            , optionTypeDomains = typeDomains
++                            , optionTypeDomains = not noTypeDomains
+                             , optionNormalForms = normalForms
+                             }
+                     -- With normal forms, a fit with the normal form of the solution is the solution.
+diff --git a/cfta-ghc/src/Data/CFTA/GHC/Erase.hs b/cfta-ghc/src/Data/CFTA/GHC/Erase.hs
+index ebcdd87c..e7a9ac27 100644
+--- a/cfta-ghc/src/Data/CFTA/GHC/Erase.hs
++++ b/cfta-ghc/src/Data/CFTA/GHC/Erase.hs
+@@ -49,6 +49,7 @@ module Data.CFTA.GHC.Erase (
+     eraseHead,
+     curriedClasses,
+     typeClasses,
++    classKey,
+     anyResult,
+     higherKinded,
+     typeHeads,
+diff --git a/cfta-ghc/src/Data/CFTA/GHC/Fits.hs b/cfta-ghc/src/Data/CFTA/GHC/Fits.hs
+index b802ae51..64e7e54b 100644
+--- a/cfta-ghc/src/Data/CFTA/GHC/Fits.hs
++++ b/cfta-ghc/src/Data/CFTA/GHC/Fits.hs
+@@ -34,7 +34,9 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
+   each of those classes can hold: the type constructors of the candidates'
+   types and of the query, the function type, and a rigid variable of the
+   query that an instance matches. So @maximum@ does not have a rigid goal
+-  @a@ without a given @Ord a@.
++  @a@ without a given @Ord a@. A run that does not determine such a
++  variable lists one typed term for it ('Data.CFTA.Gen.Synthesis.TypeDomain'),
++  not one for each type of its domain.
+ * Each program is checked in preorder, one leaf at a time
+   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
+   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
+@@ -123,7 +125,7 @@ import Data.IORef (atomicModifyIORef', modifyIORef', newIORef, readIORef, writeI
+ import Data.List (nub, sort)
+ import Data.Map.Strict (Map)
+ import qualified Data.Map.Strict as Map
+-import Data.Maybe (catMaybes, isJust, mapMaybe)
++import Data.Maybe (catMaybes, fromMaybe, isJust, mapMaybe)
+ import qualified Data.Set as Set
+ import Data.Text (Text)
+ import qualified Data.Text as Text
+@@ -132,6 +134,7 @@ import GHC.Clock (getMonotonicTimeNSec)
+ 
+ import Data.CFTA.GHC.Erase (
+     anyResult,
++    classKey,
+     curriedClasses,
+     erase,
+     eraseCurried,
+@@ -143,7 +146,7 @@ import Data.CFTA.GHC.Erase (
+ import Data.CFTA.GHC.Internal.Check
+ import Data.CFTA.GHC.NormalForm (NormalForm, mentions, normalForm, termOfId)
+ import Data.CFTA.GHC.States (holeGoals)
+-import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
++import Data.CFTA.Gen.Synthesis (Defaulting (..), Domain (..), Encoding (..), Program (..))
+ import qualified Data.CFTA.Gen.Synthesis as Hectare
+ import Data.CFTA.Gen.Synthesis.States (Figures, Walking (..), searchStatesWith)
+ import Data.CFTA.Gen.Synthesis.Walk (
+@@ -166,8 +169,8 @@ import GHC.Builtin.Types.Prim (alphaTy, betaTy)
+ import GHC.Core.Class (className)
+ import GHC.Core.ConLike (ConLike (RealDataCon))
+ import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
+-import GHC.Core.InstEnv (lookupInstEnv)
+-import GHC.Core.Predicate (mkClassPred)
++import GHC.Core.InstEnv (instanceSig, lookupInstEnv, nullUnifiers)
++import GHC.Core.Predicate (getClassPredTys_maybe, mkClassPred)
+ import GHC.Core.TyCo.Compare (eqType)
+ import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
+ import GHC.Core.TyCon (isAlgTyCon, isClassTyCon, tyConResKind, tyConTyVars)
+@@ -180,9 +183,12 @@ import GHC.Core.Type (
+     mkTyVarTys,
+     mkVisFunTyMany,
+     splitAppTys,
++    splitTyConApp_maybe,
++    substTheta,
+     substTyWith,
+     tyConAppTyCon_maybe,
+     tyConsOfType,
++    zipTvSubst,
+  )
+ import GHC.Data.Bag (bagToList, emptyBag)
+ import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
+@@ -287,7 +293,7 @@ data Options = Options
+     , optionTypeDomains :: Bool
+     {- ^ With 'optionCurried': a variable of kind @Type@ with classes that
+     the instances decide ranges over the types of the scope at which an
+-    instance of each of those classes can hold.
++    instance of each of those classes can hold. On by default.
+     -}
+     , optionNormalForms :: Bool
+     {- ^ Whether to use the normal forms of the fits: a fit with the normal
+@@ -306,7 +312,7 @@ data Mode
+       States Walking
+     deriving (Eq, Show, Read)
+ 
+--- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types and normal forms.
++-- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types, type domains, and normal forms.
+ defaultOptions :: Options
+ defaultOptions =
+     Options
+@@ -320,7 +326,7 @@ defaultOptions =
+         , optionTrace = Nothing
+         , optionCurried = True
+         , optionOnlyDefaulted = False
+-        , optionTypeDomains = False
++        , optionTypeDomains = True
+         , optionNormalForms = True
+         }
+ 
+@@ -444,7 +450,11 @@ streamFits options hole candidates goal accept = do
+         States _ -> pure []
+     let encoding
+             | optionCurried options =
+-                Curried defaulting (domains environment instances <> typeDomains environment instances decided)
++                Curried
++                    defaulting
++                    ( Map.mapWithKey (HeadDomain . defaults) (domains environment instances)
++                        <> fmap TypeDomain (typeDomains environment instances decided)
++                    )
+             | otherwise = FirstOrder
+     -- The time of the checks of the fits' parts, which are checks too.
+     ignoring <- liftIO (newIORef 0)
+@@ -591,8 +601,7 @@ streamFits options hole candidates goal accept = do
+     -- variable has a class only by an instance that matches it, as no given
+     -- provides a decided class.
+     typeDomains environment instances decided =
+-        let keys = Map.fromList (concatMap (typeClasses decided . candidateType) candidates)
+-            scope = goal : relevant <> map (body . candidateType) candidates
++        let scope = goal : relevant <> map (body . candidateType) candidates
+             constructors =
+                 [ mkTyConApp constructor (mkTyVarTys (tyConTyVars constructor))
+                 | constructor <- nonDetEltsUniqSet (unionManyUniqSets (map (tyConsOfType . expandTypeSynonyms) scope))
+@@ -604,8 +613,47 @@ streamFits options hole candidates goal accept = do
+             function = mkVisFunTyMany alphaTy betaTy
+             holds classes typ = all (\cls -> mayHold environment instances (mkClassPred cls [typ])) classes
+             matches classes typ = all (\cls -> let (found, _, _) = lookupInstEnv False instances cls [typ] in not (null found)) classes
++            -- The classes that the context of the instance of each class puts
++            -- on the arguments of a type constructor, as a key with its
++            -- classes for each argument. An instance that is not the only one
++            -- that can apply (another match, or a unifier) puts no class on
++            -- the arguments, so a domain is never smaller than what GHC
++            -- accepts.
++            restrictions classes typ = case splitTyConApp_maybe typ of
++                Just (_, arguments) ->
++                    [ case nub [cls' | cls <- classes, cls' <- requiredOn cls argument] of
++                        [] -> Nothing
++                        classes' -> Just (classKey classes', classes')
++                    | argument <- arguments
++                    ]
++                Nothing -> []
++              where
++                requiredOn cls argument = case lookupInstEnv False instances cls [typ] of
++                    ([(instance', matched)], unifiers, _)
++                        | nullUnifiers unifiers ->
++                            let (variables, theta, _, _) = instanceSig instance'
++                                substitution = zipTvSubst variables [fromMaybe (mkTyVarTy variable) found | (variable, found) <- zip variables matched]
++                             in [ cls'
++                                | predicate <- substTheta substitution theta
++                                , Just (cls', [argument']) <- [getClassPredTys_maybe predicate]
++                                , argument' `eqType` argument
++                                , decided cls'
++                                ]
++                    _ -> []
++            -- A type constructor of the domain, with the domain of each
++            -- argument that the contexts restrict: ?Ord x0 for the first
++            -- argument of a list of Ord.
++            withArguments classes typ erased = case erased of
++                Hectare.TCons name arguments ->
++                    Hectare.TCons
++                        name
++                        [ maybe argument (\(key, _) -> Hectare.TCons ("?" <> key <> " x" <> Text.pack (show index)) []) restriction
++                        | (index, argument, restriction) <- zip3 [0 :: Int ..] arguments (restrictions classes typ <> repeat Nothing)
++                        ]
++                other -> other
+             types classes =
+-                sort (mapMaybe (eraseHead rigid) (filter (holds classes) constructors))
++                sort
++                    [withArguments classes typ erased | typ <- filter (holds classes) constructors, Just erased <- [eraseHead rigid typ]]
+                     <> [Hectare.TFun (Hectare.TVar "x0") (Hectare.TVar "x1") | holds classes function]
+                     <> [ Hectare.TCons name []
+                        | variable <- free
+@@ -613,16 +661,24 @@ streamFits options hole candidates goal accept = do
+                        , matches classes (mkTyVarTy variable)
+                        , Just name <- [rigid variable]
+                        ]
+-         in fmap types keys
+-    -- With optionOnlyDefaulted, the keys of the curried variables, each with
+-    -- whether it defaults to the list type under ExtendedDefaultRules: a
++            -- The keys of the variables, and the keys that their domains
++            -- restrict their arguments to, until no new key comes.
++            close known [] = known
++            close known ((key, classes) : rest)
++                | Map.member key known = close known rest
++                | otherwise =
++                    let found = types classes
++                        referenced = [restriction | typ <- filter (holds classes) constructors, Just restriction <- restrictions classes typ]
++                     in close (Map.insert key found known) (rest <> referenced)
++         in close Map.empty (concatMap (typeClasses decided . candidateType) candidates)
++    -- With optionOnlyDefaulted, whether a key of the curried variables of
++    -- kind * -> * defaults to the list type under ExtendedDefaultRules: a
+     -- key of an interactive class (of which Foldable and Traversable have
+     -- kind * -> *), or the key of no class, as a variable without a
+     -- constraint fits at any type head.
+     defaulted = optionCurried options && optionOnlyDefaulted options
+-    defaulting
+-        | defaulted = OnlyDefault (fmap (\classes -> null classes || any interactive classes) curriedKeys)
+-        | otherwise = AnyHead
++    defaulting = if defaulted then OnlyDefault else AnyHead
++    defaults key = maybe False (\classes -> null classes || any interactive classes) (Map.lookup key curriedKeys)
+     interactive cls = className cls `elem` [showClassName, eqClassName, ordClassName, foldableClassName, traversableClassName]
+     -- A candidate's type without its foralls and contexts, so that its heads
+     -- are visible (Maybe in the type of lookup).
+diff --git a/cfta-ghc/src/Data/CFTA/GHC/HoleFits.hs b/cfta-ghc/src/Data/CFTA/GHC/HoleFits.hs
+index c2e8c76c..53ce4c79 100644
+--- a/cfta-ghc/src/Data/CFTA/GHC/HoleFits.hs
++++ b/cfta-ghc/src/Data/CFTA/GHC/HoleFits.hs
+@@ -166,7 +166,7 @@ readOptions arguments = do
+         ("programs", '=' : value) -> (\programs -> search (\o -> o{optionMaximumPrograms = Just programs})) <$> number value
+         ("first-order", "") -> Right (search (\o -> o{optionCurried = False}))
+         ("only-defaulted", "") -> Right (search (\o -> o{optionCurried = True, optionOnlyDefaulted = True}))
+-        ("type-domains", "") -> Right (search (\o -> o{optionCurried = True, optionTypeDomains = True}))
++        ("no-type-domains", "") -> Right (search (\o -> o{optionTypeDomains = False}))
+         ("normal-forms", '=' : "on") -> Right (search (\o -> o{optionNormalForms = True}))
+         ("normal-forms", '=' : "off") -> Right (search (\o -> o{optionNormalForms = False}))
+         ("rank", "") -> Right (options, ranking, True, settings)
+@@ -178,7 +178,7 @@ readOptions arguments = do
+             Left
+                 ( "unknown option "
+                     <> argument
+-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
++                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                 )
+       where
+         search change = (change options, ranking, ranked, settings)
+diff --git a/cfta-ghc/test/FitsSpec.hs b/cfta-ghc/test/FitsSpec.hs
+index ddf8fa4a..5e14aa6c 100644
+--- a/cfta-ghc/test/FitsSpec.hs
++++ b/cfta-ghc/test/FitsSpec.hs
+@@ -116,7 +116,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
+                         forM_ (take 10 fits) $ \fit ->
+                             accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)
+                                 `shouldReturn` True
+-        describe "optionTypeDomains" $
++        describe "optionTypeDomains" $ do
+             it "proposes no maximum at a rigid goal without a given Ord, and keeps head" $ do
+                 Just typ <- typeOfExpression session "undefined :: [a] -> a"
+                 let proposed domains = do
+@@ -133,6 +133,21 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
+                 with <- proposed True
+                 (parse "maximum xs" `elem` without, parse "maximum xs" `elem` with, parse "head xs" `elem` with)
+                     `shouldBe` (True, False, True)
++            it "follows the instance contexts: no maximum of pairs with a rigid part, a maximum of nested pairs" $ do
++                let proposed signature = do
++                        Just typ <- typeOfExpression session ("undefined :: " <> signature)
++                        traced <- newIORef []
++                        let options =
++                                defaultOptions
++                                    { optionMaximumSize = 2
++                                    , optionTypeDomains = True
++                                    , optionTrace = Just (\_ program -> modifyIORef' traced (program :))
++                                    }
++                        _ <- fitsForSignature session options candidates typ ["xs"] (\_ -> pure True)
++                        readIORef traced
++                rigidPart <- proposed "[(a, Int)] -> (a, Int)"
++                nested <- proposed "[((Int, Int), Int)] -> ((Int, Int), Int)"
++                (parse "maximum xs" `elem` rigidPart, parse "maximum xs" `elem` nested) `shouldBe` (False, True)
+         describe "fitIgnoresPart" $
+             it "marks the fits that ignore an argument" $ do
+                 marks <- forM ignoring $ \(signature, arguments, programs) -> do
+diff --git a/cfta-ghc/test/holes/Holes.golden b/cfta-ghc/test/holes/Holes.golden
+index b4d2a762..2246d855 100644
+--- a/cfta-ghc/test/holes/Holes.golden
++++ b/cfta-ghc/test/holes/Holes.golden
+@@ -55,10 +55,10 @@ test/holes/Holes.hs:9:11: error: [GHC-88464]
+           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+            (and originally defined in `GHC.Internal.Data.Foldable'))
+         \x1 -> mconcat (sequence x1)
+-        \x1 -> head (sequence x1)
+-        \x1 -> last (sequence x1)
+         \x1 -> mconcat (sequenceA x1)
+-        \x1 -> head (sequenceA x1)
++        \x1 -> mconcat (cycle x1)
++        \x1 -> mconcat (init x1)
++        \x1 -> mconcat (reverse x1)
+         (Some hole fits suppressed; use -fmax-valid-hole-fits=N or -fno-max-valid-hole-fits)
+   |
+ 9 | flatten = _
+@@ -97,11 +97,11 @@ test/holes/Holes.hs:12:11: error: [GHC-88464]
+           with mempty @((a -> b) -> [a] -> [b])
+           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+            (and originally defined in `GHC.Internal.Base'))
+-        \x1 x2 -> (<*>) (repeat x1) x2
+-        \x1 x2 -> (<*>) (pure x1) x2
+-        \x1 x2 -> (<*>) (return x1) x2
+-        \x1 x2 -> fmap x1 (cycle x2)
+-        \x1 x2 -> fmap x1 (init x2)
++        \x1 x2 -> pure (x1 (head x2))
++        \x1 x2 -> pure (x1 (last x2))
++        \x1 x2 -> return (x1 (head x2))
++        \x1 x2 -> return (x1 (last x2))
++        \x1 x2 -> cycle (fmap x1 x2)
+    |
+ 12 | mapList = _
+    |           ^
+@@ -143,9 +143,9 @@ test/holes/Holes.hs:20:23: error: [GHC-88464]
+         fallback :: a (bound at test/holes/Holes.hs:20:9)
+         head xs
+         last xs
+-        foldl1 const Nothing
+-        foldr1 const Nothing
+-        foldl1 const []
++        foldl1 asTypeOf Nothing
++        foldr1 asTypeOf Nothing
++        foldl1 asTypeOf []
+    |
+ 20 | firstOr fallback xs = _
+    |                       ^

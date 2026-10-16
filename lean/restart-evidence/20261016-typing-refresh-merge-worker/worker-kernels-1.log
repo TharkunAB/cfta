@@ -1,0 +1,40 @@
+lean/restart-evidence/20261016-typing-refresh-merge-worker/worker-kernels.lean:46:2: error: Type mismatch: After simplification, term
+  congrArg
+    (fun outcome =>
+      match outcome with
+      | MergedSourceComparison.Result.done values heap =>
+        SourceCurrentAllocatedMergeWorker.Outcome.done values
+          { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo
+      | MergedSourceComparison.Result.failed fault heap =>
+        SourceCurrentAllocatedMergeWorker.Outcome.failed fault
+          { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo)
+    failed
+ has type
+  @Eq (SourceCurrentAllocatedMergeWorker.Outcome (List (Value Symbol Guard)))
+    (match
+      SourceMergedSelection.select clear selectionFuel inputs (run (makeEdge symbol top children) state.heap).snd with
+    | MergedSourceComparison.Result.done values heap =>
+      SourceCurrentAllocatedMergeWorker.Outcome.done values
+        { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo
+    | MergedSourceComparison.Result.failed fault heap =>
+      SourceCurrentAllocatedMergeWorker.Outcome.failed fault
+        { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo)
+    (match MergedSourceComparison.Result.failed fault heap with
+    | MergedSourceComparison.Result.done values heap =>
+      SourceCurrentAllocatedMergeWorker.Outcome.done values
+        { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo
+    | MergedSourceComparison.Result.failed fault heap =>
+      SourceCurrentAllocatedMergeWorker.Outcome.failed fault
+        { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo)
+but is expected to have type
+  @Eq (SourceCurrentAllocatedMergeWorker.Outcome (List (Value Symbol Guard)))
+    (match
+      SourceMergedSelection.select clear selectionFuel inputs (run (makeEdge symbol top children) state.heap).snd with
+    | MergedSourceComparison.Result.done values heap =>
+      SourceCurrentAllocatedMergeWorker.Outcome.done values
+        { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo
+    | MergedSourceComparison.Result.failed fault heap =>
+      SourceCurrentAllocatedMergeWorker.Outcome.failed fault
+        { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo)
+    (SourceCurrentAllocatedMergeWorker.Outcome.failed fault
+      { heap := heap, equality := SourceEqualityMkEdgeAllocation.emptyField state.equality } memo)
