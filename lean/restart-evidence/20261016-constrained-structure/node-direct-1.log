@@ -1,0 +1,531 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:24:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNode.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNode.edge_walk`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:64:25: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  first.right.left
+of type
+  (edgeHeight value).le (edgeHeight { domain := domain, left := pair.fst, right := pair.snd }.left)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:65:20: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  first.right.right
+of type
+  (edgeHeight value).le (edgeHeight { domain := domain, left := pair.fst, right := pair.snd }.right)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:117:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.reset
+⊢ Certified (requestNode IntersectionEmptyDomain.emptyDomain left right) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:110:92: error: unsolved goals
+case h_3
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.self
+⊢ Certified (Code.pure left) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_4
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.swap
+⊢ Certified (requestNode domain right left) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_5
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+key✝ : Nat × Nat
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.repeated key✝
+⊢ Certified (Code.pure (SourceRecursiveIntersectionControl.repeatedValue key✝)) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_6
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.bothMu
+⊢ Certified (compileMu domain left right) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_7
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.leftMu
+⊢ Certified (compileMu domain left right) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_8
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.rightMu
+⊢ Certified (compileMu domain left right) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_9
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+⊢ Certified
+    (match left with
+    | Value.union entry members depth free =>
+      (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind fun values =>
+        Code.work (makeUnion values) Code.pure
+    | x => SourceRecursiveIntersectionCode.unsupported left right)
+    state fun x value => NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_10
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+⊢ Certified
+    (match right with
+    | Value.union entry members depth free =>
+      (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind fun values =>
+        Code.work (makeUnion values) Code.pure
+    | x => SourceRecursiveIntersectionCode.unsupported left right)
+    state fun x value => NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_11
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.leftReference
+⊢ Certified
+    (match left with
+    | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+    | x => SourceRecursiveIntersectionCode.unsupported left right)
+    state fun x value => NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_12
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.rightReference
+⊢ Certified
+    (match right with
+    | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+    | x => SourceRecursiveIntersectionCode.unsupported left right)
+    state fun x value => NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_13
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ Certified
+    (match left, right with
+    | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+    | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right)
+    state fun x value => NodeCertificate { domain := domain, left := left, right := right } value
+
+case h_14
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+x✝ : SourceRecursiveIntersectionControl.Branch
+heq✝ :
+  (if SourceRecursiveIntersectionControl.hasEmpty left right = true then SourceRecursiveIntersectionControl.Branch.empty
+    else
+      if SourceRecursiveIntersectionControl.reset domain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ domain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported) =
+    SourceRecursiveIntersectionControl.Branch.unsupported
+⊢ Certified (SourceRecursiveIntersectionCode.unsupported left right) state fun x value =>
+    NodeCertificate { domain := domain, left := left, right := right } value

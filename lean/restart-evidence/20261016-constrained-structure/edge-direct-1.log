@@ -1,0 +1,29 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEdge.lean:28:66: error: no macro or `[quot_precheck]` instance for syntax kind `Lean.Parser.Term.proj` found
+  pair.1
+This means we cannot eagerly check your notation/quotation for unbound identifiers; you can use `set_option quotPrecheck false` to disable this check.
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEdge.lean:32:19: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdge.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdge.termChildBounds` has not been implemented
+  ChildBounds
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEdge.lean:63:4: error: Dependent elimination failed: Failed to solve equation
+  List.map Value.referenceOf values = List.map Value.referenceOf values✝
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEdge.lean:83:27: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdge.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdge.termChildBounds` has not been implemented
+  ChildBounds
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEdge.lean:90:76: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdge.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdge.termChildBounds` has not been implemented
+  ChildBounds
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEdge.lean:79:95: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : EdgeRequest Symbol Guard
+inputs : EdgeInputs request
+combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+calls :
+  ∀ (pair : Node × Node),
+    pair ∈ request.left.children.zip request.right.children →
+      ∀ (after : Machine Symbol Guard),
+        SourceRecursiveIntersectionKernel.Valid after →
+          Extension state after →
+            SemanticReady after.heap →
+              Certified (requestNode request.domain pair.fst pair.snd) after fun x result => sorry
+⊢ Certified (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+    fun after result => EdgeCertificate request result ∧ EdgeResident after.heap result

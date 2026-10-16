@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.CertifiedControl
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.CertifiedControl
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.verified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.node_trace
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.node_trace
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.edge_trace
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryExecution.edge_trace

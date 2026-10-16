@@ -1,0 +1,104 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:116:104: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:119:117: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:124:129: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:129:141: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:141:14: error: Type mismatch: After simplification, term
+  rows_certified domain seen first left leftDepth leftFree second right rightDepth rightFree leftRows rightRows state
+    valid semantic
+ has type
+  Certified (compileRows domain left right) state fun x value =>
+    NodeCertificate
+      { domain := domain, left := Value.node first left leftDepth leftFree,
+        right := Value.node second right rightDepth rightFree }
+      value
+but is expected to have type
+  Certified
+    (match
+      if SourceRecursiveIntersectionControl.pair first.identity second.identity ∈ domain.key.seen then
+        SourceRecursiveIntersectionControl.Branch.repeated
+          (SourceRecursiveIntersectionControl.pair first.identity second.identity)
+      else SourceRecursiveIntersectionControl.Branch.ordinary with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode domain (Value.node second right rightDepth rightFree) (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu domain (Value.node first left leftDepth leftFree) (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu domain (Value.node first left leftDepth leftFree) (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu domain (Value.node first left leftDepth leftFree) (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.ordinary => compileRows domain left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree))
+    state fun x value =>
+    NodeCertificate
+      { domain := domain, left := Value.node first left leftDepth leftFree,
+        right := Value.node second right rightDepth rightFree }
+      value
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:116:84: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, Bool.true_eq_true, ite_false,
+    ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:116:123: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, Bool.false_eq_true,
+    Bool.true_eq_true, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:136:122: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, SourceRecursiveIntersectionCode.unsupported,
+    ite_false, Certified]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:136:142: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, SourceRecursiveIntersectionCode.unsupported,
+    Bool.false_eq_true, Certified]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:139:124: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, SourceRecursiveIntersectionCode.unsupported,
+    ite_false, Certified]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:139:144: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, SourceRecursiveIntersectionCode.unsupported,
+    Bool.false_eq_true, Certified]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

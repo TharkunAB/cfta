@@ -1,0 +1,96 @@
+'MicroCFTA.FiniteOrdinaryFramesReview.node_body_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.FiniteOrdinaryFramesReview.node_body_finish : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (bodyFuel finishFuel handle : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before middle after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    before.native.nodes.cells handle =
+        some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace bodyFuel
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+          before
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+          middle →
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace finishFuel
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value)))
+            middle
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+            after →
+          value = result ∧
+            finishFuel = 1 ∧
+              after =
+                  { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value middle.native,
+                    operations := middle.operations } ∧
+                MicroCFTA.InternedProbeProvenance.Available middle.native.machine.heap value ∧
+                  after.native.nodes.cells handle =
+                      some { request := request, status := MicroCFTA.FlatMemoThunk.Status.returned result } ∧
+                    after.native.machine = middle.native.machine ∧
+                      after.operations = middle.operations ∧
+                        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (bodyFuel + finishFuel)
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            ((MicroCFTA.SourceRecursiveIntersectionCode.compileNode request).bind fun output =>
+                              MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle output
+                                (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure output)))
+                          before
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+                          after
+'MicroCFTA.FiniteOrdinaryFramesReview.edge_body_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.FiniteOrdinaryFramesReview.edge_body_finish : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (bodyFuel finishFuel handle : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before middle after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    before.native.edges.cells handle =
+        some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace bodyFuel
+          (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+          before
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+          middle →
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace finishFuel
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishEdge handle value
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value)))
+            middle
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+            after →
+          value = result ∧
+            finishFuel = 1 ∧
+              after =
+                  { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishEdge handle value middle.native,
+                    operations := middle.operations } ∧
+                MicroCFTA.InternedEdgeResidency.EdgeResident middle.native.machine.heap value ∧
+                  after.native.edges.cells handle =
+                      some { request := request, status := MicroCFTA.FlatMemoThunk.Status.returned result } ∧
+                    after.native.machine = middle.native.machine ∧ after.operations = middle.operations

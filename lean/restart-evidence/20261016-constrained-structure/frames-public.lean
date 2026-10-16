@@ -1,0 +1,10 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.finishNode_split
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.finishNode_split
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.finishEdge_split
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.finishEdge_split
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.node_body_cell
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.node_body_cell
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.edge_body_cell
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFrames.edge_body_cell

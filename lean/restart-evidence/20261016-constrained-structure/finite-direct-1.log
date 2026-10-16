@@ -1,0 +1,42 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:99:7: error: unexpected token 'structure'; expected '(', ':=', '|' or term
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:99:7: error: Missing cases:
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:92:84: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+holds : Guard → Language.Term Symbol → Bool
+state : Checked width
+good : Good state
+semantic : SemanticReady state.native.machine.heap
+stored : Stored state.native
+idle : SourceRecursiveIntersectionNative.Idle state.native
+left right : Value Symbol Guard
+leftAvailable : Available state.native.machine.heap left
+rightAvailable : Available state.native.machine.heap right
+leftDomain : SourceCurrentAllocatedFiniteOrdinaryDomain.Node left
+rightDomain : SourceCurrentAllocatedFiniteOrdinaryDomain.Node right
+ranges :
+  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+    (SourceEqualityNativeDemand.Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state
+coherent : Coherent state.native.machine.heap
+fuel : Nat
+value : Value Symbol Guard
+after : Checked width
+receipt :
+  Receipt fuel (SourceEqualityNativeDemand.Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+    state value after fun final value => Available final.heap value
+afterIdle : SourceRecursiveIntersectionNative.Idle after.native
+⊢ ∃ fuel value after,
+    (Receipt fuel (SourceEqualityNativeDemand.Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+        state value after fun final value => Available final.heap value) ∧
+      SourceRecursiveIntersectionNative.Idle after.native ∧
+        SemanticReady after.native.machine.heap ∧
+          Stored after.native ∧
+            SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+              height value ≤ height left ∧ height value ≤ height right ∧ value.free = []
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:99:16: error: unexpected token ':='; expected identifier
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:102:97: error: unexpected token '.'; expected identifier
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:103:13: error: unexpected token '.'; expected identifier
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:103:28: error: unexpected token '.'; expected identifier
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:103:45: error: unexpected token '.'; expected identifier
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryFinite.lean:104:106: error: unexpected token '.'; expected identifier

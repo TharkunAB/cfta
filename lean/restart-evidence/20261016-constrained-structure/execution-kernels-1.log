@@ -1,0 +1,1617 @@
+lean/restart-evidence/20261016-constrained-structure/execution-kernels.lean:31:2: error: failed to synthesize
+  Decidable (SourceRecursiveIntersectionMemo.KeySafe 8 emptyRequest.domain emptyRequest.left emptyRequest.right)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/restart-evidence/20261016-constrained-structure/execution-kernels.lean:76:76: error(lean.unknownIdentifier): Unknown identifier `SourceRecursiveIntersectionMemo.rawKey`
+lean/restart-evidence/20261016-constrained-structure/execution-kernels.lean:73:101: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+machine : Machine Symbol Guard
+operations : Operations
+good : Good (cold machine operations)
+semantic : SemanticReady machine.heap
+trace :
+  Trace 2 (Control.code (requestNode emptyRequest.domain emptyRequest.left emptyRequest.right))
+    (cold machine operations) (Control.code (Code.pure Value.empty)) (finished machine operations)
+stored : Stored (finished machine operations).native
+_domain : SourceCurrentAllocatedFiniteOrdinaryDomain.Node Value.empty
+_height : MergedOrdinaryHeight.height Value.empty = 0
+_owner :
+  (finished machine operations).native.nodes.cells 0 =
+    some { request := emptyRequest, status := FlatMemoThunk.Status.returned Value.empty }
+_machine : (finished machine operations).native.machine = machine
+_operations : (finished machine operations).operations = operations
+reached :
+  Good (finished machine operations) ∧
+    Extension (cold machine operations).native.machine (finished machine operations).native.machine ∧
+      SourceEqualityRequiredCache.Keeps (cold machine operations).native.machine.heap
+          (finished machine operations).native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows (cold machine operations).operations
+            (finished machine operations).operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure Value.empty))
+            (finished machine operations)
+⊢ lift operations
+      (match
+        (match
+            IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+              Value.empty.referenceOf with
+          | ⋯ =>
+            (NodeSelection.direct
+                { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty, right := Value.empty },
+              {
+                machine :=
+                  (match
+                        IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                          Value.empty.referenceOf Value.empty.referenceOf with
+                      | none =>
+                        (NodeSelection.direct
+                            { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                              right := Value.empty },
+                          initial 8 machine)
+                      | some key =>
+                        (NodeSelection.memoized
+                            (match (initial 8 machine).nodes.table key with
+                              | some handle => (handle, (initial 8 machine).nodes)
+                              | none =>
+                                ((initial 8 machine).nodes.next,
+                                  { table := put (initial 8 machine).nodes.table key (initial 8 machine).nodes.next,
+                                    cells :=
+                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                        {
+                                          request :=
+                                            { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                              right := Value.empty },
+                                          status := FlatMemoThunk.Status.suspended },
+                                    next := (initial 8 machine).nodes.next + 1 })).fst,
+                          { machine := (initial 8 machine).machine,
+                            nodes :=
+                              (match (initial 8 machine).nodes.table key with
+                                | some handle => (handle, (initial 8 machine).nodes)
+                                | none =>
+                                  ((initial 8 machine).nodes.next,
+                                    { table := put (initial 8 machine).nodes.table key (initial 8 machine).nodes.next,
+                                      cells :=
+                                        put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                          {
+                                            request :=
+                                              { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                right := Value.empty },
+                                            status := FlatMemoThunk.Status.suspended },
+                                      next := (initial 8 machine).nodes.next + 1 })).snd,
+                            edges := (initial 8 machine).edges })).snd.machine,
+                nodes :=
+                  match
+                    (match
+                            (match
+                                      IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                        Value.empty.referenceOf Value.empty.referenceOf with
+                                    | none =>
+                                      (NodeSelection.direct
+                                          { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                            right := Value.empty },
+                                        initial 8 machine)
+                                    | some key =>
+                                      (NodeSelection.memoized
+                                          (match (initial 8 machine).nodes.table key with
+                                            | some handle => (handle, (initial 8 machine).nodes)
+                                            | none =>
+                                              ((initial 8 machine).nodes.next,
+                                                {
+                                                  table :=
+                                                    put (initial 8 machine).nodes.table key
+                                                      (initial 8 machine).nodes.next,
+                                                  cells :=
+                                                    put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                      {
+                                                        request :=
+                                                          { domain := IntersectionEmptyDomain.emptyDomain,
+                                                            left := Value.empty, right := Value.empty },
+                                                        status := FlatMemoThunk.Status.suspended },
+                                                  next := (initial 8 machine).nodes.next + 1 })).fst,
+                                        { machine := (initial 8 machine).machine,
+                                          nodes :=
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).snd,
+                                          edges := (initial 8 machine).edges })).snd.nodes.cells
+                              0 with
+                          | none =>
+                            (FlatMemoThunk.Observation.absent,
+                              (match
+                                    IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                      Value.empty.referenceOf Value.empty.referenceOf with
+                                  | none =>
+                                    (NodeSelection.direct
+                                        { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                          right := Value.empty },
+                                      initial 8 machine)
+                                  | some key =>
+                                    (NodeSelection.memoized
+                                        (match (initial 8 machine).nodes.table key with
+                                          | some handle => (handle, (initial 8 machine).nodes)
+                                          | none =>
+                                            ((initial 8 machine).nodes.next,
+                                              {
+                                                table :=
+                                                  put (initial 8 machine).nodes.table key
+                                                    (initial 8 machine).nodes.next,
+                                                cells :=
+                                                  put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                    {
+                                                      request :=
+                                                        { domain := IntersectionEmptyDomain.emptyDomain,
+                                                          left := Value.empty, right := Value.empty },
+                                                      status := FlatMemoThunk.Status.suspended },
+                                                next := (initial 8 machine).nodes.next + 1 })).fst,
+                                      { machine := (initial 8 machine).machine,
+                                        nodes :=
+                                          (match (initial 8 machine).nodes.table key with
+                                            | some handle => (handle, (initial 8 machine).nodes)
+                                            | none =>
+                                              ((initial 8 machine).nodes.next,
+                                                {
+                                                  table :=
+                                                    put (initial 8 machine).nodes.table key
+                                                      (initial 8 machine).nodes.next,
+                                                  cells :=
+                                                    put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                      {
+                                                        request :=
+                                                          { domain := IntersectionEmptyDomain.emptyDomain,
+                                                            left := Value.empty, right := Value.empty },
+                                                        status := FlatMemoThunk.Status.suspended },
+                                                  next := (initial 8 machine).nodes.next + 1 })).snd,
+                                        edges := (initial 8 machine).edges })).snd.nodes)
+                          | some cell =>
+                            match cell.status with
+                            | FlatMemoThunk.Status.suspended =>
+                              (FlatMemoThunk.Observation.evaluate cell.request,
+                                match
+                                  (match
+                                            IntersectionFlatMemoKeyDomain.sourceKey 8
+                                              IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                              Value.empty.referenceOf with
+                                          | none =>
+                                            (NodeSelection.direct
+                                                { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                  right := Value.empty },
+                                              initial 8 machine)
+                                          | some key =>
+                                            (NodeSelection.memoized
+                                                (match (initial 8 machine).nodes.table key with
+                                                  | some handle => (handle, (initial 8 machine).nodes)
+                                                  | none =>
+                                                    ((initial 8 machine).nodes.next,
+                                                      {
+                                                        table :=
+                                                          put (initial 8 machine).nodes.table key
+                                                            (initial 8 machine).nodes.next,
+                                                        cells :=
+                                                          put (initial 8 machine).nodes.cells
+                                                            (initial 8 machine).nodes.next
+                                                            {
+                                                              request :=
+                                                                { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                  left := Value.empty, right := Value.empty },
+                                                              status := FlatMemoThunk.Status.suspended },
+                                                        next := (initial 8 machine).nodes.next + 1 })).fst,
+                                              { machine := (initial 8 machine).machine,
+                                                nodes :=
+                                                  (match (initial 8 machine).nodes.table key with
+                                                    | some handle => (handle, (initial 8 machine).nodes)
+                                                    | none =>
+                                                      ((initial 8 machine).nodes.next,
+                                                        {
+                                                          table :=
+                                                            put (initial 8 machine).nodes.table key
+                                                              (initial 8 machine).nodes.next,
+                                                          cells :=
+                                                            put (initial 8 machine).nodes.cells
+                                                              (initial 8 machine).nodes.next
+                                                              {
+                                                                request :=
+                                                                  { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                    left := Value.empty, right := Value.empty },
+                                                                status := FlatMemoThunk.Status.suspended },
+                                                          next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                edges := (initial 8 machine).edges })).snd.nodes.cells
+                                    0 with
+                                | none =>
+                                  (match
+                                        IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                          Value.empty.referenceOf Value.empty.referenceOf with
+                                      | none =>
+                                        (NodeSelection.direct
+                                            { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                              right := Value.empty },
+                                          initial 8 machine)
+                                      | some key =>
+                                        (NodeSelection.memoized
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).fst,
+                                          { machine := (initial 8 machine).machine,
+                                            nodes :=
+                                              (match (initial 8 machine).nodes.table key with
+                                                | some handle => (handle, (initial 8 machine).nodes)
+                                                | none =>
+                                                  ((initial 8 machine).nodes.next,
+                                                    {
+                                                      table :=
+                                                        put (initial 8 machine).nodes.table key
+                                                          (initial 8 machine).nodes.next,
+                                                      cells :=
+                                                        put (initial 8 machine).nodes.cells
+                                                          (initial 8 machine).nodes.next
+                                                          {
+                                                            request :=
+                                                              { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                left := Value.empty, right := Value.empty },
+                                                            status := FlatMemoThunk.Status.suspended },
+                                                      next := (initial 8 machine).nodes.next + 1 })).snd,
+                                            edges := (initial 8 machine).edges })).snd.nodes
+                                | some cell =>
+                                  {
+                                    table :=
+                                      (match
+                                              IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                Value.empty.referenceOf with
+                                            | none =>
+                                              (NodeSelection.direct
+                                                  { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                    right := Value.empty },
+                                                initial 8 machine)
+                                            | some key =>
+                                              (NodeSelection.memoized
+                                                  (match (initial 8 machine).nodes.table key with
+                                                    | some handle => (handle, (initial 8 machine).nodes)
+                                                    | none =>
+                                                      ((initial 8 machine).nodes.next,
+                                                        {
+                                                          table :=
+                                                            put (initial 8 machine).nodes.table key
+                                                              (initial 8 machine).nodes.next,
+                                                          cells :=
+                                                            put (initial 8 machine).nodes.cells
+                                                              (initial 8 machine).nodes.next
+                                                              {
+                                                                request :=
+                                                                  { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                    left := Value.empty, right := Value.empty },
+                                                                status := FlatMemoThunk.Status.suspended },
+                                                          next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                { machine := (initial 8 machine).machine,
+                                                  nodes :=
+                                                    (match (initial 8 machine).nodes.table key with
+                                                      | some handle => (handle, (initial 8 machine).nodes)
+                                                      | none =>
+                                                        ((initial 8 machine).nodes.next,
+                                                          {
+                                                            table :=
+                                                              put (initial 8 machine).nodes.table key
+                                                                (initial 8 machine).nodes.next,
+                                                            cells :=
+                                                              put (initial 8 machine).nodes.cells
+                                                                (initial 8 machine).nodes.next
+                                                                {
+                                                                  request :=
+                                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                      left := Value.empty, right := Value.empty },
+                                                                  status := FlatMemoThunk.Status.suspended },
+                                                            next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                  edges := (initial 8 machine).edges })).snd.nodes.table,
+                                    cells :=
+                                      put
+                                        (match
+                                                IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                  IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                  Value.empty.referenceOf with
+                                              | none =>
+                                                (NodeSelection.direct
+                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                      left := Value.empty, right := Value.empty },
+                                                  initial 8 machine)
+                                              | some key =>
+                                                (NodeSelection.memoized
+                                                    (match (initial 8 machine).nodes.table key with
+                                                      | some handle => (handle, (initial 8 machine).nodes)
+                                                      | none =>
+                                                        ((initial 8 machine).nodes.next,
+                                                          {
+                                                            table :=
+                                                              put (initial 8 machine).nodes.table key
+                                                                (initial 8 machine).nodes.next,
+                                                            cells :=
+                                                              put (initial 8 machine).nodes.cells
+                                                                (initial 8 machine).nodes.next
+                                                                {
+                                                                  request :=
+                                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                      left := Value.empty, right := Value.empty },
+                                                                  status := FlatMemoThunk.Status.suspended },
+                                                            next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                  { machine := (initial 8 machine).machine,
+                                                    nodes :=
+                                                      (match (initial 8 machine).nodes.table key with
+                                                        | some handle => (handle, (initial 8 machine).nodes)
+                                                        | none =>
+                                                          ((initial 8 machine).nodes.next,
+                                                            {
+                                                              table :=
+                                                                put (initial 8 machine).nodes.table key
+                                                                  (initial 8 machine).nodes.next,
+                                                              cells :=
+                                                                put (initial 8 machine).nodes.cells
+                                                                  (initial 8 machine).nodes.next
+                                                                  {
+                                                                    request :=
+                                                                      { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                        left := Value.empty, right := Value.empty },
+                                                                    status := FlatMemoThunk.Status.suspended },
+                                                              next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                    edges := (initial 8 machine).edges })).snd.nodes.cells
+                                        0 { request := cell.request, status := FlatMemoThunk.Status.evaluating },
+                                    next :=
+                                      (match
+                                              IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                Value.empty.referenceOf with
+                                            | none =>
+                                              (NodeSelection.direct
+                                                  { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                    right := Value.empty },
+                                                initial 8 machine)
+                                            | some key =>
+                                              (NodeSelection.memoized
+                                                  (match (initial 8 machine).nodes.table key with
+                                                    | some handle => (handle, (initial 8 machine).nodes)
+                                                    | none =>
+                                                      ((initial 8 machine).nodes.next,
+                                                        {
+                                                          table :=
+                                                            put (initial 8 machine).nodes.table key
+                                                              (initial 8 machine).nodes.next,
+                                                          cells :=
+                                                            put (initial 8 machine).nodes.cells
+                                                              (initial 8 machine).nodes.next
+                                                              {
+                                                                request :=
+                                                                  { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                    left := Value.empty, right := Value.empty },
+                                                                status := FlatMemoThunk.Status.suspended },
+                                                          next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                { machine := (initial 8 machine).machine,
+                                                  nodes :=
+                                                    (match (initial 8 machine).nodes.table key with
+                                                      | some handle => (handle, (initial 8 machine).nodes)
+                                                      | none =>
+                                                        ((initial 8 machine).nodes.next,
+                                                          {
+                                                            table :=
+                                                              put (initial 8 machine).nodes.table key
+                                                                (initial 8 machine).nodes.next,
+                                                            cells :=
+                                                              put (initial 8 machine).nodes.cells
+                                                                (initial 8 machine).nodes.next
+                                                                {
+                                                                  request :=
+                                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                      left := Value.empty, right := Value.empty },
+                                                                  status := FlatMemoThunk.Status.suspended },
+                                                            next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                  edges := (initial 8 machine).edges })).snd.nodes.next })
+                            | FlatMemoThunk.Status.evaluating =>
+                              (FlatMemoThunk.Observation.busy,
+                                (match
+                                      IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                        Value.empty.referenceOf Value.empty.referenceOf with
+                                    | none =>
+                                      (NodeSelection.direct
+                                          { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                            right := Value.empty },
+                                        initial 8 machine)
+                                    | some key =>
+                                      (NodeSelection.memoized
+                                          (match (initial 8 machine).nodes.table key with
+                                            | some handle => (handle, (initial 8 machine).nodes)
+                                            | none =>
+                                              ((initial 8 machine).nodes.next,
+                                                {
+                                                  table :=
+                                                    put (initial 8 machine).nodes.table key
+                                                      (initial 8 machine).nodes.next,
+                                                  cells :=
+                                                    put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                      {
+                                                        request :=
+                                                          { domain := IntersectionEmptyDomain.emptyDomain,
+                                                            left := Value.empty, right := Value.empty },
+                                                        status := FlatMemoThunk.Status.suspended },
+                                                  next := (initial 8 machine).nodes.next + 1 })).fst,
+                                        { machine := (initial 8 machine).machine,
+                                          nodes :=
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).snd,
+                                          edges := (initial 8 machine).edges })).snd.nodes)
+                            | FlatMemoThunk.Status.returned value =>
+                              (FlatMemoThunk.Observation.ready value,
+                                (match
+                                      IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                        Value.empty.referenceOf Value.empty.referenceOf with
+                                    | none =>
+                                      (NodeSelection.direct
+                                          { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                            right := Value.empty },
+                                        initial 8 machine)
+                                    | some key =>
+                                      (NodeSelection.memoized
+                                          (match (initial 8 machine).nodes.table key with
+                                            | some handle => (handle, (initial 8 machine).nodes)
+                                            | none =>
+                                              ((initial 8 machine).nodes.next,
+                                                {
+                                                  table :=
+                                                    put (initial 8 machine).nodes.table key
+                                                      (initial 8 machine).nodes.next,
+                                                  cells :=
+                                                    put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                      {
+                                                        request :=
+                                                          { domain := IntersectionEmptyDomain.emptyDomain,
+                                                            left := Value.empty, right := Value.empty },
+                                                        status := FlatMemoThunk.Status.suspended },
+                                                  next := (initial 8 machine).nodes.next + 1 })).fst,
+                                        { machine := (initial 8 machine).machine,
+                                          nodes :=
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).snd,
+                                          edges := (initial 8 machine).edges })).snd.nodes)).snd.cells
+                      0 with
+                  | ⋯ =>
+                    match
+                      (match
+                              (match
+                                        IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                          Value.empty.referenceOf Value.empty.referenceOf with
+                                      | none =>
+                                        (NodeSelection.direct
+                                            { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                              right := Value.empty },
+                                          initial 8 machine)
+                                      | some key =>
+                                        (NodeSelection.memoized
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).fst,
+                                          { machine := (initial 8 machine).machine,
+                                            nodes :=
+                                              (match (initial 8 machine).nodes.table key with
+                                                | some handle => (handle, (initial 8 machine).nodes)
+                                                | none =>
+                                                  ((initial 8 machine).nodes.next,
+                                                    {
+                                                      table :=
+                                                        put (initial 8 machine).nodes.table key
+                                                          (initial 8 machine).nodes.next,
+                                                      cells :=
+                                                        put (initial 8 machine).nodes.cells
+                                                          (initial 8 machine).nodes.next
+                                                          {
+                                                            request :=
+                                                              { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                left := Value.empty, right := Value.empty },
+                                                            status := FlatMemoThunk.Status.suspended },
+                                                      next := (initial 8 machine).nodes.next + 1 })).snd,
+                                            edges := (initial 8 machine).edges })).snd.nodes.cells
+                                0 with
+                            | none =>
+                              (FlatMemoThunk.Observation.absent,
+                                (match
+                                      IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                        Value.empty.referenceOf Value.empty.referenceOf with
+                                    | none =>
+                                      (NodeSelection.direct
+                                          { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                            right := Value.empty },
+                                        initial 8 machine)
+                                    | some key =>
+                                      (NodeSelection.memoized
+                                          (match (initial 8 machine).nodes.table key with
+                                            | some handle => (handle, (initial 8 machine).nodes)
+                                            | none =>
+                                              ((initial 8 machine).nodes.next,
+                                                {
+                                                  table :=
+                                                    put (initial 8 machine).nodes.table key
+                                                      (initial 8 machine).nodes.next,
+                                                  cells :=
+                                                    put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                      {
+                                                        request :=
+                                                          { domain := IntersectionEmptyDomain.emptyDomain,
+                                                            left := Value.empty, right := Value.empty },
+                                                        status := FlatMemoThunk.Status.suspended },
+                                                  next := (initial 8 machine).nodes.next + 1 })).fst,
+                                        { machine := (initial 8 machine).machine,
+                                          nodes :=
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).snd,
+                                          edges := (initial 8 machine).edges })).snd.nodes)
+                            | some cell =>
+                              match cell.status with
+                              | FlatMemoThunk.Status.suspended =>
+                                (FlatMemoThunk.Observation.evaluate cell.request,
+                                  match
+                                    (match
+                                              IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                Value.empty.referenceOf with
+                                            | none =>
+                                              (NodeSelection.direct
+                                                  { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                    right := Value.empty },
+                                                initial 8 machine)
+                                            | some key =>
+                                              (NodeSelection.memoized
+                                                  (match (initial 8 machine).nodes.table key with
+                                                    | some handle => (handle, (initial 8 machine).nodes)
+                                                    | none =>
+                                                      ((initial 8 machine).nodes.next,
+                                                        {
+                                                          table :=
+                                                            put (initial 8 machine).nodes.table key
+                                                              (initial 8 machine).nodes.next,
+                                                          cells :=
+                                                            put (initial 8 machine).nodes.cells
+                                                              (initial 8 machine).nodes.next
+                                                              {
+                                                                request :=
+                                                                  { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                    left := Value.empty, right := Value.empty },
+                                                                status := FlatMemoThunk.Status.suspended },
+                                                          next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                { machine := (initial 8 machine).machine,
+                                                  nodes :=
+                                                    (match (initial 8 machine).nodes.table key with
+                                                      | some handle => (handle, (initial 8 machine).nodes)
+                                                      | none =>
+                                                        ((initial 8 machine).nodes.next,
+                                                          {
+                                                            table :=
+                                                              put (initial 8 machine).nodes.table key
+                                                                (initial 8 machine).nodes.next,
+                                                            cells :=
+                                                              put (initial 8 machine).nodes.cells
+                                                                (initial 8 machine).nodes.next
+                                                                {
+                                                                  request :=
+                                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                      left := Value.empty, right := Value.empty },
+                                                                  status := FlatMemoThunk.Status.suspended },
+                                                            next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                  edges := (initial 8 machine).edges })).snd.nodes.cells
+                                      0 with
+                                  | none =>
+                                    (match
+                                          IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                            Value.empty.referenceOf Value.empty.referenceOf with
+                                        | none =>
+                                          (NodeSelection.direct
+                                              { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                right := Value.empty },
+                                            initial 8 machine)
+                                        | some key =>
+                                          (NodeSelection.memoized
+                                              (match (initial 8 machine).nodes.table key with
+                                                | some handle => (handle, (initial 8 machine).nodes)
+                                                | none =>
+                                                  ((initial 8 machine).nodes.next,
+                                                    {
+                                                      table :=
+                                                        put (initial 8 machine).nodes.table key
+                                                          (initial 8 machine).nodes.next,
+                                                      cells :=
+                                                        put (initial 8 machine).nodes.cells
+                                                          (initial 8 machine).nodes.next
+                                                          {
+                                                            request :=
+                                                              { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                left := Value.empty, right := Value.empty },
+                                                            status := FlatMemoThunk.Status.suspended },
+                                                      next := (initial 8 machine).nodes.next + 1 })).fst,
+                                            { machine := (initial 8 machine).machine,
+                                              nodes :=
+                                                (match (initial 8 machine).nodes.table key with
+                                                  | some handle => (handle, (initial 8 machine).nodes)
+                                                  | none =>
+                                                    ((initial 8 machine).nodes.next,
+                                                      {
+                                                        table :=
+                                                          put (initial 8 machine).nodes.table key
+                                                            (initial 8 machine).nodes.next,
+                                                        cells :=
+                                                          put (initial 8 machine).nodes.cells
+                                                            (initial 8 machine).nodes.next
+                                                            {
+                                                              request :=
+                                                                { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                  left := Value.empty, right := Value.empty },
+                                                              status := FlatMemoThunk.Status.suspended },
+                                                        next := (initial 8 machine).nodes.next + 1 })).snd,
+                                              edges := (initial 8 machine).edges })).snd.nodes
+                                  | some cell =>
+                                    {
+                                      table :=
+                                        (match
+                                                IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                  IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                  Value.empty.referenceOf with
+                                              | none =>
+                                                (NodeSelection.direct
+                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                      left := Value.empty, right := Value.empty },
+                                                  initial 8 machine)
+                                              | some key =>
+                                                (NodeSelection.memoized
+                                                    (match (initial 8 machine).nodes.table key with
+                                                      | some handle => (handle, (initial 8 machine).nodes)
+                                                      | none =>
+                                                        ((initial 8 machine).nodes.next,
+                                                          {
+                                                            table :=
+                                                              put (initial 8 machine).nodes.table key
+                                                                (initial 8 machine).nodes.next,
+                                                            cells :=
+                                                              put (initial 8 machine).nodes.cells
+                                                                (initial 8 machine).nodes.next
+                                                                {
+                                                                  request :=
+                                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                      left := Value.empty, right := Value.empty },
+                                                                  status := FlatMemoThunk.Status.suspended },
+                                                            next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                  { machine := (initial 8 machine).machine,
+                                                    nodes :=
+                                                      (match (initial 8 machine).nodes.table key with
+                                                        | some handle => (handle, (initial 8 machine).nodes)
+                                                        | none =>
+                                                          ((initial 8 machine).nodes.next,
+                                                            {
+                                                              table :=
+                                                                put (initial 8 machine).nodes.table key
+                                                                  (initial 8 machine).nodes.next,
+                                                              cells :=
+                                                                put (initial 8 machine).nodes.cells
+                                                                  (initial 8 machine).nodes.next
+                                                                  {
+                                                                    request :=
+                                                                      { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                        left := Value.empty, right := Value.empty },
+                                                                    status := FlatMemoThunk.Status.suspended },
+                                                              next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                    edges := (initial 8 machine).edges })).snd.nodes.table,
+                                      cells :=
+                                        put
+                                          (match
+                                                  IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                    IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                    Value.empty.referenceOf with
+                                                | none =>
+                                                  (NodeSelection.direct
+                                                      { domain := IntersectionEmptyDomain.emptyDomain,
+                                                        left := Value.empty, right := Value.empty },
+                                                    initial 8 machine)
+                                                | some key =>
+                                                  (NodeSelection.memoized
+                                                      (match (initial 8 machine).nodes.table key with
+                                                        | some handle => (handle, (initial 8 machine).nodes)
+                                                        | none =>
+                                                          ((initial 8 machine).nodes.next,
+                                                            {
+                                                              table :=
+                                                                put (initial 8 machine).nodes.table key
+                                                                  (initial 8 machine).nodes.next,
+                                                              cells :=
+                                                                put (initial 8 machine).nodes.cells
+                                                                  (initial 8 machine).nodes.next
+                                                                  {
+                                                                    request :=
+                                                                      { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                        left := Value.empty, right := Value.empty },
+                                                                    status := FlatMemoThunk.Status.suspended },
+                                                              next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                    { machine := (initial 8 machine).machine,
+                                                      nodes :=
+                                                        (match (initial 8 machine).nodes.table key with
+                                                          | some handle => (handle, (initial 8 machine).nodes)
+                                                          | none =>
+                                                            ((initial 8 machine).nodes.next,
+                                                              {
+                                                                table :=
+                                                                  put (initial 8 machine).nodes.table key
+                                                                    (initial 8 machine).nodes.next,
+                                                                cells :=
+                                                                  put (initial 8 machine).nodes.cells
+                                                                    (initial 8 machine).nodes.next
+                                                                    {
+                                                                      request :=
+                                                                        { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                          left := Value.empty, right := Value.empty },
+                                                                      status := FlatMemoThunk.Status.suspended },
+                                                                next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                      edges := (initial 8 machine).edges })).snd.nodes.cells
+                                          0 { request := cell.request, status := FlatMemoThunk.Status.evaluating },
+                                      next :=
+                                        (match
+                                                IntersectionFlatMemoKeyDomain.sourceKey 8
+                                                  IntersectionEmptyDomain.emptyDomain Value.empty.referenceOf
+                                                  Value.empty.referenceOf with
+                                              | none =>
+                                                (NodeSelection.direct
+                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                      left := Value.empty, right := Value.empty },
+                                                  initial 8 machine)
+                                              | some key =>
+                                                (NodeSelection.memoized
+                                                    (match (initial 8 machine).nodes.table key with
+                                                      | some handle => (handle, (initial 8 machine).nodes)
+                                                      | none =>
+                                                        ((initial 8 machine).nodes.next,
+                                                          {
+                                                            table :=
+                                                              put (initial 8 machine).nodes.table key
+                                                                (initial 8 machine).nodes.next,
+                                                            cells :=
+                                                              put (initial 8 machine).nodes.cells
+                                                                (initial 8 machine).nodes.next
+                                                                {
+                                                                  request :=
+                                                                    { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                      left := Value.empty, right := Value.empty },
+                                                                  status := FlatMemoThunk.Status.suspended },
+                                                            next := (initial 8 machine).nodes.next + 1 })).fst,
+                                                  { machine := (initial 8 machine).machine,
+                                                    nodes :=
+                                                      (match (initial 8 machine).nodes.table key with
+                                                        | some handle => (handle, (initial 8 machine).nodes)
+                                                        | none =>
+                                                          ((initial 8 machine).nodes.next,
+                                                            {
+                                                              table :=
+                                                                put (initial 8 machine).nodes.table key
+                                                                  (initial 8 machine).nodes.next,
+                                                              cells :=
+                                                                put (initial 8 machine).nodes.cells
+                                                                  (initial 8 machine).nodes.next
+                                                                  {
+                                                                    request :=
+                                                                      { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                        left := Value.empty, right := Value.empty },
+                                                                    status := FlatMemoThunk.Status.suspended },
+                                                              next := (initial 8 machine).nodes.next + 1 })).snd,
+                                                    edges := (initial 8 machine).edges })).snd.nodes.next })
+                              | FlatMemoThunk.Status.evaluating =>
+                                (FlatMemoThunk.Observation.busy,
+                                  (match
+                                        IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                          Value.empty.referenceOf Value.empty.referenceOf with
+                                      | none =>
+                                        (NodeSelection.direct
+                                            { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                              right := Value.empty },
+                                          initial 8 machine)
+                                      | some key =>
+                                        (NodeSelection.memoized
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).fst,
+                                          { machine := (initial 8 machine).machine,
+                                            nodes :=
+                                              (match (initial 8 machine).nodes.table key with
+                                                | some handle => (handle, (initial 8 machine).nodes)
+                                                | none =>
+                                                  ((initial 8 machine).nodes.next,
+                                                    {
+                                                      table :=
+                                                        put (initial 8 machine).nodes.table key
+                                                          (initial 8 machine).nodes.next,
+                                                      cells :=
+                                                        put (initial 8 machine).nodes.cells
+                                                          (initial 8 machine).nodes.next
+                                                          {
+                                                            request :=
+                                                              { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                left := Value.empty, right := Value.empty },
+                                                            status := FlatMemoThunk.Status.suspended },
+                                                      next := (initial 8 machine).nodes.next + 1 })).snd,
+                                            edges := (initial 8 machine).edges })).snd.nodes)
+                              | FlatMemoThunk.Status.returned value =>
+                                (FlatMemoThunk.Observation.ready value,
+                                  (match
+                                        IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                          Value.empty.referenceOf Value.empty.referenceOf with
+                                      | none =>
+                                        (NodeSelection.direct
+                                            { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                              right := Value.empty },
+                                          initial 8 machine)
+                                      | some key =>
+                                        (NodeSelection.memoized
+                                            (match (initial 8 machine).nodes.table key with
+                                              | some handle => (handle, (initial 8 machine).nodes)
+                                              | none =>
+                                                ((initial 8 machine).nodes.next,
+                                                  {
+                                                    table :=
+                                                      put (initial 8 machine).nodes.table key
+                                                        (initial 8 machine).nodes.next,
+                                                    cells :=
+                                                      put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                        {
+                                                          request :=
+                                                            { domain := IntersectionEmptyDomain.emptyDomain,
+                                                              left := Value.empty, right := Value.empty },
+                                                          status := FlatMemoThunk.Status.suspended },
+                                                    next := (initial 8 machine).nodes.next + 1 })).fst,
+                                          { machine := (initial 8 machine).machine,
+                                            nodes :=
+                                              (match (initial 8 machine).nodes.table key with
+                                                | some handle => (handle, (initial 8 machine).nodes)
+                                                | none =>
+                                                  ((initial 8 machine).nodes.next,
+                                                    {
+                                                      table :=
+                                                        put (initial 8 machine).nodes.table key
+                                                          (initial 8 machine).nodes.next,
+                                                      cells :=
+                                                        put (initial 8 machine).nodes.cells
+                                                          (initial 8 machine).nodes.next
+                                                          {
+                                                            request :=
+                                                              { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                left := Value.empty, right := Value.empty },
+                                                            status := FlatMemoThunk.Status.suspended },
+                                                      next := (initial 8 machine).nodes.next + 1 })).snd,
+                                            edges := (initial 8 machine).edges })).snd.nodes)).snd.cells
+                        0 with
+                    | ⋯ =>
+                      (match
+                          (match
+                                    IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                      Value.empty.referenceOf Value.empty.referenceOf with
+                                  | none =>
+                                    (NodeSelection.direct
+                                        { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                          right := Value.empty },
+                                      initial 8 machine)
+                                  | some key =>
+                                    (NodeSelection.memoized
+                                        (match (initial 8 machine).nodes.table key with
+                                          | some handle => (handle, (initial 8 machine).nodes)
+                                          | none =>
+                                            ((initial 8 machine).nodes.next,
+                                              {
+                                                table :=
+                                                  put (initial 8 machine).nodes.table key
+                                                    (initial 8 machine).nodes.next,
+                                                cells :=
+                                                  put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                    {
+                                                      request :=
+                                                        { domain := IntersectionEmptyDomain.emptyDomain,
+                                                          left := Value.empty, right := Value.empty },
+                                                      status := FlatMemoThunk.Status.suspended },
+                                                next := (initial 8 machine).nodes.next + 1 })).fst,
+                                      { machine := (initial 8 machine).machine,
+                                        nodes :=
+                                          (match (initial 8 machine).nodes.table key with
+                                            | some handle => (handle, (initial 8 machine).nodes)
+                                            | none =>
+                                              ((initial 8 machine).nodes.next,
+                                                {
+                                                  table :=
+                                                    put (initial 8 machine).nodes.table key
+                                                      (initial 8 machine).nodes.next,
+                                                  cells :=
+                                                    put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                      {
+                                                        request :=
+                                                          { domain := IntersectionEmptyDomain.emptyDomain,
+                                                            left := Value.empty, right := Value.empty },
+                                                        status := FlatMemoThunk.Status.suspended },
+                                                  next := (initial 8 machine).nodes.next + 1 })).snd,
+                                        edges := (initial 8 machine).edges })).snd.nodes.cells
+                            0 with
+                        | ⋯ =>
+                          (FlatMemoThunk.Observation.absent,
+                            (match
+                                  IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                    Value.empty.referenceOf Value.empty.referenceOf with
+                                | none =>
+                                  (NodeSelection.direct
+                                      { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                        right := Value.empty },
+                                    initial 8 machine)
+                                | some key =>
+                                  (NodeSelection.memoized
+                                      (match (initial 8 machine).nodes.table key with
+                                        | some handle => (handle, (initial 8 machine).nodes)
+                                        | none =>
+                                          ((initial 8 machine).nodes.next,
+                                            {
+                                              table :=
+                                                put (initial 8 machine).nodes.table key (initial 8 machine).nodes.next,
+                                              cells :=
+                                                put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                  {
+                                                    request :=
+                                                      { domain := IntersectionEmptyDomain.emptyDomain,
+                                                        left := Value.empty, right := Value.empty },
+                                                    status := FlatMemoThunk.Status.suspended },
+                                              next := (initial 8 machine).nodes.next + 1 })).fst,
+                                    { machine := (initial 8 machine).machine,
+                                      nodes :=
+                                        (match (initial 8 machine).nodes.table key with
+                                          | some handle => (handle, (initial 8 machine).nodes)
+                                          | none =>
+                                            ((initial 8 machine).nodes.next,
+                                              {
+                                                table :=
+                                                  put (initial 8 machine).nodes.table key
+                                                    (initial 8 machine).nodes.next,
+                                                cells :=
+                                                  put (initial 8 machine).nodes.cells (initial 8 machine).nodes.next
+                                                    {
+                                                      request :=
+                                                        { domain := IntersectionEmptyDomain.emptyDomain,
+                                                          left := Value.empty, right := Value.empty },
+                                                      status := FlatMemoThunk.Status.suspended },
+                                                next := (initial 8 machine).nodes.next + 1 })).snd,
+                                      edges := (initial 8 machine).edges })).snd.nodes)
+                        | ⋯ =>
+                          match cell.status with
+                          | ⋯ =>
+                            (FlatMemoThunk.Observation.evaluate cell.request,
+                              match
+                                (match
+                                          IntersectionFlatMemoKeyDomain.sourceKey 8 IntersectionEmptyDomain.emptyDomain
+                                            Value.empty.referenceOf Value.empty.referenceOf with
+                                        | ⋯ =>
+                                          (NodeSelection.direct
+                                              { domain := IntersectionEmptyDomain.emptyDomain, left := Value.empty,
+                                                right := Value.empty },
+                                            initial 8 machine)
+                                        | ⋯ =>
+                                          (NodeSelection.memoized
+                                              (match (initial 8 machine).nodes.table key with
+                                                | some handle => (handle, (initial 8 machine).nodes)
+                                                | none =>
+                                                  ((initial 8 machine).nodes.next,
+                                                    {
+                                                      table :=
+                                                        put (initial 8 machine).nodes.table key
+                                                          (initial 8 machine).nodes.next,
+                                                      cells :=
+                                                        put (initial 8 machine).nodes.cells
+                                                          (initial 8 machine).nodes.next
+                                                          {
+                                                            request :=
+                                                              { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                left := Value.empty, right := Value.empty },
+                                                            status := FlatMemoThunk.Status.suspended },
+                                                      next := (initial 8 machine).nodes.next + 1 })).fst,
+                                            { machine := (initial 8 machine).machine,
+                                              nodes :=
+                                                (match (initial 8 machine).nodes.table key with
+                                                  | some handle => (handle, (initial 8 machine).nodes)
+                                                  | none =>
+                                                    ((initial 8 machine).nodes.next,
+                                                      {
+                                                        table :=
+                                                          put (initial 8 machine).nodes.table key
+                                                            (initial 8 machine).nodes.next,
+                                                        cells :=
+                                                          put (initial 8 machine).nodes.cells
+                                                            (initial 8 machine).nodes.next
+                                                            {
+                                                              request :=
+                                                                { domain := IntersectionEmptyDomain.emptyDomain,
+                                                                  left := Value.empty, right := Value.empty },
+                                                              status := FlatMemoThunk.Status.suspended },
+                                                        next := (initial 8 machine).nodes.next + 1 })).snd,
+                                              edges := ⋯.edges })).snd.nodes.cells
+                                  ⋯ with
+                              | ⋯ => ⋯
+                              | ⋯ => ⋯)
+                          | ⋯ => ⋯
+                          | ⋯ => ⋯).snd
+                    | ⋯ => ⋯
+                  | ⋯ => ⋯,
+                edges := ⋯ })
+          | ⋯ => ⋯).fst with
+      | ⋯ => ⋯
+      | ⋯ => ⋯) =
+    ⋯
+lean/restart-evidence/20261016-constrained-structure/execution-kernels.lean:75:96: warning: This simp argument is unused:
+  cold
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [step, SourceRecursiveIntersectionNative.step, requestNode, finished, running, chosen, lookupNode,
+    emptyRequest, SourceRecursiveIntersectionMemo.requestKey, SourceRecursiveIntersectionMemo.rawKey, demandNode,
+    finishNode, FlatMemoThunk.lookupOrInsert, FlatMemoThunk.demand, FlatMemoThunk.finish, FlatMemoThunk.setStatus,
+    FlatMemoThunk.empty, put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-constrained-structure/execution-kernels.lean:78:31: warning: This simp argument is unused:
+  FlatMemoThunk.empty
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [step, SourceRecursiveIntersectionNative.step, requestNode, finished, running, chosen, cold, lookupNode,
+    emptyRequest, SourceRecursiveIntersectionMemo.requestKey, SourceRecursiveIntersectionMemo.rawKey, demandNode,
+    finishNode, FlatMemoThunk.lookupOrInsert, FlatMemoThunk.demand, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-constrained-structure/execution-kernels.lean:78:52: warning: This simp argument is unused:
+  put
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [step, SourceRecursiveIntersectionNative.step, requestNode, finished, running, chosen, cold, lookupNode,
+    emptyRequest, SourceRecursiveIntersectionMemo.requestKey, SourceRecursiveIntersectionMemo.rawKey, demandNode,
+    finishNode, FlatMemoThunk.lookupOrInsert, FlatMemoThunk.demand, FlatMemoThunk.finish, FlatMemoThunk.setStatus,
+    FlatMemoThunk.empty]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'FiniteOrdinaryExecutionKernels.cold_empty_installs_its_actual_owner' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@FiniteOrdinaryExecutionKernels.cold_empty_installs_its_actual_owner : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+      (FiniteOrdinaryExecutionKernels.cold machine operations) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) machine) →
+      And
+        (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) inst inst_1
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                FiniteOrdinaryExecutionKernels.emptyRequest)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                FiniteOrdinaryExecutionKernels.emptyRequest)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                FiniteOrdinaryExecutionKernels.emptyRequest)))
+          (FiniteOrdinaryExecutionKernels.cold machine operations)
+          (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+          (FiniteOrdinaryExecutionKernels.finished machine operations))
+        (And
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+            (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native
+              (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+              (FiniteOrdinaryExecutionKernels.finished machine operations)))
+          (And
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (And
+              (@Eq.{1} Nat
+                (@MicroCFTA.MergedOrdinaryHeight.height
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (And
+                (@Eq.{1}
+                  (Option.{0}
+                    (MicroCFTA.FlatMemoThunk.Cell
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                  (@MicroCFTA.FlatMemoThunk.State.cells
+                    (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple
+                      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))))
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes
+                      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                        (FiniteOrdinaryExecutionKernels.finished machine operations)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                  (@Option.some.{0}
+                    (MicroCFTA.FlatMemoThunk.Cell
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.FlatMemoThunk.Cell.mk
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      FiniteOrdinaryExecutionKernels.emptyRequest
+                      (@MicroCFTA.FlatMemoThunk.Status.returned
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))))
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                        (FiniteOrdinaryExecutionKernels.finished machine operations)))
+                    machine)
+                  (@Eq.{1} MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (@MicroCFTA.SourceEqualityNativeDemand.State.operations
+                      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                      (FiniteOrdinaryExecutionKernels.finished machine operations))
+                    operations))))))
+'FiniteOrdinaryExecutionKernels.cold_then_warm_repeat_keeps_the_entire_checked_state' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@FiniteOrdinaryExecutionKernels.cold_then_warm_repeat_keeps_the_entire_checked_state : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+      (FiniteOrdinaryExecutionKernels.cold machine operations) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) machine) →
+      have after := FiniteOrdinaryExecutionKernels.finished machine operations;
+      And
+        (@MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good
+          (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) after)
+        (And
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+            (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native
+              (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) after))
+          (And
+            (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) inst inst_1
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    FiniteOrdinaryExecutionKernels.emptyRequest)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    FiniteOrdinaryExecutionKernels.emptyRequest)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    FiniteOrdinaryExecutionKernels.emptyRequest)))
+              after
+              (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+              after)
+            (And
+              (@Eq.{2}
+                (MicroCFTA.SourceEqualityNativeDemand.Outcome
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceEqualityNativeDemand.execute
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) inst inst_1
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        FiniteOrdinaryExecutionKernels.emptyRequest)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        FiniteOrdinaryExecutionKernels.emptyRequest)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        FiniteOrdinaryExecutionKernels.emptyRequest)))
+                  after)
+                (@MicroCFTA.SourceEqualityNativeDemand.Outcome.done
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  after))
+              (And
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@LE.le.{0} Nat instLENat
+                  (@MicroCFTA.MergedOrdinaryHeight.height
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+'FiniteOrdinaryExecutionKernels.actual_warm_edge_observation_constructs_its_checked_trace' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@FiniteOrdinaryExecutionKernels.actual_warm_edge_observation_constructs_its_checked_trace : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat}
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (chosen after :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good width before →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before) →
+        @MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))
+            request →
+          @MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) width
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request) →
+            @Eq.{1}
+                (Prod.{0, 0} Nat
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) width request
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))
+                (@Prod.mk.{0, 0} Nat
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  handle chosen) →
+              @Eq.{1}
+                  (Prod.{0, 0}
+                    (MicroCFTA.FlatMemoThunk.Observation
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.State width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge width
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) handle chosen)
+                  (@Prod.mk.{0, 0}
+                    (MicroCFTA.FlatMemoThunk.Observation
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.State width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.FlatMemoThunk.Observation.ready
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      result)
+                    after) →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCode.EdgeInputs request →
+                  And
+                    (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      width inst inst_1 (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)))
+                      before
+                      (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          result))
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.mk width after
+                        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before)))
+                    (And
+                      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after)
+                      (And
+                        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+                        (@LE.le.{0} Nat instLENat
+                          (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) result)
+                          (@Min.min.{0} Nat instMinNat
+                            (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))
+                            (@MicroCFTA.MergedOrdinaryHeight.edgeHeight
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))))))

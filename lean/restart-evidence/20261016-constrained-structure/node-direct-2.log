@@ -1,0 +1,206 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:47:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNode.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNode.paired_rows`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:115:84: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:118:97: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:118:105: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:123:109: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:123:117: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:126:60: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+seen : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftDomain : DNode { domain := domain, left := left, right := right }.left
+rightDomain : DNode { domain := domain, left := left, right := right }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty left right = true
+resetCase : ¬SourceRecursiveIntersectionControl.reset domain.key left right = true
+selfCase : SourceRecursiveIntersectionControl.closedSelf left right = true
+same : left = right
+x✝¹ : { domain := domain, left := left, right := right }.domain.key.seen = []
+leftNode : DNode { domain := domain, left := left, right := right }.left
+x✝ : DNode { domain := domain, left := left, right := right }.right
+⊢ height right ≤ height { domain := domain, left := right, right := right }.right
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:128:121: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:128:129: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:133:121: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:135:18: error: unsolved goals
+case neg.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+right : Value Symbol Guard
+leftAvailable : Available state.heap { domain := domain, left := Value.empty, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := Value.empty, right := right }.right
+seen : { domain := domain, left := Value.empty, right := right }.domain.key.seen = []
+rightDomain : DNode { domain := domain, left := Value.empty, right := right }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty Value.empty right = true
+resetCase : ¬SourceRecursiveIntersectionControl.reset domain.key Value.empty right = true
+selfCase : ¬SourceRecursiveIntersectionControl.closedSelf Value.empty right = true
+swapCase : ¬SourceRecursiveIntersectionControl.greater Value.empty right = true
+⊢ Certified
+    (match
+      if false = true then SourceRecursiveIntersectionControl.Branch.empty
+      else
+        if false = true then SourceRecursiveIntersectionControl.Branch.reset
+        else
+          if false = true then SourceRecursiveIntersectionControl.Branch.self
+          else
+            if false = true then SourceRecursiveIntersectionControl.Branch.swap
+            else SourceRecursiveIntersectionControl.Branch.unsupported with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right Value.empty
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      Code.fail (Failure.unsupported Value.empty.referenceOf right.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain Value.empty member) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => Code.fail (Failure.unsupported Value.empty.referenceOf right.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      Code.fail (Failure.unsupported Value.empty.referenceOf right.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+        compileReference domain name Value.empty false
+      | x => Code.fail (Failure.unsupported Value.empty.referenceOf right.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      Code.fail (Failure.unsupported Value.empty.referenceOf right.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      Code.fail (Failure.unsupported Value.empty.referenceOf right.referenceOf))
+    state fun x value => NodeCertificate { domain := domain, left := Value.empty, right := right } value
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:138:20: error: unsolved goals
+case neg.ordinary.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+first : List (EdgeValue Symbol Guard)
+left : Interned InternedBinderProtocol.NodeKey
+leftDepth : Nat
+leftFree : List InternedBinderProtocol.Reference
+leftRows : DRows first
+leftAvailable :
+  Available state.heap { domain := domain, left := Value.node left first leftDepth leftFree, right := Value.empty }.left
+rightAvailable :
+  Available state.heap
+    { domain := domain, left := Value.node left first leftDepth leftFree, right := Value.empty }.right
+seen : { domain := domain, left := Value.node left first leftDepth leftFree, right := Value.empty }.domain.key.seen = []
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty (Value.node left first leftDepth leftFree) Value.empty = true
+resetCase :
+  ¬SourceRecursiveIntersectionControl.reset domain.key (Value.node left first leftDepth leftFree) Value.empty = true
+selfCase : ¬SourceRecursiveIntersectionControl.closedSelf (Value.node left first leftDepth leftFree) Value.empty = true
+swapCase : ¬SourceRecursiveIntersectionControl.greater (Value.node left first leftDepth leftFree) Value.empty = true
+⊢ Certified
+    (match
+      if false = true then SourceRecursiveIntersectionControl.Branch.empty
+      else
+        if false = true then SourceRecursiveIntersectionControl.Branch.reset
+        else
+          if false = true then SourceRecursiveIntersectionControl.Branch.self
+          else
+            if false = true then SourceRecursiveIntersectionControl.Branch.swap
+            else SourceRecursiveIntersectionControl.Branch.unsupported with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain (Value.node left first leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node left first leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode domain Value.empty (Value.node left first leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu domain (Value.node left first leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu domain (Value.node left first leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu domain (Value.node left first leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      Code.fail (Failure.unsupported (Value.node left first leftDepth leftFree).referenceOf Value.empty.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      Code.fail (Failure.unsupported (Value.node left first leftDepth leftFree).referenceOf Value.empty.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      Code.fail (Failure.unsupported (Value.node left first leftDepth leftFree).referenceOf Value.empty.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      Code.fail (Failure.unsupported (Value.node left first leftDepth leftFree).referenceOf Value.empty.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      Code.fail (Failure.unsupported (Value.node left first leftDepth leftFree).referenceOf Value.empty.referenceOf)
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      Code.fail (Failure.unsupported (Value.node left first leftDepth leftFree).referenceOf Value.empty.referenceOf))
+    state fun x value =>
+    NodeCertificate { domain := domain, left := Value.node left first leftDepth leftFree, right := Value.empty } value
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:142:43: error: Application type mismatch: The argument
+  first
+has type
+  List (EdgeValue Symbol Guard)
+but is expected to have type
+  Interned InternedBinderProtocol.NodeKey
+in the application
+  rows_certified domain seen first
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:118:105: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, resetCase, if_pos]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:123:117: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, resetCase, selfCase, if_pos]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:128:129: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, resetCase, selfCase, swapCase,
+    if_pos]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:133:121: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, resetCase, selfCase, swapCase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:135:122: warning: This simp argument is unused:
+  Certified
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, SourceRecursiveIntersectionCode.unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryNode.lean:138:124: warning: This simp argument is unused:
+  Certified
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, SourceRecursiveIntersectionCode.unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
