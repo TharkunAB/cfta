@@ -461,6 +461,11 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
         it "take a node view that fits the datatype" $
             either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] [rule TZeroNode IntType]))
                 `shouldBe` Just (NodeViewMismatch "Num Flag Plus Less If Var Let Arg" "the datatype has 8 constructors, the node view 6")
+        it "take a bound that is not negative" $ do
+            let failure bound = either Just (const Nothing) (fromTypingRules @Arith (Typing bound [] [IntType] arithRules))
+            failure (Nesting (-1)) `shouldBe` Just (NegativeBound (Nesting (-1)))
+            failure (Binders (-1)) `shouldBe` Just (NegativeBound (Binders (-1)))
+            failure (Nesting 0) `shouldBe` Nothing
         it "fit the fields of their constructor" $ do
             let mismatch :: [Rule ArithNode ArithType] -> Maybe TypingError
                 mismatch given = either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] given))

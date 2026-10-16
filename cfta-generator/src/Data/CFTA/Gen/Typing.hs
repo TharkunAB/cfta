@@ -64,8 +64,10 @@ Limits:
 * A field that holds a subterm has the type of the datatype. A field of
   another type holds one fixed value. So a family of mutually recursive
   types is not a language here.
-* With a bound on the nesting, the language is finite. The automaton has
-  about T^(D + 1) environments for T types and the bound D. With a bound on
+* With a bound on the nesting, the language is finite. One field can add
+  several binders, so an environment has at most B * D binders for the bound
+  D and at most B binders in one field, and the automaton has up to about
+  T^(B * D + 1) environments for T types. With a bound on
   the binders ('Binders'), the automaton is cyclic and the generator is
   counted by size. It must give each term one typing: an automaton with two
   runs for one term gives 'Data.CFTA.Gen.AmbiguousAutomaton'.
@@ -178,13 +180,15 @@ data Typing node ty = Typing
 data Bound
     = {- | The nesting of the recursive occurrences, as for
       'Data.CFTA.Gen.Refinement.recurUpTo': a constructor with a subterm
-      field uses one level.
+      field uses one level. The bound 0 gives the terms without subterms. A
+      negative bound is the error 'NegativeBound'.
       -}
       Nesting !Depth
     | {- | The number of binders around each position; the inputs are not
       binders. The terms can be of any size, so the automaton is cyclic, and
       'fromConstructorAutomaton' gives a generator counted by size, which
-      'Data.CFTA.Gen.upToSize' bounds.
+      'Data.CFTA.Gen.upToSize' bounds. A negative bound is the error
+      'NegativeBound'.
       -}
       Binders !Int
     deriving (Eq, Show)
@@ -202,6 +206,8 @@ data TypingError
       measures in place of a child.
       -}
       FieldMismatch !String
+    | -- | The bound is negative.
+      NegativeBound !Bound
     deriving (Eq, Show)
 
 {- | A state of the automaton of a typed language: the root, a term of a type
@@ -230,6 +236,10 @@ typingAutomaton ::
     Typing node ty ->
     Either TypingError (FTA.FTA (TypingState ty) Constructor Constraint)
 typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots = roots, typingRules = rules} = do
+    case bound of
+        Nesting depth | depth < 0 -> Left $ NegativeBound bound
+        Binders limit | limit < 0 -> Left $ NegativeBound bound
+        _ -> pure ()
     case checkNodeShape @a @node of
         Left (NodeMismatch name difference) -> Left $ NodeViewMismatch name difference
         Left other -> Left $ NodeViewMismatch "" (show other)
