@@ -1,5 +1,56 @@
 # Public API and source correspondence
 
+## Current initial resources for edits and the class pass
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `86c0416e`. Proof commits are `d36739d9`, `2c293a11`, and
+`5912b634`. Read lean/notes-current-edit-resources.md and
+lean/restart-evidence/20261016-constrained-edit-resources/.
+This section supersedes older statements that leave actual edit callback
+counts or initial edit, class, and class-pass constructor resources open.
+
+Five additive modules count callbacks on the actual execution graph,
+including Empty and repeated input positions. They derive conservative
+constructor budgets from original profiles. Edit constructs its own shared
+Leaf callbacks, ordered children, original guarded rows, and node rebuilds.
+Class derives compiled edit safety and fresh target slots while retaining
+warm native, Merge, and global tables. The tail-first class pass captures
+the exact forest returned by its tail. Its numeric recurrence uses that
+tail's derived profile. Final propagation makes no constructor request.
+
+All resource endpoints retain the same constructed graph, strict Reads,
+full existing receipt, stable literal worker, profiles, ordered narrowing,
+actual Work trace, request bounds, and final supplies. Initial total
+headroom pays for each actual prefix. No future callback, returned profile,
+completed class, or supplied capacity plan is an initial premise. Costs
+conservatively charge a full target miss at each literal value position.
+They do not assert one miss per distinct path or a total runtime bound.
+
+The full Audit passes 2610 jobs and 60501 dependency checks. All 55 declared
+public pairs, 11 constructor pairs, and 14 integration pairs pass. Combined
+probes print full explicit signatures without truncation. Only propext,
+Classical.choice, and Quot.sound occur. Independent reviews find no material
+component defect. Preservation retains 7553 starting files, 2604 older
+non-Audit proofs, all 234 Haskell files, 47 frozen manifests with 367 module
+entries, stashes, other worktrees, repairs, counterexamples, and drafts.
+
+Next compose Required and Pass at the same actual returned state, then
+local and parent resources. Derive the universal earlier-prefix capacity
+predicates through exact literal return uniqueness. The finite-ordinary
+Scan is already allocation-free and selects every original class. The
+whole outer traversal still needs quantitative warm-cache certificates,
+constraint bounds, and cumulative initial headroom. Its root numeric plan
+remains an explicit premise. Read next-parent-resources.md in the evidence
+directory. General Mu/reference/union progress, repeated-pass convergence,
+other resource families, current frontends, concrete Haskell, and complete
+public pipeline composition remain open. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
 ## Current initial resources for shared targets and leaves
 
 Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
