@@ -1,0 +1,54 @@
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace.steps' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace.trans' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace.bind' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace.plan' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt.done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.code_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.node_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.edge_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.request_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (holds : Guard → Language.Term Symbol → Bool) (state : Checked width)
+  (valid : Good state) (idle : SourceRecursiveIntersectionNative.Idle state.native) (left right : Value Symbol Guard)
+  (leftOriginal : Original left) (rightOriginal : Original right)
+  (leftAvailable : Available state.native.machine.heap left)
+  (rightAvailable : Available state.native.machine.heap right) (leftClosed : left.free = [])
+  (rightClosed : right.free = [])
+  (ranges : WordRanges (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+  ∃ fuel value after,
+    (Receipt fuel (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state value after
+        fun final value => Available final.heap value) ∧
+      SourceRecursiveIntersectionNative.Idle after.native
+MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.code_complete {A : Type} {width : Nat}
+  [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (holds : Guard → Language.Term Symbol → Bool) (bound : Nat)
+  (code : Code Symbol Guard A) (state : Checked width) (post : Machine Symbol Guard → A → Prop)
+  (safe : Safe code state.native.machine post)
+  (operands : SourceCurrentAllocatedNativeCodeProgress.Operands code state.native.machine)
+  (below : SourceRecursiveIntersectionCode.Below source holds bound code state.native.machine) (valid : Good state)
+  (fields : SourceCurrentAllocatedNativeCodeFields.Fields state.operations code)
+  (growth : Grows source state.native.machine.heap)
+  (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+  (active : SourceRecursiveIntersectionNative.ActiveAbove (view source holds) holds bound state.native)
+  (ranges : WordRanges (Control.code code) state) : Returned (Control.code code) state post

@@ -1,0 +1,276 @@
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.bindings_available' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.bound_original' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.bound_record' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.left_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.right_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.left_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.right_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.reference_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.left_node_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.right_node_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.left_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeReferenceMeaning.right_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+bindings_available : ∀
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (domain : IntersectionFlatMemoKeyDomain.DomainKey),
+  OriginalBindings source domain → SourceRecursiveIntersectionDomain.AvailableBindings source domain
+bound_original : ∀
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀ (domain : IntersectionFlatMemoKeyDomain.DomainKey),
+      OriginalBindings source domain →
+        ∀ (entry : Interned InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          Available source (Value.mu entry body depth ordinary) →
+            entry.identity ∈ SourceRecursiveIntersectionDomain.names domain →
+              Original (Value.mu entry body depth ordinary)
+bound_record : ∀
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀ (domain : IntersectionFlatMemoKeyDomain.DomainKey),
+      SourceRecursiveIntersectionDomain.Typed domain →
+        OriginalBindings source domain →
+          ∀ (name : Nat),
+            name ∈ SourceRecursiveIntersectionDomain.names domain →
+              ∃ entry body depth ordinary,
+                entry.identity = name ∧
+                  Original (Value.mu entry body depth ordinary) ∧
+                    Available source (Value.mu entry body depth ordinary) ∧
+                      SourceRecursiveIntersectionDomain.keyLookup domain name = some (NodeRef.mu name) ∧
+                        IntersectSchedule.lookup (SourceRecursiveIntersectionSchedule.domain domain) name =
+                            some (IntersectSchedule.Input.mu name) ∧
+                          SourceRecursiveIntersectionDomain.lookup source domain name =
+                              some (Value.mu entry body depth ordinary) ∧
+                            SourcePreparedSharedRows.read source name = some (Value.mu entry body depth ordinary)
+left_inputs : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  entry.identity = name →
+    Original (Value.mu entry body depth ordinary) →
+      NodeInputs view model { domain := domain, left := Value.reference (Reference.interned name), right := other } →
+        NodeInputs view model { domain := domain, left := Value.mu entry body depth ordinary, right := other }
+right_inputs : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  entry.identity = name →
+    Original (Value.mu entry body depth ordinary) →
+      NodeInputs view model { domain := domain, left := other, right := Value.reference (Reference.interned name) } →
+        NodeInputs view model { domain := domain, left := other, right := Value.mu entry body depth ordinary }
+left_law : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  entry.identity = name →
+    Original (Value.mu entry body depth ordinary) →
+      NodeLaw view model ranked holds { domain := domain, left := Value.mu entry body depth ordinary, right := other }
+          result →
+        NodeLaw view model ranked holds
+          { domain := domain, left := Value.reference (Reference.interned name), right := other } result
+right_law : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  entry.identity = name →
+    Original (Value.mu entry body depth ordinary) →
+      NodeLaw view model ranked holds { domain := domain, left := other, right := Value.mu entry body depth ordinary }
+          result →
+        NodeLaw view model ranked holds
+          { domain := domain, left := other, right := Value.reference (Reference.interned name) } result
+@reference_trace : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (left : Bool) (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before after : SourceEqualityNativeDemand.State width)
+  (result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (fuel : Nat),
+  entry.identity = name →
+    name ∈ SourceRecursiveIntersectionDomain.names domain.key →
+      SourceEqualityRequiredCache.Ready before.native.machine.heap →
+        Available before.native.machine.heap (Value.mu entry body depth ordinary) →
+          SourceEqualityNativeDemand.Steps fuel
+              (Control.code
+                (if left = true then requestNode domain (Value.mu entry body depth ordinary) other
+                else requestNode domain other (Value.mu entry body depth ordinary)))
+              before (Control.code (Code.pure result)) after →
+            SourceEqualityNativeDemand.Steps (fuel + 1) (Control.code (compileReference domain name other left)) before
+              (Control.code (Code.pure result)) after
+@left_node_trace : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before after : SourceEqualityNativeDemand.State width)
+  (result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (fuel : Nat),
+  SourceRecursiveIntersectionControl.decision domain.key (Value.reference (Reference.interned name)) other =
+      SourceRecursiveIntersectionControl.Branch.leftReference →
+    entry.identity = name →
+      name ∈ SourceRecursiveIntersectionDomain.names domain.key →
+        SourceEqualityRequiredCache.Ready before.native.machine.heap →
+          Available before.native.machine.heap (Value.mu entry body depth ordinary) →
+            SourceEqualityNativeDemand.Steps fuel
+                (Control.code (requestNode domain (Value.mu entry body depth ordinary) other)) before
+                (Control.code (Code.pure result)) after →
+              SourceEqualityNativeDemand.Steps (fuel + 1)
+                (Control.code
+                  (compileNode { domain := domain, left := Value.reference (Reference.interned name), right := other }))
+                before (Control.code (Code.pure result)) after
+@right_node_trace : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (entry : Interned InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before after : SourceEqualityNativeDemand.State width)
+  (result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (fuel : Nat),
+  SourceRecursiveIntersectionControl.decision domain.key other (Value.reference (Reference.interned name)) =
+      SourceRecursiveIntersectionControl.Branch.rightReference →
+    entry.identity = name →
+      name ∈ SourceRecursiveIntersectionDomain.names domain.key →
+        SourceEqualityRequiredCache.Ready before.native.machine.heap →
+          Available before.native.machine.heap (Value.mu entry body depth ordinary) →
+            SourceEqualityNativeDemand.Steps fuel
+                (Control.code (requestNode domain other (Value.mu entry body depth ordinary))) before
+                (Control.code (Code.pure result)) after →
+              SourceEqualityNativeDemand.Steps (fuel + 1)
+                (Control.code
+                  (compileNode { domain := domain, left := other, right := Value.reference (Reference.interned name) }))
+                before (Control.code (Code.pure result)) after
+@left_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      OriginalBindings source domain.key →
+        ∀ (name : Nat)
+          (other :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (entry : Interned InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          entry.identity = name →
+            name ∈ SourceRecursiveIntersectionDomain.names domain.key →
+              Available source (Value.mu entry body depth ordinary) →
+                ∀ (before after : SourceEqualityNativeDemand.State width)
+                  (result :
+                    Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  (fuel : Nat),
+                  SourceEqualityRequiredCache.Keeps source before.native.machine.heap →
+                    SourceEqualityNativeDemand.Steps fuel
+                        (Control.code (requestNode domain (Value.mu entry body depth ordinary) other)) before
+                        (Control.code (Code.pure result)) after →
+                      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap →
+                        Available after.native.machine.heap result →
+                          NodeLaw (view source holds) model ranked holds
+                              { domain := domain, left := Value.mu entry body depth ordinary, right := other } result →
+                            execute (fuel + 2) (Control.code (compileReference domain name other true)) before =
+                                Outcome.done result after ∧
+                              NodeLaw (view source holds) model ranked holds
+                                  { domain := domain, left := Value.reference (Reference.interned name),
+                                    right := other }
+                                  result ∧
+                                SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+                                  Available after.native.machine.heap result
+@right_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      OriginalBindings source domain.key →
+        ∀ (name : Nat)
+          (other :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (entry : Interned InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          entry.identity = name →
+            name ∈ SourceRecursiveIntersectionDomain.names domain.key →
+              Available source (Value.mu entry body depth ordinary) →
+                ∀ (before after : SourceEqualityNativeDemand.State width)
+                  (result :
+                    Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  (fuel : Nat),
+                  SourceEqualityRequiredCache.Keeps source before.native.machine.heap →
+                    SourceEqualityNativeDemand.Steps fuel
+                        (Control.code (requestNode domain other (Value.mu entry body depth ordinary))) before
+                        (Control.code (Code.pure result)) after →
+                      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap →
+                        Available after.native.machine.heap result →
+                          NodeLaw (view source holds) model ranked holds
+                              { domain := domain, left := other, right := Value.mu entry body depth ordinary } result →
+                            execute (fuel + 2) (Control.code (compileReference domain name other false)) before =
+                                Outcome.done result after ∧
+                              NodeLaw (view source holds) model ranked holds
+                                  { domain := domain, left := other,
+                                    right := Value.reference (Reference.interned name) }
+                                  result ∧
+                                SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+                                  Available after.native.machine.heap result

@@ -1,0 +1,89 @@
+'MicroCFTA.SourceCurrentAllocatedNativeMuBodyMeaning.mu_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeMuBodyMeaning.mu_body {width : Nat}
+  [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (facts : InternedNestedFacts.Facts source)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula →
+      Language.Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+  (request :
+    SourceRecursiveIntersectionThunks.NodeRequest (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (inputs :
+    SourceCurrentAllocatedNativeContextCache.NodeInputs (SourceRecursiveIntersectionInputView.view source holds) model
+      request)
+  (leftAvailable : InternedProbeProvenance.Available source request.left)
+  (rightAvailable : InternedProbeProvenance.Available source request.right)
+  (before middle : SourceEqualityNativeDemand.State width) (cacheValid : Cache.Valid before.native.machine.domains)
+  (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap) (first second : Nat)
+  (leftIdentity : SourceRecursiveIntersectionControl.identity request.left = some first)
+  (rightIdentity : SourceRecursiveIntersectionControl.identity request.right = some second)
+  (leftNonempty : SourceRecursiveIntersectionInputView.inputOf request.left ≠ IntersectSchedule.Input.empty)
+  (rightNonempty : SourceRecursiveIntersectionInputView.inputOf request.right ≠ IntersectSchedule.Input.empty)
+  (recursive :
+    (∃ name, SourceRecursiveIntersectionInputView.inputOf request.left = IntersectSchedule.Input.mu name) ∨
+      ∃ name, SourceRecursiveIntersectionInputView.inputOf request.right = IntersectSchedule.Input.mu name)
+  (selected :
+    SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+        SourceRecursiveIntersectionControl.Branch.bothMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+          SourceRecursiveIntersectionControl.Branch.leftMu ∨
+        SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+          SourceRecursiveIntersectionControl.Branch.rightMu)
+  (fresh : ¬SourceRecursiveIntersectionControl.pair first second ∈ request.domain.key.seen)
+  (bodyValue :
+    InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (fuel : Nat)
+  (child :
+    SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode
+          (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key request.left
+              request.right first second).fst
+          (SourceRecursiveIntersectionKernel.body request.left) (SourceRecursiveIntersectionKernel.body request.right)))
+      {
+        native :=
+          SourceRecursiveIntersectionThunks.advance before.native
+            (have __src := before.native.machine;
+            { heap := __src.heap,
+              domains :=
+                (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+                    request.left request.right first second).snd }),
+        operations := before.operations }
+      (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure bodyValue)) middle)
+  (keeps : SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap)
+  (available : InternedProbeProvenance.Available middle.native.machine.heap bodyValue)
+  (childLaw :
+    SourceCurrentAllocatedNativeContextCache.NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model
+      ranked holds
+      {
+        domain :=
+          (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key request.left
+              request.right first second).fst,
+        left := SourceRecursiveIntersectionKernel.body request.left,
+        right := SourceRecursiveIntersectionKernel.body request.right }
+      bodyValue) :
+  ∃ value heap,
+    have after :=
+      {
+        native :=
+          SourceRecursiveIntersectionThunks.advance middle.native
+            (have __src := middle.native.machine;
+            { heap := heap, domains := __src.domains }),
+        operations := middle.operations };
+    SourceEqualityNativeDemand.execute (fuel + 3)
+          (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.compileNode request)) before =
+        SourceEqualityNativeDemand.Outcome.done value after ∧
+      SourceCurrentAllocatedNativeContextCache.NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model
+          ranked holds request value ∧
+        SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+          InternedProbeProvenance.Available after.native.machine.heap value ∧
+            SourceEqualityRequiredSemanticCache.SemanticReady after.native.machine.heap

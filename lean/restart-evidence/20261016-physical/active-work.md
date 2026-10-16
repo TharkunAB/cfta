@@ -1,14 +1,12 @@
-# Work newer than the audited checkpoint
+# Work after the paired physical completion checkpoint
 
-The audited checkpoint contains seven frozen modules listed in frozen-modules.json.
-Two additional owned files are under active development and are not included in
-that audit or its theorem counts:
+The three previously active local proofs are now frozen, audited, and committed:
+PhysicalTraceCompletion, ReferenceMeaning, and MuBodyMeaning.
+All ten frozen module hashes are in completion-frozen-modules.json.
+No owned proof process remains at checkpoint preparation.
 
-- lean/MicroCFTA/SourceCurrentAllocatedNativePhysicalTraceCompletion.lean:
-  protected yielded traces, bind composition, and the joint completion induction.
-- lean/MicroCFTA/SourceCurrentAllocatedNativeReferenceMeaning.lean:
-  original bound-reference readback, local laws, and actual branch traces.
-
-Inspect the current files and their terminal build/freeze evidence before using
-them. Keep their source bytes and evidence during the next refresh. They do not
-change the remaining obligations stated in the restart documents.
+Next construct the joint contextual semantic induction over the actual returns.
+Derive each child law before its finish and preserve Contextual at the actual
+returned state. Derive result closedness and adequate warm-cache admission.
+The physical completion proof already derives its own reached physical plan.
+Every other full-library and separate Sized obligation stays active.
