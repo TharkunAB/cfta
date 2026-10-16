@@ -12,7 +12,9 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current native output-profile proof adds no Haskell change.
+The current caller-profile proof adds no Haskell change.
+The reported recursive field-pool defect is already repaired upstream.
+Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
 For external handoff, record every later repair here with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
@@ -29,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2570 jobs and 59925 dependency checks.
+The current pinned Lean Audit passes: 2582 jobs and 60083 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -163,6 +165,77 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current caller profiles and initial serial reservations
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `e0476c52`. Read lean/notes-current-caller-profiles.md
+for the top-level objective, current proof map, and remaining areas.
+Evidence is in lean/restart-evidence/20261016-constrained-caller-profiles/.
+Twelve additive modules are checked. Proof commits are `221787aa`,
+`b2e23854`, `c9863c2d`, and `3d4ad799`.
+
+Required retains the original row and arity profile, exact forest length,
+and height bound. Projection derives a descendant profile with row bound
+max(1,count) * max(1,R)^(depth+1), unchanged arity A, and bounded height.
+The proofs follow actual reads and constructors, including coherent hits.
+Ordinary occurrences count every literal node and edge occurrence. Repeated
+identities retain their multiplicity. ConstructorWorkTrace records actual
+Work at each intermediate heap. It bounds both supply increments by actual
+request counts and counts a cache hit as a request with no reservation.
+
+RequiredReservations and ProjectionReservations bound actual Work by the
+original occurrences. CallerResources constructs its own finite returns.
+OccurrenceBounds derives uniform occurrence limits from R, A, count, and H.
+SerialCallerResources constructs Required followed by Projection. Its
+initial node budget is 2*count*nodeCount(R,A,H)+1. Its initial edge budget is
+count*edgeCount(R,A,H). The second stage uses the first returned profile,
+height, length, and readiness. No intermediate or final profile, completion,
+or actual request-count premise is supplied. Imported kernels derive final
+packed-layout bounds and remaining headroom for a later native query.
+The headroom kernel does not construct that third query.
+
+MergeProfileBounds, MergeProfileCache, and MergeProfileSelection prove
+column envelopes, exact-owner certificates, keep-first winner retention,
+selection profiles, and actual group counts. These are foundations.
+The general recursive Merge profile producer remains OPEN. The next step
+is its local Body certificate and mutual actual Run/Call induction. A miss
+must derive a universal candidate certificate before rereading the current
+memo and certifying its actual winner. Read next-merge-producer-review.md
+and merge-profile-producer-next.md in this evidence directory.
+
+Then prove Merge reservations and compose Operand, the rotated Target right
+fold, edits, class passes, local/parent calls, and outer cumulative budgets.
+The ordinary root numeric plan remains an explicit premise. The earlier
+ordinary completion theorem admits arbitrary guards and equality classes,
+including unequal path lengths. Its finite domain excludes Mu, references,
+and explicit unions. General recursive progress and repeated-pass
+convergence remain separate open obligations.
+
+There is no completed whole-library theorem. Current frontend adapters,
+concrete Haskell execution, and full-pipeline composition remain open.
+Keep language, transformation, exact size/count/order/rank, generator, and
+probability contracts separate. Exact ranks use the original sorted graph
+rows. The optimized interned core and older constructor/equality work remain.
+Equality, sidecar, and thunk resources, host interleavings, losing concurrent
+candidates, lazy forcing, and signed host counters need separate bounds.
+
+The full Audit passes 2582 jobs and 60083 dependency checks. All 86 declared
+public axiom/full-signature pairs pass. The final kernel inventory records
+27 integration pairs and three repeated public checks. Only propext,
+Classical.choice, and Quot.sound occur. Preservation retains 6977 starting
+files and 2569 older non-Audit sources. Forty-two frozen manifests check
+339 module entries. Older repairs, counterexamples, drafts, stashes, and
+other worktrees remain unchanged.
+
+No Haskell change. The recursive field-pool repair `b9219b9e` is merged by
+PR #65 and locally validated. The original reproducer returns
+`Left (FieldAtomOnDatatype "Next" 0)`. Standalone `holds` retains its opaque
+pool behavior. Root FINDINGS keeps the external repair handoff first.
+Record each later repair there with failure, reproducer, paths, commit,
+checks, and upstream status. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild/metadata checks.
+The full-library goal remains active.
 
 ## Current native output profiles and serial reservations
 
