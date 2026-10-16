@@ -1,0 +1,487 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:287:100: error: don't know how to synthesize implicit argument `built`
+  @consCase entries✝ before✝ values✝ middle✝ result✝ heap✝ edges✝ results✝ after✝ firstCalls✝ restCalls✝ edge✝ children✝
+    ?m.1259 rest✝
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+    {result : Value Symbol Guard} {after : SharedState width}
+    (actual : Leaf record originals target value before result after), NodeBound ⋯ 1
+emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, NodeBound ⋯ 0
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard} {calls : Nat}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsCount actual calls → RowsBound actual calls → NodeBound ⋯ calls
+recursiveCase :
+  ∀ {original exposed : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width} {value : Value Symbol Guard}
+    {after : SharedState width} {calls : Nat} {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    NodeCount body calls → NodeBound body calls → NodeBound ⋯ calls
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width}, ChildrenBound ⋯ 0
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {calls : Nat}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenCount rest calls → ChildrenBound rest calls → ChildrenBound ⋯ calls
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {firstCalls restCalls offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeCount first firstCalls →
+      ChildrenCount rest restCalls →
+        NodeBound first firstCalls → ChildrenBound rest restCalls → ChildrenBound ⋯ (firstCalls + restCalls)
+nilRows : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, RowsBound ⋯ 0
+consCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {edges results : List (EdgeValue Symbol Guard)}
+    {after : SharedState width} {firstCalls restCalls : Nat} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {built :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenCount children firstCalls →
+      RowsCount rest restCalls →
+        ChildrenBound children firstCalls → RowsBound rest restCalls → RowsBound ⋯ (firstCalls + restCalls)
+edits : Edits EqualityNormalize.Path
+value : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+actual : EditNode record originals edits value before result after
+own : NodeCount actual calls
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+before✝ : SharedState width
+values✝ : List (Value Symbol Guard)
+middle✝ : SharedState width
+result✝ : EdgeValue Symbol Guard
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+edges✝ results✝ : List (EdgeValue Symbol Guard)
+after✝ : SharedState width
+firstCalls✝ restCalls✝ : Nat
+edge✝ : EdgeValue Symbol Guard
+children✝ : EditChildren record originals entries✝ 0 edge✝.children before✝ values✝ middle✝
+rebuilt✝ :
+  run (makeEdge edge✝.entry.key.symbol edge✝.entry.key.constraint values✝) middle✝.checked.native.machine.heap =
+    (result✝, heap✝)
+rest✝ : EditRows record originals entries✝ edges✝ (advanceHeap middle✝ heap✝) results✝ after✝
+⊢ run (makeEdge edge✝.entry.key.symbol edge✝.entry.key.constraint values✝) middle✝.checked.native.machine.heap =
+    (result✝, heap✝)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:287:79: error: don't know how to synthesize implicit argument `found`
+  @selectedCase entries✝ edits✝ value✝ before✝ result✝ middle✝ values✝ results✝ after✝ firstCalls✝ restCalls✝ offset✝
+    ?m.1241 first✝ rest✝
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+    {result : Value Symbol Guard} {after : SharedState width}
+    (actual : Leaf record originals target value before result after), NodeBound ⋯ 1
+emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, NodeBound ⋯ 0
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard} {calls : Nat}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsCount actual calls → RowsBound actual calls → NodeBound ⋯ calls
+recursiveCase :
+  ∀ {original exposed : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width} {value : Value Symbol Guard}
+    {after : SharedState width} {calls : Nat} {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    NodeCount body calls → NodeBound body calls → NodeBound ⋯ calls
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width}, ChildrenBound ⋯ 0
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {calls : Nat}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenCount rest calls → ChildrenBound rest calls → ChildrenBound ⋯ calls
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {firstCalls restCalls offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeCount first firstCalls →
+      ChildrenCount rest restCalls →
+        NodeBound first firstCalls → ChildrenBound rest restCalls → ChildrenBound ⋯ (firstCalls + restCalls)
+nilRows : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, RowsBound ⋯ 0
+consCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {edges results : List (EdgeValue Symbol Guard)}
+    {after : SharedState width} {firstCalls restCalls : Nat} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {built :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenCount children firstCalls →
+      RowsCount rest restCalls →
+        ChildrenBound children firstCalls → RowsBound rest restCalls → RowsBound ⋯ (firstCalls + restCalls)
+edits : Edits EqualityNormalize.Path
+value : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+actual : EditNode record originals edits value before result after
+own : NodeCount actual calls
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+edits✝ : Edits EqualityNormalize.Path
+value✝ : Value Symbol Guard
+before✝ : SharedState width
+result✝ : Value Symbol Guard
+middle✝ : SharedState width
+values✝ results✝ : List (Value Symbol Guard)
+after✝ : SharedState width
+firstCalls✝ restCalls✝ offset✝ : Nat
+found✝ : SourceEqualityNeededMap.lookup (↑offset✝) entries✝ = some edits✝
+first✝ : EditNode record originals edits✝ value✝ before✝ result✝ middle✝
+rest✝ : EditChildren record originals entries✝ (offset✝ + 1) values✝ middle✝ results✝ after✝
+⊢ SourceEqualityNeededMap.lookup (↑offset✝) entries✝ = some edits✝
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:287:64: error: don't know how to synthesize implicit argument `absent`
+  @unselectedCase entries✝ values✝ before✝ results✝ after✝ calls✝ value✝ offset✝ ?m.1225 rest✝
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+    {result : Value Symbol Guard} {after : SharedState width}
+    (actual : Leaf record originals target value before result after), NodeBound ⋯ 1
+emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, NodeBound ⋯ 0
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard} {calls : Nat}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsCount actual calls → RowsBound actual calls → NodeBound ⋯ calls
+recursiveCase :
+  ∀ {original exposed : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width} {value : Value Symbol Guard}
+    {after : SharedState width} {calls : Nat} {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    NodeCount body calls → NodeBound body calls → NodeBound ⋯ calls
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width}, ChildrenBound ⋯ 0
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {calls : Nat}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenCount rest calls → ChildrenBound rest calls → ChildrenBound ⋯ calls
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {firstCalls restCalls offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeCount first firstCalls →
+      ChildrenCount rest restCalls →
+        NodeBound first firstCalls → ChildrenBound rest restCalls → ChildrenBound ⋯ (firstCalls + restCalls)
+nilRows : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, RowsBound ⋯ 0
+consCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {edges results : List (EdgeValue Symbol Guard)}
+    {after : SharedState width} {firstCalls restCalls : Nat} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {built :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenCount children firstCalls →
+      RowsCount rest restCalls →
+        ChildrenBound children firstCalls → RowsBound rest restCalls → RowsBound ⋯ (firstCalls + restCalls)
+edits : Edits EqualityNormalize.Path
+value : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+actual : EditNode record originals edits value before result after
+own : NodeCount actual calls
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+values✝ : List (Value Symbol Guard)
+before✝ : SharedState width
+results✝ : List (Value Symbol Guard)
+after✝ : SharedState width
+calls✝ : Nat
+value✝ : Value Symbol Guard
+offset✝ : Nat
+absent✝ : SourceEqualityNeededMap.lookup (↑offset✝) entries✝ = none
+rest✝ : EditChildren record originals entries✝ (offset✝ + 1) values✝ before✝ results✝ after✝
+⊢ SourceEqualityNeededMap.lookup (↑offset✝) entries✝ = none
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:287:38: error: don't know how to synthesize implicit argument `head`
+  @recursiveCase original✝ exposed✝ heap✝ entries✝ before✝ value✝ after✝ calls✝ ?m.1210 ?m.1211 body✝
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+    {result : Value Symbol Guard} {after : SharedState width}
+    (actual : Leaf record originals target value before result after), NodeBound ⋯ 1
+emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, NodeBound ⋯ 0
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard} {calls : Nat}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsCount actual calls → RowsBound actual calls → NodeBound ⋯ calls
+recursiveCase :
+  ∀ {original exposed : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width} {value : Value Symbol Guard}
+    {after : SharedState width} {calls : Nat} {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    NodeCount body calls → NodeBound body calls → NodeBound ⋯ calls
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width}, ChildrenBound ⋯ 0
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {calls : Nat}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenCount rest calls → ChildrenBound rest calls → ChildrenBound ⋯ calls
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {firstCalls restCalls offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeCount first firstCalls →
+      ChildrenCount rest restCalls →
+        NodeBound first firstCalls → ChildrenBound rest restCalls → ChildrenBound ⋯ (firstCalls + restCalls)
+nilRows : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, RowsBound ⋯ 0
+consCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {edges results : List (EdgeValue Symbol Guard)}
+    {after : SharedState width} {firstCalls restCalls : Nat} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {built :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenCount children firstCalls →
+      RowsCount rest restCalls →
+        ChildrenBound children firstCalls → RowsBound rest restCalls → RowsBound ⋯ (firstCalls + restCalls)
+edits : Edits EqualityNormalize.Path
+value : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+actual : EditNode record originals edits value before result after
+own : NodeCount actual calls
+original✝ exposed✝ : Value Symbol Guard
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+before✝ : SharedState width
+value✝ : Value Symbol Guard
+after✝ : SharedState width
+calls✝ : Nat
+recursive✝ : SourceEqualityRequiredGraph.Recursive original✝
+head✝ : SourceEqualityRequiredHead.Head original✝ before✝.checked.native.machine.heap exposed✝ heap✝
+body✝ : EditNode record originals (Edits.editBelow entries✝) exposed✝ (advanceHeap before✝ heap✝) value✝ after✝
+⊢ SourceEqualityRequiredHead.Head original✝ before✝.checked.native.machine.heap exposed✝ heap✝
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:287:38: error: don't know how to synthesize implicit argument `recursive`
+  @recursiveCase original✝ exposed✝ heap✝ entries✝ before✝ value✝ after✝ calls✝ ?m.1210 ?m.1211 body✝
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+    {result : Value Symbol Guard} {after : SharedState width}
+    (actual : Leaf record originals target value before result after), NodeBound ⋯ 1
+emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, NodeBound ⋯ 0
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard} {calls : Nat}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsCount actual calls → RowsBound actual calls → NodeBound ⋯ calls
+recursiveCase :
+  ∀ {original exposed : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width} {value : Value Symbol Guard}
+    {after : SharedState width} {calls : Nat} {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    NodeCount body calls → NodeBound body calls → NodeBound ⋯ calls
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width}, ChildrenBound ⋯ 0
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {calls : Nat}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenCount rest calls → ChildrenBound rest calls → ChildrenBound ⋯ calls
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {firstCalls restCalls offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeCount first firstCalls →
+      ChildrenCount rest restCalls →
+        NodeBound first firstCalls → ChildrenBound rest restCalls → ChildrenBound ⋯ (firstCalls + restCalls)
+nilRows : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, RowsBound ⋯ 0
+consCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {edges results : List (EdgeValue Symbol Guard)}
+    {after : SharedState width} {firstCalls restCalls : Nat} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {built :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenCount children firstCalls →
+      RowsCount rest restCalls →
+        ChildrenBound children firstCalls → RowsBound rest restCalls → RowsBound ⋯ (firstCalls + restCalls)
+edits : Edits EqualityNormalize.Path
+value : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+actual : EditNode record originals edits value before result after
+own : NodeCount actual calls
+original✝ exposed✝ : Value Symbol Guard
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+before✝ : SharedState width
+value✝ : Value Symbol Guard
+after✝ : SharedState width
+calls✝ : Nat
+recursive✝ : SourceEqualityRequiredGraph.Recursive original✝
+head✝ : SourceEqualityRequiredHead.Head original✝ before✝.checked.native.machine.heap exposed✝ heap✝
+body✝ : EditNode record originals (Edits.editBelow entries✝) exposed✝ (advanceHeap before✝ heap✝) value✝ after✝
+⊢ SourceEqualityRequiredGraph.Recursive original✝
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:287:25: error: don't know how to synthesize implicit argument `built`
+  @ordinaryCase entries✝ edges✝ before✝ rebuilt✝ middle✝ value✝ heap✝ calls✝ entry✝ depth✝ free✝ actual✝ ?m.1198
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+    {result : Value Symbol Guard} {after : SharedState width}
+    (actual : Leaf record originals target value before result after), NodeBound ⋯ 1
+emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, NodeBound ⋯ 0
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard} {calls : Nat}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsCount actual calls → RowsBound actual calls → NodeBound ⋯ calls
+recursiveCase :
+  ∀ {original exposed : Value Symbol Guard} {heap : InternedConstructorTemplates.State Symbol Guard}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width} {value : Value Symbol Guard}
+    {after : SharedState width} {calls : Nat} {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    NodeCount body calls → NodeBound body calls → NodeBound ⋯ calls
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width}, ChildrenBound ⋯ 0
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {calls : Nat}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenCount rest calls → ChildrenBound rest calls → ChildrenBound ⋯ calls
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {firstCalls restCalls offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeCount first firstCalls →
+      ChildrenCount rest restCalls →
+        NodeBound first firstCalls → ChildrenBound rest restCalls → ChildrenBound ⋯ (firstCalls + restCalls)
+nilRows : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width}, RowsBound ⋯ 0
+consCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {edges results : List (EdgeValue Symbol Guard)}
+    {after : SharedState width} {firstCalls restCalls : Nat} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {built :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenCount children firstCalls →
+      RowsCount rest restCalls →
+        ChildrenBound children firstCalls → RowsBound rest restCalls → RowsBound ⋯ (firstCalls + restCalls)
+edits : Edits EqualityNormalize.Path
+value : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+actual : EditNode record originals edits value before result after
+own : NodeCount actual calls
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+edges✝ : List (EdgeValue Symbol Guard)
+before✝ : SharedState width
+rebuilt✝ : List (EdgeValue Symbol Guard)
+middle✝ : SharedState width
+value✝ : Value Symbol Guard
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+calls✝ : Nat
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+actual✝ : EditRows record originals entries✝ edges✝ before✝ rebuilt✝ middle✝
+built✝ : run (makeNode rebuilt✝) middle✝.checked.native.machine.heap = (value✝, heap✝)
+⊢ run (makeNode rebuilt✝) middle✝.checked.native.machine.heap = (value✝, heap✝)

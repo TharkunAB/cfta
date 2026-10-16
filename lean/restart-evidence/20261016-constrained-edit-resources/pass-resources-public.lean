@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputRows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputRows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputArity
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputArity
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.nodeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.edgeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.fold_complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.fold_complete
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.complete

@@ -1,0 +1,161 @@
+'MicroCFTA.EditResourceIntegrationChecks.two_selected_count' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@two_selected_count : ∀ [inst : DecidableEq.{1} Symbol] [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)] {width : Nat}
+  {record : SourceEqualityClassOrder.Record} {originals : List.{0} (Value Symbol Guard)} {path : EqualityNormalize.Path}
+  {first second : Value Symbol Guard} {before : SharedState width} {results : List.{0} (Value Symbol Guard)}
+  {after : SharedState width}
+  (actual :
+    EditChildren record originals
+      (List.cons.{0} (Prod.mk.{0, 0} 0 (Edits.editAt path))
+        (List.cons.{0} (Prod.mk.{0, 0} 1 (Edits.editAt path)) List.nil.{0}))
+      0 (List.cons.{0} first (List.cons.{0} second List.nil.{0})) before results after),
+  ChildrenCount actual 2
+'MicroCFTA.EditResourceIntegrationChecks.constructed_empty_leaf' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@constructed_empty_leaf : ∀ [inst : DecidableEq.{1} Symbol] [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (bits : Nat) (record : SourceEqualityClassOrder.Record) (originals : List.{0} (Value Symbol Guard))
+  (base : InternedConstructorTemplates.State Symbol Guard) (before : Shared (HAdd.hAdd.{0, 0, 0} bits 2))
+  (rows arity count depth bound inputRows inputArity inputBound : Nat),
+  Values base originals →
+    SourceEqualityClassOrder.Coherent record →
+      EqualityNormalize.Nontrivial record.paths →
+        ChildrenShape rows arity originals →
+          LE.le.{0} (List.length.{0} originals) count →
+            (∀ (path : EqualityNormalize.Path),
+                Membership.mem.{0, 0} record.paths path → LE.le.{0} (List.length.{0} path) depth) →
+              LE.le.{0} (childrenHeight originals) bound →
+                ∀ (inventory : Inventory),
+                  Ready formulas solver inventory record originals base before →
+                    Stored
+                        (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows record rows count depth
+                          bound)
+                        (max.{0} arity 1) bound before →
+                      ∀ (path : EqualityNormalize.Path),
+                        Membership.mem.{0, 0} record.paths path →
+                          ∀ (memos : Memos),
+                            Valid before.checked.native.machine.heap memos →
+                              LE.le.{0}
+                                  (HAdd.hAdd.{0, 0, 0} before.checked.native.machine.heap.nodes.next
+                                    (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes record rows arity
+                                      count depth bound inputRows inputArity inputBound))
+                                  (HPow.hPow.{0, 0, 0} 2 bits) →
+                                LE.le.{0}
+                                    (HAdd.hAdd.{0, 0, 0} before.checked.native.machine.heap.edges.next
+                                      (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges record rows arity
+                                        count depth bound inputRows inputArity inputBound))
+                                    (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                  Exists.{1} fun result =>
+                                    Exists.{2} fun after =>
+                                      Exists.{1} fun next =>
+                                        Exists.{1} fun final =>
+                                          Exists.{1} fun requests =>
+                                            Exists.{0} fun actual =>
+                                              NodeReads formulas solver base actual memos final ∧
+                                                NodeCount actual 1 ∧
+                                                  SourceCurrentAllocatedSharedEditEffects.NodeReceipt formulas solver
+                                                      next record originals base Value.empty before result after memos
+                                                      final ∧
+                                                    Stored
+                                                        (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+                                                          record rows count depth bound)
+                                                        (max.{0} arity 1) bound after ∧
+                                                      Trace before.checked.native.machine.heap
+                                                          after.checked.native.machine.heap requests ∧
+                                                        LE.le.{0} (nodeRequests requests)
+                                                            (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes
+                                                              record rows arity count depth bound inputRows inputArity
+                                                              inputBound) ∧
+                                                          LE.le.{0} (edgeRequests requests)
+                                                            (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges
+                                                              record rows arity count depth bound inputRows inputArity
+                                                              inputBound)
+'MicroCFTA.EditResourceIntegrationChecks.constructed_two_empty_leaves' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@constructed_two_empty_leaves : ∀ [inst : DecidableEq.{1} Symbol] [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (bits : Nat) (record : SourceEqualityClassOrder.Record) (originals : List.{0} (Value Symbol Guard))
+  (base : InternedConstructorTemplates.State Symbol Guard) (before : Shared (HAdd.hAdd.{0, 0, 0} bits 2))
+  (rows arity count depth bound inputRows inputArity inputBound : Nat),
+  Values base originals →
+    SourceEqualityClassOrder.Coherent record →
+      EqualityNormalize.Nontrivial record.paths →
+        ChildrenShape rows arity originals →
+          LE.le.{0} (List.length.{0} originals) count →
+            (∀ (path : EqualityNormalize.Path),
+                Membership.mem.{0, 0} record.paths path → LE.le.{0} (List.length.{0} path) depth) →
+              LE.le.{0} (childrenHeight originals) bound →
+                ∀ (inventory : Inventory),
+                  Ready formulas solver inventory record originals base before →
+                    Stored
+                        (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows record rows count depth
+                          bound)
+                        (max.{0} arity 1) bound before →
+                      ∀ (path : EqualityNormalize.Path),
+                        Membership.mem.{0, 0} record.paths path →
+                          ∀ (memos : Memos),
+                            Valid before.checked.native.machine.heap memos →
+                              LE.le.{0}
+                                  (HAdd.hAdd.{0, 0, 0} before.checked.native.machine.heap.nodes.next
+                                    (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes
+                                      (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes record rows arity
+                                        count depth bound inputRows inputArity inputBound)
+                                      (List.cons.{0} Value.empty (List.cons.{0} Value.empty List.nil.{0}))))
+                                  (HPow.hPow.{0, 0, 0} 2 bits) →
+                                LE.le.{0}
+                                    (HAdd.hAdd.{0, 0, 0} before.checked.native.machine.heap.edges.next
+                                      (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges
+                                        (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges record rows
+                                          arity count depth bound inputRows inputArity inputBound)
+                                        (List.cons.{0} Value.empty (List.cons.{0} Value.empty List.nil.{0}))))
+                                    (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                  Exists.{1} fun results =>
+                                    Exists.{2} fun after =>
+                                      Exists.{1} fun next =>
+                                        Exists.{1} fun final =>
+                                          Exists.{1} fun requests =>
+                                            Exists.{0} fun actual =>
+                                              ChildrenReads formulas solver base actual memos final ∧
+                                                ChildrenCount actual 2 ∧
+                                                  SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt formulas
+                                                      solver next record originals base
+                                                      (List.cons.{0} Value.empty
+                                                        (List.cons.{0} Value.empty List.nil.{0}))
+                                                      before results after memos final ∧
+                                                    Stored
+                                                        (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+                                                          record rows count depth bound)
+                                                        (max.{0} arity 1) bound after ∧
+                                                      Eq.{1} (List.length.{0} results) 2 ∧
+                                                        SourceCurrentAllocatedSharedEditWorkerCompletion.StableRun
+                                                            (fun e p h m s n =>
+                                                              SourceCurrentAllocatedSharedEditWorker.children
+                                                                (SourceCurrentAllocatedSharedEditWorker.edit record
+                                                                  originals e p h m s n)
+                                                                (List.cons.{0} (Prod.mk.{0, 0} 0 (Edits.editAt path))
+                                                                  (List.cons.{0} (Prod.mk.{0, 0} 1 (Edits.editAt path))
+                                                                    List.nil.{0}))
+                                                                0
+                                                                (List.cons.{0} Value.empty
+                                                                  (List.cons.{0} Value.empty List.nil.{0}))
+                                                                before)
+                                                            results after ∧
+                                                          Trace before.checked.native.machine.heap
+                                                              after.checked.native.machine.heap requests ∧
+                                                            LE.le.{0} (nodeRequests requests)
+                                                                (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes
+                                                                  (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes
+                                                                    record rows arity count depth bound inputRows
+                                                                    inputArity inputBound)
+                                                                  (List.cons.{0} Value.empty
+                                                                    (List.cons.{0} Value.empty List.nil.{0}))) ∧
+                                                              LE.le.{0} (edgeRequests requests)
+                                                                (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges
+                                                                  (SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges
+                                                                    record rows arity count depth bound inputRows
+                                                                    inputArity inputBound)
+                                                                  (List.cons.{0} Value.empty
+                                                                    (List.cons.{0} Value.empty List.nil.{0})))

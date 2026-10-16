@@ -1,0 +1,100 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:93:20: error: don't know how to synthesize implicit argument `built`
+  @NodeCount.ordinary inst✝¹ inst✝ width record originals entries✝ edges✝ before rebuilt✝ middle✝ result heap✝ calls
+    entry✝ depth✝ free✝ rows ?m.346 counted
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+before : SharedState width
+result : Value Symbol Guard
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+edges✝ rebuilt✝ : List (EdgeValue Symbol Guard)
+middle✝ : SharedState width
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+rows : EditRows record originals entries✝ edges✝ before rebuilt✝ middle✝
+built : run (makeNode rebuilt✝) middle✝.checked.native.machine.heap = (result, heap✝)
+calls : Nat
+counted : RowsCount rows calls
+⊢ run (makeNode rebuilt✝) middle✝.checked.native.machine.heap = (result, heap✝)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:97:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:112:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:124:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:148:73: error(lean.unknownIdentifier): Unknown identifier `recursive`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:148:67: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.543
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case recursive.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+exposed✝ : Value Symbol Guard
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+body✝ : EditNode record originals (Edits.editBelow entries✝) exposed✝ (advanceHeap before heap✝) result after
+counted✝ : NodeCount body✝ calls
+recursive✝ : SourceEqualityRequiredGraph.Recursive Value.empty
+head✝ : SourceEqualityRequiredHead.Head Value.empty before.checked.native.machine.heap exposed✝ heap✝
+x✝ : ?m.543
+⊢ calls ≤ Positions Value.empty
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:148:73: error(lean.unknownIdentifier): Unknown identifier `recursive`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:148:67: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.543
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case recursive.ordinary
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+before : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+calls : Nat
+exposed✝ : Value Symbol Guard
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+body✝ : EditNode record originals (Edits.editBelow entries✝) exposed✝ (advanceHeap before heap✝) result after
+counted✝ : NodeCount body✝ calls
+edges✝ : List (EdgeValue Symbol Guard)
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+rows✝ : DRows edges✝
+recursive✝ : SourceEqualityRequiredGraph.Recursive (Value.node entry✝ edges✝ depth✝ free✝)
+head✝ :
+  SourceEqualityRequiredHead.Head (Value.node entry✝ edges✝ depth✝ free✝) before.checked.native.machine.heap exposed✝
+    heap✝
+x✝ : ?m.543
+⊢ calls ≤ Positions (Value.node entry✝ edges✝ depth✝ free✝)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:173:48: error: Application type mismatch: The argument
+  ChildrenCount.bound head first
+has type
+  firstCalls✝ ≤ ChildPositions edge✝.children
+but is expected to have type
+  firstCalls✝ ≤ SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge edge✝
+in the application
+  Nat.add_le_add (ChildrenCount.bound head first)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:137:0: error: failed to infer structural recursion:
+Cannot use parameter counted:
+  failed to eliminate recursive application
+    RowsCount.bound tail rest
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:149:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCallbackCounts.lean:137:0: error: failed to infer structural recursion:
+Cannot use parameter counted:
+  failed to eliminate recursive application
+    ChildrenCount.bound counted rest

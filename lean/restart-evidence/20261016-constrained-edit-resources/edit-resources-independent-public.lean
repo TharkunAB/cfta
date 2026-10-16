@@ -1,0 +1,16 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.node
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.children
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.list
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditResources.list

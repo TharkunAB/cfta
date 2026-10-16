@@ -1,0 +1,292 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.outputRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.outputRows : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.outputArity' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.outputArity : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.input_rows_le_outputRows' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.input_rows_le_outputRows : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (rows count depth bound inputRows : Nat),
+  @LE.le.{0} Nat instLENat inputRows
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.outputRows record rows count depth bound inputRows)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.input_arity_le_outputArity' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.input_arity_le_outputArity : ∀ (arity inputArity : Nat),
+  @LE.le.{0} Nat instLENat inputArity
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.outputArity arity inputArity)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → Nat → Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → Nat → Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leaf_nodes_bound' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leaf_nodes_bound : ∀ {width : Nat}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (rows arity count depth bound inputRows inputArity inputBound : Nat)
+  (before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) (path : MicroCFTA.EqualityNormalize.Path),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedLeafResources.nodeBudget width record rows arity count depth
+      bound inputRows inputArity inputBound before path)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes record rows arity count depth bound
+      inputRows inputArity inputBound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leaf_edges_bound' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leaf_edges_bound : ∀ {width : Nat}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (rows arity count depth bound inputRows inputArity inputBound : Nat)
+  (before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) (path : MicroCFTA.EqualityNormalize.Path),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedLeafResources.edgeBudget width record rows arity count depth
+      bound inputRows inputArity inputBound before path)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges record rows arity count depth bound
+      inputRows inputArity inputBound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.query_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.query_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (rows arity count depth bound : Nat)
+  {firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  @LE.le.{0} Nat instLENat firstRows lastRows →
+    @LE.le.{0} Nat instLENat firstArity lastArity →
+      @LE.le.{0} Nat instLENat firstBound lastBound →
+        @LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedLeafResources.queryBudget record rows arity count depth
+            bound firstRows firstArity firstBound)
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedLeafResources.queryBudget record rows arity count depth
+            bound lastRows lastArity lastBound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (rows arity count depth bound : Nat)
+  {firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  @LE.le.{0} Nat instLENat firstRows lastRows →
+    @LE.le.{0} Nat instLENat firstArity lastArity →
+      @LE.le.{0} Nat instLENat firstBound lastBound →
+        @LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes record rows arity count depth bound
+            firstRows firstArity firstBound)
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafNodes record rows arity count depth bound
+            lastRows lastArity lastBound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (rows arity count depth bound : Nat)
+  {firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  @LE.le.{0} Nat instLENat firstRows lastRows →
+    @LE.le.{0} Nat instLENat firstArity lastArity →
+      @LE.le.{0} Nat instLENat firstBound lastBound →
+        @LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges record rows arity count depth bound
+            firstRows firstArity firstBound)
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.leafEdges record rows arity count depth bound
+            lastRows lastArity lastBound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeNodes' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeNodes : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeEdges' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeEdges : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsNodes' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsNodes : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsEdges' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsEdges : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.node_empty' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.node_empty : ∀ {Symbol Guard : Type}
+  (nodes edges : Nat),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeNodes Symbol Guard nodes
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+      nodes)
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeEdges Symbol Guard edges
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+      edges)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.node_ordinary' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.node_ordinary : ∀ {Symbol Guard : Type}
+  (nodes edgeCost : Nat) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeNodes Symbol Guard nodes
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) nodes
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsNodes Symbol Guard nodes edges)))
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeEdges Symbol Guard edgeCost
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) edgeCost
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsEdges Symbol Guard edgeCost edges)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.children_nil' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.children_nil : ∀ {Symbol Guard : Type}
+  (nodes edges : Nat),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes Symbol Guard nodes
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges Symbol Guard edges
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.children_cons' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.children_cons : ∀ {Symbol Guard : Type}
+  (nodes edges : Nat) (first : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes Symbol Guard nodes
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) first rest))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeNodes Symbol Guard nodes first)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes Symbol Guard nodes rest)))
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges Symbol Guard edges
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) first rest))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeEdges Symbol Guard edges first)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges Symbol Guard edges rest)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rows_nil' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rows_nil : ∀ {Symbol Guard : Type} (nodes edges : Nat),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsNodes Symbol Guard nodes
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsEdges Symbol Guard edges
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rows_cons' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rows_cons : ∀ {Symbol Guard : Type} (nodes edges : Nat)
+  (first : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (rest : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsNodes Symbol Guard nodes
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) first rest))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes Symbol Guard nodes
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard first))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsNodes Symbol Guard nodes rest)))
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsEdges Symbol Guard edges
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) first rest))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges Symbol Guard edges
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard first)))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.rowsEdges Symbol Guard edges rest)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.node_profile' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.node_profile : ∀ {Symbol Guard : Type}
+  (nodes edges : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) {rows arity : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard rows arity value →
+    ∀ (bound : Nat),
+      @LE.le.{0} Nat instLENat (@MicroCFTA.MergedOrdinaryHeight.height Symbol Guard value) bound →
+        And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeNodes Symbol Guard nodes value)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) arity
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound)))
+                nodes)
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity bound)))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.nodeEdges Symbol Guard edges value)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) arity
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound)))
+                edges)
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.children_profile' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.children_profile : ∀ {Symbol Guard : Type}
+  (nodes edges : Nat) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  {rows arity : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard rows arity values →
+    ∀ (bound : Nat),
+      @LE.le.{0} Nat instLENat (@MicroCFTA.MergedOrdinaryHeight.childrenHeight Symbol Guard values) bound →
+        And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes Symbol Guard nodes values)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) arity
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound))))
+                nodes)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity bound))))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges Symbol Guard edges values)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) arity
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound))))
+                edges)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.forest_profile' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.forest_profile : ∀ {Symbol Guard : Type}
+  (nodes edges : Nat) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  {rows arity : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape Symbol Guard rows arity values →
+    ∀ (count bound : Nat),
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+          count →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.MergedOrdinaryHeight.childrenHeight Symbol Guard values) bound →
+          And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenNodes Symbol Guard nodes values)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) count
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) arity
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound))))
+                  nodes)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) count
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity bound))))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditBudgetNumbers.childrenEdges Symbol Guard edges values)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) count
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) arity
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound))))
+                  edges)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) count
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound))))

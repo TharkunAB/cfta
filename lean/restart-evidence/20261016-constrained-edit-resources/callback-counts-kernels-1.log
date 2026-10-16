@@ -1,0 +1,116 @@
+lean/restart-evidence/20261016-constrained-edit-resources/callback-counts-kernels.lean:33:49: error: Tactic `rfl` failed: No `[refl]` lemma registered for relation
+  LE.le
+
+Hint: Add the `[refl]` attribute to reflexivity lemmas for `LE.le` to use this tactic
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+result : Value Symbol Guard
+before after : SharedState width
+actual : Leaf record originals path Value.empty before result after
+own : NodeCount ⋯ 1
+⊢ MergedOrdinaryHeight.height Value.empty ≤ MergedOrdinaryHeight.height Value.empty
+lean/restart-evidence/20261016-constrained-edit-resources/callback-counts-kernels.lean:53:54: error: Tactic `rfl` failed: No `[refl]` lemma registered for relation
+  LE.le
+
+Hint: Add the `[refl]` attribute to reflexivity lemmas for `LE.le` to use this tactic
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+firstResult lastResult : Value Symbol Guard
+before middle after : SharedState width
+first : Leaf record originals path Value.empty before firstResult middle
+last : Leaf record originals path Value.empty middle lastResult after
+entries : List (Int × Edits EqualityNormalize.Path) := [(0, Edits.editAt path), (1, Edits.editAt path)]
+foundFirst : SourceEqualityNeededMap.lookup 0 entries = some (Edits.editAt path)
+foundLast : SourceEqualityNeededMap.lookup 1 entries = some (Edits.editAt path)
+tail : EditChildren record originals entries 1 [Value.empty] middle [lastResult] after :=
+  EditChildren.selected 1 foundLast (EditNode.leaf last) EditChildren.nil
+actual : EditList record originals (Edits.editBelow entries) [Value.empty, Value.empty] before [firstResult, lastResult]
+  after :=
+  EditList.children (EditChildren.selected 0 foundFirst (EditNode.leaf first) tail)
+tailCount : ChildrenCount tail 1
+own : ListCount actual 2
+profile : ChildrenShape 0 0 [Value.empty, Value.empty]
+⊢ [Value.empty, Value.empty].length ≤ [Value.empty, Value.empty].length
+lean/restart-evidence/20261016-constrained-edit-resources/callback-counts-kernels.lean:70:61: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.editAt` could not be determined
+
+Hint: Using `Edits.editAt would be unambiguous:
+  [apply] `Edits.editAt`
+lean/restart-evidence/20261016-constrained-edit-resources/callback-counts-kernels.lean:70:84: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.editAt` could not be determined
+
+Hint: Using `Edits.editAt would be unambiguous:
+  [apply] `Edits.editAt`
+lean/restart-evidence/20261016-constrained-edit-resources/callback-counts-kernels.lean:68:58: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+firstResult lastResult : Value Symbol Guard
+rowEntry : Interned (EdgeKey Symbol Guard)
+before middle afterLeaf : SharedState width
+first : Leaf record originals path Value.empty before firstResult middle
+last :
+  Leaf record originals path Value.empty
+    (advanceHeap middle
+      (run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [firstResult]) middle.checked.native.machine.heap).snd)
+    lastResult afterLeaf
+row : EdgeValue Symbol Guard := EdgeValue.mk rowEntry [Value.empty]
+firstBuilt : EdgeValue Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [firstResult]) middle.checked.native.machine.heap
+next : SharedState width := advanceHeap middle firstBuilt.snd
+lastBuilt : EdgeValue Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [lastResult]) afterLeaf.checked.native.machine.heap
+after : SharedState width := advanceHeap afterLeaf lastBuilt.snd
+⊢ ∃ actual, RowsCount actual 2 ∧ 2 ≤ RowPositions [row, row]
+MicroCFTA.EditCallbackCountKernels.ignored_branches [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard))
+  (entries : List (Int × Edits EqualityNormalize.Path)) (path : EqualityNormalize.Path) (state : SharedState width) :
+  NodeCount ⋯ 0 ∧ 0 ≤ Positions Value.empty ∧ ListCount ⋯ 0 ∧ 0 ≤ ChildPositions [Value.empty, Value.empty]
+'MicroCFTA.EditCallbackCountKernels.ignored_branches' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.EditCallbackCountKernels.empty_leaf [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+  {result : Value Symbol Guard} {before after : SharedState width}
+  (actual : Leaf record originals path Value.empty before result after) : NodeCount ⋯ 1 ∧ 1 ≤ 1 + 0 * EdgeCount 0 0 0
+'MicroCFTA.EditCallbackCountKernels.empty_leaf' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+MicroCFTA.EditCallbackCountKernels.repeated_empty_positions [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {path : EqualityNormalize.Path} {firstResult lastResult : Value Symbol Guard}
+  {before middle after : SharedState width} (first : Leaf record originals path Value.empty before firstResult middle)
+  (last : Leaf record originals path Value.empty middle lastResult after) :
+  have entries := [(0, Edits.editAt path), (1, Edits.editAt path)];
+  ∃ actual, ListCount actual 2 ∧ 2 ≤ 2 * (1 + 0 * EdgeCount 0 0 0)
+'MicroCFTA.EditCallbackCountKernels.repeated_empty_positions' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.EditCallbackCountKernels.repeated_rows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+  {firstResult lastResult : Value Symbol Guard} (rowEntry : Interned (EdgeKey Symbol Guard))
+  {before middle afterLeaf : SharedState width}
+  (first : Leaf record originals path Value.empty before firstResult middle)
+  (last :
+    Leaf record originals path Value.empty
+      (advanceHeap middle
+        (run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [firstResult])
+            middle.checked.native.machine.heap).snd)
+      lastResult afterLeaf) :
+  have row := EdgeValue.mk rowEntry [Value.empty];
+  have firstBuilt :=
+    run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [firstResult]) middle.checked.native.machine.heap;
+  have next := advanceHeap middle firstBuilt.snd;
+  have lastBuilt :=
+    run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [lastResult]) afterLeaf.checked.native.machine.heap;
+  have after := advanceHeap afterLeaf lastBuilt.snd;
+  ∃ actual, RowsCount actual 2 ∧ 2 ≤ RowPositions [row, row]
+'MicroCFTA.EditCallbackCountKernels.repeated_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,49 @@
+'MicroCFTA.ClassResourceChecks.empty_class_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+@empty_class_identity : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (record : SourceEqualityClassOrder.Record) (rows arity depth bound e p h m s n : Nat) (before : Checked width)
+  (memo : Memo),
+  nodeBudget record rows arity 0 depth bound = 0 ∧
+    edgeBudget record rows arity 0 depth bound = 0 ∧
+      SourceCurrentAllocatedClassWorker.runClass e p h m s n record [] before memo =
+        SourceCurrentAllocatedClassWorker.Outcome.done [] before memo
+'MicroCFTA.ClassResourceChecks.two_actual_classes' depends on axioms: [propext, Classical.choice, Quot.sound]
+@two_actual_classes : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (first second : SourceEqualityClassOrder.Record),
+  SourceEqualityClassOrder.Coherent first →
+    EqualityNormalize.Nontrivial first.paths →
+      SourceEqualityClassOrder.Coherent second →
+        EqualityNormalize.Nontrivial second.paths →
+          ∀ (values : List (Value Symbol Guard)) (before : Checked (bits + 2)) (memo : Memo),
+            Ready before →
+              At formulas solver inventory before →
+                Values before.native.machine.heap values →
+                  SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                    Profiles memo →
+                      NativeStored before.native →
+                        OutputStored before.native →
+                          (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                              SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver)
+                                ambient memo) →
+                            ∀ (memos : Memos),
+                              EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                ∀ (rows arity count firstDepth secondDepth bound : Nat),
+                                  ChildrenShape rows arity values →
+                                    values.length ≤ count →
+                                      (∀ (path : EqualityNormalize.Path),
+                                          path ∈ first.paths → List.length path ≤ firstDepth) →
+                                        (∀ (path : EqualityNormalize.Path),
+                                            path ∈ second.paths → List.length path ≤ secondDepth) →
+                                          childrenHeight values ≤ bound →
+                                            before.native.machine.heap.nodes.next +
+                                                    nodeBudget first rows arity count firstDepth bound +
+                                                  nodeBudget second (outputRows first rows count firstDepth bound)
+                                                    (outputArity arity) count secondDepth bound ≤
+                                                2 ^ bits →
+                                              before.native.machine.heap.edges.next +
+                                                      edgeBudget first rows arity count firstDepth bound +
+                                                    edgeBudget second (outputRows first rows count firstDepth bound)
+                                                      (outputArity arity) count secondDepth bound ≤
+                                                  2 ^ (bits + 2) →
+                                                ∃ middleValues middle current next currentMemos results after saved
+                                                  last, Exists ⋯

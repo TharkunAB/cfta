@@ -1,0 +1,29 @@
+lean/restart-evidence/20261016-constrained-edit-resources/edit-budget-numbers-kernels.lean:17:18: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+lean/restart-evidence/20261016-constrained-edit-resources/edit-budget-numbers-kernels.lean:17:18: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+'MicroCFTA.EditBudgetNumberChecks.repeated_literal_cost' depends on axioms: [propext, sorryAx]
+@repeated_literal_cost : ∀ {Symbol Guard : Type} (nodes edgeCost : Nat) (nodeEntry : Interned NodeKey)
+  (edgeEntry : Interned (EdgeKey Symbol Guard)),
+  have row := EdgeValue.mk edgeEntry [Value.empty, Value.empty];
+  have value := Value.node nodeEntry [row, row] 0 [];
+  nodeNodes nodes value = 5 * nodes + 1 ∧ nodeEdges edgeCost value = 5 * edgeCost + 2
+'MicroCFTA.EditBudgetNumberChecks.descendant_leaf_cost' depends on axioms: [propext, Quot.sound]
+@descendant_leaf_cost : ∀ {width : Nat} (record : SourceEqualityClassOrder.Record) (rows arity count depth bound : Nat)
+  (before : SourceCurrentAllocatedSharedTargetState.State width) (path : EqualityNormalize.Path)
+  {localRows wholeRows localArity wholeArity localHeight wholeHeight : Nat},
+  localRows ≤ wholeRows →
+    localArity ≤ wholeArity →
+      localHeight ≤ wholeHeight →
+        SourceCurrentAllocatedFiniteOrdinarySharedLeafResources.nodeBudget record rows arity count depth bound localRows
+              localArity localHeight before path ≤
+            leafNodes record rows arity count depth bound wholeRows wholeArity wholeHeight ∧
+          SourceCurrentAllocatedFiniteOrdinarySharedLeafResources.edgeBudget record rows arity count depth bound
+              localRows localArity localHeight before path ≤
+            leafEdges record rows arity count depth bound wholeRows wholeArity wholeHeight
+'MicroCFTA.EditBudgetNumberChecks.profiled_repeated_forest' depends on axioms: [propext, Quot.sound]
+@profiled_repeated_forest : ∀ {Symbol Guard : Type} (nodes edgeCost : Nat) (nodeEntry : Interned NodeKey)
+  (edgeEntry : Interned (EdgeKey Symbol Guard)),
+  have row := EdgeValue.mk edgeEntry [Value.empty, Value.empty];
+  have value := Value.node nodeEntry [row, row] 0 [];
+  childrenNodes nodes [value, value] ≤ 10 * nodes + 2 ∧ childrenEdges edgeCost [value, value] ≤ 10 * edgeCost + 4

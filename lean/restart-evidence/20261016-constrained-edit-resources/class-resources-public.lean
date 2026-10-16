@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources
+
+set_option pp.universes true
+set_option pp.explicit true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.nodeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.edgeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.outputRows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.outputRows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.outputArity
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.outputArity
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.complete

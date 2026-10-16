@@ -1,0 +1,37 @@
+MicroCFTA.EditCallbackCountKernels.ignored_branches [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard))
+  (entries : List (Int × Edits EqualityNormalize.Path)) (path : EqualityNormalize.Path) (state : SharedState width) :
+  NodeCount ⋯ 0 ∧ 0 ≤ Positions Value.empty ∧ ListCount ⋯ 0 ∧ 0 ≤ ChildPositions [Value.empty, Value.empty]
+'MicroCFTA.EditCallbackCountKernels.ignored_branches' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.EditCallbackCountKernels.empty_leaf [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+  {result : Value Symbol Guard} {before after : SharedState width}
+  (actual : Leaf record originals path Value.empty before result after) : NodeCount ⋯ 1 ∧ 1 ≤ 1 + 0 * EdgeCount 0 0 0
+'MicroCFTA.EditCallbackCountKernels.empty_leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.EditCallbackCountKernels.repeated_empty_positions [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {path : EqualityNormalize.Path} {firstResult lastResult : Value Symbol Guard}
+  {before middle after : SharedState width} (first : Leaf record originals path Value.empty before firstResult middle)
+  (last : Leaf record originals path Value.empty middle lastResult after) :
+  have entries := [(0, Edits.editAt path), (1, Edits.editAt path)];
+  ∃ actual, ListCount actual 2 ∧ 2 ≤ 2 * (1 + 0 * EdgeCount 0 0 0)
+'MicroCFTA.EditCallbackCountKernels.repeated_empty_positions' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.EditCallbackCountKernels.repeated_rows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+  {firstResult lastResult : Value Symbol Guard} (rowEntry : Interned (EdgeKey Symbol Guard))
+  {before middle afterLeaf : SharedState width}
+  (first : Leaf record originals path Value.empty before firstResult middle)
+  (last :
+    Leaf record originals path Value.empty
+      (advanceHeap middle
+        (run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [firstResult])
+            middle.checked.native.machine.heap).snd)
+      lastResult afterLeaf) :
+  have row := EdgeValue.mk rowEntry [Value.empty];
+  have firstBuilt :=
+    run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [firstResult]) middle.checked.native.machine.heap;
+  have lastBuilt :=
+    run (makeEdge rowEntry.key.symbol rowEntry.key.constraint [lastResult]) afterLeaf.checked.native.machine.heap;
+  have after := advanceHeap afterLeaf lastBuilt.snd;
+  ∃ actual, RowsCount actual 2 ∧ 2 ≤ RowPositions [row, row]
+'MicroCFTA.EditCallbackCountKernels.repeated_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
