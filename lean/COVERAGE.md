@@ -1,5 +1,61 @@
 # Full formalization coverage
 
+## Current native entry from original allocation and construction histories
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`8ec2983b`. Proof commits are `07ef6169`, `13950ca4`, and `c585a6d3`.
+Audit and scope note commit is `6591e383`. No Haskell implementation or test
+changes occur. The Haskell fix handoff at the top of FINDINGS.md remains
+current for external agents.
+
+Five additive modules derive initial checked native invariants from one
+covered original allocation history and actual source construction.
+History events retain normalization checks. Coverage derives normalized
+syntax and existing same-cache field loads. Physical Good, SemanticReady,
+availability, closedness, and Original syntax are conclusions.
+
+Literal serial field preparation derives its own finite History, atomic
+steps, final validity, retained entries, and ordered field readback.
+The complete native query history starts at that actual returned interner.
+Its entry needs no supplied Good, SemanticReady, Original, model membership,
+parent law, future native result, or completed preparation. Normalized
+literal fields, initial equality-cache validity, actual source build,
+closed available query operands, and reached WordRanges remain explicit.
+Final ordered exact languages, closed resident results, and unchanged
+cacheable historical repeats follow from the same actual checked walk.
+
+Only the modeled completed operation tables start empty over the retained
+interner. No Haskell global reset or GHC eager field-demand order is claimed.
+The allocated class-entry adapter also derives exact finite precheck behavior.
+Its Scan endpoints retain completed historical Scan as a premise; they do
+not transfer the later conjunction decision or prove general termination.
+
+The pinned full Audit passes 2299 jobs and 56075 theorem dependency checks.
+Focused validation passes 18 public axiom reports, 18 signatures, 26 kernel
+examples, one named kernel theorem, and three executable evaluations.
+Only standard foundations and the old unused-input warning occur.
+Independent reviews found no material defect. Reuse unchanged-source strict
+Nix build, 777 examples plus golden, five-file Fourmolu, and four-package
+Cabal-gild.
+
+Read lean/notes-current-native-original-entry.md. Evidence and frozen source
+copies are repository-local in lean/restart-evidence/20261016-original-entry/.
+All 3347 baseline files remain. All 2293 older non-Audit proof sources and
+prior frozen modules retain identical bytes. Earlier unavailable external
+draft bytes are not claimed recovered or reverified.
+
+Next connect the CURRENT conjunction decision and its memo/worklist effects
+to class Scan. Then compose current checked native callbacks, selected
+required paths, and the general constrained outer caller. Do not replace
+this obligation with the historical completed Scan premise. Warm operation
+tables, new generated operands, cross-model admission, runtime/GHC forcing
+and publication, allocation order, concurrency, concrete containers, and
+machine capacity retain explicit boundaries. Every other full-library and
+separate Sized contract remains active. Preserve the optimized interned
+core and every older constructor/equality proof. No board posts or
+deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
 ## Current exact serial native histories and retained warm answers
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is
