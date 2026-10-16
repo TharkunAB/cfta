@@ -107,6 +107,8 @@ module Data.CFTA.Gen.Refinement.Derive (
     HasLTA (..),
     deriveLTA,
     deriveLTAFrom,
+    deriveLTARooted,
+    deriveLTAFromRooted,
     Invariant (..),
     invariantAnnotations,
 
@@ -121,6 +123,7 @@ module Data.CFTA.Gen.Refinement.Derive (
 
     -- * Values
     holds,
+    holdsRooted,
     measureOf,
     measuresOf,
 
@@ -164,7 +167,7 @@ import GHC.Generics (
 import qualified GHC.Generics as Generic
 
 import Data.CFTA.Formula (Formula (Top))
-import Data.CFTA.Gen.Refinement (LTAGen)
+import Data.CFTA.Gen.Refinement (LTAGen, satisfying)
 import Data.CFTA.Gen.Refinement.Derive.Internal
 import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
 import Data.CFTA.Index (Arity (..), Depth)
@@ -403,6 +406,32 @@ deriveLTAFrom bound atoms rules = do
     annotations <- invariantAnnotations @a rules
     deriveLTAWith @a bound atoms annotations
 
+{- | Derive the refinement generator of a datatype from its 'HasLTA' instance,
+with a condition on the measures of the root. The condition is written once,
+as the invariant is: 'holdsRooted' runs it on values. For a 'Measured'
+invariant, the measures are 'Single'; for a 'Contracted' invariant,
+'NoMeasures'.
+-}
+deriveLTARooted ::
+    forall a.
+    (HasLTA a) => Depth -> Atoms -> (forall e. (Symbolic e) => Measures a e -> Truth e) -> Either DeriveLTAError (LTAGen a)
+deriveLTARooted bound atoms = deriveLTAFromRooted bound atoms (invariant @a)
+
+-- | 'deriveLTAFrom' with a condition on the measures of the root, as for 'deriveLTARooted'.
+deriveLTAFromRooted ::
+    forall a node m.
+    (HasFTA a, NodeView node) =>
+    Depth -> Atoms -> Invariant node m -> (forall e. (Symbolic e) => m e -> Truth e) -> Either DeriveLTAError (LTAGen a)
+deriveLTAFromRooted bound atoms rules condition =
+    (`satisfying` (condition . rootMeasures rules)) <$> deriveLTAFrom bound atoms rules
+
+-- | The measures of a value term, as the invariant names them.
+rootMeasures :: Invariant node m -> Expr -> m Expr
+rootMeasures rules value = case rules of
+    Measured _ _ -> Single value
+    Contracted _ -> NoMeasures
+    MeasuredBy _ _ -> measuresAt value
+
 -- | The constructors of a datatype in declaration order, with whether each field is of the datatype itself.
 datatypeConstructors :: forall a. (HasFTA a) => [(Constructor, [Bool])]
 datatypeConstructors = case describeType (Proxy @a) of
@@ -503,6 +532,17 @@ the fields of the datatype itself with the measures.
 -}
 holds :: forall a node m. (HasFTA a, NodeView node) => Atoms -> Invariant node m -> a -> Bool
 holds atoms rules = fst . evaluate @a atoms rules . encodeTerm
+
+-- | Whether a value satisfies the invariant at each node and the condition on the measures of its root.
+holdsRooted ::
+    forall a node m.
+    (HasFTA a, NodeView node) => Atoms -> Invariant node m -> (forall e. (Symbolic e) => m e -> Truth e) -> a -> Bool
+holdsRooted atoms rules condition value = holds atoms rules value && condition rootValues
+  where
+    rootValues = case rules of
+        Measured _ _ -> Single (measureOf atoms rules value)
+        Contracted _ -> NoMeasures
+        MeasuredBy _ _ -> measuresOf atoms rules value
 
 -- | The measure of a value, for a 'Measured' invariant.
 measureOf :: forall a node. (HasFTA a, NodeView node) => Atoms -> Invariant node Single -> a -> Integer

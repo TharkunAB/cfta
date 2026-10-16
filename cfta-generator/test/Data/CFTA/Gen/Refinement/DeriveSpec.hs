@@ -546,6 +546,20 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
     it "reports a node view whose constructors are in another order" $
         void (deriveLTAFrom @Signed 0 (atom @Integer LTAGen.every) (Contracted (\_ -> true) :: Invariant SignedNode NoMeasures))
             `shouldBe` Left (NodeMismatch "Negative" "the node view has PositiveNode in its place, a name that does not start with Negative")
+    it "derives RedBlackTrees with a condition on the measures of the root" $ do
+        let blackRooted root = col root .== 0 .&& bh root .<= 3
+        sameRanks redBlackTrees (deriveLTARooted @Tree 6 mempty blackRooted)
+        map (holdsRooted mempty (invariant @Tree) blackRooted) [Black Leaf Leaf, Red Leaf Leaf, Leaf]
+            `shouldBe` [True, False, True]
+    it "takes a condition on the measure of the root of a Measured invariant" $ do
+        let atoms = atom @Integer LTAGen.every
+            headAbove (Single headOf') = 999999 .<= headOf'
+        rooted <- either (fail . show) LTAGen.compile (deriveLTARooted @SortedList 8 atoms headAbove)
+        conditioned <-
+            either (fail . show) (LTAGen.compile . (`LTAGen.satisfying` (999999 .<=))) (deriveLTA @SortedList 8 atoms)
+        LTAGen.cardinality rooted `shouldBe` LTAGen.cardinality conditioned
+        map (holdsRooted atoms (invariant @SortedList) headAbove) [Cons 999999 Nil, Cons 3 Nil, Nil]
+            `shouldBe` [True, False, True]
     it "names a value of an enumeration with literal on values and on terms" $ do
         let atoms = atom @Bool (LTAGen.elements [False, True])
         compiled <- either (fail . show) LTAGen.compile (deriveLTA @Flags 3 atoms)
