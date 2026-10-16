@@ -192,8 +192,9 @@ cabal repl --with-repl=doctest lib:cfta-generator
 ```
 
 `scripts/release.sh PACKAGE --check-only` validates one package and the local
-source archive of its workspace dependency. Publish `cfta` first, then
-`cfta-generator`.
+source archives of its workspace dependencies. It supports `cfta`,
+`cfta-generator`, `specftacular`, and `specftacular-ghc`. Publish each package
+after its workspace dependencies.
 
 Code that imports `Data.CFTA.*` must declare `cfta`, and code that imports
 `Data.CFTA.Gen.*` or `Data.CFTA.Ranked.*` must declare `cfta-generator`.
