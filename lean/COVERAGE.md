@@ -2,6 +2,13 @@
 
 ## Current generator node views and source refresh
 
+Publication readback at 13:14 CEST found remote main `5399d310` (PR #63,
+qualified typing do-notation). It is fetched but not merged or validated.
+The audited source below remains `999c04a5`; formalize checkpoint `27a4722c`
+is published. Inspect and refresh that five-file frontend delta before the
+next implementation. Read lean/restart-evidence/20261016-typing-do-pending.md.
+
+
 Source main is `999c04a5`, merged at `9aaffc95`. The preceding published
 checkpoint is `b931bcc6`. PR #60 adds field-specific atoms; PR #61 writes
 typing rules through node views; PR #62 rejects negative typing bounds.
