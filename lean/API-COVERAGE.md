@@ -1,5 +1,75 @@
 # Public API and source correspondence
 
+## Current warm local reduction and checked parent construction
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`af0b0fa9`. Proof commits are `cb5232fe`, `8f38d731`, `9432d30d`, and
+`c2cfe5c8`. No Haskell implementation or test changes occur. The external
+Haskell fix registry remains first in root FINDINGS.md. Record each later
+fix there with its failure case, affected files, commit, checks, and
+upstream status.
+
+Five additive modules compose the CURRENT warm local child reduction and
+its checked parent constructor. The actual allocated precheck retains its
+literal returned equality operations and complete native state. It derives
+all three source branches and the live original records. The unchanged
+child branch can still retain accessor allocation; it is not a whole-state
+no-op theorem. No initial closed forest or cold cache reset is required.
+
+One actual current Scan selects erasure or the literal required worker and
+checked class right fold. Exact selected records, global read receipts,
+fourth answers, merge entries, and returned inventories remain connected.
+Ranges inspect only reached raw precheck, Scan, required, and class prefixes.
+No future completion, readiness, admission oracle, or result-language law
+is an input. Initial legitimate warm invariants and actual machine checks
+remain explicit.
+
+The complete local receipt narrows the input forest. It gives equal membership
+for terms satisfying the original full guard and inherited equalities. The
+parent checks raw contradiction BEFORE local child reduction. Rejection needs
+no field load, inherited readiness, child availability, or local ranges.
+Its sentinel derives Top allocation at the actual current cache. The live
+branch calls the actual checked mkEdge at the literal local return. Both
+constructor acceptance and rejection have exact independent PCS edge meaning.
+The parent language narrows the original raw edge and is equal under inherited
+satisfaction. No unconditional output-class-satisfaction law is claimed.
+
+Local child count is preserved. A rejected constructor can instead return
+one empty child and Top; final-edge arity is not unconditionally preserved.
+The next inherited stage must read THAT returned guard and child list.
+Its inherited-FIRST combination differs from the local precheck's own-FIRST
+key. Final same-arity setChildren remains a separate raw interning operation.
+
+The pinned full Audit passes 2363 jobs and 56924 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Public
+probes, independent reviews, and a two-edge warm integration pass. The latter
+derives source field loads and child availability, then constructs the second
+edge at the first edge's actual returned state and all returned memo tables.
+Evidence is in lean/restart-evidence/20261016-current-local-reduction/.
+All 4060 starting files remain. All 2357 older non-Audit proof sources retain
+identical bytes. Eighteen frozen manifests, stashes, other worktree records,
+and the first Haskell registry remain. Earlier unavailable external drafts
+are not claimed recovered or reverified. Reuse unchanged-source strict Nix
+build, 777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-local-reduction.md and inherited-current-next.md in
+the evidence directory. Next port the returned-edge inherited prefix, its
+indexed descents and CURRENT recursive requests, then ordered rows and the
+literal modifyNode reconstruction. Combine the parent payload once. Do not
+map an old helper that repeats combination at every child. Keep the source
+contradiction short circuit before an otherwise demanded own accessor.
+General constrained outer completion and its actual outer/edge result caches
+remain open. Completed serial graphs do not establish the literal bounded
+worker, GHC forcing, IntMap demand order, or pending cache publication.
+The pure selection noConstraint CAF adapter remains explicit.
+
+The full library goal, broader frontend and recursive-generator adapters,
+all separate Sized contracts, concrete containers, concurrency, identity
+lifetime, machine capacity, solver IO, random draws, callbacks, and codecs
+stay active. Preserve the optimized interned core and every older constructor
+and equality proof. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress.
+
 ## Current checked structural edits and full class pass
 
 Source main remains `8f85ddb6`. The preceding published checkpoint is
