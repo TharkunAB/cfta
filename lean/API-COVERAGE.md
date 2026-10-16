@@ -1,5 +1,55 @@
 # Public API and source correspondence
 
+## Current exact serial native histories and retained warm answers
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`3e84dab7`. Proof commits are `ef5bbc8e`, `2bdf6641`, and `c8fe3b9f`.
+Audit and scope note commit is `133ffb69`. No Haskell implementation or test
+changes occur. The Haskell fix handoff at the top of FINDINGS.md remains
+current for external agents.
+
+Five additive modules derive one input model for the complete finite list
+of closed Original available operands, then complete the literal serial
+Code.walk in that same fixed model. Every actual head receipt supplies the
+tail's physical, contextual, scope, and semantic invariants. Whole-walk
+WordRanges derives each head and tail plan through actual reached traces.
+There is no per-query future-success or result-law callback.
+
+The final receipt retains ordered exact intersection languages, closed
+resident values, and actual final returned cells for every cacheable query.
+Each such historical query repeats in two checked steps with the whole
+final checked state unchanged. Requests without a key retain their direct
+body path and have no warm-hit claim. Empty and duplicate histories are
+covered. The cold endpoint derives initial Contextual, Scoped, Idle, and
+all operand model membership from the finite source inventory. Initial
+Good, SemanticReady, and actual-prefix WordRanges remain explicit.
+
+The pinned full Audit passes 2294 jobs and 56040 theorem dependency checks.
+Focused validation passes 21 public axiom reports, 21 signatures, 37 kernel
+examples, and two named kernel theorems. Only standard foundations and the
+old unused-input warning occur. Independent reviews found no material
+defect. Reuse unchanged-source strict Nix build, 777 examples plus golden,
+five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-warm-history.md. Evidence and frozen source
+copies are repository-local in lean/restart-evidence/20261016-warm-history/.
+All 3291 baseline files remain. All 2288 older non-Audit proof sources and
+the preceding frozen modules retain identical bytes. Earlier missing
+external draft bytes remain unavailable. They are not claimed recovered
+or reverified.
+
+Next derive initial Good and SemanticReady from complete original allocation,
+normalization, and loaded-field histories at the actual caller boundary.
+Compose with the current class Scan and constrained outer caller. The new
+history uses a fixed source and listed original operands; new allocations,
+generated operands, and cross-model cache admission remain separate.
+Runtime/GHC forcing and publication, concurrency, concrete containers, and
+machine ranges retain explicit boundaries. Every other full-library and
+separate Sized contract remains active. Preserve the optimized interned
+core and every older constructor/equality proof. No board posts or
+deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
 ## Current actual result scope and closed exact cold returns
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is
