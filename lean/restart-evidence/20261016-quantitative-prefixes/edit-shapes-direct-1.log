@@ -1,0 +1,64 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:312:11: error(lean.unknownIdentifier): Unknown identifier `«ChildrenShape».domain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:312:67: error(lean.unknownIdentifier): Unknown identifier `«NodeShape».domain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:335:11: error(lean.unknownIdentifier): Unknown identifier `«ChildrenShape».domain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:335:67: error(lean.unknownIdentifier): Unknown identifier `«ChildrenShape».domain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:358:11: error(lean.unknownIdentifier): Unknown identifier `«ChildrenShape».domain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:358:67: error(lean.unknownIdentifier): Unknown identifier `«RowsShape».domain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:381:29: error(lean.unknownIdentifier): Unknown identifier `«ChildrenShape».mono`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:384:23: error: Type mismatch
+  retained.right.left read inventory populated allowed ready available safe valid known coherent
+has type
+  ∀ (rows arity count depth bound inputRows inputArity inputBound : Nat),
+    ChildrenShape rows arity originals →
+      originals.length ≤ count →
+        (∀ (path : EqualityNormalize.Path), path ∈ record.paths → List.length path ≤ depth) →
+          childrenHeight originals ≤ bound →
+            Stored (TargetRows record rows count depth bound) (max arity 1) bound before →
+              ChildrenShape inputRows inputArity values →
+                childrenHeight values ≤ inputBound →
+                  Stored (TargetRows record rows count depth bound) (max arity 1) bound after ∧
+                    ChildrenShape (OutRows record rows count depth bound inputRows) (OutArity arity inputArity) results
+but is expected to have type
+  Stored (TargetRows record rowLimit count depth bound) (max arity 1) bound after ∧
+    ChildrenShape (OutRows record rowLimit count depth bound inputRows) (OutArity arity inputArity) results
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:377:111: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+edits : Edits EqualityNormalize.Path
+values : List (Value Symbol Guard)
+before : SharedState width
+results : List (Value Symbol Guard)
+after : SharedState width
+memos final : Memos
+actual : EditList record originals edits values before results after
+reads : ListReads formulas solver base actual memos final
+populated : Populated edits
+allowed : Allowed record edits
+ready : Ready formulas solver inventory record originals base before
+available : Values before.checked.native.machine.heap values
+safe : SourceCurrentAllocatedSharedEditEffects.ListSafe edits values
+valid : Valid before.checked.native.machine.heap memos
+known : Values base originals
+coherent : SourceEqualityClassOrder.Coherent record
+rowLimit arity count depth bound inputRows inputArity inputBound : Nat
+captured : ChildrenShape rowLimit arity originals
+lengthBound : originals.length ≤ count
+pathsBound : ∀ (path : EqualityNormalize.Path), path ∈ record.paths → List.length path ≤ depth
+capturedHeight : childrenHeight originals ≤ bound
+stored : Stored (TargetRows record rowLimit count depth bound) (max arity 1) bound before
+profile : ChildrenShape inputRows inputArity values
+inputHeight : childrenHeight values ≤ inputBound
+produced :
+  Stored (TargetRows record rowLimit count depth bound) (max arity 1) bound after ∧
+    ChildrenShape (OutRows record rowLimit count depth bound inputRows) (OutArity arity inputArity) results
+⊢ Stored (TargetRows record rowLimit count depth bound) (max arity 1) bound after ∧
+    ChildrenShape (OutRows record rowLimit count depth bound inputRows) (OutArity arity inputArity) results ∧
+      All₂ NodeNarrow values results ∧ results.length = values.length ∧ childrenHeight results ≤ inputBound
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditShapes.lean:385:8: error: unexpected identifier; expected command

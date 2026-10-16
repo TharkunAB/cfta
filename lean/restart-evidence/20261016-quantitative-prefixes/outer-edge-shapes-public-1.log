@@ -1,0 +1,94 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeShapes.edge_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryOuterEdgeShapes.edge_body : ∀
+  [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {request : SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : SourceCurrentAllocatedPartialState.State width}
+  {result :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {actual : @SourceCurrentAllocatedPartialGraph.EdgeBody inst inst_1 inst_2 width budget request before result after}
+  {memos final : EndpointMemoGateTrace.Memos},
+  @SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads inst inst_1 inst_2 width formulas solver budget request before
+      result after actual memos final →
+    ∀ (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory),
+      @SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+        SourceEqualityConstraintAllocation.Ready
+            (@SourceEqualityNativeDemand.State.operations width
+                (@SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+            request.inherited →
+          @InternedEdgeResidency.EdgeResident (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width
+                    (@SourceCurrentAllocatedPartialState.State.checked width before))))
+              request.value →
+            @SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) request.value →
+              @SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeState.Stored width before →
+                And (@SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeState.Stored width after)
+                  (And
+                    (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      request.value result)
+                    (SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.EdgeCertificate request result))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeShapes.edge_call' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryOuterEdgeShapes.edge_call : ∀
+  [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {request : SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : SourceCurrentAllocatedPartialState.State width}
+  {result :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {actual : @SourceCurrentAllocatedPartialGraph.EdgeCall inst inst_1 inst_2 width budget request before result after}
+  {memos final : EndpointMemoGateTrace.Memos},
+  @SourceCurrentAllocatedPartialSourceReads.EdgeCallReads inst inst_1 inst_2 width formulas solver budget request before
+      result after actual memos final →
+    ∀ (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory),
+      @SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+        SourceEqualityConstraintAllocation.Ready
+            (@SourceEqualityNativeDemand.State.operations width
+                (@SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+            request.inherited →
+          @InternedEdgeResidency.EdgeResident (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width
+                    (@SourceCurrentAllocatedPartialState.State.checked width before))))
+              request.value →
+            @SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) request.value →
+              @SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeState.Stored width before →
+                And (@SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeState.Stored width after)
+                  (And
+                    (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      request.value result)
+                    (SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.EdgeCertificate request result))

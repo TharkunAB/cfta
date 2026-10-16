@@ -1,0 +1,555 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageShapes.profile_from_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryStageShapes.profile_from_reads : ∀
+  [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory) {budget : Nat}
+  {records : List.{0} SourceEqualityClassOrder.Record}
+  {values results :
+    List.{0}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width} {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {outcome : Option.{0} EqualityNormalize.Class} {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @SourceCurrentConjunctionScanClassPass.Reduction inst inst_1 inst_2 width budget records values before fourth memo
+      outcome results after savedFourth saved},
+  @SourceCurrentConjunctionScanClassPassActual.Reads inst inst_1 inst_2 width formulas solver budget records values
+      results before after fourth savedFourth memo saved outcome actual memos final →
+    @SourceCurrentConjunctionClassScan.Ready width before →
+      @SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+        @InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native width before)))
+            values →
+          (∀ (record : SourceEqualityClassOrder.Record),
+              @Membership.mem.{0, 0} SourceEqualityClassOrder.Record (List.{0} SourceEqualityClassOrder.Record)
+                  (@List.instMembership.{0} SourceEqualityClassOrder.Record) records record →
+                ∀ (path : EqualityNormalize.Path),
+                  @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                      (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+                    @Ne.{1} EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+            (∀ (record : SourceEqualityClassOrder.Record),
+                @Membership.mem.{0, 0} SourceEqualityClassOrder.Record (List.{0} SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} SourceEqualityClassOrder.Record) records record →
+                  And (SourceEqualityClassOrder.Coherent record)
+                    (And (EqualityTrie.Ascending record.trie) (EqualityNormalize.Nontrivial record.paths))) →
+              SourceCurrentEmptinessMemo.Correct formulas solver
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width before)))
+                  fourth →
+                @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas
+                          solver)
+                        ambient memo) →
+                    @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before) →
+                      @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                        @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width before) →
+                          @EndpointMemoGateTrace.Valid inst_1
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width before)))
+                              memos →
+                            ∀ (rows arity count depth bound : Nat),
+                              @SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity values →
+                                @LE.le.{0} Nat instLENat
+                                    (@List.length.{0}
+                                      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                      values)
+                                    count →
+                                  (∀ (record : SourceEqualityClassOrder.Record),
+                                      @Membership.mem.{0, 0} SourceEqualityClassOrder.Record
+                                          (List.{0} SourceEqualityClassOrder.Record)
+                                          (@List.instMembership.{0} SourceEqualityClassOrder.Record) records record →
+                                        ∀ (path : EqualityNormalize.Path),
+                                          @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                                              (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+                                            @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth) →
+                                    @LE.le.{0} Nat instLENat
+                                        (@MergedOrdinaryHeight.childrenHeight
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) values)
+                                        bound →
+                                      And
+                                        (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@SourceEqualityNativeDemand.State.native width after))
+                                        (And
+                                          (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@SourceEqualityNativeDemand.State.native width after))
+                                          (And
+                                            (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) saved)
+                                            (And
+                                              (@SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (SourceCurrentAllocatedFiniteOrdinaryPassResources.outputRows records
+                                                  rows count depth bound)
+                                                (SourceCurrentAllocatedFiniteOrdinaryPassResources.outputArity records
+                                                  arity)
+                                                results)
+                                              (And
+                                                (@Language.All₂
+                                                  (InternedConstructorTemplates.Value
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                  (InternedConstructorTemplates.Value
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                  (@SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                  values results)
+                                                (And
+                                                  (@Eq.{1} Nat
+                                                    (@List.length.{0}
+                                                      (InternedConstructorTemplates.Value
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                      results)
+                                                    (@List.length.{0}
+                                                      (InternedConstructorTemplates.Value
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                      values))
+                                                  (@LE.le.{0} Nat instLENat
+                                                    (@MergedOrdinaryHeight.childrenHeight
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) results)
+                                                    bound))))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentShapes.local_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryParentShapes.local_reads : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_1 : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (original : SourceSymbolicIndex.Constraint FullSyntax.Formula) {budget : Nat}
+  {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+  {inherited : SourceEqualityConstraintAllocation.Value}
+  {values results :
+    List.{0}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width} {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @SourceCurrentAllocatedLocalReduction.Reduction inst_1 inst inst_2 width budget loaded inherited values before
+      fourth memo results after savedFourth saved},
+  @SourceCurrentAllocatedLocalReductionActual.Reads inst_1 inst inst_2 width formulas solver budget loaded inherited
+      values results before after fourth savedFourth memo saved actual memos final →
+    @SourceCurrentConjunctionClassScan.Ready width before →
+      @SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+        SourceEqualityGuardReadback.Cached (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula original) →
+          @Eq.{1} (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+              (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula original
+                (@SourceEqualityNativeDemand.State.operations width before).constraints)
+              (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) loaded)) →
+            SourceEqualityConstraintAllocation.Ready
+                (@SourceEqualityNativeDemand.State.operations width before).constraints inherited →
+              @InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width before)))
+                  values →
+                SourceCurrentEmptinessMemo.Correct formulas solver
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    fourth →
+                  @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before)))
+                      memo →
+                    (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                        @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                            formulas solver)
+                          ambient memo) →
+                      @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before) →
+                        @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                          @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceEqualityNativeDemand.State.native width before) →
+                            @EndpointMemoGateTrace.Valid inst
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width before)))
+                                memos →
+                              ∀ (limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+                                @SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds FullSyntax.Formula limits
+                                    original →
+                                  ∀ (rows arity count bound : Nat),
+                                    @SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity values →
+                                      @LE.le.{0} Nat instLENat
+                                          (@List.length.{0}
+                                            (InternedConstructorTemplates.Value
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                            values)
+                                          count →
+                                        @LE.le.{0} Nat instLENat
+                                            (@MergedOrdinaryHeight.childrenHeight
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) values)
+                                            bound →
+                                          And
+                                            (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@SourceEqualityNativeDemand.State.native width after))
+                                            (And
+                                              (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceEqualityNativeDemand.State.native width after))
+                                              (And
+                                                (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) saved)
+                                                (And
+                                                  (@SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows
+                                                      limits rows count bound)
+                                                    (@max.{0} Nat Nat.instMax arity
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                                    results)
+                                                  (And
+                                                    (@Language.All₂
+                                                      (InternedConstructorTemplates.Value
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                      (InternedConstructorTemplates.Value
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                      (@SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                      values results)
+                                                    (And
+                                                      (@Eq.{1} Nat
+                                                        (@List.length.{0}
+                                                          (InternedConstructorTemplates.Value
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                          results)
+                                                        (@List.length.{0}
+                                                          (InternedConstructorTemplates.Value
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                          values))
+                                                      (@LE.le.{0} Nat instLENat
+                                                        (@MergedOrdinaryHeight.childrenHeight
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) results)
+                                                        bound))))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentShapes.structure_from_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryParentShapes.structure_from_reads : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_1 : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (original :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  {budget : Nat} {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+  {inherited : SourceEqualityConstraintAllocation.Value} {before after : SourceEqualityNativeDemand.State width}
+  {result :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @SourceCurrentAllocatedParentEdge.Edge inst_1 inst inst_2 width budget
+      (@InternedConstructorTemplates.EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      loaded inherited
+      (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+      before fourth memo result after savedFourth saved},
+  @SourceCurrentAllocatedParentEdgeActual.Reads inst_1 inst inst_2 width formulas solver budget
+      (@InternedConstructorTemplates.EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      loaded inherited
+      (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+      before after result fourth savedFourth memo saved actual memos final →
+    @SourceCurrentConjunctionClassScan.Ready width before →
+      @SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+        (@Eq.{1} Bool
+              (@SourceEqualityMkEdgeAllocation.contradictory FullSyntax.Formula
+                (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@Cache.Interned.key
+                    (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))))
+              false →
+            And
+              (SourceEqualityGuardReadback.Cached
+                (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula
+                  (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@Cache.Interned.key
+                      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                      (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))))
+              (And
+                (@Eq.{1}
+                  (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                  (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula
+                    (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@Cache.Interned.key
+                        (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                    (@SourceEqualityNativeDemand.State.operations width before).constraints)
+                  (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                    (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) loaded)))
+                (And
+                  (SourceEqualityConstraintAllocation.Ready
+                    (@SourceEqualityNativeDemand.State.operations width before).constraints inherited)
+                  (@InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))))) →
+          ∀ (limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+            @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge (SourceObservations.Label FullSyntax.Formula)
+                FullSyntax.Formula limits original →
+              SourceCurrentEmptinessMemo.Correct formulas solver
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width before)))
+                  fourth →
+                @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas
+                          solver)
+                        ambient memo) →
+                    @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before) →
+                      @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                        @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width before) →
+                          @EndpointMemoGateTrace.Valid inst
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width before)))
+                              memos →
+                            @SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                                (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                (@SourceEqualityNativeDemand.State.native width before) →
+                              @SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                  (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula memo →
+                                ∀ (rows arity bound : Nat),
+                                  @SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity original →
+                                    @LE.le.{0} Nat instLENat
+                                        (@MergedOrdinaryHeight.edgeHeight (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+                                        bound →
+                                      And
+                                        (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@SourceEqualityNativeDemand.State.native width after))
+                                        (And
+                                          (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@SourceEqualityNativeDemand.State.native width after))
+                                          (And
+                                            (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) saved)
+                                            (And
+                                              (@SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                                                (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                                (@SourceEqualityNativeDemand.State.native width after))
+                                              (And
+                                                (@SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                                  (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                                  saved)
+                                                (And
+                                                  (@SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows
+                                                      limits rows arity bound)
+                                                    (@max.{0} Nat Nat.instMax arity
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                                    result)
+                                                  (And
+                                                    (@SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge
+                                                      (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                                      (SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit
+                                                        limits)
+                                                      result)
+                                                    (And
+                                                      (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original
+                                                        result)
+                                                      (@LE.le.{0} Nat instLENat
+                                                        (@MergedOrdinaryHeight.edgeHeight
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) result)
+                                                        bound))))))))
