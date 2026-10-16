@@ -1915,6 +1915,11 @@ import MicroCFTA.SourceCurrentConjunctionSelectedRecords
 import MicroCFTA.SourceCurrentConjunctionRequired
 import MicroCFTA.SourceCurrentConjunctionRequiredGlobalMemos
 import MicroCFTA.SourceCurrentConjunctionAllocatedRequired
+import MicroCFTA.SourceCurrentAllocatedMergeGraph
+import MicroCFTA.SourceCurrentAllocatedMergePhysical
+import MicroCFTA.SourceCurrentConjunctionTargetProjection
+import MicroCFTA.SourceCurrentAllocatedMerge
+import MicroCFTA.SourceCurrentAllocatedMergeOperand
 /-!
 # Proof dependency audit
 
