@@ -2,6 +2,75 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current inherited descent and reduced-edge result memos
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`a15d6143`. Proof commits are `e5714c8d`, `0af22f98`, `e37b311b`, and
+`1226b1f3`. No Haskell implementation or test changes occur. The external
+Haskell fix registry remains first in root FINDINGS.md. Record each later
+fix there with its failure case, affected files, commit, checks, and
+upstream status.
+
+Eight additive modules retain the CURRENT inherited prefix, raw rebuilding,
+both caller result families, ordered recursive graph, actual read schedule,
+Mu reconstruction, warm result laws, and reduced-edge wrapper. Inherited
+combination runs once on the RETURNED edge, inherited FIRST. Contradiction
+short circuits before its own accessor. Each child receives its actual
+indexed allocated descent. Raw same-arity setChildren and literal modifyNode
+retain their distinct source operations. Warm tables are not reset.
+
+Both result families retain their complete first published requests. A
+suspended hit starts its stored owner. A completed hit reuses that owner's
+proved law through the actual physical key and keeps the whole caller state.
+Equal key transport derives inherited satisfaction equivalence; it does not
+assume identical metadata or a candidate result law. Actual physical effects
+retain all warm cell facts. Empty families derive Sound without answers.
+
+The current reduced-edge wrapper is composed with the actual ParentEdge
+finite theorem. It derives the owner body law, retains its exact running
+cell, finishes that cell, and derives the candidate's law. Fresh keys construct
+their own prefix. Ready hits need no parent range plan. finite_or_busy covers
+all valid starts: actual busy observation or an actual completed call and
+full physical, language, inventory, merge, fourth, and global receipt.
+Validity excludes absence. No busy cell becomes a result. Ranges inspect
+only reached evaluated owners and actual field loads; no future successful
+body, readiness oracle, or result-language law is an input.
+
+Mu reconstruction uses an explicit filtered-probe heap derived by original
+construction. Actual constructor work, optional binders, and checked native
+execution retain it. A resident binder then rebuilds to its smart cleanup
+with unchanged heap and exact independent meaning. Current Ready does not
+imply that probe heap. Its transport through all high-level current graphs
+remains open. The raw outer graph and Reads alone prove neither its physical
+invariants nor its full recursive language law.
+
+The pinned full Audit passes 2371 jobs and 57099 theorem dependency checks.
+Only standard foundations and the old unused-input warning remain. Public
+probes, external integration kernels, and independent reviews are retained
+in lean/restart-evidence/20261016-current-inherited/. All 4146 starting files
+remain. All 2362 older non-Audit proof sources retain their bytes. Nineteen
+frozen manifests, stashes, other worktree records, and the first Haskell fix
+registry remain. Earlier unavailable external drafts are not claimed recovered
+or reverified. Reuse unchanged-source strict Nix all-component build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-inherited-caller.md and outer-current-next.md in the
+evidence directory. Next prove protected running-cell frames and the mutual
+physical/language invariant for the CURRENT recursive calls, descendants,
+ordered rows, and modifyNode. Derive child laws from smaller actual calls.
+Do not assume the desired body law through a callback. Preserve the explicit
+probe heap through current operations before using the Mu receipt globally.
+General constrained outer completion, unequal-length path classes, and the
+literal bounded executable worker remain open. Serial graphs do not prove
+GHC forcing, lazy IntMap/list demand, or pending publication.
+
+The full-library goal, broader frontend and recursive-generator adapters,
+all separate Sized contracts, noConstraint CAF, concrete containers,
+concurrency, identity lifetime, machine capacity, solver IO, random draws,
+callbacks, codecs, and older constructor and equality work stay active.
+Preserve the optimized interned core. No board posts or deployments. Push
+verified formalize checkpoints regularly. This checkpoint is progress.
+
 ## Current warm local reduction and checked parent construction
 
 Source main remains `8f85ddb6`. The preceding published checkpoint is
