@@ -1,0 +1,27 @@
+/tmp/mcfta-recursive-selected-progress.hs:49:12: warning: [GHC-63394] [-Wx-partial]
+    In the use of ‘head’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+49 |         && head (children directResult) /= chain
+   |            ^^^^
+
+/tmp/mcfta-recursive-selected-progress.hs:50:12: warning: [GHC-63394] [-Wx-partial]
+    In the use of ‘head’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+50 |         && head (children directResult) == last (children directResult)
+   |            ^^^^
+
+("selected distinct recursive endpoints really narrow",Just True)
+("unequal selected paths unfold unconstrained recursive inputs",Just False)
+mcfta-recursive-selected-progress.hs: Uncaught exception ghc-internal:GHC.Internal.Exception.ErrorCall:
+
+user error (unequal selected paths unfold unconstrained recursive inputs)
+
+HasCallStack backtrace:
+  throwIO, called at libraries/ghc-internal/src/GHC/Internal/Control/Monad/Fail.hs:66:12 in ghc-internal:GHC.Internal.Control.Monad.Fail
+  a type signature in an instance, called at libraries/ghc-internal/src/GHC/Internal/Control/Monad/Fail.hs:65:13 in ghc-internal:GHC.Internal.Control.Monad.Fail
+  fail, called at /tmp/mcfta-recursive-selected-progress.hs:35:35 in main:Main
+

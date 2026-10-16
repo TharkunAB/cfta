@@ -1,0 +1,57 @@
+import MicroCFTA.SourceCurrentAllocatedNativeColdClosedExact
+import MicroCFTA.SourceCurrentAllocatedNativeOriginalHistory
+import MicroCFTA.SourceRecursiveIntersectionNativeFiniteObservation
+import MicroCFTA.InternedFreshOrdinaryClosedCompletion
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.IntersectSchedule.Completes
+#check @MicroCFTA.IntersectSchedule.Completes
+
+#print axioms MicroCFTA.IntersectSchedule.requiredFuel
+#check @MicroCFTA.IntersectSchedule.requiredFuel
+
+#print axioms MicroCFTA.IntersectSchedule.requiredFuel_success
+#check @MicroCFTA.IntersectSchedule.requiredFuel_success
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.BodiesBelow
+#check @MicroCFTA.SourceRecursiveIntersectionNative.BodiesBelow
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.node_busy_impossible
+#check @MicroCFTA.SourceRecursiveIntersectionNative.node_busy_impossible
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.edge_busy_impossible
+#check @MicroCFTA.SourceRecursiveIntersectionNative.edge_busy_impossible
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.node_terminal
+#check @MicroCFTA.SourceRecursiveIntersectionNative.node_terminal
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.edge_terminal
+#check @MicroCFTA.SourceRecursiveIntersectionNative.edge_terminal
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.code_terminal_of_bodies
+#check @MicroCFTA.SourceRecursiveIntersectionNative.code_terminal_of_bodies
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.code_terminal
+#check @MicroCFTA.SourceRecursiveIntersectionNative.code_terminal
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionRequestProgress.initial_complete
+#check @MicroCFTA.SourceRecursiveIntersectionRequestProgress.initial_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeColdClosedExact.cold_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativeColdClosedExact.cold_complete
+
+#print axioms MicroCFTA.InternedFreshOrdinaryClosedCompletion.closed_complete
+#check @MicroCFTA.InternedFreshOrdinaryClosedCompletion.closed_complete
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInputView.source_schedule_total
+#check @MicroCFTA.SourceRecursiveIntersectionInputView.source_schedule_total

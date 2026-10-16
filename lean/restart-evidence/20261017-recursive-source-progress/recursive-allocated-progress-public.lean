@@ -1,0 +1,47 @@
+import MicroCFTA.SourceCurrentAllocatedNativeConstructedHistory
+import MicroCFTA.SourceCurrentAllocatedNativePreparedHistory
+import MicroCFTA.SourceCurrentAllocatedPartialInitialization
+import MicroCFTA.SourceCurrentAllocatedTargetQuery
+import MicroCFTA.SourceRecursiveIntersectionNativeColdExact
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualNativeWork
+import MicroCFTA.SourceCurrentAllocatedNativeMuSource
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeOriginalHistory.constructed
+#check @MicroCFTA.SourceCurrentAllocatedNativeOriginalHistory.constructed
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInitialization.constructed
+#check @MicroCFTA.SourceCurrentAllocatedPartialInitialization.constructed
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionRequestProgress.initial_complete
+#check @MicroCFTA.SourceRecursiveIntersectionRequestProgress.initial_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeConstructedHistory.query_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativeConstructedHistory.query_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePreparedHistory.query_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativePreparedHistory.query_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInventoryState.query_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativeInventoryState.query_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetQuery.finite
+#check @MicroCFTA.SourceCurrentAllocatedTargetQuery.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeMuSource.enter_prefix
+#check @MicroCFTA.SourceCurrentAllocatedNativeMuSource.enter_prefix
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.counted
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.counted
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNative.constructed_node_table_exact
+#check @MicroCFTA.SourceRecursiveIntersectionNative.constructed_node_table_exact
