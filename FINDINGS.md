@@ -2,13 +2,17 @@
 
 ## Haskell fix handoff for external work
 
-Current source main is `999c04a5`. It is merged into `formalize` at `9aaffc95`.
+Audited source main is `999c04a5`. It is merged into `formalize` at `9aaffc95`.
 This refresh adds field-specific atoms and typing rules through node views.
 It also rejects negative typing bounds. It changes no interned core or Sized
 implementation.
 No local Haskell behavior repair is added. The historical repairs below
 remain upstream. The only local Haskell-tree differences are the retained
 constructor changelog entry and reproducer comment.
+
+Remote main advanced to `5399d310` during publication. PR #63 adds qualified
+typing do-notation. That five-file delta is fetched but not merged or checked.
+The repair and counterexample entries below refer to audited main `999c04a5`.
 
 The current source validation is recorded in
 `lean/restart-evidence/20261016-frontend-node-view-refresh/`.
@@ -129,6 +133,13 @@ to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
 
 ## Current generator node views and source refresh
+
+Publication readback at 13:14 CEST found remote main `5399d310` (PR #63,
+qualified typing do-notation). It is fetched but not merged or validated.
+The audited source below remains `999c04a5`; formalize checkpoint `27a4722c`
+is published. Inspect and refresh that five-file frontend delta before the
+next implementation. Read lean/restart-evidence/20261016-typing-do-pending.md.
+
 
 Source main is `999c04a5`, merged at `9aaffc95`. The preceding published
 checkpoint is `b931bcc6`. PR #60 adds field-specific atoms; PR #61 writes
