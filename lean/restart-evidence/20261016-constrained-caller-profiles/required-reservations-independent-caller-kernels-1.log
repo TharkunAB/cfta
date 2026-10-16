@@ -1,0 +1,31 @@
+'CallerResourceIndependentChecks.required_then_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+@required_then_projection : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (paths : List (List Int)) (path : List Int) (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    Values before values →
+      ChildrenShape rows arity values →
+        ∀ (count depth bound : Nat),
+          values.length ≤ count →
+            path.length ≤ depth →
+              childrenHeight values ≤ bound →
+                ∃ middleValues middle result after requests,
+                  SourceEqualityRequiredWorkerComplete.StableRun
+                      (fun fuel readFuel =>
+                        SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+                      middleValues middle ∧
+                    SourceEqualityProjectionGraph.Forest path middleValues middle result after ∧
+                      SourceEqualityRequiredWorkerComplete.StableRun
+                          (fun fuel readFuel =>
+                            SourceEqualityProjectionWorker.forest fuel readFuel path middleValues middle)
+                          result after ∧
+                        Keeps before after ∧
+                          SemanticReady after ∧
+                            Available after result ∧
+                              NodeShape
+                                  (SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count depth)
+                                  arity result ∧
+                                height result ≤ bound ∧
+                                  Trace before after requests ∧
+                                    nodeRequests requests ≤ (Counts values).fst + (1 + (Counts middleValues).fst) ∧
+                                      edgeRequests requests ≤ (Counts values).snd

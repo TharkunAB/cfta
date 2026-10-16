@@ -1,0 +1,74 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySerialCallerResources.nodeBudget' does not depend on any axioms
+nodeBudget : Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySerialCallerResources.edgeBudget' does not depend on any axioms
+edgeBudget : Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySerialCallerResources.required_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@required_projection : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (paths : List (List Int)) (path : List Int) (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredSemanticCache.SemanticReady before →
+    InternedNestedProvenance.Values before values →
+      ChildrenShape rows arity values →
+        ∀ (count depth bound : Nat),
+          values.length ≤ count →
+            path.length ≤ depth →
+              childrenHeight values ≤ bound →
+                ∃ middle current result after earlier later,
+                  StableRun
+                      (fun fuel readFuel =>
+                        SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+                      middle current ∧
+                    SourceEqualityProjectionGraph.Forest path middle current result after ∧
+                      StableRun
+                          (fun fuel readFuel => SourceEqualityProjectionWorker.forest fuel readFuel path middle current)
+                          result after ∧
+                        SourceEqualityRequiredCache.Keeps before after ∧
+                          SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                            Available after result ∧
+                              NodeShape
+                                  (SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count depth)
+                                  arity result ∧
+                                MergedOrdinaryHeight.height result ≤ bound ∧
+                                  SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after
+                                      (earlier ++ later) ∧
+                                    SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests (earlier ++ later) ≤
+                                        nodeBudget rows arity count bound ∧
+                                      SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests (earlier ++ later) ≤
+                                          edgeBudget rows arity count bound ∧
+                                        after.nodes.next ≤ before.nodes.next + nodeBudget rows arity count bound ∧
+                                          after.edges.next ≤ before.edges.next + edgeBudget rows arity count bound
+'SerialCallerResourceChecks.serial_layout_capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+@serial_layout_capacity : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (bits : Nat) (paths : List (List Int)) (path : List Int) (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredSemanticCache.SemanticReady before →
+    InternedNestedProvenance.Values before values →
+      ChildrenShape rows arity values →
+        ∀ (count depth bound : Nat),
+          values.length ≤ count →
+            path.length ≤ depth →
+              childrenHeight values ≤ bound →
+                before.nodes.next + nodeBudget rows arity count bound ≤ 2 ^ bits →
+                  before.edges.next + edgeBudget rows arity count bound ≤ 2 ^ (bits + 2) →
+                    ∃ middle current result after requests,
+                      StableRun
+                          (fun fuel readFuel =>
+                            SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+                          middle current ∧
+                        SourceEqualityProjectionGraph.Forest path middle current result after ∧
+                          StableRun
+                              (fun fuel readFuel =>
+                                SourceEqualityProjectionWorker.forest fuel readFuel path middle current)
+                              result after ∧
+                            SourceEqualityRequiredCache.Keeps before after ∧
+                              SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                                Available after result ∧
+                                  NodeShape
+                                      (SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count
+                                        depth)
+                                      arity result ∧
+                                    SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after
+                                        requests ∧
+                                      after.nodes.next ≤ 2 ^ bits ∧ after.edges.next ≤ 2 ^ (bits + 2)

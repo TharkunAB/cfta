@@ -1,0 +1,106 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.lean:150:66: error: invalid `▸` notation, argument
+  member
+has type
+  row ∈ [edge]
+equality expected
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.lean:160:13: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+identityCase :
+  ∀ {value : Value Symbol Guard} {state : InternedConstructorTemplates.State Symbol Guard}, NodeResult value state state
+emptyCase :
+  ∀ {entries : List (Int × Needed)} {state : InternedConstructorTemplates.State Symbol Guard},
+    entries ≠ [] → NodeResult Value.empty state state
+ordinaryCase :
+  ∀ {entries : List (Int × Needed)} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {rebuilt : List (EdgeValue Symbol Guard)}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {value : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard} {entry : Interned InternedBinderProtocol.NodeKey}
+    {depth : Nat} {free : List InternedBinderProtocol.Reference},
+    entries ≠ [] →
+      RequireRows entries edges before rebuilt middle →
+        run (makeNode rebuilt) middle = (value, after) →
+          RowsResult edges before middle → NodeResult (Value.node entry edges depth free) before after
+recursiveCase :
+  ∀ {entries : List (Int × Needed)} {original : Value Symbol Guard}
+    {before : InternedConstructorTemplates.State Symbol Guard} {exposed : Value Symbol Guard}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard},
+    entries ≠ [] →
+      Recursive original →
+        SourceEqualityRequiredHead.Head original before exposed middle →
+          RequireNode (Needed.node entries) exposed middle result after →
+            NodeResult exposed middle after → NodeResult original before after
+nilChildren : ∀ {state : InternedConstructorTemplates.State Symbol Guard}, ChildrenResult [] state state
+unselectedCase :
+  ∀ {entries : List (Int × Needed)} {values : List (Value Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {results : List (Value Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard} {value : Value Symbol Guard} (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = none →
+      RequireChildren entries (index + 1) values before results after →
+        ChildrenResult values before after → ChildrenResult (value :: values) before after
+selectedCase :
+  ∀ {entries : List (Int × Needed)} {needed : Needed} {value : Value Symbol Guard}
+    {before : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {values results : List (Value Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard} (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = some needed →
+      RequireNode needed value before result middle →
+        RequireChildren entries (index + 1) values middle results after →
+          NodeResult value before middle →
+            ChildrenResult values middle after → ChildrenResult (value :: values) before after
+nilRows : ∀ {state : InternedConstructorTemplates.State Symbol Guard}, RowsResult [] state state
+rejectedCase :
+  ∀ {entries : List (Int × Needed)} {edge : EdgeValue Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {results : List (EdgeValue Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard},
+    fits (Needed.node entries) edge.children.length = false →
+      RequireRows entries edges before results after →
+        RowsResult edges before after → RowsResult (edge :: edges) before after
+entries : List (Int × Needed)
+before : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+result : EdgeValue Symbol Guard
+afterEdge : InternedConstructorTemplates.State Symbol Guard
+edges results : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+a✝ : RequireRows entries edges afterEdge results after
+restIH : RowsResult edges afterEdge after
+semantic : SemanticReady before
+later : Budget afterEdge after (ORows edges)
+entry : Interned (EdgeKey Symbol Guard)
+originals : List (Value Symbol Guard)
+fit : fits (Needed.node entries) (EdgeValue.mk entry originals).children.length = true
+children : RequireChildren entries 0 (EdgeValue.mk entry originals).children before values middle
+built :
+  run
+      (makeEdge (EdgeValue.mk entry originals).entry.key.symbol (EdgeValue.mk entry originals).entry.key.constraint
+        values)
+      middle =
+    (result, afterEdge)
+childrenIH : ChildrenResult (EdgeValue.mk entry originals).children before middle
+resident : Edges before (EdgeValue.mk entry originals :: edges)
+domain : DRows (EdgeValue.mk entry originals :: edges)
+edgeDomain : SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (EdgeValue.mk entry originals)
+edgeResident : EdgeResident before (EdgeValue.mk entry originals)
+childrenAvailable : Values before (EdgeValue.mk entry originals).children
+earlier : Budget before middle (OChildren (EdgeValue.mk entry originals).children)
+firstGraph : RequireRows entries [EdgeValue.mk entry originals] before [result] afterEdge
+physical :
+  SourceEqualityRequiredCache.Keeps before afterEdge ∧
+    SemanticReady afterEdge ∧
+      Edges afterEdge [result] ∧
+        DRows [result] ∧
+          ∃ selected,
+            selected.Sublist [EdgeValue.mk entry originals] ∧
+              Language.All₂ SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow selected [result]
+⊢ (OChildren (EdgeValue.mk entry originals).children).fst ≤ (OChildren originals).fst
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.lean:161:77: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(OChildren (EdgeValue.mk entry originals).children).snd
+ b := ↑(OChildren originals).snd

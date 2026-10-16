@@ -1,0 +1,75 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.required' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.required : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {rows arity : Nat}
+  (paths : List (List Int)) (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedNestedProvenance.Values before values →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+        ∃ results after requests,
+          MicroCFTA.SourceEqualityRequiredWorkerComplete.StableRun
+              (fun fuel readFuel =>
+                MicroCFTA.SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+              results after ∧
+            MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+              MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                MicroCFTA.InternedNestedProvenance.Values after results ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity results ∧
+                    MicroCFTA.MergedOrdinaryHeight.childrenHeight results ≤
+                        MicroCFTA.MergedOrdinaryHeight.childrenHeight values ∧
+                      results.length = values.length ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd ∧
+                              after.nodes.next ≤
+                                  before.nodes.next +
+                                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ∧
+                                after.edges.next ≤
+                                  before.edges.next +
+                                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.projection : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {rows arity : Nat}
+  (path : List Int) (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedNestedProvenance.Values before values →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+        ∀ (count depth bound : Nat),
+          values.length ≤ count →
+            path.length ≤ depth →
+              MicroCFTA.MergedOrdinaryHeight.childrenHeight values ≤ bound →
+                ∃ result after requests,
+                  MicroCFTA.SourceEqualityProjectionGraph.Forest path values before result after ∧
+                    MicroCFTA.SourceEqualityRequiredWorkerComplete.StableRun
+                        (fun fuel readFuel =>
+                          MicroCFTA.SourceEqualityProjectionWorker.forest fuel readFuel path values before)
+                        result after ∧
+                      MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+                        MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                          MicroCFTA.InternedProbeProvenance.Available after result ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count
+                                  depth)
+                                arity result ∧
+                              MicroCFTA.MergedOrdinaryHeight.height result ≤ bound ∧
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after
+                                    requests ∧
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                                      1 +
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children
+                                            values).fst ∧
+                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests =
+                                        0 ∧
+                                      after.nodes.next ≤
+                                          before.nodes.next +
+                                            (1 +
+                                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children
+                                                  values).fst) ∧
+                                        after.edges.next = before.edges.next

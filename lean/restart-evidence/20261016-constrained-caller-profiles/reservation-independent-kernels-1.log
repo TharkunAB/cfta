@@ -1,0 +1,51 @@
+lean/restart-evidence/20261016-constrained-caller-profiles/reservation-independent-kernels.lean:39:63: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+'MicroCFTA.ProjectionReservationIndependentKernels.repeated_original_occurrences' depends on axioms: [propext]
+repeated_original_occurrences : O root = (5, 2) ∧ OChildren [root, root] = (10, 4)
+'MicroCFTA.ProjectionReservationIndependentKernels.warm_request_without_reservation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@warm_request_without_reservation : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (edges : List (EdgeValue Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  InternedConstructorTemplates.Valid before →
+    canonicalEdges (surviving edges) ≠ [] →
+      have warm := (run (makeNode edges) before).snd;
+      ∃ requests,
+        Trace warm warm requests ∧ nodeRequests requests = 1 ∧ nodeReservations requests = 0 ∧ edgeRequests requests = 0
+'MicroCFTA.ProjectionReservationIndependentKernels.same_forest_profile_and_work' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@same_forest_profile_and_work : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  {path : List Int} {values : List (Value Symbol Guard)} {result : Value Symbol Guard}
+  {before after : InternedConstructorTemplates.State Symbol Guard},
+  Forest path values before result after →
+    SemanticReady before →
+      Values before values →
+        ChildrenShape rows arity values →
+          ∃ requests,
+            Trace before after requests ∧
+              nodeRequests requests ≤ 1 + (OChildren values).fst ∧
+                edgeRequests requests = 0 ∧
+                  after.nodes.next ≤ before.nodes.next + (1 + (OChildren values).fst) ∧
+                    after.edges.next = before.edges.next ∧
+                      NodeShape
+                          (SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows values.length
+                            path.length)
+                          arity result ∧
+                        height result ≤ childrenHeight values
+'MicroCFTA.ProjectionReservationIndependentKernels.serial_actual_work' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@serial_actual_work : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {firstPath secondPath : List Int} {input middle result : Value Symbol Guard}
+  {before current after : InternedConstructorTemplates.State Symbol Guard},
+  Project firstPath input before middle current →
+    Project secondPath middle current result after →
+      SemanticReady before →
+        Available before input →
+          SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+            ∃ earlier later,
+              Trace before current earlier ∧
+                Trace current after later ∧
+                  Trace before after (earlier ++ later) ∧
+                    nodeRequests (earlier ++ later) ≤ (O input).fst + (O middle).fst ∧
+                      edgeRequests (earlier ++ later) = 0 ∧ after.edges.next = before.edges.next

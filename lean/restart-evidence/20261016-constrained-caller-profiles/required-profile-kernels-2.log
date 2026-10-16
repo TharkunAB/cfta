@@ -1,0 +1,64 @@
+lean/restart-evidence/20261016-constrained-caller-profiles/required-profile-kernels.lean:45:6: warning: Variable name `actual` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _actual
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-constrained-caller-profiles/required-profile-kernels.lean:61:6: warning: Variable name `actual` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _actual
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'RequiredProfileChecks.serial_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+@serial_finite : ∀ {Symbol Guard : Type} {rowLimit arityLimit : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (firstPaths lastPaths : List (List Int)) (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    Values before values →
+      ChildrenShape rowLimit arityLimit values →
+        ∃ middleValues middle results after,
+          SourceEqualityRequiredWorkerComplete.StableRun
+              (fun fuel readFuel => SourceEqualityRequiredExecution.requireAll fuel readFuel firstPaths values before)
+              middleValues middle ∧
+            SourceEqualityRequiredWorkerComplete.StableRun
+                (fun fuel readFuel =>
+                  SourceEqualityRequiredExecution.requireAll fuel readFuel lastPaths middleValues middle)
+                results after ∧
+              Keeps before after ∧
+                SemanticReady after ∧
+                  Values after results ∧ ChildrenShape rowLimit arityLimit results ∧ results.length = values.length
+'RequiredProfileChecks.zero_bounds_empty_paths' depends on axioms: [propext, Classical.choice, Quot.sound]
+@zero_bounds_empty_paths : ∀ {Symbol Guard : Type} {rowLimit arityLimit : Nat}
+  [inst : DecidableEq (EdgeKey Symbol Guard)] (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    Values before values →
+      ChildrenShape rowLimit arityLimit values →
+        SourceEqualityRequiredExecution.requireAll 0 0 [] values before =
+            SourceEqualityRequiredWorker.Result.done values before ∧
+          Keeps before before ∧
+            SemanticReady before ∧
+              Values before values ∧ ChildrenShape rowLimit arityLimit values ∧ values.length = values.length
+'RequiredProfileChecks.nullary_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+@nullary_rejection : ∀ {Symbol Guard : Type} {rowLimit arityLimit : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (entry : Interned (EdgeKey Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    EdgeResident before (EdgeValue.mk entry []) →
+      EdgeShape rowLimit arityLimit (EdgeValue.mk entry []) →
+        ∃ actual,
+          Keeps before before ∧
+            SemanticReady before ∧ Edges before [] ∧ RowsShape rowLimit arityLimit [] ∧ [].length ≤ 1
+'RequiredProfileChecks.unary_rebuild' depends on axioms: [propext, Classical.choice, Quot.sound]
+@unary_rebuild : ∀ {Symbol Guard : Type} {rowLimit arityLimit : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (entry : Interned (EdgeKey Symbol Guard)) (child : Value Symbol Guard)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    EdgeResident before (EdgeValue.mk entry [child]) →
+      EdgeShape rowLimit arityLimit (EdgeValue.mk entry [child]) →
+        have built := run (makeEdge entry.key.symbol entry.key.constraint [child]) before;
+        ∃ actual,
+          Keeps before built.snd ∧
+            SemanticReady built.snd ∧
+              Edges built.snd [built.fst] ∧
+                RowsShape rowLimit arityLimit [built.fst] ∧ [built.fst].length ≤ [EdgeValue.mk entry [child]].length

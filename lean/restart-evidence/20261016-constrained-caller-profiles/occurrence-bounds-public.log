@@ -1,0 +1,72 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount_succ : ∀ (rows arity bound : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity bound ≤
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity (bound + 1)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount_succ : ∀ (rows arity bound : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity bound ≤
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity (bound + 1)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount_mono : ∀ (rows arity : Nat) {first last : Nat},
+  first ≤ last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity first ≤
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rows arity last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount_mono : ∀ (rows arity : Nat) {first last : Nat},
+  first ≤ last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity first ≤
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rows arity last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.node' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.node : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+    ∀ (bound : Nat),
+      MicroCFTA.MergedOrdinaryHeight.height value ≤ bound →
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).fst ≤
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rowLimit arityLimit bound ∧
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).snd ≤
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.rows' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.rows : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit edges →
+    ∀ (bound : Nat),
+      MicroCFTA.MergedOrdinaryHeight.edgesHeight edges ≤ bound →
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows edges).fst ≤
+            edges.length *
+              (arityLimit *
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rowLimit arityLimit bound) ∧
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows edges).snd ≤
+            edges.length *
+              (1 +
+                arityLimit *
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edge' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edge : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit value →
+    ∀ (bound : Nat),
+      MicroCFTA.MergedOrdinaryHeight.edgeHeight value ≤ bound →
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.edge value).fst ≤
+            arityLimit *
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rowLimit arityLimit bound ∧
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.edge value).snd ≤
+            1 +
+              arityLimit *
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.children' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.children : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+    ∀ (bound : Nat),
+      MicroCFTA.MergedOrdinaryHeight.childrenHeight values ≤ bound →
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ≤
+            values.length *
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.nodeCount rowLimit arityLimit bound ∧
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd ≤
+            values.length *
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound

@@ -1,0 +1,70 @@
+'CallerNativeBudgetIntegration.generated_native_headroom' depends on axioms: [propext, Classical.choice, Quot.sound]
+@CallerNativeBudgetIntegration.generated_native_headroom : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (rows arity count depth bound bits : Nat) (paths : List (List Int)) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedNestedProvenance.Values before values →
+      MicroCFTA.InternedProbeProvenance.Available before right →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity right →
+            values.length ≤ count →
+              path.length ≤ depth →
+                MicroCFTA.MergedOrdinaryHeight.childrenHeight values ≤ bound →
+                  MicroCFTA.MergedOrdinaryHeight.height right ≤ bound →
+                    before.nodes.next +
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySerialCallerResources.nodeBudget rows arity
+                              count bound +
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count
+                              depth)
+                            arity bound ≤
+                        2 ^ bits →
+                      before.edges.next +
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySerialCallerResources.edgeBudget rows arity
+                                count bound +
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count
+                                depth)
+                              arity bound ≤
+                          2 ^ (bits + 2) →
+                        ∃ middle current result after earlier later,
+                          MicroCFTA.SourceEqualityRequiredWorkerComplete.StableRun
+                              (fun fuel readFuel =>
+                                MicroCFTA.SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+                              middle current ∧
+                            MicroCFTA.SourceEqualityProjectionGraph.Forest path middle current result after ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after
+                                  (earlier ++ later) ∧
+                                MicroCFTA.InternedProbeProvenance.Available after result ∧
+                                  MicroCFTA.InternedProbeProvenance.Available after right ∧
+                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows
+                                          count depth)
+                                        arity result ∧
+                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget result
+                                            right ≤
+                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows
+                                              rows count depth)
+                                            arity bound ∧
+                                        after.nodes.next +
+                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget
+                                                result right ≤
+                                            2 ^ bits ∧
+                                          after.edges.next +
+                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget
+                                                result right ≤
+                                            2 ^ (bits + 2)

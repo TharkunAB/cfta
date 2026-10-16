@@ -1,0 +1,34 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.lean:83:8: error: unsolved goals
+case nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+coherent : InternedRecordCoherence.Coherent heap
+linked : Linked heap
+rows arity : Nat
+available : ∀ (value : Value Symbol Guard), value ∈ [] → Available heap value
+profile : ChildrenShape rows arity []
+⊢ NodeShape 0 arity
+    (run
+        (match List.filterMap (fun identity => none) (EnumerationBuilderCaches.canonicalIds []) with
+        | [] => Work.pure Value.empty
+        | first :: rest =>
+          Work.node
+            (InternedBinderProtocol.NodeKey.node
+              (first.entry.identity :: List.map (fun edge => edge.entry.identity) rest))
+            (identifyNode (first :: rest)) Work.pure)
+        heap).fst
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.lean:83:98: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [ordinaryUnion, InternedConstructorTemplates.makeNode, surviving, canonicalEdges, NodeShape]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.lean:83:103: warning: This simp argument is unused:
+  NodeShape
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [ordinaryUnion, InternedConstructorTemplates.makeNode, surviving, canonicalEdges, run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

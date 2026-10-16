@@ -1,0 +1,92 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.node' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedProbeProvenance.Available before value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value →
+          ∃ requests,
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).fst ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).snd ∧
+                  after.nodes.next ≤
+                      before.nodes.next + (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).fst ∧
+                    after.edges.next ≤
+                      before.edges.next + (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.children' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries index values before results after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedNestedProvenance.Values before values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+          ∃ requests,
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd ∧
+                  after.nodes.next ≤
+                      before.nodes.next +
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ∧
+                    after.edges.next ≤
+                      before.edges.next +
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.rows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredGraph.RequireRows entries edges before results after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedNestedProvenance.Edges before edges →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows edges →
+          ∃ requests,
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows edges).fst ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows edges).snd ∧
+                  after.nodes.next ≤
+                      before.nodes.next + (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows edges).fst ∧
+                    after.edges.next ≤
+                      before.edges.next + (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows edges).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.requireAll_done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredReservations.requireAll_done : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (fuel readFuel : Nat)
+  (paths : List (List Int)) (values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedNestedProvenance.Values before values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+          ∃ requests,
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd ∧
+                  after.nodes.next ≤
+                      before.nodes.next +
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).fst ∧
+                    after.edges.next ≤
+                      before.edges.next +
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd

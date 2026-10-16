@@ -1,0 +1,54 @@
+lean/restart-evidence/20261016-constrained-caller-profiles/occurrence-bounds-kernels.lean:21:55: error: failed to synthesize
+  Decidable
+    (NodeShape 2 3 repeatedTree ∧
+      height repeatedTree = 2 ∧
+        SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree = (7, 14) ∧
+          nodeCount 2 3 2 = 7 ∧ edgeCount 2 3 2 = 14)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/restart-evidence/20261016-constrained-caller-profiles/occurrence-bounds-kernels.lean:49:87: error: Application type mismatch: The argument
+  ih
+has type
+  SourceEqualityRequiredExecution.requireAll fuel readFuel paths as✝ before =
+      SourceEqualityRequiredWorker.Result.done bs✝ after →
+    InternedNestedProvenance.Values before as✝ →
+      ChildrenShape rows arity as✝ →
+        as✝.length ≤ count →
+          childrenHeight as✝ ≤ bound →
+            SourceEqualityRequiredCache.Keeps before after ∧
+                SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                  InternedNestedProvenance.Values after bs✝ ∧ ChildrenShape rows arity bs✝ ∧ bs✝.length = as✝.length →
+              SourceEqualityRequiredCache.Keeps before after ∧
+                  SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                    InternedNestedProvenance.Values after bs✝ ∧
+                      SourceCurrentAllocatedFiniteOrdinaryDomain.Children bs✝ ∧
+                        Language.All₂ SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow as✝ bs✝ →
+                childrenHeight bs✝ ≤ childrenHeight as✝
+but is expected to have type
+  childrenHeight bs✝ ≤ ?m.121
+in the application
+  Nat.le_trans ih
+'OccurrenceBoundChecks.saturated_repeated_tree' depends on axioms: [propext, sorryAx]
+saturated_repeated_tree : NodeShape 2 3 repeatedTree ∧
+  height repeatedTree = 2 ∧
+    SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree = (7, 14) ∧
+      nodeCount 2 3 2 = 7 ∧ edgeCount 2 3 2 = 14
+'OccurrenceBoundChecks.repeated_tree_bound' depends on axioms: [propext, sorryAx, Quot.sound]
+repeated_tree_bound : (SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree).fst ≤ 7 ∧
+  (SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree).snd ≤ 14
+'OccurrenceBoundChecks.required_result_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+@required_result_bound : ∀ {Symbol Guard : Type} {rows arity : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (fuel readFuel : Nat) (paths : List (List Int)) (values results : List (Value Symbol Guard))
+  (before after : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before =
+      SourceEqualityRequiredWorker.Result.done results after →
+    SourceEqualityRequiredSemanticCache.SemanticReady before →
+      InternedNestedProvenance.Values before values →
+        ChildrenShape rows arity values →
+          ∀ (count bound : Nat),
+            values.length ≤ count →
+              childrenHeight values ≤ bound →
+                (SourceCurrentAllocatedFiniteOrdinaryOccurrences.children results).fst ≤
+                    count * nodeCount rows arity bound ∧
+                  (SourceCurrentAllocatedFiniteOrdinaryOccurrences.children results).snd ≤
+                    count * edgeCount rows arity bound

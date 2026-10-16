@@ -1,0 +1,47 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryCallerResources.lean:52:7: error: unexpected token 'structure'; expected '(', ':=', '|' or term
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryCallerResources.lean:52:7: error: Missing cases:
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryCallerResources.lean:46:131: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+rows arity : Nat
+paths : List (List Int)
+values : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+available : Values before values
+profile : ChildrenShape rows arity values
+results : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+keeps : Keeps before after
+afterSemantic : SemanticReady after
+afterAvailable : Values after results
+resultProfile : ChildrenShape rows arity results
+length : results.length = values.length
+fuel readFuel : Nat
+completed :
+  ∀ (workerFuel headFuel : Nat),
+    fuel ≤ workerFuel →
+      readFuel ≤ headFuel →
+        (fun fuel readFuel => SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before) workerFuel
+            headFuel =
+          SourceEqualityRequiredWorker.Result.done results after
+done :
+  (fun fuel readFuel => SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before) fuel readFuel =
+    SourceEqualityRequiredWorker.Result.done results after
+domain : SourceCurrentAllocatedFiniteOrdinaryDomain.Children values
+⊢ ∃ results after requests,
+    StableRun (fun fuel readFuel => SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+        results after ∧
+      Keeps before after ∧
+        SemanticReady after ∧
+          Values after results ∧
+            ChildrenShape rows arity results ∧
+              childrenHeight results ≤ childrenHeight values ∧
+                results.length = values.length ∧
+                  Trace before after requests ∧
+                    nodeRequests requests ≤ (OChildren values).fst ∧
+                      edgeRequests requests ≤ (OChildren values).snd ∧
+                        after.nodes.next ≤ before.nodes.next + (OChildren values).fst ∧
+                          after.edges.next ≤ before.edges.next + (OChildren values).snd
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryCallerResources.lean:52:16: error: unexpected token ':='; expected identifier
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryCallerResources.lean:58:42: error: unexpected token '.'; expected identifier

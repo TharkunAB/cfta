@@ -1,0 +1,142 @@
+lean/restart-evidence/20261016-constrained-caller-profiles/merge-profile-kernels.lean:18:38: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.bound`
+
+Note: Inferred this name from the expected resulting type of `.bound`:
+  InternedBinderProtocol.Reference
+lean/restart-evidence/20261016-constrained-caller-profiles/merge-profile-kernels.lean:19:36: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.bound`
+
+Note: Inferred this name from the expected resulting type of `.bound`:
+  InternedBinderProtocol.Reference
+lean/restart-evidence/20261016-constrained-caller-profiles/merge-profile-kernels.lean:20:66: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.bound`
+
+Note: Inferred this name from the expected resulting type of `.bound`:
+  InternedBinderProtocol.Reference
+lean/restart-evidence/20261016-constrained-caller-profiles/merge-profile-kernels.lean:24:74: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.bound`
+
+Note: Inferred this name from the expected resulting type of `.bound`:
+  InternedBinderProtocol.Reference
+@MergeProfileKernels.first_winner_rejects_invalid_candidate : ∀ {Symbol Guard : Type}
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  have first :=
+    MicroCFTA.SourceCurrentMemoMergeGraph.remember MicroCFTA.SourceCurrentMemoMergeGraph.empty input
+      MicroCFTA.InternedConstructorTemplates.Value.empty;
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored first ∧
+    MicroCFTA.SourceCurrentMemoMergeGraph.remember first input
+          (MicroCFTA.InternedConstructorTemplates.Value.reference sorry) =
+        first ∧
+      MicroCFTA.SourceCurrentMemoMergeGraph.winner first input
+            (MicroCFTA.InternedConstructorTemplates.Value.reference sorry) =
+          { original := input, result := MicroCFTA.InternedConstructorTemplates.Value.empty } ∧
+        ¬MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Certificate
+            MicroCFTA.InternedConstructorTemplates.Value.empty
+            (MicroCFTA.InternedConstructorTemplates.Value.reference sorry)
+'MergeProfileKernels.first_winner_rejects_invalid_candidate' depends on axioms: [propext, sorryAx]
+@MergeProfileKernels.warm_hit_profile : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady heap →
+    MicroCFTA.InternedProbeProvenance.Available heap input →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored heap memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+          memo input.referenceOf = some entry →
+            ∀ (rows arity bound : Nat),
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+                MicroCFTA.MergedOrdinaryHeight.height input ≤ bound →
+                  MicroCFTA.SourceCurrentMemoMergeGraph.Call clear top input heap memo entry.result heap memo ∧
+                    entry.original = input ∧
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows bound) arity
+                          entry.result ∧
+                        MicroCFTA.MergedOrdinaryHeight.height entry.result ≤
+                            MicroCFTA.MergedOrdinaryHeight.height input ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo
+'MergeProfileKernels.warm_hit_profile' depends on axioms: [propext, Quot.sound]
+@MergeProfileKernels.column_actual_parent_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (count rows arity : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rows arity edges →
+    edges.length ≤ rows →
+      ∀ (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        MicroCFTA.InternedRecordCoherence.Coherent heap →
+          MicroCFTA.InternedEdgeResidency.Linked heap →
+            MicroCFTA.InternedProbeProvenance.Cached heap →
+              (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  edge ∈ edges → MicroCFTA.InternedEdgeResidency.EdgeResident heap edge) →
+                ∀ (column : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+                  column ∈
+                      MicroCFTA.MergedAlternativesGroups.columns
+                        (List.map MicroCFTA.InternedConstructorTemplates.EdgeValue.children edges) count →
+                    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) (depth : Nat)
+                      (free : List MicroCFTA.InternedBinderProtocol.Reference),
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows
+                            (MicroCFTA.MergedOrdinaryHeight.height
+                              (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free)))
+                          arity
+                          (MicroCFTA.InternedConstructorTemplates.run
+                              (MicroCFTA.MergedOrdinaryHeight.ordinaryUnion column) heap).fst ∧
+                        MicroCFTA.MergedOrdinaryHeight.height
+                            (MicroCFTA.InternedConstructorTemplates.run
+                                (MicroCFTA.MergedOrdinaryHeight.ordinaryUnion column) heap).fst <
+                          MicroCFTA.MergedOrdinaryHeight.height
+                            (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free)
+'MergeProfileKernels.column_actual_parent_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeProfileKernels.selection_then_retained_column : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (fuel : Nat) (inputs values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (done :
+    MicroCFTA.SourceMergedSelection.select clear fuel inputs before =
+      MicroCFTA.MergedSourceComparison.Result.done values after)
+  (rows arity : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity inputs →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values ∧
+      values.length ≤ inputs.length ∧
+        MicroCFTA.SourceCurrentMemoMergeGraph.retainedColumn values =
+          match values, done with
+          | [single], done => MicroCFTA.SourceCurrentMemoMergeGraph.Code.pure single
+          | others, done =>
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Code.work (MicroCFTA.MergedOrdinaryHeight.ordinaryUnion others)).bind
+              MicroCFTA.SourceCurrentMemoMergeGraph.Code.request
+'MergeProfileKernels.selection_then_retained_column' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeProfileKernels.allocated_group_multiplicity : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {edges values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Run clear (MicroCFTA.SourceCurrentAllocatedMergeGraph.group edges) before
+      memo values after saved →
+    MicroCFTA.SourceCurrentMemoMergeGraph.Run clear MicroCFTA.SourceCurrentAllocatedMergeGraph.top
+        (MicroCFTA.SourceCurrentMemoMergeGraph.group MicroCFTA.SourceCurrentAllocatedMergeGraph.top edges) before.heap
+        memo values after.heap saved ∧
+      values.length ≤ edges.length
+'MergeProfileKernels.allocated_group_multiplicity' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeProfileKernels.allocated_groups_multiplicity : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {groups values :
+    List
+      (List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Run clear
+      (MicroCFTA.SourceCurrentAllocatedMergeGraph.map MicroCFTA.SourceCurrentAllocatedMergeGraph.group groups) before
+      memo values after saved →
+    ∀ (rows : Nat), groups.flatten.length ≤ rows → values.length = groups.length ∧ values.flatten.length ≤ rows
+'MergeProfileKernels.allocated_groups_multiplicity' depends on axioms: [propext, Classical.choice, Quot.sound]

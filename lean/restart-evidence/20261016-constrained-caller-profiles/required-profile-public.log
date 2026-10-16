@@ -1,0 +1,103 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.head' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.head : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredHead.Head value before result after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedProbeProvenance.Available before value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+          MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+              MicroCFTA.InternedProbeProvenance.Available after result ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.node' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.node : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedProbeProvenance.Available before value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value →
+          MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+              MicroCFTA.InternedProbeProvenance.Available after result ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.children' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.children : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries index values before results after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedNestedProvenance.Values before values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+          MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+              MicroCFTA.InternedNestedProvenance.Values after results ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit results ∧
+                  results.length = values.length
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.rows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.rows : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredGraph.RequireRows entries edges before results after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedNestedProvenance.Edges before edges →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit edges →
+          MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+              MicroCFTA.InternedNestedProvenance.Edges after results ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit results ∧
+                  results.length ≤ edges.length
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.requireAll_done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.requireAll_done : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (fuel readFuel : Nat) (paths : List (List Int))
+  (values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedNestedProvenance.Values before values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+          MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+              MicroCFTA.InternedNestedProvenance.Values after results ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit results ∧
+                  results.length = values.length
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequiredProfile.finite : ∀ {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (paths : List (List Int)) (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedNestedProvenance.Values before values →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values →
+        ∃ results after,
+          MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+              MicroCFTA.InternedNestedProvenance.Values after results ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit results ∧
+                  results.length = values.length ∧
+                    MicroCFTA.SourceEqualityRequiredWorkerComplete.StableRun
+                      (fun fuel readFuel =>
+                        MicroCFTA.SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before)
+                      results after

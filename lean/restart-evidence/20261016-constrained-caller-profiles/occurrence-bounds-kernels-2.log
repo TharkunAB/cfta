@@ -1,0 +1,30 @@
+lean/restart-evidence/20261016-constrained-caller-profiles/occurrence-bounds-kernels.lean:37:8: warning: automatically included section variable(s) unused in theorem `_private.lean.«restart-evidence».«20261016-constrained-caller-profiles».«occurrence-bounds-kernels».0.OccurrenceBoundChecks.narrow_height`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'OccurrenceBoundChecks.saturated_repeated_tree' depends on axioms: [propext, Quot.sound]
+saturated_repeated_tree : NodeShape 2 3 repeatedTree ∧
+  height repeatedTree = 2 ∧
+    SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree = (7, 14) ∧
+      nodeCount 2 3 2 = 7 ∧ edgeCount 2 3 2 = 14
+'OccurrenceBoundChecks.repeated_tree_bound' depends on axioms: [propext, Quot.sound]
+repeated_tree_bound : (SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree).fst ≤ 7 ∧
+  (SourceCurrentAllocatedFiniteOrdinaryOccurrences.node repeatedTree).snd ≤ 14
+'OccurrenceBoundChecks.required_result_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@required_result_bound : ∀ {Symbol Guard : Type} {rows arity : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (fuel readFuel : Nat) (paths : List (List Int)) (values results : List (Value Symbol Guard))
+  (before after : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before =
+      SourceEqualityRequiredWorker.Result.done results after →
+    SourceEqualityRequiredSemanticCache.SemanticReady before →
+      InternedNestedProvenance.Values before values →
+        ChildrenShape rows arity values →
+          ∀ (count bound : Nat),
+            values.length ≤ count →
+              childrenHeight values ≤ bound →
+                (SourceCurrentAllocatedFiniteOrdinaryOccurrences.children results).fst ≤
+                    count * nodeCount rows arity bound ∧
+                  (SourceCurrentAllocatedFiniteOrdinaryOccurrences.children results).snd ≤
+                    count * edgeCount rows arity bound

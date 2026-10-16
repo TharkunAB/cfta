@@ -1,0 +1,6 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.required
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.required
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.projection
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCallerResources.projection

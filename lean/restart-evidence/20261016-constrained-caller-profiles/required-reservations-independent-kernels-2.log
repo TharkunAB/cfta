@@ -1,0 +1,45 @@
+'RequiredReservationIndependentChecks.same_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+@same_return : ∀ {Symbol Guard : Type} {rows arity : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (fuel readFuel : Nat) (paths : List (List Int)) (values results : List (Value Symbol Guard))
+  (before after : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before =
+      SourceEqualityRequiredWorker.Result.done results after →
+    SemanticReady before →
+      Values before values →
+        ChildrenShape rows arity values →
+          ∃ requests,
+            Trace before after requests ∧
+              Keeps before after ∧
+                SemanticReady after ∧
+                  Values after results ∧
+                    ChildrenShape rows arity results ∧
+                      results.length = values.length ∧
+                        nodeRequests requests ≤ (Counts values).fst ∧
+                          edgeRequests requests ≤ (Counts values).snd ∧
+                            after.nodes.next ≤ before.nodes.next + (Counts values).fst ∧
+                              after.edges.next ≤ before.edges.next + (Counts values).snd
+'RequiredReservationIndependentChecks.serial_requests' depends on axioms: [propext, Classical.choice, Quot.sound]
+@serial_requests : ∀ {Symbol Guard : Type} {rows arity : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (fuel readFuel : Nat) (firstPaths lastPaths : List (List Int))
+  (values middleValues results : List (Value Symbol Guard))
+  (before middle after : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredExecution.requireAll fuel readFuel firstPaths values before =
+      SourceEqualityRequiredWorker.Result.done middleValues middle →
+    SourceEqualityRequiredExecution.requireAll fuel readFuel lastPaths middleValues middle =
+        SourceEqualityRequiredWorker.Result.done results after →
+      SemanticReady before →
+        Values before values →
+          ChildrenShape rows arity values →
+            ∃ requests,
+              Trace before after requests ∧
+                ChildrenShape rows arity results ∧
+                  nodeRequests requests ≤ (Counts values).fst + (Counts middleValues).fst ∧
+                    edgeRequests requests ≤ (Counts values).snd + (Counts middleValues).snd
+'RequiredReservationIndependentChecks.warm_request' depends on axioms: [propext]
+@warm_request : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)
+  (children : List (Value Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard)
+  (entry : Interned (EdgeKey Symbol Guard)),
+  before.edges.table { symbol := symbol, children := List.map Value.referenceOf children, constraint := guard } =
+      some entry →
+    edgeRequests (observe (makeEdge symbol guard children) before) = 1 ∧
+      edgeReservations (observe (makeEdge symbol guard children) before) = 0

@@ -1,0 +1,54 @@
+lean/restart-evidence/20261016-constrained-caller-profiles/projection-profile-kernels.lean:34:6: warning: Variable name `actual` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _actual
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-constrained-caller-profiles/projection-profile-kernels.lean:50:6: warning: Variable name `actual` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _actual
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'MicroCFTA.ProjectionProfileKernels.constructed_root_union' depends on axioms: [propext, Classical.choice, Quot.sound]
+@constructed_root_union : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (values : List (Value Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    Values before values →
+      ChildrenShape rows arity values →
+        ∀ (count bound : Nat),
+          values.length ≤ count →
+            childrenHeight values ≤ bound →
+              have built := run (makeNode (List.flatMap nodeEdges values)) before;
+              ∃ actual, NodeShape (forestRows rows count 0) arity built.fst ∧ height built.fst ≤ bound
+'MicroCFTA.ProjectionProfileKernels.constructed_first_child' depends on axioms: [propext, Classical.choice, Quot.sound]
+@constructed_first_child : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  (node : Interned NodeKey) (entry : Interned (EdgeKey Symbol Guard)) (child : Value Symbol Guard)
+  (more : List (Value Symbol Guard)) (depth : Nat) (free : List Reference)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    Available before (Value.node node [EdgeValue.mk entry (child :: more)] depth free) →
+      NodeShape rows arity (Value.node node [EdgeValue.mk entry (child :: more)] depth free) →
+        have built := run (makeNode (List.flatMap nodeEdges [child])) before;
+        ∃ actual,
+          NodeShape (projectRows rows 1) arity built.fst ∧
+            height built.fst ≤ height (Value.node node [EdgeValue.mk entry (child :: more)] depth free)
+'MicroCFTA.ProjectionProfileKernels.negative_position' depends on axioms: [propext, Quot.sound]
+@negative_position : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (values : List (Value Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard) (suffix : List Int)
+  (rows arity count depth bound : Nat),
+  Forest (-1 :: suffix) values before Value.empty before ∧
+    NodeShape (forestRows rows count depth) arity Value.empty ∧ height Value.empty ≤ bound
+'MicroCFTA.ProjectionProfileKernels.serial_generated_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@serial_generated_projection : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] {rows arity : Nat}
+  {firstPath secondPath : List Int} {input middle result : Value Symbol Guard}
+  {before current after : InternedConstructorTemplates.State Symbol Guard},
+  Project firstPath input before middle current →
+    Project secondPath middle current result after →
+      SemanticReady before →
+        Available before input →
+          NodeShape rows arity input →
+            NodeShape (projectRows (projectRows rows firstPath.length) secondPath.length) arity result ∧
+              height result ≤ height input ∧ Available after result ∧ SemanticReady after
