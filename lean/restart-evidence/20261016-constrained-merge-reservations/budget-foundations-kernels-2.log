@@ -1,0 +1,43 @@
+'MicroCFTA.MergeBudgetFoundationKernels.numeric_expansion' does not depend on any axioms
+numeric_expansion : SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget 2 3 0 = 0 ∧
+  SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget 2 3 0 = 0 ∧
+    SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget 2 3 2 = 85 ∧
+      SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget 2 3 2 = 26 ∧
+        SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget 7 0 2 = 1 ∧
+          SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget 7 0 2 = 7
+'MicroCFTA.MergeBudgetFoundationKernels.mixed_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+@mixed_map : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (symbol : Symbol) (guard : Guard) (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      Certified clear
+        (map
+          (fun kind =>
+            if kind = true then (Code.work (makeNode [])).bind fun x => Code.pure ()
+            else (Code.work (makeEdge symbol guard [])).bind fun x => Code.pure ())
+          [false, true, false])
+        before fun after outputs =>
+        Budget before after 1 2 ∧
+          Language.All₂ (fun x output => output = ()) [false, true, false] outputs ∧ outputs.length = 3
+'MicroCFTA.MergeBudgetFoundationKernels.warm_edge_requests' depends on axioms: [propext, Classical.choice, Quot.sound]
+@warm_edge_requests : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (before : InternedConstructorTemplates.State Symbol Guard),
+  InternedRecordCoherence.Coherent before →
+    have first := run (makeEdge symbol guard []) before;
+    have second := run (makeEdge symbol guard []) first.snd;
+    second = first ∧
+      Budget before second.snd 0 2 ∧
+        second.snd.edges.next ≤ before.edges.next + 1 ∧
+          edgeRequests (observe (makeEdge symbol guard []) before ++ observe (makeEdge symbol guard []) first.snd) = 2
+'MicroCFTA.MergeBudgetFoundationKernels.request_original_budget' depends on axioms: [propext, Quot.sound]
+@request_original_budget : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (input : Value Symbol Guard)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  Available before input →
+    ∀ (rows arity bound : Nat),
+      NodeShape rows arity input →
+        height input ≤ bound →
+          Certified clear (Code.request input) before fun after output =>
+            Budget before after (SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity bound)
+                (SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity bound) ∧
+              SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Contract input before output after

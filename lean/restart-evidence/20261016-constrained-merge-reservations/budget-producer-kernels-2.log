@@ -1,0 +1,84 @@
+@MergeBudgetProducerKernels.cold_requests_and_supplies : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  MicroCFTA.SourceCurrentMemoMergeGraph.Call clear top input before MicroCFTA.SourceCurrentMemoMergeGraph.empty output
+      after saved →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedProbeProvenance.Available before input →
+          ∀ (rows arity bound : Nat),
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+              MicroCFTA.MergedOrdinaryHeight.height input ≤ bound →
+                MicroCFTA.SourceCurrentMemoMergeEffects.Stored after saved ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                    ∃ requests,
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity
+                              bound ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity
+                                bound ∧
+                            after.nodes.next ≤
+                                before.nodes.next +
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity
+                                    bound ∧
+                              after.edges.next ≤
+                                before.edges.next +
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity
+                                    bound
+'MergeBudgetProducerKernels.cold_requests_and_supplies' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeBudgetProducerKernels.warm_hit_zero : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored before memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+          MicroCFTA.InternedProbeProvenance.Available before input →
+            memo input.referenceOf = some entry →
+              MicroCFTA.SourceCurrentMemoMergeGraph.Call clear top input before memo entry.result before memo ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Contract input before entry.result
+                    before ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before before [] ∧
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations [] = 0 ∧
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations [] = 0
+'MergeBudgetProducerKernels.warm_hit_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeBudgetProducerKernels.losing_body_counted : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {current : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+  MicroCFTA.SourceCurrentMemoMergeGraph.Run clear top (MicroCFTA.SourceCurrentMemoMergeGraph.body top input) before
+      MicroCFTA.SourceCurrentMemoMergeGraph.empty candidate after current →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedProbeProvenance.Available before input →
+          current input.referenceOf = some entry →
+            ∀ (rows arity bound : Nat),
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+                MicroCFTA.MergedOrdinaryHeight.height input ≤ bound →
+                  MicroCFTA.SourceCurrentMemoMergeGraph.remember current input candidate = current ∧
+                    MicroCFTA.SourceCurrentMemoMergeGraph.winner current input candidate = entry ∧
+                      ∃ requests,
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after requests ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity
+                                bound ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity
+                                  bound ∧
+                              after.nodes.next =
+                                  before.nodes.next +
+                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations
+                                      requests ∧
+                                after.edges.next =
+                                  before.edges.next +
+                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations requests
+'MergeBudgetProducerKernels.losing_body_counted' depends on axioms: [propext, Classical.choice, Quot.sound]

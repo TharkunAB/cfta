@@ -1,0 +1,131 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:32:11: error: Tactic `rfl` failed: The left-hand side
+  (List.map (fun x => cost) []).sum
+is not definitionally equal to the right-hand side
+  [].length * cost
+
+case nil
+Input : Type
+cost : Nat
+⊢ (List.map (fun x => cost) []).sum = [].length * cost
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:39:11: error: Tactic `rfl` failed: The left-hand side
+  (List.map (fun values => values.length * cost) []).sum
+is not definitionally equal to the right-hand side
+  [].flatten.length * cost
+
+case nil
+Input : Type
+cost : Nat
+⊢ (List.map (fun values => values.length * cost) []).sum = [].flatten.length * cost
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:141:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  i - j ≥ 1
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - f ≥ 0
+  c - h ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - e ≥ 0
+where
+ a := ↑rows
+ b := ↑inputs.length
+ c := ↑bound
+ d := ↑(childrenHeight inputs)
+ e := ↑values.length
+ f := ↑(childrenHeight values)
+ g := ↑(height (run (ordinaryUnion values) before).fst)
+ h := ↑(height value)
+ i := ↑(nodeBudget (rows * rows) arity bound)
+ j := ↑(lowerNodes rows arity bound)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:141:59: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  i - j ≥ 1
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - f ≥ 0
+  c - h ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - e ≥ 0
+where
+ a := ↑rows
+ b := ↑inputs.length
+ c := ↑bound
+ d := ↑(childrenHeight inputs)
+ e := ↑values.length
+ f := ↑(childrenHeight values)
+ g := ↑(height (run (ordinaryUnion values) before).fst)
+ h := ↑(height value)
+ i := ↑(edgeBudget (rows * rows) arity bound)
+ j := ↑(lowerEdges rows arity bound)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:166:4: error: Tactic `subst` failed: did not find equation for eliminating 'after'
+
+case checked
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+_costs : CostHeap before
+available : Values before inputs
+rows arity bound : Nat
+profile : ChildrenShape rows arity inputs
+count : inputs.length ≤ rows
+bounded : childrenHeight inputs ≤ bound
+closed : ClosedValues inputs
+fuel : Nat
+values : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+done : SourceMergedSelection.select clear fuel inputs before = MergedSourceComparison.Result.done values after
+a✝ : Effect before after
+same : values = distinctNodes inputs ∧ after = before
+⊢ after = before ∧
+    Values after values ∧ ChildrenShape rows arity values ∧ values.length ≤ rows ∧ childrenHeight values ≤ bound
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:175:42: error(lean.unknownIdentifier): Unknown identifier `before`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:265:109: error: unexpected token '('; expected ')', ',' or ':'
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:257:20: error: Application type mismatch: The argument
+  Budget.refl before
+has type
+  Budget before before 0 0
+but is expected to have type
+  Budget before before ([].length * (arity * (1 + lowerNodes rows arity bound)))
+    ([].length * (1 + arity * lowerEdges rows arity bound))
+in the application
+  And.intro (Budget.refl before)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:264:14: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `And.intro` has 2 explicit field, but only 1 was provided
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:264:15: error: Application type mismatch: The argument
+  Budget.mono ready.left ?m.430
+has type
+  1 + arity * lowerEdges rows arity bound ≤ ?m.429 → Budget before middle✝ ?m.428 ?m.429
+but is expected to have type
+  Budget before middle✝ ((first :: rest).length * (arity * (1 + lowerNodes rows arity bound)))
+    ((first :: rest).length * (1 + arity * lowerEdges rows arity bound))
+in the application
+  And.intro (Budget.mono ready.left ?m.430)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetBody.lean:265:14: error: Type mismatch: After simplification, term
+  Nat.mul_le_mul_right (arity * (1 + lowerNodes rows arity bound))
+ has type
+  ?m.431 ≤ ?m.432 →
+    ?m.431 * (arity * (1 + lowerNodes rows arity bound)) ≤ ?m.432 * (arity * (1 + lowerNodes rows arity bound))
+but is expected to have type
+  arity * (1 + lowerNodes rows arity bound) ≤ ?m.428

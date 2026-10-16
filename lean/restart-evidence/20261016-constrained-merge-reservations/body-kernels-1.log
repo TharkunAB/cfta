@@ -1,0 +1,45 @@
+'MergeBudgetBodyChecks.five_row_columns' depends on axioms: [propext, Classical.choice, Quot.sound]
+@five_row_columns : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (top : Guard) (first second third fourth fifth : Interned (EdgeKey Symbol Guard))
+  (values : List (Value Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      Edges before (fiveRows first second third fourth fifth values) →
+        ChildrenShape 5 2 values →
+          values.length = 2 →
+            childrenHeight values ≤ 1 →
+              Certified clear (group top (fiveRows first second third fourth fifth values)) before fun after outputs =>
+                Budget before after 104 51 ∧ ∀ (edge : EdgeValue Symbol Guard), edge ∈ outputs → EdgeReady after edge
+'MergeBudgetBodyChecks.ordinary_select_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ordinary_select_zero : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (inputs : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard) (rows arity : Nat),
+  ChildrenShape rows arity inputs →
+    SourceMergedSelection.select clear 0 inputs before =
+        MergedSourceComparison.Result.done (distinctNodes inputs) before ∧
+      Budget before before 0 0
+'MergeBudgetBodyChecks.two_layer_numbers' depends on axioms: [propext]
+two_layer_numbers : ∀ (rows arity : Nat),
+  nodeBudget rows arity 1 = 1 + rows * arity ∧
+    edgeBudget rows arity 1 = rows ∧ nodeBudget 5 2 2 = 521 ∧ edgeBudget 5 2 2 = 255
+'MergeBudgetBodyChecks.same_actual_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+@same_actual_body : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (top : Guard) (entry : Interned InternedBinderProtocol.NodeKey)
+  (first second third fourth fifth : Interned (EdgeKey Symbol Guard)) (values : List (Value Symbol Guard))
+  (before after : InternedConstructorTemplates.State Symbol Guard) (memo saved : Memo Symbol Guard)
+  (output : Value Symbol Guard),
+  Run clear top (body top (Value.node entry (fiveRows first second third fourth fifth values) 0 [])) before memo output
+      after saved →
+    SemanticReady before →
+      CostHeap before →
+        SourceCurrentMemoMergeEffects.Stored before memo →
+          SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            Available before (Value.node entry (fiveRows first second third fourth fifth values) 0 []) →
+              ChildrenShape 5 2 values →
+                values.length = 2 →
+                  childrenHeight values ≤ 1 →
+                    SourceCurrentMemoMergeEffects.Effect before after ∧
+                      SourceCurrentMemoMergeEffects.Stored after saved ∧
+                        SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                          Budget before after 521 255 ∧
+                            after.nodes.next ≤ before.nodes.next + 521 ∧ after.edges.next ≤ before.edges.next + 255

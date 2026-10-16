@@ -1,0 +1,90 @@
+⚠ [761/803] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [1326/1328] Built MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetProducer (621ms)
+✖ [1327/1328] Building MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite (923ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.lean:130:86: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  k ≥ 0
+  j ≥ 0
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  g + j - k ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  e + h - i ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  d - i + l ≤ -1
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑bound
+ b := ↑(height input)
+ c := ↑(height output)
+ d := ↑(nodeBudget rows arity bound)
+ e := ↑(nodeRequests requests)
+ f := ↑(edgeBudget rows arity bound)
+ g := ↑(edgeRequests requests)
+ h := ↑(physical before.checked).heap.nodes.next
+ i := ↑after.heap.nodes.next
+ j := ↑(physical before.checked).heap.edges.next
+ k := ↑after.heap.edges.next
+ l := ↑before.checked.native.machine.heap.nodes.next
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite.lean:130:96: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  k ≥ 0
+  j ≥ 0
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  g + j - k ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  f - k + l ≤ -1
+  e ≥ 0
+  e + h - i ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑bound
+ b := ↑(height input)
+ c := ↑(height output)
+ d := ↑(nodeBudget rows arity bound)
+ e := ↑(nodeRequests requests)
+ f := ↑(edgeBudget rows arity bound)
+ g := ↑(edgeRequests requests)
+ h := ↑(physical before.checked).heap.nodes.next
+ i := ↑after.heap.nodes.next
+ j := ↑(physical before.checked).heap.edges.next
+ k := ↑after.heap.edges.next
+ l := ↑before.checked.native.machine.heap.edges.next
+✖ [1328/1328] Building MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources (964ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOperandResources.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOperandResources.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOperandResources.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOperandResources.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOperandResources.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOperandResources.lean:105:4: Type mismatch
+  lastEdges
+has type
+  edgeRequests later ≤ E (P rows count depth) arity bound
+but is expected to have type
+  0 + edgeRequests later ≤ edgeBudget rows arity count depth bound
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetFinite
+- MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources
+error: build failed

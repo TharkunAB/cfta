@@ -1,0 +1,324 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_parameters_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_parameters_mono : ∀ (height : Nat)
+  {firstRows lastRows firstArity lastArity : Nat},
+  @LE.le.{0} Nat instLENat firstRows lastRows →
+    @LE.le.{0} Nat instLENat firstArity lastArity →
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget firstRows firstArity height)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget lastRows lastArity height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_parameters_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_parameters_mono : ∀ (height : Nat)
+  {firstRows lastRows firstArity lastArity : Nat},
+  @LE.le.{0} Nat instLENat firstRows lastRows →
+    @LE.le.{0} Nat instLENat firstArity lastArity →
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget firstRows firstArity height)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget lastRows lastArity height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_rows_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_rows_mono : ∀ (arity height : Nat)
+  {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget first arity height)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget last arity height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_rows_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_rows_mono : ∀ (arity height : Nat)
+  {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget first arity height)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget last arity height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_arity_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_arity_mono : ∀ (rows height : Nat)
+  {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows first height)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows last height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_arity_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_arity_mono : ∀ (rows height : Nat)
+  {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows first height)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows last height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_succ : ∀ (rows arity height : Nat),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity height)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) height
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_succ : ∀ (rows arity height : Nat),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity height)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) height
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.node_mono : ∀ (rows arity : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.nodeBudget rows arity last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edge_mono : ∀ (rows arity : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetNumbers.edgeBudget rows arity last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Nat → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.refl' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.refl : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst state state
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {nodes edges moreNodes moreEdges : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before after nodes edges →
+    @LE.le.{0} Nat instLENat nodes moreNodes →
+      @LE.le.{0} Nat instLENat edges moreEdges →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before after moreNodes
+          moreEdges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.trans' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.trans : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {firstNodes firstEdges lastNodes lastEdges : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before middle firstNodes
+      firstEdges →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst middle after lastNodes
+        lastEdges →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before after
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstNodes lastNodes)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstEdges lastEdges)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.next_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget.next_le : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {nodes edges : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before after nodes edges →
+    And
+      (@LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+          nodes))
+      (@LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard before))
+          edges))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.node_work' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.node_work : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before
+    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) before))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.edge_work' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.edge_work : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before
+    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) before))
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certificate : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Contract' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Contract : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {Output : Type} →
+      [DecidableEq.{1} Symbol] →
+        (Guard → Bool) →
+          MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output →
+            MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.lift_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.lift_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] {Output : Type} (clear : Guard → Bool)
+  (code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified Symbol Guard Output inst_1 inst clear code
+      before post →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst Output inst_1 clear code
+      before post
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.lift_physical' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.lift_physical : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] {Output : Type} (clear : Guard → Bool)
+  (code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+  @MicroCFTA.SourceCurrentMemoMergeEffects.Certified Symbol Guard Output inst_1 inst
+      (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract Symbol Guard) clear code before post →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst Output inst_1 clear code
+      before post
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.bind_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.bind_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] {First Output : Type} (clear : Guard → Bool)
+  (first : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard First)
+  (next : First → MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (intermediate : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → First → Prop)
+  (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst First inst_1 clear first
+      before intermediate →
+    (∀ (value : First) (middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before middle →
+          intermediate middle value →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst Output inst_1
+              clear (next value) middle post) →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst Output inst_1 clear
+        (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.bind Symbol Guard First Output first next) before post
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.map_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.map_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] {Request Output : Type} (clear : Guard → Bool)
+  (call : Request → MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output)
+  (pre : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Request → Prop)
+  (relation : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Request → Output → Prop),
+  (∀ (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after →
+        ∀ (request : Request), pre before request → pre after request) →
+    (∀ (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after →
+          ∀ (request : Request) (value : Output), relation before request value → relation after request value) →
+      ∀ (nodeCost edgeCost : Request → Nat) (requests : List.{0} Request),
+        (∀ (request : Request),
+            @Membership.mem.{0, 0} Request (List.{0} Request) (@List.instMembership.{0} Request) requests request →
+              ∀ (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+                  @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                    pre before request →
+                      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst Output
+                        inst_1 clear (call request) before fun after value =>
+                        And
+                          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst
+                            before after (nodeCost request) (edgeCost request))
+                          (relation after request value)) →
+          ∀ (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                (∀ (request : Request),
+                    @Membership.mem.{0, 0} Request (List.{0} Request) (@List.instMembership.{0} Request) requests
+                        request →
+                      pre before request) →
+                  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst
+                    (List.{0} Output) inst_1 clear
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.map.{0} Request Symbol Guard Output call requests) before
+                    fun after values =>
+                    And
+                      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before
+                        after
+                        (@List.sum.{0} Nat instAddNat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0)))
+                          (@List.map.{0, 0} Request Nat nodeCost requests))
+                        (@List.sum.{0} Nat instAddNat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0)))
+                          (@List.map.{0, 0} Request Nat edgeCost requests)))
+                      (@MicroCFTA.Language.All₂ Request Output (relation after) requests values)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.request_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.request_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (clear : Guard → Bool)
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst_1 clear
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.request Symbol Guard input) before fun after output =>
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Contract Symbol Guard inst input before output
+        after
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.edge_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.edge_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (clear : Guard → Bool) (symbol : Symbol) (guard : Guard)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst_1 clear
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values))
+            before fun after edge =>
+            And
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before after
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol Guard after edge)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.node_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.node_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (clear : Guard → Bool)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard edges →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Certified Symbol Guard inst
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst_1 clear
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges))
+            before fun after value =>
+            And
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeBudgetCode.Budget Symbol Guard inst before after
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard after value)
