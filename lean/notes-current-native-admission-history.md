@@ -107,6 +107,11 @@ checks, and upstream status.
 
 1. Carry the concrete expanded inventory and coverage through the entire
    source seeded fold. Projection effects must retain the same native tables.
+   Use the actual head-projection, tail-fold, native-query order and the
+   source seed rotation `rest ++ [seed]`. Reached FoldRanges supplies the
+   machine checks after those actual prefixes. Do not require unrelated
+   original forest siblings to be closed; anchored PathSupport supplies
+   closedness for the selected operands.
 2. Derive common-subtree inclusion and the actual checked class witness.
    Prove original stopped-class rejection soundness for current Scan.
 3. Compose the actual allocated precheck state, all gate memo receipts,
