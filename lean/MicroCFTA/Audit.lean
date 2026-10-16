@@ -1941,6 +1941,14 @@ import MicroCFTA.SourceCurrentConjunctionScanClassPass
 import MicroCFTA.SourceCurrentAllocatedMkEdge
 import MicroCFTA.SourceCurrentAllocatedLocalReduction
 import MicroCFTA.SourceCurrentAllocatedParentEdge
+import MicroCFTA.SourceCurrentAllocatedInheritedPrefix
+import MicroCFTA.SourceCurrentAllocatedRawRebuild
+import MicroCFTA.SourceCurrentAllocatedPartialState
+import MicroCFTA.SourceCurrentAllocatedPartialGraph
+import MicroCFTA.SourceCurrentAllocatedPartialReads
+import MicroCFTA.SourceCurrentAllocatedMuRebuild
+import MicroCFTA.SourceCurrentAllocatedPartialMemoSound
+import MicroCFTA.SourceCurrentAllocatedPartialEdgeCall
 /-!
 # Proof dependency audit
 
