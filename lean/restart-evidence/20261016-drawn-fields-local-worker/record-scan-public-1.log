@@ -1,0 +1,162 @@
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+      width →
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedScanWorker.Result width
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.select' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.select {width : Nat}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+      width →
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+      width
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (g s p h n budget : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) :
+  List MicroCFTA.SourceEqualityClassOrder.Record →
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width →
+      MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo →
+        MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+          width
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths_bind' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths_bind {A : Type} {width : Nat}
+  (first : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome A width)
+  (next :
+    A →
+      MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width →
+        MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo →
+          MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome
+            MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths
+      (MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.bind first next) =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.bind first fun value state memo =>
+      MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths (next value state memo)
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths_select' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths_select {width : Nat}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (first :
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+      width) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths
+      (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.select record first) =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.select record.paths
+      (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths first)
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan_nil
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (g s p h n budget : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values [] before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done (none, []) before memo
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan_mapPaths' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan_mapPaths
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (g s p h n budget : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (records : List MicroCFTA.SourceEqualityClassOrder.Record)
+  (before : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.mapPaths
+      (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records before memo) =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.scan g s p h n budget values
+      (List.map MicroCFTA.SourceEqualityClassOrder.Record.paths records) before memo
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerStability.select_done_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedRecordScanWorkerStability.select_done_iff {width : Nat}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (first :
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+      width)
+  (result : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result)
+  (after : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.select record first =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved ↔
+    ∃ rest,
+      first = MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done rest after saved ∧
+        result = (rest.fst, record :: rest.snd)
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerStability.scan_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedRecordScanWorkerStability.scan_done_stable
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s p h n G S P H N budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records : List MicroCFTA.SourceEqualityClassOrder.Record}
+  {before after : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo}
+  {result : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result}
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved)
+  (enoughG : g ≤ G) (enoughS : s ≤ S) (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughN : n ≤ N) :
+  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan G S P H N budget values records before memo =
+    MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done result after saved
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerStability.scan_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedRecordScanWorkerStability.scan_done_unique
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s p h n G S P H N budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records : List MicroCFTA.SourceEqualityClassOrder.Record}
+  {before after later : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Checked width}
+  {memo saved current : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Memo}
+  {first second : MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result}
+  (one :
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done first after saved)
+  (two :
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan G S P H N budget values records before memo =
+      MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done second later current) :
+  first = second ∧ after = later ∧ saved = current

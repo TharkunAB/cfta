@@ -1,0 +1,1036 @@
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.scan_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.scan_complete : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option.{0} MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {actual :
+    @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+      MicroCFTA.SourceMemoGate.unconstrained
+      (@MicroCFTA.SourceEndpointReachability.reaches (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) MicroCFTA.SourceMemoGate.unconstrained)
+      values classes before memo outcome selected after saved},
+  @MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1 inst_2 budget
+      MicroCFTA.SourceMemoGate.unconstrained
+      (@MicroCFTA.SourceEndpointReachability.reaches (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) MicroCFTA.SourceMemoGate.unconstrained)
+      values classes selected outcome before after memo saved actual records kept →
+    @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun width
+      MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+      (fun (g s p h n : Nat) =>
+        @MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values records
+          before memo)
+      (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) outcome kept)
+      after saved
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.sound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.sound : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {g s p h n budget : Nat}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record}
+  {outcome : Option.{0} MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo},
+  @Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+        width)
+      (@MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values records
+        before memo)
+      (@MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+        width
+        (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) outcome kept)
+        after saved) →
+    @MicroCFTA.SourceCurrentConjunctionClassScan.Ready width before →
+      @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+          values →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                paths →
+              ∀ (path : MicroCFTA.EqualityNormalize.Path),
+                @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                  @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+          MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+              memo →
+            @MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges width inst inst_1 inst_2 budget
+                MicroCFTA.SourceMemoGate.unconstrained
+                (@MicroCFTA.SourceEndpointReachability.reaches
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceMemoGate.unconstrained)
+                values
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                before memo →
+              @Exists.{0}
+                (@MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                  MicroCFTA.SourceMemoGate.unconstrained
+                  (@MicroCFTA.SourceEndpointReachability.reaches
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.SourceMemoGate.unconstrained)
+                  values
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                  before memo outcome
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                  after saved)
+                fun
+                  (actual :
+                    @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                      MicroCFTA.SourceMemoGate.unconstrained
+                      (@MicroCFTA.SourceEndpointReachability.reaches
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        MicroCFTA.SourceMemoGate.unconstrained)
+                      values
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                      before memo outcome
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                      after saved) =>
+                @MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1 inst_2 budget
+                  MicroCFTA.SourceMemoGate.unconstrained
+                  (@MicroCFTA.SourceEndpointReachability.reaches
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.SourceMemoGate.unconstrained)
+                  values
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                  outcome before after memo saved actual records kept
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.verified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.verified : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {g s p h n budget : Nat}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record}
+  {outcome : Option.{0} MicroCFTA.EqualityNormalize.Class}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+        values →
+      (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              paths →
+            ∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                paths →
+              MicroCFTA.EqualityNormalize.Nontrivial paths) →
+          @MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges width inst inst_1 inst_2 budget
+              MicroCFTA.SourceMemoGate.unconstrained
+              (@MicroCFTA.SourceEndpointReachability.reaches
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                MicroCFTA.SourceMemoGate.unconstrained)
+              values
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) →
+            @Eq.{2}
+                (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome
+                  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width)
+                (@MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values
+                  records (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before))
+                (@MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done
+                  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width
+                  (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) outcome kept)
+                  after saved) →
+              @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                  @Exists.{0}
+                    (@MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                      MicroCFTA.SourceMemoGate.unconstrained
+                      (@MicroCFTA.SourceEndpointReachability.reaches
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        MicroCFTA.SourceMemoGate.unconstrained)
+                      values
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) outcome
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                      after saved)
+                    fun
+                      (actual :
+                        @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                          MicroCFTA.SourceMemoGate.unconstrained
+                          (@MicroCFTA.SourceEndpointReachability.reaches
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.SourceMemoGate.unconstrained)
+                          values
+                          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                            MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) outcome
+                          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                            MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                          after saved) =>
+                    And
+                      (@MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1 inst_2 budget
+                        MicroCFTA.SourceMemoGate.unconstrained
+                        (@MicroCFTA.SourceEndpointReachability.reaches
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          MicroCFTA.SourceMemoGate.unconstrained)
+                        values
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                        outcome (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before) after
+                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) saved actual records
+                        kept)
+                      (And
+                        (@MicroCFTA.SourceCurrentAllocatedScanSourceReads.ScanReads width inst inst_1 inst_2 budget
+                          values
+                          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                            MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                            MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                          outcome (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before) after
+                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) saved actual memos
+                          final)
+                        (And
+                          (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1 width formulas solver next
+                            before
+                            (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after saved
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+                            final)
+                          (And
+                            (@MicroCFTA.InternedNestedProvenance.Values
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))
+                              values)
+                            (And (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records)
+                              (MicroCFTA.SourceCurrentAllocatedScanCaller.StoppedSound formulas solver values
+                                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)
+                                outcome)))))
+'MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.finite' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedRecordScanWorkerActual.finite : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+        values →
+      (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              paths →
+            ∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                paths →
+              MicroCFTA.EqualityNormalize.Nontrivial paths) →
+          @MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges width inst inst_1 inst_2 budget
+              MicroCFTA.SourceMemoGate.unconstrained
+              (@MicroCFTA.SourceEndpointReachability.reaches
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                MicroCFTA.SourceMemoGate.unconstrained)
+              values
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) →
+            @Exists.{1} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+              fun (outcome : Option.{0} MicroCFTA.EqualityNormalize.Class) =>
+              @Exists.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                fun (kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) =>
+                @Exists.{2} (MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+                  fun (after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width) =>
+                  @Exists.{1} MicroCFTA.SourceCurrentAllocatedScanWorker.Memo
+                    fun (saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo) =>
+                    @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                      fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                      @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos
+                        fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                        And
+                          (@MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun width
+                            MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+                            (fun (g s p h n : Nat) =>
+                              @MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n
+                                budget values records
+                                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before))
+                            (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+                              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) outcome kept)
+                            after saved)
+                          (@Exists.{0}
+                            (@MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                              MicroCFTA.SourceMemoGate.unconstrained
+                              (@MicroCFTA.SourceEndpointReachability.reaches
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.SourceMemoGate.unconstrained)
+                              values
+                              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                records)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) outcome
+                              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                              after saved)
+                            fun
+                              (actual :
+                                @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                                  MicroCFTA.SourceMemoGate.unconstrained
+                                  (@MicroCFTA.SourceEndpointReachability.reaches
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    MicroCFTA.SourceMemoGate.unconstrained)
+                                  values
+                                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                    MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                    records)
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) outcome
+                                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                    MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                    kept)
+                                  after saved) =>
+                            And
+                              (@MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1 inst_2
+                                budget MicroCFTA.SourceMemoGate.unconstrained
+                                (@MicroCFTA.SourceEndpointReachability.reaches
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  MicroCFTA.SourceMemoGate.unconstrained)
+                                values
+                                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)
+                                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  kept)
+                                outcome (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before) after
+                                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) saved actual
+                                records kept)
+                              (And
+                                (@MicroCFTA.SourceCurrentAllocatedScanSourceReads.ScanReads width inst inst_1 inst_2
+                                  budget values
+                                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                    MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                    records)
+                                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                    MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                    kept)
+                                  outcome (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                  after (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) saved
+                                  actual memos final)
+                                (And
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1 width formulas solver
+                                    next before
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after saved
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width before))
+                                    final)
+                                  (And
+                                    (@MicroCFTA.InternedNestedProvenance.Values
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))
+                                      values)
+                                    (And (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records)
+                                      (MicroCFTA.SourceCurrentAllocatedScanCaller.StoppedSound formulas solver values
+                                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                          MicroCFTA.EqualityNormalize.Class
+                                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                                        outcome))))))
+'RecordActualChecks.empty_stable' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@RecordActualChecks.empty_stable : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (budget : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+  @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun width
+    MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+    (fun (g s p h n : Nat) =>
+      @MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values
+        (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) before memo)
+    (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+      (@Option.none.{0} MicroCFTA.EqualityNormalize.Class) (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+    before memo
+'RecordActualChecks.equal_paths_keep_both' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@RecordActualChecks.equal_paths_keep_both : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (budget : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (first second : MicroCFTA.SourceEqualityClassOrder.Record),
+  @Eq.{1} MicroCFTA.EqualityNormalize.Class first.paths second.paths →
+    ∀ (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+      (heap later :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+      @MicroCFTA.EndpointStatefulGateTrace.ClassTrace (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+          MicroCFTA.SourceMemoGate.unconstrained
+          (@MicroCFTA.SourceEndpointReachability.reaches
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.SourceMemoGate.unconstrained)
+          values first.paths
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+          Bool.false heap →
+        @MicroCFTA.EndpointStatefulGateTrace.ClassTrace
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+            MicroCFTA.SourceMemoGate.unconstrained
+            (@MicroCFTA.SourceEndpointReachability.reaches
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceMemoGate.unconstrained)
+            values first.paths heap Bool.false later →
+          @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun width
+            MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+            (fun (g s p h n : Nat) =>
+              @MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values
+                (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first
+                  (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record second
+                    (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))
+                before memo)
+            (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (@Option.none.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first
+                (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record second
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+            (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width
+              (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap) later)
+            memo
+'RecordActualChecks.selected_prefix_before_stop' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@RecordActualChecks.selected_prefix_before_stop : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (head : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (stopped : MicroCFTA.EqualityNormalize.Class) {classes : MicroCFTA.EqualityNormalize.Constraints}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo},
+  @MicroCFTA.EndpointStatefulGateTrace.ClassTrace (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+      MicroCFTA.SourceMemoGate.unconstrained
+      (@MicroCFTA.SourceEndpointReachability.reaches (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) MicroCFTA.SourceMemoGate.unconstrained)
+      values head.paths
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+      Bool.false heap →
+    ∀
+      (tail :
+        @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+          MicroCFTA.SourceMemoGate.unconstrained
+          (@MicroCFTA.SourceEndpointReachability.reaches
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.SourceMemoGate.unconstrained)
+          values classes (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap) memo
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Class stopped) (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)
+          after saved),
+      @MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1 inst_2 budget
+          MicroCFTA.SourceMemoGate.unconstrained
+          (@MicroCFTA.SourceEndpointReachability.reaches
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.SourceMemoGate.unconstrained)
+          values classes (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Class stopped)
+          (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap) after memo saved tail records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        @MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion.StableRun width
+          MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+          (fun (g s p h n : Nat) =>
+            @MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record head records) before memo)
+          (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Class stopped)
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record head
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))
+          after saved
+'RecordActualChecks.supplied_positions' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@RecordActualChecks.supplied_positions : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {g s p h n budget : Nat}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record}
+  {outcome : Option.{0} MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo},
+  @Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+        width)
+      (@MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values records
+        before memo)
+      (@MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result
+        width
+        (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) outcome kept)
+        after saved) →
+    @MicroCFTA.SourceCurrentConjunctionClassScan.Ready width before →
+      @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+          values →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                paths →
+              ∀ (path : MicroCFTA.EqualityNormalize.Path),
+                @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                  @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+          MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+              memo →
+            @MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges width inst inst_1 inst_2 budget
+                MicroCFTA.SourceMemoGate.unconstrained
+                (@MicroCFTA.SourceEndpointReachability.reaches
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceMemoGate.unconstrained)
+                values
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                before memo →
+              And (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records)
+                (@Exists.{0}
+                  (@MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                    MicroCFTA.SourceMemoGate.unconstrained
+                    (@MicroCFTA.SourceEndpointReachability.reaches
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      MicroCFTA.SourceMemoGate.unconstrained)
+                    values
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                    before memo outcome
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                    after saved)
+                  fun
+                    (actual :
+                      @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                        MicroCFTA.SourceMemoGate.unconstrained
+                        (@MicroCFTA.SourceEndpointReachability.reaches
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          MicroCFTA.SourceMemoGate.unconstrained)
+                        values
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                        before memo outcome
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                        after saved) =>
+                  @MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1 inst_2 budget
+                    MicroCFTA.SourceMemoGate.unconstrained
+                    (@MicroCFTA.SourceEndpointReachability.reaches
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      MicroCFTA.SourceMemoGate.unconstrained)
+                    values
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                    outcome before after memo saved actual records kept)
+'RecordActualChecks.finite_literal_return' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@RecordActualChecks.finite_literal_return : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+        values →
+      (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              paths →
+            ∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                paths →
+              MicroCFTA.EqualityNormalize.Nontrivial paths) →
+          @MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges width inst inst_1 inst_2 budget
+              MicroCFTA.SourceMemoGate.unconstrained
+              (@MicroCFTA.SourceEndpointReachability.reaches
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                MicroCFTA.SourceMemoGate.unconstrained)
+              values
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) →
+            @Exists.{1} Nat fun (g : Nat) =>
+              @Exists.{1} Nat fun (s : Nat) =>
+                @Exists.{1} Nat fun (p : Nat) =>
+                  @Exists.{1} Nat fun (h : Nat) =>
+                    @Exists.{1} Nat fun (n : Nat) =>
+                      @Exists.{1} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+                        fun (outcome : Option.{0} MicroCFTA.EqualityNormalize.Class) =>
+                        @Exists.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          fun (kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) =>
+                          @Exists.{2} (MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width)
+                            fun (after : MicroCFTA.SourceCurrentAllocatedScanWorker.Checked width) =>
+                            @Exists.{1} MicroCFTA.SourceCurrentAllocatedScanWorker.Memo
+                              fun (saved : MicroCFTA.SourceCurrentAllocatedScanWorker.Memo) =>
+                              @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                                fun (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) =>
+                                @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos
+                                  fun (final : MicroCFTA.EndpointMemoGateTrace.Memos) =>
+                                  And
+                                    (@Eq.{2}
+                                      (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome
+                                        MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width)
+                                      (@MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g
+                                        s p h n budget values records
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before))
+                                      (@MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done
+                                        MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width
+                                        (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+                                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) outcome kept)
+                                        after saved))
+                                    (@Exists.{0}
+                                      (@MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2 budget
+                                        MicroCFTA.SourceMemoGate.unconstrained
+                                        (@MicroCFTA.SourceEndpointReachability.reaches
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          MicroCFTA.SourceMemoGate.unconstrained)
+                                        values
+                                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                          MicroCFTA.EqualityNormalize.Class
+                                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                                        outcome
+                                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                          MicroCFTA.EqualityNormalize.Class
+                                          MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                                        after saved)
+                                      fun
+                                        (actual :
+                                          @MicroCFTA.SourceCurrentConjunctionClassScan.Scan width inst inst_1 inst_2
+                                            budget MicroCFTA.SourceMemoGate.unconstrained
+                                            (@MicroCFTA.SourceEndpointReachability.reaches
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              MicroCFTA.SourceMemoGate.unconstrained)
+                                            values
+                                            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                              MicroCFTA.EqualityNormalize.Class
+                                              MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                                            outcome
+                                            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                              MicroCFTA.EqualityNormalize.Class
+                                              MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                                            after saved) =>
+                                      And
+                                        (@MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained width inst inst_1
+                                          inst_2 budget MicroCFTA.SourceMemoGate.unconstrained
+                                          (@MicroCFTA.SourceEndpointReachability.reaches
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            MicroCFTA.SourceMemoGate.unconstrained)
+                                          values
+                                          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                            MicroCFTA.EqualityNormalize.Class
+                                            MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                                          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                            MicroCFTA.EqualityNormalize.Class
+                                            MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                                          outcome
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                          after
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                                          saved actual records kept)
+                                        (And
+                                          (@MicroCFTA.SourceCurrentAllocatedScanSourceReads.ScanReads width inst inst_1
+                                            inst_2 budget values
+                                            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                              MicroCFTA.EqualityNormalize.Class
+                                              MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                                            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                              MicroCFTA.EqualityNormalize.Class
+                                              MicroCFTA.SourceEqualityClassOrder.Record.paths kept)
+                                            outcome
+                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                                            after
+                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before)
+                                            saved actual memos final)
+                                          (And
+                                            (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1 width
+                                              formulas solver next before
+                                              (@MicroCFTA.SourceCurrentAllocatedPartialState.advance width before after
+                                                saved
+                                                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge width
+                                                  before))
+                                              final)
+                                            (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept
+                                              records))))
+'RecordActualChecks.actual_stop_refutes' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@RecordActualChecks.actual_stop_refutes : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {g s p h n budget : Nat}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record} {paths : MicroCFTA.EqualityNormalize.Class}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+        values →
+      (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              paths →
+            ∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                paths →
+              MicroCFTA.EqualityNormalize.Nontrivial paths) →
+          @MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges width inst inst_1 inst_2 budget
+              MicroCFTA.SourceMemoGate.unconstrained
+              (@MicroCFTA.SourceEndpointReachability.reaches
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                MicroCFTA.SourceMemoGate.unconstrained)
+              values
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before) →
+            @Eq.{2}
+                (MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Outcome
+                  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width)
+                (@MicroCFTA.SourceCurrentAllocatedRecordScanWorker.scan inst inst_1 inst_2 width g s p h n budget values
+                  records (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.fourth width before))
+                (@MicroCFTA.SourceCurrentAllocatedScanWorker.Outcome.done
+                  MicroCFTA.SourceCurrentAllocatedRecordScanWorker.Result width
+                  (@Prod.mk.{0, 0} (Option.{0} MicroCFTA.EqualityNormalize.Class)
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@Option.some.{0} MicroCFTA.EqualityNormalize.Class paths) kept)
+                  after saved) →
+              And (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records)
+                (And
+                  (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+                    paths)
+                  (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                    (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (terms :
+                      List.{0}
+                        (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))),
+                    @MicroCFTA.Language.All₂
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.InternedGuardedLanguage.meaning
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceEqualityPCSGuard.holds MicroCFTA.FullSyntax.Formula
+                            MicroCFTA.FormulaExecutable.formulaDecidableEq formulas solver)
+                          ambient)
+                        values terms →
+                      Not
+                        (@MicroCFTA.EqualityNormalize.ClassSat
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.Language.Term.node
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) symbol terms)
+                          paths)))

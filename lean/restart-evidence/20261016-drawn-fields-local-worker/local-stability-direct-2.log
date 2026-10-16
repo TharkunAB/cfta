@@ -1,0 +1,45 @@
+lean/MicroCFTA/SourceCurrentAllocatedLocalWorkerStability.lean:69:21: error: Application type mismatch: The argument
+  actual
+has type
+  SourceEqualityRequiredExecution.requireAll r h paths values before.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done results heap
+but is expected to have type
+  SourceEqualityRequiredWorker.Result.done results heap = SourceEqualityRequiredWorker.Result.done results heap
+in the application
+  And.intro actual
+lean/MicroCFTA/SourceCurrentAllocatedLocalWorkerStability.lean:71:93: error: Application type mismatch: The argument
+  done
+has type
+  SourceEqualityRequiredWorker.Result.done found heap = SourceEqualityRequiredWorker.Result.done results otherHeap
+but is expected to have type
+  SourceEqualityRequiredExecution.requireAll r h paths values before.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done ?m.207 ?m.208
+in the application
+  Eq.trans (Eq.symm actual) done
+lean/MicroCFTA/SourceCurrentAllocatedLocalWorkerStability.lean:71:16: error: Tactic `subst` failed: 'found' occurs at
+  ?m.207
+
+case done.mpr
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+r h : Nat
+paths : List SourceEqualityNeeded.Path
+values results : List (Value Symbol Guard)
+before after : Checked width
+fourth savedFourth : Fourth
+memo saved : Memo
+found : List (Value Symbol Guard)
+heap : Heap
+actual :
+  SourceEqualityRequiredExecution.requireAll r h paths values before.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done found heap
+otherHeap : Heap
+done : SourceEqualityRequiredWorker.Result.done found heap = SourceEqualityRequiredWorker.Result.done results otherHeap
+sameState : after = advanceHeap before otherHeap
+sameFourth : savedFourth = fourth
+sameMemo : saved = memo
+left✝ : found = ?m.207
+right✝ : heap = ?m.208
+⊢ required r h paths values before fourth memo = Outcome.done results after savedFourth saved

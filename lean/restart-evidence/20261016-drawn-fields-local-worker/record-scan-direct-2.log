@@ -1,0 +1,39 @@
+lean/MicroCFTA/SourceCurrentAllocatedRecordScanWorker.lean:90:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapPaths (Outcome.bind ?first ?next)
+in the target expression
+  ((decision p h budget record.paths value checked fourth).bind fun value state memo =>
+      mapPaths
+        (if value = true then Outcome.done (some record.paths, []) state memo
+        else scan g s p h n budget values records state memo)) =
+    (decision p h budget record.paths value checked fourth).bind fun answer after final =>
+      if answer = true then Outcome.done (some record.paths, []) after final
+      else SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) after final
+
+case cons.e_next.true.e_next.false.e_next
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width g s p h n budget : Nat
+values : List (Value Symbol Guard)
+record : Record
+records : List Record
+ih :
+  ∀ (before : Checked width) (memo : Memo),
+    mapPaths (scan g s p h n budget values records before memo) =
+      SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) before memo
+before : Checked width
+memo : Memo
+middle : Checked width
+current : Memo
+later : Checked width
+saved : Memo
+value : Value Symbol Guard
+checked : Checked width
+fourth : Memo
+⊢ ((decision p h budget record.paths value checked fourth).bind fun value state memo =>
+      mapPaths
+        (if value = true then Outcome.done (some record.paths, []) state memo
+        else scan g s p h n budget values records state memo)) =
+    (decision p h budget record.paths value checked fourth).bind fun answer after final =>
+      if answer = true then Outcome.done (some record.paths, []) after final
+      else SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) after final

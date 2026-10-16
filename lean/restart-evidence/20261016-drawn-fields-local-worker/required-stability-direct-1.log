@@ -1,0 +1,37 @@
+lean/MicroCFTA/SourceEqualityRequiredWorkerStability.lean:92:35: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [rows, matching] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceEqualityRequiredWorkerStability.lean:114:31: error: Dependent elimination failed: Failed to solve equation
+  Result.done result after =
+    Decidable.rec
+      (fun h_1 =>
+        (fun x =>
+            match Value.reference name✝ with
+            | Value.empty => Result.done Value.empty before
+            | Value.reference name => Result.unresolved name before
+            | Value.node entry edges depth free =>
+              (rows (require r h) entries edges before).bind fun rebuilt after => work (makeNode rebuilt) after
+            | value@h_2:(Value.mu entry body depthShape ordinaryShape) =>
+              (head h value before).bind fun exposed after => require r h (Needed.node entries) exposed after
+            | value@h_2:(Value.union entry members depth free) =>
+              (head h value before).bind fun exposed after => require r h (Needed.node entries) exposed after)
+          h_1)
+      (fun h => (fun x => Result.done (Value.reference name✝) before) h) (instDecidableEqBool entries.isEmpty true)
+lean/MicroCFTA/SourceEqualityRequiredWorkerStability.lean:116:47: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [require, empty] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceEqualityRequiredWorkerStability.lean:121:47: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [require, empty] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

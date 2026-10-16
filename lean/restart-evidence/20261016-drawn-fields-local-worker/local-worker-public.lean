@@ -1,0 +1,9 @@
+import MicroCFTA.SourceCurrentAllocatedLocalWorker
+set_option pp.universes true
+set_option pp.explicit true
+#print axioms MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce_error
+#check @MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce_error
+#print axioms MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce_unchanged
+#check @MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce_unchanged
+#print axioms MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce_emptyChildren
+#check @MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce_emptyChildren

@@ -1,0 +1,68 @@
+lean/MicroCFTA/SourceCurrentAllocatedRecordScanWorker.lean:81:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapPaths (Outcome.bind ?first ?next)
+in the target expression
+  mapPaths
+      (if true = true then
+        (gate false s values record.paths middle current).bind fun secondary later saved =>
+          if secondary = true then scan g s p h n budget values records later saved
+          else
+            (query p h n values record.paths later saved).bind fun value checked fourth =>
+              (decision p h budget record.paths value checked fourth).bind fun answer after final =>
+                if answer = true then Outcome.done (some record.paths, []) after final
+                else scan g s p h n budget values records after final
+      else select record (scan g s p h n budget values records middle current)) =
+    if true = true then
+      (gate false s values record.paths middle current).bind fun secondary later saved =>
+        if secondary = true then
+          SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) later saved
+        else
+          (query p h n values record.paths later saved).bind fun value checked fourth =>
+            (decision p h budget record.paths value checked fourth).bind fun answer after final =>
+              if answer = true then Outcome.done (some record.paths, []) after final
+              else
+                SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) after
+                  final
+    else
+      Outcome.select record.paths
+        (SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) middle current)
+
+case cons.e_next.true
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width g s p h n budget : Nat
+values : List (Value Symbol Guard)
+record : Record
+records : List Record
+ih :
+  ∀ (before : Checked width) (memo : Memo),
+    mapPaths (scan g s p h n budget values records before memo) =
+      SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) before memo
+before : Checked width
+memo : Memo
+middle : Checked width
+current : Memo
+⊢ mapPaths
+      (if true = true then
+        (gate false s values record.paths middle current).bind fun secondary later saved =>
+          if secondary = true then scan g s p h n budget values records later saved
+          else
+            (query p h n values record.paths later saved).bind fun value checked fourth =>
+              (decision p h budget record.paths value checked fourth).bind fun answer after final =>
+                if answer = true then Outcome.done (some record.paths, []) after final
+                else scan g s p h n budget values records after final
+      else select record (scan g s p h n budget values records middle current)) =
+    if true = true then
+      (gate false s values record.paths middle current).bind fun secondary later saved =>
+        if secondary = true then
+          SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) later saved
+        else
+          (query p h n values record.paths later saved).bind fun value checked fourth =>
+            (decision p h budget record.paths value checked fourth).bind fun answer after final =>
+              if answer = true then Outcome.done (some record.paths, []) after final
+              else
+                SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) after
+                  final
+    else
+      Outcome.select record.paths
+        (SourceCurrentAllocatedScanWorker.scan g s p h n budget values (List.map Record.paths records) middle current)

@@ -1,0 +1,186 @@
+'MicroCFTA.SourceEqualityRequiredWorkerStability.head_done_stable' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.head_done_stable {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {h H : Nat}
+  {input result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredWorker.head h input before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done result after)
+  (enough : h ≤ H) :
+  MicroCFTA.SourceEqualityRequiredWorker.head H input before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done result after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.children_done_stable' does not depend on any axioms
+MicroCFTA.SourceEqualityRequiredWorkerStability.children_done_stable {Symbol Guard : Type}
+  (recur later :
+    MicroCFTA.SourceEqualityNeeded.Needed →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.SourceEqualityRequiredWorker.Result Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (preserves :
+    ∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed)
+      (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      recur needed value before = MicroCFTA.SourceEqualityRequiredWorker.Result.done result after →
+        later needed value before = MicroCFTA.SourceEqualityRequiredWorker.Result.done result after)
+  (entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)) (index : Nat)
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredWorker.children recur entries index values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after) :
+  MicroCFTA.SourceEqualityRequiredWorker.children later entries index values before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done results after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.rows_done_stable' depends on axioms: [propext]
+MicroCFTA.SourceEqualityRequiredWorkerStability.rows_done_stable {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (recur later :
+    MicroCFTA.SourceEqualityNeeded.Needed →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.SourceEqualityRequiredWorker.Result Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (preserves :
+    ∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed)
+      (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      recur needed value before = MicroCFTA.SourceEqualityRequiredWorker.Result.done result after →
+        later needed value before = MicroCFTA.SourceEqualityRequiredWorker.Result.done result after)
+  (entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed))
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {results : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredWorker.rows recur entries edges before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after) :
+  MicroCFTA.SourceEqualityRequiredWorker.rows later entries edges before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done results after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.require_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.require_done_stable {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredWorker.require r h needed value before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done result after)
+  (enoughR : r ≤ R) (enoughH : h ≤ H) :
+  MicroCFTA.SourceEqualityRequiredWorker.require R H needed value before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done result after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.children_require_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.children_require_done_stable {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredWorker.children (MicroCFTA.SourceEqualityRequiredWorker.require r h) entries index
+        values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after)
+  (enoughR : r ≤ R) (enoughH : h ≤ H) :
+  MicroCFTA.SourceEqualityRequiredWorker.children (MicroCFTA.SourceEqualityRequiredWorker.require R H) entries index
+      values before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done results after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.rows_require_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.rows_require_done_stable {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredWorker.rows (MicroCFTA.SourceEqualityRequiredWorker.require r h) entries edges
+        before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after)
+  (enoughR : r ≤ R) (enoughH : h ≤ H) :
+  MicroCFTA.SourceEqualityRequiredWorker.rows (MicroCFTA.SourceEqualityRequiredWorker.require R H) entries edges
+      before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done results after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.requireAll_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.requireAll_done_stable {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {paths : List MicroCFTA.SourceEqualityNeeded.Path}
+  {values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual :
+    MicroCFTA.SourceEqualityRequiredExecution.requireAll r h paths values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done results after)
+  (enoughR : r ≤ R) (enoughH : h ≤ H) :
+  MicroCFTA.SourceEqualityRequiredExecution.requireAll R H paths values before =
+    MicroCFTA.SourceEqualityRequiredWorker.Result.done results after
+'MicroCFTA.SourceEqualityRequiredWorkerStability.require_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.require_done_unique {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (one :
+    MicroCFTA.SourceEqualityRequiredWorker.require r h needed value before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done first after)
+  (two :
+    MicroCFTA.SourceEqualityRequiredWorker.require R H needed value before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done second later) :
+  first = second ∧ after = later
+'MicroCFTA.SourceEqualityRequiredWorkerStability.children_require_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.children_require_done_unique {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values first second : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (one :
+    MicroCFTA.SourceEqualityRequiredWorker.children (MicroCFTA.SourceEqualityRequiredWorker.require r h) entries index
+        values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done first after)
+  (two :
+    MicroCFTA.SourceEqualityRequiredWorker.children (MicroCFTA.SourceEqualityRequiredWorker.require R H) entries index
+        values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done second later) :
+  first = second ∧ after = later
+'MicroCFTA.SourceEqualityRequiredWorkerStability.rows_require_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.rows_require_done_unique {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges first second : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (one :
+    MicroCFTA.SourceEqualityRequiredWorker.rows (MicroCFTA.SourceEqualityRequiredWorker.require r h) entries edges
+        before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done first after)
+  (two :
+    MicroCFTA.SourceEqualityRequiredWorker.rows (MicroCFTA.SourceEqualityRequiredWorker.require R H) entries edges
+        before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done second later) :
+  first = second ∧ after = later
+'MicroCFTA.SourceEqualityRequiredWorkerStability.requireAll_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceEqualityRequiredWorkerStability.requireAll_done_unique {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {r h R H : Nat}
+  {paths : List MicroCFTA.SourceEqualityNeeded.Path}
+  {values first second : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (one :
+    MicroCFTA.SourceEqualityRequiredExecution.requireAll r h paths values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done first after)
+  (two :
+    MicroCFTA.SourceEqualityRequiredExecution.requireAll R H paths values before =
+      MicroCFTA.SourceEqualityRequiredWorker.Result.done second later) :
+  first = second ∧ after = later
