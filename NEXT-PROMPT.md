@@ -2,6 +2,58 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current allocated conjunction worklist and completed memo
+
+Source main remains `a4f38cbb`. The refresh found no new source change.
+Proof commits are `692b5efb`, `fc19ceeb`, `8796bf90`, `d4162cc7`,
+`71af830d`, `5995899d`, `2829037a`, and `78f0c1c7`.
+Full library scope stays active. Earlier sections retain historical scopes.
+
+Actual physical tuples now retain source order and accepted-edge coverage.
+The equality fold loads original fields, runs actual allocated accessors,
+stops at a contradictory head, and derives canonical combination receipts.
+Requirements construct child columns and row-major class projections.
+Common-heap coherence derives the identity-map key law.
+One row graph threads both returned heaps and derives smaller accepted witnesses.
+
+The dynamic worklist constructs every reached row from initial invariants.
+Only admission decreases its budget. Open pending operands can be skipped.
+Actual Run derives returned readiness, resident table domains, and local
+coverage for each stored entry. Literal Boolean grow completes in at most
+budget plus one comparisons. A true verdict excludes every accepted finite term.
+No fixed edge/project/row supplier or future invariant is supplied.
+The new Decision derives the open shortcut or completed closed worklist.
+SourceCurrentConjunctionMemo.finite constructs valid completed hits/misses
+using this new Decision. The historical intersection-based Call is not used.
+
+The schedule completes rows before logical insertion. Haskell stores lazy
+rows and can demand or skip prefixes differently. This is not a proof of GHC
+forcing, equal source heaps/Booleans under reordered reads, pending publication,
+or runtime allocation order. Initial Ready includes equality-cache Fields.
+Next derive that invariant through actual native query and checked constraint
+allocation, then connect the new memo to the current class prefix and new Scan.
+Do not substitute a future Fields premise or the historical Scan body.
+Continue general constrained completion and every other full-library target,
+including all separate Sized contracts and older constructor/equality work.
+
+The pinned full audit passes 2,238 jobs and 54,980 dependency checks.
+Seventy-five public axiom probes and 62 kernel examples pass.
+Only standard foundations and the preexisting unused-input warning occur.
+Thirteen new modules and one note preserve all earlier non-Audit proof files.
+Audit gains one import. No Haskell/package source changes. The prior strict
+Nix build, six suites with 755 examples plus golden, Fourmolu, and Cabal-gild
+checks remain applicable and were not repeated for this proof-only increment.
+
+Read `lean/notes-current-conjunction-worklist.md` for the exact proof boundary.
+Start: `/tmp/mcfta-general-scan-checkpoint-20261016-0228/` (2,939 files).
+Closing: `/tmp/mcfta-conjunction-worklist-checkpoint-20261016-0250/` (2,953 files).
+Script: `/tmp/mcfta-preserve-conjunction-worklist-20261016.py`.
+Evidence uses `/tmp/mcfta-conjunction-*` and `/tmp/mcfta-current-conjunction-*`.
+Fourteen external marked drafts, stashes, and other worktrees remain.
+The last weekly allowance was 81%; it is stale. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+The full-library goal stays active. HANDOFF.md records per-command SSH port443.
+
 ## Current finite class prefixes and conjunction read completion
 
 Audited source main is `a4f38cbb`, merged at `a140c37b`.
