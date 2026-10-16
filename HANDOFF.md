@@ -1,6 +1,62 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 16:51 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 17:17 CEST (Europe/Stockholm)**.
+
+## Current constrained finite ordinary parent bounds
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `9bff0326`. Read lean/notes-current-constrained-parent-bounds.md
+and lean/restart-evidence/20261016-constrained-class-structure/.
+Twelve additive modules prove actual class, local, and parent bounds.
+Proof commits are `00484d33` (narrowing and owner certificates),
+`373dd9cd` (metadata, Scan, receipts, and edits), `ea8b2e1a` (Class/Pass),
+and `095e5f71` (actual local and stable parent composition).
+
+Coherent finite ordinary records derive zero cached Mu depth and empty
+free names. Every actual primary Scan is false at the same heap. The Scan
+selects the complete source class list, returns no rejected class, and
+retains the exact checked state and fourth memo. Strict reads retain the
+same global bundle. No seeded query occurs on this domain.
+
+Actual target/leaf receipts derive structural certificates without a
+uniform future range plan. Shared-edit induction retains native results,
+merge results, target slots, and positional Language.All₂ height bounds.
+Class starts fresh slots. Its right fold captures the ACTUAL tail forest
+and warm tables. Required paths and final propagation retain positional
+bounds. Full guards, nonempty equality classes, and unequal path lengths
+remain admitted by this finite ordinary stage.
+
+Stage and Local derive their structural results at exact actual prefixes.
+Parent.finite constructs its own graph, strict reads, full receipt, and
+stable literal execution. Every larger nine-bound tuple returns the same
+edge, full checked state, fourth memo, and merge memo. The returned edge
+has domain children and height bounded by the ORIGINAL edge. Initial
+readiness, semantic admission, causal warm tables, and reached ranges
+remain explicit. No future body, successful worker, or result law is input.
+Raw rejected_finite needs no original domain, child availability, field,
+inherited readiness, or range plan.
+
+Returned.Stored gives both outer result families conditional domain and
+height certificates tied to their actual captured owners. Exact begin,
+demand, advance, finish, warm readback, and strict returned-child rank
+lemmas pass. Next prove structural preservation through all eight actual
+outer families, then construct strong-rank finite recursion. Read
+next-outer-completion-review.md. Lifecycle laws and stable parent execution
+do not yet complete the outer caller. Machine-range derivation, general
+Mu/union/reference progress, repeated passes, current frontends, concrete
+Haskell runtime, and full-pipeline composition remain open. All separate
+language, Sized, rank/inverse, probability, and transformation contracts
+and older constructor/equality work stay in the full-library objective.
+
+The full Audit passes 2520 jobs and 59190 dependency checks. Preservation
+retains all 6103 starting files and 2507 older non-Audit proof sources.
+Thirty-five frozen manifests check 277 module entries. Historical repairs,
+stashes, other worktrees, and the optimized interned core remain.
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+each later repair there with failure, reproducer, paths, commit, checks,
+and upstream status. This is progress; the full goal remains active.
 
 ## Current finite ordinary target domains and shared leaves
 
