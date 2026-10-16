@@ -1,5 +1,47 @@
 # cfta formal model
 
+## Current literal outer correctness and root language preservation
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The preceding
+published checkpoint is `9d70eeff`. Four additive modules connect the
+literal outer worker to its own strict source receipt. Supporting proof
+commit is `695c6fb3`; the full Actual proof is `9dbafced`.
+Read lean/notes-current-outer-actual.md and the current evidence in
+lean/restart-evidence/20261016-outer-actual/.
+
+Executable range predicates follow actual successful prefixes and returned
+states. They contain only reached machine checks. Check composition covers
+all sixteen raw constructors and aligns existential physical states through
+finite graph realization and whole-return uniqueness. The parent leaf derives
+its exact full caller and existing receipt from the literal parent observation.
+
+All eight Actual endpoints derive the successful worker's SAME graph, strict
+Reads, reached Checks, computed next inventory, full Post, output support,
+and independent language law. Strong fuel induction threads each derived
+prefix Context into the next actual call. No future graph, result law, final
+invariant, or body completion callback is a public input.
+PartialWorkerActual.root_exact applies the existing semantic root theorem
+to that derived trace. Its execution premise is literal worker success,
+not a supplied completed graph.
+
+General completion is still open. Context permits evaluating owners, so
+Context and reached ranges alone cannot imply success. Next derive public
+root initialization and an independent progress domain with active-owner
+exclusion. Read root-entry-review.md and progress-domain-review.md in the
+current evidence directory. Unequal-length classes and repeated-pass
+convergence remain open. Current reducePartially performs one pass.
+Concrete runtime, frontend, Sized, generator, rank/probability, solver,
+random-source, callback, codec, full-pipeline, and older constructor/equality
+obligations remain in scope. Preserve the optimized interned core.
+
+The full Audit passes 2475 jobs and 58753 dependency checks. Preservation
+retains all 5484 starting files and 2470 older proof sources. Twenty-nine
+frozen manifests check 232 module entries. Historical repairs, stashes, and
+the three other worktrees remain. No Haskell file changes. Reuse the strict
+Nix build, 798 examples plus golden, six-file Fourmolu, and four-package
+Cabal-gild and metadata checks. Root FINDINGS.md keeps Haskell repairs first.
+Earlier sections are historical checkpoints. The full objective stays active.
+
 ## Current literal parent and mutual outer execution
 
 Source main remains `c0cc8a05`, merged at `896b0a1c`. The preceding
