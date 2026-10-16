@@ -280,4 +280,3 @@ theorem secondary_class
         (fun value member => (available value member).grows _ _ first.growth first.history) first.valid)
 
 end MicroCFTA.SourceCurrentAllocatedGateReadValidity
-
