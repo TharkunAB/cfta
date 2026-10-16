@@ -1,5 +1,36 @@
 # Full formalization coverage
 
+## Current recursive domain inventory and allocation
+
+Updated: 2026-10-17 00:58 CEST. Source main remains `c0cc8a05`.
+This checkpoint starts at published `3d1ad127`. Proof commits are
+`84312e12`, `e1ede72e`, `e6732039`, and `ef8f7b56`. Read
+`lean/notes-current-recursive-domain-capacity.md` and
+`lean/restart-evidence/20261017-recursive-capacity/`.
+
+Seven additive modules prove finite canonical Typed domain inventories, actual
+sequential allocation bounds, fixed-source request key bounds, current checked
+domain history transport, and local recursive source compiler certificates.
+Repeated hits consume no identities. Actual empty domains preserve the cache.
+Mu entry, reference lookup, unions, and checked edge bodies retain the exact
+original heap scope and current domain membership. The current checked prefix
+split also retains exact inner returns, continuation prefixes, and full states.
+The full Audit passes
+2700 jobs and 61554 dependency checks with only the permitted axioms.
+All 131 public/integration axiom and signature pairs pass. Nine component
+manifests retain 179 entries. Independent reviews find no material defect.
+
+Whole-query raw-prefix admission is still open. DomainTrace.Prefixes remains
+an explicit premise. Derive a simultaneous invariant with physical validity,
+original operands, actual allocation history, and protected finish frames.
+Then derive current WordRanges from initial resources and reuse existing
+recursive native completion. The coarse issued-range inventory may exceed
+fixed machine capacity; it is not a practical guarantee for all source inputs.
+General constrained recursive outer progress, convergence, frontend/runtime
+correspondence, and complete public pipelines remain open. The full-library
+goal stays active. No Haskell change or new defect occurs. FINDINGS keeps
+merged repair b9219b9e and the external handoff first. Preserve all older work.
+
 ## Current universal raw-reach capacity and ordinary root
 
 Updated: 2026-10-17 00:25 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
