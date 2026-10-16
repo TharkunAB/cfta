@@ -1,5 +1,69 @@
 # Full formalization coverage
 
+## Current checked query composition and completion prerequisites
+
+Source main is `78618ea2`, merged at `45475383`. It adds rooted refinement
+conditions, polymorphic literals, and positional node-view name checks.
+Native intersection, conjunction emptiness, and Typing source stay unchanged.
+Proof commits are `ae797af8`, `2cfa0e21`, `ef14ad04`, and `541ae1cd`.
+Audit and scope notes are in `c5440696`. The optimized interned core and
+all older constructor/equality proofs remain. Full library scope stays active.
+
+Actual checked finite execution now preserves SemanticReady and stored
+CostHeap from current physical inputs. All outcomes retain their actual
+states. The combined endpoint derives readiness, fields, native validity,
+and both histories at that same returned state. CostHeap is an unfolding
+invariant, not a runtime complexity bound.
+
+The completed checked query now enters the new conjunction memo with the
+actual constructor heap and equality cache. It derives result availability,
+checked provenance, final idle/valid native tables, correct saved entries,
+old-entry retention, and conservative answer soundness. Advancing the memo
+result retains both full native tables and the domain cache. A true answer
+excludes common original terms for closed operands in the exact empty domain.
+The actual query completion and reached input plan remain explicit premises.
+That plan includes semantic NodeProduced/EdgeProduced checks at finish cells.
+
+New actual checked running proofs restore enclosing active bounds. New child
+bounds use only the independent original-input requiredFuel measure. Checked
+rejection skips child requests and effects. Actual-prefix Words/WordRanges
+preserve exact full states. They do not generate range or completion proofs.
+The new derive name phase proves exact positional prefixes, first-error
+order, diagnostic text, and earlier shape-error precedence. It does not
+supply Generic/schema/codec or rooted measure correspondence laws.
+
+Next derive general checked query completion and its reached input receipts.
+The recursive Mu proof needs open-context soundness and rank-bounded
+completeness. Exact SeenContext cannot extend to arbitrary binder candidates.
+Warm returned cells currently carry only closed/empty-domain language laws;
+derive a stronger open-cache invariant or adequate causal-history proof.
+Compose initial whole-heap allocation histories, then define the new current
+Scan and complete the physical class/outer caller. Do not substitute the
+historical intersection Scan or an old eager native execution. Continue all
+other full-library and separate Sized targets. Typing helper-order disagreement
+remains in main; the fetched fix branch is unmerged.
+
+The full pinned audit passes 2,254 jobs and 55,292 dependency checks.
+Forty-eight public axiom probes, thirty-six signatures, and fifty literal
+kernel examples pass. Two extra named kernel theorems are counted separately.
+Only standard foundations and the old unused-input warning occur. Independent
+review found no state-threading or conservative-soundness defect. The refreshed
+strict Nix build and all six suites pass: 767 examples plus golden. Fourmolu
+checks four changed Haskell files with the new fixities. Cabal-gild checks
+four active packages. No new test file is committed.
+
+Read lean/notes-current-allocated-query-memo.md and
+lean/notes-main-78618ea2.md. Start preservation is
+/tmp/mcfta-allocated-fields-checkpoint-20261016-0331/ (2,967 files).
+Closing preservation is /tmp/mcfta-allocated-query-checkpoint-20261016-0357/.
+The script is /tmp/mcfta-preserve-allocated-query-20261016.py. Evidence uses
+/tmp/mcfta-allocated-query-*, native semantic/cost/running/request validation,
+and /tmp/mcfta-derive-78618ea2-*. Sixteen prior external marked drafts,
+stashes, and other worktrees remain. No board posts or deployments.
+Push verified formalize checkpoints regularly. The last allowance observation
+was 81 percent and is stale. Stop owned work at 1 percent or less.
+The full-library goal remains active.
+
 ## Current loaded-field closure through checked native execution
 
 Source main stays `894a74af`. No Haskell source changes. Proof commits are
