@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentAllocatedSharedEditGraph
+#print MicroCFTA.SourceCurrentAllocatedSharedEditGraph.NodeReads.rec
+#check MicroCFTA.SourceEqualityAnnotationHeap.edge
+#check MicroCFTA.SourceQueryUnfoldMemo.valid_grows
+#check MicroCFTA.SourceCurrentConjunctionEquality.FieldAvailable.grows

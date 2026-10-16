@@ -1,0 +1,120 @@
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:39:47: error: Unknown identifier `root.atPath` at quotation precheck
+
+Note: You can use `set_option quotPrecheck false` to disable this check.
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:49:18: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.0.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.termCondition` has not been implemented
+  condition
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:60:17: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.0.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.termCondition` has not been implemented
+  condition
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:72:18: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.0.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.termCondition` has not been implemented
+  condition
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:86:151: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+ambient : InternedGuardedLanguage.Env Symbol
+rootSymbol : Symbol
+rootTerms : List (Term Symbol)
+leafCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {next : Inventory}
+    {path : EqualityNormalize.Path} {value : Value Symbol Guard}
+    {before : SourceCurrentAllocatedSharedTargetState.State width} {result : Value Symbol Guard}
+    {after : SourceCurrentAllocatedSharedTargetState.State width} {memos saved : Memos},
+    SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path value before result
+        after memos saved →
+      NodeBounds formulas solver base record originals ambient rootSymbol rootTerms (Edits.editAt path) value before
+        result memos
+emptyCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos},
+    NodeBounds formulas solver base record originals ambient rootSymbol rootTerms (Edits.editBelow entries) Value.empty
+      state Value.empty memos
+ordinaryCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : Heap} {entry : Cache.Interned InternedBinderProtocol.NodeKey} {depth : Nat}
+    {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)} {memos saved : Memos},
+    RowsReads formulas solver base actual memos saved →
+      RowsBounds formulas solver base record originals ambient rootSymbol rootTerms entries edges before rebuilt memos →
+        NodeBounds formulas solver base record originals ambient rootSymbol rootTerms (Edits.editBelow entries)
+          (Value.node entry edges depth free) before value memos
+recursiveCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {original : Value Symbol Guard} {before : SharedState width}
+    {exposed : Value Symbol Guard} {heap : Heap} {value : Value Symbol Guard} {after : SharedState width}
+    {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after}
+    {memos middle saved : Memos},
+    SourceCurrentRequiredQueryMemos.HeadReads head memos middle →
+      SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos middle →
+        NodeReads formulas solver base body middle saved →
+          NodeBounds formulas solver base record originals ambient rootSymbol rootTerms (Edits.editBelow entries)
+              exposed (advanceHeap before heap) value middle →
+            NodeBounds formulas solver base record originals ambient rootSymbol rootTerms (Edits.editBelow entries)
+              original before value memos
+nilChildren :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {index : Nat} {state : SharedState width} {memos : Memos},
+    ChildrenBounds formulas solver base record originals ambient rootSymbol rootTerms entries index [] state [] memos
+unselectedCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width}
+    {value : Value Symbol Guard} {index : Nat} {absent : SourceEqualityNeededMap.lookup (↑index) entries = none}
+    {rest : EditChildren record originals entries (index + 1) values before results after} {memos saved : Memos},
+    ChildrenReads formulas solver base rest memos saved →
+      ChildrenBounds formulas solver base record originals ambient rootSymbol rootTerms entries (index + 1) values
+          before results memos →
+        ChildrenBounds formulas solver base record originals ambient rootSymbol rootTerms entries index
+          (value :: values) before (value :: results) memos
+selectedCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {index : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑index) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (index + 1) values middle results after}
+    {memos current saved : Memos},
+    NodeReads formulas solver base first memos current →
+      ChildrenReads formulas solver base rest current saved →
+        NodeBounds formulas solver base record originals ambient rootSymbol rootTerms edits value before result memos →
+          ChildrenBounds formulas solver base record originals ambient rootSymbol rootTerms entries (index + 1) values
+              middle results current →
+            ChildrenBounds formulas solver base record originals ambient rootSymbol rootTerms entries index
+              (value :: values) before (result :: results) memos
+⊢ (∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+      {edits : Edits EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+      {result : Value Symbol Guard} {after : SharedState width}
+      {actual : EditNode record originals edits value before result after} {memos final : Memos},
+      NodeReads formulas solver base actual memos final →
+        NodeBounds formulas solver base record originals ambient rootSymbol rootTerms edits value before result memos) ∧
+    (∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+        {entries : List (Int × Edits EqualityNormalize.Path)} {index : Nat} {values : List (Value Symbol Guard)}
+        {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width}
+        {actual : EditChildren record originals entries index values before results after} {memos final : Memos},
+        ChildrenReads formulas solver base actual memos final →
+          ChildrenBounds formulas solver base record originals ambient rootSymbol rootTerms entries index values before
+            results memos) ∧
+      ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+        {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+        {before : SharedState width} {results : List (EdgeValue Symbol Guard)} {after : SharedState width}
+        {actual : EditRows record originals entries edges before results after} {memos final : Memos},
+        RowsReads formulas solver base actual memos final →
+          RowsBounds formulas solver base record originals ambient rootSymbol rootTerms entries edges before results
+            memos
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:196:14: error: unexpected token '('; expected command
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:308:44: error: elaboration function for `_private.lean.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.0.MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.termCondition` has not been implemented
+  condition
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditLanguage.lean:310:2: error: Invalid target:
+  read
+has type
+  ListReads formulas solver base actual memos final
+but is expected to have type
+  ListReads ?m.91 ?m.92 ?m.93 ?a✝ ?a✝¹ ?a✝²

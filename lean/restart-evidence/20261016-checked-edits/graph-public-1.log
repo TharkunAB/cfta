@@ -1,0 +1,79 @@
+'MicroCFTA.SourceCurrentAllocatedSharedEditGraph.children_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSharedEditGraph.children_length {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] {record : SourceEqualityClassOrder.Record}
+  {originals : List (Value Symbol Guard)} {entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)}
+  {index : Nat} {values : List (Value Symbol Guard)} {before : SharedState width} {results : List (Value Symbol Guard)}
+  {after : SharedState width} (actual : EditChildren record originals entries index values before results after) :
+  results.length = values.length
+MicroCFTA.SourceCurrentAllocatedSharedEditGraph.NodeReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (base : State Symbol Guard)
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {edits : SourceEqualityEdits.Edits EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+  {result : Value Symbol Guard} {after : SharedState width} :
+  EditNode record originals edits value before result after →
+    EndpointMemoGateTrace.Memos → EndpointMemoGateTrace.Memos → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ChildrenReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (base : State Symbol Guard)
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)} {offset : Nat}
+  {values : List (Value Symbol Guard)} {before : SharedState width} {results : List (Value Symbol Guard)}
+  {after : SharedState width} :
+  EditChildren record originals entries offset values before results after →
+    EndpointMemoGateTrace.Memos → EndpointMemoGateTrace.Memos → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditGraph.RowsReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (base : State Symbol Guard)
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+  {before : SharedState width} {results : List (EdgeValue Symbol Guard)} {after : SharedState width} :
+  EditRows record originals entries edges before results after →
+    EndpointMemoGateTrace.Memos → EndpointMemoGateTrace.Memos → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ListReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (base : State Symbol Guard)
+  {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {edits : SourceEqualityEdits.Edits EqualityNormalize.Path} {values : List (Value Symbol Guard)}
+  {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} :
+  EditList record originals edits values before results after →
+    EndpointMemoGateTrace.Memos → EndpointMemoGateTrace.Memos → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditRanges.NodeRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard)) :
+  SourceEqualityEdits.Edits EqualityNormalize.Path → Value Symbol Guard → SharedState width → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditRanges.ChildrenRanges [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} (record : SourceEqualityClassOrder.Record)
+  (originals : List (Value Symbol Guard)) :
+  List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path) →
+    Nat → List (Value Symbol Guard) → SharedState width → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditRanges.RowsRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard)) :
+  List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path) →
+    List (EdgeValue Symbol Guard) → SharedState width → Prop
+MicroCFTA.SourceCurrentAllocatedSharedEditRanges.ListRanges {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (record : SourceEqualityClassOrder.Record)
+  (originals : List (Value Symbol Guard)) (edits : SourceEqualityEdits.Edits EqualityNormalize.Path)
+  (values : List (Value Symbol Guard)) (before : SharedState width) : Prop
+lean/restart-evidence/20261016-checked-edits/graph-public.lean:22:0: warning: automatically included section variable(s) unused in theorem `constructor_tables`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-checked-edits/graph-public.lean:39:36: error: Application type mismatch: The argument
+  children
+has type
+  EditChildren record originals entries index inputs before values middle
+but is expected to have type
+  EditChildren ?m.71 ?m.72 ?m.73 ?m.74 inputs ?m.76
+    (run (makeEdge symbol guard (run (makeEdge symbol guard values) middle.checked.native.machine.heap).fst.children)
+          middle.checked.native.machine.heap).fst.children
+    ?m.78
+in the application
+  children_length children
+'constructor_tables' does not depend on any axioms
+'same_arity_rebuild' depends on axioms: [propext, sorryAx, Quot.sound]
+'root_leaf_is_silent' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,227 @@
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.node_physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.edge_physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.head_physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.node_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.children_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.rows_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditEffects.list_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@node_physical : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SharedState width},
+  SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+    ∀
+      (edges :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))),
+      Edges before.checked.native.machine.heap edges →
+        SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base
+            (advanceHeap before (run (makeNode edges) before.checked.native.machine.heap).snd) ∧
+          SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked)
+              (physical (advanceHeap before (run (makeNode edges) before.checked.native.machine.heap).snd).checked) ∧
+            Available (run (makeNode edges) before.checked.native.machine.heap).snd
+              (run (makeNode edges) before.checked.native.machine.heap).fst
+@edge_physical : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SharedState width},
+  SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+    ∀ (symbol : SourceObservations.Label FullSyntax.Formula) (guard : SourceSymbolicIndex.Constraint FullSyntax.Formula)
+      (children :
+        List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))),
+      SourceCurrentConjunctionEquality.FieldAvailable before.checked.operations guard →
+        Values before.checked.native.machine.heap children →
+          SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base
+              (advanceHeap before (run (makeEdge symbol guard children) before.checked.native.machine.heap).snd) ∧
+            SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked)
+                (physical
+                  (advanceHeap before
+                      (run (makeEdge symbol guard children) before.checked.native.machine.heap).snd).checked) ∧
+              InternedEdgeResidency.EdgeResident
+                  (run (makeEdge symbol guard children) before.checked.native.machine.heap).snd
+                  (run (makeEdge symbol guard children) before.checked.native.machine.heap).fst ∧
+                (run (makeEdge symbol guard children) before.checked.native.machine.heap).fst.children = children
+@head_physical : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SharedState width}
+  {input exposed :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {heap :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+    SourceEqualityRequiredHead.Head input before.checked.native.machine.heap exposed heap →
+      Available before.checked.native.machine.heap input →
+        SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base
+            (advanceHeap before heap) ∧
+          SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked)
+              (physical (advanceHeap before heap).checked) ∧
+            Available heap exposed
+@node_effects : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {edits : Edits EqualityNormalize.Path}
+  {value : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SharedState width}
+  {result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {after : SharedState width} {memos final : EndpointMemoGateTrace.Memos}
+  {actual : EditNode record originals edits value before result after},
+  NodeReads formulas solver base actual memos final →
+    Populated edits →
+      HasLeaf edits →
+        Allowed record edits →
+          SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+            Available before.checked.native.machine.heap value →
+              Safe edits value →
+                EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                  ∃ next, NodeReceipt formulas solver next record originals base value before result after memos final
+@children_effects : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SharedState width}
+  {results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {after : SharedState width} {memos final : EndpointMemoGateTrace.Memos}
+  {actual : EditChildren record originals entries offset values before results after},
+  ChildrenReads formulas solver base actual memos final →
+    Populated (Edits.editBelow entries) →
+      Allowed record (Edits.editBelow entries) →
+        SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+          Values before.checked.native.machine.heap values →
+            ChildrenSafe entries offset values →
+              EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                ∃ next,
+                  ChildrenReceipt formulas solver next record originals base values before results after memos final
+@rows_effects : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {entries : List (Int × Edits EqualityNormalize.Path)}
+  {edges :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SharedState width}
+  {results :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {after : SharedState width} {memos final : EndpointMemoGateTrace.Memos}
+  {actual : EditRows record originals entries edges before results after},
+  RowsReads formulas solver base actual memos final →
+    Populated (Edits.editBelow entries) →
+      Allowed record (Edits.editBelow entries) →
+        SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+          Edges before.checked.native.machine.heap edges →
+            RowsSafe entries edges →
+              EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                ∃ next, RowsReceipt formulas solver next record originals base edges before results after memos final
+@list_effects : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {edits : Edits EqualityNormalize.Path}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SharedState width}
+  {results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {after : SharedState width} {memos final : EndpointMemoGateTrace.Memos}
+  {actual : EditList record originals edits values before results after},
+  ListReads formulas solver base actual memos final →
+    Populated edits →
+      Allowed record edits →
+        SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before →
+          Values before.checked.native.machine.heap values →
+            ListSafe edits values →
+              EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                ∃ next,
+                  ChildrenReceipt formulas solver next record originals base values before results after memos final
+@ListSafe : {Action : Type} →
+  Edits Action →
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)) →
+      Prop
+lean/restart-evidence/20261016-checked-edits/effects-public-probes.lean:71:54: error: Application type mismatch: The argument
+  trivial
+has type
+  True
+but is expected to have type
+  Populated (Edits.editAt path)
+in the application
+  list_effects ListReads.leaf trivial

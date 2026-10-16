@@ -1,0 +1,82 @@
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:402:9: error: unexpected token 'prefix'; expected '(', ':=', '|' or term
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:265:6: error: don't know how to synthesize implicit argument `width`
+  @NodeLaw inst✝¹ inst✝ ?m.88 formulas solver base record originals (Edits.editAt path) value before result after memos
+    saved
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+next : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+value : Value Symbol Guard
+before : SourceCurrentAllocatedSharedTargetState.State ?m.88
+result : Value Symbol Guard
+after : SourceCurrentAllocatedSharedTargetState.State ?m.88
+memos saved : Memos
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:264:6: error: don't know how to synthesize implicit argument `width`
+  @SourceCurrentAllocatedSharedTargetLeaf.Receipt ?m.88 inst✝¹ inst✝ formulas solver next record originals base path
+    value before result after memos saved
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+next : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+value : Value Symbol Guard
+before : SourceCurrentAllocatedSharedTargetState.State ?m.88
+result : Value Symbol Guard
+after : SourceCurrentAllocatedSharedTargetState.State ?m.88
+memos saved : Memos
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:263:68: error(lean.inferBinderTypeFailed): Failed to infer type of binder `after`
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:263:54: error(lean.inferBinderTypeFailed): Failed to infer type of binder `before`
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:262:141: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+⊢ (∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+      {edits : Edits EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+      {result : Value Symbol Guard} {after : SharedState width} {memos final : Memos}
+      {actual : EditNode record originals edits value before result after},
+      NodeReads formulas solver base actual memos final →
+        NodeLaw record originals edits value before result after memos final) ∧
+    (∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+        {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {values : List (Value Symbol Guard)}
+        {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width}
+        {memos final : Memos} {actual : EditChildren record originals entries offset values before results after},
+        ChildrenReads formulas solver base actual memos final →
+          ChildrenLaw record originals entries offset values before results after memos final) ∧
+      ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+        {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+        {before : SharedState width} {results : List (EdgeValue Symbol Guard)} {after : SharedState width}
+        {memos final : Memos} {actual : EditRows record originals entries edges before results after},
+        RowsReads formulas solver base actual memos final →
+          RowsLaw record originals entries edges before results after memos final
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:402:15: error: unexpected token ':='; expected ':'
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:407:39: error: unexpected identifier; expected ':'
+lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean:490:69: error: Application type mismatch: The argument
+  ih
+has type
+  Values before.checked.native.machine.heap values →
+    (match Edits.editAt x✝, ⋯, ⋯, populated, allowed with
+      | Edits.editAt action, actual, reads, populated, allowed => True
+      | Edits.editBelow entries, actual, reads, populated, allowed => ChildrenSafe entries 0 values) →
+      All₂ Transport values values
+but is expected to have type
+  All₂ Transport values values
+in the application
+  All₂.cons (fun x domain => domain) ih

@@ -1,0 +1,101 @@
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_populated' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_allowed' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_disjoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_nonroot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_not_leaf' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_children' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_condition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled : MicroCFTA.SourceEqualityClassOrder.Record →
+  MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_valid : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityEdits.Valid (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_populated : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceCurrentEditDomains.Populated (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_allowed : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualitySharedEditEffects.Allowed record
+    (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_disjoint : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    List.Pairwise (fun first second => MicroCFTA.SourceEqualityEditCompiledPaths.Disjoint first.fst second.fst)
+      (MicroCFTA.SourceEqualityClassEdits.edits record.paths id)
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_nonroot : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+      ∀ (path : MicroCFTA.SourceEqualityEdits.Path) (action : MicroCFTA.EqualityNormalize.Path),
+        (path, action) ∈ MicroCFTA.SourceEqualityClassEdits.edits record.paths id → path ≠ []
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_not_leaf : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+      ∀ (token : MicroCFTA.EqualityNormalize.Path),
+        MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record ≠ MicroCFTA.SourceEqualityEdits.Edits.editAt token
+MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_children : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+      ∃ entries,
+        MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record =
+          MicroCFTA.SourceEqualityEdits.Edits.editBelow entries
+@MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_safe : ∀ {Symbol Guard : Type}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    ∀ (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+      (∀ (path : MicroCFTA.EqualityNormalize.Path),
+          path ∈ record.paths →
+            MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) values) →
+        ∀ (entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)),
+          MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record =
+              MicroCFTA.SourceEqualityEdits.Edits.editBelow entries →
+            MicroCFTA.SourceCurrentEditDomains.ChildrenSafe entries 0 values
+@MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled_condition : ∀ {Symbol : Type}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+      ∀ (symbol : Symbol) (terms : List (MicroCFTA.Language.Term Symbol)),
+        MicroCFTA.SourceEqualityEditAPI.ListCondition
+          (fun path part => (MicroCFTA.Language.Term.node symbol terms).atPath path = some part)
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) terms
+'MicroCFTA.SourceCurrentAllocatedClassEditPlanProbes.compiled_tokens' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassEditPlanProbes.selected_plan' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedClassEditPlanProbes.compiled_tokens : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    ∀ (signed : List Int) (token : MicroCFTA.EqualityNormalize.Path),
+      (signed, token) ∈
+          MicroCFTA.SourceEqualityEditLeafPaths.leaves (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) ↔
+        token ∈ record.paths ∧ signed = List.map Int.ofNat token
+@MicroCFTA.SourceCurrentAllocatedClassEditPlanProbes.selected_plan : ∀ {Symbol Guard : Type}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+      ∀ (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        (∀ (path : MicroCFTA.EqualityNormalize.Path),
+            path ∈ record.paths →
+              MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) values) →
+          ∃ entries,
+            MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record =
+                MicroCFTA.SourceEqualityEdits.Edits.editBelow entries ∧
+              MicroCFTA.SourceCurrentEditDomains.ChildrenSafe entries 0 values ∧
+                MicroCFTA.SourceEqualityEdits.Valid (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) ∧
+                  MicroCFTA.SourceCurrentEditDomains.Populated
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) ∧
+                    MicroCFTA.SourceEqualitySharedEditEffects.Allowed record
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)

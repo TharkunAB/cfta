@@ -1,0 +1,252 @@
+'MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.children' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.list' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.node : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (rootSymbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (rootTerms : List (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)))
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {actual : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditNode record originals edits value before result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedSharedEditGraph.NodeReads formulas solver base actual memos final →
+    MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.NodeBounds✝ formulas solver base record originals ambient
+      rootSymbol rootTerms edits value before result memos
+@MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.children : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (rootSymbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (rootTerms : List (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)))
+  {entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)} {index : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {actual :
+    MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditChildren record originals entries index values before results
+      after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ChildrenReads formulas solver base actual memos final →
+    MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.ChildrenBounds✝ formulas solver base record originals ambient
+      rootSymbol rootTerms entries index values before results memos
+@MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.rows : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (rootSymbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (rootTerms : List (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)))
+  {entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)}
+  {edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {actual :
+    MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditRows record originals entries edges before results after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedSharedEditGraph.RowsReads formulas solver base actual memos final →
+    MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.RowsBounds✝ formulas solver base record originals ambient
+      rootSymbol rootTerms entries edges before results memos
+@MicroCFTA.SourceCurrentAllocatedSharedEditLanguage.list : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (rootSymbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (rootTerms : List (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)))
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {actual : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditList record originals edits values before results after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ListReads formulas solver base actual memos final →
+    MicroCFTA.SourceEqualityEdits.Valid edits →
+      MicroCFTA.SourceCurrentEditDomains.Populated edits →
+        MicroCFTA.SourceEqualitySharedEditEffects.Allowed record edits →
+          ∀ {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory},
+            MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base
+                before →
+              MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+                MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ListSafe edits values →
+                  MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                    ∀
+                      (terms :
+                        List
+                          (MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))),
+                      (MicroCFTA.Language.All₂
+                            (MicroCFTA.InternedGuardedLanguage.meaning
+                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                            results terms →
+                          MicroCFTA.Language.All₂
+                            (MicroCFTA.InternedGuardedLanguage.meaning
+                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                            values terms) ∧
+                        (MicroCFTA.Language.All₂
+                            (MicroCFTA.InternedGuardedLanguage.meaning
+                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                            originals rootTerms →
+                          MicroCFTA.EqualityNormalize.ClassSat (MicroCFTA.Language.Term.node rootSymbol rootTerms)
+                              record.paths →
+                            MicroCFTA.SourceEqualityEditAPI.ListCondition
+                                (fun path part =>
+                                  (MicroCFTA.Language.Term.node rootSymbol rootTerms).atPath path = some part)
+                                edits terms →
+                              MicroCFTA.Language.All₂
+                                  (MicroCFTA.InternedGuardedLanguage.meaning
+                                    (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                                  values terms →
+                                MicroCFTA.Language.All₂
+                                  (MicroCFTA.InternedGuardedLanguage.meaning
+                                    (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                                  results terms)
+lean/restart-evidence/20261016-checked-edits/language-probe.lean:71:42: error: Tactic `assumption` failed
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+ambient : InternedGuardedLanguage.Env Symbol
+symbol : Symbol
+rootTerms : List (Term Symbol)
+inventory : Inventory
+edits : Edits EqualityNormalize.Path
+values results : List (Value Symbol Guard)
+before after : SharedState width
+memos final : Memos
+actual : EditList record originals edits values before results after
+read : ListReads formulas solver base actual memos final
+valid : SourceEqualityEdits.Valid edits
+populated : Populated edits
+allowed : Allowed record edits
+ready✝ : Ready formulas solver inventory record originals base before
+available✝ : Values before.checked.native.machine.heap values
+safe : ListSafe edits values
+memoValid : MemoValid before.checked.native.machine.heap memos
+path : EqualityNormalize.Path
+terms : List (Term Symbol)
+ready : Ready formulas solver inventory record originals base before
+available : Values before.checked.native.machine.heap values
+member : path ∈ record.paths
+accepted : All₂ (meaning (pcs formulas solver) ambient) values terms
+⊢ SourceEqualityEdits.Valid (Edits.editAt path)
+lean/restart-evidence/20261016-checked-edits/language-probe.lean:71:55: error: Tactic `assumption` failed
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+ambient : InternedGuardedLanguage.Env Symbol
+symbol : Symbol
+rootTerms : List (Term Symbol)
+inventory : Inventory
+edits : Edits EqualityNormalize.Path
+values results : List (Value Symbol Guard)
+before after : SharedState width
+memos final : Memos
+actual : EditList record originals edits values before results after
+read : ListReads formulas solver base actual memos final
+valid : SourceEqualityEdits.Valid edits
+populated : Populated edits
+allowed : Allowed record edits
+ready✝ : Ready formulas solver inventory record originals base before
+available✝ : Values before.checked.native.machine.heap values
+safe : ListSafe edits values
+memoValid : MemoValid before.checked.native.machine.heap memos
+path : EqualityNormalize.Path
+terms : List (Term Symbol)
+ready : Ready formulas solver inventory record originals base before
+available : Values before.checked.native.machine.heap values
+member : path ∈ record.paths
+accepted : All₂ (meaning (pcs formulas solver) ambient) values terms
+⊢ Populated (Edits.editAt path)

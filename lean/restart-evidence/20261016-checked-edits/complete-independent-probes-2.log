@@ -1,0 +1,143 @@
+'MicroCFTA.SourceCurrentAllocatedSharedEditComplete.node_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditComplete.children_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditComplete.list_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedEditComplete.node_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedProvenance.Values base originals →
+    (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        path ∈ record.paths →
+          MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent record →
+        MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+            {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+            {value :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+            MicroCFTA.SourceCurrentAllocatedSharedEditRanges.NodeRanges record originals edits value before →
+              MicroCFTA.SourceCurrentEditDomains.Populated edits →
+                MicroCFTA.SourceCurrentEditDomains.HasLeaf edits →
+                  MicroCFTA.SourceEqualitySharedEditEffects.Allowed record edits →
+                    MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals
+                        base before →
+                      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap value →
+                        MicroCFTA.SourceCurrentEditDomains.Safe edits value →
+                          ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                            MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                              ∃ result after next final actual,
+                                MicroCFTA.SourceCurrentAllocatedSharedEditGraph.NodeReads formulas solver base actual
+                                    memos final ∧
+                                  MicroCFTA.SourceCurrentAllocatedSharedEditEffects.NodeReceipt formulas solver next
+                                    record originals base value before result after memos final
+@MicroCFTA.SourceCurrentAllocatedSharedEditComplete.children_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedProvenance.Values base originals →
+    (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        path ∈ record.paths →
+          MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent record →
+        MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+            {entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)} {offset : Nat}
+            {values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+            MicroCFTA.SourceCurrentAllocatedSharedEditRanges.ChildrenRanges record originals entries offset values
+                before →
+              MicroCFTA.SourceCurrentEditDomains.Populated (MicroCFTA.SourceEqualityEdits.Edits.editBelow entries) →
+                MicroCFTA.SourceEqualitySharedEditEffects.Allowed record
+                    (MicroCFTA.SourceEqualityEdits.Edits.editBelow entries) →
+                  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals
+                      base before →
+                    MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+                      MicroCFTA.SourceCurrentEditDomains.ChildrenSafe entries offset values →
+                        ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                          MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                            ∃ results after next final actual,
+                              MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ChildrenReads formulas solver base actual
+                                  memos final ∧
+                                MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt formulas solver next
+                                  record originals base values before results after memos final
+@MicroCFTA.SourceCurrentAllocatedSharedEditComplete.list_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedProvenance.Values base originals →
+    (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        path ∈ record.paths →
+          MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent record →
+        MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+            {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+            {values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+            MicroCFTA.SourceCurrentAllocatedSharedEditRanges.ListRanges record originals edits values before →
+              MicroCFTA.SourceCurrentEditDomains.Populated edits →
+                MicroCFTA.SourceEqualitySharedEditEffects.Allowed record edits →
+                  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals
+                      base before →
+                    MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+                      MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ListSafe edits values →
+                        ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                          MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                            ∃ results after next final actual,
+                              MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ListReads formulas solver base actual
+                                  memos final ∧
+                                MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt formulas solver next
+                                  record originals base values before results after memos final

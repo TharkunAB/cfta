@@ -1,0 +1,223 @@
+'MicroCFTA.SourceCurrentAllocatedSharedEditComplete.node_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditComplete.children_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditComplete.list_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedEditComplete.node_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedProvenance.Values base originals →
+    (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        path ∈ record.paths →
+          MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent record →
+        MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+            {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+            {value :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+            MicroCFTA.SourceCurrentAllocatedSharedEditRanges.NodeRanges record originals edits value before →
+              MicroCFTA.SourceCurrentEditDomains.Populated edits →
+                MicroCFTA.SourceCurrentEditDomains.HasLeaf edits →
+                  MicroCFTA.SourceEqualitySharedEditEffects.Allowed record edits →
+                    MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals
+                        base before →
+                      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap value →
+                        MicroCFTA.SourceCurrentEditDomains.Safe edits value →
+                          ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                            MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                              ∃ result after next final actual,
+                                MicroCFTA.SourceCurrentAllocatedSharedEditGraph.NodeReads formulas solver base actual
+                                    memos final ∧
+                                  MicroCFTA.SourceCurrentAllocatedSharedEditEffects.NodeReceipt formulas solver next
+                                    record originals base value before result after memos final
+@MicroCFTA.SourceCurrentAllocatedSharedEditComplete.children_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedProvenance.Values base originals →
+    (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        path ∈ record.paths →
+          MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent record →
+        MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+            {entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)} {offset : Nat}
+            {values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+            MicroCFTA.SourceCurrentAllocatedSharedEditRanges.ChildrenRanges record originals entries offset values
+                before →
+              MicroCFTA.SourceCurrentEditDomains.Populated (MicroCFTA.SourceEqualityEdits.Edits.editBelow entries) →
+                MicroCFTA.SourceEqualitySharedEditEffects.Allowed record
+                    (MicroCFTA.SourceEqualityEdits.Edits.editBelow entries) →
+                  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals
+                      base before →
+                    MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+                      MicroCFTA.SourceCurrentEditDomains.ChildrenSafe entries offset values →
+                        ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                          MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                            ∃ results after next final actual,
+                              MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ChildrenReads formulas solver base actual
+                                  memos final ∧
+                                MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt formulas solver next
+                                  record originals base values before results after memos final
+@MicroCFTA.SourceCurrentAllocatedSharedEditComplete.list_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedProvenance.Values base originals →
+    (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        path ∈ record.paths →
+          MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent record →
+        MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+            {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+            {values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+            MicroCFTA.SourceCurrentAllocatedSharedEditRanges.ListRanges record originals edits values before →
+              MicroCFTA.SourceCurrentEditDomains.Populated edits →
+                MicroCFTA.SourceEqualitySharedEditEffects.Allowed record edits →
+                  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals
+                      base before →
+                    MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values →
+                      MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ListSafe edits values →
+                        ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                          MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                            ∃ results after next final actual,
+                              MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ListReads formulas solver base actual
+                                  memos final ∧
+                                MicroCFTA.SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt formulas solver next
+                                  record originals base values before results after memos final
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:36:8: warning: automatically included section variable(s) unused in theorem `_private.lean.«restart-evidence».«20261016-checked-edits».«complete-independent-probes».0.MicroCFTA.CheckedEditCompleteIndependentProbe.leaf_safe`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:43:8: warning: automatically included section variable(s) unused in theorem `_private.lean.«restart-evidence».«20261016-checked-edits».«complete-independent-probes».0.MicroCFTA.CheckedEditCompleteIndependentProbe.leaf_nonempty`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:54:60: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:54:66: error(lean.unknownIdentifier): Unknown identifier `domains`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:54:74: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:54:83: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:54:90: error(lean.unknownIdentifier): Unknown identifier `inventory`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:56:48: error(lean.unknownIdentifier): Unknown identifier `ready`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:56:100: error(lean.unknownIdentifier): Unknown identifier `valid`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:72:4: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:72:10: error(lean.unknownIdentifier): Unknown identifier `domains`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:72:18: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:72:27: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:72:34: error(lean.unknownIdentifier): Unknown identifier `inventory`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:72:51: error(lean.unknownIdentifier): Unknown identifier `ready`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:71:9: error: Tactic `rcases` failed: `x✝ : ?m.105` is not an inductive datatype
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:100:84: error(lean.unknownIdentifier): Unknown identifier `ready.checked.semantic.ready`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:101:33: error(lean.unknownIdentifier): Unknown identifier `ready`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:97:105: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState width
+memos : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+original : Value Symbol Guard
+recursive : SourceEqualityRequiredGraph.Recursive original
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+available : Available before.checked.native.machine.heap original
+safe : Safe (Edits.editBelow entries) original
+bodyRanges :
+  ∀ (exposed : Value Symbol Guard) (heap : Heap),
+    SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap →
+      NodeRanges record originals (Edits.editBelow entries) exposed (advanceHeap before heap)
+closed : original.free = []
+exposed : Value Symbol Guard
+heap : Heap
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+left✝ : SourceEqualityRequiredCache.Keeps before.checked.native.machine.heap heap
+exposedAvailable : Available heap exposed
+exposedClosed : exposed.free = []
+right✝ : SourceEqualityRequiredCache.Ordinary exposed
+⊢ ∃ exposed heap current result after next final head body,
+    SourceCurrentRequiredQueryMemos.HeadReads head memos current ∧
+      SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current ∧
+        NodeReads formulas solver base body current final ∧
+          NodeReceipt formulas solver next record originals base original before result after memos final
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:123:42: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:123:48: error(lean.unknownIdentifier): Unknown identifier `domains`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:123:56: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:123:65: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:123:72: error(lean.unknownIdentifier): Unknown identifier `inventory`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:125:48: error(lean.unknownIdentifier): Unknown identifier `ready`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:125:78: error(lean.unknownIdentifier): Unknown identifier `valid`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:148:56: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:148:62: error(lean.unknownIdentifier): Unknown identifier `domains`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:148:70: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:148:79: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:148:86: error(lean.unknownIdentifier): Unknown identifier `inventory`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:148:103: error(lean.unknownIdentifier): Unknown identifier `ready`
+lean/restart-evidence/20261016-checked-edits/complete-independent-probes.lean:147:9: error: Tactic `rcases` failed: `x✝ : ?m.129` is not an inductive datatype

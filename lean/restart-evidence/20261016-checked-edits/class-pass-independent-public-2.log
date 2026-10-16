@@ -1,0 +1,152 @@
+'MicroCFTA.SourceCurrentAllocatedClassPass.Fold.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassPass.fold_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassPass.Pass.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassPass.pass_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedClassPass.Receipt.fourth_correct' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@Fold.verified : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  {records : List SourceEqualityClassOrder.Record}
+  {values results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos} {actual : Fold records values before memo results after saved},
+  FoldReads formulas solver actual memos final →
+    (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → SourceEqualityClassOrder.Coherent record) →
+      (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → EqualityNormalize.Nontrivial record.paths) →
+        SourceCurrentConjunctionClassScan.Ready before →
+          At formulas solver inventory before →
+            Values before.native.machine.heap values →
+              (∀ (record : SourceEqualityClassOrder.Record),
+                  record ∈ records →
+                    ∀ (path : EqualityNormalize.Path),
+                      path ∈ record.paths → ForestClosed (List.map Int.ofNat path) values) →
+                SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                        memo) →
+                    EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∃ next, Receipt formulas solver next records values before memo results after saved memos final
+@fold_complete : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  {records : List SourceEqualityClassOrder.Record}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SourceEqualityNativeDemand.State width}
+  {memo :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  Ranges records values before memo →
+    (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → SourceEqualityClassOrder.Coherent record) →
+      (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → EqualityNormalize.Nontrivial record.paths) →
+        SourceCurrentConjunctionClassScan.Ready before →
+          At formulas solver inventory before →
+            Values before.native.machine.heap values →
+              (∀ (record : SourceEqualityClassOrder.Record),
+                  record ∈ records →
+                    ∀ (path : EqualityNormalize.Path),
+                      path ∈ record.paths → ForestClosed (List.map Int.ofNat path) values) →
+                SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                        memo) →
+                    ∀ (memos : EndpointMemoGateTrace.Memos),
+                      EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∃ results after saved next final actual,
+                          FoldReads formulas solver actual memos final ∧
+                            Receipt formulas solver next records values before memo results after saved memos final
+@Pass.verified : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  {records : List SourceEqualityClassOrder.Record}
+  {values results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos} {actual : Pass records values before memo results after saved},
+  PassReads formulas solver actual memos final →
+    (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → SourceEqualityClassOrder.Coherent record) →
+      (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → EqualityNormalize.Nontrivial record.paths) →
+        SourceCurrentConjunctionClassScan.Ready before →
+          At formulas solver inventory before →
+            Values before.native.machine.heap values →
+              (∀ (record : SourceEqualityClassOrder.Record),
+                  record ∈ records →
+                    ∀ (path : EqualityNormalize.Path),
+                      path ∈ record.paths → ForestClosed (List.map Int.ofNat path) values) →
+                SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                        memo) →
+                    EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∃ next, Receipt formulas solver next records values before memo results after saved memos final
+@pass_complete : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  {records : List SourceEqualityClassOrder.Record}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before : SourceEqualityNativeDemand.State width}
+  {memo :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  Ranges records values before memo →
+    (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → SourceEqualityClassOrder.Coherent record) →
+      (∀ (record : SourceEqualityClassOrder.Record), record ∈ records → EqualityNormalize.Nontrivial record.paths) →
+        SourceCurrentConjunctionClassScan.Ready before →
+          At formulas solver inventory before →
+            Values before.native.machine.heap values →
+              (∀ (record : SourceEqualityClassOrder.Record),
+                  record ∈ records →
+                    ∀ (path : EqualityNormalize.Path),
+                      path ∈ record.paths → ForestClosed (List.map Int.ofNat path) values) →
+                SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                        memo) →
+                    ∀ (memos : EndpointMemoGateTrace.Memos),
+                      EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∃ results after saved next final actual,
+                          PassReads formulas solver actual memos final ∧
+                            Receipt formulas solver next records values before memo results after saved memos final
+@Receipt.fourth_correct : ∀
+  [inst :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {inventory : Inventory}
+  {records : List SourceEqualityClassOrder.Record}
+  {values results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos},
+  Receipt formulas solver inventory records values before memo results after saved memos final →
+    ∀ (fourth : SourceCurrentEmptinessMemo.Memo),
+      SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+        SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap fourth
+'two_class_actual_capture' does not depend on any axioms
+'two_class_inventory_carry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'finite_pass_language' depends on axioms: [propext, Classical.choice, Quot.sound]
