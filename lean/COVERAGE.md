@@ -35,7 +35,8 @@ memos. Positive guard extraction is part of that accessor. Empty stored
 payload alone is insufficient. No historical execution is transferred.
 
 Next derive current parent returned-height and structural support, then
-construct actual outer completion with the active-owner order. The plain
+construct actual outer completion with the active-owner order. Read
+next-completion-review.md in the current evidence directory. The plain
 Region is an intermediate domain, not the full objective. General
 constrained completion, unequal-length classes, and repeated-pass
 convergence remain open. Concrete runtime and shared warm initialization,

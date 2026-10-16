@@ -146,6 +146,13 @@ Context allows evaluating owners. General progress needs independent active
 owner exclusion and justified structural bounds on actual returned edges.
 An arbitrary semantic warm edge law does not imply those structural bounds.
 
+Read next-completion-review.md in the current evidence directory. The next
+parent result certificate needs original children, erased slots, or a
+singleton Empty sentinel. It must derive both height descent and Region
+membership for actual warm edge returns. Height bounds alone do not retain
+the Region domain. The next proof must derive that certificate from actual
+parent work and its completed cache history.
+
 Concrete containers, machine identities, shared warm caches, GHC demand and
 publication, solver IO, random sources, callbacks, codecs, current frontend
 adapters, generator composition, full-pipeline composition, and every separate
