@@ -1,12 +1,13 @@
+{-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE PatternSynonyms #-}
 
 {- | Typed languages with variables, from typing rules for each constructor.
 
-The language is the closed terms of a 'HasFTA' datatype that have one of some
-types, with a nesting of at most a bound. Each rule gives a type to a
-constructor of the datatype, by its name. A variable has a de Bruijn index:
-the index 0 is the innermost binder. The environment of a term is the list
-of the types of its binders, innermost first.
+The language is the terms of a 'HasFTA' datatype that have one of some types,
+with a nesting of at most a bound. Each rule gives a type to a constructor of
+the datatype, by its name. A variable has a de Bruijn index: the index 0 is
+the innermost binder. The environment of a term is the list of the types of
+its binders, innermost first.
 
 @
 data Ty = TInt | TBool
@@ -23,16 +24,25 @@ typedRules =
         <> [rule \"TLet\" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [TInt, TBool], typ <- [TInt, TBool]]
 
 closed :: Either TypingError (Gen Symbol Typed)
-closed = fromTypingRules 3 [TInt, TBool] typedRules
+closed = fromTypingRules Typing{typingBound = Nesting 3, typingInputs = [], typingRoots = [TInt, TBool], typingRules = typedRules}
 @
 
-'fromTypingRules' builds the automaton whose states are an environment, a
-type, and the nesting that remains, and reads it as 'Data.CFTA.Gen.fromAutomaton'
-does. The symbols are the labels of 'Data.CFTA.Gen.fromDatatype', so a value
-and its term share one rank, and 'Data.CFTA.Gen.rankOfValue' finds it. The
-ranks order the constructors of a node by arity, then in declaration order,
-as for 'Data.CFTA.Gen.fromDatatype'. This holds for the constructors of each
-type that the datatype reaches. A literal has no declared position, so the
+'typingAutomaton' builds the automaton whose states are an environment, a
+type, and the nesting that remains ('TypingState'). Its symbols are the
+constructors of the datatype and of the values, so the operations of
+"Data.CFTA" and "Data.CFTA.Template" apply to it before it becomes a
+generator: 'Data.CFTA.intersectWith' with another automaton over
+'Constructor', such as an annotated 'Data.CFTA.Generic.datatypeFTA',
+'Data.CFTA.annotate', which can read the environment and the type of a state,
+and 'Data.CFTA.Template.excludeAnywhereFTA' or
+'Data.CFTA.Template.restrictFTA'. 'fromConstructorAutomaton' reads the result,
+and 'fromTypingRules' is the two in one.
+
+The symbols of the generator are the labels of 'Data.CFTA.Gen.fromDatatype',
+so a value and its term share one rank, and 'Data.CFTA.Gen.rankOfValue' finds
+it. The ranks order the constructors of a node by arity, then in declaration
+order, as for 'Data.CFTA.Gen.fromDatatype'. This holds for the constructors of
+each type in the automaton. A literal has no declared position, so the
 literals of one type follow the order of their labels. For numbers that are
 not negative and have at most nine digits, that is the numeric order.
 'Data.CFTA.Gen.fromDatatype' orders literals as their domain lists them.
@@ -42,19 +52,29 @@ Limits:
 * A field that holds a subterm has the type of the datatype. A field of
   another type holds one fixed value. So a family of mutually recursive
   types is not a language here.
-* The bound is on the nesting, not on the binders, so the language is
-  finite. The automaton has about T^(D + 1) environments for T types and the
-  bound D.
+* The bound is on the nesting, so the language is finite. The automaton has
+  about T^(D + 1) environments for T types and the bound D. A bound on the
+  binders ('Binders') and inputs are not implemented yet.
 -}
 module Data.CFTA.Gen.Typing (
+    -- * Rules
     Rule,
     Child,
     rule,
     variable,
     subterm,
     value,
+
+    -- * Languages
+    Typing (..),
+    Bound (..),
     TypingError (..),
     fromTypingRules,
+
+    -- * The automaton
+    TypingState (..),
+    typingAutomaton,
+    fromConstructorAutomaton,
 ) where
 
 import Control.Monad (unless, (<=<))
@@ -67,10 +87,10 @@ import Data.Proxy (Proxy (Proxy))
 import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as Text
-import Data.Typeable (typeRep)
+import Data.Typeable (TypeRep, typeRep)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (noConstraint)
+import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Gen.Error (GenError (UndecodableConstructor))
 import Data.CFTA.Gen.Internal.Automaton (undecodableConstructor)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
@@ -121,6 +141,29 @@ Use 'subterm' for a field of that datatype.
 value :: (HasFTA v) => v -> Child ty
 value = Value . encodeTerm
 
+-- | A typed language: the bound, the environment at the root, the types at the root, and the rules.
+data Typing ty = Typing
+    { typingBound :: !Bound
+    -- ^ The bound on the terms.
+    , typingInputs :: ![ty]
+    -- ^ The types of the variables in scope at the root, innermost first. Not implemented yet: it must be empty.
+    , typingRoots :: ![ty]
+    -- ^ The types of the terms of the language.
+    , typingRules :: ![Rule ty]
+    -- ^ The typing rules.
+    }
+
+-- | The bound on the terms of a typed language.
+data Bound
+    = {- | The nesting of the recursive occurrences, as for
+      'Data.CFTA.Gen.Refinement.recurUpTo': a constructor with a subterm
+      field uses one level.
+      -}
+      Nesting !Depth
+    | -- | The number of binders around each position. Not implemented yet.
+      Binders !Int
+    deriving (Eq, Show)
+
 -- | Failure while building a typed language.
 data TypingError
     = {- | Rule names that no constructor of the datatype has. The second
@@ -133,37 +176,52 @@ data TypingError
       another type than its field.
       -}
       FieldMismatch !String
+    | -- | A part of 'Typing' that is not implemented yet: inputs, or a bound on the binders.
+      NotImplemented !String
     deriving (Eq, Show)
 
--- | A state of the automaton: the root, a term of a type in an environment with the nesting that remains, or one value.
-data Goal ty = Root | Goal ![ty] !ty !Int | Fixed !(Term Constructor)
-    deriving (Eq, Ord)
-
-{- | The closed terms of the datatype that have one of the types, with a
-nesting of at most the bound. A constructor with a subterm field uses one
-level of the nesting, as for 'Data.CFTA.Gen.Refinement.recurUpTo'. A constructor without
-a rule is not in the language.
+{- | A state of the automaton of a typed language: the root, a term of a type
+in an environment, or one value. The nesting that remains is 'Just' for a
+'Nesting' bound. The root has the transitions of the terms of each root
+type, so a transition of the root does not say its type; its children do.
 -}
-fromTypingRules :: forall a ty. (HasFTA a, Ord ty) => Depth -> [ty] -> [Rule ty] -> Either TypingError (Gen Symbol a)
-fromTypingRules (Depth bound) roots rules = do
+data TypingState ty = Root | Goal ![ty] !ty !(Maybe Int) | Fixed !(Term Constructor)
+    deriving (Eq, Ord, Show)
+
+{- | The terms of the datatype that have one of the root types, within the
+bound. A constructor without a rule is not in the language.
+-}
+fromTypingRules :: forall a ty. (HasFTA a, Ord ty) => Typing ty -> Either TypingError (Gen Symbol a)
+fromTypingRules typing = fromConstructorAutomaton @a <$> typingAutomaton @a typing
+
+{- | The automaton of a typed language over the constructors of the datatype
+@a@ and of the values. Each state has a row, and each constructor has the
+arity of its fields.
+-}
+typingAutomaton ::
+    forall a ty. (HasFTA a, Ord ty) => Typing ty -> Either TypingError (FTA.FTA (TypingState ty) Constructor Constraint)
+typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots = roots, typingRules = rules} = do
     let unknown = nubOrd [name | name <- map ruleName rules, Map.notMember name constructors]
     unless (null unknown) $ Left $ UnknownConstructors unknown (map constructorName declared)
     mapM_ checked [(name, children) | Rule name children _ <- rules]
+    unless (null inputs) $ Left $ NotImplemented "inputs"
+    case bound of
+        Nesting _ -> Right ()
+        Binders _ -> Left $ NotImplemented "a bound on the binders"
     rows <- close Map.empty [Root]
-    -- Each state has a row, and each label has the arity of its constructor.
-    let automaton =
-            fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton") $ FTA.mkFTA Root (Map.toList rows)
-        symbols = nubOrd [FTA.transitionSymbol transition | transitions <- Map.elems rows, transition <- transitions]
-    pure $ case undecodableConstructor (null . decodeTerm @a) automaton of
-        Just constructor -> Transparent $ Left $ UndecodableConstructor $ constructorName constructor
-        Nothing -> decode symbols <$> Flat.fromAutomaton (order symbols) (Interned.fromRows Root (Map.map (map labelled) rows))
+    pure
+        $ fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton")
+        $ FTA.mkFTA Root (Map.toList rows)
   where
-    declared = case describeType (Proxy @a) of
-        AlgebraicType _ alternatives -> map fst alternatives
-        AtomicType _ -> []
+    declared = constructorsOf (describeType (Proxy @a))
     constructors = Map.fromList [(constructorName constructor, constructor) | constructor <- declared]
     ruleName (Rule name _ _) = name
     ruleName (Variable name _) = name
+
+    -- The nesting at the root.
+    nesting = case bound of
+        Nesting (Depth depth) -> Just depth
+        Binders _ -> Nothing
 
     close rows [] = Right rows
     close rows (state : pending)
@@ -172,7 +230,7 @@ fromTypingRules (Depth bound) roots rules = do
             transitions <- row state
             close (Map.insert state transitions rows) (concatMap FTA.transitionChildren transitions <> pending)
 
-    row Root = concat <$> traverse (\typ -> row (Goal [] typ bound)) (nubOrd roots)
+    row Root = concat <$> traverse (\typ -> row (Goal [] typ nesting)) (nubOrd roots)
     row (Fixed term) = Right [FTA.Transition (Term.rootLabel term) (map Fixed (Term.subForest term)) noConstraint]
     row (Goal env goal remaining) =
         traverse
@@ -187,11 +245,11 @@ fromTypingRules (Depth bound) roots rules = do
                    ]
             )
       where
-        nests children = remaining > 0 || null [() | Subterm _ _ <- children]
+        nests children = maybe True (> 0) remaining || null [() | Subterm _ _ <- children]
         transition alternative@(_, children) = do
             constructor <- checked alternative
             pure $ FTA.Transition constructor (map child children) noConstraint
-        child (Subterm binds typ) = Goal (binds <> env) typ (remaining - 1)
+        child (Subterm binds typ) = Goal (binds <> env) typ (subtract 1 <$> remaining)
         child (Value term) = Fixed term
 
     -- The constructor of a rule, when the children fit its fields.
@@ -206,34 +264,39 @@ fromTypingRules (Depth bound) roots rules = do
         fieldType field /= typeRep (Proxy @a)
             && fieldType field == constructorType (Term.rootLabel term)
 
+{- | Read an automaton over the constructors of the datatype @a@ and of its
+field values as a generator of values of @a@, as 'Data.CFTA.Gen.fromAutomaton'
+reads an automaton: finite when it is acyclic, and counted by size otherwise.
+The ranks order the constructors of a node by arity, then in declaration
+order, and atomic literals by their labels.
+
+When the generator is built, it decodes one term for each transition. If the
+codec rejects one, the generator fails with 'UndecodableConstructor'.
+-}
+fromConstructorAutomaton ::
+    forall a state. (HasFTA a, Ord state) => FTA.FTA state Constructor Constraint -> Gen Symbol a
+fromConstructorAutomaton automaton = case undecodableConstructor (null . decodeTerm @a) automaton of
+    Just constructor -> Transparent $ Left $ UndecodableConstructor $ constructorName constructor
+    Nothing -> decode <$> Flat.fromAutomaton order (Interned.fromRows (FTA.initialState automaton) (Map.map (map labelled) rows))
+  where
+    rows = FTA.transitionTable automaton
+    symbols = nubOrd [FTA.transitionSymbol transition | transitions <- Map.elems rows, transition <- transitions]
     labelled transition = transition{FTA.transitionSymbol = fromString (constructorLabel (FTA.transitionSymbol transition))}
 
     -- The key of 'Data.CFTA.Gen.fromDatatype': the declaration position of a
-    -- constructor in its type, for each type that the datatype reaches, and
-    -- the label text. A literal has no declared position.
-    order symbols =
-        let needed = Set.fromList (map constructorType symbols)
-            positions =
-                Map.fromList
-                    [ (Text.pack (constructorLabel constructor), position)
-                    | alternatives <- reachable needed Set.empty [describeType (Proxy @a)]
-                    , (position, (constructor, _)) <- zip [0 :: Int ..] alternatives
-                    ]
-         in \(Symbol label) -> (Map.findWithDefault 0 label positions, label)
-
-    -- The constructors of each algebraic type in the descriptions and their
-    -- fields, for the types in the typing rows only. A field that no rule
-    -- uses can have a non-regular type, whose description reaches infinitely
-    -- many types. The walk keeps the types that it saw.
-    reachable _ _ [] = []
-    reachable needed seen (AtomicType _ : pending) = reachable needed seen pending
-    reachable needed seen (AlgebraicType typ alternatives : pending)
-        | Set.notMember typ needed || Set.member typ seen = reachable needed seen pending
-        | otherwise = alternatives : reachable needed (Set.insert typ seen) (concatMap snd alternatives <> pending)
+    -- constructor in its type, for the types of the constructors of the
+    -- automaton, and the label text. A literal has no declared position.
+    positions =
+        Map.fromList
+            [ (Text.pack (constructorLabel constructor), position)
+            | description <- reachable (Set.fromList (map constructorType symbols)) Set.empty [describeType (Proxy @a)]
+            , (position, constructor) <- zip [0 :: Int ..] (constructorsOf description)
+            ]
+    order (Symbol label) = (Map.findWithDefault 0 label positions, label)
 
     -- A label is found by its hash, then by the identity of the symbol, as
     -- 'Data.CFTA.Gen.Internal.Automaton.datatypeDecoder' does.
-    decode symbols = \term -> case decodeLabelled term of
+    decode = \term -> case decodeLabelled term of
         Just decoded -> decoded
         Nothing -> error "cfta-generator bug in Data.CFTA.Gen.Typing: the codec rejected a term of the language"
       where
@@ -245,3 +308,22 @@ fromTypingRules (Depth bound) roots rules = do
                 , let symbol = fromString (constructorLabel constructor) :: Symbol
                 ]
         decodeLabelled = decodeTerm @a <=< traverse (\symbol -> lookup symbol =<< IntMap.lookup (hash symbol) table)
+
+{- | The descriptions of the needed types that a description reaches, each
+once. A type that is not needed is not read: a field that no rule uses can
+have a non-regular type, whose description reaches infinitely many types.
+-}
+reachable :: Set.Set TypeRep -> Set.Set TypeRep -> [Description] -> [Description]
+reachable _ _ [] = []
+reachable needed seen (description : rest)
+    | Set.notMember typ needed || Set.member typ seen = reachable needed seen rest
+    | otherwise = description : reachable needed (Set.insert typ seen) (children <> rest)
+  where
+    (typ, children) = case description of
+        AtomicType atomic -> (atomic, [])
+        AlgebraicType algebraic alternatives -> (algebraic, concatMap snd alternatives)
+
+-- | The constructors of a type, in declaration order, and none for an atomic type.
+constructorsOf :: Description -> [Constructor]
+constructorsOf (AlgebraicType _ alternatives) = map fst alternatives
+constructorsOf (AtomicType _) = []

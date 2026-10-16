@@ -15,12 +15,27 @@ import GHC.Generics (Generic)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, conjoinConstraints, equalityConstraint, noConstraint)
+import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import qualified Data.CFTA.Gen as Gen
-import Data.CFTA.Gen.Typing
+import Data.CFTA.Gen.Typing (
+    Bound (..),
+    Rule,
+    Typing (Typing),
+    TypingError (..),
+    TypingState (Goal),
+    fromConstructorAutomaton,
+    fromTypingRules,
+    rule,
+    subterm,
+    typingAutomaton,
+    value,
+    variable,
+ )
 import Data.CFTA.Generic (
     Constructor (..),
-    HasFTA,
+    HasFTA (..),
+    annotateConstructors,
     constructorLabel,
     datatypeFTA,
     decodeLabelledTerm,
@@ -30,7 +45,10 @@ import Data.CFTA.Generic (
  )
 import Data.CFTA.Index (Cardinality (..), Rank (..))
 import qualified Data.CFTA.Interned as Interned
+import Data.CFTA.Path (path)
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Template (Template (..), excludeAnywhereFTA)
+import qualified Data.CFTA.Term as Term
 
 -- * The language of the binders spike
 
@@ -57,7 +75,7 @@ typedRules =
 
 -- | The closed well-typed terms up to the bound, from the rules.
 typedLanguage :: Int -> Gen.Gen Symbol Typed
-typedLanguage bound = either (error . show) id $ fromTypingRules (fromIntegral bound) [TInt, TBool] typedRules
+typedLanguage bound = either (error . show) id $ fromTypingRules (Typing (Nesting (fromIntegral bound)) [] [TInt, TBool] typedRules)
 
 {- | The number of closed well-typed terms up to the bound, from a recurrence
 over the environment: @count n env typ@ is the number of terms of the type in
@@ -79,14 +97,14 @@ typedCount bound = count bound [] TInt + count bound [] TBool
             TBool -> count (n - 1) env TInt
 
 -- | A state of the hand-written automaton (path (b) of the binders spike).
-data State = Root | Typing ![Ty] !Ty !Int | Index !Int | TypeState !Ty
+data State = HandRoot | HandTyping ![Ty] !Ty !Int | Index !Int | TypeState !Ty
     deriving stock (Eq, Ord, Show)
 
 {- | The hand-written automaton of the closed typed terms up to the bound,
 over the labels of the constructors of 'Typed'.
 -}
 explicitTyped :: Int -> FTA.FTA State String Constraint
-explicitTyped bound = either (error . show) id $ FTA.mkFTA Root rows
+explicitTyped bound = either (error . show) id $ FTA.mkFTA HandRoot rows
   where
     derived = either (error . show) id $ deriveFTAWith @Typed (domain [0 .. bound - 1 :: Int])
     labels =
@@ -97,23 +115,25 @@ explicitTyped bound = either (error . show) id $ FTA.mkFTA Root rows
             ]
     label name = Map.findWithDefault (error ("no constructor " <> name)) name labels
     transition name children = FTA.Transition (label name) children noConstraint
-    reachable = closure [] [Typing [] TInt bound, Typing [] TBool bound]
+    reachable = closure [] [HandTyping [] TInt bound, HandTyping [] TBool bound]
     closure seen [] = seen
     closure seen (state : pending)
         | state `elem` seen = closure seen pending
         | otherwise = closure (state : seen) (concatMap FTA.transitionChildren (row state) <> pending)
-    rows = (Root, row (Typing [] TInt bound) <> row (Typing [] TBool bound)) : [(state, row state) | state <- reachable]
-    row Root = []
+    rows =
+        (HandRoot, row (HandTyping [] TInt bound) <> row (HandTyping [] TBool bound))
+            : [(state, row state) | state <- reachable]
+    row HandRoot = []
     row (Index index) = [transition (show index) []]
     row (TypeState typ) = [transition (show typ) []]
-    row (Typing env typ remaining) =
+    row (HandTyping env typ remaining) =
         [transition "TZero" [] | typ == TInt]
             <> [transition "TTrue" [] | typ == TBool]
             <> [transition "TVar" [Index index, TypeState typ] | (index, bound') <- zip [0 ..] env, bound' == typ]
             <> concat
-                [ [transition "TAdd" [Typing env TInt below, Typing env TInt below] | typ == TInt]
-                    <> [transition "TIsZero" [Typing env TInt below] | typ == TBool]
-                    <> [transition "TLet" [Typing env rhs below, Typing (rhs : env) typ below] | rhs <- [TInt, TBool]]
+                [ [transition "TAdd" [HandTyping env TInt below, HandTyping env TInt below] | typ == TInt]
+                    <> [transition "TIsZero" [HandTyping env TInt below] | typ == TBool]
+                    <> [transition "TLet" [HandTyping env rhs below, HandTyping (rhs : env) typ below] | rhs <- [TInt, TBool]]
                 | remaining > 0
                 , let below = remaining - 1
                 ]
@@ -148,9 +168,40 @@ arithRules =
         <> [rule "If" [subterm [] BoolType, subterm [] typ, subterm [] typ] typ | typ <- [IntType, BoolType]]
         <> [rule "Let" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [IntType, BoolType], typ <- [IntType, BoolType]]
 
+-- | The typed arithmetic language up to the bound.
+arithTyping :: Int -> Typing ArithType
+arithTyping bound = Typing (Nesting (fromIntegral bound)) [] [IntType, BoolType] arithRules
+
 -- | The closed well-typed arithmetic terms up to the bound, from the rules.
 arithLanguage :: Int -> Gen.Gen Symbol Arith
-arithLanguage bound = either (error . show) id $ fromTypingRules (fromIntegral bound) [IntType, BoolType] arithRules
+arithLanguage = either (error . show) id . fromTypingRules . arithTyping
+
+-- | The automaton of the closed well-typed arithmetic terms up to the bound.
+arithAutomaton :: Int -> FTA.FTA (TypingState ArithType) Constructor Constraint
+arithAutomaton = either (error . show) id . typingAutomaton @Arith . arithTyping
+
+-- | The subterms of an arithmetic term, the term first.
+subterms :: Arith -> [Arith]
+subterms term =
+    term
+        : concatMap
+            subterms
+            ( case term of
+                Plus left right -> [left, right]
+                Less left right -> [left, right]
+                If condition yes no -> [condition, yes, no]
+                Let rhs body -> [rhs, body]
+                _ -> []
+            )
+
+-- | Whether each conditional of the type 'IntType' in a well-typed term has two equal branches.
+equalIntBranches :: [ArithType] -> Arith -> Bool
+equalIntBranches env term = case term of
+    If condition yes no -> (arithType env yes /= Just IntType || yes == no) && all (equalIntBranches env) [condition, yes, no]
+    Plus left right -> equalIntBranches env left && equalIntBranches env right
+    Less left right -> equalIntBranches env left && equalIntBranches env right
+    Let rhs body -> equalIntBranches env rhs && equalIntBranches (fromMaybe (error "an ill-typed term") (arithType env rhs) : env) body
+    _ -> True
 
 -- | The type of an arithmetic term in an environment, if it has one, with the literals of the rules.
 arithType :: [ArithType] -> Arith -> Maybe ArithType
@@ -265,15 +316,51 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
             filter (isNothing . arithType []) decoded `shouldBe` []
             filter ((> 3) . arithNesting) decoded `shouldBe` []
             mapM (Gen.rankOfValue generator) decoded `shouldBe` Right ranks
+    describe "the automaton" $ do
+        let derived = either (error . show) id $ deriveFTAWith @Arith (domain [0, 1 :: Int])
+            same left right = if left == right then Just left else Nothing
+            listed = either (error . show) id . Gen.values
+        it "reads the grammar of a datatype in the ranks of fromDatatypeUpToDepth" $ do
+            let typedGrammar = either (error . show) id $ deriveFTAWith @Typed (domain [0, 1 :: Int])
+            listed (fromConstructorAutomaton @Typed (FTA.boundDepth 2 (datatypeFTA typedGrammar)))
+                `shouldBe` listed (Gen.fromDatatypeUpToDepth 2 typedGrammar)
+        it "keeps the terms whose sums add equal terms, in a product with an annotated grammar" $ do
+            let equalOperands = equalityConstraint (mkEqConstraints [[path [0], path [1]]])
+                annotated = either (error . show) id $ annotateConstructors noConstraint [("Plus", equalOperands)] derived
+                product' = either (error . show) id $ FTA.intersectWith same conjoinConstraints (arithAutomaton 2) (datatypeFTA annotated)
+                equalSums term = and [left == right | Plus left right <- subterms term]
+            members (fromConstructorAutomaton @Arith product') `shouldBe` filter equalSums (members (arithLanguage 2))
+        it "keeps the terms without a subterm that a template matches" $ do
+            let constructorOf :: (HasFTA v) => v -> Constructor
+                constructorOf = Term.rootLabel . encodeTerm
+                template =
+                    TemplateNode
+                        (constructorOf (Plus (Num 0) (Num 0)))
+                        [TemplateNode (constructorOf (Num 0)) [TemplateNode (constructorOf (0 :: Int)) []], Hole]
+                excluded = excludeAnywhereFTA [template] (arithAutomaton 2)
+                addsZero term = not (null [() | Plus (Num 0) _ <- subterms term])
+            members (fromConstructorAutomaton @Arith excluded) `shouldBe` filter (not . addsZero) (members (arithLanguage 2))
+        it "can read the types of the states in an annotation" $ do
+            -- A conditional of the type IntType has a child state of that type.
+            let equalBranches = equalityConstraint (mkEqConstraints [[path [1], path [2]]])
+                annotation _ (FTA.Transition constructor children _) = case children of
+                    [_, Goal _ IntType _, _] | constructorName constructor == "If" -> equalBranches
+                    _ -> noConstraint
+                annotated = FTA.annotate annotation (arithAutomaton 2)
+            members (fromConstructorAutomaton @Arith annotated) `shouldBe` filter (equalIntBranches []) (members (arithLanguage 2))
     describe "the rules" $ do
         it "names only constructors of the datatype" $
             either
                 Just
                 (const Nothing)
-                (fromTypingRules @Arith 1 [IntType] [rule "Num" [value (0 :: Int)] IntType, rule "Mul" [] IntType])
+                (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] [rule "Num" [value (0 :: Int)] IntType, rule "Mul" [] IntType]))
                 `shouldBe` Just (UnknownConstructors ["Mul"] ["Num", "Flag", "Plus", "Less", "If", "Var", "Let"])
+        it "report inputs and a bound on the binders as not implemented" $ do
+            let failure typing = either Just (const Nothing) (fromTypingRules @Arith typing)
+            failure (Typing (Nesting 1) [IntType] [IntType] arithRules) `shouldBe` Just (NotImplemented "inputs")
+            failure (Typing (Binders 1) [] [IntType] arithRules) `shouldBe` Just (NotImplemented "a bound on the binders")
         it "fit the fields of their constructor" $ do
-            let mismatch rules = either Just (const Nothing) (fromTypingRules @Arith 1 [IntType] rules)
+            let mismatch given = either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] given))
             mismatch [rule "Plus" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Plus")
             mismatch [rule "Num" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Num")
             mismatch [rule "Num" [value True] IntType] `shouldBe` Just (FieldMismatch "Num")
@@ -289,10 +376,15 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
                 `shouldBe` Just (FieldMismatch "Var")
     describe "the order of the values" $ do
         it "orders the constructors of a helper type in declaration order, as fromDatatype does" $ do
-            let typed = either (error . show) id $ fromTypingRules @Lettered 0 [()] [rule "Lit" [value A] (), rule "Lit" [value Z] ()]
+            let typed =
+                    either (error . show) id $
+                        fromTypingRules @Lettered (Typing (Nesting 0) [] [()] [rule "Lit" [value A] (), rule "Lit" [value Z] ()])
                 derived = Gen.fromDatatype $ either (error . show) id $ deriveFTA @Lettered
             Gen.values derived `shouldBe` Right [Lit Z, Lit A]
             Gen.values typed `shouldBe` Right [Lit Z, Lit A]
         it "reads only the types of the rules, so a non-regular field that no rule uses does not stop it" $
-            Gen.values (either (error . show) id $ fromTypingRules @Holding 0 [()] [rule "Other" [] (), rule "Plain" [] ()])
+            Gen.values
+                ( either (error . show) id $
+                    fromTypingRules @Holding (Typing (Nesting 0) [] [()] [rule "Other" [] (), rule "Plain" [] ()])
+                )
                 `shouldBe` Right [Plain, Other]
