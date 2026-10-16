@@ -1,0 +1,117 @@
+lean/MicroCFTA/SourceCurrentAllocatedParentWorkerActual.lean:217:110: error: don't know how to synthesize implicit argument `field`
+  @SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads.parent inst✝² inst✝¹ inst✝ width formulas solver budget
+    request.value loaded request.inherited before result after savedFourth saved parent memos final ?m.397 reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+request : Request
+initial : Context formulas solver inventory before memos
+inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+ranges : ResidentRanges budget request before
+cached : SourceEqualityGuardReadback.Cached request.value.entry.key.constraint.equalities
+loaded : Allocated
+found :
+  SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+    Except.ok (some loaded)
+available :
+  ∀ (child : Value Symbol Guard), child ∈ request.value.children → Available before.checked.native.machine.heap child
+live : LiveInputs budget request.value.entry.key.constraint loaded request.inherited request.value.children before
+result : EdgeValue Symbol Guard
+after : Checked width
+savedFourth : Fourth
+saved : Memo
+next : Inventory
+final : Memos
+stable :
+  StableRun
+    (fun g s r e p h m c n =>
+      edge g s r e p h m c n budget request.value.entry.key.symbol request.value.entry.key.constraint request.inherited
+        request.value.children before.checked before.fourth before.merge)
+    result after savedFourth saved
+parent :
+  SourceCurrentAllocatedParentEdge.Edge budget request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked before.fourth before.merge result after savedFourth saved
+reads : Reads formulas solver parent memos final
+receipt :
+  Receipt formulas solver next request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked result after before.fourth savedFourth before.merge saved
+    final
+post :
+  Post formulas solver next before (SourceCurrentAllocatedPartialState.advance before after savedFourth saved) final
+law : SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+body : SourceCurrentAllocatedPartialGraph.EdgeBody budget request before result
+  (SourceCurrentAllocatedPartialState.advance before after savedFourth saved) := ⋯
+⊢ contradictory request.value.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+      Except.ok (some loaded)
+lean/MicroCFTA/SourceCurrentAllocatedParentWorkerActual.lean:198:126: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+request : Request
+initial : Context formulas solver inventory before memos
+inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+ranges : ResidentRanges budget request before
+cached : SourceEqualityGuardReadback.Cached request.value.entry.key.constraint.equalities
+loaded : Allocated
+found :
+  SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+    Except.ok (some loaded)
+available :
+  ∀ (child : Value Symbol Guard), child ∈ request.value.children → Available before.checked.native.machine.heap child
+live : LiveInputs budget request.value.entry.key.constraint loaded request.inherited request.value.children before
+result : EdgeValue Symbol Guard
+after : Checked width
+savedFourth : Fourth
+saved : Memo
+next : Inventory
+final : Memos
+stable :
+  StableRun
+    (fun g s r e p h m c n =>
+      edge g s r e p h m c n budget request.value.entry.key.symbol request.value.entry.key.constraint request.inherited
+        request.value.children before.checked before.fourth before.merge)
+    result after savedFourth saved
+parent :
+  SourceCurrentAllocatedParentEdge.Edge budget request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked before.fourth before.merge result after savedFourth saved
+reads : Reads formulas solver parent memos final
+receipt :
+  Receipt formulas solver next request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked result after before.fourth savedFourth before.merge saved
+    final
+post :
+  Post formulas solver next before (SourceCurrentAllocatedPartialState.advance before after savedFourth saved) final
+law : SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+body : SourceCurrentAllocatedPartialGraph.EdgeBody budget request before result
+  (SourceCurrentAllocatedPartialState.advance before after savedFourth saved) :=
+  SourceCurrentAllocatedPartialGraph.EdgeBody.parent (fun x => found) parent
+⊢ ∃ result after savedFourth saved next final,
+    StableRun
+        (fun g s r e p h m c n =>
+          edge g s r e p h m c n budget request.value.entry.key.symbol request.value.entry.key.constraint
+            request.inherited request.value.children before.checked before.fourth before.merge)
+        result after savedFourth saved ∧
+      ∃ actual,
+        SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver actual memos final ∧
+          SourceCurrentAllocatedPartialEdgeCall.Receipt formulas solver next request before result
+              (SourceCurrentAllocatedPartialState.advance before after savedFourth saved) final ∧
+            Post formulas solver next before (SourceCurrentAllocatedPartialState.advance before after savedFourth saved)
+              final

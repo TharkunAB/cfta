@@ -1,0 +1,195 @@
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun {A : Type} {width : Nat}
+  (evaluation :
+    Nat →
+      Nat →
+        Nat → Nat → Nat → Nat → Nat → Nat → Nat → Nat → MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome A width)
+  (result : A) (after : MicroCFTA.SourceCurrentAllocatedPartialState.State width) : Prop
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.nodeCall_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.nodeCall_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget request before result after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall f g s r e p h m c n budget request before)
+    result after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.nodeBody_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.nodeBody_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody budget request before result after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeBody f g s r e p h m c n budget request before)
+    result after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.edgeCall_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.edgeCall_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall budget request before result after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request before)
+    result after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.edgeBody_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.edgeBody_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget request before result after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeBody f g s r e p h m c n budget request before)
+    result after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.rows_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.rows_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows budget inherited originals before results after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.rows f g s r e p h m c n budget inherited originals before)
+    results after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.descendants_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.descendants_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants budget inherited edge before result after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.descendants f g s r e p h m c n budget inherited edge before)
+    result after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.children_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.children_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.Children budget combined values before results after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.children f g s r e p h m c n budget combined values before)
+    results after
+'MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.walk_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.walk_complete
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget : Nat} {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value} {index : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk budget combined index values before results after) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+    (fun f g s r e p h m c n =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.walk f g s r e p h m c n budget combined index values before)
+    results after

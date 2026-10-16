@@ -1,0 +1,247 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:115:87: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width budget : Nat
+before : Caller width
+inherited : EqValue
+original results : List Edge
+middle : Caller width
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+rows : SourceCurrentAllocatedPartialGraph.Rows budget inherited original before results middle
+completed :
+  StableRun
+    (fun f g s r e p h m c n =>
+      (SourceCurrentAllocatedPartialWorker.rows f g s r e p h m c n budget inherited original before).bind
+        fun results after =>
+        let rebuilt :=
+          SourceCurrentAllocatedRawRebuild.modify (Value.node entry original depth free) original results after.checked;
+        Outcome.done rebuilt.fst (advance after rebuilt.snd after.fourth after.merge))
+    (SourceCurrentAllocatedRawRebuild.modify (Value.node entry original depth free) original results middle.checked).fst
+    (advance middle
+      (SourceCurrentAllocatedRawRebuild.modify (Value.node entry original depth free) original results
+          middle.checked).snd
+      middle.fourth middle.merge)
+f g s r e p h m c n : Nat
+⊢ (match { inherited := inherited, value := Value.node entry original depth free }.value with
+    | Value.empty => Outcome.done Value.empty before
+    | value@h:(Value.union entry members depth free) => Outcome.done value before
+    | Value.reference name => Outcome.failed (Fault.unexpectedReference name) before
+    | Value.mu entry body depth ordinary =>
+      match SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap with
+      | InternedNestedConstruction.Outcome.done result heap =>
+        Outcome.done result
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := heap, equality := before.checked.operations })
+            before.fourth before.merge)
+      | observation@h:(InternedNestedConstruction.Outcome.pending key heap) =>
+        Outcome.failed (Fault.binder observation)
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := heap, equality := before.checked.operations })
+            before.fourth before.merge)
+    | value@h_1:(Value.node entry_1 original_1 depth_1 free_1) =>
+      match f with
+      | 0 => Outcome.failed (Fault.exhausted Limit.nodeBody) before
+      | next.succ =>
+        (SourceCurrentAllocatedPartialWorker.rows next g s r e p h m c n budget
+              { inherited := inherited, value := Value.node entry original depth free }.inherited original_1
+              before).bind
+          fun results after =>
+          have rebuilt := SourceCurrentAllocatedRawRebuild.modify value original_1 results after.checked;
+          Outcome.done rebuilt.fst (advance after rebuilt.snd after.fourth after.merge)) =
+    match f with
+    | 0 => Outcome.failed (Fault.exhausted Limit.nodeBody) before
+    | fuel.succ =>
+      (SourceCurrentAllocatedPartialWorker.rows fuel g s r e p h m c n budget inherited original before).bind
+        fun results after =>
+        let rebuilt :=
+          SourceCurrentAllocatedRawRebuild.modify (Value.node entry original depth free) original results after.checked;
+        Outcome.done rebuilt.fst (advance after rebuilt.snd after.fourth after.merge)
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:146:24: error: unsolved goals
+case parent
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width budget : Nat
+before : Caller width
+result : Edge
+g s r e p h m c n F G S R E P H M C N : Nat
+a✝ : 0 ≤ F
+hg : g ≤ G
+hs : s ≤ S
+hr : r ≤ R
+he : e ≤ E
+hp : p ≤ P
+hh : h ≤ H
+hm : m ≤ M
+hc : c ≤ C
+hn : n ≤ N
+loaded✝ : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+inherited✝ : EqValue
+checked✝ : SourceEqualityNativeDemand.State width
+fourth✝ : SourceCurrentEmptinessMemo.Memo
+merge✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+edge✝ : Edge
+field :
+  SourceEqualityMkEdgeAllocation.contradictory edge✝.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load edge✝.entry.key.constraint before.checked.operations.constraints =
+      Except.ok (some loaded✝)
+parent :
+  SourceCurrentAllocatedParentEdge.Edge budget edge✝.entry.key.symbol edge✝.entry.key.constraint loaded✝ inherited✝
+    edge✝.children before.checked before.fourth before.merge result checked✝ fourth✝ merge✝
+stable :
+  ∀ (G S R E P H M C N : Nat),
+    g ≤ G →
+      s ≤ S →
+        r ≤ R →
+          e ≤ E →
+            p ≤ P →
+              h ≤ H →
+                m ≤ M →
+                  c ≤ C →
+                    n ≤ N →
+                      (fun g s r e p h m c n =>
+                            SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+                              { inherited := inherited✝, value := edge✝ }.value.entry.key.symbol
+                              { inherited := inherited✝, value := edge✝ }.value.entry.key.constraint
+                              { inherited := inherited✝, value := edge✝ }.inherited
+                              { inherited := inherited✝, value := edge✝ }.value.children before.checked before.fourth
+                              before.merge)
+                          G S R E P H M C N =
+                        SourceCurrentAllocatedParentWorker.Outcome.done result
+                          (advance before checked✝ fourth✝ merge✝).checked
+                          (advance before checked✝ fourth✝ merge✝).fourth (advance before checked✝ fourth✝ merge✝).merge
+completed :
+  (fun g s r e p h m c n =>
+        SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+          { inherited := inherited✝, value := edge✝ }.value.entry.key.symbol
+          { inherited := inherited✝, value := edge✝ }.value.entry.key.constraint
+          { inherited := inherited✝, value := edge✝ }.inherited
+          { inherited := inherited✝, value := edge✝ }.value.children before.checked before.fourth before.merge)
+      G S R E P H M C N =
+    SourceCurrentAllocatedParentWorker.Outcome.done result (advance before checked✝ fourth✝ merge✝).checked
+      (advance before checked✝ fourth✝ merge✝).fourth (advance before checked✝ fourth✝ merge✝).merge
+⊢ Outcome.done result
+      (advance before (advance before checked✝ fourth✝ merge✝).checked (advance before checked✝ fourth✝ merge✝).fourth
+        (advance before checked✝ fourth✝ merge✝).merge) =
+    Outcome.done result (advance before checked✝ fourth✝ merge✝)
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:169:139: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width budget : Nat
+inherited : EqValue
+before after : Caller width
+original narrowed : Edge
+middle : Caller width
+result : Edge
+afterChildren : Caller width
+originals results : List Edge
+children : SourceCurrentAllocatedPartialGraph.Descendants budget inherited narrowed middle result afterChildren
+edge :
+  SourceCurrentAllocatedPartialGraph.EdgeCall budget { inherited := inherited, value := original } before narrowed
+    middle
+rest : SourceCurrentAllocatedPartialGraph.Rows budget inherited originals afterChildren results after
+tail :
+  StableRun
+    (fun f g s r e p h m c n =>
+      (rows f g s r e p h m c n budget inherited originals afterChildren).bind fun values state =>
+        Outcome.done (result :: values) state)
+    (result :: results) after
+later :
+  StableRun
+    (fun f g s r e p h m c n =>
+      (descendants f g s r e p h m c n budget inherited narrowed middle).bind fun result current =>
+        (rows f g s r e p h m c n budget inherited originals current).bind fun values final =>
+          Outcome.done (result :: values) final)
+    (result :: results) after
+completed :
+  StableRun
+    (fun f g s r e p h m c n =>
+      (edgeCall f g s r e p h m c n budget { inherited := inherited, value := original } before).bind
+        fun narrowed current =>
+        (descendants f g s r e p h m c n budget inherited narrowed current).bind fun result later =>
+          (rows f g s r e p h m c n budget inherited originals later).bind fun values final =>
+            Outcome.done (result :: values) final)
+    (result :: results) after
+f g s r e p h m c n : Nat
+⊢ (match original :: originals with
+    | [] => Outcome.done [] before
+    | original :: rest =>
+      match f with
+      | 0 => Outcome.failed (Fault.exhausted Limit.rows) before
+      | next.succ =>
+        (edgeCall next g s r e p h m c n budget { inherited := inherited, value := original } before).bind
+          fun narrowed middle =>
+          (descendants next g s r e p h m c n budget inherited narrowed middle).bind fun result after =>
+            (rows next g s r e p h m c n budget inherited rest after).bind fun results final =>
+              Outcome.done (result :: results) final) =
+    match f with
+    | 0 => Outcome.failed (Fault.exhausted Limit.rows) before
+    | fuel.succ =>
+      (edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := original } before).bind
+        fun narrowed current =>
+        (descendants fuel g s r e p h m c n budget inherited narrowed current).bind fun result later =>
+          (rows fuel g s r e p h m c n budget inherited originals later).bind fun values final =>
+            Outcome.done (result :: values) final
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:217:149: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width budget : Nat
+combined : EqValue
+index : Nat
+before after : Caller width
+value result : Node
+middle : Caller width
+values results : List Node
+head :
+  SourceCurrentAllocatedPartialGraph.NodeCall budget
+    { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+    (SourceCurrentAllocatedPartialGraph.descend before combined index).snd result middle
+rest : SourceCurrentAllocatedPartialGraph.Walk budget combined (index + 1) values middle results after
+tail :
+  StableRun
+    (fun f g s r e p h m c n =>
+      (walk f g s r e p h m c n budget combined (index + 1) values middle).bind fun values state =>
+        Outcome.done (result :: values) state)
+    (result :: results) after
+completed :
+  StableRun
+    (fun f g s r e p h m c n =>
+      (nodeCall f g s r e p h m c n budget
+            { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+            (SourceCurrentAllocatedPartialGraph.descend before combined index).snd).bind
+        fun result current =>
+        (walk f g s r e p h m c n budget combined (index + 1) values current).bind fun values final =>
+          Outcome.done (result :: values) final)
+    (result :: results) after
+f g s r e p h m c n : Nat
+⊢ (match value :: values with
+    | [] => Outcome.done [] before
+    | value :: rest =>
+      match f with
+      | 0 => Outcome.failed (Fault.exhausted Limit.walk) before
+      | next.succ =>
+        have actual := SourceCurrentAllocatedPartialGraph.descend before combined index;
+        (nodeCall next g s r e p h m c n budget { inherited := actual.fst, value := value } actual.snd).bind
+          fun result middle =>
+          (walk next g s r e p h m c n budget combined (index + 1) rest middle).bind fun results after =>
+            Outcome.done (result :: results) after) =
+    match f with
+    | 0 => Outcome.failed (Fault.exhausted Limit.walk) before
+    | fuel.succ =>
+      let actual := SourceCurrentAllocatedPartialGraph.descend before combined index;
+      (nodeCall fuel g s r e p h m c n budget { inherited := actual.fst, value := value } actual.snd).bind
+        fun result current =>
+        (walk fuel g s r e p h m c n budget combined (index + 1) values current).bind fun values final =>
+          Outcome.done (result :: values) final
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:134:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:79:0: error: failed to infer structural recursion:
+Cannot use parameters actual of MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.nodeCall_complete, actual of MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.nodeBody_complete, actual of MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.rows_complete, actual of MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.descendants_complete, actual of MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.children_complete, and actual of MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.walk_complete:
+  failed to eliminate recursive application
+    nodeBody_complete body

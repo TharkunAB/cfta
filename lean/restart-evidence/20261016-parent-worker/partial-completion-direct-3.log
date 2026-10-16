@@ -1,0 +1,48 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:118:4: error: Type mismatch: After simplification, term
+  completed
+ has type
+  StableRun
+    (fun f g s r e p h m c n =>
+      (nodeBody f g s r e p h m c n budget original running).bind fun value state =>
+        Outcome.done value (finishNode handle value state))
+    result (finishNode handle result middle)
+but is expected to have type
+  NodeCallStable budget request before result (finishNode handle result middle)
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:168:4: error: Type mismatch: After simplification, term
+  completed
+ has type
+  StableRun
+    (fun f g s r e p h m c n =>
+      (edgeBody f g s r e p h m c n budget original running).bind fun value state =>
+        Outcome.done value (finishEdge handle value state))
+    result (finishEdge handle result middle)
+but is expected to have type
+  EdgeCallStable budget request before result (finishEdge handle result middle)
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:220:4: error: Type mismatch: After simplification, term
+  completed
+ has type
+  StableRun
+    (fun f g s r e p h m c n =>
+      (children f g s r e p h m c n budget payload edge.children
+            (advance before
+              (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+                { heap := before.checked.native.machine.heap,
+                  equality :=
+                    (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+                        before.checked.operations).snd })
+              before.fourth before.merge)).bind
+        fun results after =>
+        Outcome.done (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).fst
+          (advance after (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).snd after.fourth
+            after.merge))
+    (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).fst
+    (advance middle (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).snd middle.fourth middle.merge)
+but is expected to have type
+  DescendantsStable budget inherited edge before (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).fst
+    (advance middle (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).snd middle.fourth middle.merge)
+lean/MicroCFTA/SourceCurrentAllocatedPartialWorkerCompletion.lean:229:4: error: Type mismatch: After simplification, term
+  walkDone
+ has type
+  WalkStable budget (SourceEqualityConstraintAllocation.Value.live identity records) 0 values before results after
+but is expected to have type
+  ChildrenStable budget (SourceEqualityConstraintAllocation.Value.live identity records) values before results after

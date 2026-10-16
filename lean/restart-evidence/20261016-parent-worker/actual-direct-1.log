@@ -1,0 +1,37 @@
+lean/MicroCFTA/SourceCurrentAllocatedParentWorkerActual.lean:101:63: error: unsolved goals
+case live
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+symbol : Symbol
+original : Guard
+loaded : Allocated
+inherited : EqValue
+values : List (Value Symbol Guard)
+initial : Context formulas solver inventory before memos
+live : LiveInputs budget original loaded inherited values before
+test : contradictory original = true
+receipt :
+  Receipt formulas solver inventory symbol original loaded inherited values before.checked
+    (SourceCurrentAllocatedMkEdge.reject symbol before.checked).fst
+    (SourceCurrentAllocatedMkEdge.reject symbol before.checked).snd before.fourth before.fourth before.merge
+    before.merge memos
+children✝ : List (Value Symbol Guard)
+middle✝ : Checked width
+test✝ : contradictory original = false
+built✝ :
+  SourceCurrentAllocatedMkEdge.build symbol loaded children✝ middle✝ =
+    (Except.ok (SourceCurrentAllocatedMkEdge.reject symbol before.checked).fst,
+      (SourceCurrentAllocatedMkEdge.reject symbol before.checked).snd)
+reduction✝ :
+  SourceCurrentAllocatedLocalReduction.Reduction budget loaded inherited values before.checked before.fourth
+    before.merge children✝ middle✝ before.fourth before.merge
+left✝ : SourceCurrentAllocatedParentEdge.Reads formulas solver ⋯ memos memos
+⊢ Reads formulas solver ⋯ memos memos

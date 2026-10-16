@@ -1,0 +1,185 @@
+MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeBody.eq_def
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (fuel g s r e p h m c n budget : Nat)
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeBody fuel g s r e p h m c n budget request before =
+    match request.value with
+    | MicroCFTA.InternedConstructorTemplates.Value.empty =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done MicroCFTA.InternedConstructorTemplates.Value.empty
+        before
+    | value@h:(MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free) =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done value before
+    | MicroCFTA.InternedConstructorTemplates.Value.reference name =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+        (MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.unexpectedReference name) before
+    | MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary =>
+      match
+        MicroCFTA.SourceEqualityMuReconstruction.rebuild entry body depth ordinary
+          before.checked.native.machine.heap with
+      | MicroCFTA.InternedNestedConstruction.Outcome.done result heap =>
+        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := heap, equality := before.checked.operations })
+            before.fourth before.merge)
+      | observation@h:(MicroCFTA.InternedNestedConstruction.Outcome.pending key heap) =>
+        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.binder observation)
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := heap, equality := before.checked.operations })
+            before.fourth before.merge)
+    | value@h_1:(MicroCFTA.InternedConstructorTemplates.Value.node entry original depth free) =>
+      match fuel with
+      | 0 =>
+        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.exhausted
+            MicroCFTA.SourceCurrentAllocatedPartialWorker.Limit.nodeBody)
+          before
+      | next.succ =>
+        (MicroCFTA.SourceCurrentAllocatedPartialWorker.rows next g s r e p h m c n budget request.inherited original
+              before).bind
+          fun results after =>
+          have rebuilt := MicroCFTA.SourceCurrentAllocatedRawRebuild.modify value original results after.checked;
+          MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done rebuilt.fst
+            (MicroCFTA.SourceCurrentAllocatedPartialState.advance after rebuilt.snd after.fourth after.merge)
+MicroCFTA.SourceCurrentAllocatedPartialWorker.rows.eq_def
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (fuel g s r e p h m c n budget : Nat) (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorker.rows fuel g s r e p h m c n budget inherited originals before =
+    match originals with
+    | [] => MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done [] before
+    | original :: rest =>
+      match fuel with
+      | 0 =>
+        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.exhausted
+            MicroCFTA.SourceCurrentAllocatedPartialWorker.Limit.rows)
+          before
+      | next.succ =>
+        (MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall next g s r e p h m c n budget
+              { inherited := inherited, value := original } before).bind
+          fun narrowed middle =>
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.descendants next g s r e p h m c n budget inherited narrowed
+                middle).bind
+            fun result after =>
+            (MicroCFTA.SourceCurrentAllocatedPartialWorker.rows next g s r e p h m c n budget inherited rest after).bind
+              fun results final => MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done (result :: results) final
+MicroCFTA.SourceCurrentAllocatedPartialWorker.walk.eq_def
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (fuel g s r e p h m c n budget : Nat) (combined : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (index : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorker.walk fuel g s r e p h m c n budget combined index values before =
+    match values with
+    | [] => MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done [] before
+    | value :: rest =>
+      match fuel with
+      | 0 =>
+        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.exhausted
+            MicroCFTA.SourceCurrentAllocatedPartialWorker.Limit.walk)
+          before
+      | next.succ =>
+        have actual := MicroCFTA.SourceCurrentAllocatedPartialGraph.descend before combined index;
+        (MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall next g s r e p h m c n budget
+              { inherited := actual.fst, value := value } actual.snd).bind
+          fun result middle =>
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.walk next g s r e p h m c n budget combined (index + 1) rest
+                middle).bind
+            fun results after => MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done (result :: results) after
+MicroCFTA.SourceCurrentAllocatedPartialWorker.children.eq_def
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (fuel g s r e p h m c n budget : Nat) (combined : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) :
+  MicroCFTA.SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n budget combined values before =
+    match combined with
+    | MicroCFTA.SourceEqualityConstraintAllocation.Value.contradiction =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+        (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.erase values) before
+    | MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records =>
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.walk fuel g s r e p h m c n budget combined 0 values before
+theorem MicroCFTA.SourceCurrentAllocatedPartialWorker.rows.eq_1 : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (fuel g s r e p h m c n budget : Nat) (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialWorker.rows fuel g s r e p h m c n budget inherited [] before =
+    MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done [] before :=
+fun [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {width} fuel g s r e p h m c n budget inherited before =>
+  Eq.trans (MicroCFTA.SourceCurrentAllocatedPartialWorker.rows.eq_def fuel g s r e p h m c n budget inherited [] before)
+    (Eq.refl
+      (match [] with
+      | [] => MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done [] before
+      | original :: rest =>
+        match fuel with
+        | 0 =>
+          MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+            (MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.exhausted
+              MicroCFTA.SourceCurrentAllocatedPartialWorker.Limit.rows)
+            before
+        | next.succ =>
+          (MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall next g s r e p h m c n budget
+                { inherited := inherited, value := original } before).bind
+            fun narrowed middle =>
+            (MicroCFTA.SourceCurrentAllocatedPartialWorker.descendants next g s r e p h m c n budget inherited narrowed
+                  middle).bind
+              fun result after =>
+              (MicroCFTA.SourceCurrentAllocatedPartialWorker.rows next g s r e p h m c n budget inherited rest
+                    after).bind
+                fun results final =>
+                MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done (result :: results) final))
