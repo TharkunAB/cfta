@@ -1920,6 +1920,13 @@ import MicroCFTA.SourceCurrentAllocatedMergePhysical
 import MicroCFTA.SourceCurrentConjunctionTargetProjection
 import MicroCFTA.SourceCurrentAllocatedMerge
 import MicroCFTA.SourceCurrentAllocatedMergeOperand
+import MicroCFTA.SourceCurrentAllocatedTargetQuery
+import MicroCFTA.SourceCurrentAllocatedTargetGraph
+import MicroCFTA.SourceCurrentAllocatedTargetComplete
+import MicroCFTA.SourceCurrentAllocatedClassTarget
+import MicroCFTA.SourceCurrentAllocatedSharedTargetState
+import MicroCFTA.SourceCurrentAllocatedSharedTargetForce
+import MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf
 /-!
 # Proof dependency audit
 
