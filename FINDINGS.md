@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2687 jobs and 61361 dependency checks.
+The last completed pinned Lean Audit passes: 2693 jobs and 61393 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,41 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current universal raw-reach capacity and ordinary root
+
+Updated: 2026-10-17 00:25 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `7427d4c7`. Proof commits are
+`7200f2ec`, `4be6bc09`, and `3450be52`.
+Read `lean/notes-current-raw-reach-capacity.md` and
+`lean/restart-evidence/20261017-outer-raw-reach-capacity/`.
+
+Six additive modules derive initial resource admission over the complete
+original raw Reach relation. Supplied bare prefixes align with independently
+constructed executions by exact result and whole-caller uniqueness. All ten
+original entry transitions retain profiles, causal stores, active-owner caps,
+and remaining supplies. The original universal numeric Plan and older parent
+machine-range Plan now follow from initial resources. The preserved conditional
+root theorem receives that derived Plan and retains its complete same-return
+execution, semantic, quantitative, and language laws. Source preparation uses
+only initial computed headroom. No Reach domain or caller Plan is substituted.
+This section supersedes older statements that leave the raw-reach bridge open.
+
+The full pinned Audit passes 2693 jobs and 61393 dependency checks.
+All 44 axiom/full-signature pairs pass. Only propext, Classical.choice,
+and Quot.sound occur. Preservation retains 8851 starting files, 2686 older
+non-Audit proofs, 234 Haskell files, and 55 frozen production manifests with
+450 entries. All earlier repairs, counterexamples, and drafts remain.
+Canonical builds replay one pre-existing unused-variable warning.
+
+Next address the recursive progress boundary beyond finite ordinary inputs.
+Read next-recursive-source-progress.md. General constrained Mu/reference/union
+progress, recursive selected narrowing, repeated-pass convergence, current
+frontend and concrete runtime correspondence, and complete public pipelines
+remain open. The full-library goal stays active. No Haskell change or new
+defect occurs. FINDINGS keeps merged repair b9219b9e and the external handoff
+first. Reuse unchanged strict Nix validation: 798 examples plus golden,
+Fourmolu, and Cabal-gild. Preserve the optimized core and all earlier evidence.
 
 ## Current ordinary root execution from initial resources
 
