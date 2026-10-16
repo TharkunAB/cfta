@@ -1,0 +1,26 @@
+MicroCFTA.ValuePositionsKernels.empty_forest {Symbol Guard : Type} :
+  children [Value.empty, Value.empty] = 2 ∧
+    (SourceCurrentAllocatedFiniteOrdinaryOccurrences.children [Value.empty, Value.empty]).fst = 0 ∧
+      children [Value.empty, Value.empty] ≤ 2 * (1 + 0 * EdgeCount 0 0 0)
+'MicroCFTA.ValuePositionsKernels.empty_forest' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ValuePositionsKernels.repeated_row {Symbol Guard : Type} (entry : Interned InternedBinderProtocol.NodeKey)
+  (rowEntry : Interned (EdgeKey Symbol Guard)) :
+  have row := EdgeValue.mk rowEntry [Value.empty, Value.empty];
+  have value := Value.node entry [row, row] 0 [];
+  node value = 5 ∧ node value ≤ 1 + 2 * EdgeCount 2 2 1
+'MicroCFTA.ValuePositionsKernels.repeated_row' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ValuePositionsKernels.ordered_prefixes {Symbol Guard : Type} (first last : List (Value Symbol Guard))
+  (rows arity countFirst countLast bound : Nat) (firstProfile : ChildrenShape rows arity first)
+  (lastProfile : ChildrenShape rows arity last) (firstLength : first.length ≤ countFirst)
+  (lastLength : last.length ≤ countLast) (firstHeight : childrenHeight first ≤ bound)
+  (lastHeight : childrenHeight last ≤ bound) :
+  children (first ++ last) ≤ (countFirst + countLast) * (1 + arity * EdgeCount rows arity bound) ∧
+    children (first ++ last) = children first + children last
+'MicroCFTA.ValuePositionsKernels.ordered_prefixes' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ValuePositionsKernels.selected_child {Symbol Guard : Type} (entry : Interned InternedBinderProtocol.NodeKey)
+  (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+  (row : EdgeValue Symbol Guard) (child : Value Symbol Guard) (rows arity bound : Nat)
+  (profile : NodeShape rows arity (Value.node entry edges depth free))
+  (heightBound : height (Value.node entry edges depth free) ≤ bound) (present : row ∈ edges)
+  (member : child ∈ row.children) : node child ≤ arity * EdgeCount rows arity bound
+'MicroCFTA.ValuePositionsKernels.selected_child' depends on axioms: [propext, Quot.sound]

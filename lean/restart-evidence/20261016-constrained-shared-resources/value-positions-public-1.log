@@ -1,0 +1,99 @@
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node {Symbol Guard : Type} :
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows {Symbol Guard : Type} :
+  List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge {Symbol Guard : Type} :
+  MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children {Symbol Guard : Type} :
+  List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node_empty {Symbol Guard : Type} :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node MicroCFTA.InternedConstructorTemplates.Value.empty =
+    1
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node_empty' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node_pos {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) :
+  0 < MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node_pos' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows_append {Symbol Guard : Type}
+  (first last : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows (first ++ last) =
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows first +
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows_append' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children_append {Symbol Guard : Type}
+  (first last : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children (first ++ last) =
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children first +
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children_append' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.length_le_children {Symbol Guard : Type}
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) :
+  values.length ≤ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.length_le_children' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.child_member {Symbol Guard : Type}
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (member : value ∈ values) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node value ≤
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.child_member' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge_member {Symbol Guard : Type}
+  (values : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) (member : value ∈ values) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge value ≤
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge_member' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node_edges {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node value ≤
+    1 + arityLimit * (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.node value).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node_edges' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows_edges {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rowLimit arityLimit values) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows values ≤
+    arityLimit * (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.rows values).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.rows_edges' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge_edges {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rowLimit arityLimit value) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge value ≤
+    arityLimit * (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.edge value).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.edge_edges' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children_edges {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children values ≤
+    values.length + arityLimit * (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrences.children values).snd
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children_edges' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.profile_node {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rowLimit arityLimit value)
+  (bound : Nat) (heightBound : MicroCFTA.MergedOrdinaryHeight.height value ≤ bound) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.node value ≤
+    1 + arityLimit * MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.profile_node' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.profile_children {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values)
+  (bound : Nat) (heightBound : MicroCFTA.MergedOrdinaryHeight.childrenHeight values ≤ bound) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children values ≤
+    values.length *
+      (1 +
+        arityLimit * MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.profile_children' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.profile_forest {Symbol Guard : Type}
+  {rowLimit arityLimit : Nat} (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (profile : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rowLimit arityLimit values)
+  (count bound : Nat) (lengthBound : values.length ≤ count)
+  (heightBound : MicroCFTA.MergedOrdinaryHeight.childrenHeight values ≤ bound) :
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.children values ≤
+    count *
+      (1 +
+        arityLimit * MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOccurrenceBounds.edgeCount rowLimit arityLimit bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryValuePositions.profile_forest' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,73 @@
+'MicroCFTA.SharedInitialCapacityChecks.raw_hit_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+@raw_hit_identity : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard)) (path : EqualityNormalize.Path)
+  (before after : Shared width) (cached result : Value Symbol Guard),
+  before.targets path = some cached → Force record values path before result after → result = cached ∧ after = before
+'MicroCFTA.SharedInitialCapacityChecks.initial_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+@initial_ranges : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+  (base : InternedConstructorTemplates.State Symbol Guard) (before : Shared (bits + 2)),
+  Ready formulas solver inventory record values base before →
+    Values base values →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (path : EqualityNormalize.Path),
+            path ∈ record.paths →
+              ∀ (rows arity count depth bound : Nat),
+                ChildrenShape rows arity values →
+                  values.length ≤ count →
+                    (∀ (path : EqualityNormalize.Path), path ∈ record.paths → List.length path ≤ depth) →
+                      childrenHeight values ≤ bound →
+                        Stored (targetRows record rows count depth bound) (max arity 1) bound before →
+                          before.checked.native.machine.heap.nodes.next +
+                                nodeBudget record rows arity count depth bound before path ≤
+                              2 ^ bits →
+                            before.checked.native.machine.heap.edges.next +
+                                  edgeBudget record rows arity count depth bound before path ≤
+                                2 ^ (bits + 2) →
+                              ∀ (memos : Memos),
+                                EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                                  ∀ (input : Value Symbol Guard),
+                                    Available before.checked.native.machine.heap input →
+                                      SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+                                        ForceRanges record values path before ∧
+                                          SourceCurrentAllocatedSharedTargetLeaf.Ranges record values path input before
+'MicroCFTA.SharedInitialCapacityChecks.literal_leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+@literal_leaf : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+  (base : InternedConstructorTemplates.State Symbol Guard) (before : Shared (bits + 2)),
+  Ready formulas solver inventory record values base before →
+    Values base values →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (path : EqualityNormalize.Path),
+            path ∈ record.paths →
+              ∀ (rows arity count depth bound : Nat),
+                ChildrenShape rows arity values →
+                  values.length ≤ count →
+                    (∀ (path : EqualityNormalize.Path), path ∈ record.paths → List.length path ≤ depth) →
+                      childrenHeight values ≤ bound →
+                        Stored (targetRows record rows count depth bound) (max arity 1) bound before →
+                          before.checked.native.machine.heap.nodes.next +
+                                nodeBudget record rows arity count depth bound before path ≤
+                              2 ^ bits →
+                            before.checked.native.machine.heap.edges.next +
+                                  edgeBudget record rows arity count depth bound before path ≤
+                                2 ^ (bits + 2) →
+                              ∀ (memos : Memos),
+                                EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                                  ∀ (input : Value Symbol Guard),
+                                    Available before.checked.native.machine.heap input →
+                                      SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+                                        ∃ result after next final,
+                                          SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record
+                                              values base path input before result after memos final ∧
+                                            SourceCurrentAllocatedSharedTargetWorkerCompletion.StableRun
+                                                (fun p h m s n =>
+                                                  SourceCurrentAllocatedSharedTargetWorker.leaf p h m s n record values
+                                                    path input before)
+                                                result after ∧
+                                              SourceCurrentAllocatedFiniteOrdinaryShared.Stored after ∧
+                                                SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow input result

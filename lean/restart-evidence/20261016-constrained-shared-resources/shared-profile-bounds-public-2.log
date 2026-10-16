@@ -1,0 +1,132 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.target_rows_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.target_rows_mono : ∀ (rows count depth bound : Nat)
+  {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows rows count depth bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows rows count depth bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.target_nodes_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.target_nodes_mono : ∀
+  (rows arity count depth bound : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows arity count depth bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows arity count depth bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.target_edges_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.target_edges_mono : ∀
+  (rows arity count depth bound : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows arity count depth bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows arity count depth bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.operand_paths_length' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.operand_paths_length : ∀
+  (paths : MicroCFTA.EqualityNormalize.Class) (selected : MicroCFTA.EqualityNormalize.Path),
+  @List.Nodup.{0} MicroCFTA.EqualityNormalize.Path paths →
+    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths selected →
+      @Eq.{1} Nat (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths paths selected))
+        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path paths)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.record_operand_paths_length' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.record_operand_paths_length : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    ∀ (selected : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths selected →
+        @Eq.{1} Nat
+          (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths selected))
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+            (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.operand_paths_depth' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.operand_paths_depth : ∀
+  (paths : MicroCFTA.EqualityNormalize.Class) (selected : MicroCFTA.EqualityNormalize.Path) (depth : Nat),
+  (∀ (path : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+        @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth) →
+    ∀ (path : List.{0} Int),
+      @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths paths selected) path →
+        @LE.le.{0} Nat instLENat (@List.length.{0} Int path) depth
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.record_target_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.record_target_bounds : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    ∀ (selected : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths selected →
+        ∀ (rows arity count depth bound members : Nat),
+          @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths) members →
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+                @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+                  @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth) →
+              And
+                (@LE.le.{0} Nat instLENat
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows rows count depth bound
+                    (@List.length.{0} (List.{0} Int)
+                      (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths selected)))
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows rows count depth bound
+                    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) members
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows arity count depth
+                      bound
+                      (@List.length.{0} (List.{0} Int)
+                        (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths selected)))
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows arity count depth
+                      bound
+                      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) members
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                  (And
+                    (@LE.le.{0} Nat instLENat
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows arity count depth
+                        bound
+                        (@List.length.{0} (List.{0} Int)
+                          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths selected)))
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows arity count depth
+                        bound
+                        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) members
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                    (∀ (path : List.{0} Int),
+                      @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                          (@List.instMembership.{0} (List.{0} Int))
+                          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths selected) path →
+                        @LE.le.{0} Nat instLENat (@List.length.{0} Int path) depth)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.record_profile' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedProfileBounds.record_profile : ∀ {Symbol Guard : Type}
+  (record : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+    ∀ (selected : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths selected →
+        ∀ (rows arity count depth bound members : Nat),
+          @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths) members →
+            ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows rows count depth bound
+                    (@List.length.{0} (List.{0} Int)
+                      (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths selected)))
+                  arity value →
+                @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape Symbol Guard
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows rows count depth bound
+                    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) members
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  arity value

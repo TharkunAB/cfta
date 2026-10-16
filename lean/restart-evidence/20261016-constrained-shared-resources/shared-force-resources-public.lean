@@ -1,0 +1,14 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.nodeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.edgeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedForceResources.complete

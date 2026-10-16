@@ -1,0 +1,791 @@
+'MicroCFTA.SharedForceResourcesIndependentIntegration.first_force_then_exact_hit' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@first_force_then_exact_hit : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (record : SourceEqualityClassOrder.Record)
+  (values :
+    List.{0} (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before :
+    SourceCurrentAllocatedSharedTargetState.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+  @SourceCurrentAllocatedSharedTargetState.Ready
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      inst inst_1 formulas solver inventory record values base before →
+    @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+        values →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (path : EqualityNormalize.Path),
+            @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+              ∀ (rows arity count depth bound : Nat),
+                @ChildrenShape (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity values →
+                  @LE.le.{0} Nat instLENat
+                      (@List.length.{0}
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        values)
+                      count →
+                    (∀ (path : EqualityNormalize.Path),
+                        @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                            (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth) →
+                      @LE.le.{0} Nat instLENat
+                          (@childrenHeight (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) values)
+                          bound →
+                        @SourceCurrentAllocatedFiniteOrdinarySharedProfiles.Stored
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows record rows count depth
+                              bound)
+                            (@max.{0} Nat Nat.instMax arity
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            bound before →
+                          @LE.le.{0} Nat instLENat
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@State.next InternedBinderProtocol.NodeKey
+                                  (@State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceRecursiveIntersectionThunks.State.machine
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@SourceEqualityNativeDemand.State.native
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                          (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            before))))))
+                                (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.nodeBudget
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                  record rows arity count depth bound before path))
+                              (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+                            @LE.le.{0} Nat instLENat
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@State.next
+                                    (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    (@State.edges (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceRecursiveIntersectionKernel.Machine.heap
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@SourceRecursiveIntersectionThunks.State.machine
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@SourceEqualityNativeDemand.State.native
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                              before))))))
+                                  (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.edgeBudget
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                    record rows arity count depth bound before path))
+                                (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                  (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                              ∀ (memos : EndpointMemoGateTrace.Memos),
+                                @EndpointMemoGateTrace.Valid inst_1
+                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceRecursiveIntersectionThunks.State.machine
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@SourceEqualityNativeDemand.State.native
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                          (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            before))))
+                                    memos →
+                                  @Exists.{1}
+                                    (Value (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    fun value =>
+                                    @Exists.{2}
+                                      (SourceCurrentAllocatedSharedTargetState.State
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                      fun after =>
+                                      @Exists.{1} Inventory fun next =>
+                                        @Exists.{1} EndpointMemoGateTrace.Memos fun final =>
+                                          @Exists.{1}
+                                            (List.{0}
+                                              (SourceCurrentAllocatedFiniteOrdinaryReservations.Request
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                            fun requests =>
+                                            And
+                                              (@SourceCurrentAllocatedSharedTargetForce.Receipt
+                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                inst inst_1 formulas solver next record values base path before value
+                                                after memos final)
+                                              (And
+                                                (@SourceCurrentAllocatedSharedTargetForce.Receipt
+                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                  inst inst_1 formulas solver next record values base path after value
+                                                  after final final)
+                                                (And
+                                                  (@SourceCurrentAllocatedFiniteOrdinarySharedProfiles.Stored
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+                                                      record rows count depth bound)
+                                                    (@max.{0} Nat Nat.instMax arity
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                                    bound after)
+                                                  (And
+                                                    (@NodeShape (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+                                                        record rows count depth bound)
+                                                      (@max.{0} Nat Nat.instMax arity
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                                      value)
+                                                    (And
+                                                      (@LE.le.{0} Nat instLENat
+                                                        (@height (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) value)
+                                                        bound)
+                                                      (And
+                                                        (@SourceEqualityRequiredCache.Keeps
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+                                                          (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                            (@SourceRecursiveIntersectionThunks.State.machine
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                              (@SourceEqualityNativeDemand.State.native
+                                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                  (@instHAdd.{0} Nat instAddNat) bits
+                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                    (instOfNatNat (nat_lit 2))))
+                                                                (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                      (instOfNatNat (nat_lit 2))))
+                                                                  after)))))
+                                                        (And (@Eq.{1} SourceEndpointMemo.Memos final.query memos.query)
+                                                          (And
+                                                            (@Extends InternedBinderProtocol.NodeRef
+                                                              (Prod.{0, 0}
+                                                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                                              memos.unfolding final.unfolding)
+                                                            (And
+                                                              (@Trace (SourceObservations.Label FullSyntax.Formula)
+                                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                inst_1
+                                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                  (@SourceRecursiveIntersectionThunks.State.machine
+                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                      (@instHAdd.{0} Nat instAddNat) bits
+                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                        (instOfNatNat (nat_lit 2))))
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (@SourceEqualityNativeDemand.State.native
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2))))
+                                                                      (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                          (@instHAdd.{0} Nat instAddNat) bits
+                                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                            (instOfNatNat (nat_lit 2))))
+                                                                        before))))
+                                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                  (@SourceRecursiveIntersectionThunks.State.machine
+                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                      (@instHAdd.{0} Nat instAddNat) bits
+                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                        (instOfNatNat (nat_lit 2))))
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (@SourceEqualityNativeDemand.State.native
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2))))
+                                                                      (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                          (@instHAdd.{0} Nat instAddNat) bits
+                                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                            (instOfNatNat (nat_lit 2))))
+                                                                        after))))
+                                                                requests)
+                                                              (And
+                                                                (@LE.le.{0} Nat instLENat
+                                                                  (@nodeRequests
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    requests)
+                                                                  (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.nodeBudget
+                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                      (@instHAdd.{0} Nat instAddNat) bits
+                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                        (instOfNatNat (nat_lit 2))))
+                                                                    record rows arity count depth bound before path))
+                                                                (And
+                                                                  (@LE.le.{0} Nat instLENat
+                                                                    (@edgeRequests
+                                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                                      (SourceSymbolicIndex.Constraint
+                                                                        FullSyntax.Formula)
+                                                                      requests)
+                                                                    (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.edgeBudget
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2))))
+                                                                      record rows arity count depth bound before path))
+                                                                  (And
+                                                                    (SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity
+                                                                      bits
+                                                                      (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                          (@instHAdd.{0} Nat instAddNat) bits
+                                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                            (instOfNatNat (nat_lit 2))))
+                                                                        after))
+                                                                    (And
+                                                                      (∀ (p h m s n : Nat),
+                                                                        @Eq.{2}
+                                                                          (SourceCurrentAllocatedSharedTargetWorker.Outcome
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2)))))
+                                                                          (@SourceCurrentAllocatedSharedTargetWorker.force
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            inst inst_1 p h m s n record values path
+                                                                            after)
+                                                                          (@SourceCurrentAllocatedSharedTargetWorker.Outcome.done
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            value after))
+                                                                      (And
+                                                                        (@Trace
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula)
+                                                                          inst_1
+                                                                          (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            (@SourceRecursiveIntersectionThunks.State.machine
+                                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                  (instOfNatNat (nat_lit 2))))
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula)
+                                                                              (@SourceEqualityNativeDemand.State.native
+                                                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                  (@instHAdd.{0} Nat instAddNat) bits
+                                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                    (instOfNatNat (nat_lit 2))))
+                                                                                (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                      (instOfNatNat (nat_lit 2))))
+                                                                                  after))))
+                                                                          (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            (@SourceRecursiveIntersectionThunks.State.machine
+                                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                  (instOfNatNat (nat_lit 2))))
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula)
+                                                                              (@SourceEqualityNativeDemand.State.native
+                                                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                  (@instHAdd.{0} Nat instAddNat) bits
+                                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                    (instOfNatNat (nat_lit 2))))
+                                                                                (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                      (instOfNatNat (nat_lit 2))))
+                                                                                  after))))
+                                                                          (@List.nil.{0}
+                                                                            (SourceCurrentAllocatedFiniteOrdinaryReservations.Request
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula))))
+                                                                        (And
+                                                                          (@Eq.{1} Nat
+                                                                            (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.nodeBudget
+                                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                  (instOfNatNat (nat_lit 2))))
+                                                                              record rows arity count depth bound after
+                                                                              path)
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 0)
+                                                                              (instOfNatNat (nat_lit 0))))
+                                                                          (@Eq.{1} Nat
+                                                                            (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.edgeBudget
+                                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                  (instOfNatNat (nat_lit 2))))
+                                                                              record rows arity count depth bound after
+                                                                              path)
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 0)
+                                                                              (instOfNatNat (nat_lit 0))))))))))))))))))
+'MicroCFTA.SharedForceResourcesIndependentIntegration.fresh_class_admission' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@fresh_class_admission : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  (record : SourceEqualityClassOrder.Record)
+  (values :
+    List.{0} (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checked : SourceEqualityNativeDemand.State width)
+  (memo :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @SourceCurrentConjunctionClassScan.Ready width checked →
+    @At width formulas solver inventory checked →
+      @SourceEqualityRequiredCache.Keeps (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+          (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceEqualityNativeDemand.State.native width checked))) →
+        @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native width checked)))
+            memo →
+          (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+              @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (SourceObservations.Label FullSyntax.Formula)
+                (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas solver)
+                ambient memo) →
+            @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native width checked) →
+              @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored width
+                  (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width checked) →
+                @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                    (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    memo →
+                  ∀ (rows arity bound : Nat),
+                    And
+                      (@SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver inventory record
+                        values base (@initial width checked memo))
+                      (And
+                        (@SourceCurrentAllocatedFiniteOrdinarySharedProfiles.Stored width rows arity bound
+                          (@initial width checked memo))
+                        (∀ (path : EqualityNormalize.Path),
+                          @Eq.{1}
+                            (Option.{0}
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                            (@SourceCurrentAllocatedSharedTargetState.State.targets width (@initial width checked memo)
+                              path)
+                            (@none.{0}
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+'MicroCFTA.SharedForceResourcesIndependentIntegration.fresh_miss_then_hit' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@fresh_miss_then_hit : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (record : SourceEqualityClassOrder.Record)
+  (values :
+    List.{0} (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checked :
+    SourceEqualityNativeDemand.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+  (memo :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @SourceCurrentConjunctionClassScan.Ready
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      checked →
+    @At
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        formulas solver inventory checked →
+      @SourceEqualityRequiredCache.Keeps (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+          (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionThunks.State.machine
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceEqualityNativeDemand.State.native
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                checked))) →
+        @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionThunks.State.machine
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  checked)))
+            memo →
+          (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+              @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (SourceObservations.Label FullSyntax.Formula)
+                (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas solver)
+                ambient memo) →
+            @SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  checked) →
+              @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    checked) →
+                @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                    (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    memo →
+                  @Values (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) base values →
+                    SourceEqualityClassOrder.Coherent record →
+                      EqualityNormalize.Nontrivial record.paths →
+                        ∀ (path : EqualityNormalize.Path),
+                          @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                              (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+                            ∀ (rows arity count depth bound : Nat),
+                              @ChildrenShape (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity values →
+                                @LE.le.{0} Nat instLENat
+                                    (@List.length.{0}
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                      values)
+                                    count →
+                                  (∀ (path : EqualityNormalize.Path),
+                                      @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                                          (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+                                        @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth) →
+                                    @LE.le.{0} Nat instLENat
+                                        (@childrenHeight (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) values)
+                                        bound →
+                                      @LE.le.{0} Nat instLENat
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                            (@State.next InternedBinderProtocol.NodeKey
+                                              (@State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionThunks.State.machine
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceEqualityNativeDemand.State.native
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      checked)))))
+                                            (SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows arity
+                                              count depth bound
+                                              (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                                                (@List.length.{0} EqualityNormalize.Path record.paths)
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                                          (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                            (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+                                        @LE.le.{0} Nat instLENat
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                              (@State.next
+                                                (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                (@State.edges (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceRecursiveIntersectionThunks.State.machine
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceEqualityNativeDemand.State.native
+                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                          bits
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                        checked)))))
+                                              (SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows arity
+                                                count depth bound
+                                                (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                                                  (@List.length.{0} EqualityNormalize.Path record.paths)
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                                            (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                              (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                                          ∀ (memos : EndpointMemoGateTrace.Memos),
+                                            @EndpointMemoGateTrace.Valid inst_1
+                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionThunks.State.machine
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceEqualityNativeDemand.State.native
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      checked)))
+                                                memos →
+                                              @Exists.{1}
+                                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                fun value =>
+                                                @Exists.{2}
+                                                  (SourceCurrentAllocatedSharedTargetState.State
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                                  fun after =>
+                                                  @Exists.{1} Inventory fun next =>
+                                                    @Exists.{1} EndpointMemoGateTrace.Memos fun final =>
+                                                      And
+                                                        (@SourceCurrentAllocatedSharedTargetForce.Receipt
+                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2))))
+                                                          inst inst_1 formulas solver next record values base path
+                                                          (@initial
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            checked memo)
+                                                          value after memos final)
+                                                        (And
+                                                          (@SourceCurrentAllocatedSharedTargetForce.Receipt
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            inst inst_1 formulas solver next record values base path
+                                                            after value after final final)
+                                                          (And
+                                                            (@SourceCurrentAllocatedFiniteOrdinarySharedProfiles.Stored
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+                                                                record rows count depth bound)
+                                                              (@max.{0} Nat Nat.instMax arity
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 1)
+                                                                  (instOfNatNat (nat_lit 1))))
+                                                              bound after)
+                                                            (And
+                                                              (@NodeShape (SourceObservations.Label FullSyntax.Formula)
+                                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                (SourceCurrentAllocatedFiniteOrdinarySharedForceResources.targetRows
+                                                                  record rows count depth bound)
+                                                                (@max.{0} Nat Nat.instMax arity
+                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 1)
+                                                                    (instOfNatNat (nat_lit 1))))
+                                                                value)
+                                                              (And
+                                                                (@LE.le.{0} Nat instLENat
+                                                                  (@height (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    value)
+                                                                  bound)
+                                                                (And
+                                                                  (@Exists.{2}
+                                                                    (SourceEqualityNativeDemand.State
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2)))))
+                                                                    fun actualChecked =>
+                                                                    @Exists.{1}
+                                                                      (SourceCurrentMemoMergeGraph.Memo
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula))
+                                                                      fun saved =>
+                                                                      And
+                                                                        (@Eq.{2}
+                                                                          (SourceCurrentAllocatedSharedTargetState.State
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2)))))
+                                                                          after
+                                                                          (@store
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            (@initial
+                                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                  (instOfNatNat (nat_lit 2))))
+                                                                              checked memo)
+                                                                            path value actualChecked saved))
+                                                                        (@SourceCurrentAllocatedTargetGraph.Target
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2))))
+                                                                          inst inst_1 values
+                                                                          (SourceEqualityClassTarget.operandPaths
+                                                                            record.paths path)
+                                                                          checked memo value actualChecked saved))
+                                                                  (And
+                                                                    (∀ (p h m s n : Nat),
+                                                                      @Eq.{2}
+                                                                        (SourceCurrentAllocatedSharedTargetWorker.Outcome
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2)))))
+                                                                        (@SourceCurrentAllocatedSharedTargetWorker.force
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2))))
+                                                                          inst inst_1 p h m s n record values path
+                                                                          after)
+                                                                        (@SourceCurrentAllocatedSharedTargetWorker.Outcome.done
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2))))
+                                                                          value after))
+                                                                    (And
+                                                                      (@Eq.{1} Nat
+                                                                        (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.nodeBudget
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2))))
+                                                                          record rows arity count depth bound after
+                                                                          path)
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 0)
+                                                                          (instOfNatNat (nat_lit 0))))
+                                                                      (@Eq.{1} Nat
+                                                                        (@SourceCurrentAllocatedFiniteOrdinarySharedForceResources.edgeBudget
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2))))
+                                                                          record rows arity count depth bound after
+                                                                          path)
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 0)
+                                                                          (instOfNatNat (nat_lit 0)))))))))))

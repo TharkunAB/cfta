@@ -1,0 +1,79 @@
+lean/restart-evidence/20261016-constrained-shared-resources/leaf-integration-kernels.lean:48:46: error: Application type mismatch: The argument
+  forced
+has type
+  SourceCurrentAllocatedSharedTargetForce.Force record values path before target✝ middle✝
+but is expected to have type
+  SourceCurrentAllocatedSharedTargetForce.Force ?m.93 ?m.94 path ?m.96 ?m.98
+    (SourceCurrentAllocatedSharedTargetState.advance middle✝ checked✝)
+in the application
+  force_present forced
+'MicroCFTA.SharedLeafResourceChecks.leaf_present' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@leaf_present : ∀ [inst : DecidableEq.{1} Symbol] [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : Record} {values : List.{0} (Value Symbol Guard)}
+  {base : InternedConstructorTemplates.State Symbol Guard} {path : Path} {input result : Value Symbol Guard}
+  {before after : Shared width} {memos final : Memos},
+  Receipt formulas solver inventory record values base path input before result after memos final →
+    Exists.{1} fun target => Eq.{1} (after.targets path) (some.{0} target)
+'MicroCFTA.SharedLeafResourceChecks.two_leaves' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@two_leaves : ∀ [inst : DecidableEq.{1} Symbol] [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (record : Record) (values : List.{0} (Value Symbol Guard))
+  (base : InternedConstructorTemplates.State Symbol Guard) (before : Shared (HAdd.hAdd.{0, 0, 0} bits 2)),
+  Ready formulas solver inventory record values base before →
+    Values base values →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (path : Path),
+            Membership.mem.{0, 0} record.paths path →
+              ∀ (rows arity count depth bound : Nat),
+                ChildrenShape rows arity values →
+                  LE.le.{0} (List.length.{0} values) count →
+                    (∀ (path : Path),
+                        Membership.mem.{0, 0} record.paths path → LE.le.{0} (List.length.{0} path) depth) →
+                      LE.le.{0} (childrenHeight values) bound →
+                        Stored (TargetRows record rows count depth bound) (max.{0} arity 1) bound before →
+                          ∀ (input : Value Symbol Guard) (inputRows inputArity inputBound : Nat),
+                            Available before.checked.native.machine.heap input →
+                              NodeShape inputRows inputArity input →
+                                LE.le.{0} (height input) inputBound →
+                                  LE.le.{0}
+                                      (HAdd.hAdd.{0, 0, 0}
+                                        (HAdd.hAdd.{0, 0, 0} before.checked.native.machine.heap.nodes.next
+                                          (LeafN record rows arity count depth bound inputRows inputArity inputBound
+                                            before path))
+                                        (QueryN record rows arity count depth bound
+                                          (HMul.hMul.{0, 0, 0}
+                                            (max.{0} (TargetRows record rows count depth bound) inputRows)
+                                            (max.{0} (TargetRows record rows count depth bound) inputRows))
+                                          (max.{0} (max.{0} (max.{0} arity 1) inputArity) 1) inputBound))
+                                      (HPow.hPow.{0, 0, 0} 2 bits) →
+                                    LE.le.{0}
+                                        (HAdd.hAdd.{0, 0, 0}
+                                          (HAdd.hAdd.{0, 0, 0} before.checked.native.machine.heap.edges.next
+                                            (LeafE record rows arity count depth bound inputRows inputArity inputBound
+                                              before path))
+                                          (QueryN record rows arity count depth bound
+                                            (HMul.hMul.{0, 0, 0}
+                                              (max.{0} (TargetRows record rows count depth bound) inputRows)
+                                              (max.{0} (TargetRows record rows count depth bound) inputRows))
+                                            (max.{0} (max.{0} (max.{0} arity 1) inputArity) 1) inputBound))
+                                        (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                      ∀ (memos : Memos),
+                                        Valid before.checked.native.machine.heap memos →
+                                          Exists.{1} fun first =>
+                                            Exists.{2} fun middle =>
+                                              Exists.{1} fun firstInventory =>
+                                                Exists.{1} fun current =>
+                                                  Exists.{1} fun result =>
+                                                    Exists.{2} fun after =>
+                                                      Exists.{1} fun next =>
+                                                        Exists.{1} fun final =>
+                                                          Exists.{1} fun firstRequests =>
+                                                            Exists.{1} fun lastRequests => ⋯

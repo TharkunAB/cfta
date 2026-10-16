@@ -1,0 +1,15 @@
+# Independent review of two constructed Leaves
+
+Reviewed 2026-10-16 21:09 CEST. Verdict: no material defect found in the final `leaf-integration-kernels.lean` and `leaf-integration-2.log` supplied by the root component.
+
+`leaf_present` follows the actual Leaf graph. Force.hit returns an existing slot. Force.miss puts the exact target into its slot. The later checked query uses shared advance and therefore retains that slot. This is a causal derivation from the actual force. It is not an assumed cache-hit or target-result property.
+
+`two_leaves` receives only legitimate initial shared invariants, original captured forest bounds, a separate current-input profile and height bound, global validity, and initial headroom for one complete Leaf plus the second query's statically enlarged profile. It constructs the first full Leaf itself. The first receipt supplies the actual current inventory, current shared readiness, current input availability, global validity, and retained causal stores for the second Leaf.
+
+The second input is the actual first returned value. Its row and arity limits are the derived first-result profile. Its height limit follows from the first query's actual right-input bound. It is not assumed to retain the initial input profile or to equal the stored target. The second force uses the slot retained by `leaf_present`. That fact derives both second-force request budgets as zero. Actual first supply bounds derive the remaining second-query headroom from the original total inequalities.
+
+The two receipts and all Work traces join at the same full shared state. Captured forest values and their original profile remain fixed. The second call uses the first computed inventory and current global bundle. It does not identify that bundle with the original bundle if the first force grew it. Native and output certificates and the Merge profile store pass through the actual returns. No future completion, intermediate capacity, intermediate profile, result-law callback, or enclosing Leaf success is a premise.
+
+The public kernel returns both full semantic receipts, zero second-force node/edge budgets, both stage Work traces and their exact concatenation, final causal stores, the two input-relative height inequalities, stable literal execution of the second worker, and final node/edge supply bounds. It does not explicitly export combined request-count or final-capacity conjuncts. The production complete theorem supplies those stronger resource facts; the kernel does not overstate them.
+
+Root direct imported check 2 passed with exit 0 and no warnings or `sorryAx`. Both printed axiom checks use only standard logical axioms. The printed second signature elides its deep result tail, so this review checked that complete result directly in the retained source. No new build or production edit was needed for this source review. Constructor resources, semantic conditional preservation, and whole-library/runtime boundaries remain as stated in `leaf-independent-review.md`.

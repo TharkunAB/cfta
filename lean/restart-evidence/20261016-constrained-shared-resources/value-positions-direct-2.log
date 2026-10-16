@@ -1,0 +1,55 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:98:25: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Value x_0 x_1 → Nat × Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:108:23: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → List (EdgeValue x_0 x_1) → Nat × Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:112:24: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → List (EdgeValue x_0 x_1) → Nat × Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:112:6: error: Type mismatch: After simplification, term
+  Nat.add_le_add firstBound restBound
+ has type
+  edge first + rows rest ≤ arityLimit * (OrdinaryEdge first).snd + arityLimit * (OrdinaryRows rest).snd
+but is expected to have type
+  edge first + rows rest ≤ arityLimit * (OrdinaryRows (first :: rest)).snd
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:123:73: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → EdgeValue x_0 x_1 → Nat × Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:123:67: error: `simp` made no progress
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:130:27: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → List (Value x_0 x_1) → Nat × Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:134:27: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → List (Value x_0 x_1) → Nat × Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:135:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c + d - e ≥ 0
+  b ≥ 0
+  b - c + e - f ≥ 2
+  a ≥ 0
+  a - b ≥ -1
+where
+ a := ↑arityLimit * ↑(OrdinaryNode first).snd
+ b := ↑(node first)
+ c := ↑rest.length
+ d := ↑arityLimit * ↑(OrdinaryChildren rest).snd
+ e := ↑(children rest)
+ f := ↑arityLimit * ↑(OrdinaryChildren (first :: rest)).snd
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:113:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:102:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:136:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:124:0: warning: unused `termination_by`, function is not recursive
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:134:63: warning: This simp argument is unused:
+  Nat.mul_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, OrdinaryChildren, List.length_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryValuePositions.lean:155:25: warning: This simp argument is unused:
+  Nat.mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Nat.mul_add, Nat.mul_comm, Nat.mul_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
