@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE QualifiedDo #-}
 
 {- | Typed languages from typing rules, against a hand-written automaton and
 against recurrences that count the closed well-typed terms.
@@ -35,6 +36,7 @@ import Data.CFTA.Gen.Typing (
     value,
     variable,
  )
+import qualified Data.CFTA.Gen.Typing.Do as Typing
 import Data.CFTA.Generic (
     Constructor (..),
     HasFTA (..),
@@ -80,6 +82,25 @@ typedRules =
     , variable (\index typ -> TVarNode (value index) (value typ))
     ]
         <> [rule (TLetNode (subterm [] rhs) (subterm [rhs] typ)) typ | rhs <- [TInt, TBool], typ <- [TInt, TBool]]
+
+-- | The typing rules of 'Typed' in the do-notation of "Data.CFTA.Gen.Typing.Do".
+typedRulesDo :: [Rule TypedNode Ty]
+typedRulesDo =
+    [rule TZeroNode TInt, rule TTrueNode TBool]
+        <> Typing.do
+            left <- Typing.sub TInt
+            right <- Typing.sub TInt
+            Typing.yields (TAddNode left right) TInt
+        <> Typing.do
+            argument <- Typing.sub TInt
+            Typing.yields (TIsZeroNode argument) TBool
+        <> [variable (\index typ -> TVarNode (value index) (value typ))]
+        <> Typing.do
+            rhs <- Typing.each [TInt, TBool]
+            typ <- Typing.each [TInt, TBool]
+            bound <- Typing.sub rhs
+            body <- Typing.under [rhs] typ
+            Typing.yields (TLetNode bound body) typ
 
 -- | The closed well-typed terms up to the bound, from the rules.
 typedLanguage :: Int -> Gen.Gen Symbol Typed
@@ -333,6 +354,26 @@ total generator = case Gen.cardinality generator of
 members :: (Ord a) => Gen.Gen symbol a -> [a]
 members = sort . either (error . show) id . Gen.values
 
+-- * A choice that reads an earlier one
+
+-- | A fraction of two literals.
+data Fraction = Frac !Int !Int
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | The node of a 'Fraction'.
+data FractionNode e = FracNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The fractions of a number from 1 to 12 by one of its divisors.
+fractionRules :: [Rule FractionNode ()]
+fractionRules = Typing.do
+    n <- Typing.each [1 .. 12 :: Int]
+    d <- Typing.each [1 .. n]
+    Typing.guard (n `mod` d == 0)
+    Typing.yields (FracNode (value n) (value d)) ()
+
 -- * The order of a helper type
 
 -- | A helper type. Its constructors are declared in the reverse order of their labels.
@@ -481,6 +522,15 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
                 , variable (\_ _ -> VarNode (value False))
                 ]
                 `shouldBe` Just (FieldMismatch "Var")
+    describe "the do-notation" $ do
+        it "gives the language of the same rules in a list, in the same order" $
+            Gen.values (either (error . show) id (fromTypingRules @Typed (Typing (Nesting 2) [] [TInt, TBool] typedRulesDo)))
+                `shouldBe` Gen.values (typedLanguage 2)
+        it "reads earlier choices, and keeps the combinations that the guard accepts" $ do
+            let fractions = fromTypingRules @Fraction (Typing (Nesting 0) [] [()] fractionRules)
+                expected = [Frac n d | n <- [1 .. 12], d <- [1 .. n], n `mod` d == 0]
+            fmap sort (Gen.values (either (error . show) id fractions)) `shouldBe` Right (sort expected)
+            length expected `shouldBe` 35
     describe "the order of the values" $ do
         it "orders the constructors of a helper type in declaration order, as fromDatatype does" $ do
             let typed =
