@@ -54,11 +54,11 @@ test/holes/Holes.hs:9:11: error: [GHC-88464]
           with maximum @[] @[a]
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Data.Foldable'))
-        \x1 -> (=<<) cycle x1
-        \x1 -> (=<<) init x1
-        \x1 -> (=<<) reverse x1
-        \x1 -> (=<<) tail x1
-        \x1 -> (=<<) id x1
+        \x1 -> mconcat (sequence x1)
+        \x1 -> head (sequence x1)
+        \x1 -> last (sequence x1)
+        \x1 -> mconcat (sequenceA x1)
+        \x1 -> head (sequenceA x1)
         (Some hole fits suppressed; use -fmax-valid-hole-fits=N or -fno-max-valid-hole-fits)
   |
 9 | flatten = _
@@ -143,9 +143,9 @@ test/holes/Holes.hs:20:23: error: [GHC-88464]
         fallback :: a (bound at test/holes/Holes.hs:20:9)
         head xs
         last xs
-        foldl1 asTypeOf Nothing
-        foldr1 asTypeOf Nothing
-        foldl1 asTypeOf []
+        foldl1 const Nothing
+        foldr1 const Nothing
+        foldl1 const []
    |
 20 | firstOr fallback xs = _
    |                       ^
