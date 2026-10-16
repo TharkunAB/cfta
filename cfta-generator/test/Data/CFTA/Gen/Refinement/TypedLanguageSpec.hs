@@ -23,19 +23,6 @@ import Data.CFTA.Generic (Constructor (..), HasFTA (..))
 import Data.CFTA.Path (path)
 import qualified Data.CFTA.Term as Term
 
--- | One node of a typed arithmetic term, for one measure: the integers of the fields and of the subterms.
-data ArithNode e
-    = NumNode e
-    | FlagNode e
-    | PlusNode e e
-    | LessNode e e
-    | IfNode e e e
-    | VarNode e
-    | LetNode e e
-    | ArgNode e
-    deriving stock (Generic)
-    deriving anyclass (NodeView)
-
 {- | The sum of the literals of a term: a literal is its value, a variable is
 0, and a let is its body. A sum adds at most 1.
 -}

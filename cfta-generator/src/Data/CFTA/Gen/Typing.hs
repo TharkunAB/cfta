@@ -5,7 +5,8 @@
 
 The language is the terms of a 'HasFTA' datatype that have one of some types,
 with a nesting of at most a bound. Each rule gives a type to a constructor of
-the datatype, by its name. A variable has a de Bruijn index: the index 0 is
+the datatype, through a node view ('Data.CFTA.Gen.Refinement.Derive.NodeView')
+whose fields are the children of the rule. A variable has a de Bruijn index: the index 0 is
 the innermost binder. The environment of a term is the list of the types of
 its binders, innermost first, and then the inputs: the variables in scope at
 the root. With inputs, the language is the programs over those inputs.
@@ -14,19 +15,29 @@ the root. With inputs, the language is the programs over those inputs.
 data Ty = TInt | TBool
 data Typed = TZero | TTrue | TAdd Typed Typed | TIsZero Typed | TVar !Int !Ty | TLet Typed Typed
 
-typedRules :: [Rule Ty]
+data TypedNode e = TZeroNode | TTrueNode | TAddNode e e | TIsZeroNode e | TVarNode e e | TLetNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+typedRules :: [Rule TypedNode Ty]
 typedRules =
-    [ rule \"TZero\" [] TInt
-    , rule \"TTrue\" [] TBool
-    , rule \"TAdd\" [subterm [] TInt, subterm [] TInt] TInt
-    , rule \"TIsZero\" [subterm [] TInt] TBool
-    , variable \"TVar\" (\\index typ -> [value index, value typ])
+    [ rule TZeroNode TInt
+    , rule TTrueNode TBool
+    , rule (TAddNode (subterm [] TInt) (subterm [] TInt)) TInt
+    , rule (TIsZeroNode (subterm [] TInt)) TBool
+    , variable (\\index typ -> TVarNode (value index) (value typ))
     ]
-        <> [rule \"TLet\" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [TInt, TBool], typ <- [TInt, TBool]]
+        <> [rule (TLetNode (subterm [] rhs) (subterm [rhs] typ)) typ | rhs <- [TInt, TBool], typ <- [TInt, TBool]]
 
 closed :: Either TypingError (Gen Symbol Typed)
 closed = fromTypingRules Typing{typingBound = Nesting 3, typingInputs = [], typingRoots = [TInt, TBool], typingRules = typedRules}
 @
+
+The node view has one constructor for each constructor of the datatype, in
+order, with the same number of fields, and each name starts with the name of
+the datatype's constructor, as for an invariant. So a rule names its
+constructor and its fields by type, and a rule with the wrong number of fields
+does not compile.
 
 'typingAutomaton' builds the automaton whose states are an environment, a
 type, and the nesting that remains ('TypingState'). Its symbols are the
@@ -53,8 +64,10 @@ Limits:
 * A field that holds a subterm has the type of the datatype. A field of
   another type holds one fixed value. So a family of mutually recursive
   types is not a language here.
-* With a bound on the nesting, the language is finite. The automaton has
-  about T^(D + 1) environments for T types and the bound D. With a bound on
+* With a bound on the nesting, the language is finite. One field can add
+  several binders, so an environment has at most B * D binders for the bound
+  D and at most B binders in one field, and the automaton has up to about
+  T^(B * D + 1) environments for T types. With a bound on
   the binders ('Binders'), the automaton is cyclic and the generator is
   counted by size. It must give each term one typing: an automaton with two
   runs for one term gives 'Data.CFTA.Gen.AmbiguousAutomaton'.
@@ -62,7 +75,7 @@ Limits:
 An input is a variable, so a binder above its use moves its index up by one.
 A datatype with its own constructor for the inputs, such as @Arg !Int@, needs
 no inputs in the 'Typing': each input is a rule,
-@[rule \"Arg\" [value position] typ | (position, typ) <- zip [0 ..] inputTypes]@.
+@[rule (ArgNode (value position)) typ | (position, typ) <- zip [0 ..] inputTypes]@.
 -}
 module Data.CFTA.Gen.Typing (
     -- * Rules
@@ -85,7 +98,7 @@ module Data.CFTA.Gen.Typing (
     fromConstructorAutomaton,
 ) where
 
-import Control.Monad (unless, (<=<))
+import Control.Monad ((<=<))
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (hash)
@@ -103,6 +116,7 @@ import Data.CFTA.Gen.Error (GenError (UndecodableConstructor))
 import Data.CFTA.Gen.Internal.Automaton (undecodableConstructor)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Types (Gen, pattern Transparent)
+import Data.CFTA.Gen.Refinement.Derive (DeriveLTAError (NodeMismatch), NodeView (..), checkNodeShape)
 import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..), constructorLabel)
 import Data.CFTA.Index (Depth (..))
 import qualified Data.CFTA.Interned as Interned
@@ -110,29 +124,30 @@ import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
--- | A typing rule of one constructor, by its name.
-data Rule ty
-    = Rule !String ![Child ty] !ty
-    | Variable !String !(Int -> ty -> [Child ty])
+-- | A typing rule of one constructor, as a node of the node view @node@ whose fields are the children.
+data Rule node ty
+    = Rule !(node (Child ty)) !ty
+    | Variable !(Int -> ty -> node (Child ty))
 
 -- | One field of a constructor in a rule.
 data Child ty
     = Subterm ![ty] !ty
     | Value !(Term Constructor)
 
-{- | @rule name children result@: the constructor has the type @result@ in
-each environment when its fields are @children@, one for each field, in
-order. A polymorphic rule is one rule for each type. The alternatives of
-several rules of one constructor add up.
+{- | @rule node result@: the constructor of the node has the type @result@ in
+each environment when its fields are the children of the node, as in
+@rule (TAddNode (subterm [] TInt) (subterm [] TInt)) TInt@. A polymorphic
+rule is one rule for each type. The alternatives of several rules of one
+constructor add up.
 -}
-rule :: String -> [Child ty] -> ty -> Rule ty
+rule :: node (Child ty) -> ty -> Rule node ty
 rule = Rule
 
-{- | @variable name fields@: a variable of the goal type. For each position
-of the environment that holds the goal type, the constructor has the fields
-@fields index type@.
+{- | @variable node@: a variable of the goal type. For each position of the
+environment that holds the goal type, the constructor of the node has the
+children of @node index type@.
 -}
-variable :: String -> (Int -> ty -> [Child ty]) -> Rule ty
+variable :: (Int -> ty -> node (Child ty)) -> Rule node ty
 variable = Variable
 
 {- | @subterm binds t@: a field that is a subterm of the type @t@. Its
@@ -150,14 +165,14 @@ value :: (HasFTA v) => v -> Child ty
 value = Value . encodeTerm
 
 -- | A typed language: the bound, the environment at the root, the types at the root, and the rules.
-data Typing ty = Typing
+data Typing node ty = Typing
     { typingBound :: !Bound
     -- ^ The bound on the terms.
     , typingInputs :: ![ty]
     -- ^ The types of the variables in scope at the root: the input @i@ has the index @i@ at the root.
     , typingRoots :: ![ty]
     -- ^ The types of the terms of the language.
-    , typingRules :: ![Rule ty]
+    , typingRules :: ![Rule node ty]
     -- ^ The typing rules.
     }
 
@@ -165,29 +180,34 @@ data Typing ty = Typing
 data Bound
     = {- | The nesting of the recursive occurrences, as for
       'Data.CFTA.Gen.Refinement.recurUpTo': a constructor with a subterm
-      field uses one level.
+      field uses one level. The bound 0 gives the terms without subterms. A
+      negative bound is the error 'NegativeBound'.
       -}
       Nesting !Depth
     | {- | The number of binders around each position; the inputs are not
       binders. The terms can be of any size, so the automaton is cyclic, and
       'fromConstructorAutomaton' gives a generator counted by size, which
-      'Data.CFTA.Gen.upToSize' bounds.
+      'Data.CFTA.Gen.upToSize' bounds. A negative bound is the error
+      'NegativeBound'.
       -}
       Binders !Int
     deriving (Eq, Show)
 
 -- | Failure while building a typed language.
 data TypingError
-    = {- | Rule names that no constructor of the datatype has. The second
-      field lists the names of the constructors.
+    = {- | The node view of the rules does not fit the datatype. The fields
+      give the constructor, by the name of the datatype's constructor, and
+      what differs, as 'Data.CFTA.Gen.Refinement.Derive.NodeMismatch' does.
       -}
-      UnknownConstructors ![String] ![String]
-    | {- | A rule of the constructor does not fit its fields: it has another
-      number of fields, a subterm in a field of another type than the
-      datatype, a fixed value in a field of the datatype, or a value of
-      another type than its field.
+      NodeViewMismatch !String !String
+    | {- | A rule of the constructor does not fit its fields: a subterm in a
+      field of another type than the datatype, a fixed value in a field of
+      the datatype, a value of another type than its field, or a record of
+      measures in place of a child.
       -}
       FieldMismatch !String
+    | -- | The bound is negative.
+      NegativeBound !Bound
     deriving (Eq, Show)
 
 {- | A state of the automaton of a typed language: the root, a term of a type
@@ -202,7 +222,8 @@ data TypingState ty = Root | Goal ![ty] !ty !(Maybe Int) | Fixed !(Term Construc
 environment of the inputs, within the bound. A constructor without a rule is
 not in the language.
 -}
-fromTypingRules :: forall a ty. (HasFTA a, Ord ty) => Typing ty -> Either TypingError (Gen Symbol a)
+fromTypingRules ::
+    forall a node ty. (HasFTA a, NodeView node, Ord ty) => Typing node ty -> Either TypingError (Gen Symbol a)
 fromTypingRules typing = fromConstructorAutomaton @a <$> typingAutomaton @a typing
 
 {- | The automaton of a typed language over the constructors of the datatype
@@ -210,20 +231,26 @@ fromTypingRules typing = fromConstructorAutomaton @a <$> typingAutomaton @a typi
 arity of its fields.
 -}
 typingAutomaton ::
-    forall a ty. (HasFTA a, Ord ty) => Typing ty -> Either TypingError (FTA.FTA (TypingState ty) Constructor Constraint)
+    forall a node ty.
+    (HasFTA a, NodeView node, Ord ty) =>
+    Typing node ty ->
+    Either TypingError (FTA.FTA (TypingState ty) Constructor Constraint)
 typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots = roots, typingRules = rules} = do
-    let unknown = nubOrd [name | name <- map ruleName rules, Map.notMember name constructors]
-    unless (null unknown) $ Left $ UnknownConstructors unknown (map constructorName declared)
-    mapM_ checked [(name, children) | Rule name children _ <- rules]
+    case bound of
+        Nesting depth | depth < 0 -> Left $ NegativeBound bound
+        Binders limit | limit < 0 -> Left $ NegativeBound bound
+        _ -> pure ()
+    case checkNodeShape @a @node of
+        Left (NodeMismatch name difference) -> Left $ NodeViewMismatch name difference
+        Left other -> Left $ NodeViewMismatch "" (show other)
+        Right () -> pure ()
+    mapM_ checked [node | Rule node _ <- rules]
     rows <- close Map.empty [Root]
     pure
         $ fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton")
         $ FTA.mkFTA Root (Map.toList rows)
   where
     declared = constructorsOf (describeType (Proxy @a))
-    constructors = Map.fromList [(constructorName constructor, constructor) | constructor <- declared]
-    ruleName (Rule name _ _) = name
-    ruleName (Variable name _) = name
 
     -- The nesting at the root.
     nesting = case bound of
@@ -239,18 +266,16 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
 
     row Root = concat <$> traverse (\typ -> row (Goal inputs typ nesting)) (nubOrd roots)
     row (Fixed term) = Right [FTA.Transition (Term.rootLabel term) (map Fixed (Term.subForest term)) noConstraint]
-    row (Goal env goal remaining) =
-        traverse
-            transition
-            ( [(name, children) | Rule name children result <- rules, result == goal, allowed children]
-                <> [ (name, children)
-                   | Variable name fields <- rules
-                   , (index, typ) <- zip [0 ..] env
-                   , typ == goal
-                   , let children = fields index typ
-                   , allowed children
-                   ]
-            )
+    row (Goal env goal remaining) = do
+        alternatives <-
+            traverse
+                checked
+                ( [node | Rule node result <- rules, result == goal]
+                    <> [node index typ | Variable node <- rules, (index, typ) <- zip [0 ..] env, typ == goal]
+                )
+        pure
+            [ FTA.Transition constructor (map child children) noConstraint | (constructor, children) <- alternatives, allowed children
+            ]
       where
         -- A subterm needs a level of the nesting, and its binders must stay
         -- within a bound on the binders. The inputs are not binders.
@@ -258,19 +283,22 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
         withinBinders binds = case bound of
             Nesting _ -> True
             Binders limit -> length binds + length env - length inputs <= limit
-        transition alternative@(_, children) = do
-            constructor <- checked alternative
-            pure $ FTA.Transition constructor (map child children) noConstraint
         child (Subterm binds typ) = Goal (binds <> env) typ (subtract 1 <$> remaining)
         child (Value term) = Fixed term
 
-    -- The constructor of a rule, when the children fit its fields.
-    checked (name, children)
-        | length children == length fields && and (zipWith fits fields children) = Right constructor
-        | otherwise = Left $ FieldMismatch name
+    -- The constructor of the node of a rule, and its children, when they fit
+    -- its fields. The node view fits the datatype, so the position is one of
+    -- its constructors and the node has as many fields.
+    checked node = case drop position declared of
+        constructor : _
+            | Just children <- sequence fields
+            , length children == length (constructorFields constructor)
+            , and (zipWith fits (constructorFields constructor) children) ->
+                Right (constructor, children)
+            | otherwise -> Left $ FieldMismatch (constructorName constructor)
+        [] -> Left $ NodeViewMismatch "" ("the node view has no constructor at the position " <> show position)
       where
-        constructor = constructors Map.! name
-        fields = constructorFields constructor
+        (position, fields) = nodeFields node
     fits field (Subterm _ _) = fieldType field == typeRep (Proxy @a)
     fits field (Value term) =
         fieldType field /= typeRep (Proxy @a)

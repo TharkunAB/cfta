@@ -3,12 +3,12 @@
 
 {- | The level below "Data.CFTA.Gen.Refinement.Derive": the contracts and
 the measures of the constructors of a datatype as annotations in the
-expression language of "Data.CFTA.Refinement.Expression", by constructor
-name.
+expression language of "Data.CFTA.Refinement.Expression", by the
+'Constructor' of each constructor, as 'Data.CFTA.Generic.datatypeConstructors'
+gives it.
 
-This module is exposed for integration: a translation that knows the names of
-the constructors and of the measures only at run time, such as one from
-Liquid Haskell specifications, builds annotations here. It is not part of the
+This module is exposed for integration: a translation that knows the
+constructors and the measures only at run time builds annotations here. It is not part of the
 PVP contract. A datatype with a 'Data.CFTA.Gen.Refinement.Derive.HasLTA'
 instance needs none of it.
 
@@ -33,7 +33,7 @@ form one group, and they unfold together: their recursive occurrences nest at
 most the bound times. A type that is in no cycle does not use a level.
 -}
 module Data.CFTA.Gen.Refinement.Derive.Internal (
-    -- * Annotations by constructor name
+    -- * Annotations by constructor
     deriveLTAWith,
     deriveLTAOnWith,
     Annotation (..),
@@ -51,6 +51,7 @@ module Data.CFTA.Gen.Refinement.Derive.Internal (
     Atoms (..),
     AtomicField (..),
     atom,
+    atomicField,
 
     -- * Errors
     DeriveLTAError (..),
@@ -61,7 +62,7 @@ import Data.Containers.ListUtils (nubOrd)
 import Data.Graph (SCC (..), stronglyConnComp)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isNothing)
 import Data.Proxy (Proxy (Proxy))
 import qualified Data.Set as Set
 import Data.String (fromString)
@@ -96,8 +97,9 @@ import qualified Data.CFTA.Term as Term
 
 -- | Failure while deriving a refinement generator.
 data DeriveLTAError
-    = {- | Annotation names that no constructor of the datatype has. The second
-      field lists the names of the constructors.
+    = {- | Constructors with annotations or field atoms that the datatype does
+      not reach, by name. The second field lists the names of the constructors
+      that it reaches.
       -}
       UnknownConstructors ![String] ![String]
     | -- | An atomic field type that 'atom' gives no generator for.
@@ -134,10 +136,30 @@ data DeriveLTAError
       The field is the name of its constructor.
       -}
       ConstrainedTransition !String
+    | {- | A field atom has a generator of another type than its field. The
+      fields are the constructor name, the position of the field, and the type
+      of the generator.
+      -}
+      FieldAtomMismatch !String !Int !TypeRep
+    | {- | A pool of 'Data.CFTA.Gen.Refinement.Derive.fieldAtoms' is for a term
+      that is not one field of the node view. The field is the constructor
+      name.
+      -}
+      FieldAtomTerm !String
     deriving (Eq, Show)
 
--- | Generators for atomic field types, by type.
-newtype Atoms = Atoms (Map.Map TypeRep AtomicField)
+{- | Generators for atomic fields: by the type of the field ('atom'), and by
+a constructor and the position of one of its fields
+('Data.CFTA.Gen.Refinement.Derive.fieldAtoms'). A field atom applies before
+the atom of the field's type.
+-}
+data Atoms = Atoms
+    { byType :: !(Map.Map TypeRep AtomicField)
+    , byField :: !(Map.Map (Constructor, Int) (TypeRep, AtomicField))
+    -- ^ The type of the generator, and the generator.
+    , atomProblems :: ![DeriveLTAError]
+    -- ^ The errors of field atoms that do not fit, which a derivation reports.
+    }
 
 -- | The generator of one atomic type, and the integer of a term of that type.
 data AtomicField = AtomicField
@@ -145,12 +167,13 @@ data AtomicField = AtomicField
     , atomInteger :: Term Constructor -> Maybe Integer
     }
 
--- | When two generators are for one type, the rightmost one applies.
+-- | When two generators are for one type, or for one field, the rightmost one applies.
 instance Semigroup Atoms where
-    Atoms left <> Atoms right = Atoms $ Map.union right left
+    Atoms types fields problems <> Atoms types' fields' problems' =
+        Atoms (Map.union types' types) (Map.union fields' fields) (problems <> problems')
 
 instance Monoid Atoms where
-    mempty = Atoms Map.empty
+    mempty = Atoms Map.empty Map.empty []
 
 {- | The generator of each field of a type, as in @atom \@Integer every@.
 
@@ -159,8 +182,22 @@ The value of an atomic field stands for one integer, 'toLiteral', which
 replaces the derived one, so a field of that type is drawn from it.
 -}
 atom :: forall c. (HasFTA c, Literal c) => LTAGen c -> Atoms
-atom generator =
-    Atoms $ Map.singleton (typeRep $ Proxy @c) $ AtomicField (encodeTerm <$> generator) (fmap (toLiteral @c) . decodeTerm)
+atom generator = Atoms (Map.singleton (typeRep $ Proxy @c) (atomicField generator)) Map.empty []
+
+-- | The generator of an atomic type, and the integer of its terms.
+atomicField :: forall c. (HasFTA c, Literal c) => LTAGen c -> AtomicField
+atomicField generator = AtomicField (encodeTerm <$> generator) (fmap (toLiteral @c) . decodeTerm)
+
+{- | The atom of a type: its own atom, or else a field atom of that type. The
+integer of a term depends only on the type, so any field atom of the type
+gives it.
+-}
+atomOfType :: Atoms -> TypeRep -> Maybe AtomicField
+atomOfType (Atoms types fields _) typ = case Map.lookup typ types of
+    Just field -> Just field
+    Nothing -> case [field | (typ', field) <- Map.elems fields, typ' == typ] of
+        field : _ -> Just field
+        [] -> Nothing
 
 -- | The contracts and the measures of one constructor. Combine them with '<>'.
 data Annotation = Annotation
@@ -264,17 +301,22 @@ typeLimit = 10000
 {- | Derive the refinement generator of a datatype.
 
 The bound is the number of times that the recursive occurrences nest, as for
-'recurUpTo'. Each atomic field type needs a generator from the 'Atoms'. Each
-annotation names a constructor. Constructors of different types that have the
-same name get the same annotations. A constructor without annotations has no
-contract and no measure.
+'recurUpTo'. Each atomic field needs a generator from the 'Atoms': the atom
+of its type, or a field atom of the field. Each annotation is for one
+'Constructor'. A constructor without annotations has no contract and no
+measure.
 -}
-deriveLTAWith :: forall a. (HasFTA a) => Depth -> Atoms -> [(String, Annotation)] -> Either DeriveLTAError (LTAGen a)
-deriveLTAWith bound (Atoms atoms) named = do
-    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
+deriveLTAWith ::
+    forall a. (HasFTA a) => Depth -> Atoms -> [(Constructor, Annotation)] -> Either DeriveLTAError (LTAGen a)
+deriveLTAWith bound atoms@(Atoms typeMap fieldMap _) named = do
+    Derivation derived annotationOf <- derivation @a atoms named
     pure $ decodeValue <$> generatorOf (buildAll derived annotationOf) (typeRep $ Proxy @a)
   where
-    generatorOf built typ = Map.findWithDefault (maybe emptyGenerator atomGenerator $ Map.lookup typ atoms) typ built
+    generatorOf built typ = Map.findWithDefault (maybe emptyGenerator atomGenerator $ Map.lookup typ typeMap) typ built
+    -- The atom of a field of a constructor, when the field has one.
+    fieldAtomOf constructor position typ = case Map.lookup (constructor, position) fieldMap of
+        Just (typ', field) | typ' == typ -> Just field
+        _ -> Nothing
 
     -- The types that refer to each other unfold together, as 'recurUpTo'
     -- unfolds one type. A group comes after the groups that it refers to.
@@ -294,8 +336,14 @@ deriveLTAWith bound (Atoms atoms) named = do
         step built typ = case Map.findWithDefault [] typ derived of
             [alternative] -> alternativeGenerator built alternative
             alternatives -> oneof $ map (alternativeGenerator built) alternatives
-        alternativeGenerator built (Alternative constructor fields) =
-            constructorGenerator annotationOf constructor (map (`Map.member` derived) fields) (map (generatorOf built) fields)
+        alternativeGenerator built (Alternative constructor fieldTypes) =
+            constructorGenerator
+                annotationOf
+                constructor
+                [isNothing (fieldAtomOf constructor position typ) && Map.member typ derived | (position, typ) <- zip [0 ..] fieldTypes]
+                [ maybe (generatorOf built typ) atomGenerator (fieldAtomOf constructor position typ)
+                | (position, typ) <- zip [0 ..] fieldTypes
+                ]
 
 {- | Derive the refinement generator of the terms of an automaton over the
 constructors of a datatype, such as the automaton of
@@ -313,17 +361,19 @@ and they are not the ranks of 'Data.CFTA.Gen.Typing.fromConstructorAutomaton'.
 The automaton must be acyclic ('CyclicAutomaton'), and its transitions must
 have no constraint ('ConstrainedTransition'), because a generator has no place
 for an equality between children. The checks of 'deriveLTAWith' on the names,
-the atoms, and the annotations apply.
+the atoms, and the annotations apply. A field atom gives no generator here,
+because the automaton gives the terms of each field; it gives the integer of
+its type when the type has no 'atom'.
 -}
 deriveLTAOnWith ::
     forall a state.
     (HasFTA a, Ord state) =>
     FTA.FTA state Constructor Constraint ->
     Atoms ->
-    [(String, Annotation)] ->
+    [(Constructor, Annotation)] ->
     Either DeriveLTAError (LTAGen a)
-deriveLTAOnWith automaton (Atoms atoms) named = do
-    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
+deriveLTAOnWith automaton atoms named = do
+    Derivation derived annotationOf <- derivation @a atoms named
     unless (Set.null $ FTA.cyclicStates trimmed) $ Left CyclicAutomaton
     case [constructorName symbol | FTA.Transition symbol _ constraint <- concat (Map.elems rows), constraint /= noConstraint] of
         name : _ -> Left $ ConstrainedTransition name
@@ -341,7 +391,7 @@ deriveLTAOnWith automaton (Atoms atoms) named = do
         [generator] -> generator
         alternatives -> oneof alternatives
       where
-        transitionGenerators (FTA.Transition constructor children _) = case Map.lookup (constructorType constructor) atoms of
+        transitionGenerators (FTA.Transition constructor children _) = case atomOfType atoms (constructorType constructor) of
             Just field ->
                 [ leaf term (fromString $ constructorName constructor) (.== fromInteger (integerOf field term))
                 | term <- termsOf (FTA.Transition constructor children noConstraint)
@@ -369,15 +419,42 @@ data Derivation = Derivation !(Map.Map TypeRep [Alternative]) (Constructor -> An
 {- | Reach the types of a datatype, and check the names of the annotations, the
 atoms of the atomic types, and the arity and the parts of each annotation.
 -}
-derivation :: forall a. (HasFTA a) => Atoms -> [(String, Annotation)] -> Either DeriveLTAError Derivation
-derivation (Atoms atoms) named = do
+derivation :: forall a. (HasFTA a) => Atoms -> [(Constructor, Annotation)] -> Either DeriveLTAError Derivation
+derivation (Atoms atoms fieldMap problems) named = do
     reached <- reach Map.empty (describeType $ Proxy @a)
     let derived = Map.filterWithKey (\typ _ -> not $ Map.member typ atoms) $ Map.mapMaybe id reached
         constructors = [constructor | alternatives <- Map.elems derived, Alternative constructor _ <- alternatives]
         known = nubOrd $ map constructorName constructors
-        unknown = nubOrd [name | (name, _) <- named, name `notElem` known]
+        unknown =
+            nubOrd
+                [ constructorName constructor
+                | constructor <- map fst named <> map fst (Map.keys fieldMap)
+                , constructor `notElem` constructors
+                ]
+        -- An atomic type without an atom of its own.
+        atomic typ = case Map.lookup typ reached of
+            Just Nothing -> not (Map.member typ atoms)
+            _ -> False
+        root = typeRep $ Proxy @a
+    case problems of
+        problem : _ -> Left problem
+        [] -> pure ()
     unless (null unknown) $ Left $ UnknownConstructors unknown known
-    case [typ | (typ, Nothing) <- Map.toList reached, not $ Map.member typ atoms] of
+    case [ (constructor, position, typ)
+         | ((constructor, position), (typ, _)) <- Map.toList fieldMap
+         , take 1 (drop position (map fieldType (constructorFields constructor))) /= [typ]
+         ] of
+        (constructor, position, typ) : _ -> Left $ FieldAtomMismatch (constructorName constructor) position typ
+        [] -> pure ()
+    -- An atomic type needs an atom where a field of that type has no field
+    -- atom, and where it is the datatype itself.
+    case [root | atomic root]
+        <> [ typ
+           | Alternative constructor fieldTypes <- concat (Map.elems derived)
+           , (position, typ) <- zip [0 ..] fieldTypes
+           , atomic typ
+           , not (covered constructor position typ)
+           ] of
         typ : _ -> Left $ MissingAtom typ
         [] -> pure ()
     mapM_ checkAnnotation constructors
@@ -389,7 +466,12 @@ derivation (Atoms atoms) named = do
     pure $ Derivation derived annotationOf
   where
     annotations = Map.fromListWith (flip (<>)) named
-    annotationOf constructor = Map.findWithDefault mempty (constructorName constructor) annotations
+    annotationOf constructor = Map.findWithDefault mempty constructor annotations
+
+    -- Whether a field atom gives the field of the constructor a generator.
+    covered constructor position typ = case Map.lookup (constructor, position) fieldMap of
+        Just (typ', _) -> typ' == typ
+        Nothing -> False
 
     -- The reached types: the alternatives of a type with constructors, and
     -- 'Nothing' for an atomic type.
@@ -424,6 +506,7 @@ derivation (Atoms atoms) named = do
             | (position, typ) <- zip [0 ..] fields
             , contractTermName (ArgumentIndex position) `elem` readNames
             , not (Map.member typ atoms)
+            , not (covered constructor position typ)
             , not (any measuredAlternative (Map.findWithDefault [] typ derived))
             ]
       where
