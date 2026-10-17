@@ -120,22 +120,23 @@ schemaInstances isVar vars t =
   where
     generality ivs = (negate (length (nubOrd (map snd ivs))), map fst ivs)
 
-{- | A law with canonical names, as QuickSpec prints a law: the variables of
-each type get the indexes 0, 1, and so on, in the order of their first
-occurrence from left to right. The second argument gives the variables of
-each type, from the variable with the index 0.
+{- | Give the variables of each type indexes in first-occurrence order.
+Only the printed names change. Evaluation uses the original signature.
 -}
-canonicalLaw :: Map Symbol [Symbol] -> Term -> Term
-canonicalLaw vars law = rename law
+canonicalLaw :: Sig -> Term -> Term
+canonicalLaw sig law = rename law
   where
-    family = Map.fromList [(v, x) | (x, vs) <- Map.assocs vars, v <- vs]
-    occurrences (Term s ts) = [s | s `Map.member` family] ++ concatMap occurrences ts
+    variables =
+        Map.fromList
+            [(Symbol name, (ty, info)) | (name, GivenFun info@GivenVar{} ty) <- Map.assocs sig]
+    occurrences (Term symbol children) = [symbol | symbol `Map.member` variables] ++ concatMap occurrences children
     names = Map.fromList (snd (mapAccumL next Map.empty (nubOrd (occurrences law))))
-    next counts v =
-        let f = family Map.! v
-            n = Map.findWithDefault 0 f counts
-         in (Map.insert f (n + 1) counts, (v, (vars Map.! f) !! n))
-    rename (Term s ts) = Term (Map.findWithDefault s s names) (map rename ts)
+    next counts symbol =
+        let (ty, GivenVar prefix label _ gen) = variables Map.! symbol
+            index = Map.findWithDefault 0 ty counts
+            name = Symbol (gvToName (GivenVar prefix label index gen))
+         in (Map.insert ty (index + 1) counts, (symbol, name))
+    rename (Term symbol children) = Term (Map.findWithDefault symbol symbol names) (map rename children)
 
 termSize :: Term -> Int
 termSize (Term s []) = 1
@@ -185,6 +186,8 @@ data Settings = Settings
     -- ^ Whether to emit flushed timing events on stderr.
     , detailedDiagnostics :: Bool
     -- ^ Whether to include stages inside each bucket.
+    , resolveInstance :: TypeSkeleton -> Maybe Instance
+    -- ^ Resolve exact generators and equality for law generalization.
     , diagnosticPhase :: Int
     -- ^ The phase that is running, rather than the requested last phase.
     }
@@ -312,6 +315,7 @@ searchPhases size phase givenInstances givenSig =
                     , diagnostics = diagnostics
                     , detailedDiagnostics = detailedDiagnostics
                     , diagnosticPhase = 0
+                    , resolveInstance = instances
                     }
         runPhases env size (max 1 (min 4 phase)) instances sig
 
@@ -636,15 +640,15 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             hPutStrLn stderr ("\r\ESC[Kfollows from the laws: " ++ ppNpTerm (lawOf w))
                         return (Knew, s)
                     | otherwise -> do
+                        (lawSig, law) <- generalizeLaw resolveInstance test_cases inst_sig (eq_type, eq_inst) (lawOf w)
                         let n = law_count s + 1
-                            law = lawOf w
-                            law_str = show n <> ". " <> ppNpTerm (canonicalLaw schema_vars law)
+                            law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
                         when progress $ hPutStr stderr "\r\ESC[K"
                         putStrLn law_str
                         rules <-
                             if detailedDiagnostics
-                                then diagnose env lvl (show current_ty) "completion" s $ evaluate (addLaw maxSize inst_sig law (rewrite_rules s))
-                                else return (addLaw maxSize inst_sig law (rewrite_rules s))
+                                then diagnose env lvl (show current_ty) "completion" s $ evaluate (addLaw maxSize lawSig law (rewrite_rules s))
+                                else return (addLaw maxSize lawSig law (rewrite_rules s))
                         return
                             ( Discovered law_str
                             , s

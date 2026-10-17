@@ -15,6 +15,7 @@ module Specftacular.Rewriting (
     joinable,
     kboCompare,
     addLaw,
+    generalizeLaw,
 ) where
 
 import Control.Applicative ((<|>))
@@ -253,6 +254,132 @@ principalType sig term = do
         (a', Term h []) | meta h, not (occurs h a') -> unify (Map.insert h a' s) rest
         (Term h as, Term k bs) | h == k, length as == length bs -> unify s (zip as bs ++ rest)
         _ -> Nothing
+
+{- | Infer an equation scheme. This function does not test the equation.
+Signature constants must meet the existing parametric carrier contract.
+Given variables retain their concrete type constructors. Each original
+variable has one type skeleton across both sides. Ordinary constants get
+fresh instances of their declared type scheme at each occurrence.
+-}
+regeneraliseEquation :: Sig -> (Term, Term) -> Maybe (Term, Term)
+regeneraliseEquation sig (lhs, rhs) = do
+    guard
+        (not (any reserved (Map.keys sig ++ concatMap typeNames (map sfTypeRep (Map.elems sig)) ++ symbols lhs ++ symbols rhs)))
+    (left, leftConstraints) <- annotate "L" lhs
+    (right, rightConstraints) <- annotate "R" rhs
+    bindings <-
+        foldM
+            (\s (a, b) -> unifyType a b s)
+            Map.empty
+            ((typeOf left, typeOf right) : leftConstraints ++ rightConstraints)
+    let proposal@(a, b) = (substitute bindings left, substitute bindings right)
+    -- One shared match must reconstruct both original annotated terms.
+    matched <- matchTemplate a lhs Map.empty
+    _ <- matchTemplate b rhs matched
+    pure (canonical proposal)
+  where
+    reserved name = "<t>" `T.isPrefixOf` name || "<v>" `T.isPrefixOf` name
+    symbols (Term (Symbol name) children) = name : concatMap symbols children
+    typeNames (TVar name) = [name]
+    typeNames (TCons name children) = name : concatMap typeNames children
+    typeNames (TFun a b) = typeNames a ++ typeNames b
+    variableNames (Term "app" [_, f, x]) = variableNames f ++ variableNames x
+    variableNames (Term symbol@(Symbol name) [_]) = case Map.lookup name sig of
+        Just (GivenFun{given_info = GivenVar{}}) -> [symbol]
+        _ -> []
+    variableNames _ = []
+    variables = Map.fromList (zip (nubOrd (variableNames lhs ++ variableNames rhs)) [0 :: Int ..])
+    fresh name = Term (Symbol ("<t>rg:" <> name)) []
+    arrow a b = Term "->" [Term "(->)" [], a, b]
+    typeOf (Term _ (ty : _)) = ty
+    typeOf _ = error "regeneraliseEquation: missing inferred annotation"
+    -- Each position of one given type can vary. Repeated uses share it.
+    givenType path ty
+        | ty `elem` map fst carriers = fresh path
+    givenType path (TVar _) = fresh path
+    givenType path (TFun a b) = arrow (givenType (path <> ":0") a) (givenType (path <> ":1") b)
+    givenType path (TCons name children) =
+        Term (Symbol name) [givenType (path <> ":" <> T.pack (show index)) child | (index, child) <- zip [0 :: Int ..] children]
+    -- Equal declaration binders stay equal within this constant occurrence.
+    declaredType path (TVar name) = fresh ("c:" <> path <> ":" <> name)
+    declaredType path (TFun a b) = arrow (declaredType path a) (declaredType path b)
+    declaredType path (TCons name children) = Term (Symbol name) (map (declaredType path) children)
+    annotate path (Term "app" [_, f, x]) = do
+        (f', fs) <- annotate (path <> "f") f
+        (x', xs) <- annotate (path <> "x") x
+        let result = fresh ("r:" <> path)
+        pure (Term "app" [result, f', x'], (typeOf f', arrow (typeOf x') result) : fs ++ xs)
+    annotate path (Term symbol@(Symbol name) [oldType]) = do
+        fun <- Map.lookup name sig
+        case fun of
+            GivenFun{given_info = GivenVar{}} -> do
+                guard (oldType == typeSkeletonToTerm (sfTypeRep fun))
+                index <- Map.lookup symbol variables
+                let ty = givenType ("v:" <> T.pack (show index)) (sfTypeRep fun)
+                pure (Term (Symbol ("<v>rg:" <> T.pack (show index))) [ty], [])
+            GivenFun{} -> do
+                guard (oldType == typeSkeletonToTerm (sfTypeRep fun))
+                pure (Term symbol [oldType], [])
+            _ -> pure (Term symbol [declaredType path (generalizeType (sfTypeRep fun))], [])
+    annotate _ _ = Nothing
+
+{- | Validate a more general type scheme before adding its rewrite rules.
+Each independent type binder gets a distinct abstract carrier. Each term
+variable gets its own generator at the inferred type. Missing instances,
+failed inference, and rejected or untestable equations keep the original law.
+The result type and the original equality function must remain the same.
+The signature constants must meet the parametric carrier contract.
+-}
+generalizeLaw ::
+    (TypeSkeleton -> Maybe Instance) -> [TestCase] -> Sig -> (TypeSkeleton, Value) -> Term -> IO (Sig, Term)
+generalizeLaw resolve cases sig (equalityType, equalityValue) original@(Term "(==)" [equality, lhs, rhs]) =
+    case prepare of
+        Nothing -> pure (sig, original)
+        Just (newSig, law, required, eq, left, right) -> do
+            valid <- foldM (check required eq left right) True cases
+            pure (if valid then (newSig, law) else (sig, original))
+  where
+    check _ _ _ _ False _ = pure False
+    check required eq left right True testcase = do
+        let values = testCaseValues required testcase
+        result <- valuesEqual eq (left values) (right values)
+        pure (result == Just True)
+    prepare = do
+        proposal@(a, b) <- regeneraliseEquation sig (lhs, rhs)
+        guard (proposal /= canonical (toTemplate sig lhs, toTemplate sig rhs))
+        let typeVars = nubOrd (foldMap variable a ++ foldMap variable b)
+            variable symbol = [symbol | isTypeVar symbol]
+        guard (length typeVars <= length carriers)
+        let types = Map.fromList (zip typeVars (map (typeSkeletonToTerm . fst) carriers))
+            vars = templateVarLeaves (substitute types a) ++ templateVarLeaves (substitute types b)
+        (required, bindings, _) <- foldM allocate (Map.empty, types, Map.empty) (nubOrd vars)
+        let newSig = required `Map.union` sig
+            leftTerm = substitute bindings a
+            rightTerm = substitute bindings b
+        resultType <- either (const Nothing) Just (termType newSig leftTerm)
+        rightType <- either (const Nothing) Just (termType newSig rightTerm)
+        guard (resultType == rightType)
+        guard (resultType == equalityType)
+        left <- either (const Nothing) Just (compileTerm newSig leftTerm)
+        right <- either (const Nothing) Just (compileTerm newSig rightTerm)
+        pure (newSig, Term "(==)" [equality, leftTerm, rightTerm], required, equalityValue, left, right)
+    allocate (required, bindings, counts) (Term name [annotation]) = do
+        ty <- either (const Nothing) Just (annotationType annotation)
+        inst <- resolve ty
+        let start = Map.findWithDefault 0 ty counts
+            select index =
+                let info = GivenVar (inst_prefix inst) (inst_text inst) index (inst_gen inst)
+                    label = gvToName info
+                    occupied = Map.member label required || Map.member label sig
+                 in if occupied then select (index + 1) else (index, label, GivenFun info ty)
+            (index, label, fun) = select start
+        pure
+            ( Map.insert label fun required
+            , Map.insert name (Term (Symbol label) [annotation]) bindings
+            , Map.insert ty (index + 1) counts
+            )
+    allocate _ _ = Nothing
+generalizeLaw _ _ sig _ law = pure (sig, law)
 
 {- | Whether the known laws prove a law: the two sides of the law have the
 same normal form, or their normal forms are an instance of a rule (see
