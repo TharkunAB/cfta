@@ -128,7 +128,7 @@ private theorem parent_done : parent = .done result parent.state parent.fourth p
       exact False.elim impossible
 
 /-- An initial source-built parent copies a constrained finite branch deeper and raises returned edge height. -/
-theorem supported_parent_growth :
+private theorem witness :
     ∃ (program : Syntax Symbol Guard) (input : Value Symbol Guard) (initialHeap : State Symbol Guard)
       (initial : Checked 8) (finiteValue recursiveValue : Value Symbol Guard)
       (originalEdge returnedEdge : EdgeValue Symbol Guard) (inherited : SourceEqualityConstraintAllocation.Value)
@@ -173,5 +173,33 @@ theorem supported_parent_growth :
     rw [field]
     exact rawGuard
 
+
+/-- Initial source facts construct the exact parent-height growth witness. -/
+theorem supported_parent_growth :
+    ∃ (program : Syntax Symbol Guard) (input : Value Symbol Guard) (initialHeap : State Symbol Guard)
+      (initial : Checked 8) (finiteValue recursiveValue : Value Symbol Guard)
+      (originalEdge returnedEdge : EdgeValue Symbol Guard) (inherited : SourceEqualityConstraintAllocation.Value)
+      (after : Checked 8) (fourth : SourceCurrentEmptinessMemo.Memo)
+      (saved : SourceCurrentMemoMergeGraph.Memo Symbol Guard),
+      InternedFreshOrdinaryConstruction.build program [] empty = .done input initialHeap ∧
+      initial.native.machine.heap = initialHeap ∧ SourceCurrentConjunctionClassScan.Ready initial ∧
+      Available initialHeap input ∧ input.free = [] ∧ originalEdge ∈ nodeEdges input ∧
+      originalEdge.children = [finiteValue,recursiveValue] ∧
+      originalEdge.entry.key.constraint.equalities = some [[[0],[1,0]]] ∧
+      SourceMemoGate.unconstrained recursiveValue = true ∧
+      SourceCurrentAllocatedGateWorker.primary 16 [finiteValue,recursiveValue] [[0],[1,0]] initial = .done false initial ∧
+      SourceCurrentAllocatedParentWorker.edge 16 16 16 16 16 16 16 16 128 0
+        originalEdge.entry.key.symbol originalEdge.entry.key.constraint inherited originalEdge.children initial
+        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty = .done returnedEdge after fourth saved ∧
+      returnedEdge.entry.key.constraint = originalEdge.entry.key.constraint ∧
+      MergedOrdinaryHeight.edgeHeight originalEdge = 2 ∧ MergedOrdinaryHeight.edgeHeight returnedEdge = 3 ∧
+      MergedOrdinaryHeight.height input = 3 ∧
+      MergedOrdinaryHeight.height ((returnedEdge.children[1]?).getD (Value.empty : Value Symbol Guard)) = 3 ∧
+      returnedEdge.children.length = 2 ∧
+      (returnedEdge.children[0]?).getD (Value.empty : Value Symbol Guard) = finiteValue ∧
+      (((children ((returnedEdge.children[1]?).getD (Value.empty : Value Symbol Guard)))[0]?).getD (Value.empty : Value Symbol Guard)).referenceOf = finiteValue.referenceOf ∧
+      ((nodeEdges ((returnedEdge.children[1]?).getD (Value.empty : Value Symbol Guard))).map (fun row => row.entry.key.constraint) = [plain]) ∧
+      (nodeEdges (((children ((returnedEdge.children[1]?).getD (Value.empty : Value Symbol Guard)))[0]?).getD (Value.empty : Value Symbol Guard))).map
+        (fun row => row.entry.key.constraint) = [inner] := witness
 
 end MicroCFTA.SourceCurrentOuterParentHeightGrowth
