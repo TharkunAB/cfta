@@ -1,0 +1,62 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapTargetNumeric.lean:80:66: error: don't know how to synthesize implicit argument `operand`
+  @FoldReads.nil (bits + 2) inst✝¹ inst✝ formulas solver seed values before memo result after saved inventory memos
+    final ?m.249 receipt
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+bounded : ∀ (value : Value Symbol Guard), value ∈ values → Cap Plain depth value
+inventory : Inventory
+before : Checked (bits + 2)
+memo : Memo
+profile : Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+domains : ∀ (path : List Int), path ∈ [seed] → Domain path values
+physicalStored : PhysicalStored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+merged : MergeStored memo
+reserved : SourceCurrentConstrainedCapTargetForecast.Reserved bits values.length seed [] profile
+result : Value Symbol Guard
+after : Checked (bits + 2)
+saved : Memo
+final : Memos
+actual : SourceCurrentAllocatedTargetGraph.Operand seed values before memo result after saved
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory seed values before memo result after saved memos
+    final
+returned : Frame formulas solver inventory after
+finalFits : Fits (SourceCurrentConstrainedCapTargetForecast.operand seed values.length profile) after
+done :
+  SourceCurrentAllocatedTargetWorker.operand
+      (SourceCurrentConstrainedCapTargetForecast.operandFuel seed values.length profile)
+      (SourceCurrentConstrainedCapTargetForecast.operandFuel seed values.length profile)
+      (SourceCurrentConstrainedCapTargetForecast.operandFuel seed values.length profile)
+      (SourceCurrentConstrainedCapTargetForecast.operandFuel seed values.length profile) seed values before memo =
+    SourceCurrentAllocatedTargetWorker.Outcome.done result after saved
+caps :
+  MergeStored saved ∧
+    SourceCurrentConstrainedCapCurrentNative.At Plain after ∧
+      Cap Plain (SourceCurrentConstrainedCapMixedTarget.operandDepth depth seed) result
+⊢ SourceCurrentAllocatedTargetGraph.Operand seed values before memo result after saved
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapTargetNumeric.lean:93:21: error: Application type mismatch: The argument
+  bounded
+has type
+  ∀ (value : Value Symbol Guard), value ∈ values → Cap Plain depth value
+but is expected to have type
+  SourceCurrentConstrainedCapTargetForecast.Reserved bits values.length seed paths
+    (SourceCurrentConstrainedCapTargetForecast.operand path values.length profile)
+in the application
+  ih inventory middle current (SourceCurrentConstrainedCapTargetForecast.operand path values.length profile) headFrame
+    headFits first.originals (tail_all domains) first.stored first.covered nextMemos first.globals headCaps.left bounded
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapTargetNumeric.lean:89:13: error: Tactic `rcases` failed: `x✝ : ?m.447` is not an inductive datatype
