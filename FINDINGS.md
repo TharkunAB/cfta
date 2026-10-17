@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `ba6639ec`.
+Status rechecked on 2026-10-17 at proof checkpoint `bebaf1ed`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-outer-owners.md` for the current proof boundaries.
+Read `lean/notes-current-required-origins.md` for the current proof boundaries.
 
-The current owner, internal-reuse, and native-product proofs add no Haskell change.
+The current Required origin and callback erasure proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 3040 jobs and 67182 dependency checks.
+The last completed pinned Lean Audit passes: 3049 jobs and 67263 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -174,6 +174,67 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current complete Required origins and callback erasure
+
+Updated: 2026-10-17 17:31 CEST. Starting checkpoint is e4b949a5.
+Proof commit is bebaf1ed. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-required-origins.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-node-origins/.
+
+Actual false primary certificates now produce structural exposure safety
+for the compiled Required trie. Actual source construction derives the
+union normalization needed by the finite shortcut. SemanticReady alone
+does not state that an ordinary-only union was merged. No plain-guard,
+whole-forest closure, future Cap, or future output-origin law is assumed.
+
+Completed Required returns retain indexed original row origins and ordered
+child origins. Every nonplain or positive physical equality row projects
+to an original structural occurrence with its exact guard, symbol, and
+arity. Row normalization can remove or reorder rows. The map is not
+injective and does not preserve row numbers. Semantic Mu-body addresses
+exclude both probes. Empty requirements retain arbitrary subtrees.
+
+The complete source entry constructs the actual Required return with both
+its structural origins and exact guarded-language receipt. Readiness, cost, guard, and union-normality facts follow from repaired
+construction. Operand availability and the earlier false primary class
+remain explicit inputs. No future Required result is supplied.
+This does not complete the outer recursive pass.
+
+Actual normalized callback output with no deep local occurrence has no
+free local name after bare-self erasure. Its later stored reconstruction
+has the same complete outcome for any two replacements. Native callbacks
+retain the same law. This does not exchange the original callback inputs
+or equate a warm stored body with its ordinary probe. General native row
+provenance through callback and warm selection remains open.
+
+Next compose native products, Required origins, inherited combine/descent,
+and actual parent returns into causal progress for fresh node evaluations.
+The measure must agree with actual request keys or prove owner disjointness.
+Ordinary height and maximum constrained depth are not decreasing measures.
+Do not supply a future returned-child rank, successful graph, or globally
+idle node table as a producer premise. Then finish nonempty live walks,
+ordered rows, ordinary nodes, full mutual completion, and repeated-pass
+convergence. Current frontend/error adapters, lazy forcing, publication,
+concrete memo events, host capacity, public composition, and full Haskell
+correspondence remain open. The whole-library goal stays active.
+
+Full Audit passes 3049 jobs and 67263 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 355 MiB peak memory.
+All seven final strict source logs are empty. Final canonical targets pass.
+Public proof and constructed checks permit only standard kernel axioms.
+Read checkpoint-validation.json and README for exact final probe counts.
+Earlier proofs, counterexamples, repairs, marked drafts, optimized interned
+code, stashes, and other worktrees remain preserved.
+
+No Haskell patch or new production defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e remains merged
+and validated in unchanged source c0cc8a05. The Chain example returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record later repairs there with failure, executable reproducer,
+affected paths, commit, checks, and upstream status.
+
 
 ## Current guard origins, selected endpoint bounds, and actual parent growth
 
