@@ -5,6 +5,7 @@ Each suspended check belongs to one branch and resumes when its hole expands.
 -}
 module Specftacular.Pruning (prunedTerms) where
 
+import Control.Monad (zipWithM)
 import Data.CFTA.Equality (
     EnumerateM,
     Node,
@@ -115,10 +116,10 @@ matchPartial template (CT.Node (ConcreteSymbol symbol) children) = case template
     _ -> Nothing
   where
     exact parts
-        | length parts == length children = concat <$> sequence (zipWith matchPartial parts children)
+        | length parts == length children = concat <$> zipWithM matchPartial parts children
         | otherwise = Nothing
     prefix parts
-        | length parts <= length children = concat <$> sequence (zipWith matchPartial parts children)
+        | length parts <= length children = concat <$> zipWithM matchPartial parts children
         | otherwise = Nothing
 matchPartial _ _ = Nothing
 
