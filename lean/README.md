@@ -1,5 +1,65 @@
 # cfta formal model
 
+## Current complete initial shared Force and Leaf
+
+Updated: 2026-10-17 11:00 CEST. This checkpoint starts at published 7b774272.
+Proof commit is 4f815db0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-initial-force-leaf.md for the complete library
+contract, proof map, support, and next mixed Edit/ClassPass obligations.
+Evidence is in lean/restart-evidence/20261017-initial-force-leaf/.
+
+Three additive modules construct complete shared Force and Leaf from
+initial class facts and pure numeric reservations. Force uses the actual
+initial slot branch. A hit returns the identical full shared state at
+zero fuel. A miss constructs Target and installs its actual historical
+receipt. Existing universal slot laws derive the new cap certificate.
+Leaf passes the actual Force target and returned state to the checked
+query. The same return retains complete receipts, Frame, inventory,
+Merge and global memos, target-slot histories, forecast Profile, cap,
+and exact common-five-fuel worker result. No ForceRanges, Leaf.Ranges,
+future completed graph, successful fuel, reached bound, or callback
+resource law is an input.
+
+The concrete integrations derive their own finite width from one initial
+forecast. They construct a missing-slot Force and exact zero-fuel warm
+reuse. They also construct a missing-slot Leaf followed by a result-fed
+Leaf at the complete returned state. Its second Force uses the produced
+slot. They retain an open unselected sibling and a valid stored equality
+descent operation. They do not claim a native query hit or an unchanged
+second checked state.
+
+Selected ForestClosed domains, all-original-root caps, valid warm-slot
+laws, and initial input caps remain explicit. Target language inclusion
+is still one-way for nonempty proper paths. Leaf retains its existing
+narrowing and preservation contract. Equality-table size and instruction
+counts, concrete capacity, Haskell lazy demand, and memo publication
+remain separate boundaries.
+
+Next construct complete mixed Edit from initial forecasts in source
+head, child, and row order. Derive Force/Leaf reservations and literal
+width and reconstruction bounds at each actual returned state. Then
+compose the class fold in source order. General Edit/ClassPass, outer
+descent, arbitrary constrained Mu, convergence, current adapters, capacity,
+and full public Haskell correspondence remain open. The library goal
+stays active.
+
+The pinned Audit passes 2939 jobs and 65012 dependency checks. All three
+final production strict logs are empty. All 33 complete signature and
+axiom pairs pass in six groups: 27 public declarations and six constructed
+checks. Only propext, Classical.choice, and Quot.sound occur. Four component
+manifests verify 101 entries. Preservation retains 14399 starting files,
+2933 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 88 frozen module
+manifests retain 694 entries. Read checkpoint-validation.json for hashes.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
 ## Current complete initial Target execution
 
 Updated: 2026-10-17 10:40 CEST. This checkpoint starts at published c0cccd79.

@@ -1,0 +1,63 @@
+'MicroCFTA.SharedForecastKernels.present_slot' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SharedForecastKernels.present_slot : ∀ (bits count : Nat) (paths : List.{0} (List.{0} Int))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile →
+    And
+      (@Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths Bool.true profile) profile)
+      (And
+        (@Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths Bool.true profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+        (And (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count paths Bool.true profile)
+          (And
+            (@Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths Bool.true profile)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel profile))
+            (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count paths Bool.true profile)))))
+'MicroCFTA.SharedForecastKernels.empty_missing_target' depends on axioms: [propext]
+MicroCFTA.SharedForecastKernels.empty_missing_target : ∀ (bits count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile →
+    And
+      (@Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count (@List.nil.{0} (List.{0} Int))
+          Bool.false profile)
+        profile)
+      (And
+        (@Eq.{1} Nat
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count (@List.nil.{0} (List.{0} Int)) Bool.false
+            profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+        (And
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count (@List.nil.{0} (List.{0} Int))
+            Bool.false profile)
+          (@Eq.{1} Nat
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count (@List.nil.{0} (List.{0} Int))
+              Bool.false profile)
+            (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel profile))))
+'MicroCFTA.SharedForecastKernels.singleton_miss_then_hit' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SharedForecastKernels.singleton_miss_then_hit : ∀ (bits count : Nat) (seed : List.{0} Int)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+          (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand seed count profile))) →
+    have first :=
+      MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+        (@List.cons.{0} (List.{0} Int) seed (@List.nil.{0} (List.{0} Int))) Bool.false profile;
+    And
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count
+        (@List.cons.{0} (List.{0} Int) seed (@List.nil.{0} (List.{0} Int))) Bool.false profile)
+      (And
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count
+          (@List.cons.{0} (List.{0} Int) seed (@List.nil.{0} (List.{0} Int))) Bool.true first)
+        (And
+          (@Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+              (@List.cons.{0} (List.{0} Int) seed (@List.nil.{0} (List.{0} Int))) Bool.true first)
+            (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+              (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand seed count profile))))
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+              (@List.cons.{0} (List.{0} Int) seed (@List.nil.{0} (List.{0} Int))) Bool.true first))))
