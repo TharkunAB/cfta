@@ -2415,6 +2415,10 @@ import MicroCFTA.SourceCurrentConstrainedCapClassCallerNumeric
 import MicroCFTA.SourceCurrentConstrainedCapOpenExposure
 import MicroCFTA.SourceCurrentConstrainedCapSelectedRequired
 import MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredComplete
+import MicroCFTA.SourceCurrentRequiredWorkerNumeric
+import MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker
+import MicroCFTA.SourceCurrentOpenRowReadResources
+import MicroCFTA.SourceCurrentConstrainedCapRequiredForecast
 /-!
 # Proof dependency audit
 
