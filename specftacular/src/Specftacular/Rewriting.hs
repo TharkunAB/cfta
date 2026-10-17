@@ -292,7 +292,7 @@ matchTypeTerm _ _ _ = Nothing
 instantiate a carrier with any checked type.
 -}
 hasTypeVars :: Term -> Bool
-hasTypeVars (Term h ts) = isTypeVar h || any hasTypeVars ts
+hasTypeVars = any isTypeVar
 
 -- | Bind one pattern variable, or check its previous occurrence.
 bindMatch :: Symbol -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
