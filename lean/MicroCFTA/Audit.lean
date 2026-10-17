@@ -2483,6 +2483,11 @@ import MicroCFTA.SourceCurrentScanRequiredClassGraph
 import MicroCFTA.SourceCurrentClassesNumeric
 import MicroCFTA.SourceCurrentLocalForecast
 import MicroCFTA.SourceCurrentLocalNumeric
+import MicroCFTA.SourceCurrentMkEdgeNumeric
+import MicroCFTA.SourceCurrentParentForecast
+import MicroCFTA.SourceCurrentParentNumeric
+import MicroCFTA.SourceCurrentEdgeBodyNumeric
+import MicroCFTA.SourceCurrentEdgeCallNumeric
 /-!
 # Proof dependency audit
 
