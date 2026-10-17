@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentMemoMergeResourceTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.mono
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.mono
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.initial_fits
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.initial_fits
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.final_fits
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.final_fits
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.initial_fits
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.initial_fits
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.final_fits
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.final_fits
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.selection_ready
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.selection_ready
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.selection_ready
+#check @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.selection_ready

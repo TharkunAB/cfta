@@ -1,0 +1,283 @@
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.map_checked' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.map_checked.{u_1} : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Request : Type u_1}
+  {Output : Type} (width : Nat) (clear : Guard → Bool)
+  (call : Request → MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output)
+  (pre : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Request → Prop)
+  (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+  (∀ (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after →
+        ∀ (request : Request), pre before request → pre after request) →
+    (∀ (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after →
+          ∀ (value : Output), post before value → post after value) →
+      ∀ (requests : List.{u_1} Request),
+        (∀ (request : Request),
+            @Membership.mem.{u_1, u_1} Request (List.{u_1} Request) (@List.instMembership.{u_1} Request) requests
+                request →
+              ∀ (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+                  @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                    pre before request →
+                      @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1 Output width
+                        clear (call request) before post) →
+          ∀ (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                (∀ (request : Request),
+                    @Membership.mem.{u_1, u_1} Request (List.{u_1} Request) (@List.instMembership.{u_1} Request)
+                        requests request →
+                      pre before request) →
+                  @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+                    (List.{0} Output) width clear
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.map.{u_1} Request Symbol Guard Output call requests) before
+                    fun after values =>
+                    And
+                      (∀ (value : Output),
+                        @Membership.mem.{0, 0} Output (List.{0} Output) (@List.instMembership.{0} Output) values value →
+                          post after value)
+                      (@Eq.{1} Nat (@List.length.{0} Output values) (@List.length.{u_1} Request requests))
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.edge_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.edge_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (symbol : Symbol) (guard : Guard)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+              width →
+            @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) width clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values))
+              before (@MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.node_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.node_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before rows →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard rows →
+          @LE.le.{0} Nat instLENat
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows) width →
+            @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows))
+              before (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.request_checked' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.request_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard before value →
+    @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width clear
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.request Symbol Guard value) before
+      (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.retained_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.retained_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before inputs →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard inputs →
+          @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inputs)
+              width →
+            @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.retainedColumn Symbol Guard inputs) before
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.column_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.column_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before inputs →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard inputs →
+          @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inputs)
+              width →
+            @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.column Symbol Guard inputs) before
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.small_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.small_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol Guard before edge →
+        @LE.le.{0} Nat instLENat
+            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+            width →
+          @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) width clear
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.small Symbol Guard edge) before
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.large_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.large_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width : Nat)
+  (clear : Guard → Bool) (top : Guard) (first : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (rest : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) first rest) →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) first rest) →
+          @LE.le.{0} Nat instLENat
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) first rest))
+              width →
+            @LE.le.{0} Nat instLENat
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard first))
+                width →
+              @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) width clear
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.large Guard Symbol top first rest) before
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.group_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.group_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width bound : Nat)
+  (clear : Guard → Bool) (top : Guard)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard edges →
+          @LE.le.{0} Nat instLENat
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edges) bound →
+            (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges
+                    edge →
+                  @LE.le.{0} Nat instLENat
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+                    width) →
+              @LE.le.{0} Nat instLENat bound width →
+                @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) width clear
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.group Guard Symbol top edges) before fun heap rows =>
+                  And
+                    (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          rows edge →
+                        @MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol Guard heap edge)
+                    (@LE.le.{0} Nat instLENat
+                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows) bound)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.root_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.root_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (width bound : Nat)
+  (clear : Guard → Bool) (top : Guard)
+  (groups : List.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      (∀ (group : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+          @Membership.mem.{0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (List.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+              (@List.instMembership.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+              groups group →
+            @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before group) →
+        (∀ (group : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+            @Membership.mem.{0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (List.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                (@List.instMembership.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                groups group →
+              @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard group) →
+          @LE.le.{0} Nat instLENat
+              (@List.length.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) groups)
+              bound →
+            (∀ (group : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+                @Membership.mem.{0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (List.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    (@List.instMembership.{0}
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    groups group →
+                  @LE.le.{0} Nat instLENat
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) group) bound) →
+              (∀ (group : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+                  @Membership.mem.{0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (List.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                      (@List.instMembership.{0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                      groups group →
+                    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          group edge →
+                        @LE.le.{0} Nat instLENat
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+                          width) →
+                @LE.le.{0} Nat instLENat bound width →
+                  @LE.le.{0} Nat instLENat (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound)
+                      width →
+                    @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width clear
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.root Guard Symbol top groups) before
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol Guard)
+'MicroCFTA.SourceCurrentMemoMergeWorkWidths.body_checked' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeWorkWidths.body_checked : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+        ∀ (bound : Nat),
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard input) bound →
+            @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked Symbol Guard inst inst_1
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bound
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              clear (@MicroCFTA.SourceCurrentMemoMergeGraph.body Symbol Guard inst top input) before fun after output =>
+              And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after output)
+                (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard input)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                  @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard output)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))

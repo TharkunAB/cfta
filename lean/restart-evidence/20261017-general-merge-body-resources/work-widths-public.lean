@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentMemoMergeWorkWidths
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.map_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.map_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.edge_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.edge_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.node_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.node_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.request_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.request_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.retained_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.retained_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.column_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.column_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.small_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.small_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.large_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.large_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.group_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.group_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.root_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.root_checked
+#print axioms MicroCFTA.SourceCurrentMemoMergeWorkWidths.body_checked
+#check @MicroCFTA.SourceCurrentMemoMergeWorkWidths.body_checked

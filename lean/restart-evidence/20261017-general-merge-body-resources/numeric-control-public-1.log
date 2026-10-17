@@ -1,0 +1,120 @@
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.width' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeNumericControl.width : Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step : Nat → (Nat → Nat) → Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.bound' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeNumericControl.bound : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_ge' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_ge : ∀ (next : Nat → Nat),
+  (∀ (value : Nat), @LE.le.{0} Nat instLENat value (next value)) →
+    ∀ (count value : Nat), @LE.le.{0} Nat instLENat value (MicroCFTA.HeightOrderControlled.iterate next count value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_mono : ∀ (next : Nat → Nat),
+  (∀ {first last : Nat}, @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (next first) (next last)) →
+    ∀ (count : Nat) {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.iterate next count first)
+          (MicroCFTA.HeightOrderControlled.iterate next count last)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_add' depends on axioms: [propext]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_add : ∀ (next : Nat → Nat) (first last value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.HeightOrderControlled.iterate next
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last) value)
+    (MicroCFTA.HeightOrderControlled.iterate next last (MicroCFTA.HeightOrderControlled.iterate next first value))
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_succ_right' depends on axioms: [propext]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_succ_right : ∀ (next : Nat → Nat) (count value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.HeightOrderControlled.iterate next
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+    (next (MicroCFTA.HeightOrderControlled.iterate next count value))
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_count_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_count_mono : ∀ (next : Nat → Nat),
+  (∀ (value : Nat), @LE.le.{0} Nat instLENat value (next value)) →
+    ∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        ∀ (value : Nat),
+          @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.iterate next first value)
+            (MicroCFTA.HeightOrderControlled.iterate next last value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_compare' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_compare : ∀ (firstStep lastStep : Nat → Nat),
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (lastStep first) (lastStep last)) →
+    (∀ (value : Nat), @LE.le.{0} Nat instLENat (firstStep value) (lastStep value)) →
+      ∀ (count : Nat) {first last : Nat},
+        @LE.le.{0} Nat instLENat first last →
+          @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.iterate firstStep count first)
+            (MicroCFTA.HeightOrderControlled.iterate lastStep count last)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.width_mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentMemoMergeNumericControl.width_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeNumericControl.width first)
+      (MicroCFTA.SourceCurrentMemoMergeNumericControl.width last)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.width_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.width_ge : ∀ (value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.SourceCurrentMemoMergeNumericControl.width value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget first)
+      (MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget last)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_ge : ∀ (value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step_ge : ∀ (width : Nat) (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_pays_child' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step_pays_child : ∀ (width : Nat) (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value (child value))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_primitive' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step_primitive : ∀ (width : Nat) (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width value)
+    (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_selection' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step_selection : ∀ (width : Nat) (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth value)
+    (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_child' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step_child : ∀ (width : Nat) (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat (child value) (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_compare' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeNumericControl.step_compare : ∀ {firstWidth lastWidth : Nat}
+  {firstChild lastChild : Nat → Nat},
+  @LE.le.{0} Nat instLENat firstWidth lastWidth →
+    (∀ (value : Nat), @LE.le.{0} Nat instLENat (firstChild value) (lastChild value)) →
+      ∀ (value : Nat),
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeNumericControl.step firstWidth firstChild value)
+          (MicroCFTA.SourceCurrentMemoMergeNumericControl.step lastWidth lastChild value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.step_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.step_mono : ∀ (width : Nat) (child : Nat → Nat),
+  (∀ {first last : Nat}, @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (child first) (child last)) →
+    ∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child first)
+          (MicroCFTA.SourceCurrentMemoMergeNumericControl.step width child last)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_ge : ∀ (height value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+    (MicroCFTA.SourceCurrentMemoMergeNumericControl.bound height value)
+'MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_mono : ∀ (height : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeNumericControl.bound height first)
+      (MicroCFTA.SourceCurrentMemoMergeNumericControl.bound height last)

@@ -1,0 +1,42 @@
+import MicroCFTA.SourceCurrentMemoMergeResourceCertificate
+import MicroCFTA.SourceCurrentMemoMergeResourceIteration
+import MicroCFTA.SourceCurrentMemoMergeNumeric
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 8000000
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked
+#check @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceCertificate.bind_checked
+#check @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.bind_checked
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked.mono
+#check @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked.mono
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked.erase
+#check @MicroCFTA.SourceCurrentMemoMergeResourceCertificate.Checked.erase
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceIteration.Requests
+#check @MicroCFTA.SourceCurrentMemoMergeResourceIteration.Requests
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceIteration.Counted.resources
+#check @MicroCFTA.SourceCurrentMemoMergeResourceIteration.Counted.resources
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumeric.call_bound
+#check @MicroCFTA.SourceCurrentMemoMergeNumeric.call_bound
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumeric.workFuel
+#check @MicroCFTA.SourceCurrentMemoMergeNumeric.workFuel
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumeric.selectionFuel
+#check @MicroCFTA.SourceCurrentMemoMergeNumeric.selectionFuel
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumeric.complete
+#check @MicroCFTA.SourceCurrentMemoMergeNumeric.complete

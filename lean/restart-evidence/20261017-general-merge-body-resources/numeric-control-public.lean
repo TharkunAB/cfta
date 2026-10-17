@@ -1,0 +1,56 @@
+import MicroCFTA.SourceCurrentMemoMergeNumericControl
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.width
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.width
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.bound
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.bound
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_ge
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_ge
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_mono
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_add
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_add
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_succ_right
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_succ_right
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_count_mono
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_count_mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_compare
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.iterate_compare
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.width_mono
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.width_mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.width_ge
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.width_ge
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_mono
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_ge
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.bodyBudget_ge
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_ge
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_ge
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_pays_child
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_pays_child
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_primitive
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_primitive
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_selection
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_selection
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_child
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_child
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_compare
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_compare
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.step_mono
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.step_mono
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_ge
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_ge
+#print axioms MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_mono
+#check @MicroCFTA.SourceCurrentMemoMergeNumericControl.bound_mono

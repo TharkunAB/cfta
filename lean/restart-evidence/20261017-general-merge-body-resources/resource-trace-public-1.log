@@ -1,0 +1,154 @@
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace : {Symbol Guard : Type} →
+  [symbolEq : DecidableEq.{1} Symbol] →
+    [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+      {clear : Guard → Bool} →
+        {top : Guard} →
+          Nat →
+            {Output : Type} →
+              {cost : Nat} →
+                {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output} →
+                  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                    {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} →
+                      {output : Output} →
+                        {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                          {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} →
+                            @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredRun Symbol Guard symbolEq edgeEq clear top
+                                Output cost code before memo output after saved →
+                              Prop
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace : {Symbol Guard : Type} →
+  [symbolEq : DecidableEq.{1} Symbol] →
+    [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+      {clear : Guard → Bool} →
+        {top : Guard} →
+          Nat →
+            {cost : Nat} →
+              {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+                {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} →
+                    {output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+                      {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                        {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} →
+                          @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredCall Symbol Guard symbolEq edgeEq clear top
+                              cost input before memo output after saved →
+                            Prop
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.mono : ∀ {Symbol Guard : Type} [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {first last : Nat} {Output : Type} {cost : Nat}
+  {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredRun Symbol Guard symbolEq edgeEq clear top Output cost code before
+      memo output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace Symbol Guard symbolEq edgeEq clear top first Output cost code
+      before memo output after saved actual →
+    @LE.le.{0} Nat instLENat first last →
+      @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace Symbol Guard symbolEq edgeEq clear top last Output cost code
+        before memo output after saved actual
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.mono : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {first last cost : Nat} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredCall Symbol Guard symbolEq edgeEq clear top cost input before memo
+      output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace Symbol Guard symbolEq edgeEq clear top first cost input
+      before memo output after saved actual →
+    @LE.le.{0} Nat instLENat first last →
+      @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace Symbol Guard symbolEq edgeEq clear top last cost input
+        before memo output after saved actual
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.initial_fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.initial_fits : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {bound : Nat} {Output : Type} {cost : Nat}
+  {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredRun Symbol Guard symbolEq edgeEq clear top Output cost code before
+      memo output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace Symbol Guard symbolEq edgeEq clear top bound Output cost code
+      before memo output after saved actual →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound before
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.final_fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.final_fits : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {bound : Nat} {Output : Type} {cost : Nat}
+  {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredRun Symbol Guard symbolEq edgeEq clear top Output cost code before
+      memo output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace Symbol Guard symbolEq edgeEq clear top bound Output cost code
+      before memo output after saved actual →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound after
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.initial_fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.initial_fits : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {bound cost : Nat} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredCall Symbol Guard symbolEq edgeEq clear top cost input before memo
+      output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace Symbol Guard symbolEq edgeEq clear top bound cost input
+      before memo output after saved actual →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound before
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.final_fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.final_fits : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {bound cost : Nat} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredCall Symbol Guard symbolEq edgeEq clear top cost input before memo
+      output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace Symbol Guard symbolEq edgeEq clear top bound cost input
+      before memo output after saved actual →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound after
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.selection_ready' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace.selection_ready : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {bound : Nat} {Output : Type} {cost : Nat}
+  {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredRun Symbol Guard symbolEq edgeEq clear top Output cost code before
+      memo output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.Trace Symbol Guard symbolEq edgeEq clear top bound Output cost code
+      before memo output after saved actual →
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.SelectionReady Symbol Guard symbolEq edgeEq clear top
+      (MicroCFTA.SourceMergedComparisonNumeric.comparisonFuel bound bound bound) Output cost code before memo output
+      after saved actual
+'MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.selection_ready' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace.selection_ready : ∀ {Symbol Guard : Type}
+  [symbolEq : DecidableEq.{1} Symbol]
+  [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {bound cost : Nat} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {actual :
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.MeasuredCall Symbol Guard symbolEq edgeEq clear top cost input before memo
+      output after saved},
+  @MicroCFTA.SourceCurrentMemoMergeResourceTrace.CallTrace Symbol Guard symbolEq edgeEq clear top bound cost input
+      before memo output after saved actual →
+    @MicroCFTA.SourceCurrentMemoMergeMeasured.CallSelectionReady Symbol Guard symbolEq edgeEq clear top
+      (MicroCFTA.SourceMergedComparisonNumeric.comparisonFuel bound bound bound) cost input before memo output after
+      saved actual
