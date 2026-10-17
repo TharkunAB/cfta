@@ -2400,6 +2400,12 @@ import MicroCFTA.SourceCurrentConstrainedCapTargetNumeric
 import MicroCFTA.SourceCurrentConstrainedCapSharedForecast
 import MicroCFTA.SourceCurrentConstrainedCapForceNumeric
 import MicroCFTA.SourceCurrentConstrainedCapLeafNumeric
+import MicroCFTA.SourceCurrentConstrainedCapTargetMonotone
+import MicroCFTA.SourceCurrentConstrainedCapSharedMonotone
+import MicroCFTA.SourceCurrentConstrainedCapEditFrame
+import MicroCFTA.SourceCurrentConstrainedCapEditReceipt
+import MicroCFTA.SourceCurrentConstrainedCapEditForecast
+import MicroCFTA.SourceCurrentConstrainedCapEditScans
 /-!
 # Proof dependency audit
 
