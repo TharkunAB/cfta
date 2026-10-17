@@ -11,17 +11,22 @@ open InternedConstructorTemplates
 
 /-- A reference or Mu value reached through root unions only. -/
 inductive Literal : Value Symbol Guard → Value Symbol Guard → Prop
+  /-- A reference is one literal atom. -/
   | reference (name) : Literal (.reference name) (.reference name)
+  /-- A complete Mu value is one literal atom. -/
   | mu (entry body depth ordinary) :
       Literal (.mu entry body depth ordinary) (.mu entry body depth ordinary)
+  /-- A union retains the literal atoms of each member. -/
   | union {entry members level free value atom}
       (member : value ∈ members) (found : Literal value atom) :
       Literal (.union entry members level free) atom
 
 /-- An ordinary row reached through root unions only. -/
 inductive Row : Value Symbol Guard → EdgeValue Symbol Guard → Prop
+  /-- An ordinary node exposes each stored row. -/
   | node {entry rows level free row} (member : row ∈ rows) :
       Row (.node entry rows level free) row
+  /-- A union retains the ordinary rows of each member. -/
   | union {entry members level free value row}
       (member : value ∈ members) (found : Row value row) :
       Row (.union entry members level free) row
