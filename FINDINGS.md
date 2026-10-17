@@ -2,13 +2,14 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 19:31 CEST. Proof checkpoint is `179b5a09`.
-The full pinned Audit passes 3080 jobs and 67877 dependency checks. The
-normalized source comparison and causal unused-Mu readback are proved.
+Current proof update: 2026-10-17 19:43 CEST. Proof checkpoint is `b9434f53`.
+The full pinned Audit passes 3084 jobs and 67897 dependency checks. Actual
+native execution now produces causal Mu histories. Unused native binder
+returns retain the current raw ordinary callback's complete row origins.
 No Haskell behavior patch or new production defect is added. Field-pool
 repair `b9219b9e` remains merged and validated in unchanged source `c0cc8a05`.
-Read `lean/notes-current-normalized-callback-comparison.md` for the exact
-proof boundary. Keep this repair registry before historical failure reports.
+Read `lean/notes-current-native-callback-history.md` for the exact proof
+boundary. Keep this repair registry before historical failure reports.
 
 Audited source main is `c0cc8a05`, merged into `formalize` at `896b0a1c`.
 PR #64 adds drawn typing fields. PR #65 repairs the recursive field-pool
@@ -182,6 +183,45 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current native callback histories and row readback
+
+Updated: 2026-10-17 19:43 CEST. Starting checkpoint is `84f47113`.
+Proof commit is `b9434f53`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-native-callback-history.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Actual native callbacks and optional binders now produce causal Mu publication
+histories. Checked native steps and bounded execution retain those histories
+on every stopping outcome. Physical traces derive their own heap inputs.
+An actual closed source start supplies the initial semantic heap and history.
+The reached unused-Mu law needs no desired stored comparison law.
+
+Actual native construction retains its current raw ordinary substitution and
+the selected physical winner. For an unused local binder, the return equals
+the current erased ordinary callback. Its complete row origins equal those
+of the current raw ordinary substitution at every fixed view. Initial Ready,
+Available, and causal History construct the actual optional return and this
+readback. The caller supplies no future successful return.
+
+The next gap is row occurrence transport through the actual substitution.
+Preserve the exact source guard, symbol, and arity. Relate children in order.
+Do not assert physical edge identity with the pre-substitution body: replacing
+a child reference changes that identity. Nested retained Mu records still
+need their actual writer relation. General outer progress, convergence,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+
+The full pinned Audit passes 3084 jobs and 67897 dependency checks under
+verified 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 383 MiB peak.
+All four final strict source logs are empty. All canonical targets pass.
+Evidence is in `lean/restart-evidence/20261017-native-callback-history/`.
+Earlier proofs, counterexamples, repairs, drafts, optimized interned code,
+stashes, and other worktrees remain preserved. The whole-library goal is active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` is merged
+and validated. Record every later repair there with its failure, reproducer,
+affected paths, commit, checks, and upstream status.
 
 ## Current normalized source comparison and causal Mu readback
 
