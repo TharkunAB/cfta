@@ -113,3 +113,25 @@ transitions. The probe confirms that those copies need distinct identities or
 retained source provenance before they can become an editable document. Keep
 the original source when applying such transformations to a compiled graph.
 A reversible filter layer is separate work.
+
+## Cost
+
+All eight standard benchmark cells retain their checksums against main
+`c0cc8a05`. All six executables are byte-identical. Instruction differences
+are below 0.11%; allocation differences are below 0.01%.
+
+The existing 10,000-state JSON round-trip probe still produces 1,437,836 bytes.
+Sharing the codec takes 6,137,418,220 instructions and 1,719,601,536 allocated
+bytes: increases of 0.082% and 0.052% over the graph-only implementation.
+
+A separate probe constructs a 10,000-state chain and changes one named fact
+100 times. Each patch checks its starting document and validates the result.
+It takes 8,489,876,796 instructions and 1,513,082,288 allocated bytes, with
+2,143,752 bytes of sampled maximum residency. Its checksum is 100 applied facts.
+These totals include initial construction. No counts, solver results, or query
+indexes are reused. Incremental document validation and persistent row-update
+integration remain follow-ups.
+
+Measurements use GHC 9.14.1 at `-O2` with the workspace dependency settings.
+All local jobs run serially through heavy-management with 12 GiB process caps
+and 4 GiB RTS caps.
