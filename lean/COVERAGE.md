@@ -1,5 +1,69 @@
 # Full formalization coverage
 
+## Current complete initial class pass
+
+Updated: 2026-10-17 11:46 CEST. This checkpoint starts at published 9c614fe4.
+Proof commit is e60bbec0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-initial-class-pass.md for the complete library
+contract, proof map, exact support, and next outer caller obligations.
+Evidence is in lean/restart-evidence/20261017-initial-class-resources/.
+
+Three additive modules construct a complete class, literal right fold,
+and final empty propagation from initial support and one numeric forecast.
+The tail executes before the head captures its actual returned forest.
+Its Frame, Fits, physical and semantic Merge laws, global memos, and caps
+feed the head. Actual transport proves equal forest length. This equality
+justifies the fixed original count in every forecast. Each class clears
+its own local target slots and retains native and equality state.
+The same complete return contains actual graphs and reads, full receipts,
+a matching-inventory Frame, forecast Fits, output caps, equal forest length,
+and an exact common-six-fuel worker result. No supplied future graph,
+successful worker, ClassRanges, ClassPass.Ranges, reached resource bound,
+or callback resource law is an input.
+
+The concrete integrations construct their own initial word widths. They
+edit a genuinely open parent with a nonempty equality guard, outside Cap 0,
+with selected paths [[0,0],[0,1]] and an unselected recursion reference.
+They construct one class and two actual class returns in source order.
+The second class captures the first return before literal final empty
+propagation. Both retain a valid stored equality descent record. A separate
+empty-pass check needs no numeric room and returns the exact input state
+and Merge memo at every fuel tuple.
+
+Selected path domains, all-root caps, initial query Frame, and valid warm
+Merge laws remain explicit. Target inclusion is still one-way for nonempty
+proper paths. Class and pass language laws retain narrowing and preservation
+for terms that satisfy the class constraints. Size-based fuels and depth
+caps remain logical definitions. Haskell lazy demand, memo publication,
+equality-table size, and concrete capacity remain separate obligations.
+
+Next compose this initial pass with the full caller context, its fourth
+memo, probes, actual inventory, Frames, and resources. Then construct
+required-child preparation, refused-class checks, active and stored outer
+descent, and the complete source gate. Arbitrary constrained Mu,
+convergence, current frontend and runtime adapters, and full public Haskell
+correspondence remain open. The complete library goal stays active.
+
+The pinned Audit passes 2948 jobs and 65194 dependency checks. All three
+final production strict logs are empty. Their canonical builds pass.
+All 36 full signature and axiom pairs pass in seven groups: 30 public
+and six constructed declarations. Four component manifests verify 98 entries.
+Only propext, Classical.choice, and Quot.sound occur. Read
+checkpoint-validation.json for hashes and exact successful logs. Preservation retains
+14690 starting files, 2944 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, both stashes, and three other worktrees.
+All 90 frozen module manifests retain 705 entries. All older baseline
+bytes remain preserved, including the prior editor's documented early-log
+gap. New checks execute immutable source snapshots under unique prefixes.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
 ## Current complete initial mixed editor
 
 Updated: 2026-10-17 11:33 CEST. This checkpoint starts at published 0c76ba40.
