@@ -2307,6 +2307,11 @@ import MicroCFTA.SourceCurrentConstrainedCapProjectionGuard
 import MicroCFTA.SourceCurrentConstrainedCapSelectedProjection
 import MicroCFTA.SourceCurrentConstrainedCapMixedTarget
 import MicroCFTA.SourceCurrentConstrainedCapMixedShared
+import MicroCFTA.SourceCurrentConstrainedCapMixedEditStoreEffects
+import MicroCFTA.SourceCurrentConstrainedCapMixedEdit
+import MicroCFTA.SourceCurrentConstrainedCapMixedClass
+import MicroCFTA.SourceCurrentConstrainedCapMixedClassPass
+import MicroCFTA.SourceCurrentConstrainedCapStaticQueries
 /-!
 # Proof dependency audit
 
