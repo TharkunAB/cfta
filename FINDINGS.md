@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `8a132c64`.
+Status rechecked on 2026-10-17 at proof checkpoint `a52aeb5f`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-initial-operand-fuel.md` for the current proof boundaries.
+Read `lean/notes-current-target-forecast.md` for the current proof boundaries.
 
-The current initial selected Operand budget proofs add no Haskell change.
+The current initial Target prerequisite proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2929 jobs and 64924 dependency checks.
+The last completed pinned Lean Audit passes: 2934 jobs and 64980 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -174,6 +174,49 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current initial Target prerequisites
+
+Updated: 2026-10-17 10:28 CEST. This checkpoint starts at published f7494679.
+Proof commit is a52aeb5f. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-target-forecast.md for the complete top-level
+contract, established components, and missing work. Evidence is in
+lean/restart-evidence/20261017-initial-target-forecast/.
+
+Three additive modules prove exact full allocated Merge numeric replay,
+a pure source-order Target profile and fuel schedule, and complete Target
+receipt composition from actual components. The forecast follows head
+Operand, recursive tail, then checked query order. All five worker fuels
+have one computed ceiling. Actual receipt composition retains complete
+states, inventories, Merge tables, global memos, and language inclusion.
+The complete initial multi-path Target execution theorem remains open.
+A schedule and composition of actual receipts do not establish that theorem.
+
+Next construct the actual Target from its initial Frame, forest, paths,
+resources, caps, memo laws, and numeric reservations. Derive each reached
+Profile and full allocated worker observation. Do not assume a future
+completed call, returned bound, successful fuel, or callback range law.
+General Force, Edit/ClassPass, outer descent, arbitrary constrained Mu,
+convergence, current adapters, capacity, and full public Haskell
+correspondence remain open. The complete library goal stays active.
+
+The pinned Lean Audit passes 2934 jobs and 64980 dependency checks.
+All three final production strict logs are empty. All 64 complete signature
+and axiom pairs pass in six groups: 55 public declarations and nine
+constructed checks. Only propext, Classical.choice, and Quot.sound occur.
+Three component manifests verify 69 entries. Preservation retains 14247
+starting files, 2928 older non-Audit proof sources, all 239 Haskell files,
+all 206 active-package files, both stashes, and three other worktrees.
+All 86 frozen module manifests retain 689 entries. Read
+checkpoint-validation.json for exact hashes and successful logs.
+
+No Haskell patch or new behavior defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record each later Haskell repair in
+FINDINGS with its failure, executable reproducer, affected paths, commit,
+checks, and upstream status. Preserve all earlier proofs, counterexamples,
+repairs, drafts, stashes, worktrees, and the optimized interned core.
 
 ## Current initial complete selected Operand budgets
 
