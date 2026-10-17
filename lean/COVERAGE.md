@@ -1,5 +1,56 @@
 # Full formalization coverage
 
+## Current finite result-fed query resources
+
+Updated: 2026-10-17 08:18 CEST. This checkpoint starts at published `c7949534`.
+Proof commits are `84e353ad` and `61c48e57`. Source main remains `c0cc8a05`,
+merged locally at `896b0a1c`. Read
+`lean/notes-current-generated-query-resources.md` for the full target,
+proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-generated-query-resources/`.
+
+Four additive modules construct supported finite indexed native-query
+programs from one initial numeric forecast. Each query appends its exact
+result for later selection. Initial index checks and computed entry
+reservations derive every later admission. The same joint physical trace
+retains exact language, full readiness, inventory admission, captured native
+origins, populated native/equality state, global-table validity, and resource
+bounds. No future trace, WordRanges, later counter, or output law is supplied.
+
+The pinned Audit passes 2894 jobs and 64310 dependency checks. All four
+production strict logs are empty. All 46 imported full signature and axiom
+pairs pass: 39 public checks and seven integrations in seven groups. Only
+propext, Classical.choice, and Quot.sound occur. Four proof component
+manifests verify 118 entries. The next-target survey adds 24 entries.
+Aggregate validation checks five manifests with 142 entries.
+Preservation retains 13268 starting files, 2889 older non-Audit proofs,
+all 239 Haskell files, all 206 active-package files, and 79 frozen manifests
+with 651 entries. Stashes and three other worktrees retain their initial state.
+
+The concrete two-query integration creates singleton node 3 outside the
+original source and every original input model. The second call consumes
+that exact result at the first call's complete returned state. Final native
+node/edge cells and a valid nonempty equality descent record remain present.
+A separate three-query integration proves the composed exact language law.
+
+Next derive initial resource bounds and Frame retention through actual
+selected Operand projection and general Merge, including selection and
+warm winners. Compose Target in its head, tail, then query order. The new
+contiguous query program does not discharge FoldRanges across Operand work.
+General Target/Force/Edit/ClassPass, outer active/stored descent, arbitrary
+constrained Mu, convergence, remaining callers, current adapters, concrete
+capacity, and full public Haskell correspondence remain open. Source gates
+and all-root cap assumptions need separate coverage. Logical mass is not
+bytes. The full library goal stays active. Read next-initial-operand-resources.md
+and next-constrained-survey.md in the evidence directory.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS keeps all
+repair status first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Record later fixes here for external work. Preserve all
+earlier proofs, counterexamples, repairs, marked drafts, and the optimized
+interned core, including older constructor and equality work.
+
 ## Current computed native query budgets
 
 Updated: 2026-10-17 07:58 CEST. This checkpoint starts at published `50c8132a`.

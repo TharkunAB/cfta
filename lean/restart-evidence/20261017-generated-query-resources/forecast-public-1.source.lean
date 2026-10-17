@@ -1,0 +1,81 @@
+import MicroCFTA.SourceCurrentAllocatedNativeResourceForecast
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.refl
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.refl
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.trans
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.trans
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_ge
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_ge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_zero
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_zero
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_succ
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_succ
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_add
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_add
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_ge
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_ge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_count_mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_count_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_zero
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_zero
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_succ_iff
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_succ_iff
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.head
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.head
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.tail
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.tail
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.prefix
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.prefix
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_iff_last
+#check @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_iff_last

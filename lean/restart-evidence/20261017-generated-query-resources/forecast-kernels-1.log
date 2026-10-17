@@ -1,0 +1,72 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-generated-query-resources/forecast-kernels.lean:21:53: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c + d + e ≤ -1
+  b ≥ 0
+  a - b - c - d - e ≥ 1
+where
+ a := @HPow.hPow.{0, 0, 0} Int Nat Int (@instHPow.{0, 0} Int Nat (@instPowNat.{0} Int Int.instNatPow))
+  (@Nat.cast.{0} Int instNatCastInt (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) bits
+ b := @Nat.cast.{0} Int instNatCastInt last.nodes
+ c := @Nat.cast.{0} Int instNatCastInt last.edges
+ d := @Nat.cast.{0} Int instNatCastInt last.domains
+ e := @HPow.hPow.{0, 0, 0} Int Nat Int (@instHPow.{0, 0} Int Nat (@instPowNat.{0} Int Int.instNatPow))
+  (@Nat.cast.{0} Int instNatCastInt (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) last.nodes
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) last.nodes last.nodes))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-generated-query-resources/forecast-kernels.lean:22:53: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c + d + e ≥ 0
+  b ≥ 0
+  b + d + e ≤ -1
+  a - b - c - d - e ≥ 1
+where
+ a := @HPow.hPow.{0, 0, 0} Int Nat Int (@instHPow.{0, 0} Int Nat (@instPowNat.{0} Int Int.instNatPow))
+  (@Nat.cast.{0} Int instNatCastInt (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) bits
+ b := @Nat.cast.{0} Int instNatCastInt last.nodes
+ c := @Nat.cast.{0} Int instNatCastInt last.edges
+ d := @Nat.cast.{0} Int instNatCastInt last.domains
+ e := @HPow.hPow.{0, 0, 0} Int Nat Int (@instHPow.{0, 0} Int Nat (@instPowNat.{0} Int Int.instNatPow))
+  (@Nat.cast.{0} Int instNatCastInt (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) last.nodes
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) last.nodes last.nodes))
+'ForecastIntegration.finite_layout' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+ForecastIntegration.finite_layout : ∀ (original : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (count : Nat),
+  @Exists.{1} Nat fun bits =>
+    And
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits original
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits original)
+'ForecastIntegration.three_queries' depends on axioms: [propext, Quot.sound.{u}]
+ForecastIntegration.three_queries : ∀ (bits : Nat)
+  (original firstResult secondResult : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance original
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le firstResult
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step original) →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le secondResult
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step firstResult) →
+        And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits original)
+          (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits firstResult)
+            (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits secondResult)
+              (And
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits secondResult
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step secondResult)
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance original
+                    (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))))))
+'ForecastIntegration.split_sequence' depends on axioms: [propext, Quot.sound.{u}]
+ForecastIntegration.split_sequence : ∀ (bits : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (first last : Nat),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits original
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last) →
+    And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits original first)
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance original first) last)

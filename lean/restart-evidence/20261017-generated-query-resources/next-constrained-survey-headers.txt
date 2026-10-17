@@ -1,0 +1,1137 @@
+Exact selected source headers and graph constructors.
+Theorems stop before their proof. Source hashes are recorded in the survey manifest.
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQueryResources.lean:33-41
+structure Fits (profile : Profile) (state : Checked width) : Prop where
+  /-- The current node supply fits the forecast. -/
+  nodes : state.native.machine.heap.nodes.next ≤ profile.nodes
+  /-- The current edge supply fits the forecast. -/
+  edges : state.native.machine.heap.edges.next ≤ profile.edges
+  /-- The current domain supply fits the forecast. -/
+  domains : state.native.machine.domains.next ≤ profile.domains
+  /-- Every successful stored payload fits the causal mass bound. -/
+  stored : Stored profile.mass state.native.machine.heap
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQueryResources.lean:62-73
+structure Frame (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+  /-- The same state retains all physical query invariants. -/
+  ready : Ready state
+  /-- Populated native cells retain current inventory admission. -/
+  admitted : At formulas solver inventory state
+  /-- The current heap retains its semantic and guard observations. -/
+  context : Context Plain inventory.source state.native.machine
+  /-- Completed native cells retain both joint laws. -/
+  joint : SourceCurrentConstrainedCapCheckedJointCache.Stored Plain inventory.source state.native
+  /-- Every allocated native cell retains its captured source witnesses. -/
+  origins : SourceCurrentConstrainedCapCheckedJointOrigins.Stored inventory.source state.native
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQueryResources.lean:92-111
+structure Receipt (profile : Profile) (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (fuel : Nat) (left right : Value Symbol Guard) (before : Checked width)
+    (value : Value Symbol Guard) (after : Checked width) (memos : Memos) : Prop where
+  /-- The actual query retains its joint laws and captured origins. -/
+  joint : SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt inventory depth formulas solver fuel left right before value after
+  /-- The same trace retains exact language, readiness, and global tables. -/
+  query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver inventory left right before value after memos
+  /-- The literal returned state admits the next generated query. -/
+  frame : Frame formulas solver inventory after
+  /-- The initial forecast bounds all yielded instructions. -/
+  count : fuel ≤ instructionBound profile.nodes profile.edges profile.mass
+  /-- The computed fuel executes to the same result and checked state. -/
+  done : execute (instructionBound profile.nodes profile.edges profile.mass + 1)
+    (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before = .done value after
+  /-- The same returned state fits the next numeric forecast. -/
+  fits : Fits (SourceCurrentAllocatedNativeResourceForecast.step profile) after
+  /-- The returned payload fits the forecast mass schedule. -/
+  mass : InternedValueMass.value value ≤
+    massAfter (instructionBound profile.nodes profile.edges profile.mass) profile.mass
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQueryResources.lean:114-124
+theorem complete (profile : Profile) (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Checked (bits + 2)) (frame : Frame formulas solver inventory before)
+    (fits : Fits profile before) (room : Room bits profile)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftCap : SourceCurrentConstrainedCap.Cap Plain depth left)
+    (rightCap : SourceCurrentConstrainedCap.Cap Plain depth right)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next fuel value after, Receipt profile depth formulas solver next fuel left right before value after memos
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQuerySequence.lean:28-30
+def Supported : Nat → List (Nat × Nat) → Prop
+  | _, [] => True
+  | count, pair :: rest => pair.1 < count ∧ pair.2 < count ∧ Supported (count + 1) rest
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQuerySequence.lean:33-41
+structure Pool (depth : Nat) (values : List (Value Symbol Guard)) (state : Checked width) : Prop where
+  /-- Each pool value remains available in the current physical heap. -/
+  available : Values state.native.machine.heap values
+  /-- Each pool value has no free recursion reference. -/
+  closed : ∀ value ∈ values, value.free = []
+  /-- Every pool value has the same admissible guard-depth bound. -/
+  cap : ∀ value ∈ values, SourceCurrentConstrainedCap.Cap Plain depth value
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQuerySequence.lean:72-84
+inductive Run (depth : Nat) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (memos : Memos) :
+    Profile → List (Nat × Nat) → List (Value Symbol Guard) → Checked (bits + 2) →
+      List (Value Symbol Guard) → Checked (bits + 2) → Prop where
+  /-- An empty query sequence retains the entire checked state. -/
+  | nil : Run depth formulas solver memos profile [] pool before [] before
+  /-- Both current operands and the next pool use the actual earlier values. -/
+  | cons {inventory : Inventory} {fuel : Nat}
+      (leftFound : pool[first]? = some left) (rightFound : pool[second]? = some right)
+      (receipt : Receipt profile depth formulas solver inventory fuel left right before value middle memos)
+      (tail : Run depth formulas solver memos (SourceCurrentAllocatedNativeResourceForecast.step profile)
+        rest (pool ++ [value]) middle results after) :
+      Run depth formulas solver memos profile ((first, second) :: rest) pool before (value :: results) after
+
+lean/MicroCFTA/SourceCurrentConstrainedCapGeneratedQuerySequence.lean:97-108
+theorem complete_many (profile : Profile) (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (requests : List (Nat × Nat)) (pool : List (Value Symbol Guard))
+    (supported : Supported pool.length requests) (reserved : Reserved bits profile requests.length)
+    (inventory : Inventory) (before : Checked (bits + 2)) (frame : Frame formulas solver inventory before)
+    (fits : Fits profile before) (known : Pool depth pool before)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ results after next,
+      Run depth formulas solver memos profile requests pool before results after ∧
+      Frame formulas solver next after ∧ Fits (advance profile requests.length) after ∧
+      Extension before.native.machine after.native.machine ∧ Pool depth (pool ++ results) after ∧
+      Valid after.native.machine.heap memos ∧ results.length = requests.length
+
+lean/MicroCFTA/SourceCurrentAllocatedNativeResourceForecast.lean:18-26
+structure Profile where
+  /-- Upper bound on the issued node counter. -/
+  nodes : Nat
+  /-- Upper bound on the issued edge counter. -/
+  edges : Nat
+  /-- Upper bound on the domain counter. -/
+  domains : Nat
+  /-- Upper bound on every stored payload mass. -/
+  mass : Nat
+
+lean/MicroCFTA/SourceCurrentAllocatedNativeResourceForecast.lean:44-48
+def step (profile : Profile) : Profile :=
+  let instructions := instructionBound profile.nodes profile.edges profile.mass
+  let constructors := credit instructions profile.mass
+  ⟨profile.nodes + constructors, profile.edges + constructors,
+    profile.domains + instructions, massAfter instructions profile.mass⟩
+
+lean/MicroCFTA/SourceCurrentAllocatedNativeResourceForecast.lean:105-107
+def Room (bits : Nat) (profile : Profile) : Prop :=
+  profile.nodes < 2 ^ bits ∧ profile.edges ≤ 2 ^ (bits + 2) ∧
+    profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) < 2 ^ (bits + 1)
+
+lean/MicroCFTA/SourceCurrentAllocatedNativeResourceForecast.lean:118-119
+def Reserved (bits : Nat) (profile : Profile) (count : Nat) : Prop :=
+  ∀ index, index < count → Room bits (advance profile index)
+
+lean/MicroCFTA/SourceCurrentConstrainedCapCurrentNative.lean:28-30
+def At (annotation : Guard → Prop) (state : Checked width) : Prop :=
+  Context annotation state.native.machine.heap state.native.machine ∧
+    Joint annotation state.native.machine.heap state.native ∧ Origins state.native.machine.heap state.native
+
+lean/MicroCFTA/SourceCurrentConstrainedCapCurrentNative.lean:42-48
+theorem advance (annotation : Guard → Prop) (before after : Checked width)
+    (current : At annotation before) (good : Good after)
+    (semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap after.native.machine.heap)
+    (guards : SourceCurrentConstrainedCapGuardHeap.Heap annotation after.native.machine.heap)
+    (extension : Extension before.native.machine after.native.machine)
+    (nodes : after.native.nodes = before.native.nodes) (edges : after.native.edges = before.native.edges) :
+    At annotation after
+
+lean/MicroCFTA/SourceCurrentConstrainedCapCurrentNative.lean:57-68
+theorem step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {left right result : Value Symbol Guard} {before after : Checked width}
+    (actual : SourceCurrentAllocatedTargetQuery.Step left right before result after)
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap) (current : At Plain before)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftCap : SourceCurrentConstrainedCap.Cap Plain depth left)
+    (rightCap : SourceCurrentConstrainedCap.Cap Plain depth right) :
+    At Plain after ∧ SourceCurrentConstrainedCap.Cap Plain depth result ∧ result.free = [] ∧
+      Original result ∧ SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree result
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:38-38
+def operandDepth (depth : Nat) (path : List Int) : Nat := depth - (path.length - 1)
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:41-43
+def foldDepth (depth : Nat) (seed : List Int) : List (List Int) → Nat
+  | [] => operandDepth depth seed
+  | path :: paths => max (operandDepth depth path) (foldDepth depth seed paths)
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:46-57
+def targetDepth (depth : Nat) : List (List Int) → Nat
+  | [] => 0
+  | seed :: paths => foldDepth depth seed paths
+
+private theorem tail_all {A : Type} {seed first : A} {rest : List A} {property : A → Prop}
+    (all : ∀ value ∈ seed :: first :: rest, property value) : ∀ value ∈ seed :: rest, property value := by
+  intro value member
+  rcases List.mem_cons.mp member with rfl | member
+  · exact all _ List.mem_cons_self
+  · exact all value (List.mem_cons_of_mem _ (List.mem_cons_of_mem _ member))
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:89-103
+theorem operand_complete (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (path : List Int) (values : List (Value Symbol Guard))
+    (before : Checked width) (memo : Memo) (ready : Ready before)
+    (admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before)
+    (available : Values before.native.machine.heap values) (domain : Domain path values)
+    (physicalStored : PhysicalStored before.native.machine.heap memo)
+    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (memos : Memos) (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+    (merged : MergeStored memo) (current : Current before) (bounded : ∀ value ∈ values, Cap Plain depth value) :
+    ∃ result after saved final,
+      Operand path values before memo result after saved ∧
+      SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+        before memo result after saved memos final ∧
+      MergeStored saved ∧ Current after ∧ Cap Plain (operandDepth depth path) result
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:110-120
+theorem fold (depth : Nat)
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {values : List (Value Symbol Guard)} {seed : List Int} {paths : List (List Int)}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : Fold values seed paths before memo result after saved} (reads : FoldReads formulas solver actual memos final) :
+    Ready before → Values before.native.machine.heap values → PhysicalStored before.native.machine.heap memo →
+      MergeStored memo → Current before → (∀ value ∈ values, Cap Plain depth value) →
+      (∀ path ∈ seed :: paths, Domain path values) →
+      Ready after ∧ Effects (physical before) (physical after) ∧ PhysicalStored after.native.machine.heap saved ∧
+      MergeStored saved ∧ Current after ∧ Available after.native.machine.heap result ∧ result.free = [] ∧
+      Cap Plain (foldDepth depth seed paths) result
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:138-147
+theorem target_reads (depth : Nat)
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {values : List (Value Symbol Guard)} {paths : List (List Int)}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : Target values paths before memo result after saved} (reads : TargetReads formulas solver actual memos final)
+    (ready : Ready before) (available : Values before.native.machine.heap values)
+    (physicalStored : PhysicalStored before.native.machine.heap memo) (merged : MergeStored memo)
+    (current : Current before) (bounded : ∀ value ∈ values, Cap Plain depth value)
+    (domains : ∀ path ∈ paths, Domain path values) :
+    MergeStored saved ∧ Current after ∧ Cap Plain (targetDepth depth paths) result
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedShared.lean:32-36
+def Certificate (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (path : EqualityNormalize.Path) (value : Value Symbol Guard) : Prop :=
+  ∀ depth, (∀ original ∈ values, Cap Plain depth original) →
+    (∀ operand ∈ operands record.paths path, Domain operand values) →
+    Cap Plain (targetDepth depth (operands record.paths path)) value
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedShared.lean:39-46
+structure Stored (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (state : State width) : Prop where
+  /-- The literal current heap interprets both native tables and their captured origins. -/
+  current : Current state.checked
+  /-- Each Merge result retains every depth of its complete captured original. -/
+  merge : MergeStored state.memo
+  /-- Every present slot retains the law of its immutable captured class forest. -/
+  slots : ∀ path value, state.targets path = some value → Certificate record values path value
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedShared.lean:86-92
+theorem force_receipt {receiptBase : InternedConstructorTemplates.State Symbol Guard}
+    (receipt : SourceCurrentAllocatedSharedTargetForce.Receipt formulas solver next record values receiptBase path
+      before value after memos final)
+    (ready : Ready formulas solver inventory record values base before) (known : Values base values)
+    (stored : Stored record values before) (depth : Nat) (bounded : ∀ original ∈ values, Cap Plain depth original)
+    (domains : ∀ operand ∈ operands record.paths path, Domain operand values) :
+    Stored record values after ∧ Cap Plain (targetDepth depth (operands record.paths path)) value
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedShared.lean:107-116
+theorem leaf_receipt
+    (receipt : SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record values base path input
+      before result after memos final)
+    (ready : Ready formulas solver inventory record values base before) (known : Values base values)
+    (stored : Stored record values before) (capturedDepth : Nat)
+    (bounded : ∀ original ∈ values, Cap Plain capturedDepth original)
+    (domains : ∀ operand ∈ operands record.paths path, Domain operand values)
+    (available : Available before.checked.native.machine.heap input) (closed : input.free = [])
+    (inputDepth : Nat) (inputCap : Cap Plain inputDepth input) :
+    Stored record values after ∧ Cap Plain (leafDepth record path capturedDepth inputDepth) result
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:32-33
+noncomputable def outputDepth (capturedDepth inputDepth : Nat) (edits : Edits EqualityNormalize.Path) : Nat :=
+  inputDepth + capturedDepth + sizeOf edits
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:309-310
+theorem node {record originals edits value before result after memos final}
+    {actual : EditNode (width
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:325-326
+theorem children {record originals entries offset values before results after memos final}
+    {actual : EditChildren (width
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:341-342
+theorem rows {record originals entries edges before results after memos final}
+    {actual : EditRows (width
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:357-358
+theorem list {record originals edits values before results after memos final}
+    {actual : EditList (width
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedClass.lean:34-37
+noncomputable def classDepth (record : SourceEqualityClassOrder.Record) (depth : Nat) : Nat :=
+  SourceCurrentConstrainedCapMixedEdit.outputDepth depth depth (compiled record)
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedClass.lean:40-56
+theorem verified
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record)
+    (coherent : SourceEqualityClassOrder.Coherent record) (active : EqualityNormalize.Nontrivial record.paths)
+    {values results : List (Value Symbol Guard)} {before after : Checked width} {memo saved : Memo}
+    {memos final : Memos} {actual : Class record values before memo results after saved}
+    (reads : ClassReads formulas solver actual memos final)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (physical : PhysicalStored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+    (current : Current before) (merged : MergeStored memo) (depth : Nat)
+    (bounded : ∀ value ∈ values, Cap Plain depth value) :
+    ∃ next, Receipt formulas solver next record values before memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧ ∀ value ∈ results, Cap Plain (classDepth record depth) value
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedClassPass.lean:34-36
+noncomputable def foldDepth : List SourceEqualityClassOrder.Record → Nat → Nat
+  | [], depth => depth
+  | record :: records, depth => classDepth record (foldDepth records depth)
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedClassPass.lean:87-102
+theorem fold (inventory : Inventory) (depth : Nat)
+    {records values results} {before after : Checked width} {memo saved : Memo} {memos final : Memos}
+    {actual : Fold records values before memo results after saved}
+    (reads : FoldReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (physical : PhysicalStored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+    (current : Current before) (merged : MergeStored memo)
+    (bounded : ∀ value ∈ values, Cap Plain depth value) :
+    ∃ next, Receipt formulas solver next records values before memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧ ∀ value ∈ results, Cap Plain (foldDepth records depth) value
+
+lean/MicroCFTA/SourceCurrentConstrainedCapMixedClassPass.lean:110-125
+theorem pass (inventory : Inventory) (depth : Nat)
+    {records values results} {before after : Checked width} {memo saved : Memo} {memos final : Memos}
+    {actual : Pass records values before memo results after saved}
+    (reads : PassReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (physical : PhysicalStored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+    (current : Current before) (merged : MergeStored memo)
+    (bounded : ∀ value ∈ values, Cap Plain depth value) :
+    ∃ next, Receipt formulas solver next records values before memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧ ∀ value ∈ results, Cap Plain (foldDepth records depth) value
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetGraph.lean:36-42
+inductive Operand [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (path : List Int) (values : List (Value Symbol Guard)) :
+    Checked width → Memo → Value Symbol Guard → Checked width → Memo → Prop where
+  | force (projection : SourceEqualityProjectionGraph.Forest path values before.native.machine.heap projected heap)
+      (merged : SourceCurrentAllocatedMerge.Merge SourceCurrentAllocatedMerge.literalClear projected
+        (advancePhysical before ⟨heap, before.operations⟩) memo result after saved) :
+      Operand path values before memo result after saved
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetGraph.lean:111-119
+inductive Fold [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) (seed : List Int) :
+    List (List Int) → Checked width → Memo → Value Symbol Guard → Checked width → Memo → Prop where
+  | nil (operand : Operand seed values before memo result after saved) :
+      Fold values seed [] before memo result after saved
+  | cons (operand : Operand path values before memo head middle current)
+      (rest : Fold values seed paths middle current tail later saved)
+      (checked : Step head tail later result after) :
+      Fold values seed (path :: paths) before memo result after saved
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetGraph.lean:122-127
+inductive Target [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) :
+    List (List Int) → Checked width → Memo → Value Symbol Guard → Checked width → Memo → Prop where
+  | nil : Target values [] before memo .empty before memo
+  | nonempty (fold : Fold values seed paths before memo result after saved) :
+      Target values (seed :: paths) before memo result after saved
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetGraph.lean:130-139
+def FoldRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) (seed : List Int) :
+    List (List Int) → Checked width → Memo → Prop
+  | [], _, _ => True
+  | path :: paths, before, memo =>
+      (∀ head middle current, Operand path values before memo head middle current →
+        FoldRanges values seed paths middle current) ∧
+      (∀ head middle current tail later saved,
+        Operand path values before memo head middle current → Fold values seed paths middle current tail later saved →
+        WordRanges (.code (requestNode emptyDomain head tail)) later)
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetGraph.lean:142-146
+def TargetRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) (paths : List (List Int)) (before : Checked width) (memo : Memo) : Prop :=
+  match paths with
+  | [] => True
+  | seed :: paths => FoldRanges values seed paths before memo
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:41-57
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (values : List (Value Symbol Guard)) (paths : List (List Int))
+    (before : Checked width) (memo : Memo) (result : Value Symbol Guard) (after : Checked width)
+    (saved : Memo) (memos final : Memos) : Prop where
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  stored : Stored after.native.machine.heap saved
+  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved
+  available : Available after.native.machine.heap result
+  closed : result.free = []
+  originals : Values after.native.machine.heap values
+  retained : Extends memo saved
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap after.native.machine.heap memos final
+  included : paths ≠ [] → (∀ path ∈ paths, path ≠ []) → Includes formulas solver values paths result
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:60-75
+inductive FoldReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {values : List (Value Symbol Guard)} → {seed : List Int} → {paths : List (List Int)} →
+    {before after : Checked width} → {memo saved : Memo} → {result : Value Symbol Guard} →
+    Fold values seed paths before memo result after saved → Memos → Memos → Prop where
+  | nil {operand : Operand seed values before memo result after saved}
+      (receipt : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory seed values
+        before memo result after saved memos final) : FoldReads formulas solver (.nil operand) memos final
+  | cons {operand : Operand path values before memo value middle current}
+      {rest : Fold values seed paths middle current tail later saved}
+      {step : SourceCurrentAllocatedTargetQuery.Step value tail later result after}
+      (receipt : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+        before memo value middle current memos nextMemos)
+      (remaining : FoldReads formulas solver rest nextMemos lastMemos)
+      (query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory value tail later result after lastMemos) :
+      FoldReads formulas solver (.cons operand rest step) memos lastMemos
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:78-139
+inductive TargetReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {values : List (Value Symbol Guard)} → {paths : List (List Int)} → {before after : Checked width} →
+    {memo saved : Memo} → {result : Value Symbol Guard} →
+    Target values paths before memo result after saved → Memos → Memos → Prop where
+  | nil : TargetReads formulas solver (.nil (values := values) (before := state) (memo := memo)) memos memos
+  | cons {actual : Fold values seed paths before memo result after saved}
+      (reads : FoldReads formulas solver actual memos final) :
+      TargetReads formulas solver (.nonempty actual) memos final
+
+private theorem tail_all {A : Type} {seed first : A} {rest : List A} {property : A → Prop}
+    (all : ∀ value ∈ seed :: first :: rest, property value) : ∀ value ∈ seed :: rest, property value := by
+  intro value member
+  rcases List.mem_cons.mp member with rfl | member
+  · exact all _ List.mem_cons_self
+  · exact all value (by simp only [List.mem_cons]; exact Or.inr (Or.inr member))
+
+private theorem operand_receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {values : List (Value Symbol Guard)} {path : List Int}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    (own : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+      before memo result after saved memos final) :
+    Receipt formulas solver inventory values [path] before memo result after saved memos final := by
+  have exactExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine :=
+    ⟨own.effects.keeps.growth, own.effects.keeps.history, by
+      simpa only [own.domains] using Cache.extends_refl before.native.machine.domains.table⟩
+  refine ⟨own.ready, own.admitted, own.effects, exactExtension, own.stored, own.covered,
+    own.available, own.closed, own.originals, own.retained,
+    ⟨own.effects.keeps, own.effects.ready.semantic, own.effects.ready.costs, own.globals, own.unfolding, own.query⟩, ?_⟩
+  intro _ proper ambient symbol terms part accepted selected
+  exact own.included (proper path List.mem_cons_self) ambient symbol terms part accepted (selected path List.mem_cons_self)
+
+private theorem cons_receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory nextInventory finalInventory : Inventory} {values : List (Value Symbol Guard)}
+    {seed path : List Int} {paths : List (List Int)} {before middle later after : Checked width}
+    {memo current saved : Memo} {head tail result : Value Symbol Guard} {memos nextMemos lastMemos : Memos}
+    (first : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+      before memo head middle current memos nextMemos)
+    (rest : Receipt formulas solver nextInventory values (seed :: paths) middle current tail later saved nextMemos lastMemos)
+    (query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver finalInventory head tail later result after lastMemos) :
+    Receipt formulas solver finalInventory values (seed :: path :: paths) before memo result after saved memos lastMemos := by
+  have effects := first.effects.trans (rest.effects.trans query.effects)
+  have firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine :=
+    ⟨first.effects.keeps.growth, first.effects.keeps.history, by simpa only [first.domains] using Cache.extends_refl before.native.machine.domains.table⟩
+  have queryGlobal : SourceCurrentSubsumesQueryMemos.Effect later.native.machine.heap after.native.machine.heap lastMemos lastMemos :=
+    ⟨query.effects.keeps, query.ready.semantic, query.ready.costs, query.globals, extends_refl _, rfl⟩
+  have firstGlobal : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos nextMemos :=
+    ⟨first.effects.keeps, first.effects.ready.semantic, first.effects.ready.costs,
+      first.globals, first.unfolding, first.query⟩
+  refine ⟨query.ready, query.admitted, effects,
+    firstExtension.trans (rest.extension.trans query.extension), rest.stored.grows query.effects.keeps,
+    rest.covered, query.available, query.closed, ?_, extends_trans first.retained rest.retained,
+    SourceCurrentMemoMergeQueryMemos.effect_trans firstGlobal
+      (SourceCurrentMemoMergeQueryMemos.effect_trans rest.globals queryGlobal), ?_⟩
+  · intro value member
+    exact query.effects.keeps.available value (rest.originals value member)
+  · intro _ proper ambient symbol terms part accepted selected
+    exact (query.meaning ambient part).mpr
+      ⟨first.included (proper path (by simp)) ambient symbol terms part accepted (selected path (by simp)),
+        rest.included (by simp) (tail_all proper) ambient symbol terms part accepted (tail_all selected)⟩
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:172-182
+theorem fold_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (values : List (Value Symbol Guard)) (seed : List Int) (paths : List (List Int))
+    (before : Checked width) (memo : Memo) (ready : Ready before)
+    (admitted : At formulas solver inventory before) (available : Values before.native.machine.heap values)
+    (domains : ∀ path ∈ seed :: paths, Domain path values) (stored : Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (ranges : FoldRanges values seed paths before memo) (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ result after saved next final, ∃ actual : Fold values seed paths before memo result after saved,
+      FoldReads formulas solver actual memos final ∧
+      Receipt formulas solver next values (seed :: paths) before memo result after saved memos final
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:203-213
+theorem target_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (values : List (Value Symbol Guard)) (paths : List (List Int))
+    (before : Checked width) (memo : Memo) (ready : Ready before)
+    (admitted : At formulas solver inventory before) (available : Values before.native.machine.heap values)
+    (domains : ∀ path ∈ paths, Domain path values) (stored : Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (ranges : TargetRanges values paths before memo) (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ result after saved next final, ∃ actual : Target values paths before memo result after saved,
+      TargetReads formulas solver actual memos final ∧
+      Receipt formulas solver next values paths before memo result after saved memos final
+
+lean/MicroCFTA/SourceCurrentAllocatedSharedTargetForce.lean:40-47
+inductive Force [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard)) (path : EqualityNormalize.Path) :
+    State width → Value Symbol Guard → State width → Prop where
+  | hit (present : before.targets path = some value) : Force record values path before value before
+  | miss (absent : before.targets path = none)
+      (actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path)
+        before.checked before.memo value checked saved) :
+      Force record values path before value (store before path value checked saved)
+
+lean/MicroCFTA/SourceCurrentAllocatedSharedTargetForce.lean:50-67
+inductive Reads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {record : SourceEqualityClassOrder.Record} → {values : List (Value Symbol Guard)} → {path : EqualityNormalize.Path} →
+    {before after : State width} → {value : Value Symbol Guard} →
+    Force record values path before value after → Memos → Memos → Prop where
+  | hit {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+      {before : State width} {value : Value Symbol Guard}
+      (present : before.targets path = some value) (memos : Memos) :
+      Reads formulas solver (record := record) (values := values)
+        (Force.hit (record := record) (values := values) present) memos memos
+  | miss {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+      {before : State width} {value : Value Symbol Guard} {checked : Checked width} {saved : Memo}
+      (absent : before.targets path = none)
+      {actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path)
+        before.checked before.memo value checked saved}
+      (reads : SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos final) :
+      Reads formulas solver (record := record) (values := values)
+        (Force.miss absent actual) memos final
+
+lean/MicroCFTA/SourceCurrentAllocatedSharedTargetForce.lean:70-74
+def ForceRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard)) (path : EqualityNormalize.Path)
+    (before : State width) : Prop :=
+  before.targets path = none → SourceCurrentAllocatedTargetGraph.TargetRanges
+    values (operandPaths record.paths path) before.checked before.memo
+
+lean/MicroCFTA/SourceCurrentAllocatedSharedTargetForce.lean:77-118
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (base : InternedConstructorTemplates.State Symbol Guard) (path : EqualityNormalize.Path)
+    (before : State width) (value : Value Symbol Guard) (after : State width) (memos final : Memos) : Prop where
+  actual : Force record values path before value after
+  reads : Reads formulas solver actual memos final
+  ready : Ready formulas solver inventory record values base after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+  extension : SourceRecursiveIntersectionKernel.Extension before.checked.native.machine after.checked.native.machine
+  available : Available after.checked.native.machine.heap value
+  closed : value.free = []
+  present : after.targets path = some value
+  slots : Retains before after
+  retained : Extends before.memo after.memo
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap after.checked.native.machine.heap memos final
+  included : SourceCurrentAllocatedClassTarget.SelectedIncludes formulas solver record values path value
+
+private theorem miss_receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory next : Inventory} {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : EqualityNormalize.Path}
+    {before : State width} {value : Value Symbol Guard} {checked : Checked width} {saved : Memo} {memos final : Memos}
+    (ready : Ready formulas solver inventory record values base before) (member : path ∈ record.paths)
+    (absent : before.targets path = none)
+    (actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path)
+      before.checked before.memo value checked saved)
+    (reads : SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos final)
+    (receipt : SourceCurrentAllocatedTargetComplete.Receipt formulas solver next values (operandPaths record.paths path)
+      before.checked before.memo value checked saved memos final)
+    (included : SourceCurrentAllocatedClassTarget.SelectedIncludes formulas solver record values path value) :
+    Receipt formulas solver next record values base path before value (store before path value checked saved) memos final := by
+  refine ⟨.miss absent actual, .miss absent reads, ready.store path member actual reads receipt,
+    receipt.effects, receipt.extension, receipt.available, receipt.closed, ?_, ?_, receipt.retained,
+    receipt.globals, included⟩
+  · simp only [store, put, ite_true]
+  · intro other target present
+    by_cases same : other = path
+    · subst other
+      rw [absent] at present
+      cases present
+    · simpa only [store, put, same, ite_false] using present
+
+lean/MicroCFTA/SourceCurrentAllocatedSharedTargetForce.lean:154-164
+theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (base : InternedConstructorTemplates.State Symbol Guard) (before : State width)
+    (ready : Ready formulas solver inventory record values base before) (known : Values base values)
+    (domains : ∀ own ∈ record.paths, SourceEqualityProjectionPathDomain.ForestClosed (own.map Int.ofNat) values)
+    (coherent : SourceEqualityClassOrder.Coherent record) (active : EqualityNormalize.Nontrivial record.paths)
+    (path : EqualityNormalize.Path) (member : path ∈ record.paths) (ranges : ForceRanges record values path before)
+    (memos : Memos) (valid : Valid before.checked.native.machine.heap memos) :
+    ∃ value after next final, Force record values path before value after ∧
+      Receipt formulas solver next record values base path before value after memos final
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:20-22
+structure Entry (Symbol Guard : Type) where
+  original : Value Symbol Guard
+  result : Value Symbol Guard
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:39-44
+inductive Code (Symbol Guard : Type) : Type → Type 1 where
+  | pure (value : Result) : Code Symbol Guard Result
+  | work (job : Work Symbol Guard Result) : Code Symbol Guard Result
+  | select (inputs : List (Value Symbol Guard)) : Code Symbol Guard (List (Value Symbol Guard))
+  | request (input : Value Symbol Guard) : Code Symbol Guard (Value Symbol Guard)
+  | bind (first : Code Symbol Guard First) (next : First → Code Symbol Guard Result) : Code Symbol Guard Result
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:52-56
+def retainedColumn (retained : List (Value Symbol Guard)) : Code Symbol Guard (Value Symbol Guard) :=
+  match retained with
+  | [single] => .pure single
+  | others => if others.any recursiveBoundary then .work (makeUnion others)
+    else .bind (.work (ordinaryUnion others)) Code.request
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:59-61
+def small (edge : EdgeValue Symbol Guard) : Code Symbol Guard (EdgeValue Symbol Guard) :=
+  .bind (map Code.request edge.children) fun children =>
+    .work (makeEdge edge.entry.key.symbol edge.entry.key.constraint children)
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:64-65
+def column (inputs : List (Value Symbol Guard)) : Code Symbol Guard (Value Symbol Guard) :=
+  .bind (.select inputs) retainedColumn
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:68-72
+def large (top : Guard) (first : EdgeValue Symbol Guard) (rest : List (EdgeValue Symbol Guard)) :
+    Code Symbol Guard (EdgeValue Symbol Guard) :=
+  .bind (map column
+    (MergedAlternativesGroups.columns ((first :: rest).map EdgeValue.children) first.children.length))
+    fun children => .work (makeEdge first.entry.key.symbol top children)
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:75-79
+def group (top : Guard) (edges : List (EdgeValue Symbol Guard)) : Code Symbol Guard (List (EdgeValue Symbol Guard)) :=
+  if edges.length ≤ 4 then map small edges
+  else match edges with
+  | [] => .pure []
+  | first :: rest => .bind (large top first rest) fun edge => .pure [edge]
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:86-92
+def body [DecidableEq Symbol] (top : Guard) (input : Value Symbol Guard) : Code Symbol Guard (Value Symbol Guard) :=
+  match input with
+  | .node _ edges _ free => if free = [] then root top (MergedSourceGrouping.groups edges) else .pure input
+  | _ => .pure input
+
+mutual
+  /-- Actual completed instructions retain exact intermediate heaps and result tables. -/
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:93-109
+  inductive Run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (top : Guard) :
+      {Output : Type} → Code Symbol Guard Output → State Symbol Guard → Memo Symbol Guard →
+        Output → State Symbol Guard → Memo Symbol Guard → Prop where
+    | pure (value : Output) (state : State Symbol Guard) (memo : Memo Symbol Guard) :
+        Run clear top (.pure value) state memo value state memo
+    | work (job : Work Symbol Guard Output) (state : State Symbol Guard) (memo : Memo Symbol Guard) :
+        Run clear top (.work job) state memo (run job state).1 (run job state).2 memo
+    | select (fuel : Nat)
+        (done : SourceMergedSelection.select clear fuel inputs before = .done values after) :
+        Run clear top (.select inputs) before memo values after memo
+    | request (actual : Call clear top input before memo output after saved) :
+        Run clear top (.request input) before memo output after saved
+    | bind (first : Run clear top code before memo value middle current)
+        (later : Run clear top (next value) middle current output after saved) :
+        Run clear top (.bind code next) before memo output after saved
+
+  /-- A completed hit skips the body; a miss executes the actual recursive memo-aware body. -/
+
+lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean:110-117
+  inductive Call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (top : Guard) :
+      Value Symbol Guard → State Symbol Guard → Memo Symbol Guard → Value Symbol Guard →
+        State Symbol Guard → Memo Symbol Guard → Prop where
+    | hit (found : memo input.referenceOf = some entry) :
+        Call clear top input before memo entry.result before memo
+    | miss (absent : memo input.referenceOf = none)
+        (actual : Run clear top (body top input) before memo candidate after current) :
+        Call clear top input before memo (winner current input candidate).result after (remember current input candidate)
+
+lean/MicroCFTA/SourceCurrentConstrainedCapSelectedProjection.lean:129-134
+theorem forest (valid : Guard → Prop) (depth : Nat)
+    {path : List Int} {values : List (Value Symbol Guard)} {result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : Forest path values before result after) (semantic : SemanticReady before)
+    (available : Values before values) (domain : ForestClosed path values) (stored : MuStored valid before)
+    (bounded : ∀ value ∈ values, Cap valid depth value) :
+    MuStored valid after ∧ Cap valid (depth - (path.length - 1)) result
+
+lean/MicroCFTA/SourceCurrentConstrainedCapSelectedProjection.lean:153-157
+theorem forest_complete (valid : Guard → Prop) (depth : Nat) (path : List Int) (values : List (Value Symbol Guard))
+    (before : State Symbol Guard) (semantic : SemanticReady before) (available : Values before values)
+    (domain : ForestClosed path values) (stored : MuStored valid before) (bounded : ∀ value ∈ values, Cap valid depth value) :
+    ∃ result after, Forest path values before result after ∧ Keeps before after ∧ SemanticReady after ∧
+      Available after result ∧ result.free = [] ∧ MuStored valid after ∧ Cap valid (depth - (path.length - 1)) result
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:46-51
+inductive NodeCall (budget : Nat) : NodeReq → Caller width → Value Symbol Guard → Caller width → Prop where
+  | hit (started : beginNode request before = (handle, (.ready result, running))) :
+      NodeCall budget request before result running
+  | evaluate (started : beginNode request before = (handle, (.evaluate original, running)))
+      (body : NodeBody budget original running result middle) :
+      NodeCall budget request before result (finishNode handle result middle)
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:54-67
+inductive NodeBody (budget : Nat) : NodeReq → Caller width → Value Symbol Guard → Caller width → Prop where
+  | empty : NodeBody budget ⟨inherited, .empty⟩ before .empty before
+  | union : NodeBody budget ⟨inherited, .union entry members depth free⟩ before (.union entry members depth free) before
+  | binder (actual : SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap = .done result heap) :
+      NodeBody budget ⟨inherited, .mu entry body depth ordinary⟩ before result
+        (advanceCaller before
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+          before.fourth before.merge)
+  | ordinary (rows : Rows budget inherited edges before results middle) :
+      NodeBody budget ⟨inherited, .node entry edges depth free⟩ before
+        (SourceCurrentAllocatedRawRebuild.modify (.node entry edges depth free) edges results middle.checked).1
+        (advanceCaller middle
+          (SourceCurrentAllocatedRawRebuild.modify (.node entry edges depth free) edges results middle.checked).2
+          middle.fourth middle.merge)
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:70-75
+inductive EdgeCall (budget : Nat) : EdgeReq → Caller width → EdgeValue Symbol Guard → Caller width → Prop where
+  | hit (started : beginEdge request before = (handle, (.ready result, running))) :
+      EdgeCall budget request before result running
+  | evaluate (started : beginEdge request before = (handle, (.evaluate original, running)))
+      (body : EdgeBody budget original running result middle) :
+      EdgeCall budget request before result (finishEdge handle result middle)
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:78-83
+inductive EdgeBody (budget : Nat) : EdgeReq → Caller width → EdgeValue Symbol Guard → Caller width → Prop where
+  | parent (field : SourceEqualityMkEdgeAllocation.contradictory edge.entry.key.constraint = false →
+        SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint before.checked.operations.constraints = .ok (some loaded))
+      (actual : SourceCurrentAllocatedParentEdge.Edge budget edge.entry.key.symbol edge.entry.key.constraint loaded inherited
+        edge.children before.checked before.fourth before.merge result checked fourth merge) :
+      EdgeBody budget ⟨inherited, edge⟩ before result (advanceCaller before checked fourth merge)
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:86-92
+inductive Rows (budget : Nat) :
+    EqValue → List (EdgeValue Symbol Guard) → Caller width → List (EdgeValue Symbol Guard) → Caller width → Prop where
+  | nil : Rows budget inherited [] before [] before
+  | cons (edge : EdgeCall budget ⟨inherited, original⟩ before narrowed middle)
+      (children : Descendants budget inherited narrowed middle result afterChildren)
+      (rest : Rows budget inherited originals afterChildren results after) :
+      Rows budget inherited (original :: originals) before (result :: results) after
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:95-101
+inductive Descendants (budget : Nat) :
+    EqValue → EdgeValue Symbol Guard → Caller width → EdgeValue Symbol Guard → Caller width → Prop where
+  | run (combined : (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).1 = .ok (some payload))
+      (children : Children budget payload edge.children (prefixState before edge inherited) results middle) :
+      Descendants budget inherited edge before
+        (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).1
+        (advanceCaller middle (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).2 middle.fourth middle.merge)
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:104-108
+inductive Children (budget : Nat) :
+    EqValue → List (Value Symbol Guard) → Caller width → List (Value Symbol Guard) → Caller width → Prop where
+  | contradiction : Children budget .contradiction values before (EqualityLeafProjectionRuntimeEmpty.erase values) before
+  | live (actual : Walk budget (.live identity records) 0 values before results after) :
+      Children budget (.live identity records) values before results after
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:111-117
+inductive Walk (budget : Nat) :
+    EqValue → Nat → List (Value Symbol Guard) → Caller width → List (Value Symbol Guard) → Caller width → Prop where
+  | nil : Walk budget combined index [] before [] before
+  | cons (head : NodeCall budget ⟨(descend before combined index).1, value⟩
+        (descend before combined index).2 result middle)
+      (rest : Walk budget combined (index + 1) values middle results after) :
+      Walk budget combined index (value :: values) before (result :: results) after
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveOrder.lean:30-30
+def nodeRank (request : NodeRequest) : Nat := 2 * MergedOrdinaryHeight.height request.value + 1
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveOrder.lean:33-33
+def edgeRank (request : EdgeRequest) : Nat := 2 * (MergedOrdinaryHeight.edgeHeight request.value + 1)
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveOrder.lean:81-85
+structure ActiveExcept (bound : Nat) (nodeSkip edgeSkip : Option Nat) (state : Caller width) : Prop where
+  nodes : ∀ handle request, some handle ≠ nodeSkip →
+    state.nodeResults.cells handle = some ⟨request, .evaluating⟩ → bound < nodeRank request
+  edges : ∀ handle request, some handle ≠ edgeSkip →
+    state.edgeResults.cells handle = some ⟨request, .evaluating⟩ → bound < edgeRank request
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveOrder.lean:304-306
+def ReturnedBounds (state : Caller width) : Prop :=
+  ∀ handle owner result, state.edgeResults.cells handle = some ⟨owner, .returned result⟩ →
+    MergedOrdinaryHeight.edgeHeight result ≤ MergedOrdinaryHeight.edgeHeight owner.value
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveOrder.lean:339-343
+theorem returned_child_lt {before : Caller width} (bounds : ReturnedBounds before)
+    {handle : Nat} {owner : EdgeRequest} {result : Edge}
+    (returned : before.edgeResults.cells handle = some ⟨owner, .returned result⟩)
+    (inherited : EqValue) {child : Node} (member : child ∈ result.children) :
+    nodeRank ⟨inherited, child⟩ < edgeRank owner
+
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.lean:35-36
+def Headroom (bits : Nat) (heap : Heap) (nodes edges : Nat) : Prop :=
+  heap.nodes.next + nodes ≤ 2 ^ bits ∧ heap.edges.next + edges ≤ 2 ^ (bits + 2)
+
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.lean:70-80
+def Below (bits : Nat) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (budget rank : Nat) : Prop :=
+  ∀ {inventory : Inventory} {before : Caller (bits + 2)} {memos : Memos} (request : NodeRequest),
+    nodeRank request < rank → Context formulas solver inventory before memos →
+    SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+    Available before.checked.native.machine.heap request.value → DNode request.value →
+    Stored before → ActiveAbove (nodeRank request) before → ∀ rows arity bound (limits : Limits),
+    NodeShape rows arity request.value → SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node limits request.value →
+    MergedOrdinaryHeight.height request.value ≤ bound →
+    Headroom bits before.checked.native.machine.heap (nodeNodes rows arity limits bound) (nodeEdges rows arity limits bound) →
+    NodeResult bits formulas solver budget request before memos
+
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.lean:32-36
+def NodeCertificate (owner : NodeRequest) (result : Node) : Prop :=
+  ∀ rows arity bound (limits : Limits), NodeShape rows arity owner.value →
+    NodeProfile limits owner.value → height owner.value ≤ bound →
+    NodeShape (nodeRows rows arity limits bound) (max arity 1) result ∧
+      NodeProfile (nodeGuards rows arity limits bound) result
+
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.lean:39-43
+def EdgeCertificate (owner : EdgeRequest) (result : Edge) : Prop :=
+  ∀ rows arity bound (limits : Limits), EdgeShape rows arity owner.value →
+    EdgeProfile limits owner.value → edgeHeight owner.value ≤ bound →
+    EdgeShape (parentRows limits rows arity bound) (max arity 1) result ∧
+      EdgeProfile (parentGuards limits) result
+
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.lean:46-50
+structure Stored (state : Caller width) : Prop where
+  nodes : ∀ handle owner result, state.nodeResults.cells handle = some ⟨owner, .returned result⟩ →
+    NodeCertificate owner result
+  edges : ∀ handle owner result, state.edgeResults.cells handle = some ⟨owner, .returned result⟩ →
+    EdgeCertificate owner result
+
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.lean:131-135
+theorem Stored.finishEdge {before : Caller width} (stored : Stored before)
+    {handle : Nat} {owner : EdgeRequest} (result : Edge)
+    (running : before.edgeResults.cells handle = some ⟨owner, .evaluating⟩)
+    (law : EdgeCertificate owner result) :
+    Stored (SourceCurrentAllocatedPartialState.finishEdge handle result before)
+
+lean/MicroCFTA/SourceCurrentAllocatedNativeInventoryRebase.lean:22-45
+def extend (inventory : Inventory) (target : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts target) (growth : Grows inventory.source target)
+    (history : Extends inventory.source.nodes.issued target.nodes.issued)
+    (left right : Value Symbol Guard) (leftAvailable : Available target left) (rightAvailable : Available target right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) : Inventory := by
+  let roots := inventory.roots ++ [left, right]
+  have available : Values target roots := by
+    intro root member
+    rcases List.mem_append.mp member with old | next
+    · exact (inventory.available root old).grows inventory.source target growth history
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at next
+      rcases next with rfl | rfl
+      · exact leftAvailable
+      · exact rightAvailable
+  have closed : ∀ root ∈ roots, root.free = [] := by
+    intro root member
+    rcases List.mem_append.mp member with old | next
+    · exact inventory.closed root old
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at next
+      rcases next with rfl | rfl
+      · exact leftClosed
+      · exact rightClosed
+  exact ⟨target, facts, roots,
+    SourceCurrentAllocatedNativeGrownInventory.closed_originals target facts roots available closed, available, closed⟩
+
+lean/MicroCFTA/SourceCurrentAllocatedNativeInventoryRebase.lean:48-55
+theorem rebase
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Checked width)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before) (current : At formulas solver inventory before)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) :
+    let next
+
+cfta/src/Data/CFTA/Equality/Operations.hs:75-145
+
+reducePartially' ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    EqConstraints -> Node symbol -> Node symbol
+reducePartially' constraints node =
+    memo2TypeableWith @symbol genericReducePartiallyCache go constraints node
+  where
+    go :: EqConstraints -> Node symbol -> Node symbol
+    go _ EmptyNode = EmptyNode
+    go _ (Mu n) = Mu n
+    go _ n@(InternedUnion _) = n
+    go inheritedEcs n@(Node _) = modifyNode n $ \es ->
+        map
+            (reduceChildren inheritedEcs . reduceEdgeIntersection inheritedEcs)
+            es
+    go _ (Rec _) = error "reducePartially: unexpected Rec"
+
+    reduceChildren :: EqConstraints -> Edge symbol -> Edge symbol
+    reduceChildren inheritedEcs e =
+        setChildren e $
+            reduceWithInheritedEcs (inheritedEcs `combineEqConstraints` equalities (edgeConstraint e)) (edgeChildren e)
+
+    -- Reduce children with inherited constraints.
+    --
+    -- This function is used to avoid infinite unfolding of recursive nodes,
+    -- and we do this by passing constraints from the current edge and ancestors to descendants.
+    -- For example, let `tau` be "any" node, and we define
+    --
+    -- > let n1 = Node [ mkEdge "Pair" [tau, tau] (equalityConstraint $ mkEqConstraints [[path [0, 0], path [0, 1], path [1]]])]
+    -- > let n2 = Node [ Edge "Pair" [tau, tau] ]
+    -- > let n  = Node [ mkEdge "Pair" [n1, n2]   (equalityConstraint $ mkEqConstraints [[path [0, 0], path [0, 1], path [1]]])]
+    --
+    -- If `reducePartially n` does not propagate constraints down to its children `n1` or `n2`,
+    -- the reduction can expand `tau` without end between rounds.
+    --
+    -- To break such cycles, we actively pass constraints down to children.
+    -- In this example, we first call `reducePartially' EmptyConstraints n` at the top level, where the inherited constraint is empty,
+    -- so we only need to consider the constraints from the current edge.
+    -- Then, we pass the constraints `0.0=0.1=1` down to its children, and `n1` receives `0=1` and `n2` receives nothing.
+    -- Next, we reduce the children of `n` by calling `reducePartially' (mkEqConstraints [[path [0], path [1]]]) n1`.
+    -- At this node, we will have to combine the inherited constraints `0=1` and the local constraints `0.0=0.1=1`.
+    -- Now, we can see that these two constraints contain a contradiction that requires `0=0.0=0.1`, so we can drop the edge.
+    --
+    -- The inherited constraints do not stop every recursive cycle. The pass
+    -- must also not unfold a recursive node that has constraints. 'go'
+    -- returns a recursive node unchanged. 'reduceEqConstraints' does not
+    -- reduce a class whose paths meet such a node, or end above one. Without
+    -- the last rule, an intersection at the end of a path can unfold the
+    -- node, and a narrowed child can then contain its own ancestor. The memo
+    -- then demands its own unfinished result. The test "stops when a narrowed
+    -- child contains its ancestor" has such an input. The standalone
+    -- reproduction is lean/repro/OuterCallerCycle.hs.
+    --
+    -- One pass ends in two cases. If no reduced path meets a recursive node,
+    -- at its end or before it, the pass unfolds nothing. An intersection is
+    -- then not higher than the node that it replaces, so each narrowed child
+    -- is lower than its parent. If no node at the end of a reduced path has a
+    -- constraint, the narrowing adds no constraint. Then the pass changes no
+    -- node below the deepest constrained edge of the input, and below that
+    -- depth it stops at each recursive node. No proof covers the other
+    -- inputs. A class over paths of unequal length can move a constrained
+    -- node into the unfolding of a recursive node without constraints,
+    -- deeper than it was. No proof shows that a repetition of passes ends
+    -- either. The reduction tests "stops on the example that needs inherited
+    -- constraints", "stops on a class over three recursive children", and
+    -- "stops on classes over recursive children" check finite examples and
+    -- random recursive inputs.
+    reduceWithInheritedEcs :: EqConstraints -> [Node symbol] -> [Node symbol]
+    reduceWithInheritedEcs EqContradiction children = map (const EmptyNode) children
+    reduceWithInheritedEcs inheritedEcs children = zipWith (\i -> reducePartially' (eqConstraintsDescend inheritedEcs i)) [0 ..] children
+
+cfta/src/Data/CFTA/Equality/Operations.hs:171-234
+
+{- | Apply the local equality classes to a child list. Make every child empty
+when the local and inherited classes contradict each other.
+
+One pass over the classes is not always enough: the intersection for one class
+can narrow a node that a class earlier in the pass already read. Iterate the
+reduction, as 'fixUnbounded' does, to get a fixpoint. The reduction does not
+iterate by itself. The next pass reads the new nodes of this pass, so its
+intersections miss the memo. A fixpoint at each edge made the term search of
+the ECTA paper about 100 times slower than a fixpoint of 'reducePartially'.
+
+A class stays unreduced when one of its paths meets a recursive node with
+constraints, at the end of the path or before it. Unfolding such a node shows
+its constrained edges again, and their reduction unfolds the node again. A
+recursive node without constraints can unfold, because its unfolding has no
+constraints to reduce. A class also stays unreduced when a node at the end of
+one of its paths reaches a recursive node with constraints. The intersection
+at that path would unfold the recursive node too. When only the end of a path
+refuses a class (the nodes at its paths are closed, and one is or reaches a
+recursive node with constraints), and the intersection of the nodes at its
+paths provably accepts no term ('provablyEmpty'), every child becomes empty,
+as for a contradiction.
+-}
+reduceEqConstraints ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    EqConstraints ->
+    EqConstraints ->
+    [Node symbol] ->
+    [Node symbol]
+reduceEqConstraints = go
+  where
+    propagateEmptyNodes :: [Node symbol] -> [Node symbol]
+    propagateEmptyNodes ns = if EmptyNode `elem` ns then map (const EmptyNode) ns else ns
+
+    go :: EqConstraints -> EqConstraints -> [Node symbol] -> [Node symbol]
+    go EmptyConstraints EmptyConstraints origNs = origNs
+    go ecs inheritedEcs origNs
+        | constraintsAreContradictory (ecs `combineEqConstraints` inheritedEcs) = map (const EmptyNode) origNs
+        | any emptyBelowEnd refused = map (const EmptyNode) origNs
+        | otherwise = propagateEmptyNodes $ foldr reduceEClass withNeededChildren eclasses
+      where
+        (refused, eclasses) = partition (any (meetsConstrainedMu True origNs) . unPathEClass) (unsafeSubsumptionOrderedEclasses ecs)
+
+        -- Only the end of a path refuses this class: the nodes at its paths
+        -- are closed, and one is or reaches a recursive node with
+        -- constraints. The check reads their intersection and puts it into
+        -- no child.
+        emptyBelowEnd :: PathEClass -> Bool
+        emptyBelowEnd pec =
+            not (any (meetsConstrainedMu False origNs) paths)
+                && provablyEmpty (intersectList [getPath p origNs | p <- paths])
+          where
+            paths = Set.toList (unPathEClass pec)
+
+        withNeededChildren = requireAll (Set.unions $ map unPathEClass eclasses) origNs
+
+        intersectList :: [Node symbol] -> Node symbol
+        intersectList [] = EmptyNode
+        intersectList (n : ns) = foldr intersect n ns
+
+        -- Narrow the node at each path of the class to the nodes at the other
+        -- paths. The narrowing set is merged ('mergeAlternatives'): it can keep
+        -- more terms, never fewer. At a merged ordinary root, intersection
+
+cfta/src/Data/CFTA/Equality/Operations.hs:235-336
+        -- pairs each edge of the other side with at most one merged edge.
+        reduceEClass :: PathEClass -> [Node symbol] -> [Node symbol]
+        reduceEClass pec ns =
+            editAll
+                [ (p, intersect $ intersectList [mergeAlternatives (getPath other ns) | other <- Set.toAscList paths, other /= p])
+                | p <- Set.toAscList paths
+                ]
+                ns
+          where
+            paths = unPathEClass pec
+
+    -- Whether a path meets a recursive node with constraints, at the end of
+    -- the path or before it. A free recursive reference counts as such a
+    -- node: pruning a recursive body leaves references to the node that is
+    -- being pruned, and its edges are not known there. So does a node with
+    -- free references at the end of the path, and an unconstrained recursive
+    -- node with free references is followed through its unfolding. A closed
+    -- node at the end of the path that is, or reaches, a recursive node with
+    -- constraints ('reachesConstrainedMu') counts only if the first argument
+    -- is true.
+    meetsConstrainedMu :: Bool -> [Node symbol] -> Path -> Bool
+    meetsConstrainedMu belowEnd ns (ConsPath (ChildIndex index) rest) = maybe False (nodeMeetsConstrainedMu belowEnd rest) (ns !? index)
+    meetsConstrainedMu _ _ EmptyPath = False
+
+    nodeMeetsConstrainedMu :: Bool -> Path -> Node symbol -> Bool
+    nodeMeetsConstrainedMu _ _ (Rec _) = True
+    nodeMeetsConstrainedMu _ _ (InternedUnion _) = True
+    nodeMeetsConstrainedMu _ _ n | numNestedMu n == 0 && null (freeVars n) = False
+    nodeMeetsConstrainedMu belowEnd p n@(InternedMu _)
+        | not (unconstrained n) = case p of
+            EmptyPath | null (freeVars n) -> belowEnd
+            _ -> True
+        | null (freeVars n) = False
+        | otherwise = nodeMeetsConstrainedMu belowEnd p (unfoldOuterRec n)
+    nodeMeetsConstrainedMu belowEnd EmptyPath n = not (null (freeVars n)) || (belowEnd && reachesConstrainedMu n)
+    nodeMeetsConstrainedMu belowEnd p (Node es) = any (\e -> meetsConstrainedMu belowEnd (edgeChildren e) p) es
+    nodeMeetsConstrainedMu _ _ _ = False
+
+-- | A trie of child positions that must exist. An empty map ends a required path.
+newtype Needed = Needed (IntMap.IntMap Needed)
+
+{- | Restrict a child list to the terms that contain every path, in one
+traversal. This gives the same nodes as requiring the paths one at a time.
+-}
+requireAll ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    Set Path -> [Node symbol] -> [Node symbol]
+requireAll paths = requireList (foldr insertNeeded (Needed IntMap.empty) paths)
+  where
+    insertNeeded EmptyPath needed = needed
+    insertNeeded (ConsPath (ChildIndex index) rest) (Needed children) =
+        Needed $ IntMap.alter (Just . insertNeeded rest . fromMaybe (Needed IntMap.empty)) index children
+
+    requireList :: Needed -> [Node symbol] -> [Node symbol]
+    requireList (Needed children) ns = IntMap.foldrWithKey (\index needed -> adjustAt (ChildIndex index) (requireNode needed)) ns children
+
+    requireNode :: Needed -> Node symbol -> Node symbol
+    requireNode (Needed children) n | IntMap.null children = n
+    requireNode _ EmptyNode = EmptyNode
+    requireNode needed n@(Mu _) = requireNode needed (Node $ nodeEdges n)
+    requireNode needed n@(InternedUnion _) = requireNode needed (Node $ nodeEdges n)
+    requireNode needed@(Needed children) (Node es) =
+        Node
+            [ setChildren e (requireList needed (edgeChildren e))
+            | e <- es
+            , compareLength (edgeChildren e) (fst (IntMap.findMax children)) == GT
+            ]
+    requireNode _ (Rec _) = error "requireAll: unexpected Rec"
+
+-- | Edits at child positions: one at the end of a path, or the edits below an index.
+data Edits symbol
+    = EditAt (Node symbol -> Node symbol)
+    | EditBelow (IntMap.IntMap (Edits symbol))
+
+{- | Apply edits at several paths, none a prefix of another, in one traversal.
+This gives the same nodes as 'modifyAtPath' at each path in turn.
+-}
+editAll ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    [(Path, Node symbol -> Node symbol)] -> [Node symbol] -> [Node symbol]
+editAll edits = editList (foldr (uncurry insertEdit) (EditBelow IntMap.empty) edits)
+  where
+    insertEdit EmptyPath f _ = EditAt f
+    insertEdit (ConsPath (ChildIndex index) rest) f (EditBelow children) =
+        EditBelow $ IntMap.alter (Just . insertEdit rest f . fromMaybe (EditBelow IntMap.empty)) index children
+    insertEdit (ConsPath _ _) _ leaf@(EditAt _) = leaf
+
+    editList :: Edits symbol -> [Node symbol] -> [Node symbol]
+    editList (EditAt _) ns = ns
+    editList (EditBelow children) ns = IntMap.foldrWithKey (\index below -> adjustAt (ChildIndex index) (editNode below)) ns children
+
+    editNode :: Edits symbol -> Node symbol -> Node symbol
+    editNode (EditAt f) n = f n
+    editNode _ EmptyNode = EmptyNode
+    editNode below n@(Mu _) = editNode below (Node $ nodeEdges n)
+    editNode below n@(InternedUnion _) = editNode below (Node $ nodeEdges n)
+    editNode below (Node es) = Node (map (\e -> setChildren e (editList below (edgeChildren e))) es)
+    editNode _ (Rec _) = error "editAll: unexpected Rec"
+
+{- | Keep exactly the terms in a node that match a template.

@@ -1,0 +1,45 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-generated-query-resources/forecast-kernels.lean:22:45: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  Nat.le_add_right last.nodes last.edges
+of type
+  last.nodes.le (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) last.nodes last.edges)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-generated-query-resources/forecast-kernels.lean:25:44: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  Nat.le_add_left last.edges last.nodes
+of type
+  last.edges.le (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) last.nodes last.edges)
+'ForecastIntegration.finite_layout' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+ForecastIntegration.finite_layout : ∀ (original : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (count : Nat),
+  @Exists.{1} Nat fun bits =>
+    And
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits original
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits original)
+'ForecastIntegration.three_queries' depends on axioms: [propext, Quot.sound.{u}]
+ForecastIntegration.three_queries : ∀ (bits : Nat)
+  (original firstResult secondResult : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance original
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le firstResult
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step original) →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le secondResult
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step firstResult) →
+        And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits original)
+          (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits firstResult)
+            (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits secondResult)
+              (And
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits secondResult
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step secondResult)
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance original
+                    (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))))))
+'ForecastIntegration.split_sequence' depends on axioms: [propext, Quot.sound.{u}]
+ForecastIntegration.split_sequence : ∀ (bits : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (first last : Nat),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits original
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last) →
+    And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits original first)
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance original first) last)

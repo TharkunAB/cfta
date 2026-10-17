@@ -1,0 +1,142 @@
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile : Type
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Prop
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.refl' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.refl : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile profile
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.trans' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.trans : ∀
+  {first middle last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first middle →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le middle last →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_ge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_ge : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step profile)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step first)
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step last)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_zero' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_zero : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    profile
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_succ : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step profile) count)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_add' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_add : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (first last : Nat),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last))
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile first) last)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_ge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_ge : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile count)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    ∀ (count : Nat),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance first count)
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance last count)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_count_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance_count_mono : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile first)
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile last)
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room : Nat →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Prop
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono : ∀ {bits : Nat}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits first
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved : Nat →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_zero' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_zero : ∀ (bits : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_succ_iff' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_succ_iff : ∀ (bits : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat),
+  Iff
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile)
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step profile) count))
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.head' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.head : ∀ {bits count : Nat}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.tail' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.tail : ∀ {bits count : Nat}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step profile) count
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.mono : ∀ {bits count : Nat}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits last count →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits first count
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.prefix' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved.prefix : ∀ {bits first last : Nat}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile last →
+    @LE.le.{0} Nat instLENat first last →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile first
+'MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_iff_last' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.reserved_iff_last : ∀ (bits : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat),
+  Iff
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Reserved bits profile
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.advance profile count))

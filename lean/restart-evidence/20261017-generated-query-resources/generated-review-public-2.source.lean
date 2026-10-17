@@ -1,0 +1,49 @@
+import MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources
+import MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.room
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.room
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.mono
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame.initial
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame.initial
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Receipt
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.complete
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Supported
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Supported
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Pool
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Pool
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Pool.after
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Pool.after
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Run
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Run
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Run.length
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.Run.length
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.complete_many
+#check @MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence.complete_many
