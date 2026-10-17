@@ -1,0 +1,135 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/requirements-direct-2.source.lean:63:10: error(lean.unknownIdentifier): Unknown constant `List.length_le_of_sublist`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/requirements-direct-2.source.lean:75:22: error: unsolved goals
+case cons
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+work reader : Nat
+inputs : List (SourceCurrentConjunctionCompletionReads.Job Symbol Guard)
+before after : State Symbol Guard
+values : List (Value Symbol Guard)
+actual : Projections inputs before values after
+operations : SourceEqualityConstraintMemoAllocation.State
+forest✝ : List (Value Symbol Guard)
+path✝ : EqualityNormalize.Path
+before✝ middle✝ after✝ : State Symbol Guard
+value✝ : Value Symbol Guard
+jobs✝ : List (SourceCurrentConjunctionCompletionReads.Job Symbol Guard)
+values✝ : List (Value Symbol Guard)
+first✝ : SourceEqualityProjectionGraph.Forest (List.map Int.ofNat path✝) forest✝ before✝ value✝ middle✝
+rest✝ : Projections jobs✝ middle✝ values✝ after✝
+done : SourceCurrentProjectionNumericReplay.workFuel (List.map Int.ofNat path✝) ≤ work
+tail : SourceCurrentProjectionNumericReplay.ForestReady reader first✝
+ih : Replay work reader rest✝
+tail_ih✝ :
+  SourceCurrentConjunctionRowsWorker.projections work reader jobs✝ { heap := middle✝, equality := operations } =
+    SourceCurrentConjunctionRowsWorker.Outcome.done values✝ { heap := after✝, equality := operations }
+⊢ (match SourceEqualityProjectionWorker.forest work reader (List.map Int.ofNat path✝) forest✝ before✝ with
+    | SourceEqualityRequiredWorker.Result.done value heap =>
+      match
+        SourceCurrentConjunctionRowsWorker.projections work reader jobs✝ { heap := heap, equality := operations } with
+      | SourceCurrentConjunctionRowsWorker.Outcome.done value_1 state =>
+        SourceCurrentConjunctionRowsWorker.Outcome.done (value :: value_1) state
+      | SourceCurrentConjunctionRowsWorker.Outcome.failed fault state =>
+        SourceCurrentConjunctionRowsWorker.Outcome.failed fault state
+    | SourceEqualityRequiredWorker.Result.pending key heap =>
+      SourceCurrentConjunctionRowsWorker.Outcome.failed (SourceCurrentConjunctionRowsWorker.Fault.pending key)
+        { heap := heap, equality := operations }
+    | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+      SourceCurrentConjunctionRowsWorker.Outcome.failed (SourceCurrentConjunctionRowsWorker.Fault.unresolved name)
+        { heap := heap, equality := operations }
+    | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+      SourceCurrentConjunctionRowsWorker.Outcome.failed (SourceCurrentConjunctionRowsWorker.Fault.exhausted limit)
+        { heap := heap, equality := operations }) =
+    SourceCurrentConjunctionRowsWorker.Outcome.done (value✝ :: values✝) { heap := after✝, equality := operations }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/requirements-direct-2.source.lean:76:65: warning: This simp argument is unused:
+  done
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentConjunctionRowsWorker.projections, ih,
+    SourceCurrentConjunctionRowsWorker.Outcome.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/requirements-direct-2.source.lean:76:71: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentConjunctionRowsWorker.projections, done,
+    SourceCurrentConjunctionRowsWorker.Outcome.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/requirements-direct-2.source.lean:114:81: error: Tactic `assumption` failed
+
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+forests : List (List (Value Symbol Guard))
+constraints✝ : EqualityNormalize.Constraints
+before✝ after✝ : State Symbol Guard
+requirements✝ : List (List (Value Symbol Guard))
+shape width count : Nat
+forestCount : forests.length ≤ count
+widths : ∀ (forest : List (Value Symbol Guard)), forest ∈ forests → forest.length ≤ width
+paths : EqualityNormalize.Class
+before : State Symbol Guard
+projected : List (Value Symbol Guard)
+middle : State Symbol Guard
+constraints : EqualityNormalize.Constraints
+requirements : List (List (Value Symbol Guard))
+after : State Symbol Guard
+first : Projections (jobs forests paths) before projected middle
+rest : ClassRequirements forests constraints middle requirements after
+ih :
+  ∀ (resource : Nat),
+    SemanticReady middle →
+      CostHeap middle →
+        RowsReady middle forests →
+          Fits resource middle →
+            (∀ (paths : EqualityNormalize.Class), paths ∈ constraints → List.length paths ≤ shape) →
+              (∀ (paths : EqualityNormalize.Class),
+                  paths ∈ constraints → ∀ (path : EqualityNormalize.Path), path ∈ paths → List.length path ≤ shape) →
+                Fits (forecast shape width count (List.length constraints) resource) after ∧
+                  (∀ (row : List (Value Symbol Guard)), row ∈ requirements → row.length ≤ count * shape) ∧
+                    ∀ (operations : SourceEqualityConstraintMemoAllocation.State) (work reader : Nat),
+                      workerFuel shape ≤ work →
+                        SourceCurrentProjectionUnionResources.readFuel
+                              (forecast shape width count (List.length constraints) resource) ≤
+                            reader →
+                          SourceCurrentConjunctionRowsWorker.classes work reader forests constraints
+                              { heap := middle, equality := operations } =
+                            SourceCurrentConjunctionRowsWorker.Outcome.done requirements
+                              { heap := after, equality := operations }
+resource : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+inputs : RowsReady before forests
+fits : Fits resource before
+pathCounts : ∀ (paths_1 : EqualityNormalize.Class), paths_1 ∈ paths :: constraints → List.length paths_1 ≤ shape
+depths :
+  ∀ (paths_1 : EqualityNormalize.Class),
+    paths_1 ∈ paths :: constraints → ∀ (path : EqualityNormalize.Path), path ∈ paths_1 → List.length path ≤ shape
+jobInputs : SourceCurrentConjunctionCompletionReads.Inputs before (jobs forests paths)
+jobDepths :
+  ∀ (job : SourceCurrentConjunctionCompletionReads.Job Symbol Guard),
+    job ∈ jobs forests paths → List.length job.snd ≤ shape
+jobWidths :
+  ∀ (job : SourceCurrentConjunctionCompletionReads.Job Symbol Guard), job ∈ jobs forests paths → job.fst.length ≤ width
+jobCount : (jobs forests paths).length ≤ count * shape
+one :
+  Fits (jobsBound shape width (count * shape) resource) middle ∧
+    projected.length = (jobs forests paths).length ∧
+      Replay (workerFuel shape)
+        (SourceCurrentConjunctionProjectionResources.readerFuel shape width (count * shape) resource) first
+⊢ SourceEqualityAnnotationHeap.Heap (fun x => True) before
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/requirements-direct-2.source.lean:117:43: error: Application type mismatch: The argument
+  forestCount
+has type
+  forests.length ≤ count
+but is expected to have type
+  ∀ (paths : EqualityNormalize.Class), paths ∈ constraints → List.length paths ≤ shape
+in the application
+  ih (jobsBound shape width (count * shape) resource) physical.left.semantic physical.left.costs
+    (fun forest member =>
+      ⟨fun value included =>
+        SourceEqualityRequiredCache.Keeps.available physical.left.keeps value
+          ((inputs forest member).left value included),
+        (inputs forest member).right⟩)
+    one.left forestCount

@@ -1,0 +1,140 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:104:11: error: Type mismatch
+  closed
+has type
+  value.free = []
+but is expected to have type
+  NodeClosed [] value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:107:17: error: Tactic `assumption` failed
+
+case cons.empty
+Symbol Guard : Type
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+index : Int
+path : List Int
+ih : ∀ (value : Value Symbol Guard), Available before value → value.free = [] → NodeClosed path value
+available : Available before Value.empty
+closed : Value.empty.free = []
+⊢ NodeClosed (index :: path) Value.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:108:34: error: Type mismatch
+  closed
+has type
+  (Value.reference name✝).free = []
+but is expected to have type
+  NodeClosed (index :: path) (Value.reference name✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:108:34: error: Type mismatch
+  closed
+has type
+  (Value.union entry✝ members✝ depth✝ free✝).free = []
+but is expected to have type
+  NodeClosed (index :: path) (Value.union entry✝ members✝ depth✝ free✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:108:34: error: Type mismatch
+  closed
+has type
+  (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free = []
+but is expected to have type
+  NodeClosed (index :: path) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:110:16: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case cons.node
+Symbol Guard : Type
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+index : Int
+path : List Int
+ih : ∀ (value : Value Symbol Guard), Available before value → value.free = [] → NodeClosed path value
+entry : Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+available : Available before (Value.node entry edges depth free)
+closed : (Value.node entry edges depth free).free = []
+⊢ NodeClosed (index :: path) (Value.node entry edges depth free)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:150:18: error: Application type mismatch: The argument
+  SourceCurrentConjunctionRowsWorkerStability.forest_done_stable ?m.83 works reads
+has type
+  SourceEqualityProjectionWorker.forest largerWork largerReader ?m.78 ?m.79 ?m.80 =
+    SourceEqualityRequiredWorker.Result.done ?m.82 ?m.81
+but is expected to have type
+  SourceEqualityProjectionWorker.forest largerWork largerReader (List.map Int.ofNat path✝) forest✝ before✝ =
+    SourceEqualityRequiredWorker.Result.done value✝ middle✝
+in the application
+  cons (SourceCurrentConjunctionRowsWorkerStability.forest_done_stable ?m.83 works reads)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:165:18: error: don't know how to synthesize implicit argument `resource`
+  @forestBound_le_step (List.map Int.ofNat path) depth count (forest, path).fst.length ?m.116
+    (Eq.mpr (id (congrFun' (congrArg LE.le (List.length_map Int.ofNat)) depth))
+      (depths (forest, path) List.mem_cons_self))
+    (counts (forest, path) List.mem_cons_self)
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+jobs✝ : List (Job Symbol Guard)
+before✝ after✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List (Value Symbol Guard)
+depth count : Nat
+forest : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+before : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+jobs : List (Job Symbol Guard)
+values : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+first : Forest (List.map Int.ofNat path) forest before value middle
+rest : Projections jobs middle values after
+ih :
+  ∀ (resource : Nat),
+    SemanticReady middle →
+      CostHeap middle →
+        Inputs middle jobs →
+          Fits resource middle →
+            (∀ (job : Job Symbol Guard), job ∈ jobs → List.length job.snd ≤ depth) →
+              (∀ (job : Job Symbol Guard), job ∈ jobs → job.fst.length ≤ count) →
+                Fits (jobsBound depth count jobs.length resource) after ∧
+                  Replay (workerFuel depth) (readerFuel depth count jobs.length resource) rest
+resource : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+inputs : Inputs before ((forest, path) :: jobs)
+fits : Fits resource before
+depths : ∀ (job : Job Symbol Guard), job ∈ (forest, path) :: jobs → List.length job.snd ≤ depth
+counts : ∀ (job : Job Symbol Guard), job ∈ (forest, path) :: jobs → job.fst.length ≤ count
+available : Values before (forest, path).fst
+domain : ForestClosed (List.map Int.ofNat path) forest
+firstBound :
+  Fits (forestBound (List.map Int.ofNat path) forest.length resource) middle ∧
+    SourceCurrentProjectionNumericReplay.ForestReady
+      (readFuel (forestBound (List.map Int.ofNat path) forest.length resource)) first
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:165:11: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:207:25: error(lean.invalidField): Invalid field `bound`: The environment does not contain `MicroCFTA.SourceCurrentConjunctionCompletionReads.Projections.bound`, so it is not possible to project the field `bound` from an expression
+  actual
+of type
+  Projections jobs before values after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-1.source.lean:204:85: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+jobs : List (Job Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+depth count jobCount resource : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+fields : SourceEqualityAnnotationHeap.Heap annotation before
+inputs : Inputs before jobs
+fits : Fits resource before
+depths : ∀ (job : Job Symbol Guard), job ∈ jobs → List.length job.snd ≤ depth
+counts : ∀ (job : Job Symbol Guard), job ∈ jobs → job.fst.length ≤ count
+length : jobs.length ≤ jobCount
+values : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+actual : Projections jobs before values after
+effects : Effects annotation before after
+available : Values after values
+closed : ClosedValues values
+⊢ ∃ values after actual,
+    Effects annotation before after ∧
+      Values after values ∧
+        ClosedValues values ∧
+          Fits (jobsBound depth count jobCount resource) after ∧
+            values.length = jobs.length ∧ Replay (workerFuel depth) (readerFuel depth count jobCount resource) actual

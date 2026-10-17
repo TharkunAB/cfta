@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentConjunctionGuardUniverse
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.guards
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.guards
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.initial
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.initial
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuple_heap
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuple_heap
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuples_heap
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuples_heap
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.rows_heap
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.rows_heap
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.run_heap
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.run_heap
+#print axioms MicroCFTA.SourceCurrentConjunctionGuardUniverse.entered
+#check @MicroCFTA.SourceCurrentConjunctionGuardUniverse.entered

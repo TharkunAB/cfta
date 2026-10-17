@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentConjunctionWorklist
+set_option pp.explicit true
+#check @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Rows.run
+#check @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples.skip
+#check @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples.keep

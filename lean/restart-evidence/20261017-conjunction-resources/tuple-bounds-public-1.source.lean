@@ -1,0 +1,104 @@
+import MicroCFTA.SourceCurrentConjunctionTupleBounds
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 8000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.words
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.words
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.words
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.words_mem_iff
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.words_mem_iff
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.words_mem_iff
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.combined
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.combined
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.combined
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.pathMass
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.pathMass
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.pathMass
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.classMass
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.classMass
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.classMass
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.constraintsMass
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.constraintsMass
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.constraintsMass
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.classes_length_le
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.classes_length_le
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.classes_length_le
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.class_length_le
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.class_length_le
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.class_length_le
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.path_length_le
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.path_length_le
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.path_length_le
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.classShapeBound
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.classShapeBound
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.classShapeBound
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_mass_le
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_mass_le
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_mass_le
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_bounds
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_bounds
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_bounds
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough_succ
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough_succ
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough_succ
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.classShapeBound_le_shapeThrough
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.classShapeBound_le_shapeThrough
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.classShapeBound_le_shapeThrough
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough_mono
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.shapeThrough_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_edgeView
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_edgeView
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_edgeView
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_current_edgeView
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_current_edgeView
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.combined_current_edgeView
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.extend_length_le
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.extend_length_le
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.extend_length_le
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.tuples_length_le
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.tuples_length_le
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.tuples_length_le
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_length
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_length
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_length
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_combined_bounds
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_combined_bounds
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_combined_bounds
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_bounds_through
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_bounds_through
+#print MicroCFTA.SourceCurrentConjunctionTupleBounds.tuple_bounds_through
+

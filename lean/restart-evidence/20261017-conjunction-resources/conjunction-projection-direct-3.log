@@ -1,0 +1,70 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-3.source.lean:153:77: error: Application type mismatch: The argument
+  done
+has type
+  SourceEqualityProjectionWorker.forest work reader (List.map Int.ofNat path) forest before =
+    SourceEqualityRequiredWorker.Result.done value middle
+but is expected to have type
+  SourceEqualityProjectionWorker.forest work reader ?m.78 ?m.79 ?m.80 =
+    SourceEqualityRequiredWorker.Result.done ?m.82 ?m.81
+in the application
+  SourceCurrentConjunctionRowsWorkerStability.forest_done_stable done
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/conjunction-projection-direct-3.source.lean:182:21: error: don't know how to synthesize implicit argument `first`
+  @Replay.cons Symbol Guard inst✝ (workerFuel depth) (readerFuel depth count ((forest, path) :: jobs).length resource)
+    forest path before middle after value jobs values ?m.256 rest
+    (SourceCurrentProjectionNumericReplay.forest_replay ready (workerFuel depth)
+      (readerFuel depth count ((forest, path) :: jobs).length resource) enough
+      (Nat.le_refl (readFuel (jobsBound depth count jobs.length (step depth count resource)))))
+    tail.right
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+jobs✝ : List (Job Symbol Guard)
+before✝ after✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List (Value Symbol Guard)
+depth count : Nat
+forest : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+before : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+jobs : List (Job Symbol Guard)
+values : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+first : Forest (List.map Int.ofNat path) forest before value middle
+rest : Projections jobs middle values after
+ih :
+  ∀ (resource : Nat),
+    SemanticReady middle →
+      CostHeap middle →
+        Inputs middle jobs →
+          Fits resource middle →
+            (∀ (job : Job Symbol Guard), job ∈ jobs → List.length job.snd ≤ depth) →
+              (∀ (job : Job Symbol Guard), job ∈ jobs → job.fst.length ≤ count) →
+                Fits (jobsBound depth count jobs.length resource) after ∧
+                  Replay (workerFuel depth) (readerFuel depth count jobs.length resource) rest
+resource : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+inputs : Inputs before ((forest, path) :: jobs)
+fits : Fits resource before
+depths : ∀ (job : Job Symbol Guard), job ∈ (forest, path) :: jobs → List.length job.snd ≤ depth
+counts : ∀ (job : Job Symbol Guard), job ∈ (forest, path) :: jobs → job.fst.length ≤ count
+available : Values before (forest, path).fst
+domain : ForestClosed (List.map Int.ofNat path) forest
+firstBound :
+  Fits (forestBound (List.map Int.ofNat path) forest.length resource) middle ∧
+    SourceCurrentProjectionNumericReplay.ForestReady
+      (readFuel (forestBound (List.map Int.ofNat path) forest.length resource)) first
+one : forestBound (List.map Int.ofNat path) (forest, path).fst.length resource ≤ step depth count resource
+physical : Keeps before middle ∧ SemanticReady middle ∧ CostHeap middle ∧ Available middle value
+tail :
+  Fits (jobsBound depth count jobs.length (step depth count resource)) after ∧
+    Replay (workerFuel depth) (readerFuel depth count jobs.length (step depth count resource)) rest
+widen :
+  forestBound (List.map Int.ofNat path) (forest, path).fst.length resource ≤
+    jobsBound depth count jobs.length (step depth count resource)
+ready :
+  SourceCurrentProjectionNumericReplay.ForestReady
+    (readFuel (jobsBound depth count jobs.length (step depth count resource))) first
+enough : SourceCurrentProjectionNumericReplay.workFuel (List.map Int.ofNat path) ≤ workerFuel depth
+⊢ Forest (List.map Int.ofNat path) forest before value middle

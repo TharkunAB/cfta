@@ -1,0 +1,71 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/tuple-bounds-direct-1.source.lean:88:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - d ≥ 2
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≤ -1
+where
+ a := ↑(List.map pathMass paths).sum
+ b := ↑(List.length paths)
+ c := ↑(List.map (fun paths => 1 + (List.map pathMass paths).sum) classes).sum
+ d := ↑(List.map classMass classes).sum
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/tuple-bounds-direct-1.source.lean:98:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b - e ≥ 2
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(List.map (fun path => 1 + List.length path) paths).sum
+ b := ↑(List.length path)
+ c := ↑(List.map (fun paths => 1 + (List.map pathMass paths).sum) classes).sum
+ d := ↑(List.map pathMass paths).sum
+ e := ↑(List.map classMass classes).sum
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/tuple-bounds-direct-1.source.lean:157:10: error: Type mismatch: After simplification, term
+  Nat.le_trans ih (Nat.le_add_left (rest.length * edges.length) ?m.50)
+ has type
+  (List.flatMap
+        (fun tuple =>
+          match tuple with
+          | [] => []
+          | first :: tail =>
+            List.map (fun x => x :: tuple)
+              (List.filter
+                (fun edge =>
+                  decide (SourceCurrentConjunctionTuples.shape edge = SourceCurrentConjunctionTuples.shape first))
+                edges))
+        rest).length ≤
+    ?m.50 + rest.length * edges.length
+but is expected to have type
+  (List.flatMap
+        (fun tuple =>
+          match tuple with
+          | [] => []
+          | first :: tail =>
+            List.map (fun x => x :: tuple)
+              (List.filter
+                (fun edge =>
+                  decide (SourceCurrentConjunctionTuples.shape edge = SourceCurrentConjunctionTuples.shape first))
+                edges))
+        rest).length ≤
+    rest.length * edges.length + edges.length
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/tuple-bounds-direct-1.source.lean:191:28: error: unexpected token '('; expected ')', ',' or ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/tuple-bounds-direct-1.source.lean:190:35: error: Type mismatch: After simplification, term
+  Nat.mul_le_mul_right
+ has type
+  ∀ (k : Nat), ?m.79 ≤ ?m.80 → k * ?m.79 ≤ k * ?m.80
+but is expected to have type
+  first.length * width ^ rest.length ≤ width * width ^ rest.length
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/tuple-bounds-direct-1.source.lean:200:6: error: Type mismatch: After simplification, term
+  same
+ has type
+  @Eq Nat tuple.length (rest.length + ([].length + 1))
+but is expected to have type
+  @Eq Nat tuple.length (rest.length + 1)

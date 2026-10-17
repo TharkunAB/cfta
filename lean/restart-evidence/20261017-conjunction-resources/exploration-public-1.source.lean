@@ -1,0 +1,105 @@
+import MicroCFTA.SourceCurrentConjunctionRowsResources
+import MicroCFTA.SourceCurrentConjunctionWorklistResources
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 8000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_ge
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_ge
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_ge
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_mono
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_count_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_count_mono
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_count_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_limits_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_limits_mono
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.tupleSchedule_limits_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.forecast
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.forecast
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.forecast
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.forecast_ge
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.forecast_ge
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.forecast_ge
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.forecast_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.forecast_mono
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.forecast_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.pending_width
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.pending_width
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.pending_width
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.tuples_bound
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.tuples_bound
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.tuples_bound
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.bound
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.bound
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.bound
+
+#check @MicroCFTA.SourceCurrentConjunctionRowsResources.complete
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsResources.complete
+#print MicroCFTA.SourceCurrentConjunctionRowsResources.complete
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.step
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.step
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.step
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.step_ge
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.step_ge
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.step_ge
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.step_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.step_mono
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.step_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_ge
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_ge
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_ge
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_mono
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_budget_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_budget_mono
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.forecast_budget_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.workerFuel
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.workerFuel
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.workerFuel
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.readerFuel
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.readerFuel
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.readerFuel
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.bound
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.bound
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.bound
+
+#check @MicroCFTA.SourceCurrentConjunctionWorklistResources.entered
+#print axioms MicroCFTA.SourceCurrentConjunctionWorklistResources.entered
+#print MicroCFTA.SourceCurrentConjunctionWorklistResources.entered
+

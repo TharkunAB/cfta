@@ -1,5 +1,61 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current initial conjunction numeric resources
+
+Updated: 2026-10-17 13:40 CEST. Starting checkpoint is 2d7b0fa2.
+Proof commit is 75348c57. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-conjunction-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-conjunction-resources/.
+
+Initial conjunction rows, worklist, Decision, and Memo.Call now construct
+their own complete returns at an initial numeric forecast. The actual
+entry heap supplies its finite raw guard list. Ordered guard words bound
+normalized class shape. Original row widths and operand occurrences bound
+the Cartesian tuples. Actual projection jobs, class requirements, and
+pending conjunction widths fit the forecast. Admission consumes budget.
+Skip and empty branches retain the physical state. The same result holds
+at every independently larger projection and reader fuel.
+
+The same call retains full Frame, complete caller Post, forecast Fits,
+causal guards and probes, global memo validity, and the actual saved
+fourth memo with Extends. Both outer result tables and Merge remain exact.
+Native cells and domain supplies remain exact. The producer requires no
+future graph, worker success, reached resource callback, finite input Cap,
+or whole-input closedness. AnswerSound is one-sided: true proves emptiness;
+false does not prove nonemptiness. These are logical majorants. Some pure
+bounds are noncomputable. No extracted Haskell budget or capacity follows.
+
+The full public target remains: valid and explicitly supported initial
+inputs terminate and satisfy each operation's intended contract. Next
+forecast guards across native queries and compose the complete Scan at
+actual returned heaps. Native queries can synthesize guards. The current
+memo forecast depends on its own entry heap. An earlier scalar alone does
+not close that gap. Selected support must follow the false secondary trace.
+Full source control flow, remaining Required caps, outer descent, arbitrary
+recursive callers, convergence, current adapters, lazy Haskell forcing,
+runtime, capacity, and complete public correspondence remain open.
+
+Audit passes 2983 jobs and 65714 dependency checks. All twelve final strict
+logs are empty and all twelve canonical targets pass. Seventeen groups
+check all 116 public declarations and fourteen constructed integrations.
+Nine manifests retain 305 entries and 305 hash references. Only propext,
+Classical.choice, and Quot.sound occur in successful probes. Read
+checkpoint-validation.json and README for hashes and evidence boundaries.
+Preservation retains 15353 starting files, 2970 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 95 frozen module manifests with 740 entries. Audit adds
+twelve imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core. The goal stays active.
+
 ## Current initial gate and seeded query resources
 
 Updated: 2026-10-17 13:06 CEST. Starting checkpoint is 50abb08b.

@@ -1,0 +1,178 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/worklist-direct-1.source.lean:119:9: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/worklist-direct-1.source.lean:116:117: error: unsolved goals
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+budget✝ : Nat
+table✝ final✝ : List Entry
+pending✝ : List (List (Value Symbol Guard))
+before✝ after✝ : Physical
+alphabet : List Guard
+budget : Nat
+table : List Entry
+nodes : List (Value Symbol Guard)
+before : Physical
+requirements : List (List (List (Value Symbol Guard)))
+middle : Physical
+pending : List (List (Value Symbol Guard))
+final : List Entry
+after : Physical
+nonempty : nodes.any SourceCurrentConjunctionRequirements.isEmpty = false
+fresh :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table nodes = false
+rows : SourceCurrentConjunctionRowsAllocation.Rows nodes before requirements middle
+rest :
+  Run (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ pending) middle final
+    after
+ih :
+  ∀ (resource : Nat),
+    Ready middle →
+      PendingReady middle (requirements.flatten ++ pending) →
+        Fits resource middle.heap →
+          (∀ (nodes : List (Value Symbol Guard)), nodes ∈ requirements.flatten ++ pending → nodes.length ≤ resource) →
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) middle.heap →
+              Fits (forecast alphabet (budget - 1) resource) after.heap ∧
+                ∀ (work reader : Nat),
+                  workerFuel alphabet (budget - 1) resource ≤ work →
+                    readerFuel alphabet (budget - 1) resource ≤ reader →
+                      SourceCurrentConjunctionWorker.explore work reader (budget - 1)
+                          ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ pending) middle =
+                        SourceCurrentConjunctionWorker.Outcome.done final after
+resource : Nat
+ready : Ready before
+available : PendingReady before (nodes :: pending)
+fits : Fits resource before.heap
+widths : ∀ (nodes_1 : List (Value Symbol Guard)), nodes_1 ∈ nodes :: pending → nodes_1.length ≤ resource
+known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.heap
+admitted :
+  0 < budget ∧
+    nodes.all closed = true ∧
+      SourceCurrentConjunctionEmptinessTable.lookup SourceCurrentConjunctionRequirements.key
+          (SourceCurrentConjunctionEmptinessTable.keys SourceCurrentConjunctionRequirements.key nodes) table =
+        none
+inputs : Values before.heap nodes
+noFree : MergedColdReaderClosedInputs.ClosedValues nodes
+physical :
+  Effects before middle ∧
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) middle.heap ∧
+      SourceCurrentConjunctionRowsAllocation.RowsReady middle requirements
+numeric :
+  Fits (SourceCurrentConjunctionRowsResources.forecast alphabet resource (resource + 1)) middle.heap ∧
+    (∀ (row : List (List (Value Symbol Guard))),
+        row ∈ requirements →
+          ∀ (requirement : List (Value Symbol Guard)),
+            requirement ∈ row →
+              requirement.length ≤ SourceCurrentConjunctionRowsResources.forecast alphabet resource (resource + 1)) ∧
+      ∀ (work reader : Nat),
+        SourceCurrentConjunctionProjectionResources.workerFuel (shapeThrough alphabet resource) ≤ work →
+          SourceCurrentProjectionUnionResources.readFuel
+                (SourceCurrentConjunctionRowsResources.forecast alphabet resource (resource + 1)) ≤
+              reader →
+            SourceCurrentConjunctionRowsWorker.rows work reader nodes before =
+              SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle
+nextAvailable : PendingReady middle (requirements.flatten ++ pending)
+nextWidths :
+  ∀ (requirement : List (Value Symbol Guard)),
+    requirement ∈ requirements.flatten ++ pending → requirement.length ≤ step alphabet resource
+later :
+  Fits (forecast alphabet (budget - 1) (step alphabet resource)) after.heap ∧
+    ∀ (work reader : Nat),
+      workerFuel alphabet (budget - 1) (step alphabet resource) ≤ work →
+        readerFuel alphabet (budget - 1) (step alphabet resource) ≤ reader →
+          SourceCurrentConjunctionWorker.explore work reader (budget - 1)
+              ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ pending) middle =
+            SourceCurrentConjunctionWorker.Outcome.done final after
+positive : 0 < budget
+equal : budget = budget - 1 + 1
+⊢ forecast alphabet (budget - 1) (step alphabet resource) = forecast alphabet budget resource
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-conjunction-resources/worklist-direct-1.source.lean:93:105: error: unsolved goals
+case admit
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+budget✝ : Nat
+table✝ final✝ : List Entry
+pending✝ : List (List (Value Symbol Guard))
+before✝ after✝ : Physical
+alphabet : List Guard
+budget : Nat
+table : List Entry
+nodes : List (Value Symbol Guard)
+before : Physical
+requirements : List (List (List (Value Symbol Guard)))
+middle : Physical
+pending : List (List (Value Symbol Guard))
+final : List Entry
+after : Physical
+nonempty : nodes.any SourceCurrentConjunctionRequirements.isEmpty = false
+fresh :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table nodes = false
+rows : SourceCurrentConjunctionRowsAllocation.Rows nodes before requirements middle
+rest :
+  Run (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ pending) middle final
+    after
+ih :
+  ∀ (resource : Nat),
+    Ready middle →
+      PendingReady middle (requirements.flatten ++ pending) →
+        Fits resource middle.heap →
+          (∀ (nodes : List (Value Symbol Guard)), nodes ∈ requirements.flatten ++ pending → nodes.length ≤ resource) →
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) middle.heap →
+              Fits (forecast alphabet (budget - 1) resource) after.heap ∧
+                ∀ (work reader : Nat),
+                  workerFuel alphabet (budget - 1) resource ≤ work →
+                    readerFuel alphabet (budget - 1) resource ≤ reader →
+                      SourceCurrentConjunctionWorker.explore work reader (budget - 1)
+                          ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ pending) middle =
+                        SourceCurrentConjunctionWorker.Outcome.done final after
+resource : Nat
+ready : Ready before
+available : PendingReady before (nodes :: pending)
+fits : Fits resource before.heap
+widths : ∀ (nodes_1 : List (Value Symbol Guard)), nodes_1 ∈ nodes :: pending → nodes_1.length ≤ resource
+known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.heap
+admitted :
+  0 < budget ∧
+    nodes.all closed = true ∧
+      SourceCurrentConjunctionEmptinessTable.lookup SourceCurrentConjunctionRequirements.key
+          (SourceCurrentConjunctionEmptinessTable.keys SourceCurrentConjunctionRequirements.key nodes) table =
+        none
+inputs : Values before.heap nodes
+noFree : MergedColdReaderClosedInputs.ClosedValues nodes
+physical :
+  Effects before middle ∧
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) middle.heap ∧
+      SourceCurrentConjunctionRowsAllocation.RowsReady middle requirements
+numeric :
+  Fits (SourceCurrentConjunctionRowsResources.forecast alphabet resource (resource + 1)) middle.heap ∧
+    (∀ (row : List (List (Value Symbol Guard))),
+        row ∈ requirements →
+          ∀ (requirement : List (Value Symbol Guard)),
+            requirement ∈ row →
+              requirement.length ≤ SourceCurrentConjunctionRowsResources.forecast alphabet resource (resource + 1)) ∧
+      ∀ (work reader : Nat),
+        SourceCurrentConjunctionProjectionResources.workerFuel (shapeThrough alphabet resource) ≤ work →
+          SourceCurrentProjectionUnionResources.readFuel
+                (SourceCurrentConjunctionRowsResources.forecast alphabet resource (resource + 1)) ≤
+              reader →
+            SourceCurrentConjunctionRowsWorker.rows work reader nodes before =
+              SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle
+nextAvailable : PendingReady middle (requirements.flatten ++ pending)
+nextWidths :
+  ∀ (requirement : List (Value Symbol Guard)),
+    requirement ∈ requirements.flatten ++ pending → requirement.length ≤ step alphabet resource
+later :
+  Fits (forecast alphabet (budget - 1) (step alphabet resource)) after.heap ∧
+    ∀ (work reader : Nat),
+      workerFuel alphabet (budget - 1) (step alphabet resource) ≤ work →
+        readerFuel alphabet (budget - 1) (step alphabet resource) ≤ reader →
+          SourceCurrentConjunctionWorker.explore work reader (budget - 1)
+              ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ pending) middle =
+            SourceCurrentConjunctionWorker.Outcome.done final after
+schedule : forecast alphabet (budget - 1) (step alphabet resource) = forecast alphabet budget resource
+⊢ Fits (forecast alphabet budget resource) after.heap ∧
+    ∀ (work reader : Nat),
+      workerFuel alphabet budget resource ≤ work →
+        readerFuel alphabet budget resource ≤ reader →
+          SourceCurrentConjunctionWorker.explore work reader budget table (nodes :: pending) before =
+            SourceCurrentConjunctionWorker.Outcome.done final after

@@ -1,0 +1,40 @@
+import MicroCFTA.SourceCurrentConjunctionTupleNumeric
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 8000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_ge
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_ge
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_ge
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_mono
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_limits_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_limits_mono
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.forecast_limits_mono
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.OptionalBounds
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.OptionalBounds
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.OptionalBounds
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.bound
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.bound
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.bound
+
+#check @MicroCFTA.SourceCurrentConjunctionTupleNumeric.complete
+#print axioms MicroCFTA.SourceCurrentConjunctionTupleNumeric.complete
+#print MicroCFTA.SourceCurrentConjunctionTupleNumeric.complete
+

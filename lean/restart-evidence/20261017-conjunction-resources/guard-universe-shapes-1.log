@@ -1,0 +1,99 @@
+@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Rows.run : ∀ {Symbol Formula : Type} [inst : DecidableEq Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {nodes :
+    List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {edges :
+    List
+      (List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {rows :
+    List
+      (List
+        (List
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))}
+  {after before : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula},
+  @MicroCFTA.SourceCurrentConjunctionCompletionReads.Exposures Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      inst_1 nodes (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) edges heap →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst_1
+        (@MicroCFTA.SourceCurrentConjunctionTuples.tuples Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst
+          edges)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.mk Symbol Formula heap
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula before))
+        rows after →
+      @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Rows Symbol Formula inst inst_1 nodes before rows after
+@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples.skip : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {tuple :
+    List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {before middle : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula}
+  {tuples :
+    List
+      (List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {rows :
+    List
+      (List
+        (List
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))}
+  {after : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula},
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuple Symbol Formula inst tuple before
+      (@none
+        (List
+          (List
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))
+      middle →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst tuples middle rows after →
+      @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst
+        (@List.cons
+          (List
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+          tuple tuples)
+        before rows after
+@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples.keep : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {tuple :
+    List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {before : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula}
+  {row :
+    List
+      (List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {middle : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula}
+  {tuples :
+    List
+      (List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {rows :
+    List
+      (List
+        (List
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))}
+  {after : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula},
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuple Symbol Formula inst tuple before
+      (@some
+        (List
+          (List
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+        row)
+      middle →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst tuples middle rows after →
+      @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst
+        (@List.cons
+          (List
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+          tuple tuples)
+        before
+        (@List.cons
+          (List
+            (List
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+          row rows)
+        after

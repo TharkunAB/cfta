@@ -1,0 +1,213 @@
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.guards' does not depend on any axioms
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.guards : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → List.{0} Guard
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.initial' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.initial : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.SourceEqualityAnnotationHeap.Heap Guard Symbol
+      (fun guard =>
+        @Membership.mem.{0, 0} Guard (List.{0} Guard) (@List.instMembership.{0} Guard)
+          (@MicroCFTA.SourceCurrentConjunctionGuardUniverse.guards Symbol Guard source) guard)
+      source
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuple_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuple_heap : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (annotation : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Prop)
+  {tuple :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {before after : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula}
+  {rows :
+    Option.{0}
+      (List.{0}
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))},
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuple Symbol Formula inst tuple before rows after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+        @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) tuple →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              tuple →
+            @MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+              @MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after)
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuples_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.tuples_heap : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (annotation : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Prop)
+  {tuples :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {before after : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula}
+  {rows :
+    List.{0}
+      (List.{0}
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))},
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst tuples before rows after →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready Symbol Formula before →
+      (∀
+          (tuple :
+            List.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+          @Membership.mem.{0, 0}
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              (List.{0}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+              (@List.instMembership.{0}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+              tuples tuple →
+            @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) tuple) →
+        (∀
+            (tuple :
+              List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+            @Membership.mem.{0, 0}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                (List.{0}
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+                (@List.instMembership.{0}
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+                tuples tuple →
+              @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) tuple) →
+          @MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+              annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+            And (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects Symbol Formula before after)
+              (And
+                (@MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                  annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after))
+                (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.RowsReady Symbol Formula after rows))
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.rows_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.rows_heap : ∀ {Symbol Formula : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (annotation : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Prop)
+  {nodes :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {before after : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula}
+  {rows :
+    List.{0}
+      (List.{0}
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))},
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Rows Symbol Formula inst inst_1 nodes before rows after →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready Symbol Formula before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) nodes →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            nodes →
+          @MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+              annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+            And (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects Symbol Formula before after)
+              (And
+                (@MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                  annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after))
+                (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.RowsReady Symbol Formula after rows))
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.run_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.run_heap : ∀ {Symbol Formula : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (annotation : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Prop) {budget : Nat}
+  {table final :
+    List.{0}
+      (MicroCFTA.SourceCurrentConjunctionEmptinessTable.Entry
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {before after : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula},
+  @MicroCFTA.SourceCurrentConjunctionWorklist.Run Symbol Formula inst inst_1 budget table pending before final after →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready Symbol Formula before →
+      @MicroCFTA.SourceCurrentConjunctionWorklist.PendingReady Symbol Formula before pending →
+        @MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+            annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+          And (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects Symbol Formula before after)
+            (@MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+              annotation (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after))
+'MicroCFTA.SourceCurrentConjunctionGuardUniverse.entered' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConjunctionGuardUniverse.entered : ∀ {Symbol Formula : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (budget : Nat)
+  (pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+  (before : MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula),
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready Symbol Formula before →
+    @MicroCFTA.SourceCurrentConjunctionWorklist.PendingReady Symbol Formula before pending →
+      @Exists.{1}
+        (List.{0}
+          (MicroCFTA.SourceCurrentConjunctionEmptinessTable.Entry
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+        fun final =>
+        @Exists.{1} (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State Symbol Formula) fun after =>
+          And
+            (@MicroCFTA.SourceCurrentConjunctionWorklist.Run Symbol Formula inst inst_1 budget
+              (@List.nil.{0}
+                (MicroCFTA.SourceCurrentConjunctionEmptinessTable.Entry
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+              pending before final after)
+            (And (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects Symbol Formula before after)
+              (And (@MicroCFTA.SourceCurrentConjunctionWorklist.TableReady Symbol Formula after final)
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (@List.length.{0}
+                      (MicroCFTA.SourceCurrentConjunctionEmptinessTable.Entry
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                      final)
+                    budget)
+                  (@MicroCFTA.SourceEqualityAnnotationHeap.Heap (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                    Symbol
+                    (fun guard =>
+                      @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                        (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                        (@List.instMembership.{0} (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                        (@MicroCFTA.SourceCurrentConjunctionGuardUniverse.guards Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before))
+                        guard)
+                    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after)))))
