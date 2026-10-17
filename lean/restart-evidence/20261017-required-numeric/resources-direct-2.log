@@ -1,0 +1,19 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/resources-direct-2.source.lean:65:105: error: Tactic `rfl` failed: The left-hand side
+  InternedValueMass.edge (EdgeValue.mk entry✝ children✝)
+is not definitionally equal to the right-hand side
+  1 + InternedValueMass.values (EdgeValue.mk entry✝ children✝).children
+
+case mk
+Symbol Guard : Type
+profile : Profile
+heap : State Symbol Guard
+fits : HeapFits profile heap
+enough : profile.mass ≤ scalar profile
+entry✝ : Cache.Interned (EdgeKey Symbol Guard)
+children✝ : List (Value Symbol Guard)
+resident : InternedEdgeResidency.EdgeResident heap (EdgeValue.mk entry✝ children✝)
+mass : InternedValueMass.edge (EdgeValue.mk entry✝ children✝) ≤ profile.mass
+count :
+  (EdgeValue.mk entry✝ children✝).children.length ≤ InternedValueMass.values (EdgeValue.mk entry✝ children✝).children
+⊢ InternedValueMass.edge (EdgeValue.mk entry✝ children✝) =
+    1 + InternedValueMass.values (EdgeValue.mk entry✝ children✝).children

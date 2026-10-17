@@ -1,0 +1,416 @@
+'MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      {needed : MicroCFTA.SourceEqualityNeeded.Needed} →
+        {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+          {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+            @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after → Prop
+'MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} →
+        {index : Nat} →
+          {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} →
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before
+                  results after →
+                Prop
+'MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} →
+        {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} →
+          {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+            @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+              Prop
+'MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {first last : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {actual : @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after},
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst first needed value result before after
+      actual →
+    @LE.le.{0} Nat instLENat first last →
+      @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst last needed value result before after
+        actual
+'MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {first last : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {actual :
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results after},
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst first entries index values results
+      before after actual →
+    @LE.le.{0} Nat instLENat first last →
+      @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst last entries index values results
+        before after actual
+'MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {first last : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {actual : @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after},
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst first entries edges results before after
+      actual →
+    @LE.le.{0} Nat instLENat first last →
+      @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst last entries edges results before after
+        actual
+'MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.identity' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.identity : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (shared : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared
+    (MicroCFTA.SourceEqualityNeeded.Needed.node (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+    value value state state (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode.identity Symbol Guard inst value state)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.empty' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.empty : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (shared : Nat)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  (nonempty :
+    @Ne.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+      (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared
+    (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) state state
+    (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode.empty Symbol Guard inst entries state nonempty)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.ordinary' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.ordinary : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rebuilt : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (nonempty :
+    @Ne.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+      (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+  (actual : @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before rebuilt middle)
+  (built :
+    @Eq.{1}
+      (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rebuilt) middle)
+      (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst shared entries edges rebuilt before middle
+      actual →
+    @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared
+      (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) result before after
+      (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode.ordinary Symbol Guard inst entries edges before rebuilt middle
+        result after entry depth free nonempty actual built)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.recursive' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.recursive : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {original exposed result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (nonempty :
+    @Ne.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+      (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+  (recursive : @MicroCFTA.SourceEqualityRequiredGraph.Recursive Symbol Guard original)
+  (head : @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst original before exposed middle)
+  (body :
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst
+      (MicroCFTA.SourceEqualityNeeded.Needed.node entries) exposed middle result after),
+  @MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst shared original before exposed middle
+      head →
+    @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared
+        (MicroCFTA.SourceEqualityNeeded.Needed.node entries) exposed result middle after body →
+      @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared
+        (MicroCFTA.SourceEqualityNeeded.Needed.node entries) original result before after
+        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode.recursive Symbol Guard inst entries original before exposed
+          middle result after nonempty recursive head body)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.nil' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.nil : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (shared index : Nat)
+  (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst shared entries index
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) state state
+    (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren.nil Symbol Guard inst entries index state)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.unselected' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.unselected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (absent :
+    @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+      (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+        (@Nat.cast.{0} Int instNatCastInt index) entries)
+      (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+  (rest :
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) index
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      values before results after),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst shared entries
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) index
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      values results before after rest →
+    @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst shared entries index
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value values)
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value results) before after
+      (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren.unselected Symbol Guard inst entries values before results
+        after value index absent rest)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.selected' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.selected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (found :
+    @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+      (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+        (@Nat.cast.{0} Int instNatCastInt index) entries)
+      (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed))
+  (first : @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result middle)
+  (rest :
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) index
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      values middle results after),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared needed value result before middle
+      first →
+    @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst shared entries
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) index
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        values results middle after rest →
+      @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst shared entries index
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value values)
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result results) before after
+        (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren.selected Symbol Guard inst entries needed value before
+          result middle values results after index found first rest)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.nil' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.nil : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (shared : Nat)
+  (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst shared entries
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) state state
+    (@MicroCFTA.SourceEqualityRequiredGraph.RequireRows.nil Symbol Guard inst entries state)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.rejected' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.rejected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (rejected :
+    @Eq.{1} Bool
+      (MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)))
+      Bool.false)
+  (rest : @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst shared entries edges results before after
+      rest →
+    @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst shared entries
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge edges) results before after
+      (@MicroCFTA.SourceEqualityRequiredGraph.RequireRows.rejected Symbol Guard inst entries edges before results after
+        edge rejected rest)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.kept' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.kept : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edge result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before middle afterEdge after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (fits :
+    @Eq.{1} Bool
+      (MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)))
+      Bool.true)
+  (child :
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) before values middle)
+  (built :
+    @Eq.{1}
+      (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))
+          values)
+        middle)
+      (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result afterEdge))
+  (rest : @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges afterEdge results after),
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst shared entries
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) values before middle child →
+    @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst shared entries edges results afterEdge
+        after rest →
+      @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst shared entries
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge edges)
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) result results) before after
+        (@MicroCFTA.SourceEqualityRequiredGraph.RequireRows.kept Symbol Guard inst entries before values middle result
+          afterEdge edges results after edge fits child built rest)
+'MicroCFTA.SourceCurrentRequiredNumericReplay.node_replay' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredNumericReplay.node_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {actual : @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after},
+  @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst shared needed value result before after
+      actual →
+    ∀ (worker reader : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentRequiredWorkerNumeric.workFuel needed) worker →
+        @LE.le.{0} Nat instLENat shared reader →
+          @Eq.{1}
+            (MicroCFTA.SourceEqualityRequiredWorker.Result Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.SourceEqualityRequiredWorker.require Symbol Guard inst worker reader needed value before)
+            (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildBound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildBound : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool) →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed) → Nat → Prop
+'MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool) →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed) →
+          Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (level : Nat),
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildBound Symbol Guard inst unconstrained anchor entries
+      level →
+    ∀ {index : Nat} {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      (actual :
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results
+          after),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+              @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport Symbol Guard inst
+                    unconstrained anchor entries index values →
+                  ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                    @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                      And
+                        (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                            (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level)
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                            profile)
+                          after)
+                        (@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst
+                          (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                              (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level)
+                              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                              profile))
+                          entries index values results before after actual)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows_length' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows_length : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+    @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) results)
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edges)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (level width : Nat),
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildBound Symbol Guard inst unconstrained anchor entries
+      level →
+    ∀ {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      (actual :
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+              @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                @MicroCFTA.SourceCurrentRequiredSupport.RowsSupport Symbol Guard inst unconstrained anchor
+                    (MicroCFTA.SourceEqualityNeeded.Needed.node entries) edges →
+                  (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          edges edge →
+                        @LE.le.{0} Nat instLENat
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+                          width) →
+                    ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                      @LE.le.{0} Nat instLENat width
+                          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) →
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          And
+                            (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep level width)
+                                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edges)
+                                profile)
+                              after)
+                            (@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst
+                              (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep level width)
+                                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    edges)
+                                  profile))
+                              entries edges results before after actual)

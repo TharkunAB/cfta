@@ -1,0 +1,57 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredResources
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mono
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mono
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel_mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel_mono
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel_mono
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.head
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.head
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.head
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.of_checked
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.of_checked
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.of_checked
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.to_checked
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredResources.to_checked
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredResources.to_checked

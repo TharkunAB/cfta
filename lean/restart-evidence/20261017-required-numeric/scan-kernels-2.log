@@ -1,0 +1,197 @@
+'MicroCFTA.RequiredScanIntegration.constructed_rows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.RequiredScanIntegration.constructed_rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+          @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) →
+            ∀ (kept rejected : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard kept)
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))) →
+                @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard rejected)
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) →
+                  @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) kept
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rejected
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))) →
+                    have made :=
+                      @MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard kept)))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard kept)))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard kept))
+                        before;
+                    @Exists.{0}
+                      (@MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst
+                        (@List.cons.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                          (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed
+                            (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                            (MicroCFTA.SourceEqualityNeeded.Needed.node
+                              (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))
+                          (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) kept
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rejected
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))
+                        before
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made)
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made))
+                      fun actual =>
+                      And
+                        (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                            (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) profile)
+                          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made))
+                        (And
+                          (@MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady Symbol Guard inst
+                            (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) profile))
+                            (@List.cons.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                              (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed
+                                (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                (MicroCFTA.SourceEqualityNeeded.Needed.node
+                                  (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))
+                              (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) kept
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rejected
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made)
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                            before
+                            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made)
+                            actual)
+                          (∀ (worker reader : Nat),
+                            @LE.le.{0} Nat instLENat
+                                (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                      MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+                                      (MicroCFTA.SourceEqualityNeeded.Needed.node
+                                        (@List.cons.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                                          (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed
+                                            (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                            (MicroCFTA.SourceEqualityNeeded.Needed.node
+                                              (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))
+                                          (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                worker →
+                              @LE.le.{0} Nat instLENat
+                                  (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                      (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) profile))
+                                  reader →
+                                @Eq.{1}
+                                  (MicroCFTA.SourceEqualityRequiredWorker.Result Symbol Guard
+                                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                                  (@MicroCFTA.SourceEqualityRequiredWorker.rows Symbol Guard inst
+                                    (@MicroCFTA.SourceEqualityRequiredWorker.require Symbol Guard inst worker reader)
+                                    (@List.cons.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                                      (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed
+                                        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                        (MicroCFTA.SourceEqualityNeeded.Needed.node
+                                          (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))
+                                      (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+                                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) kept
+                                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                        rejected
+                                        (@List.nil.{0}
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))
+                                    before)
+                                  (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Symbol Guard
+                                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made)
+                                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) made))))
+'MicroCFTA.RequiredScanIntegration.offset_children' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.RequiredScanIntegration.offset_children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+          ∀ (openValue value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) openValue
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))) →
+              @Exists.{0}
+                (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst
+                  (@List.cons.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed
+                      (@OfNat.ofNat.{0} Int (nat_lit 2) (@instOfNat (nat_lit 2)))
+                      (MicroCFTA.SourceEqualityNeeded.Needed.node
+                        (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))
+                    (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) openValue
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  before
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) openValue
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  before)
+                fun actual =>
+                And
+                  (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                      (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) profile)
+                    before)
+                  (@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst
+                    (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                        (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) profile))
+                    (@List.cons.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                      (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed
+                        (@OfNat.ofNat.{0} Int (nat_lit 2) (@instOfNat (nat_lit 2)))
+                        (MicroCFTA.SourceEqualityNeeded.Needed.node
+                          (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))))
+                      (@List.nil.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) openValue
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) openValue
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                    before before actual)

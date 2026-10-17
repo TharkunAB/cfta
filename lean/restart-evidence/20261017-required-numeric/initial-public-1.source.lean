@@ -1,0 +1,37 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast_ge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast_ge
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast_ge
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.workerFuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.workerFuel
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.workerFuel
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.readerFuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.readerFuel
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.readerFuel
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.at_requireAll
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.at_requireAll
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.at_requireAll
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.complete
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.complete
+
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.caller
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.caller
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.caller

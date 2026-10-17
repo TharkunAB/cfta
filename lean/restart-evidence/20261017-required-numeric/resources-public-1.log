@@ -1,0 +1,1187 @@
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits : {Symbol Guard : Type} →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits' depends on axioms: [propext, Quot.sound.{u}]
+structure MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits {Symbol Guard : Type}
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) : Prop
+number of parameters: 4
+fields:
+  MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.nodes : @LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+      profile.nodes
+  MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.edges : @LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+      profile.edges
+  MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.stored : @MicroCFTA.InternedValueMassHeap.Stored
+      Symbol Guard profile.mass heap
+constructor:
+  MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mk {Symbol Guard : Type}
+    {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+    {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+    (nodes :
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+        profile.nodes)
+    (edges :
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+        profile.edges)
+    (stored : @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard profile.mass heap) :
+    @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mono : ∀ {Symbol Guard : Type}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard first heap →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard last heap
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mono' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mono : ∀ {Symbol Guard : Type}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard first heap →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard last heap :=
+fun {Symbol Guard} {first last} {heap} fits increase =>
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mk Symbol Guard last heap
+    (@Nat.le_trans
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+      first.nodes last.nodes
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.nodes Symbol Guard first heap fits)
+      (@And.left (@LE.le.{0} Nat instLENat first.nodes last.nodes)
+        (And (@LE.le.{0} Nat instLENat first.edges last.edges)
+          (And (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass)))
+        increase))
+    (@Nat.le_trans
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+      first.edges last.edges
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.edges Symbol Guard first heap fits)
+      (@And.left (@LE.le.{0} Nat instLENat first.edges last.edges)
+        (And (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass))
+        (@And.right (@LE.le.{0} Nat instLENat first.nodes last.nodes)
+          (And (@LE.le.{0} Nat instLENat first.edges last.edges)
+            (And (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass)))
+          increase)))
+    (@MicroCFTA.InternedValueMassHeap.Stored.mono Symbol Guard first.mass last.mass heap
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.stored Symbol Guard first heap fits)
+      (@And.right (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass)
+        (@And.right (@LE.le.{0} Nat instLENat first.edges last.edges)
+          (And (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass))
+          (@And.right (@LE.le.{0} Nat instLENat first.nodes last.nodes)
+            (And (@LE.le.{0} Nat instLENat first.edges last.edges)
+              (And (@LE.le.{0} Nat instLENat first.domains last.domains)
+                (@LE.le.{0} Nat instLENat first.mass last.mass)))
+            increase))))
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits : ∀ {Symbol Guard : Type}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) heap
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits' depends on axioms: [propext,
+ Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits : ∀ {Symbol Guard : Type}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) heap :=
+fun {Symbol Guard} {profile} {heap} fits =>
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.mk Symbol Guard
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap (@List.nil.{0} Nat)
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+    (@MicroCFTA.InternedValueMassHeap.Stored.mono Symbol Guard profile.mass
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) heap
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.stored Symbol Guard profile heap fits)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mass profile))
+    (@Nat.le_trans
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard
+            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap (@List.nil.{0} Nat)
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))))
+      profile.nodes (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.nodes Symbol Guard profile heap fits)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_nodes profile))
+    (@Nat.le_trans
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard
+            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap (@List.nil.{0} Nat)
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))))
+      profile.edges (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.edges Symbol Guard profile heap fits)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_edges profile))
+    (Nat.zero_le (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel' does not depend on any axioms
+def MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat :=
+fun profile =>
+  MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel first)
+      (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel last)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel first)
+      (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel last) :=
+fun {first last} increase =>
+  @MicroCFTA.SourceCurrentOpenRowReadResources.readFuel_mono
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar first)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar last)
+    (@MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar_mono first last increase)
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width : ∀ {Symbol Guard : Type}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    ∀ {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+      {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {depth : Nat}
+      {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference},
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free) →
+        @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width : ∀ {Symbol Guard : Type}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    ∀ {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+      {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {depth : Nat}
+      {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference},
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free) →
+        @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) :=
+fun {Symbol Guard} {profile} {heap} fits {entry} {rows} {depth} {free} available =>
+  have mass :=
+    @MicroCFTA.InternedValueMassHeap.available Symbol Guard profile.mass heap
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.stored Symbol Guard profile heap fits)
+      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free) available;
+  have count := @MicroCFTA.InternedStoredEncodingWidth.edges_length Symbol Guard rows;
+  have enough := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mass profile;
+  @Decidable.byContradiction
+    (@LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+    ((@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows).decLe
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+    fun a =>
+    @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node_width._proof_1_1 Symbol Guard profile rows count enough
+      (@Eq.mp.{0}
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.InternedValueMass.value Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free))
+          profile.mass)
+        (@LE.le.{0} Nat instLENat
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.edges Symbol Guard rows))
+          profile.mass)
+        (@congrFun'.{1, 1} Nat Prop
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.value Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free)))
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)))
+          (@congrArg.{1, 1} Nat (Nat → Prop)
+            (@MicroCFTA.InternedValueMass.value Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@MicroCFTA.InternedValueMass.edges Symbol Guard rows))
+            (@LE.le.{0} Nat instLENat) (@MicroCFTA.InternedValueMass.value.eq_3 Symbol Guard entry rows depth free))
+          profile.mass)
+        mass)
+      a
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width : ∀ {Symbol Guard : Type}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard heap edge →
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width : ∀ {Symbol Guard : Type}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard heap edge →
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) :=
+fun {Symbol Guard} {profile} {heap} fits edge resident =>
+  have mass :=
+    @MicroCFTA.InternedValueMassHeap.resident Symbol Guard profile.mass heap
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.stored Symbol Guard profile heap fits) edge
+      resident;
+  have count :=
+    @MicroCFTA.InternedStoredEncodingWidth.values_length Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge);
+  have enough := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mass profile;
+  have same :=
+    @MicroCFTA.InternedConstructorTemplates.EdgeValue.casesOn.{0} Symbol Guard
+      (fun t =>
+        @Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge t →
+          @Eq.{1} Nat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@MicroCFTA.InternedValueMass.values Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))))
+      edge
+      (fun entry children h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry children)
+          (fun edge =>
+            @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard heap edge →
+              @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge) profile.mass →
+                @LE.le.{0} Nat instLENat
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+                    (@MicroCFTA.InternedValueMass.values Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)) →
+                  @Eq.{1} Nat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@MicroCFTA.InternedValueMass.values Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))))
+          (fun resident mass count =>
+            @of_eq_true
+              (@Eq.{1} Nat
+                (@MicroCFTA.InternedValueMass.edge Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry children))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@MicroCFTA.InternedValueMass.values Symbol Guard children)))
+              (@Eq.trans.{1} Prop
+                (@Eq.{1} Nat
+                  (@MicroCFTA.InternedValueMass.edge Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry children))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@MicroCFTA.InternedValueMass.values Symbol Guard children)))
+                (@Eq.{1} Nat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@MicroCFTA.InternedValueMass.values Symbol Guard children))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@MicroCFTA.InternedValueMass.values Symbol Guard children)))
+                True
+                (@congrFun'.{1, 1} Nat Prop
+                  (@Eq.{1} Nat
+                    (@MicroCFTA.InternedValueMass.edge Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry children)))
+                  (@Eq.{1} Nat
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@MicroCFTA.InternedValueMass.values Symbol Guard children)))
+                  (@congrArg.{1, 1} Nat (Nat → Prop)
+                    (@MicroCFTA.InternedValueMass.edge Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry children))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@MicroCFTA.InternedValueMass.values Symbol Guard children))
+                    (@Eq.{1} Nat) (@MicroCFTA.InternedValueMass.edge.eq_1 Symbol Guard entry children))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@MicroCFTA.InternedValueMass.values Symbol Guard children)))
+                (@eq_self.{1} Nat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@MicroCFTA.InternedValueMass.values Symbol Guard children)))))
+          edge
+          (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry children) h)
+          resident mass count)
+      (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge);
+  @Decidable.byContradiction
+    (@LE.le.{0} Nat instLENat
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+    ((@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)).decLe
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+    fun a =>
+    @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge_width._proof_1_1 Symbol Guard profile edge
+      (@Eq.mp.{0} (@LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge) profile.mass)
+        (@LE.le.{0} Nat instLENat
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.values Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)))
+          profile.mass)
+        (@congrArg.{1, 1} Nat Prop (@MicroCFTA.InternedValueMass.edge Symbol Guard edge)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.values Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)))
+          (fun _a => @LE.le.{0} Nat instLENat _a profile.mass) same)
+        mass)
+      count enough same a
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat)
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard heap rows →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+          count →
+        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile count profile)
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat)
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard heap rows →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+          count →
+        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile count profile)
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] profile count
+    rows heap fits resident length =>
+  have produced :=
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.node Symbol Guard inst rows heap
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) count
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits Symbol Guard profile heap fits)
+      resident length;
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mk Symbol Guard
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile count profile)
+    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.nodes Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))
+        (@List.nil.{0} Nat) (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@And.left
+        (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.value Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap)))))
+        produced))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.edges Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))
+        (@List.nil.{0} Nat) (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@And.left
+        (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.value Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap)))))
+        produced))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.stored Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))
+        (@List.nil.{0} Nat) (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@And.left
+        (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.value Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap)))))
+        produced))
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat) (symbol : Symbol)
+  (guard : Guard) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap values →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+          count →
+        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile count profile)
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.edge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (count : Nat) (symbol : Symbol)
+  (guard : Guard) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile heap →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap values →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+          count →
+        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile count profile)
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] profile count
+    symbol guard values heap fits available length =>
+  have produced :=
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.edge Symbol Guard inst symbol guard values heap
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) count
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits Symbol Guard profile heap fits)
+      available length;
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mk Symbol Guard
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile count profile)
+    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.nodes Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))
+        (@List.nil.{0} Nat) (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@And.left
+        (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.edge Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          (And
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap)))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+        produced))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.edges Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))
+        (@List.nil.{0} Nat) (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@And.left
+        (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.edge Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          (And
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap)))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+        produced))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.stored Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))
+        (@List.nil.{0} Nat) (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@And.left
+        (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.edge Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth count
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          (And
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap)))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+        produced))
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.head : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual : @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @MicroCFTA.SourceSecondaryGateHead.WarmHead Symbol Guard inst before value →
+          @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+            And
+              (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile) after)
+              (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+                value before result after actual)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.head' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.head : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual : @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @MicroCFTA.SourceSecondaryGateHead.WarmHead Symbol Guard inst before value →
+          @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+            And
+              (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile) after)
+              (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+                value before result after actual) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] profile
+    {value result} {before after} actual semantic costs available warm fits =>
+  have produced :=
+    @MicroCFTA.SourceCurrentOpenRowReadResources.head Symbol Guard inst value result before after actual
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) semantic costs available warm
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.scalar_fits Symbol Guard profile before fits);
+  @And.intro
+    (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+      (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile) after)
+    (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+      (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+        (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+      value before result after actual)
+    (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mk Symbol Guard
+      (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile) after
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.nodes Symbol Guard
+        (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard after (@List.nil.{0} Nat)
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@And.left
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+            after)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+            (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+              (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                value before result after actual)))
+          (@And.right (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+                after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+                  (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                    (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                      (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                    value before result after actual))))
+            produced)))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.edges Symbol Guard
+        (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard after (@List.nil.{0} Nat)
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@And.left
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+            after)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+            (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+              (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                value before result after actual)))
+          (@And.right (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+                after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+                  (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                    (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                      (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                    value before result after actual))))
+            produced)))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.stored Symbol Guard
+        (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard after (@List.nil.{0} Nat)
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@And.left
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+            after)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+            (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+              (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                value before result after actual)))
+          (@And.right (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+                after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+                  (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                    (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                      (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                    value before result after actual))))
+            produced))))
+    (@Eq.mpr.{0}
+      (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+        (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+          (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+        value before result after actual)
+      (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+        (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+          (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+            (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges) profile.mass)))
+        value before result after
+        (@Eq.ndrec.{0, 1} (DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)) inst
+          (fun [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] =>
+            @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard edgeEq value before result after)
+          (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+            (fun {value} => @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+            (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) before
+              (fun {before} => @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+              (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                (fun {result} => @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+                (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after
+                  (fun {after} =>
+                    @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+                  actual after (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after))
+                result (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result))
+              before (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) before))
+            value (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value))
+          inst
+          (@Subsingleton.elim.{1} (DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+            (@Pi.instSubsingleton.{1, 1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (fun a =>
+                (b : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) →
+                  Decidable (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) a b))
+              fun a =>
+              @Pi.instSubsingleton.{1, 1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (fun b => Decidable (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) a b))
+                fun a_1 =>
+                instSubsingletonDecidable (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) a a_1))
+            inst inst)))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+            (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+              (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+            value before result after actual)
+          (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+            (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+              (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges) profile.mass)))
+            value before result after
+            (@Eq.ndrec.{0, 1} (DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)) inst
+              (fun [edgeEq : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] =>
+                @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard edgeEq value before result after)
+              (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                (fun {value} => @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+                (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) before
+                  (fun {before} =>
+                    @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+                  (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (fun {result} =>
+                      @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+                    (@Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after
+                      (fun {after} =>
+                        @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after)
+                      actual after (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after))
+                    result (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result))
+                  before (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) before))
+                value (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value))
+              inst
+              (@Subsingleton.elim.{1} (DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+                (@Pi.instSubsingleton.{1, 1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (fun a =>
+                    (b : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) →
+                      Decidable (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) a b))
+                  fun a =>
+                  @Pi.instSubsingleton.{1, 1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (fun b => Decidable (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) a b))
+                    fun a_1 =>
+                    instSubsingletonDecidable
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) a a_1))
+                inst inst))))
+        (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady.congr_simp Symbol Guard inst inst
+          (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+            (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+          (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+            (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+              (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges) profile.mass)))
+          (@congrArg.{1, 1} Nat Nat
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+              (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile))
+            (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+              (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges) profile.mass))
+            MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+            (@Eq.trans.{1} Nat
+              (@Max.max.{0} Nat Nat.instMax
+                (@Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile).nodes
+                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile).edges)
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                    profile.mass)))
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                    profile.mass))
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                    profile.mass)))
+              (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges) profile.mass))
+              (@congrFun'.{1, 1} Nat Nat
+                (@Max.max.{0} Nat Nat.instMax
+                  (@Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile).nodes
+                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile).edges))
+                (@Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                    (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                      profile.mass)))
+                (@congrArg.{1, 1} Nat (Nat → Nat)
+                  (@Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile).nodes
+                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile profile).edges)
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                    (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                      profile.mass))
+                  (@Max.max.{0} Nat Nat.instMax)
+                  (Nat.max_self
+                    (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                      (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                        profile.mass))))
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                    profile.mass)))
+              (Nat.max_self
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (@Max.max.{0} Nat Nat.instMax (@Max.max.{0} Nat Nat.instMax profile.nodes profile.edges)
+                    profile.mass)))))
+          value value (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) before before
+          (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) before) result result
+          (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) after after
+          (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after) actual))
+      (@And.right (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+        (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+          (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+            (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+          value before result after actual)
+        (@And.right (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+            (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+              (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+              value before result after actual))
+          (@And.right
+            (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+              (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+              after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+              (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+                (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                    (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                  value before result after actual)))
+            (@And.right (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                  (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile))
+                  after)
+                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Ordinary Symbol Guard result)
+                    (@MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady Symbol Guard inst
+                      (MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+                        (MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile)))
+                      value before result after actual))))
+              produced)))))
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.of_checked : ∀ {width : Nat}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width},
+  @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits width profile before →
+    @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) profile
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.of_checked' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.of_checked : ∀ {width : Nat}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width},
+  @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits width profile before →
+    @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) profile
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) :=
+fun {width} {profile} {before} fits =>
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.mk
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) profile
+    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+    (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.nodes width profile before fits)
+    (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.edges width profile before fits)
+    (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.stored width profile before fits)
+@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.to_checked : ∀ {width : Nat}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits width first before →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) last heap →
+        @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits width last
+          (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap)
+'MicroCFTA.SourceCurrentConstrainedCapRequiredResources.to_checked' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredResources.to_checked : ∀ {width : Nat}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits width first before →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) last heap →
+        @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits width last
+          (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap) :=
+fun {width} {first last} {before} {heap} initial increase returned =>
+  @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.mk width last
+    (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap)
+    (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.nodes
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) last heap returned)
+    (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.edges
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) last heap returned)
+    (@Nat.le_trans
+      (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+              (@MicroCFTA.SourceCurrentConjunctionClassScan.advanceHeap width before heap)))))
+      first.domains last.domains
+      (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.domains width first before initial)
+      (@And.left (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass)
+        (@And.right (@LE.le.{0} Nat instLENat first.edges last.edges)
+          (And (@LE.le.{0} Nat instLENat first.domains last.domains) (@LE.le.{0} Nat instLENat first.mass last.mass))
+          (@And.right (@LE.le.{0} Nat instLENat first.nodes last.nodes)
+            (And (@LE.le.{0} Nat instLENat first.edges last.edges)
+              (And (@LE.le.{0} Nat instLENat first.domains last.domains)
+                (@LE.le.{0} Nat instLENat first.mass last.mass)))
+            increase))))
+    (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits.stored
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) last heap returned)

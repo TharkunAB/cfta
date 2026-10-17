@@ -1,0 +1,78 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+set_option maxRecDepth 30000
+set_option maxHeartbeats 8000000
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.mono
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.mono
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.mono
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.mono
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.mono
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.mono
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.identity
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.identity
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.empty
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.empty
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.ordinary
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.ordinary
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.recursive
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady.recursive
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.nil
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.nil
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.unselected
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.unselected
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.selected
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady.selected
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.nil
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.nil
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.rejected
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.rejected
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.kept
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.RowsReady.kept
+
+#print axioms MicroCFTA.SourceCurrentRequiredNumericReplay.node_replay
+#check @MicroCFTA.SourceCurrentRequiredNumericReplay.node_replay
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildBound
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildBound
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.children
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.children
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows_length
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows_length
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.rows
+

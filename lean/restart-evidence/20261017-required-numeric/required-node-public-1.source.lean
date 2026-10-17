@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.at_size
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.at_size
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.at_size
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children
+#print MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children

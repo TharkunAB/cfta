@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/required-node-direct-2.source.lean:117:84: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+value result : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+growth : Grows anchor before
+profile : Profile
+fits : HeapFits profile before
+level : Nat
+entries : List (Int × Needed)
+valid : SourceEqualityNeeded.Valid (Needed.node entries)
+nonnegative : SourceEqualityNeededNonnegative.Nonnegative (Needed.node entries)
+actual : RequireNode (Needed.node entries) value before result after
+support : NodeSupport unconstrained anchor (Needed.node entries) value
+small : sizeOf (Needed.node entries) ≤ level + 1
+validEntries :
+  SourceEqualityNeededMap.Ascending entries ∧
+    ∀ (index : Int) (child : Needed), (index, child) ∈ entries → SourceEqualityNeeded.Valid child
+nonnegativeEntries :
+  ∀ (index : Int) (child : Needed),
+    (index, child) ∈ entries → 0 ≤ index ∧ SourceEqualityNeededNonnegative.Nonnegative child
+⊢ SourceEqualityNeededMap.Ascending entries ∧
+    ∀ (index : Int) (child : Needed), (index, child) ∈ entries → SourceEqualityNeeded.Valid child
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/required-node-direct-2.source.lean:109:21: error: unsolved goals
+case succ.node
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+value result : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+growth : Grows anchor before
+profile : Profile
+fits : HeapFits profile before
+level : Nat
+entries : List (Int × Needed)
+valid : SourceEqualityNeeded.Valid (Needed.node entries)
+nonnegative : SourceEqualityNeededNonnegative.Nonnegative (Needed.node entries)
+actual : RequireNode (Needed.node entries) value before result after
+support : NodeSupport unconstrained anchor (Needed.node entries) value
+small : sizeOf (Needed.node entries) ≤ level + 1
+validEntries✝ :
+  SourceEqualityNeededMap.Ascending entries ∧
+    ∀ (index : Int) (child : Needed), (index, child) ∈ entries → SourceEqualityNeeded.Valid child
+nonnegativeEntries :
+  ∀ (index : Int) (child : Needed),
+    (index, child) ∈ entries → 0 ≤ index ∧ SourceEqualityNeededNonnegative.Nonnegative child
+validEntries :
+  SourceEqualityNeededMap.Ascending entries ∧
+    ∀ (index : Int) (child : Needed), (index, child) ∈ entries → SourceEqualityNeeded.Valid child
+⊢ HeapFits (planProfile (level + 1) profile) after ∧
+    SourceCurrentRequiredNumericReplay.NodeReady (readFuel (planProfile (level + 1) profile)) actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/required-node-direct-2.source.lean:118:4: error: unexpected identifier; expected command
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/required-node-direct-2.source.lean:187:65: error(lean.unknownIdentifier): Unknown identifier `validEntries`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/required-node-direct-2.source.lean:188:8: error(lean.unknownIdentifier): Unknown identifier `nonnegativeEntries`

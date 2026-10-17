@@ -1,0 +1,200 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/scan-direct-1.source.lean:73:47: error: Type mismatch: After simplification, term
+  found
+ has type
+  @Eq (Option Needed) (SourceEqualityNeededMap.lookup (↑index) entries) (some needed✝)
+but is expected to have type
+  @Eq (Option Needed) (SourceEqualityNeededMap.lookup (Int.ofNat index) entries) (some needed✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/scan-direct-1.source.lean:142:27: error: don't know how to synthesize implicit argument `Guard`
+  @HeapFits ?m.600 ?m.601 (rowStep level width profile) ?m.602
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : State Symbol Guard
+entries : List (Int × Needed)
+level width : Nat
+child : ChildBound unconstrained anchor entries level
+anchorSemantic : SemanticReady anchor
+edge : EdgeValue Symbol Guard
+edges : List (EdgeValue Symbol Guard)
+ih :
+  ∀ {results : List (EdgeValue Symbol Guard)} {before after : State Symbol Guard}
+    (actual : RequireRows entries edges before results after),
+    SemanticReady before →
+      CostHeap before →
+        Edges before edges →
+          Grows anchor before →
+            RowsSupport unconstrained anchor (Needed.node entries) edges →
+              (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → edge.children.length ≤ width) →
+                ∀ (profile : Profile),
+                  width ≤ scalar profile →
+                    HeapFits profile before →
+                      HeapFits (scan (rowStep level width) edges.length profile) after ∧
+                        RowsReady (readFuel (scan (rowStep level width) edges.length profile)) actual
+before after : State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+resident : Edges before (edge :: edges)
+growth : Grows anchor before
+support : RowsSupport unconstrained anchor (Needed.node entries) (edge :: edges)
+widths : ∀ (edge_1 : EdgeValue Symbol Guard), edge_1 ∈ edge :: edges → edge_1.children.length ≤ width
+profile : Profile
+widthFits : width ≤ scalar profile
+fits : HeapFits profile before
+tailSupport : RowsSupport unconstrained anchor (Needed.node entries) edges
+tailWidths : ∀ (original : EdgeValue Symbol Guard), original ∈ edges → original.children.length ≤ width
+values✝ : List (Value Symbol Guard)
+middle✝ : State Symbol Guard
+result✝ : EdgeValue Symbol Guard
+afterEdge✝ : State Symbol Guard
+results✝ : List (EdgeValue Symbol Guard)
+built : run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝ = (result✝, afterEdge✝)
+accepted : SourceEqualityNeeded.fits (Needed.node entries) edge.children.length = true
+selected : RequireChildren entries 0 edge.children before values✝ middle✝
+rest : RequireRows entries edges afterEdge✝ results✝ after
+available : Values before edge.children
+originalSupport : ChildrenSupport unconstrained anchor entries 0 edge.children
+first :
+  HeapFits (scan (planProfile level) edge.children.length profile) middle✝ ∧
+    ChildrenReady (readFuel (scan (planProfile level) edge.children.length profile)) selected
+effects :
+  Keeps before middle✝ ∧
+    SemanticReady middle✝ ∧
+      CostHeap middle✝ ∧ SourceEqualityAnnotationHeap.Heap (fun x => True) middle✝ ∧ Values middle✝ values✝
+scanned : Profile := ⋯
+scanBelow : Le (scan (planProfile level) edge.children.length profile) scanned
+middleFits : HeapFits scanned middle✝
+widthScanned : width ≤ scalar scanned
+edgeBound :
+  HeapFits (SourceCurrentConstrainedCapEditForecast.constructorProfile width scanned)
+    (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝).snd
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/scan-direct-1.source.lean:142:27: error: don't know how to synthesize implicit argument `Symbol`
+  @HeapFits ?m.600 ?m.601 (rowStep level width profile) ?m.602
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : State Symbol Guard
+entries : List (Int × Needed)
+level width : Nat
+child : ChildBound unconstrained anchor entries level
+anchorSemantic : SemanticReady anchor
+edge : EdgeValue Symbol Guard
+edges : List (EdgeValue Symbol Guard)
+ih :
+  ∀ {results : List (EdgeValue Symbol Guard)} {before after : State Symbol Guard}
+    (actual : RequireRows entries edges before results after),
+    SemanticReady before →
+      CostHeap before →
+        Edges before edges →
+          Grows anchor before →
+            RowsSupport unconstrained anchor (Needed.node entries) edges →
+              (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → edge.children.length ≤ width) →
+                ∀ (profile : Profile),
+                  width ≤ scalar profile →
+                    HeapFits profile before →
+                      HeapFits (scan (rowStep level width) edges.length profile) after ∧
+                        RowsReady (readFuel (scan (rowStep level width) edges.length profile)) actual
+before after : State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+resident : Edges before (edge :: edges)
+growth : Grows anchor before
+support : RowsSupport unconstrained anchor (Needed.node entries) (edge :: edges)
+widths : ∀ (edge_1 : EdgeValue Symbol Guard), edge_1 ∈ edge :: edges → edge_1.children.length ≤ width
+profile : Profile
+widthFits : width ≤ scalar profile
+fits : HeapFits profile before
+tailSupport : RowsSupport unconstrained anchor (Needed.node entries) edges
+tailWidths : ∀ (original : EdgeValue Symbol Guard), original ∈ edges → original.children.length ≤ width
+values✝ : List (Value Symbol Guard)
+middle✝ : State Symbol Guard
+result✝ : EdgeValue Symbol Guard
+afterEdge✝ : State Symbol Guard
+results✝ : List (EdgeValue Symbol Guard)
+built : run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝ = (result✝, afterEdge✝)
+accepted : SourceEqualityNeeded.fits (Needed.node entries) edge.children.length = true
+selected : RequireChildren entries 0 edge.children before values✝ middle✝
+rest : RequireRows entries edges afterEdge✝ results✝ after
+available : Values before edge.children
+originalSupport : ChildrenSupport unconstrained anchor entries 0 edge.children
+first :
+  HeapFits (scan (planProfile level) edge.children.length profile) middle✝ ∧
+    ChildrenReady (readFuel (scan (planProfile level) edge.children.length profile)) selected
+effects :
+  Keeps before middle✝ ∧
+    SemanticReady middle✝ ∧
+      CostHeap middle✝ ∧ SourceEqualityAnnotationHeap.Heap (fun x => True) middle✝ ∧ Values middle✝ values✝
+scanned : Profile := ⋯
+scanBelow : Le (scan (planProfile level) edge.children.length profile) scanned
+middleFits : HeapFits scanned middle✝
+widthScanned : width ≤ scalar scanned
+edgeBound :
+  HeapFits (SourceCurrentConstrainedCapEditForecast.constructorProfile width scanned)
+    (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝).snd
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-numeric/scan-direct-1.source.lean:142:66: error: don't know how to synthesize placeholder for argument `heap`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : State Symbol Guard
+entries : List (Int × Needed)
+level width : Nat
+child : ChildBound unconstrained anchor entries level
+anchorSemantic : SemanticReady anchor
+edge : EdgeValue Symbol Guard
+edges : List (EdgeValue Symbol Guard)
+ih :
+  ∀ {results : List (EdgeValue Symbol Guard)} {before after : State Symbol Guard}
+    (actual : RequireRows entries edges before results after),
+    SemanticReady before →
+      CostHeap before →
+        Edges before edges →
+          Grows anchor before →
+            RowsSupport unconstrained anchor (Needed.node entries) edges →
+              (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → edge.children.length ≤ width) →
+                ∀ (profile : Profile),
+                  width ≤ scalar profile →
+                    HeapFits profile before →
+                      HeapFits (scan (rowStep level width) edges.length profile) after ∧
+                        RowsReady (readFuel (scan (rowStep level width) edges.length profile)) actual
+before after : State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+resident : Edges before (edge :: edges)
+growth : Grows anchor before
+support : RowsSupport unconstrained anchor (Needed.node entries) (edge :: edges)
+widths : ∀ (edge_1 : EdgeValue Symbol Guard), edge_1 ∈ edge :: edges → edge_1.children.length ≤ width
+profile : Profile
+widthFits : width ≤ scalar profile
+fits : HeapFits profile before
+tailSupport : RowsSupport unconstrained anchor (Needed.node entries) edges
+tailWidths : ∀ (original : EdgeValue Symbol Guard), original ∈ edges → original.children.length ≤ width
+values✝ : List (Value Symbol Guard)
+middle✝ : State Symbol Guard
+result✝ : EdgeValue Symbol Guard
+afterEdge✝ : State Symbol Guard
+results✝ : List (EdgeValue Symbol Guard)
+built : run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝ = (result✝, afterEdge✝)
+accepted : SourceEqualityNeeded.fits (Needed.node entries) edge.children.length = true
+selected : RequireChildren entries 0 edge.children before values✝ middle✝
+rest : RequireRows entries edges afterEdge✝ results✝ after
+available : Values before edge.children
+originalSupport : ChildrenSupport unconstrained anchor entries 0 edge.children
+first :
+  HeapFits (scan (planProfile level) edge.children.length profile) middle✝ ∧
+    ChildrenReady (readFuel (scan (planProfile level) edge.children.length profile)) selected
+effects :
+  Keeps before middle✝ ∧
+    SemanticReady middle✝ ∧
+      CostHeap middle✝ ∧ SourceEqualityAnnotationHeap.Heap (fun x => True) middle✝ ∧ Values middle✝ values✝
+scanned : Profile := ⋯
+scanBelow : Le (scan (planProfile level) edge.children.length profile) scanned
+middleFits : HeapFits scanned middle✝
+widthScanned : width ≤ scalar scanned
+edgeBound :
+  HeapFits (SourceCurrentConstrainedCapEditForecast.constructorProfile width scanned)
+    (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝).snd
+⊢ State ?m.600 ?m.601

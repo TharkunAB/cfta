@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredResources
+import MicroCFTA.SourceCurrentRequiredNumericReplay
+set_option pp.explicit true
+#check @MicroCFTA.SourceEqualityRequiredGraph.RequireNode.ordinary
+#check @MicroCFTA.SourceCurrentRequiredHeapEffects.rows

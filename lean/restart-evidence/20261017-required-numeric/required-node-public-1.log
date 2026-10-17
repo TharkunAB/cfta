@@ -1,0 +1,1024 @@
+'MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+    ∀ (level : Nat) (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+      MicroCFTA.SourceEqualityNeeded.Valid needed →
+        MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed →
+          ∀ {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (actual :
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                        value →
+                      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          @LE.le.{0} Nat instLENat
+                              (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                              level →
+                            And
+                              (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level profile) after)
+                              (@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level profile))
+                                needed value result before after actual)
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+    ∀ (level : Nat) (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+      MicroCFTA.SourceEqualityNeeded.Valid needed →
+        MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed →
+          ∀ {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (actual :
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                        value →
+                      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          @LE.le.{0} Nat instLENat
+                              (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                              level →
+                            And
+                              (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level profile) after)
+                              (@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level profile))
+                                needed value result before after actual) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] unconstrained
+    anchor anchorSemantic level needed valid nonnegative {value result} {before after} actual semantic costs available
+    growth support profile fits small =>
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node._unary Symbol Guard inst unconstrained anchor
+    anchorSemantic
+    (@PSigma.mk.{1, 1} Nat
+      (fun level =>
+        @PSigma.{1, 1} MicroCFTA.SourceEqualityNeeded.Needed fun needed =>
+          @PSigma.{0, 1} (MicroCFTA.SourceEqualityNeeded.Valid needed) fun valid =>
+            @PSigma.{0, 1} (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed) fun nonnegative =>
+              @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {value} =>
+                @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {result} =>
+                  @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+      level
+      (@PSigma.mk.{1, 1} MicroCFTA.SourceEqualityNeeded.Needed
+        (fun needed =>
+          @PSigma.{0, 1} (MicroCFTA.SourceEqualityNeeded.Valid needed) fun valid =>
+            @PSigma.{0, 1} (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed) fun nonnegative =>
+              @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {value} =>
+                @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {result} =>
+                  @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+        needed
+        (@PSigma.mk.{0, 1} (MicroCFTA.SourceEqualityNeeded.Valid needed)
+          (fun valid =>
+            @PSigma.{0, 1} (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed) fun nonnegative =>
+              @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {value} =>
+                @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {result} =>
+                  @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+          valid
+          (@PSigma.mk.{0, 1} (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed)
+            (fun nonnegative =>
+              @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {value} =>
+                @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {result} =>
+                  @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+            nonnegative
+            (@PSigma.mk.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun {value} =>
+                @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun {result} =>
+                  @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+              value
+              (@PSigma.mk.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun {result} =>
+                  @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                result
+                (@PSigma.mk.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (fun {before} =>
+                    @PSigma.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                  before
+                  (@PSigma.mk.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (fun {after} =>
+                      @PSigma.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                          after)
+                        fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                    after
+                    (@PSigma.mk.{0, 1}
+                      (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result
+                        after)
+                      (fun actual =>
+                        @PSigma.{0, 1}
+                          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                          fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                      actual
+                      (@PSigma.mk.{0, 1}
+                        (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before)
+                        (fun semantic =>
+                          @PSigma.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                            fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                        semantic
+                        (@PSigma.mk.{0, 1} (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before)
+                          (fun costs =>
+                            @PSigma.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                              fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                          costs
+                          (@PSigma.mk.{0, 1} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value)
+                            (fun available =>
+                              @PSigma.{0, 1} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                                fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                            available
+                            (@PSigma.mk.{0, 1}
+                              (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before)
+                              (fun growth =>
+                                @PSigma.{0, 1}
+                                  (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                    anchor needed value)
+                                  fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                              growth
+                              (@PSigma.mk.{0, 1}
+                                (@MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained
+                                  anchor needed value)
+                                (fun support =>
+                                  @PSigma.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                    fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                                support
+                                (@PSigma.mk.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                  (fun profile =>
+                                    @PSigma.{0, 0}
+                                      (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                        profile before)
+                                      fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                                  profile
+                                  (@PSigma.mk.{0, 0}
+                                    (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                      profile before)
+                                    (fun fits =>
+                                      @LE.le.{0} Nat instLENat
+                                        (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                        level)
+                                    fits small))))))))))))))))
+'MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.at_size' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.at_size : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+    ∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+      MicroCFTA.SourceEqualityNeeded.Valid needed →
+        MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed →
+          ∀ {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (actual :
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                        value →
+                      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          And
+                            (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                              (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+                                (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                profile)
+                              after)
+                            (@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst
+                              (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+                                  (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                  profile))
+                              needed value result before after actual)
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.at_size : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+    ∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+      MicroCFTA.SourceEqualityNeeded.Valid needed →
+        MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed →
+          ∀ {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (actual :
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                        value →
+                      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          And
+                            (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                              (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+                                (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                profile)
+                              after)
+                            (@MicroCFTA.SourceCurrentRequiredNumericReplay.NodeReady Symbol Guard inst
+                              (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+                                  (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+                                  profile))
+                              needed value result before after actual) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] unconstrained
+    anchor anchorSemantic needed valid nonnegative {value result} {before after} actual semantic costs available growth
+    support profile fits =>
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node Symbol Guard inst unconstrained anchor anchorSemantic
+    (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)
+    needed valid nonnegative value result before after actual semantic costs available growth support profile fits
+    (Nat.le_refl
+      (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+        needed))
+'MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+    ∀ (level : Nat) (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)),
+      MicroCFTA.SourceEqualityNeeded.Valid (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+          ∀ {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (actual :
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                    @MicroCFTA.SourceCurrentRequiredSupport.ForestSupport Symbol Guard inst unconstrained anchor
+                        (MicroCFTA.SourceEqualityNeeded.Needed.node entries) values →
+                      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          @LE.le.{0} Nat instLENat
+                              (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+                                (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+                              level →
+                            And
+                              (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level)
+                                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                                  profile)
+                                after)
+                              (@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level)
+                                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      values)
+                                    profile))
+                                entries (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values results
+                                before after actual)
+theorem MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (anchor : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard anchor →
+    ∀ (level : Nat) (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)),
+      MicroCFTA.SourceEqualityNeeded.Valid (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+          ∀ {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+            {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (actual :
+              @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+                @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard anchor before →
+                    @MicroCFTA.SourceCurrentRequiredSupport.ForestSupport Symbol Guard inst unconstrained anchor
+                        (MicroCFTA.SourceEqualityNeeded.Needed.node entries) values →
+                      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                        @MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard profile before →
+                          @LE.le.{0} Nat instLENat
+                              (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                                MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+                                (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+                              level →
+                            And
+                              (@MicroCFTA.SourceCurrentConstrainedCapRequiredResources.HeapFits Symbol Guard
+                                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level)
+                                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                                  profile)
+                                after)
+                              (@MicroCFTA.SourceCurrentRequiredNumericReplay.ChildrenReady Symbol Guard inst
+                                (MicroCFTA.SourceCurrentConstrainedCapRequiredResources.readFuel
+                                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level)
+                                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      values)
+                                    profile))
+                                entries (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values results
+                                before after actual) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] unconstrained
+    anchor anchorSemantic level entries valid nonnegative {values results} {before after} actual semantic costs
+    available growth support profile fits small =>
+  have validEntries :=
+    @Eq.mp.{0} (MicroCFTA.SourceEqualityNeeded.Valid (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+      (And (@MicroCFTA.SourceEqualityNeededMap.Ascending.{0} MicroCFTA.SourceEqualityNeeded.Needed entries)
+        (∀ (index : Int) (child : MicroCFTA.SourceEqualityNeeded.Needed),
+          @Membership.mem.{0, 0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+              (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+              (@List.instMembership.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+              (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index child) →
+            MicroCFTA.SourceEqualityNeeded.Valid child))
+      (MicroCFTA.SourceEqualityNeeded.Valid.eq_1 entries) valid;
+  have nonnegativeEntries :=
+    @Eq.mp.{0}
+      (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+      (∀ (index : Int) (child : MicroCFTA.SourceEqualityNeeded.Needed),
+        @Membership.mem.{0, 0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+            (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+            (@List.instMembership.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+            (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index child) →
+          And (@LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) index)
+            (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative child))
+      (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative.eq_1 entries) nonnegative;
+  have child :=
+    fun index needed member {value result} {before after} actual a semantic costs available growth support profile
+      fits =>
+    have smaller :=
+      @List.sizeOf_lt_of_mem.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+        (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index needed)
+        (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+          MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst)
+        entries member;
+    have childSize :=
+      @Decidable.byContradiction
+        (@LE.le.{0} Nat instLENat
+          (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+            needed)
+          level)
+        ((@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+              needed).decLe
+          level)
+        fun a =>
+        MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.children._proof_1_1 level entries index needed
+          (@Eq.mp.{0}
+            (@LT.lt.{0} Nat instLTNat
+              (@SizeOf.sizeOf.{1} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst)
+                (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index needed))
+              (@SizeOf.sizeOf.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                (@List._sizeOf_inst.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst))
+                entries))
+            (@LT.lt.{0} Nat instLTNat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@SizeOf.sizeOf.{1} Int Int._sizeOf_inst index))
+                (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed))
+              (@SizeOf.sizeOf.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                (@List._sizeOf_inst.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst))
+                entries))
+            (@congrFun'.{1, 1} Nat Prop
+              (@LT.lt.{0} Nat instLTNat
+                (@SizeOf.sizeOf.{1} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst)
+                  (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index needed)))
+              (@LT.lt.{0} Nat instLTNat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@SizeOf.sizeOf.{1} Int Int._sizeOf_inst index))
+                  (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed)))
+              (@congrArg.{1, 1} Nat (Nat → Prop)
+                (@SizeOf.sizeOf.{1} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst)
+                  (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index needed))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@SizeOf.sizeOf.{1} Int Int._sizeOf_inst index))
+                  (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst needed))
+                (@LT.lt.{0} Nat instLTNat)
+                (@Prod.mk.sizeOf_spec.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst index needed))
+              (@SizeOf.sizeOf.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                (@List._sizeOf_inst.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                    MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst))
+                entries))
+            smaller)
+          (@Eq.mp.{0}
+            (@LE.le.{0} Nat instLENat
+              (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+              level)
+            (@LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@SizeOf.sizeOf.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                  (@List._sizeOf_inst.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                      MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst))
+                  entries))
+              level)
+            (@congrFun'.{1, 1} Nat Prop
+              (@LE.le.{0} Nat instLENat
+                (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+                  (MicroCFTA.SourceEqualityNeeded.Needed.node entries)))
+              (@LE.le.{0} Nat instLENat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@SizeOf.sizeOf.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                    (@List._sizeOf_inst.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                      (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                        MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst))
+                    entries)))
+              (@congrArg.{1, 1} Nat (Nat → Prop)
+                (@SizeOf.sizeOf.{1} MicroCFTA.SourceEqualityNeeded.Needed
+                  MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst
+                  (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@SizeOf.sizeOf.{1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                    (@List._sizeOf_inst.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+                      (@Prod._sizeOf_inst.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed Int._sizeOf_inst
+                        MicroCFTA.SourceEqualityNeeded.Needed._sizeOf_inst))
+                    entries))
+                (@LE.le.{0} Nat instLENat) (MicroCFTA.SourceEqualityNeeded.Needed.node.sizeOf_spec entries))
+              level)
+            small)
+          a;
+    @MicroCFTA.SourceCurrentConstrainedCapRequiredNumeric.node Symbol Guard inst unconstrained anchor anchorSemantic
+      level needed
+      (@And.right (@MicroCFTA.SourceEqualityNeededMap.Ascending.{0} MicroCFTA.SourceEqualityNeeded.Needed entries)
+        (∀ (index : Int) (child : MicroCFTA.SourceEqualityNeeded.Needed),
+          @Membership.mem.{0, 0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)
+              (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+              (@List.instMembership.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+              (@Prod.mk.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed index child) →
+            MicroCFTA.SourceEqualityNeeded.Valid child)
+        validEntries index needed member)
+      (@And.right (@LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) index)
+        (MicroCFTA.SourceEqualityNeededNonnegative.Nonnegative needed) (nonnegativeEntries index needed member))
+      value result before after actual semantic costs available growth support profile fits childSize;
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.children Symbol Guard inst unconstrained anchor entries
+    level child (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values results before after actual
+    anchorSemantic semantic costs available growth
+    (@Eq.mpr.{0}
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport Symbol Guard inst unconstrained
+        anchor entries (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values)
+      (∀ (index : Nat) (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+            (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat index)
+              entries)
+            (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed) →
+          ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun as i =>
+                    @LT.lt.{0} Nat instLTNat i
+                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                  (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                  index)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+              @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed value)
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@MicroCFTA.SourceCurrentConstrainedCapRequiredScanResources.ChildrenSupport Symbol Guard inst unconstrained
+            anchor entries (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values)
+          (∀ (index : Nat) (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+            @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat index)
+                  entries)
+                (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed) →
+              ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      values index)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                  @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                    value))
+        (@forall_congr.{1} Nat
+          (fun a =>
+            ∀ (a_1 : MicroCFTA.SourceEqualityNeeded.Needed),
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                    (Int.ofNat
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) a))
+                    entries)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed a_1) →
+                ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        values a)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor a_1
+                      value)
+          (fun a =>
+            ∀ (a_1 : MicroCFTA.SourceEqualityNeeded.Needed),
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat a)
+                    entries)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed a_1) →
+                ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        values a)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor a_1
+                      value)
+          fun index =>
+          @forall_congr.{1} MicroCFTA.SourceEqualityNeeded.Needed
+            (fun a =>
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                    (Int.ofNat
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index))
+                    entries)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed a) →
+                ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        values index)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor a value)
+            (fun a =>
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat index)
+                    entries)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed a) →
+                ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        values index)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor a value)
+            fun needed =>
+            @implies_congr.{0, 0}
+              (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                  (Int.ofNat
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index))
+                  entries)
+                (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed))
+              (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat index)
+                  entries)
+                (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed))
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      values index)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                  @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                    value)
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      values index)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                  @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                    value)
+              (@congrFun'.{1, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) Prop
+                (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                    (Int.ofNat
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index))
+                    entries))
+                (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat index)
+                    entries))
+                (@congrArg.{1, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed → Prop)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                    (Int.ofNat
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index))
+                    entries)
+                  (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed (Int.ofNat index)
+                    entries)
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                  (@congrFun'.{1, 1} (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+                    (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                      (Int.ofNat
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index)))
+                    (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                      (Int.ofNat index))
+                    (@congrArg.{1, 1} Int
+                      (List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed) →
+                        Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                      (Int.ofNat
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index))
+                      (Int.ofNat index)
+                      (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                      (@congrArg.{1, 1} Nat Int
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) index)
+                        index Int.ofNat (Nat.zero_add index)))
+                    entries))
+                (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed))
+              (@Eq.refl.{1} Prop
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        values index)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+                    @MicroCFTA.SourceCurrentRequiredSupport.NodeSupport Symbol Guard inst unconstrained anchor needed
+                      value))))
+      support)
+    profile fits

@@ -1,0 +1,40 @@
+@MicroCFTA.SourceEqualityRequiredGraph.RequireNode.ordinary : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Prod Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rebuilt : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {depth : Nat}
+  {free : List MicroCFTA.InternedBinderProtocol.Reference},
+  @Ne (List (Prod Int MicroCFTA.SourceEqualityNeeded.Needed)) entries
+      (@List.nil (Prod Int MicroCFTA.SourceEqualityNeeded.Needed)) →
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before rebuilt middle →
+      @Eq
+          (Prod (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rebuilt) middle)
+          (@Prod.mk (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) value after) →
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) before value after
+@MicroCFTA.SourceCurrentRequiredHeapEffects.rows : ∀ {Guard Symbol : Type} (property : Guard → Prop)
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Prod Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.SourceEqualityAnnotationHeap.Heap Guard Symbol property before →
+          @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+            And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+              (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityAnnotationHeap.Heap Guard Symbol property after)
+                    (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard after results))))
