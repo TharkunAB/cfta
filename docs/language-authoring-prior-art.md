@@ -160,12 +160,24 @@ claim is made here. See
 
 ## Current scope and follow-ups
 
-Keep the small grammar-block codec for this PR. It shares the existing complete
+Liquid Haskell is the primary inspiration for the constraint notation: refined
+types, named measures, and explicit obligations. More complex, Lean-style
+constraints are a future target. Neither resemblance in syntax nor the ability
+to store a formula establishes complete type checking. See the
+[Liquid Haskell specification reference](https://ucsd-progsys.github.io/liquidhaskell/specifications/)
+and [Lean's introduction](https://lean-lang.org/doc/reference/latest/Introduction/).
+
+The small grammar-block codec in this PR shares the existing complete
 value codec and validation, adds no parser dependency, and keeps the common
 language example short. Its cost is a domain-specific syntax and a verbose full
 form for complex constraints. Do not describe it as EDN or as a Redex frontend.
 The roundtrip contract is between language values and canonical text; comments
 and arbitrary input spelling are not retained.
+
+The next format change should remove the JSON fallback and the need for a
+separate JSON format. Give every formula and guard a readable exact form, and
+keep state codecs typed. This is pending; the implementation in this PR still
+uses JSON for complex constraints and structured state values.
 
 Follow-ups, each with its own acceptance criteria:
 
@@ -188,6 +200,19 @@ Follow-ups, each with its own acceptance criteria:
   obligations, rather than omit unsupported premises.
 - Keep binder declarations and alpha-equivalence separate from tree equality.
   Demonstrate capture-avoiding substitution before claiming binding support.
+- Run a separate typed-language spike, with Liquid Haskell as the main design
+  reference. Generate a bounded language with explicit typing rules and
+  refinements. Compare it with an independent checker and check counts, rank
+  inverses, sampling, persistence, and rule changes. State which typing rules
+  the constraints express and which operations still need a host checker.
+  Investigate a small dependent or indexed extension and Lean proof checking
+  only after that boundary is clear. This spike is pending.
 
 The first two follow-ups directly improve the concrete workflow. General macros,
 unrestricted judgments, and host callbacks need separate capability boundaries.
+
+The repository already has bounded typed-language construction in
+`Data.CFTA.Gen.Typing`, including environments and de Bruijn variables.
+`cfta-ghc` instead performs checks inside GHC's typechecker. The latter does not
+show that CFTA constraints alone implement GHC's type system. The proposed spike
+must make this distinction explicit.
