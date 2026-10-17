@@ -1,5 +1,43 @@
 # cfta formal model
 
+## Current actual row lineage and inherited dependencies
+
+Updated: 2026-10-17 23:15 CEST. Starting checkpoint is `5286227c`.
+Proof commit is `d41ba9ab`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-active-row-progress.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the complete target and gaps.
+
+Actual completed native row compilation now derives source row and child
+indices, the exact captured writer, full joined guards, and earlier ordered
+child calls. The call heaps grow into the actual final reader. Actual warm
+lookup and cold completion retain their complete original requests.
+
+Initial equality and field data construct the actual inherited accessor,
+prefix, and indexed descent. Original class constituents remain inside
+normalized components. Strict-prefix-related constituents cannot collapse
+into one consistent component. Retained child records preserve dependency.
+These facts still need source-row occurrence labels and all-active key
+compatibility. A decreasing causal label alone does not exclude aliasing.
+
+For actual ordinary-node Mu callback publications, source-indexed raw rows
+retain both schedules, full fields, common-reader growth, equal child Empty
+tests, and equal row-drop decisions. Nonempty child and literal Mu alignment
+remain open. General outer node progress, repeated-pass convergence,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+The existing edge-idle result already excludes outer edge-busy faults.
+
+Full pinned Audit passes 3144 jobs and 69399 dependency checks. All three
+new strict source logs are empty. Canonical and full public checks pass.
+The Audit replays one unchanged old unused-variable warning. Verified caps
+are 4 GiB maximum/high and zero swap; Audit peak is 385 MiB. Evidence is in
+`lean/restart-evidence/20261017-active-row-progress/`. Preserve every older
+proof, counterexample, repair, draft, and raw attempt. Keep the full goal active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later Haskell fix there with its failure,
+reproducer, paths, commit, checks, and upstream status. Keep optimized code.
+
 ## Current native writer growth and repeated original nodes
 
 Updated: 2026-10-17 22:55 CEST. Starting checkpoint is `7b300b93`.
