@@ -1,5 +1,46 @@
 # cfta formal model
 
+## Current stored substitution row origins
+
+Updated: 2026-10-17 19:58 CEST. Starting checkpoint is `89a9a512`.
+Proof commit is `a4b6e12d`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-substitution-row-origins.md` for the exact result.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Independent capture layouts now give equivalent complete stored plans.
+Each shared encoded child call equals that child's own stored substitution
+at its actual heap, with the same original replacement environment.
+Ordinary reconstruction retains indexed source rows, full guards, symbols,
+arity, and ordered actual child calls. Union reconstruction retains exact
+epsilon origins of its substituted member returns. Initial semantic heaps,
+coverage, and source/replacement availability construct both root returns
+and their causal publication histories. Closed roots return unchanged.
+Children can contain arbitrary nested Mu records.
+
+The retained-Mu source row relation remains open. A checked closed source
+refutes literal stored-body-to-ordinary-probe equality: smart reconstruction
+can remove an unused raw inner Mu that the ordinary probe retained. The
+same example retains its root fields and ordered child correspondence after
+actual unfolding. A possible next law compares both actual reconstructed
+values in sequence. Its reconstruction-fusion and first-writer proof is
+still missing. Carry real execution growth; History.retain alone has none.
+General outer progress, convergence, frontend/runtime adapters, and complete
+public Haskell correspondence remain open. Keep the full goal active.
+
+The full pinned Audit passes 3089 jobs and 67978 dependency checks under
+verified 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 367 MiB peak.
+All five final source logs are empty. Canonical builds, 27 public checks,
+and six constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-substitution-row-origins/`.
+Earlier proofs, artifacts, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. The new
+counterexample limits a formal correspondence claim; it does not justify
+a Haskell repair. FINDINGS keeps the external repair registry first.
+Field-pool repair `b9219b9e` remains merged and validated. Record every
+later repair there with its reproducer, paths, commit, checks, and status.
+
 ## Current native callback histories and row readback
 
 Updated: 2026-10-17 19:43 CEST. Starting checkpoint is `84f47113`.

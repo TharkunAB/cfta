@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentStoredPlanEquivalence
+
+set_option linter.all true
+set_option pp.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredPlanEquivalence.encode_equivalent
+#print MicroCFTA.SourceCurrentStoredPlanEquivalence.encode_equivalent
+#print axioms MicroCFTA.SourceCurrentStoredPlanEquivalence.encode_equivalent
+
+#check @MicroCFTA.SourceCurrentStoredPlanEquivalence.encodeMany_equivalent
+#print MicroCFTA.SourceCurrentStoredPlanEquivalence.encodeMany_equivalent
+#print axioms MicroCFTA.SourceCurrentStoredPlanEquivalence.encodeMany_equivalent
+
+#check @MicroCFTA.SourceCurrentStoredPlanEquivalence.encodeEdges_equivalent
+#print MicroCFTA.SourceCurrentStoredPlanEquivalence.encodeEdges_equivalent
+#print axioms MicroCFTA.SourceCurrentStoredPlanEquivalence.encodeEdges_equivalent
+
+#check @MicroCFTA.SourceCurrentStoredPlanEquivalence.build_execute
+#print MicroCFTA.SourceCurrentStoredPlanEquivalence.build_execute
+#print axioms MicroCFTA.SourceCurrentStoredPlanEquivalence.build_execute
+
+#check @MicroCFTA.SourceCurrentStoredPlanEquivalence.recapture
+#print MicroCFTA.SourceCurrentStoredPlanEquivalence.recapture
+#print axioms MicroCFTA.SourceCurrentStoredPlanEquivalence.recapture
+

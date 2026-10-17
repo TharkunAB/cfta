@@ -1,0 +1,48 @@
+import MicroCFTA.SourceCurrentSubstitutionRowExecution
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.nil
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.nil
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.nil
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.cons
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.cons
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.cons
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.length
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.length
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.length
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.actual
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.actual
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.actual
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.children
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.children
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.children
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.indexed
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.indexed
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.ChildTrace.indexed
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.rows_indexed
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.rows_indexed
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.rows_indexed
+
+#check @MicroCFTA.SourceCurrentSubstitutionRowExecution.node_indexed
+#print MicroCFTA.SourceCurrentSubstitutionRowExecution.node_indexed
+#print axioms MicroCFTA.SourceCurrentSubstitutionRowExecution.node_indexed
+

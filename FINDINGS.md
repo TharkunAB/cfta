@@ -2,14 +2,15 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 19:43 CEST. Proof checkpoint is `b9434f53`.
-The full pinned Audit passes 3084 jobs and 67897 dependency checks. Actual
-native execution now produces causal Mu histories. Unused native binder
-returns retain the current raw ordinary callback's complete row origins.
-No Haskell behavior patch or new production defect is added. Field-pool
-repair `b9219b9e` remains merged and validated in unchanged source `c0cc8a05`.
-Read `lean/notes-current-native-callback-history.md` for the exact proof
-boundary. Keep this repair registry before historical failure reports.
+Current proof update: 2026-10-17 19:58 CEST. Proof checkpoint is `a4b6e12d`.
+The full pinned Audit passes 3089 jobs and 67978 dependency checks. Actual
+stored node and union substitution now constructs indexed row origins and
+ordered child calls from initial semantic inputs. A checked Mu example
+refutes an overstrong physical equality claim. It does not establish a
+Haskell defect or require a behavior repair. No Haskell change is added.
+Field-pool repair `b9219b9e` remains merged and validated in source `c0cc8a05`.
+Read `lean/notes-current-substitution-row-origins.md` for the proof boundary.
+Keep this repair registry before historical failure reports.
 
 Audited source main is `c0cc8a05`, merged into `formalize` at `896b0a1c`.
 PR #64 adds drawn typing fields. PR #65 repairs the recursive field-pool
@@ -46,7 +47,8 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 3063 jobs and 67649 dependency checks.
+The earlier callback-normalization Audit passed 3063 jobs and 67649 dependency checks.
+The current Audit result appears at the start of this file.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -183,6 +185,47 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current stored substitution row origins
+
+Updated: 2026-10-17 19:58 CEST. Starting checkpoint is `89a9a512`.
+Proof commit is `a4b6e12d`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-substitution-row-origins.md` for the exact result.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Independent capture layouts now give equivalent complete stored plans.
+Each shared encoded child call equals that child's own stored substitution
+at its actual heap, with the same original replacement environment.
+Ordinary reconstruction retains indexed source rows, full guards, symbols,
+arity, and ordered actual child calls. Union reconstruction retains exact
+epsilon origins of its substituted member returns. Initial semantic heaps,
+coverage, and source/replacement availability construct both root returns
+and their causal publication histories. Closed roots return unchanged.
+Children can contain arbitrary nested Mu records.
+
+The retained-Mu source row relation remains open. A checked closed source
+refutes literal stored-body-to-ordinary-probe equality: smart reconstruction
+can remove an unused raw inner Mu that the ordinary probe retained. The
+same example retains its root fields and ordered child correspondence after
+actual unfolding. A possible next law compares both actual reconstructed
+values in sequence. Its reconstruction-fusion and first-writer proof is
+still missing. Carry real execution growth; History.retain alone has none.
+General outer progress, convergence, frontend/runtime adapters, and complete
+public Haskell correspondence remain open. Keep the full goal active.
+
+The full pinned Audit passes 3089 jobs and 67978 dependency checks under
+verified 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 367 MiB peak.
+All five final source logs are empty. Canonical builds, 27 public checks,
+and six constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-substitution-row-origins/`.
+Earlier proofs, artifacts, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. The new
+counterexample limits a formal correspondence claim; it does not justify
+a Haskell repair. FINDINGS keeps the external repair registry first.
+Field-pool repair `b9219b9e` remains merged and validated. Record every
+later repair there with its reproducer, paths, commit, checks, and status.
 
 ## Current native callback histories and row readback
 

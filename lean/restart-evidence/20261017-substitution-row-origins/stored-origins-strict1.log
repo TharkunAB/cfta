@@ -1,0 +1,59 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:33:8: error: Type mismatch
+  List.mem_append_left ?m.87 present
+has type
+  leaf ∈ leaves value ++ ?m.87
+but is expected to have type
+  leaf ∈ manyLeaves (value :: rest)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:34:8: error: Type mismatch
+  List.mem_append_right ?m.90 (ih member)
+has type
+  leaf ∈ ?m.90 ++ manyLeaves rest
+but is expected to have type
+  leaf ∈ manyLeaves (first :: rest)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:45:12: error: Type mismatch
+  List.mem_append_left ?m.112 present
+has type
+  leaf ∈ manyLeaves (EdgeValue.mk entry children).children ++ ?m.112
+but is expected to have type
+  leaf ∈ edgeLeaves (EdgeValue.mk entry children :: rest)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:46:12: error: Type mismatch
+  List.mem_append_right ?m.115 (ih member)
+has type
+  leaf ∈ ?m.115 ++ edgeLeaves rest
+but is expected to have type
+  leaf ∈ edgeLeaves (EdgeValue.mk entry children :: rest)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:52:19: error(lean.unknownIdentifier): Unknown identifier `nodeEdges`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:74:67: error: typeclass instance problem is stuck
+  GetElem? (List (Value Symbol Guard)) (?m.80 values middle view row) (Value Symbol Guard)
+    (?m.84 values middle view row index original output)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:93:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+entry : Interned NodeKey
+originals : List (EdgeValue Symbol Guard)
+level : Nat
+free : List Reference
+environment : Environment Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+normal : Normal before
+available : Available before (Value.node entry originals level free)
+replacements : Replacements before environment
+opened : free.isEmpty = false
+result : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+context : List (Value Symbol Guard) := leaves (Value.node entry originals level free)
+inputs : Values before (List.map (input environment) (leaves (Value.node entry originals level free)))
+compiled :
+  encode context [] (Value.node entry originals level free) =
+    InternedNestedConstruction.Syntax.node (encodeEdges context [] originals)
+actual :
+  build (InternedNestedConstruction.Syntax.node (encodeEdges context [] originals))
+      (List.map (input environment) context) before =
+    Outcome.done result after
+⊢ NodeRows (leaves (Value.node entry originals level free)) environment originals before result after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-substitution-row-origins/stored-origins-strict1.source.lean:145:12: error: No goals to be solved

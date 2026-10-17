@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentStoredSubstitutionOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredSubstitutionOrigins.NodeRows
+#print MicroCFTA.SourceCurrentStoredSubstitutionOrigins.NodeRows
+#print axioms MicroCFTA.SourceCurrentStoredSubstitutionOrigins.NodeRows
+
+#check @MicroCFTA.SourceCurrentStoredSubstitutionOrigins.UnionRows
+#print MicroCFTA.SourceCurrentStoredSubstitutionOrigins.UnionRows
+#print axioms MicroCFTA.SourceCurrentStoredSubstitutionOrigins.UnionRows
+
+#check @MicroCFTA.SourceCurrentStoredSubstitutionOrigins.node
+#print MicroCFTA.SourceCurrentStoredSubstitutionOrigins.node
+#print axioms MicroCFTA.SourceCurrentStoredSubstitutionOrigins.node
+
+#check @MicroCFTA.SourceCurrentStoredSubstitutionOrigins.union
+#print MicroCFTA.SourceCurrentStoredSubstitutionOrigins.union
+#print axioms MicroCFTA.SourceCurrentStoredSubstitutionOrigins.union
+
+#check @MicroCFTA.SourceCurrentStoredSubstitutionOrigins.node_complete
+#print MicroCFTA.SourceCurrentStoredSubstitutionOrigins.node_complete
+#print axioms MicroCFTA.SourceCurrentStoredSubstitutionOrigins.node_complete
+
+#check @MicroCFTA.SourceCurrentStoredSubstitutionOrigins.union_complete
+#print MicroCFTA.SourceCurrentStoredSubstitutionOrigins.union_complete
+#print axioms MicroCFTA.SourceCurrentStoredSubstitutionOrigins.union_complete
