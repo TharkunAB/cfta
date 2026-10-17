@@ -15,7 +15,7 @@ import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isNothing)
 import GHC.Generics (Generic)
-import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, conjoinConstraints, equalityConstraint, noConstraint)
@@ -206,6 +206,16 @@ handWritten bound = decode <$> Gen.fromAutomaton (Interned.fromFTA (explicitType
     decode term = fromMaybe (error ("a term that does not decode: " <> show term)) (decodeLabelledTerm derived term)
 
 -- * Typed arithmetic
+
+-- | Arithmetic with literals and three binary operators.
+data Arithmetic = Number Int | Add Arithmetic Arithmetic | Subtract Arithmetic Arithmetic | Multiply Arithmetic Arithmetic
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | One node of an arithmetic term, for its typing rules.
+data ArithmeticNode e = NumberNode e | AddNode e e | SubtractNode e e | MultiplyNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
 
 -- | The typed arithmetic over the inputs up to the bound, with the inputs as variables or as arguments.
 arithPrograms :: [ArithType] -> [ArithType] -> Int -> Gen.Gen Symbol Arith
@@ -421,6 +431,27 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
             mapM (Gen.rankOfValue generator) (either (error . show) id (Gen.values generator))
                 `shouldBe` Right (map Rank [0 .. total generator - 1])
     describe "typed arithmetic" $ do
+        it "ranks 6 * 7 before a zero-padded term in size order without removing terms" $ do
+            let rules =
+                    [rule (NumberNode (value n)) IntType | n <- [0, 6, 7 :: Int]]
+                        <> [ rule (operator (subterm [] IntType) (subterm [] IntType)) IntType
+                           | operator <- [AddNode, SubtractNode, MultiplyNode]
+                           ]
+                small = Multiply (Number 6) (Number 7)
+                padded = Add (Add (Number 0) (Subtract (Number 0) (Number 0))) small
+            original <- either (fail . show) pure $ fromTypingRules @Arithmetic (Typing (Nesting 3) [] [IntType] rules)
+            let ordered = Gen.upToSize 23 original
+            originalSmall <- either (fail . show) pure $ Gen.rankOfValue original small
+            originalPadded <- either (fail . show) pure $ Gen.rankOfValue original padded
+            originalSmall `shouldSatisfy` (> originalPadded)
+            smallRank <- either (fail . show) pure $ Gen.rankOfValue ordered small
+            paddedRank <- either (fail . show) pure $ Gen.rankOfValue ordered padded
+            smallRank `shouldSatisfy` (< paddedRank)
+            Gen.cardinality ordered `shouldBe` Gen.cardinality original
+            Gen.unrank ordered smallRank `shouldBe` Right small
+            Gen.unrank ordered paddedRank `shouldBe` Right padded
+            Gen.sizeOfRank ordered smallRank `shouldBe` Just 5
+            Gen.sizeOfRank ordered paddedRank `shouldBe` Just 14
         it "counts the terms of the recurrence up to the bound 6" $
             map (total . arithLanguage) [0 .. 6] `shouldBe` map (arithCount []) [0 .. 6]
         it "gives distinct well-typed terms of a nesting up to the bound 2, as many as the recurrence" $ do
