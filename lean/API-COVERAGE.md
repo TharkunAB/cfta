@@ -1,5 +1,49 @@
 # Public API and source correspondence
 
+## Current computed native query budgets
+
+Updated: 2026-10-17 07:58 CEST. This checkpoint starts at published `50c8132a`.
+Proof commits are `318feeea`, `20f9b603`, and `feedd09e`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-computable-query-rank.md` for the top-level target,
+proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-computable-query-rank/`.
+
+Six additive modules derive a computable natural rank from full recursive
+source mass and its literal input inventory. Stable semantic success takes
+no completed execution premise. Initial node and edge counts and causal
+Stored mass bound branching and total yielded instructions. Closed original
+roots, Good, SemanticReady, Idle, and initial headroom construct their own
+checked physical receipt. That same trace, exact execute, result, stores,
+and identity supplies fit the computed instruction schedule. The resource
+producer uses the supplied causal mass directly. It does not recompute a
+larger initialBound. Idle permits populated completed native tables.
+
+The pinned Audit passes 2890 jobs and 64246 dependency checks. All six strict
+production logs are empty. All 50 imported full signature and axiom pairs
+pass: 39 public checks and eleven constructive integrations in ten groups.
+Only propext, Classical.choice, and Quot.sound occur. Preservation retains
+13113 starting files, 2883 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, and 78 frozen manifests with 647 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next compose complete queries that consume their actual preceding results.
+Forecast all later counters and causal mass from initial numbers and call
+count. Retain populated native, equality, and global caches. General Target
+and Force misses, mixed Edit/ClassPass, outer active/stored descent,
+arbitrary constrained Mu bodies, convergence, remaining callers, current
+frontend/runtime adapters, concrete capacity, and full public Haskell
+correspondence remain open. Logical mass is not bytes. Internal constructor
+and solver work need separate measures. The full library goal stays active.
+Read next-generated-query-resources.md and generated-query-survey.md in the
+evidence directory. Preserve all earlier proofs and marked drafts.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS keeps the
+repair registry first. Repair `b9219b9e` is merged and validated. The older
+recursive field-pool failure is now explicitly historical. Reuse unchanged
+strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Record each later Haskell repair here for external work.
+
 ## Current complete native instruction and payload budgets
 
 Updated: 2026-10-17 07:39 CEST. This checkpoint starts at published `59884b14`.

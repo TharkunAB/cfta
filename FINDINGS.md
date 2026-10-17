@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2884 jobs and 64123 dependency checks.
+The last completed pinned Lean Audit passes: 2890 jobs and 64246 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -85,7 +85,10 @@ separate a behavior fix from a remaining documentation change.
   binders. The three regression assertions pass in the current generator
   suite. No local repair is needed. The source adapter for this new error
   and its validation order remains open.
-- **Recursive field-pool invariant: confirmed, unfixed.** Current main
+- **Recursive field-pool invariant: historical failure, fixed by b9219b9e.**
+  This report describes the source before the repair recorded above.
+  The statements below about an absent repair apply to that old source.
+  Current main
   `999c04a5` accepts a field-specific pool for a field of the root datatype.
   The path was added in `d0966953`. With `data Chain = End Bool | Next Chain`,
   require `End True` at each Chain node and give Next's child the pool
@@ -171,6 +174,50 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current computed native query budgets
+
+Updated: 2026-10-17 07:58 CEST. This checkpoint starts at published `50c8132a`.
+Proof commits are `318feeea`, `20f9b603`, and `feedd09e`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-computable-query-rank.md` for the top-level target,
+proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-computable-query-rank/`.
+
+Six additive modules derive a computable natural rank from full recursive
+source mass and its literal input inventory. Stable semantic success takes
+no completed execution premise. Initial node and edge counts and causal
+Stored mass bound branching and total yielded instructions. Closed original
+roots, Good, SemanticReady, Idle, and initial headroom construct their own
+checked physical receipt. That same trace, exact execute, result, stores,
+and identity supplies fit the computed instruction schedule. The resource
+producer uses the supplied causal mass directly. It does not recompute a
+larger initialBound. Idle permits populated completed native tables.
+
+The pinned Audit passes 2890 jobs and 64246 dependency checks. All six strict
+production logs are empty. All 50 imported full signature and axiom pairs
+pass: 39 public checks and eleven constructive integrations in ten groups.
+Only propext, Classical.choice, and Quot.sound occur. Preservation retains
+13113 starting files, 2883 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, and 78 frozen manifests with 647 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next compose complete queries that consume their actual preceding results.
+Forecast all later counters and causal mass from initial numbers and call
+count. Retain populated native, equality, and global caches. General Target
+and Force misses, mixed Edit/ClassPass, outer active/stored descent,
+arbitrary constrained Mu bodies, convergence, remaining callers, current
+frontend/runtime adapters, concrete capacity, and full public Haskell
+correspondence remain open. Logical mass is not bytes. Internal constructor
+and solver work need separate measures. The full library goal stays active.
+Read next-generated-query-resources.md and generated-query-survey.md in the
+evidence directory. Preserve all earlier proofs and marked drafts.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS keeps the
+repair registry first. Repair `b9219b9e` is merged and validated. The older
+recursive field-pool failure is now explicitly historical. Reuse unchanged
+strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Record each later Haskell repair here for external work.
 
 ## Current complete native instruction and payload budgets
 
