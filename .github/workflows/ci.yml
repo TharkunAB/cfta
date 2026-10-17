@@ -138,6 +138,11 @@ jobs:
           cabal v2-run cfta-editable-document -- save /tmp/cfta-source.json
           cabal v2-run cfta-editable-document -- edit /tmp/cfta-source.json /tmp/cfta-edited.json
           cabal v2-run cfta-editable-document -- show /tmp/cfta-edited.json
+          cabal v2-run cfta-language-expressions
+          cabal v2-run cfta-language-expressions -- save /tmp/cfta-language.json
+          cabal v2-run cfta-language-expressions -- show /tmp/cfta-language.json
+          cabal v2-run cfta-language-expressions -- restore /tmp/cfta-language.json /tmp/cfta-restored.json
+          cabal v2-run cfta-language-expressions -- show /tmp/cfta-restored.json
 
       # The release check builds every dependency again, with documentation,
       # and takes about 30 minutes. It runs after a merge into main, and on

@@ -13,6 +13,10 @@ The format is `cfta-graph`, version 1. A graph snapshot does not contain named
 source facts, host functions, a query plan, a cursor, or count caches. Use the
 same query route and ordering policy after loading to retain ranks.
 
+For editable languages, start with [composable updates](#compose-updates-to-a-language-value).
+Change the language value through typed expressions, then save it. The graph
+snapshot API below also supports callers that already have a compiled automaton.
+
 ## Save, reopen, inspect, and query
 
 From the workspace, run these commands in separate processes:
@@ -159,6 +163,7 @@ or invalid final graph is an error. Nothing commits partially.
 | `PutRow state transitions` | Add or replace a complete row. Preserve the written alternative order. |
 | `DeleteRow state` | Remove an existing row. The final graph must still have its initial state and all referenced children. |
 | `PutTransition state transition` | Replace the complete named production in place, or append it if the name is new. Use the supplied annotation and facts. |
+| `DefineTransition state name symbol children` | Change the constructor and children while retaining existing facts, or append a new production with no facts. |
 | `DeleteTransition state transitionName` | Remove one named production. Keep the state row, even when it becomes empty. |
 | `SetFact state transitionName factName body` | Add a fact or replace that fact's body. |
 | `RemoveFact state transitionName factName` | Remove exactly one existing named fact. |
@@ -209,3 +214,94 @@ not a compact change log or a constant-time version check. Applying it validates
 and rebuilds the graph. Count-table reuse and efficient document digests remain
 separate work. Documents store source data; query plans, cursors, host functions,
 and serialized patches are not part of this format.
+
+## Compose updates to a language value
+
+Use `Data.CFTA.Language` for the user-facing update expression. Start with
+`fromDocument source`, combine changes with `<>`, and call `update` once:
+
+```haskell
+modified <- either (fail . Language.explainUpdateError) pure $
+    Language.update before $
+        Language.define twoRef twoSymbol []
+            <> Language.relax pairRef positive
+            <> Language.without zeroPairRule (Language.wholeTerm zeroPair)
+```
+
+Here `before` is a `Language State`, with an ADT for `State`. `twoRef` and
+`pairRef` are `ProductionRef State` values. `positive` is a `FactName`, and
+`zeroPairRule` is an `ExclusionName`. `twoSymbol` is the complete constructor
+symbol, and `zeroPair` is a term with complete symbols. Declare identifiers once
+and reuse these typed bindings. Production, fact, and exclusion names have
+distinct types; raw text is used at declaration and codec boundaries. See
+[LanguageExpressions.hs](examples/LanguageExpressions.hs) for the complete
+program, including the source definition and refined symbols.
+
+| Expression | Effect |
+| --- | --- |
+| `define (at state name) symbol children` | Change the constructor and children while retaining its facts, or append a new production with no facts. |
+| `remove (at state name)` | Remove that production. Other derivations of a term can remain. |
+| `require (at state name) fact constraint` | Add or replace one named fact. |
+| `relax (at state name) fact` | Remove one existing fact, without negating it. |
+| `without name (wholeTerm term)` | Exclude exactly that complete term at the root. |
+| `without name (subterm term)` | Exclude terms that contain that subtree. |
+| `without name (AtRoot template)` | Exclude complete terms that match a template. |
+| `without name (Anywhere template)` | Exclude terms with a matching subtree. |
+| `restore name` | Remove that named exclusion. Other exclusions and facts still apply. |
+| `editSource edit` | Include a checked source edit, such as a state-row change. |
+
+`define` retains an existing production's facts. Compose `require` or `relax`
+to change its obligations explicitly. A new production starts with no facts.
+The low-level `editSource (PutTransition ...)` operation remains available when
+a complete source replacement, including its facts, is intended. State references
+and constructor arities are checked after the complete source batch. Missing
+fact, production, state, or exclusion targets report an error.
+
+Templates compare complete symbols, including refinements. A displayed term
+with its refinements removed is not the same selector. Retain the original term
+when the user selects a result. Use `wholeTerm` for a single complete term and
+`subterm` when its occurrences inside larger terms must also be removed.
+
+`Language.source` and `Language.exclusions` retain the editable values. The
+compiler applies exclusions to a separate graph. `restore` therefore works
+without reconstructing transitions that an exclusion removed or split.
+Compiled state numbers are query identities, not editable source names.
+Use a constraint-aware query route such as `Sized.sizedUpTo` with a solver.
+An update invalidates existing query indexes and rank cursors.
+
+`Update` is a reusable value with inspectable first-order `Operation` values.
+It does not record an expected source version. A `Document.Patch` does record
+that expected version. The expression API is suitable for local composition;
+a remote edit protocol still needs an explicit version check.
+
+Use `encodeLanguage` and `decodeLanguage` to save and reopen the resulting
+value. Format `cfta-language`, version 1, contains the complete `cfta-document`
+source and a map of named exclusions. Root exclusions use
+`["root", template]`; subtree exclusions use `["anywhere", template]`.
+Templates use `hole`, `any-node`, `node`, `any-prefix`, or `prefix` tags.
+A `node` or `prefix` stores the full symbol and ordered child templates.
+Unknown tags, operands, fields, versions, and duplicate keys are errors.
+
+Run the complete expression example without a file:
+
+```sh
+cabal run cfta-language-expressions
+```
+
+The three size-three/size-four count pairs are `[2,3]`, `[2,2]`, and `[3,3]`.
+They show whole-term exclusion, subtree exclusion, and restoration. The `same`
+equality fact remains active throughout. The example first restores a disabled
+production and adds the refined constructor `two` through one expression.
+
+Persistence uses the same value. Run each command in a separate process:
+
+```sh
+cabal run cfta-language-expressions -- save /tmp/language.json
+cabal run cfta-language-expressions -- show /tmp/language.json
+cabal run cfta-language-expressions -- restore /tmp/language.json /tmp/restored.json
+cabal run cfta-language-expressions -- show /tmp/restored.json
+```
+
+The saved language gives `[2,3]`. Removing its named exclusion gives `[3,3]`.
+The program changes the loaded value through `restore`; it does not edit JSON.
+Storage does not include query indexes, cursor state, or update requests.

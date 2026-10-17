@@ -46,6 +46,7 @@ import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
+import qualified Data.CFTA.Language as Language
 import qualified Data.CFTA.Template as Template
 ```
 
@@ -57,6 +58,7 @@ import qualified Data.CFTA.Template as Template
 | Encode or decode one value | `Generic.encodeTerm`, `Generic.datatypeDecode` | A constructor tree or a typed value. This does not enumerate the grammar. |
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
 | List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
+| Compose source and exclusion updates | `Language.update`, `Language.define`, `Language.require`, `Language.relax`, `Language.without`, `Language.restore` | A new editable language value that retains source facts and named restrictions. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -248,6 +250,19 @@ An ordinary automaton has `noConstraint` on every transition.
 input annotations. Apply `dropConstraints` to the result of two plain FTAs before
 calling `accepts`. Use `intersectWith` when you need a different annotation
 combination. `dropConstraints` removes annotations; it does not solve constraints.
+
+## Update a language
+
+`Data.CFTA.Language` composes constructor edits, named facts, and reversible
+term exclusions over a language value. For example, combine `define`, `relax`,
+and `without` with `<>`, then apply the expression with `update`. `wholeTerm`
+excludes one complete term. `subterm` excludes every term that contains it.
+`restore` removes a named exclusion while preserving other restrictions.
+
+The language keeps its source document and exclusions. Compilation produces a
+separate constrained graph. Use the source identities for edits and the compiled
+graph for queries. See the [complete expression example](../cfta-serialization/examples/LanguageExpressions.hs)
+and [expression and persistence guide](../cfta-serialization/README.md#compose-updates-to-a-language-value).
 
 ## Visualize a grammar
 

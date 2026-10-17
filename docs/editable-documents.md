@@ -173,3 +173,8 @@ The direct-edit change retains all eight standard benchmark checksums. The six
 core executables are byte-identical to main. Instruction differences are below
 0.11%, and allocation differences are below 0.01%. The shared JSON and 100-fact
 edit probes remain within 0.01% of the preceding document implementation.
+
+`DefineTransition state name symbol children` changes a constructor while
+retaining all facts on an existing named production. A new name appends a
+production with no facts. `Data.CFTA.Language.define` uses this operation.
+`PutTransition` remains the explicit complete replacement, including its facts.

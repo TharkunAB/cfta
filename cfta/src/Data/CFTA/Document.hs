@@ -54,6 +54,7 @@ data Edit state
     = PutRow !state ![FTA.Transition state Symbol Annotation]
     | DeleteRow !state
     | PutTransition !state !(FTA.Transition state Symbol Annotation)
+    | DefineTransition !state !Text !Symbol ![state]
     | DeleteTransition !state !Text
     | SetFact !state !Text !Text !Constraint
     | RemoveFact !state !Text !Text
@@ -125,7 +126,9 @@ patch = Patch
 edit returns an error. SetFact adds or replaces a named fact; RemoveFact and
 DeleteRow require their targets to exist. PutTransition replaces a named
 production in place or appends a new one. DeleteTransition requires an existing
-name and leaves the state row. Named edits require an existing state and a unique
+name and leaves the state row. DefineTransition changes the symbol and children
+of an existing production while retaining its facts, or appends a new production
+with no facts. Named edits require an existing state and a unique
 production name. They resolve their targets at that step
 in the sequence. Validate graph references and arities after the complete batch.
 The initial state stays fixed. The old document is unchanged.
@@ -153,6 +156,14 @@ applyPatch (Patch expected edits) current
                 | otherwise -> Right $ Map.insert state (transitions <> [transition]) rows
               where
                 name = annotationName $ FTA.transitionConstraint transition
+        DefineTransition state name symbol children -> case Map.lookup state rows of
+            Nothing -> Left $ MissingState state
+            Just transitions
+                | any (named name) transitions -> changeTransition state name changeConstructor rows
+                | otherwise ->
+                    Right $ Map.insert state (transitions <> [FTA.Transition symbol children $ Annotation name Map.empty]) rows
+              where
+                changeConstructor selected = Right $ Just selected{FTA.transitionSymbol = symbol, FTA.transitionChildren = children}
         DeleteTransition state name -> changeTransition state name (const $ Right Nothing) rows
         SetFact state transition fact constraint ->
             changeFacts state transition (Right . Map.insert fact constraint) rows
