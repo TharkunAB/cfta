@@ -1,0 +1,99 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-2.source.lean:73:121: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftEntry rightEntry : Interned InternedBinderProtocol.NodeKey
+leftRows rightRows : List (EdgeValue Symbol Guard)
+leftDepth rightDepth : Nat
+leftFree rightFree : List InternedBinderProtocol.Reference
+left : request.left = Value.node leftEntry leftRows leftDepth leftFree
+right : request.right = Value.node rightEntry rightRows rightDepth rightFree
+selected :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.ordinary
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+rowSelected : (nodeEdges result)[rowIndex]? = some row
+childIndex : Nat
+value : Value Symbol Guard
+childSelected : row.children[childIndex]? = some value
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+⊢ (match
+      SourceRecursiveIntersectionControl.decision request.domain.key (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree) with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node leftEntry leftRows leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode request.domain (Value.node rightEntry rightRows rightDepth rightFree)
+        (Value.node leftEntry leftRows leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu request.domain (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu request.domain (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu request.domain (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.ordinary => compileRows request.domain leftRows rightRows
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node leftEntry leftRows leftDepth leftFree)
+        (Value.node rightEntry rightRows rightDepth rightFree)) =
+    compileRows request.domain leftRows rightRows
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-2.source.lean:74:27: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, left, right, nodeEdges]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-2.source.lean:84:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261018-native-node-lineage».«native-node-row-direct-2.source».0.MicroCFTA.SourceCurrentNativeNodeRowLineage.ready_unchanged`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-2.source.lean:84:0: warning: `ready_unchanged` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#2)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`

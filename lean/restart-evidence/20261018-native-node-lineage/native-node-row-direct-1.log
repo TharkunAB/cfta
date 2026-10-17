@@ -1,0 +1,238 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:34:51: error(lean.unknownIdentifier): Unknown identifier `nodeEdges`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:34:76: error(lean.unknownIdentifier): Unknown identifier `nodeEdges`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:41:5: error(lean.unknownIdentifier): Unknown identifier `nodeEdges`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:44:7: error(lean.unknownIdentifier): Unknown identifier `nodeEdges`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:45:7: error(lean.unknownIdentifier): Unknown identifier `nodeEdges`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:71:50: error: unexpected token 'protected'; expected rcasesPat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:63:37: error: Application type mismatch: The argument
+  NodeKey
+has type
+  (width : Nat) → NodeRequest ?m.19 ?m.20 → IntersectionFlatMemoKeyDomain.Triple width → Prop
+of sort `Type` but is expected to have type
+  Type
+of sort `Type 1` in the application
+  Interned NodeKey
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:63:37: error: Application type mismatch: The argument
+  NodeKey
+has type
+  (width : Nat) → NodeRequest ?m.21 ?m.22 → IntersectionFlatMemoKeyDomain.Triple width → Prop
+of sort `Type` but is expected to have type
+  Type
+of sort `Type 1` in the application
+  Interned NodeKey
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:68:68: error: Function expected at
+  nodeEdges
+but this term has type
+  ?m.2
+
+Note: Expected a function because this term is being applied to the argument
+  result
+
+Hint: The identifier `nodeEdges` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:71:59: error: unexpected token ','; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'structure' or 'theorem'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:82:63: error: unexpected token ','; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'structure' or 'theorem'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:92:46: error: Application type mismatch: The argument
+  key
+has type
+  SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key✝
+of sort `Prop` but is expected to have type
+  IntersectionFlatMemoKeyDomain.Triple width
+of sort `Type` in the application
+  reader.native.nodes.table key
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:95:10: error: Type mismatch
+  Eq.symm same.right
+has type
+  chosen =
+    { machine := reader.native.machine,
+      nodes :=
+        (match reader.native.nodes.table key✝ with
+          | some handle => (handle, reader.native.nodes)
+          | none =>
+            (reader.native.nodes.next,
+              { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                cells :=
+                  put reader.native.nodes.cells reader.native.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := reader.native.nodes.next + 1 })).snd,
+      edges := reader.native.edges }
+but is expected to have type
+  chosen = reader.native
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:98:79: error: Tactic `rfl` failed: The left-hand side
+  (match reader.native.nodes.table key✝ with
+    | some handle => (handle, reader.native.nodes)
+    | none =>
+      (reader.native.nodes.next,
+        { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+          cells :=
+            put reader.native.nodes.cells reader.native.nodes.next
+              { request := request, status := FlatMemoThunk.Status.suspended },
+          next := reader.native.nodes.next + 1 })).fst
+is not definitionally equal to the right-hand side
+  reader.native.nodes.next
+
+case refl
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+request : NodeRequest Symbol Guard
+chosen : Native width Symbol Guard
+result : Value Symbol Guard
+key✝ : IntersectionFlatMemoKeyDomain.Triple width
+key : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key✝
+found : reader.native.nodes.table sorry = none
+selected :
+  lookupNode width request reader.native =
+    (NodeSelection.memoized
+        (match reader.native.nodes.table key✝ with
+          | some handle => (handle, reader.native.nodes)
+          | none =>
+            (reader.native.nodes.next,
+              { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                cells :=
+                  put reader.native.nodes.cells reader.native.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := reader.native.nodes.next + 1 })).fst,
+      chosen)
+stored :
+  chosen.nodes.cells
+      (match reader.native.nodes.table key✝ with
+        | some handle => (handle, reader.native.nodes)
+        | none =>
+          (reader.native.nodes.next,
+            { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+              cells :=
+                put reader.native.nodes.cells reader.native.nodes.next
+                  { request := request, status := FlatMemoThunk.Status.suspended },
+              next := reader.native.nodes.next + 1 })).fst =
+    some { request := request, status := FlatMemoThunk.Status.returned result }
+same :
+  NodeSelection.memoized
+        (match reader.native.nodes.table key✝ with
+          | some handle => (handle, reader.native.nodes)
+          | none =>
+            (reader.native.nodes.next,
+              { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                cells :=
+                  put reader.native.nodes.cells reader.native.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := reader.native.nodes.next + 1 })).fst =
+      NodeSelection.memoized
+        (match reader.native.nodes.table key✝ with
+          | some handle => (handle, reader.native.nodes)
+          | none =>
+            (reader.native.nodes.next,
+              { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                cells :=
+                  put reader.native.nodes.cells reader.native.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := reader.native.nodes.next + 1 })).fst ∧
+    { machine := reader.native.machine,
+        nodes :=
+          (match reader.native.nodes.table key✝ with
+            | some handle => (handle, reader.native.nodes)
+            | none =>
+              (reader.native.nodes.next,
+                { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                  cells :=
+                    put reader.native.nodes.cells reader.native.nodes.next
+                      { request := request, status := FlatMemoThunk.Status.suspended },
+                  next := reader.native.nodes.next + 1 })).snd,
+        edges := reader.native.edges } =
+      chosen
+⊢ (match reader.native.nodes.table key✝ with
+      | some handle => (handle, reader.native.nodes)
+      | none =>
+        (reader.native.nodes.next,
+          { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+            cells :=
+              put reader.native.nodes.cells reader.native.nodes.next
+                { request := request, status := FlatMemoThunk.Status.suspended },
+            next := reader.native.nodes.next + 1 })).fst =
+    reader.native.nodes.next
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:96:13: error: unsolved goals
+case some.none
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+request : NodeRequest Symbol Guard
+chosen : Native width Symbol Guard
+handle : Nat
+result : Value Symbol Guard
+selected : lookupNode width request reader.native = (NodeSelection.memoized handle, chosen)
+key✝ : IntersectionFlatMemoKeyDomain.Triple width
+stored :
+  (match reader.native.nodes.table key✝ with
+          | some handle => (handle, reader.native.nodes)
+          | none =>
+            (reader.native.nodes.next,
+              { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                cells :=
+                  put reader.native.nodes.cells reader.native.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := reader.native.nodes.next + 1 })).snd.cells
+      reader.native.nodes.next =
+    some { request := request, status := FlatMemoThunk.Status.returned result }
+key : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key✝
+found : reader.native.nodes.table sorry = none
+same :
+  NodeSelection.memoized
+        (match reader.native.nodes.table key✝ with
+          | some handle => (handle, reader.native.nodes)
+          | none =>
+            (reader.native.nodes.next,
+              { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                cells :=
+                  put reader.native.nodes.cells reader.native.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := reader.native.nodes.next + 1 })).fst =
+      NodeSelection.memoized handle ∧
+    { machine := reader.native.machine,
+        nodes :=
+          (match reader.native.nodes.table key✝ with
+            | some handle => (handle, reader.native.nodes)
+            | none =>
+              (reader.native.nodes.next,
+                { table := put reader.native.nodes.table key✝ reader.native.nodes.next,
+                  cells :=
+                    put reader.native.nodes.cells reader.native.nodes.next
+                      { request := request, status := FlatMemoThunk.Status.suspended },
+                  next := reader.native.nodes.next + 1 })).snd,
+        edges := reader.native.edges } =
+      chosen
+handles : handle = reader.native.nodes.next
+⊢ chosen = reader.native
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:100:16: warning: This simp argument is unused:
+  Cache.put
+
+Hint: Omit it from the simp argument list.
+  [apply] simp at stored
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:109:37: error: Application type mismatch: The argument
+  NodeKey
+has type
+  (width : Nat) → NodeRequest ?m.39 ?m.40 → IntersectionFlatMemoKeyDomain.Triple width → Prop
+of sort `Type` but is expected to have type
+  Type
+of sort `Type 1` in the application
+  Interned NodeKey
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:109:37: error: Application type mismatch: The argument
+  NodeKey
+has type
+  (width : Nat) → NodeRequest ?m.41 ?m.42 → IntersectionFlatMemoKeyDomain.Triple width → Prop
+of sort `Type` but is expected to have type
+  Type
+of sort `Type 1` in the application
+  Interned NodeKey
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:114:68: error: Function expected at
+  nodeEdges
+but this term has type
+  ?m.2
+
+Note: Expected a function because this term is being applied to the argument
+  result
+
+Hint: The identifier `nodeEdges` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-node-lineage/native-node-row-direct-1.source.lean:123:37: error(lean.unknownIdentifier): Unknown identifier `ordinary`

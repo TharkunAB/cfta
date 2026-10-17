@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentStoredMuBinderChildLineage
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredMuBinderChildLineage.Slot
+#print MicroCFTA.SourceCurrentStoredMuBinderChildLineage.Slot
+#print axioms MicroCFTA.SourceCurrentStoredMuBinderChildLineage.Slot
+
+#check @MicroCFTA.SourceCurrentStoredMuBinderChildLineage.Paired
+#print MicroCFTA.SourceCurrentStoredMuBinderChildLineage.Paired
+#print axioms MicroCFTA.SourceCurrentStoredMuBinderChildLineage.Paired
+
+#check @MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind
+#print MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind
+#print axioms MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind
+
+#check @MicroCFTA.SourceCurrentStoredMuBinderChildLineage.of_compatible
+#print MicroCFTA.SourceCurrentStoredMuBinderChildLineage.of_compatible
+#print axioms MicroCFTA.SourceCurrentStoredMuBinderChildLineage.of_compatible
+
+#check @MicroCFTA.SourceCurrentStoredMuBinderChildLineage.reference
+#print MicroCFTA.SourceCurrentStoredMuBinderChildLineage.reference
+#print axioms MicroCFTA.SourceCurrentStoredMuBinderChildLineage.reference
+
+#check @MicroCFTA.SourceCurrentStoredMuBinderChildLineage.publication_extend
+#print MicroCFTA.SourceCurrentStoredMuBinderChildLineage.publication_extend
+#print axioms MicroCFTA.SourceCurrentStoredMuBinderChildLineage.publication_extend
