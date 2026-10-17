@@ -1,0 +1,192 @@
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep : (Nat → Nat) → Nat → Nat
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound : (Nat → Nat) → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_ge : ∀ (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_child' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_child : ∀ (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat (child value) (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_pays_child' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_pays_child : ∀ (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value (child value))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_compare' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_compare : ∀ {first last : Nat → Nat},
+  (∀ (value : Nat), @LE.le.{0} Nat instLENat (first value) (last value)) →
+    ∀ (value : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep first value)
+        (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep last value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep_mono : ∀ (child : Nat → Nat),
+  (∀ {first last : Nat}, @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (child first) (child last)) →
+    ∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child first)
+          (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child last)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_zero' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_zero : ∀ (child : Nat → Nat) (value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) value)
+    value
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_succ' depends on axioms: [propext]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_succ : ∀ (child : Nat → Nat) (count value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child
+      (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count value))
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_first' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_first : ∀ (child : Nat → Nat) (count value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count
+      (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep child value))
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_add' depends on axioms: [propext]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_add : ∀ (child : Nat → Nat) (first last value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last) value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child last
+      (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child first value))
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_ge : ∀ (child : Nat → Nat) (count value : Nat),
+  @LE.le.{0} Nat instLENat value (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_paid' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_paid : ∀ (child : Nat → Nat) (count value : Nat),
+  @LE.le.{0} Nat instLENat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value count)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_count_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_count_mono : ∀ (child : Nat → Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (value : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child first value)
+        (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child last value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_mono : ∀ (child : Nat → Nat),
+  (∀ {first last : Nat}, @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (child first) (child last)) →
+    ∀ (count : Nat) {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count first)
+          (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count last)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_compare' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_compare : ∀ {firstChild lastChild : Nat → Nat},
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (lastChild first) (lastChild last)) →
+    (∀ (value : Nat), @LE.le.{0} Nat instLENat (firstChild value) (lastChild value)) →
+      ∀ {firstCount lastCount first last : Nat},
+        @LE.le.{0} Nat instLENat firstCount lastCount →
+          @LE.le.{0} Nat instLENat first last →
+            @LE.le.{0} Nat instLENat
+              (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound firstChild firstCount first)
+              (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound lastChild lastCount last)
+'MicroCFTA.SourceCurrentProjectionNumericControl.child_le_rowsBound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.child_le_rowsBound : ∀ (child : Nat → Nat) {count value : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) count →
+    @LE.le.{0} Nat instLENat (child value) (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child count value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.ordinary' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.ordinary : (Nat → Nat) → Nat → Nat
+'MicroCFTA.SourceCurrentProjectionNumericControl.bound' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.bound : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_le_ordinary' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_le_ordinary : ∀ (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound child value value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary child value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_ge : ∀ (child : Nat → Nat) (value : Nat),
+  @LE.le.{0} Nat instLENat value (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary child value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_compare' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_compare : ∀ {firstChild lastChild : Nat → Nat},
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (lastChild first) (lastChild last)) →
+    (∀ (value : Nat), @LE.le.{0} Nat instLENat (firstChild value) (lastChild value)) →
+      ∀ {first last : Nat},
+        @LE.le.{0} Nat instLENat first last →
+          @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary firstChild first)
+            (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary lastChild last)
+'MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_mono : ∀ (child : Nat → Nat),
+  (∀ {first last : Nat}, @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (child first) (child last)) →
+    ∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary child first)
+          (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary child last)
+'MicroCFTA.SourceCurrentProjectionNumericControl.bound_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.bound_ge : ∀ (depth value : Nat),
+  @LE.le.{0} Nat instLENat value (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.bound_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.bound_mono : ∀ (depth : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth first)
+      (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth last)
+'MicroCFTA.SourceCurrentProjectionNumericControl.head_ordinary_eq' does not depend on any axioms
+MicroCFTA.SourceCurrentProjectionNumericControl.head_ordinary_eq : ∀ (depth value : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary
+      (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth)
+      (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth value))
+    (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_le_bound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.ordinary_le_bound : ∀ (depth value : Nat),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary
+      (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth) value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.headGrowth_le_bound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.headGrowth_le_bound : ∀ (depth value : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_le_bound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_le_bound : ∀ (depth value : Nat),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+      (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth) value value)
+    (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_head_le_bound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound_head_le_bound : ∀ (depth value : Nat),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+      (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth)
+      (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth value)
+      (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth value))
+    (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.child_le_ordinary' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.child_le_ordinary : ∀ (child : Nat → Nat) {value : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) value →
+    @LE.le.{0} Nat instLENat (child value) (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary child value)
+'MicroCFTA.SourceCurrentProjectionNumericControl.child_le_bound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentProjectionNumericControl.child_le_bound : ∀ (depth : Nat) {value : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) value →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth value)
+      (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        value)

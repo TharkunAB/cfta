@@ -1,0 +1,85 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionUnionResources.lean:120:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  MergedFreshOrdinaryExposure.nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) value before
+in the target expression
+  SourceEqualityRequiredCache.Keeps before (MergedFreshOrdinaryExposure.nodeEdges (readFuel bound) value before).state
+
+case refine_1
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+before after : State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+actual : SourceEqualityProjectionRead.Read value before rows after
+bound : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+closed : value.free = []
+fits : Fits bound before
+replay :
+  MergedFreshOrdinaryExposure.nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) value before =
+      MergedSourceExposure.Result.done rows after ∧
+    SourceEqualityRequiredCache.Keeps before after ∧
+      SemanticReady after ∧
+        InternedValueMassHeap.Stored (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) after ∧
+          after.nodes.next ≤ SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound ∧
+            after.edges.next ≤ SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound ∧
+              Edges after rows ∧
+                ClosedEdges rows ∧
+                  ∀ (extra : Nat),
+                    MergedFreshOrdinaryExposure.nodeEdges
+                        (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound + extra) value before =
+                      MergedSourceExposure.Result.done rows after
+width :
+  InternedValueMassHeap.Stored (massAfter (readFuel bound + 1) bound) after ∧
+    after.nodes.next ≤ before.nodes.next + SourceCurrentAllocatedRecursiveMassTrace.credit (readFuel bound + 1) bound ∧
+      after.edges.next ≤
+          before.edges.next + SourceCurrentAllocatedRecursiveMassTrace.credit (readFuel bound + 1) bound ∧
+        rows.length ≤ (readFuel bound + 1) * massAfter (readFuel bound + 1) bound ∧ Edges after rows
+physical :
+  SourceEqualityExposureCosts.Verified before (MergedFreshOrdinaryExposure.nodeEdges (readFuel bound) value before)
+kept :
+  SourceEqualityRequiredCache.Keeps before (MergedFreshOrdinaryExposure.nodeEdges (readFuel bound) value before).state
+⊢ SourceEqualityRequiredCache.Keeps before after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionUnionResources.lean:123:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  MergedFreshOrdinaryExposure.nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) value before
+in the target expression
+  CostHeap (MergedFreshOrdinaryExposure.nodeEdges (readFuel bound) value before).state
+
+case refine_2
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+before after : State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+actual : SourceEqualityProjectionRead.Read value before rows after
+bound : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+closed : value.free = []
+fits : Fits bound before
+replay :
+  MergedFreshOrdinaryExposure.nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) value before =
+      MergedSourceExposure.Result.done rows after ∧
+    SourceEqualityRequiredCache.Keeps before after ∧
+      SemanticReady after ∧
+        InternedValueMassHeap.Stored (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) after ∧
+          after.nodes.next ≤ SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound ∧
+            after.edges.next ≤ SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound ∧
+              Edges after rows ∧
+                ClosedEdges rows ∧
+                  ∀ (extra : Nat),
+                    MergedFreshOrdinaryExposure.nodeEdges
+                        (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound + extra) value before =
+                      MergedSourceExposure.Result.done rows after
+width :
+  InternedValueMassHeap.Stored (massAfter (readFuel bound + 1) bound) after ∧
+    after.nodes.next ≤ before.nodes.next + SourceCurrentAllocatedRecursiveMassTrace.credit (readFuel bound + 1) bound ∧
+      after.edges.next ≤
+          before.edges.next + SourceCurrentAllocatedRecursiveMassTrace.credit (readFuel bound + 1) bound ∧
+        rows.length ≤ (readFuel bound + 1) * massAfter (readFuel bound + 1) bound ∧ Edges after rows
+physical :
+  SourceEqualityExposureCosts.Verified before (MergedFreshOrdinaryExposure.nodeEdges (readFuel bound) value before)
+retained : CostHeap (MergedFreshOrdinaryExposure.nodeEdges (readFuel bound) value before).state
+⊢ CostHeap after

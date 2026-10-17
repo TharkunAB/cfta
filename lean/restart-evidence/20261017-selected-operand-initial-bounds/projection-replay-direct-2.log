@@ -1,0 +1,81 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:184:60: error(lean.unknownIdentifier): Unknown identifier `state`
+@MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady.rec : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {shared : Nat}
+  {motive_1 :
+    {path : List Int} →
+      {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+        {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+          {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+            {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+              (a : MicroCFTA.SourceEqualityProjectionGraph.Project path value before result after) →
+                MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady shared a → Prop}
+  {motive_2 :
+    {path : List Int} →
+      {index : Int} →
+        {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} →
+          {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+            {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} →
+              {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                (a : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows path index edges before values after) →
+                  MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady shared a → Prop},
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard), motive_1 ⋯ ⋯) →
+    (∀ (index : Int) (path : List Int) (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        motive_1 ⋯ ⋯) →
+      (∀ {path : List Int} {index : Int} {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+          {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+          {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+          {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {depth : Nat}
+          {free : List MicroCFTA.InternedBinderProtocol.Reference}
+          {rowGraph : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows path index edges before values middle}
+          {unionGraph : MicroCFTA.SourceEqualityProjectionUnion.Union values middle result after}
+          (rowsReady : MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady shared rowGraph)
+          (unionReady : MicroCFTA.SourceCurrentProjectionNumericReplay.UnionReady shared unionGraph),
+          motive_2 rowGraph rowsReady → motive_1 ⋯ ⋯) →
+        (∀ {original : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            {exposed : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {index : Int} {path : List Int}
+            {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            (recursive : MicroCFTA.SourceEqualityRequiredGraph.Recursive original)
+            {headGraph : MicroCFTA.SourceEqualityRequiredHead.Head original before exposed middle}
+            {bodyGraph : MicroCFTA.SourceEqualityProjectionGraph.Project (index :: path) exposed middle result after}
+            (headReady : MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady shared headGraph)
+            (bodyReady : MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady shared bodyGraph),
+            motive_1 bodyGraph bodyReady → motive_1 ⋯ ⋯) →
+          (∀ (path : List Int) (index : Int) (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+              motive_2 ⋯ ⋯) →
+            (∀ {index : Int} {path : List Int}
+                {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+                {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+                {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+                (absent : MicroCFTA.SourceEqualityProjectionGraph.select edge.children index = none)
+                {rest : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows path index edges before values after}
+                (restReady : MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady shared rest),
+                motive_2 rest restReady → motive_2 ⋯ ⋯) →
+              (∀ {index : Int} {child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} {path : List Int}
+                  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+                  {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+                  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+                  (found : MicroCFTA.SourceEqualityProjectionGraph.select edge.children index = some child)
+                  {first : MicroCFTA.SourceEqualityProjectionGraph.Project path child before result middle}
+                  {rest : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows path index edges middle values after}
+                  (firstReady : MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady shared first)
+                  (restReady : MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady shared rest),
+                  motive_1 first firstReady → motive_2 rest restReady → motive_2 ⋯ ⋯) →
+                ∀ {path : List Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {a : MicroCFTA.SourceEqualityProjectionGraph.Project path value before result after}
+                  (t : MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady shared a), motive_1 a t

@@ -1,6 +1,53 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-17 09:58 CEST (Europe/Stockholm)**.
+Updated: **2026-10-17 10:15 CEST (Europe/Stockholm)**.
+
+## Current initial complete selected Operand budgets
+
+Updated: 2026-10-17 10:15 CEST. This checkpoint starts at published 4ba9f2f4.
+Proof commits are 3d98c59e and 8a132c64. Source main remains c0cc8a05,
+merged locally at 896b0a1c. Read lean/notes-current-initial-operand-fuel.md
+for the complete library target, proof map, and missing areas. Evidence is
+in lean/restart-evidence/20261017-selected-operand-initial-bounds/.
+
+Seven additive modules construct complete selected projection and general
+Merge from initial forest count, signed path, counters, and causal mass.
+Static projection work fuel is 2 * path.length + 1. Actual recursive reads
+supply separate literal row widths. Ordered row growth derives every
+shared read certificate and resource bound. A scalar-only Merge bound is
+computed before its future projected argument exists. The complete Operand
+endpoint constructs its own actual graph, full allocated receipts, exact
+worker observations, returned resources, and complete query Frame.
+It takes no future completion, projected value, reached heap, or bound.
+The selected domain still permits unrelated open ordinary roots and siblings.
+Both computed schedules replay the same complete heaps and memos at larger
+fuels. Allocated equality state remains valid; its internal instruction and
+machine capacity bounds remain separate.
+
+Next compose Target in actual head Operand, recursive tail, then checked
+query order. Convert Operand resources to the next numeric query Profile
+and derive every reached range from the whole initial schedule. General
+Force, Edit/ClassPass, outer active and stored descent, arbitrary constrained
+Mu, convergence, current adapters, capacity, and full public Haskell
+correspondence remain open. The complete library goal stays active.
+
+The pinned Audit passes 2929 jobs and 64924 dependency checks. All seven
+production strict logs are empty. All 120 complete signature and axiom pairs
+pass in ten groups: 100 public declarations and 20 constructed checks.
+Four component manifests verify 153 immutable entries. Read
+checkpoint-validation.json for exact hashes. Preservation retains 14099 starting files,
+2921 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 85 frozen module
+manifests retain 686 entries.
+
+This increment adds no Haskell change or new behavior defect. Root FINDINGS
+keeps the external repair registry first. Field-pool repair b9219b9e is
+merged and validated; the Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Reuse unchanged strict Nix,
+798 examples plus golden, Fourmolu, and Cabal-gild evidence. Record each
+later Haskell repair in FINDINGS with its failure, executable reproducer,
+affected paths, commit, checks, and upstream state. Preserve all older
+proofs, counterexamples, repairs, marked drafts, and the optimized interned core.
 
 ## Current initial general Merge budgets
 

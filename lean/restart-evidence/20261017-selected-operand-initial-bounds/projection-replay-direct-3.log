@@ -1,0 +1,131 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:261:12: error: Type mismatch: After simplification, term
+  union_replay unionReady reader readEnough
+ has type
+  union reader values middle = Result.done result after
+but is expected to have type
+  (match rows (project worker reader path) index edges before with
+    | Result.done value state => union reader value state
+    | Result.pending key state => Result.pending key state
+    | Result.unresolved name state => Result.unresolved name state
+    | Result.exhausted limit state => Result.exhausted limit state) =
+    Result.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:283:6: error: Type mismatch: After simplification, term
+  ih worker reader enough readEnough
+ has type
+  rows (@project Symbol Guard (?x_5 rest✝ restReady) worker reader path✝) index✝ edges✝ before✝ =
+    Result.done values✝ after✝
+but is expected to have type
+  rows (@project Symbol Guard (?x_5 ⋯ ⋯) worker reader path✝) index✝ edges✝ before✝ = Result.done values✝ after✝
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:284:55: error: unsolved goals
+case selected
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+shared : Nat
+path : List Int
+value result : Value Symbol Guard
+before after : State Symbol Guard
+actual : Project path value before result after
+ready : ProjectReady shared actual
+index✝ : Int
+child✝ : Value Symbol Guard
+path✝ : List Int
+before✝ : State Symbol Guard
+result✝ : Value Symbol Guard
+middle✝ : State Symbol Guard
+edges✝ : List (EdgeValue Symbol Guard)
+values✝ : List (Value Symbol Guard)
+after✝ : State Symbol Guard
+edge✝ : EdgeValue Symbol Guard
+found : select edge✝.children index✝ = some child✝
+first✝ : Project path✝ child✝ before✝ result✝ middle✝
+rest✝ : ProjectRows path✝ index✝ edges✝ middle✝ values✝ after✝
+firstReady : ProjectReady shared first✝
+restReady : RowsReady shared rest✝
+firstIH : NodeReplay shared path✝ child✝ before✝ result✝ middle✝
+restIH : RowsReplay shared path✝ index✝ edges✝ middle✝ values✝ after✝
+worker reader : Nat
+enough : workFuel path✝ ≤ worker
+readEnough : shared ≤ reader
+⊢ (match project worker reader path✝ child✝ before✝ with
+    | Result.done value state =>
+      match rows (project worker reader path✝) index✝ edges✝ state with
+      | Result.done value_1 state => Result.done (value :: value_1) state
+      | Result.pending key state => Result.pending key state
+      | Result.unresolved name state => Result.unresolved name state
+      | Result.exhausted limit state => Result.exhausted limit state
+    | Result.pending key state => Result.pending key state
+    | Result.unresolved name state => Result.unresolved name state
+    | Result.exhausted limit state => Result.exhausted limit state) =
+    Result.done (result✝ :: values✝) after✝
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:232:2: error: Alternative `x_5` has not been provided
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:286:30: warning: This simp argument is unused:
+  firstIH.1 worker reader enough readEnough
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [rows, found, Result.bind, restIH worker reader enough readEnough]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:287:8: warning: This simp argument is unused:
+  restIH worker reader enough readEnough
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [rows, found, firstIH.1 worker reader enough readEnough, Result.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:311:8: error: Type mismatch
+  done worker reader (Decidable.byContradiction fun a => rows_replay_aux._proof_1_4 index path worker reader enough a)
+has type
+  @project Symbol Guard inst✝ worker reader (index :: path) Value.empty state = Result.done Value.empty state
+but is expected to have type
+  @project Symbol Guard (?x_4 ⋯ ⋯) worker reader (index :: path) Value.empty state = Result.done Value.empty state
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:313:8: error: Type mismatch
+  done worker reader (Decidable.byContradiction fun a => rows_replay_aux._proof_1_5 path worker reader enough a)
+has type
+  @project Symbol Guard inst✝ worker reader (index :: path) Value.empty state = Result.done Value.empty state
+but is expected to have type
+  @project Symbol Guard (?x_4 ⋯ ⋯) worker reader (index :: path) Value.empty state = Result.done Value.empty state
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:325:8: error: Type mismatch
+  done worker reader (Decidable.byContradiction fun a => rows_replay_aux._proof_1_8 worker reader enough a) readEnough
+has type
+  @project Symbol Guard inst✝ worker reader (index :: path) (Value.node entry edges depth free) before =
+    Result.done result after
+but is expected to have type
+  @project Symbol Guard (?x_4 ⋯ ⋯) worker reader (index :: path) (Value.node entry edges depth free) before =
+    Result.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:327:8: error: Type mismatch
+  done
+has type
+  ∀ (worker reader : Nat),
+    2 * (index :: path).length ≤ worker →
+      shared ≤ reader →
+        @project Symbol Guard inst✝ worker reader (index :: path) (Value.node entry edges depth free) before =
+          Result.done result after
+but is expected to have type
+  ∀ (worker reader : Nat),
+    2 * (index :: path).length ≤ worker →
+      shared ≤ reader →
+        @project Symbol Guard (?x_4 ⋯ ⋯) worker reader (index :: path) (Value.node entry edges depth free) before =
+          Result.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:338:28: error: Type mismatch: After simplification, term
+  bodyDone
+ has type
+  project worker reader (index :: path) exposed middle = Result.done result after
+but is expected to have type
+  (match head reader (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) before with
+    | Result.done value state => project worker reader (index :: path) value state
+    | Result.pending key state => Result.pending key state
+    | Result.unresolved name state => Result.unresolved name state
+    | Result.exhausted limit state => Result.exhausted limit state) =
+    Result.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:338:28: error: Type mismatch: After simplification, term
+  bodyDone
+ has type
+  project worker reader (index :: path) exposed middle = Result.done result after
+but is expected to have type
+  (match head reader (Value.union entry✝ members✝ depth✝ free✝) before with
+    | Result.done value state => project worker reader (index :: path) value state
+    | Result.pending key state => Result.pending key state
+    | Result.unresolved name state => Result.unresolved name state
+    | Result.exhausted limit state => Result.exhausted limit state) =
+    Result.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentProjectionNumericReplay.lean:293:2: error: Alternative `x_4` has not been provided

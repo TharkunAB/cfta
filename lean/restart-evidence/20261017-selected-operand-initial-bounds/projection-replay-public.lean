@@ -1,0 +1,58 @@
+import MicroCFTA.SourceCurrentProjectionNumericReplay
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.workFuel
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.workFuel
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ReadReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ReadReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ReadAllReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ReadAllReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.UnionReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.UnionReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ForestReady
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ForestReady
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ReadReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ReadReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ReadAllReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ReadAllReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.UnionReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.UnionReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady.ordinary
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.HeadReady.ordinary
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ProjectReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.RowsReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ForestReady.mono
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ForestReady.mono
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.read_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.read_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.readAll_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.readAll_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.union_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.union_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.head_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.head_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.project_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.project_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.ordinary_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.ordinary_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.rows_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.rows_replay
+#print axioms MicroCFTA.SourceCurrentProjectionNumericReplay.forest_replay
+#check @MicroCFTA.SourceCurrentProjectionNumericReplay.forest_replay

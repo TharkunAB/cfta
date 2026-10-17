@@ -1,0 +1,73 @@
+import MicroCFTA.SourceCurrentMemoMergeUniformNumeric
+import MicroCFTA.SourceCurrentProjectionInitialResources
+import MicroCFTA.SourceCurrentProjectionNumeric
+import MicroCFTA.SourceCurrentConstrainedCapOperandNumeric
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 8000000
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.height_le_mass
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.height_le_mass
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.edgeHeight_le_mass
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.edgeHeight_le_mass
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.edgesHeight_le_mass
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.edgesHeight_le_mass
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.childrenHeight_le_mass
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.childrenHeight_le_mass
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.of_call
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.of_call
+
+#check @MicroCFTA.SourceCurrentMemoMergeUniformNumeric.complete
+#print axioms MicroCFTA.SourceCurrentMemoMergeUniformNumeric.complete
+
+#check @MicroCFTA.SourceCurrentProjectionInitialResources.node_bound
+#print axioms MicroCFTA.SourceCurrentProjectionInitialResources.node_bound
+
+#check @MicroCFTA.SourceCurrentProjectionInitialResources.forestBound
+#print axioms MicroCFTA.SourceCurrentProjectionInitialResources.forestBound
+
+#check @MicroCFTA.SourceCurrentProjectionInitialResources.forestBound_ge
+#print axioms MicroCFTA.SourceCurrentProjectionInitialResources.forestBound_ge
+
+#check @MicroCFTA.SourceCurrentProjectionInitialResources.forest_bound
+#print axioms MicroCFTA.SourceCurrentProjectionInitialResources.forest_bound
+
+#check @MicroCFTA.SourceCurrentProjectionNumeric.workFuel
+#print axioms MicroCFTA.SourceCurrentProjectionNumeric.workFuel
+
+#check @MicroCFTA.SourceCurrentProjectionNumeric.readFuel
+#print axioms MicroCFTA.SourceCurrentProjectionNumeric.readFuel
+
+#check @MicroCFTA.SourceCurrentProjectionNumeric.of_forest
+#print axioms MicroCFTA.SourceCurrentProjectionNumeric.of_forest
+
+#check @MicroCFTA.SourceCurrentProjectionNumeric.complete
+#print axioms MicroCFTA.SourceCurrentProjectionNumeric.complete
+
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.projectionBound
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.projectionBound
+
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.workFuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.workFuel
+
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.selectionFuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.selectionFuel
+
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.complete

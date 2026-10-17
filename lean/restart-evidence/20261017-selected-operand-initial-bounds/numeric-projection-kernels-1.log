@@ -1,0 +1,87 @@
+'MicroCFTA.ProjectionNumericControlIntegration.evaluated_rows' does not depend on any axioms
+MicroCFTA.ProjectionNumericControlIntegration.evaluated_rows : And
+  (@Eq.{1} Nat
+    (MicroCFTA.SourceCurrentProjectionNumericControl.rowsStep
+      (fun value =>
+        @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+    (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))
+  (And
+    (@Eq.{1} Nat
+      (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+        (fun value =>
+          @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      (@OfNat.ofNat.{0} Nat (nat_lit 30) (instOfNatNat (nat_lit 30))))
+    (And
+      (@Eq.{1} Nat
+        (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+          (fun value =>
+            @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+            (fun value =>
+              @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 30) (instOfNatNat (nat_lit 30))))
+      (And
+        (@Eq.{1} Nat
+          (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))))
+        (@Eq.{1} Nat
+          (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary
+            (fun value =>
+              @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) value
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+'MicroCFTA.ProjectionNumericControlIntegration.prefix_union_direct' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.ProjectionNumericControlIntegration.prefix_union_direct : ∀ (depth current initial count : Nat),
+  @LE.le.{0} Nat instLENat count initial →
+    @LE.le.{0} Nat instLENat current initial →
+      And
+        (@LE.le.{0} Nat instLENat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) current count)
+          (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+            (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth) count current))
+        (@LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth count
+            (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+              (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth) count current))
+          (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            initial))
+'MicroCFTA.ProjectionNumericControlIntegration.prefix_union_after_head' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.ProjectionNumericControlIntegration.prefix_union_after_head : ∀ (depth initial count current : Nat),
+  @LE.le.{0} Nat instLENat count (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth initial) →
+    @LE.le.{0} Nat instLENat current (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth initial) →
+      And
+        (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth initial)
+          (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            initial))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth count
+              (MicroCFTA.SourceCurrentProjectionNumericControl.rowsBound
+                (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth) count current))
+            (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              initial))
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentProjectionNumericControl.ordinary
+              (MicroCFTA.SourceCurrentProjectionNumericControl.bound depth) initial)
+            (MicroCFTA.SourceCurrentProjectionNumericControl.bound
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              initial)))

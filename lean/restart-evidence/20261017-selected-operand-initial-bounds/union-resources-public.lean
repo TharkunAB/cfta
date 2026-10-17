@@ -1,0 +1,58 @@
+import MicroCFTA.SourceCurrentProjectionUnionResources
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readFuel
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readFuel
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readWidth
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readWidth
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readGrowth
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readGrowth
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readFuel_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readFuel_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readWidth_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readWidth_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readGrowth_ge
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readGrowth_ge
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readWidth_le_growth
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readWidth_le_growth
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readGrowth_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readGrowth_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth_ge
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth_ge
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.headGrowth_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_ge
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_ge
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_bound_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_bound_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_count_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_count_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readAllGrowth_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth_ge
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth_ge
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth_mono
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.unionGrowth_mono
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.read
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.read
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.read_ready
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.read_ready
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.head
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.head
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.readAll
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.readAll
+#print axioms MicroCFTA.SourceCurrentProjectionUnionResources.union
+#check @MicroCFTA.SourceCurrentProjectionUnionResources.union
