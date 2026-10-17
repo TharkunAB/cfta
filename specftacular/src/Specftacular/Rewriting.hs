@@ -736,9 +736,12 @@ Knuth-Bendix order under that ordering (Martin and Nipkow, as in Twee).
 An ordering can also make variables equal. With more than
 'maxOrderedVars' variables, the test uses only the order without a
 ranking of the variables, which is weaker.
+This check requires closed type annotations. Term-variable orderings do
+not cover changes to the annotation order under type substitution.
 -}
 groundJoinable :: Rules -> (Term, Term) -> Bool
 groundJoinable rules (s, t)
+    | hasTypeVars s || hasTypeVars t = False
     | length vs > maxOrderedVars = joinableUnder (Map.empty, Map.empty)
     | otherwise = all joinableUnder (orderings vs)
   where
@@ -835,7 +838,10 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
             complete cache2 rules queue
         | otherwise = complete HashMap.empty rules' (queue ++ concatMap (criticalPairsWith rules') new')
       where
-        nf = normalForm (kboGreater Map.empty) rules
+        -- Normalize a critical pair only with decreases that hold for every
+        -- type instance. Otherwise normalization can erase a general rule
+        -- that its later instances still need.
+        nf = normalForm annotationIndependentGreater rules
         (s', cache1) = cachedNormalForm nf cache s
         (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
