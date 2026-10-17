@@ -2379,6 +2379,12 @@ import MicroCFTA.HeightOrderControlledMonotone
 import MicroCFTA.SourceCurrentMemoMergeResourceControl
 import MicroCFTA.SourceCurrentMemoMergeMeasured
 import MicroCFTA.SourceCurrentMemoMergeDirectCost
+import MicroCFTA.SourceCurrentMemoMergeResourceCertificate
+import MicroCFTA.SourceCurrentMemoMergeWorkWidths
+import MicroCFTA.SourceCurrentMemoMergeResourceTrace
+import MicroCFTA.SourceCurrentMemoMergeNumericControl
+import MicroCFTA.SourceCurrentMemoMergeResourceIteration
+import MicroCFTA.SourceCurrentMemoMergeNumeric
 /-!
 # Proof dependency audit
 
