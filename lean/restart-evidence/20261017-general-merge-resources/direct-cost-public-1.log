@@ -1,0 +1,239 @@
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted : {Symbol Guard : Type} →
+  [DecidableEq.{1} Symbol] →
+    [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+      (Guard → Bool) →
+        Guard →
+          {Output : Type} →
+            MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output →
+              MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+                MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard →
+                  Output →
+                    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+                      MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard →
+                        List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard) → Nat → Prop
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.pure' does not depend on any axioms
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.pure : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {Output : Type} (value : Output) (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard),
+  @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.pure Symbol Guard Output value) heap memo value heap memo
+    (@List.nil.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.work' does not depend on any axioms
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.work : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {Output : Type} (job : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Output)
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard),
+  @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol Guard Output job) heap memo
+    (@Prod.fst.{0, 0} Output (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Output inst_1 job heap))
+    (@Prod.snd.{0, 0} Output (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Output inst_1 job heap))
+    memo (@List.nil.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.select' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.select : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} (fuel : Nat),
+  @Eq.{1}
+      (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear fuel inputs before)
+      (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values after) →
+    @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.select Symbol Guard inputs) before memo values after memo
+      (@List.nil.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.request' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.request : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after saved →
+    @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.request Symbol Guard input) before memo output after saved
+      (@List.cons.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)
+        (@MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence.mk Symbol Guard input before memo output after saved)
+        (@List.nil.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.bind' does not depend on any axioms
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.bind : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {x : Type} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard x}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {value : x}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {current : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {earlier : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {firstCost : Nat}
+  {x_1 : Type} {next : x → MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard x_1} {output : x_1}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {following : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {laterCost : Nat},
+  @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top x code before memo value middle
+      current earlier firstCost →
+    @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top x_1 (next value) middle
+        current output after saved following laterCost →
+      @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top x_1
+        (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.bind Symbol Guard x x_1 code next) before memo output after saved
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+          (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+          (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+          (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+            (@List.instAppend.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)))
+          earlier following)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstCost laterCost)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.erase' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.erase : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {cost : Nat},
+  @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output code before memo output
+      after saved events cost →
+    @MicroCFTA.SourceCurrentMemoMergeRequestBounds.Direct Symbol Guard inst inst_1 clear top Output code before memo
+      output after saved events
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.graph' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.graph : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {cost : Nat},
+  @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output code before memo output
+      after saved events cost →
+    @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top Output code before memo output after
+      saved
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.of_direct' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.of_direct : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)},
+  @MicroCFTA.SourceCurrentMemoMergeRequestBounds.Direct Symbol Guard inst inst_1 clear top Output code before memo
+      output after saved events →
+    @Exists.{1} Nat fun cost =>
+      @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output code before memo
+        output after saved events cost
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.of_run' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.of_run : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top Output code before memo output after
+      saved →
+    @Exists.{1} (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)) fun events =>
+      @Exists.{1} Nat fun cost =>
+        @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output code before memo
+          output after saved events cost
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.requests_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted.requests_le : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output}
+  {events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {cost : Nat},
+  @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output code before memo output
+      after saved events cost →
+    @LE.le.{0} Nat instLENat
+      (@List.length.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard) events) cost
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.map_cost' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.map_cost : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Input Output : Type}
+  (clear : Guard → Bool) (top : Guard) (call : Input → MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output)
+  (inputs : List.{0} Input) (localCost : Input → Nat),
+  (∀ (input : Input),
+      @Membership.mem.{0, 0} Input (List.{0} Input) (@List.instMembership.{0} Input) inputs input →
+        ∀ (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard) (output : Output)
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+          (events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)) (cost : Nat),
+          @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top Output (call input)
+              before memo output after saved events cost →
+            @LE.le.{0} Nat instLENat cost (localCost input)) →
+    ∀ {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {outputs : List.{0} Output}
+      {events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {cost : Nat},
+      @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top (List.{0} Output)
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.map.{0} Input Symbol Guard Output call inputs) before memo outputs
+          after saved events cost →
+        And (@Eq.{1} Nat (@List.length.{0} Output outputs) (@List.length.{0} Input inputs))
+          (@LE.le.{0} Nat instLENat cost
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@List.sum.{0} Nat instAddNat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0)))
+                  (@List.map.{0, 0} Input Nat localCost inputs))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) (@List.length.{0} Input inputs)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget : Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.body_cost' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.body_cost : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (bound : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard input) bound →
+    ∀ {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+      {output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {events : List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {cost : Nat},
+      @MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.body Symbol Guard inst top input) before memo output after saved
+          events cost →
+        @LE.le.{0} Nat instLENat cost (MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget bound)
+'MicroCFTA.SourceCurrentMemoMergeDirectCost.body_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeDirectCost.body_bound : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.body Symbol Guard inst top input) before memo output after saved →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard before memo →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+            ∀ (bound : Nat),
+              @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard input) bound →
+                @Exists.{1} (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+                  fun events =>
+                  @Exists.{1} Nat fun cost =>
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeDirectCost.Counted Symbol Guard inst inst_1 clear top
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.body Symbol Guard inst top input) before memo output
+                        after saved events cost)
+                      (And (@LE.le.{0} Nat instLENat cost (MicroCFTA.SourceCurrentMemoMergeDirectCost.bodyBudget bound))
+                        (∀ (event : MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard),
+                          @Membership.mem.{0, 0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)
+                              (List.{0} (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+                              (@List.instMembership.{0}
+                                (MicroCFTA.SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard))
+                              events event →
+                            @MicroCFTA.SourceCurrentMemoMergeRequestBounds.Reached Symbol Guard
+                              (@MicroCFTA.MergedOrdinaryHeight.height Symbol Guard input) before event))

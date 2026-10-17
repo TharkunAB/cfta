@@ -1,0 +1,367 @@
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono : ∀ {Symbol Guard : Type} {first last : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard first heap →
+    @LE.le.{0} Nat instLENat first last → @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard last heap
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.initialBound' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeResourceControl.initialBound : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.initial' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.initial : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (mass : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass heap →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.initialBound
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+        mass)
+      heap
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_ge : ∀ (width bound : Nat),
+  @LE.le.{0} Nat instLENat bound (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound)
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_mono : ∀
+  {firstWidth lastWidth firstBound lastBound : Nat},
+  @LE.le.{0} Nat instLENat firstWidth lastWidth →
+    @LE.le.{0} Nat instLENat firstBound lastBound →
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth firstWidth firstBound)
+        (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth lastWidth lastBound)
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.values_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.values_mass : ∀ {Symbol Guard : Type} {bound width : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+    ∀ (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap values →
+        @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+            width →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.values Symbol Guard values)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) width
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) bound))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.rows_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.rows_mass : ∀ {Symbol Guard : Type} {bound width : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+    ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard heap rows →
+        @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+            width →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) width
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) bound))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.edge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.edge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound width : Nat),
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap values →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+          width →
+        And
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound)
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.edge Symbol Guard
+                (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                    (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap)))
+              (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound))
+            (And
+              (@Eq.{1} Nat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap)))
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) heap))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound width : Nat),
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+    @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard heap rows →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+          width →
+        And
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound)
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                    (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap)))
+              (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@Eq.{1} Nat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) heap))))
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap)))))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.union' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.union : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound width : Nat),
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap values →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+          width →
+        And
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound)
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values) heap)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                    (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values) heap)))
+              (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values) heap))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@Eq.{1} Nat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values) heap))))
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap)))))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.ordinaryUnion' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.ordinaryUnion : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound width : Nat),
+  @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap values →
+      @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+          width →
+        And
+          (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+            (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound)
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.MergedOrdinaryHeight.ordinaryUnion Symbol Guard values) heap)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                    (@MicroCFTA.MergedOrdinaryHeight.ordinaryUnion Symbol Guard values) heap)))
+              (MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth width bound))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.MergedOrdinaryHeight.ordinaryUnion Symbol Guard values) heap))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@Eq.{1} Nat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.MergedOrdinaryHeight.ordinaryUnion Symbol Guard values) heap))))
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap)))))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth' does not depend on any axioms
+MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth : Nat → Nat
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_ge : ∀ (bound : Nat),
+  @LE.le.{0} Nat instLENat bound (MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth bound)
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth first)
+      (MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth last)
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_replay' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (oldFuel : Nat) (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard heap →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap inputs →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard inputs →
+          ∀ (result : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+            @Eq.{1}
+                (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear oldFuel inputs heap)
+                (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) result after) →
+              And (@MicroCFTA.SourceMergedComparisonEffects.Effect Symbol Guard heap after)
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                    (MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth bound) after)
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear
+                        (MicroCFTA.SourceMergedComparisonNumeric.comparisonFuel bound bound bound) inputs heap)
+                      (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) result after))
+                    (∀ (extra : Nat),
+                      @Eq.{1}
+                        (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (MicroCFTA.SourceMergedComparisonNumeric.comparisonFuel bound bound bound) extra)
+                          inputs heap)
+                        (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) result after))))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard heap →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap inputs →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard inputs →
+          @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun result =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+              And
+                (@Eq.{1}
+                  (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear
+                    (MicroCFTA.SourceMergedComparisonNumeric.comparisonFuel bound bound bound) inputs heap)
+                  (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) result after))
+                (And (@MicroCFTA.SourceMergedComparisonEffects.Effect Symbol Guard heap after)
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                      (MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth bound) after)
+                    (∀ (extra : Nat),
+                      @Eq.{1}
+                        (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (MicroCFTA.SourceMergedComparisonNumeric.comparisonFuel bound bound bound) extra)
+                          inputs heap)
+                        (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) result after))))
+'MicroCFTA.SourceCurrentMemoMergeResourceControl.winner_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeResourceControl.winner_bound : ∀ {Symbol Guard : Type} {bound : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard heap memo →
+    @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound heap →
+      ∀ (input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap candidate →
+          And
+            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate)))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate)))
+              bound)

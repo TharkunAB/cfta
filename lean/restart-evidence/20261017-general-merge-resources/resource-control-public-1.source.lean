@@ -1,0 +1,66 @@
+import MicroCFTA.SourceCurrentMemoMergeResourceControl
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.initialBound
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.initialBound
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.initial
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.initial
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_ge
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_ge
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_mono
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.primitiveGrowth_mono
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.values_mass
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.values_mass
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.rows_mass
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.rows_mass
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.edge
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.edge
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.node
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.node
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.union
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.union
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.ordinaryUnion
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.ordinaryUnion
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_ge
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_ge
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_mono
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.selectionGrowth_mono
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_replay
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_replay
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_complete
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.selection_complete
+
+#print axioms MicroCFTA.SourceCurrentMemoMergeResourceControl.winner_bound
+#check @MicroCFTA.SourceCurrentMemoMergeResourceControl.winner_bound

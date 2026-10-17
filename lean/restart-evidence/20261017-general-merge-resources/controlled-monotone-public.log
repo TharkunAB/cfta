@@ -1,0 +1,36 @@
+'MicroCFTA.HeightOrderControlled.majorant_dimension_succ' does not depend on any axioms
+MicroCFTA.HeightOrderControlled.majorant_dimension_succ : ∀ (control : Nat → Nat),
+  (∀ (value : Nat), @LT.lt.{0} Nat instLTNat value (control value)) →
+    ∀ (dimension value : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.majorant control dimension value)
+        (MicroCFTA.HeightOrderControlled.majorant control
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) dimension
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          value)
+'MicroCFTA.HeightOrderControlled.majorant_dimension_mono' depends on axioms: [propext]
+MicroCFTA.HeightOrderControlled.majorant_dimension_mono : ∀ (control : Nat → Nat),
+  (∀ (value : Nat), @LT.lt.{0} Nat instLTNat value (control value)) →
+    ∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        ∀ (value : Nat),
+          @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.majorant control first value)
+            (MicroCFTA.HeightOrderControlled.majorant control last value)
+'MicroCFTA.HeightOrderControlled.majorant_joint_mono' depends on axioms: [propext]
+MicroCFTA.HeightOrderControlled.majorant_joint_mono : ∀ (control : Nat → Nat),
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (control first) (control last)) →
+    (∀ (value : Nat), @LT.lt.{0} Nat instLTNat value (control value)) →
+      ∀ {firstDimension lastDimension firstControl lastControl : Nat},
+        @LE.le.{0} Nat instLENat firstDimension lastDimension →
+          @LE.le.{0} Nat instLENat firstControl lastControl →
+            @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.majorant control firstDimension firstControl)
+              (MicroCFTA.HeightOrderControlled.majorant control lastDimension lastControl)
+'MicroCFTA.HeightOrderControlled.majorant_diagonal_mono' depends on axioms: [propext]
+MicroCFTA.HeightOrderControlled.majorant_diagonal_mono : ∀ (control : Nat → Nat),
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (control first) (control last)) →
+    (∀ (value : Nat), @LT.lt.{0} Nat instLTNat value (control value)) →
+      ∀ {first last : Nat},
+        @LE.le.{0} Nat instLENat first last →
+          @LE.le.{0} Nat instLENat (MicroCFTA.HeightOrderControlled.majorant control first first)
+            (MicroCFTA.HeightOrderControlled.majorant control last last)

@@ -1,0 +1,84 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeResourceControl.lean:28:8: error: fail to show termination for
+  MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono
+with errors
+failed to infer structural recursion:
+Not considering parameter Symbol of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+Not considering parameter Guard of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+Not considering parameter first of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+Not considering parameter last of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+Not considering parameter heap of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+Not considering parameter fits of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+Not considering parameter increase of MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono:
+  it is unchanged in the recursive calls
+no parameters suitable for structural recursion
+
+well-founded recursion cannot be used, `MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits.mono` does not take any (non-fixed) arguments
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeResourceControl.lean:55:2: error(lean.unknownIdentifier): Unknown constant `Nat.max_le_max`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeResourceControl.lean:78:11: error: Type mismatch
+  Nat.le_refl ?m.21
+has type
+  ?m.21 ≤ ?m.21
+but is expected to have type
+  InternedValueMass.edges (List.flatMap nodeEdges []) ≤ InternedValueMass.values []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeResourceControl.lean:204:40: error: Application type mismatch: The argument
+  ih
+has type
+  first ≤ first + extra →
+    HeightOrderControlled.majorant g first bound ≤ HeightOrderControlled.majorant g (first + extra) bound
+but is expected to have type
+  HeightOrderControlled.majorant g first bound ≤ ?m.43
+in the application
+  Nat.le_trans ih
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeResourceControl.lean:236:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  m ≥ 0
+  l ≥ 0
+  l - m ≥ 1
+  k ≥ 0
+  j ≥ 0
+  j - k ≥ 0
+  i ≥ 0
+  h ≥ 0
+  h - i ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑lastNodes
+ b := ↑firstNodes
+ c := ↑lastEdges
+ d := ↑firstEdges
+ e := ↑(SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass)
+ f := ↑(SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass)
+ h := ↑(SourceCurrentAllocatedRowReadNumeric.readFuel
+    (SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass)
+    (SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass)
+    (SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass))
+ i := ↑(SourceCurrentAllocatedRowReadNumeric.readFuel
+    (SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass)
+    (SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass)
+    (SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass))
+ j := ↑(SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass) *
+  ↑(SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass)
+ k := ↑(SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass) *
+  ↑(SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass)
+ l := ↑(have bound := SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass;
+  1 + bound * bound +
+    have bound := SourceCurrentAllocatedUnfoldHistory.heapBound firstNodes firstEdges mass;
+    SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound)
+ m := ↑(have bound := SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass;
+  1 + bound * bound +
+    have bound := SourceCurrentAllocatedUnfoldHistory.heapBound lastNodes lastEdges mass;
+    SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound)

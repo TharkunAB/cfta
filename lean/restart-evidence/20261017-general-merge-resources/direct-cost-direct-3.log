@@ -1,0 +1,88 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:222:2: error: Type mismatch: After simplification, term
+  Nat.mul_le_mul_left (bound + 1) (Decidable.byContradiction fun a => square_ge._proof_1_1 bound a)
+ has type
+  (bound + 1) * 1 ≤ (bound + 1) * (bound + 1)
+but is expected to have type
+  bound + 1 ≤ (bound + 1) * (bound + 1)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:236:23: error(lean.unknownIdentifier): Unknown constant `List.length_pos.mpr`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:300:86: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+bound : Nat
+before after : State Symbol Guard
+memo saved : Memo Symbol Guard
+output : Value Symbol Guard
+events : List (Occurrence Symbol Guard)
+cost : Nat
+positive : bound + 1 ≤ (bound + 1) ^ 3
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+rows : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+mass : InternedValueMass.value (Value.node entry rows depth free) ≤ bound
+input✝ : Value Symbol Guard
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+heq✝ : Value.node entry rows depth free = Value.node entry✝ edges✝ depth✝ free✝
+actual :
+  Counted clear top
+    (if free✝ = [] then root top (MergedSourceGrouping.groups edges✝) else Code.pure (Value.node entry rows depth free))
+    before memo output after saved events cost
+rowCount : rows.length ≤ bound
+widths : ∀ (row : EdgeValue Symbol Guard), row ∈ rows → row.children.length ≤ bound
+grouping : MergedPhysicalGroupRoot.Grouping rows (MergedSourceGrouping.groups rows)
+group : List (EdgeValue Symbol Guard)
+member : group ∈ MergedSourceGrouping.groups rows
+first : EdgeValue Symbol Guard
+rest : List (EdgeValue Symbol Guard)
+same : group = first :: rest
+right✝ :
+  group =
+    List.filter
+      (fun edge =>
+        decide (edge.entry.key.symbol = first.entry.key.symbol ∧ edge.children.length = first.children.length))
+      rows
+⊢ ¬first :: rest = []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:306:83: error: Application type mismatch: The argument
+  actual
+has type
+  Counted clear top
+    (if free✝ = [] then root top (MergedSourceGrouping.groups edges✝) else Code.pure (Value.node entry rows depth free))
+    before memo output after saved events cost
+but is expected to have type
+  Counted ?m.247 ?m.248 (Code.bind ?m.249 ?m.250) ?m.251 ?m.253 ?m.255 ?m.252 ?m.254 ?m.256 ?m.257
+in the application
+  bind_cases actual
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:330:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+  100*a - d ≤ -1
+where
+ a := ↑((bound + 1) ^ 3)
+ b := ↑bound
+ c := ↑(InternedValueMass.value (Value.node entry rows depth free))
+ d := ↑cost
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:303:36: warning: This simp argument is unused:
+  List.cons_ne_self
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [same, ne_eq, not_false_eq_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentMemoMergeDirectCost.lean:303:55: warning: This simp argument is unused:
+  not_false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [same, ne_eq, List.cons_ne_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

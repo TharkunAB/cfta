@@ -1,5 +1,54 @@
 # cfta formal model
 
+## Current general Merge accounting and local resources
+
+Updated: 2026-10-17 09:32 CEST. This checkpoint starts at published db0ec2b6.
+Proof commits are c28e7cb4, b725b091, 17fcca53, and 9dba8b45. Source main
+remains c0cc8a05, merged locally at 896b0a1c. Read
+lean/notes-current-general-merge-resources.md for the complete library target,
+proof map, and missing areas. Evidence is in
+lean/restart-evidence/20261017-general-merge-resources/.
+
+Four additive modules prove controlled-majorant monotonicity, exact current
+heap transfers for literal constructors and allocating selection, additive
+completed-graph costs, and exact worker replay with one shared selection
+certificate. A body with original full input mass at most q has at most
+100 * (q + 1)^3 direct instructions. This direct bound excludes nested
+request bodies and selection internals. Every direct request retains its
+actual Call and strict ordinary-height decrease under initial physical facts.
+The source domain, complete heaps, populated memos, first-winner rereads,
+both group branches, and ordinary-union requests remain present.
+
+These are prerequisites for a whole initial Merge budget. Measured replay
+still takes a completed measured graph and a shared selection certificate.
+Local resource transfers still need current-heap bounds and literal widths.
+No complete initial Merge forecast is claimed. Next classify actual Work
+widths and compose local growth over direct counts and smaller-height calls.
+Derive all reached bounds and shared selection fuel from initial resources.
+Then forecast complete selected Operand work and compose Target in head,
+tail, then query order. General Force, Edit/ClassPass, outer active and stored
+descent, arbitrary constrained Mu, convergence, current adapters, capacity,
+and full public Haskell correspondence remain open. Keep support for unrelated
+open ordinary roots. The complete library goal stays active.
+
+The pinned Audit passes 2916 jobs and 64684 dependency checks. All four
+production strict logs are empty. All 58 full signature and axiom pairs pass
+in eight groups: 48 public declarations and ten constructed checks. Only
+propext, Classical.choice, and Quot.sound occur. Four component manifests
+verify 106 immutable entries. Read checkpoint-validation.json for exact hashes.
+Preservation retains 13856 starting files, 2911 older non-Audit proofs,
+all 239 Haskell files, all 206 active-package files, both stashes, and three
+other worktrees. All 83 frozen module manifests retain 673 entries.
+
+This increment adds no Haskell change or new behavior defect. Root FINDINGS
+keeps the external repair registry first. Field-pool repair b9219b9e is merged
+and validated; the Chain reproducer returns Left (FieldAtomOnDatatype "Next" 0).
+Reuse the unchanged strict Nix, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Record every later Haskell fix in FINDINGS with its
+reproducer, affected paths, commit, checks, and upstream state. Preserve all
+older proofs, counterexamples, repairs, marked drafts, and the optimized
+interned core, including older constructor and equality work.
+
 ## Current initial computable comparison and selection bounds
 
 Updated: 2026-10-17 09:12 CEST. This checkpoint starts at published b7b01355.
