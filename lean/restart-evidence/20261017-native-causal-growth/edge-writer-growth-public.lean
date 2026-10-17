@@ -1,0 +1,42 @@
+import MicroCFTA.SourceCurrentNativeEdgeWriterGrowth
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written.writer
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written.writer
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written.writer
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written.grows
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written.grows
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.Written.grows
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.initial
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.initial
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.initial
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.advance
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.advance
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.advance
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.trace
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.trace
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.trace
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.forget
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.forget
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.forget
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.writers
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.writers
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.writers
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.query
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.query
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.query
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.warm
+#print MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.warm
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History.warm
