@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `e5dd8505`.
+Status rechecked on 2026-10-17 at proof checkpoint `88be2ba6`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-general-native-callbacks.md` for the current proof boundaries.
+Read `lean/notes-current-native-guard-profiles.md` for the current proof boundaries.
 
-The current general callback proofs add no Haskell change.
+The current guard-profile and ranked local proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2791 jobs and 62515 dependency checks.
+The last completed pinned Lean Audit passes: 2797 jobs and 62661 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,57 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current guard profiles and ranked native local laws
+
+Updated: 2026-10-17 04:07 CEST. This checkpoint starts at published `58262ba5`.
+The proof commits are `445f33d7`, `26dd76ec`, and `88be2ba6`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-native-guard-profiles.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-mu-cap-readback/`.
+
+Six additive modules prove exact structural guard-depth observation and
+source-supported ranked native local laws. The profile reads literal guards
+and stored bodies. Its finite bound is equivalent to Cap. Original syntax,
+availability, and domain coverage supply the ranked law's input boundary.
+Closed inputs derive these facts. Actual domain extension and later reads
+retain the same original source Mu witnesses.
+
+Actual memo lookup, demand, and captured finish retain conditional cap and
+occurrence laws. Literal row, child, and union code derives both laws from
+its smaller request laws. Budgets use the actual ordered child zip. These
+are local continuation certificates. They do not prove arbitrary native
+completion or the missing joint recursive induction.
+
+A source-built empty-language example proves that language observations
+cannot recover literal guard caps. It is a proof-interface obstruction,
+not a Haskell defect. Exact causal positive-depth readback for earlier Mu
+winners remains open. Historical semantic origins do not already retain
+the required earlier depth/profile invariants. Read next-causal-guard-profile.md
+in the new evidence directory. Do not repeat the pure observer or local cache laws.
+
+The pinned Audit passes 2797 jobs and 62661 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All six production sources pass
+absolute-path strict checks without diagnostics. All 96 imported pairs pass
+in eight groups. Five component manifests verify 147 entries. Failed raw
+attempts remain preserved. Canonical replay retains one older unused-input
+warning. Preservation retains
+11053 starting files, 2790 older non-Audit proofs, all 239 Haskell files,
+and 66 frozen production manifests with 554 entries. Stashes and three
+other worktrees remain unchanged.
+
+General mixed native closure, finite warm callers, constrained recursive
+descent, repeated convergence, remaining recursive callers, frontend and
+runtime adapters, capacity, serial public pipelines, and complete public
+composition remain open. The final source gate remains broader than the
+current supported family. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Recursive field-pool repair `b9219b9e` is merged and
+validated. Reuse unchanged strict Nix build, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve the optimized interned core and
+every earlier proof, counterexample, repair, and marked draft.
 
 ## Current general native marker and cap transport
 
