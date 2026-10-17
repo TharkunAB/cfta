@@ -1,0 +1,503 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:16:7: warning: missing doc string for public abbrev Shape
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:19:7: warning: missing doc string for public abbrev join
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:20:7: warning: missing doc string for public abbrev raise
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:21:7: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'SourceCurrentConstrainedCapGuardDepth.guardCost', which is 'noncomputable'
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:21:7: warning: missing doc string for public abbrev cost
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:26:2: warning: missing doc string for public field Shape.shape
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:27:2: warning: missing doc string for public field Shape.guardDepth
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:48:36: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Depth.Shape.isEmpty`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:93:86: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Depth.Shape.map`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:93:115: error: unsolved goals
+Atom Other : Type
+function : Atom → Other
+values : List (Shape Atom)
+⊢ ∀ (a : Shape Atom), a ∈ values → InternedDepthSemantics.Shape.map function a.shape = sorry () a.shape
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:110:99: error: unsolved goals
+Atom Other Guard : Type
+function : Atom → Other
+valid : Guard → Prop
+guard : Guard
+values : List (Shape Atom)
+⊢ { shape := InternedDepthSemantics.edge (List.map sorry (List.map Shape.shape values)),
+      guardDepth :=
+        if (values.any fun x => sorry (sorry x.shape)) = true then some 0
+        else GuardDepth.join (some (GuardDepth.cost valid guard)) (GuardDepth.raise (combineMany values).guardDepth) } =
+    { shape := InternedDepthSemantics.Shape.map function (InternedDepthSemantics.edge (List.map Shape.shape values)),
+      guardDepth :=
+        if (values.any fun x => sorry x.shape) = true then some 0
+        else GuardDepth.join (some (GuardDepth.cost valid guard)) (GuardDepth.raise (combineMany values).guardDepth) }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:111:13: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:111:31: warning: This simp argument is unused:
+  InternedDepthSemantics.edge_map
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [edge, shapes_map, List.any_map, Function.comp_def, InternedDepthSemantics.isEmpty_map,
+    combineMany_map, Shape.map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:112:4: warning: This simp argument is unused:
+  InternedDepthSemantics.isEmpty_map
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [edge, shapes_map, InternedDepthSemantics.edge_map, List.any_map, Function.comp_def,
+    combineMany_map, Shape.map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:116:88: error: unsolved goals
+Atom Other : Type
+function : Atom → Other
+smart : Bool
+body : Shape (Unit ⊕ Atom)
+⊢ { shape := InternedDepthSemantics.Shape.map function (InternedDepthSemantics.binder smart body.shape),
+      guardDepth :=
+        if
+            (!smart ||
+                InternedDepthSemantics.hasLocal
+                  (InternedDepthSemantics.Shape.map (Sum.map id function) body.shape).deep) =
+              true then
+          if body.guardDepth = some 0 then some 0 else none
+        else body.guardDepth } =
+    { shape := InternedDepthSemantics.Shape.map function (InternedDepthSemantics.binder smart body.shape),
+      guardDepth :=
+        if (!smart || InternedDepthSemantics.hasLocal body.shape.deep) = true then
+          if body.guardDepth = some 0 then some 0 else none
+        else body.guardDepth }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:117:67: warning: This simp argument is unused:
+  InternedDepthSemantics.hasLocal_map
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [binder, Shape.map, InternedDepthSemantics.binder_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:123:30: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Depth.Shape.map`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:122:95: error: unsolved goals
+Atom Other : Type
+function : Atom → Other
+environment : List (Shape Atom)
+⊢ InternedDepthSemantics.Shape.map (Sum.map id function) { roots := [Sum.inl ()] } = { roots := [Sum.inl ()] } ∧
+    ∀ (a : Shape Atom),
+      a ∈ environment →
+        InternedDepthSemantics.Shape.map (Sum.map id function) (InternedDepthSemantics.Shape.map Sum.inr a.shape) =
+          InternedDepthSemantics.Shape.map Sum.inr (InternedDepthSemantics.Shape.map function a.shape)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:130:13: error: Tactic `rfl` failed: The left-hand side
+  evaluate valid Syntax.empty (List.map (Shape.map function) environment)
+is not definitionally equal to the right-hand side
+  Shape.map function (evaluate valid Syntax.empty environment)
+
+case empty
+Atom Other Guard Symbol : Type
+function : Atom → Other
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ evaluate valid Syntax.empty (List.map (Shape.map function) environment) =
+    Shape.map function (evaluate valid Syntax.empty environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:131:14: error: unsolved goals
+case var.none
+Atom Other Guard Symbol : Type
+function : Atom → Other
+valid : Guard → Prop
+environment : List (Shape Atom)
+index : Nat
+found : environment[index]? = none
+⊢ { } = InternedDepthSemantics.Shape.map function { }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:144:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateMany valid [] (List.map (Shape.map function) environment)
+is not definitionally equal to the right-hand side
+  List.map (Shape.map function) (evaluateMany valid [] environment)
+
+case nil
+Atom Other Guard Symbol : Type
+function : Atom → Other
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ evaluateMany valid [] (List.map (Shape.map function) environment) =
+    List.map (Shape.map function) (evaluateMany valid [] environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:153:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateEdges valid [] (List.map (Shape.map function) environment)
+is not definitionally equal to the right-hand side
+  Shape.map function (evaluateEdges valid [] environment)
+
+case nil
+Atom Other Guard Symbol : Type
+function : Atom → Other
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ evaluateEdges valid [] (List.map (Shape.map function) environment) =
+    Shape.map function (evaluateEdges valid [] environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:166:13: error: Tactic `rfl` failed: The left-hand side
+  (evaluate valid Syntax.empty environment).shape
+is not definitionally equal to the right-hand side
+  InternedDepthSemantics.evaluate Syntax.empty (List.map Shape.shape environment)
+
+case empty
+Guard Symbol Atom : Type
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ (evaluate valid Syntax.empty environment).shape =
+    InternedDepthSemantics.evaluate Syntax.empty (List.map Shape.shape environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:182:11: error: Tactic `rfl` failed: The left-hand side
+  List.map Shape.shape (evaluateMany valid [] environment)
+is not definitionally equal to the right-hand side
+  InternedDepthSemantics.evaluateMany [] (List.map Shape.shape environment)
+
+case nil
+Guard Symbol Atom : Type
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ List.map Shape.shape (evaluateMany valid [] environment) =
+    InternedDepthSemantics.evaluateMany [] (List.map Shape.shape environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:190:11: error: Tactic `rfl` failed: The left-hand side
+  (evaluateEdges valid [] environment).shape
+is not definitionally equal to the right-hand side
+  InternedDepthSemantics.evaluateEdges [] (List.map Shape.shape environment)
+
+case nil
+Guard Symbol Atom : Type
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ (evaluateEdges valid [] environment).shape =
+    InternedDepthSemantics.evaluateEdges [] (List.map Shape.shape environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:161:0: error: failed to prove termination, possible solutions:
+  - Use `have`-expressions to prove the remaining goals
+  - Use `termination_by` to specify a different well-founded relation
+  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal
+Guard✝ : Type
+Symbol✝¹ : (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard✝ → Prop) ×' (_ : Syntax Symbol Guard✝) ×' List (Shape Atom)
+a✝⁴ :
+  ∀
+    (y :
+      (Guard : Type) ×'
+          (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : Syntax Symbol Guard) ×' List (Shape Atom) ⊕'
+        (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (Syntax Symbol Guard)) ×' List (Shape Atom) ⊕'
+          (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (EdgeSyntax Symbol Guard)) ×' List (Shape Atom)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSum.casesOn x
+            (fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expression =>
+                      PSigma.casesOn expression fun expression environment => sizeOf expression)
+            fun _x =>
+            PSum.casesOn _x
+              (fun _x =>
+                PSigma.casesOn _x fun Guard Symbol =>
+                  PSigma.casesOn Symbol fun Symbol Atom =>
+                    PSigma.casesOn Atom fun Atom valid =>
+                      PSigma.casesOn valid fun valid expressions =>
+                        PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+              fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expressions =>
+                      PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+        y (PSum.inl ⟨Guard✝, Symbol✝¹⟩) →
+      PSum.casesOn y
+        (fun _x =>
+          (evaluate _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluate _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+        fun _x =>
+        PSum.casesOn _x
+          (fun _x =>
+            List.map Shape.shape (evaluateMany _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2) =
+              InternedDepthSemantics.evaluateMany _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+          fun _x =>
+          (evaluateEdges _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluateEdges _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2)
+Symbol✝ : Type
+Atom✝¹ : (Atom : Type) ×' (_ : Guard✝ → Prop) ×' (_ : Syntax Symbol✝ Guard✝) ×' List (Shape Atom)
+a✝³ :
+  ∀
+    (y :
+      (Guard : Type) ×'
+          (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : Syntax Symbol Guard) ×' List (Shape Atom) ⊕'
+        (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (Syntax Symbol Guard)) ×' List (Shape Atom) ⊕'
+          (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (EdgeSyntax Symbol Guard)) ×' List (Shape Atom)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSum.casesOn x
+            (fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expression =>
+                      PSigma.casesOn expression fun expression environment => sizeOf expression)
+            fun _x =>
+            PSum.casesOn _x
+              (fun _x =>
+                PSigma.casesOn _x fun Guard Symbol =>
+                  PSigma.casesOn Symbol fun Symbol Atom =>
+                    PSigma.casesOn Atom fun Atom valid =>
+                      PSigma.casesOn valid fun valid expressions =>
+                        PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+              fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expressions =>
+                      PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+        y (PSum.inl ⟨Guard✝, ⟨Symbol✝, Atom✝¹⟩⟩) →
+      PSum.casesOn y
+        (fun _x =>
+          (evaluate _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluate _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+        fun _x =>
+        PSum.casesOn _x
+          (fun _x =>
+            List.map Shape.shape (evaluateMany _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2) =
+              InternedDepthSemantics.evaluateMany _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+          fun _x =>
+          (evaluateEdges _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluateEdges _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2)
+Atom✝ : Type
+valid✝¹ : (_ : Guard✝ → Prop) ×' (_ : Syntax Symbol✝ Guard✝) ×' List (Shape Atom✝)
+a✝² :
+  ∀
+    (y :
+      (Guard : Type) ×'
+          (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : Syntax Symbol Guard) ×' List (Shape Atom) ⊕'
+        (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (Syntax Symbol Guard)) ×' List (Shape Atom) ⊕'
+          (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (EdgeSyntax Symbol Guard)) ×' List (Shape Atom)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSum.casesOn x
+            (fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expression =>
+                      PSigma.casesOn expression fun expression environment => sizeOf expression)
+            fun _x =>
+            PSum.casesOn _x
+              (fun _x =>
+                PSigma.casesOn _x fun Guard Symbol =>
+                  PSigma.casesOn Symbol fun Symbol Atom =>
+                    PSigma.casesOn Atom fun Atom valid =>
+                      PSigma.casesOn valid fun valid expressions =>
+                        PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+              fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expressions =>
+                      PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+        y (PSum.inl ⟨Guard✝, ⟨Symbol✝, ⟨Atom✝, valid✝¹⟩⟩⟩) →
+      PSum.casesOn y
+        (fun _x =>
+          (evaluate _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluate _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+        fun _x =>
+        PSum.casesOn _x
+          (fun _x =>
+            List.map Shape.shape (evaluateMany _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2) =
+              InternedDepthSemantics.evaluateMany _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+          fun _x =>
+          (evaluateEdges _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluateEdges _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2)
+valid✝ : Guard✝ → Prop
+expression✝ : (_ : Syntax Symbol✝ Guard✝) ×' List (Shape Atom✝)
+a✝¹ :
+  ∀
+    (y :
+      (Guard : Type) ×'
+          (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : Syntax Symbol Guard) ×' List (Shape Atom) ⊕'
+        (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (Syntax Symbol Guard)) ×' List (Shape Atom) ⊕'
+          (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (EdgeSyntax Symbol Guard)) ×' List (Shape Atom)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSum.casesOn x
+            (fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expression =>
+                      PSigma.casesOn expression fun expression environment => sizeOf expression)
+            fun _x =>
+            PSum.casesOn _x
+              (fun _x =>
+                PSigma.casesOn _x fun Guard Symbol =>
+                  PSigma.casesOn Symbol fun Symbol Atom =>
+                    PSigma.casesOn Atom fun Atom valid =>
+                      PSigma.casesOn valid fun valid expressions =>
+                        PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+              fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expressions =>
+                      PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+        y (PSum.inl ⟨Guard✝, ⟨Symbol✝, ⟨Atom✝, ⟨valid✝, expression✝⟩⟩⟩⟩) →
+      PSum.casesOn y
+        (fun _x =>
+          (evaluate _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluate _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+        fun _x =>
+        PSum.casesOn _x
+          (fun _x =>
+            List.map Shape.shape (evaluateMany _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2) =
+              InternedDepthSemantics.evaluateMany _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+          fun _x =>
+          (evaluateEdges _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluateEdges _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2)
+expression : Syntax Symbol✝ Guard✝
+environment✝ : List (Shape Atom✝)
+a✝ :
+  ∀
+    (y :
+      (Guard : Type) ×'
+          (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : Syntax Symbol Guard) ×' List (Shape Atom) ⊕'
+        (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (Syntax Symbol Guard)) ×' List (Shape Atom) ⊕'
+          (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (EdgeSyntax Symbol Guard)) ×' List (Shape Atom)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSum.casesOn x
+            (fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expression =>
+                      PSigma.casesOn expression fun expression environment => sizeOf expression)
+            fun _x =>
+            PSum.casesOn _x
+              (fun _x =>
+                PSigma.casesOn _x fun Guard Symbol =>
+                  PSigma.casesOn Symbol fun Symbol Atom =>
+                    PSigma.casesOn Atom fun Atom valid =>
+                      PSigma.casesOn valid fun valid expressions =>
+                        PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+              fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expressions =>
+                      PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+        y (PSum.inl ⟨Guard✝, ⟨Symbol✝, ⟨Atom✝, ⟨valid✝, ⟨expression, environment✝⟩⟩⟩⟩⟩) →
+      PSum.casesOn y
+        (fun _x =>
+          (evaluate _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluate _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+        fun _x =>
+        PSum.casesOn _x
+          (fun _x =>
+            List.map Shape.shape (evaluateMany _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2) =
+              InternedDepthSemantics.evaluateMany _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+          fun _x =>
+          (evaluateEdges _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluateEdges _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2)
+members : List (Syntax Symbol✝ Guard✝)
+x✝ :
+  ∀
+    (y :
+      (Guard : Type) ×'
+          (Symbol : Type) ×' (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : Syntax Symbol Guard) ×' List (Shape Atom) ⊕'
+        (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (Syntax Symbol Guard)) ×' List (Shape Atom) ⊕'
+          (Guard : Type) ×'
+            (Symbol : Type) ×'
+              (Atom : Type) ×' (_ : Guard → Prop) ×' (_ : List (EdgeSyntax Symbol Guard)) ×' List (Shape Atom)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSum.casesOn x
+            (fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expression =>
+                      PSigma.casesOn expression fun expression environment => sizeOf expression)
+            fun _x =>
+            PSum.casesOn _x
+              (fun _x =>
+                PSigma.casesOn _x fun Guard Symbol =>
+                  PSigma.casesOn Symbol fun Symbol Atom =>
+                    PSigma.casesOn Atom fun Atom valid =>
+                      PSigma.casesOn valid fun valid expressions =>
+                        PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+              fun _x =>
+              PSigma.casesOn _x fun Guard Symbol =>
+                PSigma.casesOn Symbol fun Symbol Atom =>
+                  PSigma.casesOn Atom fun Atom valid =>
+                    PSigma.casesOn valid fun valid expressions =>
+                      PSigma.casesOn expressions fun expressions environment => sizeOf expressions)
+        y (PSum.inl ⟨Guard✝, ⟨Symbol✝, ⟨Atom✝, ⟨valid✝, ⟨Syntax.union members, environment✝⟩⟩⟩⟩⟩) →
+      PSum.casesOn y
+        (fun _x =>
+          (evaluate _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluate _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+        fun _x =>
+        PSum.casesOn _x
+          (fun _x =>
+            List.map Shape.shape (evaluateMany _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2) =
+              InternedDepthSemantics.evaluateMany _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2))
+          fun _x =>
+          (evaluateEdges _x.2.2.2.1 _x.2.2.2.2.1 _x.2.2.2.2.2).shape =
+            InternedDepthSemantics.evaluateEdges _x.2.2.2.2.1 (List.map Shape.shape _x.2.2.2.2.2)
+h✝ : expression = Syntax.union members
+Guard Symbol Atom : Type
+valid : Guard → Prop
+expressions : List (Syntax Symbol Guard)
+environment : List (Shape Atom)
+⊢ sizeOf expressions < 1 + sizeOf members
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:193:71: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:210:32: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Depth.Shape.map`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:209:43: error: unsolved goals
+Guard Symbol Atom : Type
+valid : Guard → Prop
+expression : Syntax Symbol Guard
+environment : List (Shape Atom)
+argument : Atom
+mapped :
+  evaluate valid expression
+      (List.map (Shape.map (supply argument)) (reference (Sum.inl ()) :: List.map (Shape.map Sum.inr) environment)) =
+    Shape.map (supply argument)
+      (evaluate valid expression (reference (Sum.inl ()) :: List.map (Shape.map Sum.inr) environment))
+⊢ InternedDepthSemantics.Shape.map (supply argument) { roots := [Sum.inl ()] } = { roots := [argument] } ∧
+    List.map
+        (fun x =>
+          {
+            shape :=
+              InternedDepthSemantics.Shape.map (supply argument) (InternedDepthSemantics.Shape.map Sum.inr x.shape),
+            guardDepth := x.guardDepth })
+        environment =
+      environment
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:210:49: warning: This simp argument is unused:
+  supply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [reference, Shape.map, Depth.Shape.map, List.map_map, Function.comp_def]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

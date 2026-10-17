@@ -1,0 +1,326 @@
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape : Type → Type
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map : {Atom Other : Type} →
+  (Atom → Other) →
+    MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom →
+      MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference : {Atom : Type} →
+  Atom → MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combine' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combine : {Atom : Type} →
+  MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom →
+    MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom →
+      MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany : {Atom : Type} →
+  List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom) →
+    MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.edge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.edge : {Guard Atom : Type} →
+  (Guard → Prop) →
+    Guard →
+      List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom) →
+        MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.binder' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.binder : {Atom : Type} →
+  Bool →
+    MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom) →
+      MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate : {Guard Symbol Atom : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+      List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom) →
+        MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany : {Guard Symbol Atom : Type} →
+  (Guard → Prop) →
+    List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) →
+      List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom) →
+        List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges : {Guard Symbol Atom : Type} →
+  (Guard → Prop) →
+    List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) →
+      List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom) →
+        MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany_shape' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany_shape : ∀ {Atom : Type}
+  (values : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.InternedDepthSemantics.Shape Atom)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany Atom values))
+    (@MicroCFTA.InternedDepthSemantics.combineMany Atom
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.InternedDepthSemantics.Shape Atom)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom) values))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.shapes_map' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.shapes_map : ∀ {Atom Other : Type} (function : Atom → Other)
+  (values : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (List.{0} (MicroCFTA.InternedDepthSemantics.Shape Other))
+    (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+      (MicroCFTA.InternedDepthSemantics.Shape Other)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Other)
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) values))
+    (@List.map.{0, 0} (MicroCFTA.InternedDepthSemantics.Shape Atom) (MicroCFTA.InternedDepthSemantics.Shape Other)
+      (@MicroCFTA.InternedDepthSemantics.Shape.map Atom Other function)
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.InternedDepthSemantics.Shape Atom)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom) values))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combine_map' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combine_map : ∀ {Atom Other : Type} (function : Atom → Other)
+  (first second : MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combine Other
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function first)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function second))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combine Atom first second))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany_map' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany_map : ∀ {Atom Other : Type} (function : Atom → Other)
+  (values : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany Other
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) values))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.combineMany Atom values))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.edge_map' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.edge_map : ∀ {Atom Other Guard : Type} (function : Atom → Other)
+  (valid : Guard → Prop) (guard : Guard)
+  (values : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.edge Guard Other valid guard
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) values))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.edge Guard Atom valid guard values))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.binder_map' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.binder_map : ∀ {Atom Other : Type} (function : Atom → Other)
+  (smart : Bool) (body : MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom)),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.binder Other smart
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map (Sum.{0, 0} Unit Atom) (Sum.{0, 0} Unit Other)
+        (@Sum.map.{0, 0, 0, 0} Unit Unit Atom Other (@id.{1} Unit) function) body))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.binder Atom smart body))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.local_map' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.local_map : ∀ {Atom Other : Type} (function : Atom → Other)
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Other)))
+    (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom))
+      (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Other))
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map (Sum.{0, 0} Unit Atom) (Sum.{0, 0} Unit Other)
+        (@Sum.map.{0, 0, 0, 0} Unit Unit Atom Other (@id.{1} Unit) function))
+      (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom))
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference (Sum.{0, 0} Unit Atom)
+          (@Sum.inl.{0, 0} Unit Atom Unit.unit))
+        (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+          (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom))
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom (Sum.{0, 0} Unit Atom)
+            (@Sum.inr.{0, 0} Unit Atom))
+          environment)))
+    (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Other))
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference (Sum.{0, 0} Unit Other)
+        (@Sum.inl.{0, 0} Unit Other Unit.unit))
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Other))
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Other (Sum.{0, 0} Unit Other)
+          (@Sum.inr.{0, 0} Unit Other))
+        (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+          (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) environment)))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate_map' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate_map : ∀ {Atom Other Guard Symbol : Type}
+  (function : Atom → Other) (valid : Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Other valid expression
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) environment))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression environment))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany_map' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany_map : ∀ {Atom Other Guard Symbol : Type}
+  (function : Atom → Other) (valid : Guard → Prop)
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany Guard Symbol Other valid expressions
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) environment))
+    (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+      (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany Guard Symbol Atom valid expressions
+        environment))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges_map' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges_map : ∀ {Atom Other Guard Symbol : Type}
+  (function : Atom → Other) (valid : Guard → Prop)
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges Guard Symbol Other valid expressions
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Other)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function) environment))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom Other function
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges Guard Symbol Atom valid expressions
+        environment))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate_shape' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate_shape : ∀ {Guard Symbol Atom : Type}
+  (valid : Guard → Prop) (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.InternedDepthSemantics.Shape Atom)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression environment))
+    (@MicroCFTA.InternedDepthSemantics.evaluate Symbol Guard Atom expression
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.InternedDepthSemantics.Shape Atom)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom) environment))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany_shape' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany_shape : ∀ {Guard Symbol Atom : Type}
+  (valid : Guard → Prop) (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (List.{0} (MicroCFTA.InternedDepthSemantics.Shape Atom))
+    (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+      (MicroCFTA.InternedDepthSemantics.Shape Atom)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateMany Guard Symbol Atom valid expressions
+        environment))
+    (@MicroCFTA.InternedDepthSemantics.evaluateMany Symbol Guard Atom expressions
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.InternedDepthSemantics.Shape Atom)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom) environment))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges_shape' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges_shape : ∀ {Guard Symbol Atom : Type}
+  (valid : Guard → Prop) (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)),
+  @Eq.{1} (MicroCFTA.InternedDepthSemantics.Shape Atom)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluateEdges Guard Symbol Atom valid expressions
+        environment))
+    (@MicroCFTA.InternedDepthSemantics.evaluateEdges Symbol Guard Atom expressions
+      (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (MicroCFTA.InternedDepthSemantics.Shape Atom)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.shape Atom) environment))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.supply' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.supply.{u_1} : {Atom : Type u_1} →
+  Atom → Sum.{0, u_1} Unit Atom → Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate_supplied' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate_supplied : ∀ {Guard Symbol Atom : Type}
+  (valid : Guard → Prop) (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)) (argument : Atom),
+  @Eq.{1} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression
+      (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference Atom argument) environment))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map (Sum.{0, 0} Unit Atom) Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.supply.{0} Atom argument)
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol (Sum.{0, 0} Unit Atom) valid
+        expression
+        (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom))
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference (Sum.{0, 0} Unit Atom)
+            (@Sum.inl.{0, 0} Unit Atom Unit.unit))
+          (@List.map.{0, 0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+            (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape (Sum.{0, 0} Unit Atom))
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.map Atom (Sum.{0, 0} Unit Atom)
+              (@Sum.inr.{0, 0} Unit Atom))
+            environment))))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.arguments_guardDepth' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.arguments_guardDepth : ∀ {Guard Symbol Atom : Type}
+  (valid : Guard → Prop) (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)) (first second : Atom),
+  @Eq.{1} (Option.{0} Nat)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression
+        (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference Atom first) environment)))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression
+        (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference Atom second) environment)))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize : {Atom : Type} →
+  [DecidableEq.{1} Atom] →
+    Atom →
+      MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom →
+        MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize_guardDepth' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize_guardDepth : ∀ {Atom : Type}
+  [inst : DecidableEq.{1} Atom] (argument : Atom)
+  (value : MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom),
+  @Eq.{1} (Option.{0} Nat)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize Atom inst argument value))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth Atom value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalized_arguments_guardDepth' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalized_arguments_guardDepth : ∀ {Atom Guard Symbol : Type}
+  [inst : DecidableEq.{1} Atom] (valid : Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)) (first second : Atom),
+  @Eq.{1} (Option.{0} Nat)
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize Atom inst first
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression
+          (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference Atom first) environment))))
+    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth Atom
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.normalize Atom inst second
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol Atom valid expression
+          (@List.cons.{0} (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape Atom)
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.reference Atom second) environment))))
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.decode' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.decode : {Guard Symbol : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape MicroCFTA.InternedBinderProtocol.Reference
+'MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.decode_within_iff' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.decode_within_iff : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.decode Guard Symbol valid value)))
+    (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value)

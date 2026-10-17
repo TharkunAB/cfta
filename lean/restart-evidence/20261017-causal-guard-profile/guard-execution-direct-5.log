@@ -1,0 +1,443 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:136:12: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_1 → Prop) → Value x_0 x_1 → Option Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:136:21: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → (x_0 → Prop) → Syntax x_1 x_0 → List (GShape x_2) → GShape x_2
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:136:6: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:50: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → (x_0 → Prop) → Syntax x_1 x_0 → List (GShape x_2) → GShape x_2
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:86: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_0 → Prop) → Value x_1 x_0 → GShape Reference
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:94: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_1 → Prop) → Value x_0 x_1 → Option Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:50: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → (x_0 → Prop) → Syntax x_1 x_0 → List (GShape x_2) → GShape x_2
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:86: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_0 → Prop) → Value x_1 x_0 → GShape Reference
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:94: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_1 → Prop) → Value x_0 x_1 → Option Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:137:14: error: unsolved goals
+case var.none
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+index : Nat
+found : environment[index]? = none
+⊢ profile valid Value.empty = (evaluate valid (Syntax.var index) (List.map (decode valid) environment)).guardDepth
+
+case var.some
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+index : Nat
+val✝ : Value Symbol Guard
+found : environment[index]? = some val✝
+⊢ profile valid val✝ = (evaluate valid (Syntax.var index) (List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:152:8: error: Tactic `rfl` failed: The left-hand side
+  (evaluateEdges valid edges (List.map (decode valid) environment)).guardDepth
+is not definitionally equal to the right-hand side
+  (evaluate valid (Syntax.node edges) (List.map (decode valid) environment)).guardDepth
+
+case node.holds
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+edges : List (EdgeSyntax Symbol Guard)
+verified : Verified state (buildEdges edges environment state) Edges
+values : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+returned : buildEdges edges environment state = Outcome.done values after
+afterHeap : Heap valid after
+same :
+  SourceCurrentConstrainedCapGuardDepth.rows valid (surviving values) =
+    (evaluateEdges valid edges (List.map (decode valid) environment)).guardDepth
+afterContext : Context after environment
+resident : Edges after values
+⊢ (evaluateEdges valid edges (List.map (decode valid) environment)).guardDepth =
+    (evaluate valid (Syntax.node edges) (List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:164:8: error: Tactic `rfl` failed: The left-hand side
+  (SourceCurrentConstrainedCapGuardSemantics.combineMany
+      (evaluateMany valid members (List.map (decode valid) environment))).guardDepth
+is not definitionally equal to the right-hand side
+  (evaluate valid (Syntax.union members) (List.map (decode valid) environment)).guardDepth
+
+case union.holds
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+members : List (Syntax Symbol Guard)
+verified : Verified state (buildMany members environment state) Values
+values : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+returned : buildMany members environment state = Outcome.done values after
+afterHeap : Heap valid after
+matched : Matches valid values (evaluateMany valid members (List.map (decode valid) environment))
+afterContext : Context after environment
+available : Values after values
+⊢ (SourceCurrentConstrainedCapGuardSemantics.combineMany
+        (evaluateMany valid members (List.map (decode valid) environment))).guardDepth =
+    (evaluate valid (Syntax.union members) (List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:182:37: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_0 → Prop) → Value x_1 x_0 → GShape Reference
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:182:77: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_1 → Prop) → Value x_0 x_1 → Option Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:182:10: error: Type mismatch: After simplification, term
+  same
+ has type
+  profile valid value =
+    (evaluate valid body (decode valid (Value.reference name) :: List.map (decode valid) environment)).guardDepth
+but is expected to have type
+  profile valid value =
+    (evaluate valid body ({ shape := { roots := [name] } } :: List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:226:34: error(lean.unknownIdentifier): Unknown identifier `InternedNestedProvenance.request_verified`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:237:34: error(lean.unknownIdentifier): Unknown identifier `InternedNestedProvenance.request_verified`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:269:52: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_0 → Prop) → Value x_1 x_0 → GShape Reference
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:267:67: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+smart : Bool
+body : Syntax Symbol Guard
+checked :
+  ∀ (name : Reference) (current : InternedConstructorTemplates.State Symbol Guard),
+    Context current environment →
+      Available current (Value.reference name) →
+        Heap valid current →
+          Checked valid (callback body environment name current) fun value =>
+            profile valid value =
+              (evaluate valid body
+                  (SourceCurrentConstrainedCapGuardSemantics.reference name ::
+                    List.map (decode valid) environment)).guardDepth
+depth : Value Symbol Guard
+afterDepth : InternedConstructorTemplates.State Symbol Guard
+depthDone : callback body environment Reference.depth state = Outcome.done depth afterDepth
+depthHeap : Heap valid afterDepth
+depthSame :
+  profile valid depth =
+    (evaluate valid body
+        (SourceCurrentConstrainedCapGuardSemantics.reference Reference.depth ::
+          List.map (decode valid) environment)).guardDepth
+depthContext : Context afterDepth environment
+depthPhysical : Verified state (callback body environment Reference.depth state) Available
+depthAvailable : Available afterDepth depth
+ordinary : Value Symbol Guard
+afterOrdinary : InternedConstructorTemplates.State Symbol Guard
+ordinaryDone :
+  callback body environment (Reference.uninterned (ordinaryLevel depth)) afterDepth =
+    Outcome.done ordinary afterOrdinary
+ordinaryHeap : Heap valid afterOrdinary
+ordinarySame :
+  profile valid ordinary =
+    (evaluate valid body
+        (SourceCurrentConstrainedCapGuardSemantics.reference (Reference.uninterned (ordinaryLevel depth)) ::
+          List.map (decode valid) environment)).guardDepth
+finalContext : Context afterOrdinary environment
+ordinaryPhysical :
+  Verified afterDepth (callback body environment (Reference.uninterned (ordinaryLevel depth)) afterDepth) Available
+finalDepth : Available afterOrdinary depth
+finalOrdinary : Available afterOrdinary ordinary
+whole :
+  build (Syntax.binder smart body) environment state =
+    request smart depth ordinary (callback body environment) afterOrdinary
+retained : Heap valid (request smart depth ordinary (callback body environment) afterOrdinary).state
+value : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+returned : request smart depth ordinary (callback body environment) afterOrdinary = Outcome.done value after
+afterContext : Context after environment
+afterGuard : Heap valid after
+physical : Verified state (build (Syntax.binder smart body) environment state) Available
+afterDepthAvailable : Available after depth
+afterOrdinaryAvailable : Available after ordinary
+readback : profile valid value = SourceCurrentConstrainedCapGuardReadback.decoded valid smart depth ordinary
+depthObserved :
+  depth.depth = (InternedRecordDepthCallback.symbolic body environment).depth ∧
+    InternedFreshOrdinaryDepthHeap.Observed (InternedRecordDepthCallback.captured body environment)
+      (InternedRecordDepthCallback.uses body environment) Reference.depth depth
+ordinaryObserved :
+  ordinary.depth = (InternedRecordDepthCallback.symbolic body environment).depth ∧
+    InternedFreshOrdinaryDepthHeap.Observed (InternedRecordDepthCallback.captured body environment)
+      (InternedRecordDepthCallback.uses body environment) (Reference.uninterned (ordinaryLevel depth)) ordinary
+fresh : ¬Reference.uninterned (ordinaryLevel depth) ∈ InternedRecordDepthCallback.captured body environment
+own :
+  Reference.uninterned (ordinaryLevel depth) ∈ InternedDeepFreeDepth.deepNames ordinary ↔
+    InternedRecordDepthCallback.uses body environment = true
+useExact :
+  InternedFreshOrdinaryDepthHeap.usesLocal depth ordinary =
+    InternedDepthSemantics.hasLocal (InternedRecordDepthCallback.symbolic body environment).deep
+⊢ InternedDepthSemantics.evaluate body
+      ({ roots := [Sum.inl ()] } ::
+        List.map (fun x => InternedDepthSemantics.Shape.map Sum.inr (decode valid x).shape) environment) =
+    InternedDepthSemantics.evaluate body
+      ({ roots := [Sum.inl ()] } ::
+        List.map (fun x => InternedDepthSemantics.Shape.map Sum.inr (InternedRecordDepthShape.shape x)) environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:278:8: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → (x_0 → Prop) → Syntax x_1 x_0 → List (GShape x_2) → GShape x_2
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:165:22: error: unsolved goals
+case binder
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+smart : Bool
+body : Syntax Symbol Guard
+checked :
+  ∀ (name : Reference) (current : InternedConstructorTemplates.State Symbol Guard),
+    Context current environment →
+      Available current (Value.reference name) →
+        Heap valid current →
+          Checked valid (callback body environment name current) fun value =>
+            profile valid value =
+              (evaluate valid body
+                  (SourceCurrentConstrainedCapGuardSemantics.reference name ::
+                    List.map (decode valid) environment)).guardDepth
+depth : Value Symbol Guard
+afterDepth : InternedConstructorTemplates.State Symbol Guard
+depthDone : callback body environment Reference.depth state = Outcome.done depth afterDepth
+depthHeap : Heap valid afterDepth
+depthSame :
+  profile valid depth =
+    (evaluate valid body
+        (SourceCurrentConstrainedCapGuardSemantics.reference Reference.depth ::
+          List.map (decode valid) environment)).guardDepth
+depthContext : Context afterDepth environment
+depthPhysical : Verified state (callback body environment Reference.depth state) Available
+depthAvailable : Available afterDepth depth
+ordinary : Value Symbol Guard
+afterOrdinary : InternedConstructorTemplates.State Symbol Guard
+ordinaryDone :
+  callback body environment (Reference.uninterned (ordinaryLevel depth)) afterDepth =
+    Outcome.done ordinary afterOrdinary
+ordinaryHeap : Heap valid afterOrdinary
+ordinarySame :
+  profile valid ordinary =
+    (evaluate valid body
+        (SourceCurrentConstrainedCapGuardSemantics.reference (Reference.uninterned (ordinaryLevel depth)) ::
+          List.map (decode valid) environment)).guardDepth
+finalContext : Context afterOrdinary environment
+ordinaryPhysical :
+  Verified afterDepth (callback body environment (Reference.uninterned (ordinaryLevel depth)) afterDepth) Available
+finalDepth : Available afterOrdinary depth
+finalOrdinary : Available afterOrdinary ordinary
+whole :
+  build (Syntax.binder smart body) environment state =
+    request smart depth ordinary (callback body environment) afterOrdinary
+retained : Heap valid (request smart depth ordinary (callback body environment) afterOrdinary).state
+value : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+returned : request smart depth ordinary (callback body environment) afterOrdinary = Outcome.done value after
+afterContext : Context after environment
+afterGuard : Heap valid after
+physical : Verified state (build (Syntax.binder smart body) environment state) Available
+afterDepthAvailable : Available after depth
+afterOrdinaryAvailable : Available after ordinary
+readback : profile valid value = SourceCurrentConstrainedCapGuardReadback.decoded valid smart depth ordinary
+depthObserved :
+  depth.depth = (InternedRecordDepthCallback.symbolic body environment).depth ∧
+    InternedFreshOrdinaryDepthHeap.Observed (InternedRecordDepthCallback.captured body environment)
+      (InternedRecordDepthCallback.uses body environment) Reference.depth depth
+ordinaryObserved :
+  ordinary.depth = (InternedRecordDepthCallback.symbolic body environment).depth ∧
+    InternedFreshOrdinaryDepthHeap.Observed (InternedRecordDepthCallback.captured body environment)
+      (InternedRecordDepthCallback.uses body environment) (Reference.uninterned (ordinaryLevel depth)) ordinary
+fresh : ¬Reference.uninterned (ordinaryLevel depth) ∈ InternedRecordDepthCallback.captured body environment
+own :
+  Reference.uninterned (ordinaryLevel depth) ∈ InternedDeepFreeDepth.deepNames ordinary ↔
+    InternedRecordDepthCallback.uses body environment = true
+useExact :
+  InternedFreshOrdinaryDepthHeap.usesLocal depth ordinary =
+    InternedDepthSemantics.hasLocal (InternedRecordDepthCallback.symbolic body environment).deep
+shapeExact :
+  (evaluate valid body
+        (SourceCurrentConstrainedCapGuardSemantics.reference (Sum.inl ()) ::
+          List.map (SourceCurrentConstrainedCapGuardSemantics.Shape.map Sum.inr)
+            (List.map (decode valid) environment))).shape =
+    InternedRecordDepthCallback.symbolic body environment
+ordinaryExpected :
+  profile valid ordinary =
+    (evaluate valid body
+        (SourceCurrentConstrainedCapGuardSemantics.reference (Sum.inl ()) ::
+          List.map (SourceCurrentConstrainedCapGuardSemantics.Shape.map Sum.inr)
+            (List.map (decode valid) environment))).guardDepth
+⊢ (if
+        (!smart || InternedDepthSemantics.hasLocal (InternedRecordDepthCallback.symbolic body environment).deep) =
+          true then
+      if
+          (evaluate valid body
+                (SourceCurrentConstrainedCapGuardSemantics.reference (Sum.inl ()) ::
+                  List.map (SourceCurrentConstrainedCapGuardSemantics.Shape.map Sum.inr)
+                    (List.map (decode valid) environment))).guardDepth =
+            some 0 then
+        some 0
+      else none
+    else
+      (evaluate valid body
+          (SourceCurrentConstrainedCapGuardSemantics.reference (Sum.inl ()) ::
+            List.map (SourceCurrentConstrainedCapGuardSemantics.Shape.map Sum.inr)
+              (List.map (decode valid) environment))).guardDepth) =
+    (evaluate valid (Syntax.binder smart body) (List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:288:63: error: Application type mismatch: The argument
+  InternedOccurrenceObservations.Paired.nil
+has type
+  InternedOccurrenceObservations.Paired ?m.1335 [] []
+but is expected to have type
+  Matches valid [] (evaluateMany valid [] (List.map (decode valid) environment))
+in the application
+  done_checked valid [] state
+    (fun values => Matches valid values (evaluateMany valid [] (List.map (decode valid) environment))) heap
+    InternedOccurrenceObservations.Paired.nil
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:299:34: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → (x_0 → Prop) → Value x_1 x_0 → GShape Reference
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:299:8: error: Type mismatch: After simplification, term
+  shapeChecked.result value after returned
+ has type
+  @InternedFreshOrdinaryDepthComposition.Observed Symbol Guard value
+    (InternedDepthSemantics.evaluate first (List.map InternedRecordDepthShape.shape environment))
+but is expected to have type
+  @InternedFreshOrdinaryDepthComposition.Observed Symbol Guard value
+    (InternedDepthSemantics.evaluate first (List.map (fun x => (decode valid x).shape) environment))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:302:47: error: Application type mismatch: The argument
+  InternedOccurrenceObservations.Paired.cons ⟨observed, same⟩ matched
+has type
+  InternedOccurrenceObservations.Paired (Observation valid) (value :: values)
+    (evaluate valid first (List.map (decode valid) environment) ::
+      evaluateMany valid rest (List.map (decode valid) environment))
+but is expected to have type
+  Matches valid (value :: values) (evaluateMany valid (first :: rest) (List.map (decode valid) environment))
+in the application
+  done_checked valid (value :: values) final
+    (fun values => Matches valid values (evaluateMany valid (first :: rest) (List.map (decode valid) environment)))
+    finalHeap (InternedOccurrenceObservations.Paired.cons ⟨observed, same⟩ matched)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:313:126: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → (x_0 → Prop) → List (EdgeSyntax x_1 x_0) → List (GShape x_2) → GShape x_2
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:313:8: error: unsolved goals
+case nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+⊢ some 0 = (evaluateEdges valid [] (List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:339:10: error: Tactic `rfl` failed: The left-hand side
+  SourceCurrentConstrainedCapGuardDepth.join
+    (if
+        (List.map SourceCurrentConstrainedCapGuardSemantics.Shape.shape
+                (evaluateMany valid children (List.map (decode valid) environment))).any
+            InternedDepthSemantics.Shape.isEmpty =
+          true then
+      some 0
+    else
+      SourceCurrentConstrainedCapGuardDepth.join (some (SourceCurrentConstrainedCapGuardDepth.guardCost valid guard))
+        (SourceCurrentConstrainedCapGuardDepth.raise
+          (SourceCurrentConstrainedCapGuardSemantics.combineMany
+              (evaluateMany valid children (List.map (decode valid) environment))).guardDepth))
+    (evaluateEdges valid rest (List.map (decode valid) environment)).guardDepth
+is not definitionally equal to the right-hand side
+  (evaluateEdges valid (EdgeSyntax.mk symbol guard children :: rest) (List.map (decode valid) environment)).guardDepth
+
+case cons.mk
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state environment
+heap : Heap valid state
+rest : List (EdgeSyntax Symbol Guard)
+symbol : Symbol
+guard : Guard
+children : List (Syntax Symbol Guard)
+physical : Verified state (buildMany children environment state) Values
+values : List (Value Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+returned : buildMany children environment state = Outcome.done values after
+afterHeap : Heap valid after
+matched : Matches valid values (evaluateMany valid children (List.map (decode valid) environment))
+afterContext : Context after environment
+available : Values after values
+edge : EdgeValue Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  run (makeEdge symbol guard values) after
+edgeContext : Context edge.snd environment
+edgeHeap : Heap valid edge.snd
+childrenSame : edge.fst.children = values
+edges : List (EdgeValue Symbol Guard)
+final : InternedConstructorTemplates.State Symbol Guard
+completed : buildEdges rest environment edge.snd = Outcome.done edges final
+finalHeap : Heap valid final
+same :
+  SourceCurrentConstrainedCapGuardDepth.rows valid (surviving edges) =
+    (evaluateEdges valid rest (List.map (decode valid) environment)).guardDepth
+exactEdge :
+  SourceCurrentConstrainedCapGuardDepth.rows valid [edge.fst] =
+    SourceCurrentConstrainedCapGuardDepth.join (some (SourceCurrentConstrainedCapGuardDepth.guardCost valid guard))
+      (SourceCurrentConstrainedCapGuardDepth.raise (SourceCurrentConstrainedCapGuardDepth.children valid values))
+⊢ SourceCurrentConstrainedCapGuardDepth.join
+      (if
+          (List.map SourceCurrentConstrainedCapGuardSemantics.Shape.shape
+                  (evaluateMany valid children (List.map (decode valid) environment))).any
+              InternedDepthSemantics.Shape.isEmpty =
+            true then
+        some 0
+      else
+        SourceCurrentConstrainedCapGuardDepth.join (some (SourceCurrentConstrainedCapGuardDepth.guardCost valid guard))
+          (SourceCurrentConstrainedCapGuardDepth.raise
+            (SourceCurrentConstrainedCapGuardSemantics.combineMany
+                (evaluateMany valid children (List.map (decode valid) environment))).guardDepth))
+      (evaluateEdges valid rest (List.map (decode valid) environment)).guardDepth =
+    (evaluateEdges valid (EdgeSyntax.mk symbol guard children :: rest) (List.map (decode valid) environment)).guardDepth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:303:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:340:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:279:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:60: warning: This simp argument is unused:
+  List.getElem?_map
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [evaluate, found, decode, profile]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:140:79: warning: This simp argument is unused:
+  found
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [evaluate, List.getElem?_map, decode, profile]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:278:18: warning: This simp argument is unused:
+  SourceCurrentConstrainedCapGuardSemantics.binder
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentConstrainedCapGuardReadback.decoded, useExact, ordinaryExpected, evaluate, shapeExact]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:278:68: warning: This simp argument is unused:
+  shapeExact
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentConstrainedCapGuardReadback.decoded, useExact, ordinaryExpected, evaluate,
+    SourceCurrentConstrainedCapGuardSemantics.binder]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

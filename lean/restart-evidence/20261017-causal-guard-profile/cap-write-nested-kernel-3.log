@@ -1,0 +1,37 @@
+'MicroCFTA.CapWriteNestedKernel.nested_actual_cell_profiles' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+nested_actual_cell_profiles : And
+  (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+    (@InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) expression
+      (@List.nil.{0} (Value Nat Bool)) (@empty Nat Bool))
+    (@Outcome.done Nat Bool (Value Nat Bool) root heap))
+  (And
+    (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+      (@InternedFreshOrdinaryConstruction.build Nat Bool
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) expression
+        (@List.nil.{0} (Value Nat Bool)) heap)
+      (@Outcome.done Nat Bool (Value Nat Bool) root heap))
+    (And
+      (@Eq.{1} (Option.{0} (Value Nat Bool)) (@State.nodeRecords Nat Bool heap (@muKey Nat Bool depth ordinary))
+        (@some.{0} (Value Nat Bool) (@Value.mu Nat Bool entry body depth ordinary)))
+      (And (@SourceRecursiveIntersectionSemanticHeap.SemanticHeap Nat Bool heap)
+        (And (@Available Nat Bool heap body)
+          (And
+            (@Eq.{1} (Option.{0} Nat) (@profile Nat Bool annotation body)
+              (@some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (And
+              (@Eq.{1} (Option.{0} Nat) (@profile Nat Bool annotation depth)
+                (@some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (And
+                (@Eq.{1} (Option.{0} Nat) (@profile Nat Bool annotation ordinary)
+                  (@some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (And (@Cap Nat Bool annotation (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) depth)
+                  (And (@Cap Nat Bool annotation (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) ordinary)
+                    (And (@Cap Nat Bool annotation (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) body)
+                      (And
+                        (Not
+                          (@Cap Nat Bool annotation (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) body))
+                        (@Eq.{1} Bool (@InternedFreshOrdinaryDepthHeap.usesLocal Nat Bool depth ordinary)
+                          false))))))))))))

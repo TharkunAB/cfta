@@ -1,0 +1,52 @@
+import MicroCFTA.SourceCurrentConstrainedCapSourceHistory
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.empty_context
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.empty_context
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.build
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.build
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.many
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.many
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.edges
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.edges
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.local
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.local
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.callback
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.callback
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.edge
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.reserve
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.reserve
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Origin
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Origin
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Origin.base
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Origin.base
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap.base
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap.base
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.empty_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.empty_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.preserve
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.preserve
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.bind_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.bind_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.complete_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.complete_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.build_origins
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.build_origins
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.buildMany_origins
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.buildMany_origins
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.buildEdges_origins
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.buildEdges_origins
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceHistory.closed_origins
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.closed_origins

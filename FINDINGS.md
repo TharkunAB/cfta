@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `88be2ba6`.
+Status rechecked on 2026-10-17 at proof checkpoint `b72ecdc9`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-native-guard-profiles.md` for the current proof boundaries.
+Read `lean/notes-current-causal-guard-producer.md` for the current proof boundaries.
 
-The current guard-profile and ranked local proofs add no Haskell change.
+The current causal guard producer and finite binder proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2797 jobs and 62661 dependency checks.
+The last completed pinned Lean Audit passes: 2805 jobs and 62806 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,40 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current causal source guard production and finite optional binders
+
+Updated: 2026-10-17 04:31 CEST. This checkpoint starts at published `5ce2c90f`.
+The proof commits are `69f576ae`, `df35e4cd`, and `b72ecdc9`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-causal-guard-producer.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-causal-guard-profile/`.
+
+Eight additive modules derive exact guard profiles through full actual source
+syntax. Fresh writes establish body/probe equality before publication.
+Warm hits retain the actual earlier writer's certificate. Stored substitution
+and optional binders retain that guard heap. Positive ranked optional binders
+construct finite capped and classified returns, including earlier winners.
+Their initial probe-freshness and ranked conditions remain explicit.
+
+The pinned Audit passes 2805 jobs and 62806 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight strict source checks are
+clean. All 134 imported pairs pass in 14 groups. Seven component manifests
+verify 181 entries. Failed attempts and timeout scopes remain recorded.
+Preservation retains 11200 starting files, 2796 older non-Audit proofs,
+all 239 Haskell files, and 67 frozen manifests with 562 production entries.
+
+Next complete the joint recursive native producer from initial inputs.
+General warm callers, constrained descent, repeated convergence, remaining
+recursive callers, frontend/runtime adapters, capacity, serial public
+pipelines, and complete public composition remain open. The full library
+goal stays active. Read next-joint-native-producer.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
 
 ## Current guard profiles and ranked native local laws
 

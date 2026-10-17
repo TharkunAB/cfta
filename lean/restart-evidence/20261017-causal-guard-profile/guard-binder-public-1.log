@@ -1,0 +1,99 @@
+'MicroCFTA.SourceCurrentConstrainedCapGuardBinder.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardBinder.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (depth : Nat) (pair : Prod.{0, 0} Nat Nat) (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth body →
+        @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation state →
+          ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat),
+            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+              @Eq.{1} Nat
+                  (weight
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                      (@Prod.snd.{0, 0} Nat Nat pair)))
+                  bound →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound body →
+                  Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        MicroCFTA.InternedBinderProtocol.Reference.depth) →
+                    (∀ (level : Nat),
+                        Not
+                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                            (MicroCFTA.InternedBinderProtocol.Reference.uninterned level))) →
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                          And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body state)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+                            (And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth value)
+                              (And
+                                (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight
+                                  bound value)
+                                (And
+                                  (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                                  (And
+                                    (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol annotation
+                                      after)
+                                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                                      (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard state after))))))
+'MicroCFTA.SourceCurrentConstrainedCapGuardBinder.intersection_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardBinder.intersection_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (depth : Nat) (pair : Prod.{0, 0} Nat Nat) (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth body →
+        @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation state →
+          ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat),
+            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+              @Eq.{1} Nat
+                  (weight
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                      (@Prod.snd.{0, 0} Nat Nat pair)))
+                  bound →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound body →
+                  (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                      @Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body) name →
+                        @Exists.{1} Nat fun first =>
+                          @Exists.{1} Nat fun second =>
+                            @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                              (MicroCFTA.InternedBinderProtocol.Reference.intersection first second)) →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body state)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+                          (And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth value)
+                            (And
+                              (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight
+                                bound value)
+                              (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                                (And
+                                  (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol annotation
+                                    after)
+                                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                                    (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard state after))))))

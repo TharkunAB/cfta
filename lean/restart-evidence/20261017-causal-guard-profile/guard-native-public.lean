@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentConstrainedCapGuardNative
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.stored
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.context
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.context
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.callback_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.callback_profile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.execute_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.execute_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.native_callback
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.native_callback
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.optional_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.optional_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.request_record
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.request_record
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardNative.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardNative.complete

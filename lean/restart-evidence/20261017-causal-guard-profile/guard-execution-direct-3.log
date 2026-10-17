@@ -1,0 +1,40 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardExecution.lean:120:10: error: `simp` made no progress
+case none.done
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+smart : Bool
+depth ordinary : Value Symbol Guard
+call : Reference → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+facts : Facts after
+depthAvailable : Available after depth
+ordinaryAvailable : Available after ordinary
+depthHeap : InternedFreshOrdinaryDepthHeap.Heap after
+guardHeap : Heap valid after
+installed : state.nodes.table (muKey depth ordinary) = none
+entry : Interned NodeKey × Cache.State NodeKey := intern state.nodes (muKey depth ordinary)
+allocated : InternedConstructorTemplates.State Symbol Guard :=
+  { edges := state.edges, nodes := entry.snd, edgeRecords := state.edgeRecords, nodeRecords := state.nodeRecords }
+body : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+called : call (Reference.interned entry.fst.identity) allocated = Outcome.done body middle
+actual :
+  Outcome.done
+      (finish smart
+        ((keepFirst middle.nodeRecords (muKey depth ordinary)
+              (Value.mu (intern state.nodes (muKey depth ordinary)).fst body depth ordinary)
+              (muKey depth ordinary)).getD
+          (Value.mu (intern state.nodes (muKey depth ordinary)).fst body depth ordinary)))
+      { edges := middle.edges, nodes := middle.nodes, edgeRecords := middle.edgeRecords,
+        nodeRecords :=
+          keepFirst middle.nodeRecords (muKey depth ordinary)
+            (Value.mu (intern state.nodes (muKey depth ordinary)).fst body depth ordinary) } =
+    Outcome.done value after
+winner : Value Symbol Guard
+present :
+  keepFirst middle.nodeRecords (muKey depth ordinary) (Value.mu entry.fst body depth ordinary) (muKey depth ordinary) =
+    some winner
+⊢ profile valid value = SourceCurrentConstrainedCapGuardReadback.decoded valid smart depth ordinary

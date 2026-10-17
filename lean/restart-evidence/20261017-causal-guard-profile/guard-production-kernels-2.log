@@ -1,0 +1,69 @@
+'MicroCFTA.CausalGuardKernels.constructed' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.CausalGuardKernels.constructed : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+      And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+        (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after)
+          (And
+            (@Eq.{1} (Option.{0} Nat)
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value)
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth
+                MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol
+                  MicroCFTA.InternedBinderProtocol.Reference valid expression
+                  (@List.nil.{0}
+                    (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape
+                      MicroCFTA.InternedBinderProtocol.Reference)))))
+            (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap Symbol Guard inst after)))
+'MicroCFTA.CausalGuardKernels.serial_captured' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.CausalGuardKernels.serial_captured : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (first second : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst first
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value middle))
+            (And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst second
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  middle)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+              (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid middle)
+                (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after)
+                  (@Eq.{1} (Option.{0} Nat)
+                    (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid result)
+                    (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape.guardDepth
+                      MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.evaluate Guard Symbol
+                        MicroCFTA.InternedBinderProtocol.Reference valid second
+                        (@List.cons.{0}
+                          (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape
+                            MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.decode Guard Symbol valid value)
+                          (@List.nil.{0}
+                            (MicroCFTA.SourceCurrentConstrainedCapGuardSemantics.Shape
+                              MicroCFTA.InternedBinderProtocol.Reference)))))))))

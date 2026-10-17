@@ -1,0 +1,70 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-causal-guard-profile/guard-binder-kernels-1.source.lean:34:64: error: Application type mismatch: The argument
+  @rfl.{?u.55} ?m.101 ?m.102
+has type
+  @Eq.{?u.55} ?m.101 ?m.102 ?m.102
+but is expected to have type
+  @Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst✝
+      (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard)
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+in the application
+  @MicroCFTA.SourceEqualityRequiredCache.constructed Symbol Guard inst✝
+    (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard)
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+    (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) (@rfl.{?u.55} ?m.101 ?m.102)
+'MicroCFTA.GuardBinderKernels.optional_and_replay' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.GuardBinderKernels.optional_and_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (pair : Prod.{0, 0} Nat Nat),
+  have old :=
+    MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+      (@Prod.snd.{0, 0} Nat Nat pair);
+  have body := @MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard old;
+  have weight := fun name =>
+    @ite.{1} Nat (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name old)
+      (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name old)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)));
+  And
+    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body) old)
+    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body
+              (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+          (And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body after)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+            (And
+              (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)
+              (And
+                (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)
+                (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                  (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol annotation after)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                      (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) after))))))))

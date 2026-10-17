@@ -1,0 +1,11 @@
+# Joint guard semantics review
+
+The frozen module interprets full nested source syntax. It retains the existing root, deep-name, opacity, and cached-depth observation. It adds the exact finite guard-depth observation. Each binder introduces a distinct symbolic local. External-name maps therefore preserve its local-use decision.
+
+The row interpreter tests child emptiness before it charges the row guard. A retained Mu wrapper has finite guard depth only when its body has depth zero. A removed smart wrapper retains the body profile. The structural projection equals the existing depth interpreter for every source expression and lexical environment. The callback argument theorem compares two images of one symbolic body. It permits arbitrary external maps, including collisions. The pure theorem does not supply actual physical freshness or a successful callback.
+
+The final kernels calculate a mixed source with an erased bad row, nested raw and smart binders, and a surviving false guard. They prove exact guard depth two. A second kernel changes the supplied argument and checks the different deep names. A third kernel checks a capture collision that changes normalized root alternatives while retaining guard depth. These are interpreter calculations, not actual cache-publication proofs.
+
+The module has no assumed body-cap or stored-winner law. The actual build correspondence must come from an induction over actual source construction. That induction must start with the causal guard heap, derive the three smaller callback observations, prove the fresh candidate law before publication, and read an earlier winner through its stored probe law. Actual normalization and readback are separate modules. The full execution producer remains required; this pure component does not establish general recursive completion or whole-library Haskell correspondence.
+
+Validation: strict direct attempt 5 has no diagnostics. Canonical foundations build 2 passed 1006 jobs. The final imported probes contain 31 public axiom/signature pairs and three pure integration pairs. They use explicit proof, universe, and deep-term printing. Only standard Lean axioms occur. All earlier failed sources and logs remain in this directory.

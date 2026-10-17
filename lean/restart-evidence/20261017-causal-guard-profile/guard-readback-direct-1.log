@@ -1,0 +1,116 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:39:10: error: unsolved goals
+case false
+Symbol Guard : Type
+annotation : Guard → Prop
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+depthCorrect : InternedFreshOrdinaryDepthHeap.Correct entry body depth ordinary
+bodyDepth : body.depth = depth.depth
+⊢ SourceCurrentConstrainedCapGuardDepth.profile annotation
+      (if false = true then cleanup (Value.mu entry body depth ordinary) else Value.mu entry body depth ordinary) =
+    if SourceCurrentConstrainedCapGuardDepth.profile annotation body = some 0 then some 0 else none
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:46:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  body.depth
+in the target expression
+  (if ¬False then body
+      else
+        if body.referenceOf = InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity) then Value.empty
+        else Value.mu entry body depth ordinary).depth =
+    if usesLocal depth ordinary = true then depth.depth + 1 else depth.depth
+
+Symbol Guard : Type
+annotation : Guard → Prop
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+depthCorrect : InternedFreshOrdinaryDepthHeap.Correct entry body depth ordinary
+bodyDepth : body.depth = depth.depth
+unused : ¬Reference.interned entry.identity ∈ body.free
+observed :
+  (if ¬False then body
+      else
+        if body.referenceOf = InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity) then Value.empty
+        else Value.mu entry body depth ordinary).depth =
+    if usesLocal depth ordinary = true then depth.depth + 1 else depth.depth
+⊢ usesLocal depth ordinary = false
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:42:6: error: unsolved goals
+case pos
+Symbol Guard : Type
+annotation : Guard → Prop
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+depthCorrect : InternedFreshOrdinaryDepthHeap.Correct entry body depth ordinary
+bodyDepth : body.depth = depth.depth
+unused : ¬Reference.interned entry.identity ∈ body.free
+used : usesLocal depth ordinary = false
+⊢ SourceCurrentConstrainedCapGuardDepth.profile annotation
+      (if ¬False then body
+      else
+        if body.referenceOf = InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity) then Value.empty
+        else Value.mu entry body depth ordinary) =
+    SourceCurrentConstrainedCapGuardDepth.profile annotation body
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:58:123: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:64:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  body.depth
+in the target expression
+  (if ¬True then body else Value.mu entry body depth ordinary).depth =
+    if usesLocal depth ordinary = true then depth.depth + 1 else depth.depth
+
+Symbol Guard : Type
+annotation : Guard → Prop
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+depthCorrect : InternedFreshOrdinaryDepthHeap.Correct entry body depth ordinary
+bodyDepth : body.depth = depth.depth
+unused : ¬¬Reference.interned entry.identity ∈ body.free
+present : Reference.interned entry.identity ∈ body.free
+self : ¬body.referenceOf = InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)
+observed :
+  (if ¬True then body else Value.mu entry body depth ordinary).depth =
+    if usesLocal depth ordinary = true then depth.depth + 1 else depth.depth
+⊢ usesLocal depth ordinary = true
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:60:8: error: unsolved goals
+case neg
+Symbol Guard : Type
+annotation : Guard → Prop
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+depthCorrect : InternedFreshOrdinaryDepthHeap.Correct entry body depth ordinary
+bodyDepth : body.depth = depth.depth
+unused : ¬¬Reference.interned entry.identity ∈ body.free
+present : Reference.interned entry.identity ∈ body.free
+self : ¬body.referenceOf = InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)
+used : usesLocal depth ordinary = true
+⊢ SourceCurrentConstrainedCapGuardDepth.profile annotation
+      (if ¬True then body else Value.mu entry body depth ordinary) =
+    if SourceCurrentConstrainedCapGuardDepth.profile annotation body = some 0 then some 0 else none
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:39:32: warning: This simp argument is unused:
+  SourceCurrentConstrainedCapGuardDepth.profile
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [finish, Bool.not_false, Bool.true_or, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:56:14: warning: This simp argument is unused:
+  Value.depth
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [finish, cleanup, Value.free, List.mem_singleton, Value.referenceOf, ↓reduceIte,
+    InternedFreshOrdinaryDepthHeap.decodedDepth, Bool.not_true, Bool.false_or] at observed
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:62:67: warning: This simp argument is unused:
+  Value.depth
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [finish, cleanup, present, self, ↓reduceIte, InternedFreshOrdinaryDepthHeap.decodedDepth,
+    Bool.not_true, Bool.false_or] at observed
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardReadback.lean:67:12: warning: This simp argument is unused:
+  SourceCurrentConstrainedCapGuardDepth.profile
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [finish, cleanup, present, self, used, Bool.not_true, Bool.false_or, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

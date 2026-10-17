@@ -1,0 +1,81 @@
+'MicroCFTA.SourceHistoryKernels.raw_empty_origin' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceHistoryKernels.raw_empty_origin : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)],
+  @Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun entry =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+      And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+            (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard Bool.false
+              (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard))
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+            after))
+        (And
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))))
+          (And (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap Symbol Guard inst after)
+            (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Origin Symbol Guard inst entry
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))))
+'MicroCFTA.SourceHistoryKernels.pending_reserved' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceHistoryKernels.pending_reserved : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)],
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+    @Exists.{1} MicroCFTA.InternedBinderProtocol.NodeKey fun key =>
+      And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+            (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard Bool.false
+              (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard))
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) state)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.pending Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) key state))
+        (And
+          (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap Symbol Guard inst
+            (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard Bool.false
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard))
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) state)))
+          (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+'MicroCFTA.SourceHistoryKernels.nested_constructed' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceHistoryKernels.nested_constructed : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (body : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+      And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+            (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard Bool.false
+              (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard Bool.true body))
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+        (And (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Heap Symbol Guard inst after)
+          (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after))

@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentConstrainedCapGuardExecution
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardExecution.Observation
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardExecution.Observation
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardExecution.Matches
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardExecution.Matches
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardExecution.build_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardExecution.build_profile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardExecution.buildMany_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardExecution.buildMany_profile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardExecution.buildEdges_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardExecution.buildEdges_profile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardExecution.closed_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardExecution.closed_heap

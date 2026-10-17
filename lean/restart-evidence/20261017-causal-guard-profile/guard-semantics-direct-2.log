@@ -1,0 +1,77 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:109:88: error: unsolved goals
+Atom Other : Type
+function : Atom → Other
+smart : Bool
+body : Shape (Unit ⊕ Atom)
+⊢ {
+      shape :=
+        InternedDepthSemantics.binder smart
+          { roots := List.map (Sum.map id function) body.shape.roots,
+            deep := List.map (Sum.map id function) body.shape.deep, hasOpaque := body.shape.hasOpaque,
+            depth := body.shape.depth },
+      guardDepth :=
+        if (!smart || InternedDepthSemantics.hasLocal body.shape.deep) = true then
+          if body.guardDepth = some 0 then some 0 else none
+        else body.guardDepth } =
+    {
+      shape :=
+        { roots := List.map function (InternedDepthSemantics.binder smart body.shape).roots,
+          deep := List.map function (InternedDepthSemantics.binder smart body.shape).deep,
+          hasOpaque := (InternedDepthSemantics.binder smart body.shape).hasOpaque,
+          depth := (InternedDepthSemantics.binder smart body.shape).depth },
+      guardDepth :=
+        if (!smart || InternedDepthSemantics.hasLocal body.shape.deep) = true then
+          if body.guardDepth = some 0 then some 0 else none
+        else body.guardDepth }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:110:32: warning: This simp argument is unused:
+  InternedDepthSemantics.binder_map
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [binder, Shape.map, InternedDepthSemantics.Shape.map, InternedDepthSemantics.hasLocal_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:137:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateMany valid [] (List.map (Shape.map function) environment)
+is not definitionally equal to the right-hand side
+  List.map (Shape.map function) (evaluateMany valid [] environment)
+
+case nil
+Atom Other Guard Symbol : Type
+function : Atom → Other
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ evaluateMany valid [] (List.map (Shape.map function) environment) =
+    List.map (Shape.map function) (evaluateMany valid [] environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:159:13: error: Tactic `rfl` failed: The left-hand side
+  (evaluate valid Syntax.empty environment).shape
+is not definitionally equal to the right-hand side
+  InternedDepthSemantics.evaluate Syntax.empty (List.map Shape.shape environment)
+
+case empty
+Guard Symbol Atom : Type
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ (evaluate valid Syntax.empty environment).shape =
+    InternedDepthSemantics.evaluate Syntax.empty (List.map Shape.shape environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:175:11: error: Tactic `rfl` failed: The left-hand side
+  List.map Shape.shape (evaluateMany valid [] environment)
+is not definitionally equal to the right-hand side
+  InternedDepthSemantics.evaluateMany [] (List.map Shape.shape environment)
+
+case nil
+Guard Symbol Atom : Type
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ List.map Shape.shape (evaluateMany valid [] environment) =
+    InternedDepthSemantics.evaluateMany [] (List.map Shape.shape environment)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardSemantics.lean:183:11: error: Tactic `rfl` failed: The left-hand side
+  (evaluateEdges valid [] environment).shape
+is not definitionally equal to the right-hand side
+  InternedDepthSemantics.evaluateEdges [] (List.map Shape.shape environment)
+
+case nil
+Guard Symbol Atom : Type
+valid : Guard → Prop
+environment : List (Shape Atom)
+⊢ (evaluateEdges valid [] environment).shape =
+    InternedDepthSemantics.evaluateEdges [] (List.map Shape.shape environment)

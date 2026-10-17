@@ -1,0 +1,13 @@
+# Independent normalization and readback review
+
+No material defect was found in the final normalization and readback modules. This review uses normalization 23a8af9ec1daefafe9b6f8e148430a2eb78e8c78b568130b7114fec9efab5210 and readback 285351c9938850e59f5d26951068169ff37b889ccf7e8781f731efeba30822db.
+
+Normalization proves exact optional guard-profile equalities. `within_ext` compares every finite upper bound, so it also distinguishes an absent profile. `canonical_rows` requires coherent resident rows. Its reverse membership argument retains the complete earlier resident payload, including each guard. `makeNode_profile` first removes rows with an empty child. The added `surviving_cons` states that exact branch and assigns an erased row zero contribution. `makeEdge_profile` obtains both the literal key and exact ordered children from actual coherent/cache readback.
+
+Union reflection needs `Facts`, `Live`, and availability of all original operands. In the ordinary-union case, `Live` prevents the union constructor from silently erasing an original resident row. The distinct-node and canonical-edge lemmas recover each complete original member and row. Without this initial representation condition, forward cap preservation alone would not prove reflection. `filter_profile` removes only literal root references, which have profile zero, and calls exact union normalization with the actual normal heap.
+
+Readback first uses the existing raw/smart depth equation to identify the cleanup branch. It handles absent self, bare-self cleanup to Empty, and a retained wrapper separately. It then uses the explicit body/ordinary-probe guard equality. `hit_profile` obtains the stored Mu entry and exact probes from `stored_probes`. `hit_cap` derives a positive-depth cap for an unused-local warm return; it does not assume a cap for the old body. These readback theorems require the causal guard heap. They do not derive that heap from unrelated semantic language facts.
+
+All 18 final public declarations passed independent imported axiom and full-signature checks. Only standard Lean axioms occur. The first probe attempt used an incorrect working-directory prefix and did not open a Lean source; its log is retained. The final standalone source and second log are clean. Normalization passed the designated final canonical build with 1004 jobs; readback passed its canonical build with 1005 jobs.
+
+The actual source-to-earlier-winner integration is a separate pending check. It must start with empty guard storage and use the full construction producer. This review does not treat a supplied guard heap or a pure callback-renaming theorem as that producer. It makes no Haskell host-forcing or general completion claim.

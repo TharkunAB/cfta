@@ -1,0 +1,13 @@
+# Independent positive-cap optional-binder review
+
+No material defect was found in GuardBinder be553632209103039c6235b25ab3017ff22b3273d2e3a2a1a4676e193851565c. The final source has 107 lines. The designated strict log is empty, and canonical-binder-1.log passed 1103 jobs. The owner retains the two public probe pairs and constructive integration evidence.
+
+`complete` starts with Ready, availability, an initial Cap, the causal guard heap, a positive ranked classifier, the old marker's weight, and exact probe freshness. It has no completed request, callback result, old-body cap, or future result law as a premise. Ready includes the initial semantic heap, complete cache coverage, and open-depth readback heap. The guard heap is a separate produced representation invariant; semantic language equivalence alone does not imply it.
+
+The used-marker branch constructs the actual Depth callback first. It derives the guard heap at that exact returned state. The ordinary callback then uses the literal ordinary level of that Depth result and the same original body, transported by actual Keeps. The independent finite maybeMu theorem begins at the original state. Its actual equality and the two constructed callback equalities identify the exact reached request at afterOrdinary. This alignment does not assume that an enclosing callback has completed.
+
+`request_record` selects the actual final first-writer record. The proof obtains the final availability of both actual probes through the reached request effects. The ordinary marked classifier and its positive bound exclude a deep local. The final guard heap supplies the selected winner's body-to-probe law, so `hit_cap` derives the cap of that exact smart return. The separate exact warm-occurrence theorem derives its classifier. The proof does not replace an earlier winner with a newly computed candidate. The same actual final state supplies GuardHeap, MuStored, availability, full Ready, growth, and issued history.
+
+The unused-marker branch returns the literal original body and state. The support adapter derives the two freshness premises only because every initial free name is an intersection reference. It does not remove the classifier or positivity assumptions.
+
+The source gate is substantive. An arbitrary finite-cap body can have a forbidden probe name or a deep occurrence of the maximal marker and need not meet these premises. The theorem establishes finite optional-binder execution and positive-cap/classifier preservation for the stated initial gate. It does not establish that every native request reaches this gate, general recursive selected reduction, or whole-library Haskell correspondence.
