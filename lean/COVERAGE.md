@@ -1,5 +1,64 @@
 # Full formalization coverage
 
+## Current complete initial Scan resources
+
+Updated: 2026-10-17 14:14 CEST. Starting checkpoint is ba44d54f.
+Proof commit is d82a0f7e. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-scan-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-scan-guard-resources/.
+
+Initial guard and profile schedules now construct the complete current
+Scan. Actual native instructions advance a finite guard carrier. Actual
+false secondary returns derive selected PathSupport. Supported open
+projections retain that carrier. The seeded fold constructs its own native
+queries and the current conjunction memo at their actual returned heaps.
+Selected, skipped, continued, and stopped branches retain source order.
+The original class suffix uses the actual prior return. A true memo answer
+stops before the suffix. SeededRanges and ClassScanCompletion.Ranges are
+now derived outputs of the initial producers.
+
+The same Scan retains full Frame, forecast Fits, finite guard carrier,
+physical effects, original available values, correct saved fourth memo,
+and Extends. The same literal result holds at every independently larger
+choice of five worker fuels. The complete caller constructs strict logical
+source reads, same-inventory Post, selected Sublist, and sound stopped-class
+refutation. Both outer result tables and Merge remain exact. Initial
+assumptions are Frame, Fits, valid memos, proper paths, pure query
+reservations, and active classes for refutation. No future graph, reached
+ranges, worker success, finite input Cap, or whole-forest closedness is a
+producer premise. False memo answers do not establish nonemptiness.
+
+The public target remains valid and explicitly supported initial inputs
+terminate and satisfy each operation's intended contract. These are logical,
+partly noncomputable bounds. They do not establish extracted Haskell budgets
+or host capacity. Next compose Scan, Required preparation, and the numeric
+class caller in the original source control flow. Remaining Required caps,
+outer parent and mutual recursion, arbitrary constrained Mu and open
+recursive inputs, convergence, current adapters, lazy forcing, runtime,
+and complete public Haskell correspondence remain open. The goal stays active.
+
+Audit passes 2998 jobs and 65859 dependency checks. All fifteen final strict
+logs are empty and all fifteen canonical targets pass. Twenty-five groups
+check 85 handwritten public declarations, ten Receipt field projections,
+and 27 constructed integrations. Only propext, Classical.choice, and
+Quot.sound occur in successful probes. Fifteen component manifests retain
+479 entries and 479 hash references. Read checkpoint-validation.json and
+README for exact hashes and evidence boundaries.
+Preservation retains 15587 starting files, 2982 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 96 frozen module manifests with 755 entries. Audit adds
+fifteen imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
 ## Current initial conjunction numeric resources
 
 Updated: 2026-10-17 13:40 CEST. Starting checkpoint is 2d7b0fa2.
