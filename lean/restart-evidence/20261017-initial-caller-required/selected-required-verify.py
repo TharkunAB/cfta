@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""Verify the frozen open Required component without rebuilding."""
+from pathlib import Path
+import hashlib
+import json
+import re
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+manifest = json.loads((HERE / "selected-required-manifest.json").read_text())
+assert len(manifest["entries"]) == manifest["entry_count"]
+seen = set()
+for entry in manifest["entries"]:
+    assert entry["path"] not in seen, entry["path"]
+    seen.add(entry["path"])
+    data = (ROOT / entry["path"]).read_bytes()
+    assert len(data) == entry["bytes"], entry["path"]
+    assert hashlib.sha256(data).hexdigest() == entry["sha256"], entry["path"]
+for production in manifest["production"]:
+    assert (HERE / production["strict_log"]).read_bytes() == b""
+    assert (ROOT / production["path"]).read_bytes() == (HERE / production["strict_snapshot"]).read_bytes()
+    canonical = (HERE / production["canonical_log"]).read_text()
+    assert f"Build completed successfully ({production['canonical_jobs']} jobs)." in canonical
+    assert "Built MicroCFTA." + Path(production["path"]).stem in canonical
+assert "no such file or directory" in (HERE / "selected-required-exposure-direct-1.log").read_text()
+assert not (HERE / "selected-required-exposure-direct-1.source.lean").exists()
+for check in manifest["checks"]:
+    source = (HERE / check["source"]).read_text()
+    log = (HERE / check["log"]).read_text()
+    assert (HERE / check["source"]).read_bytes() == (HERE / check["snapshot"]).read_bytes()
+    assert not re.search(r"error(?:\(|:)|warning:|sorryAx|truncated|maximum.*(?:depth|steps)", log), check["log"]
+    pairs = re.findall(r"^'([^']+)' depends on axioms: \[([^\]]*)\]", log, re.M | re.S)
+    pairs += [(name, "") for name in re.findall(r"^'([^']+)' does not depend on any axioms$", log, re.M)]
+    assert len(pairs) == check["pairs"], (check["log"], len(pairs))
+    assert len(re.findall(r"^#print axioms ", source, re.M)) == check["pairs"]
+    assert len(re.findall(r"^#check @", source, re.M)) == check["pairs"]
+    for name, axioms in pairs:
+        assert "#print axioms " + name in source
+        assert "#check @" + name in source
+        assert "#print " + name + "\n" in source
+        assert re.search(r"^@?" + re.escape(name) + r"\s*:", log, re.M), name
+        names = [re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in axioms.split(",") if item.strip()]
+        assert set(names) <= {"propext", "Classical.choice", "Quot.sound"}, (name, names)
+    for setting in ["pp.explicit true", "pp.fullNames true", "pp.proofs true", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000", "linter.all true"]:
+        assert "set_option " + setting in source, setting
+public = (HERE / "selected-required-public.lean").read_text()
+for production in manifest["production"]:
+    source = (ROOT / production["path"]).read_text()
+    for name in re.findall(r"^theorem\s+(\w+)", source, re.M):
+        full = "MicroCFTA." + Path(production["path"]).stem + "." + name
+        assert "#check @" + full + "\n" in public, full
+print("PASS:", manifest["entry_count"], "hashes;", sum(c["pairs"] for c in manifest["checks"]), "complete pairs; diagnostics 0; preparation failure recorded")

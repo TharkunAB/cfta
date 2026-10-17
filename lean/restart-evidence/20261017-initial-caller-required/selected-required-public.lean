@@ -1,0 +1,39 @@
+import MicroCFTA.SourceCurrentConstrainedCapSelectedRequired
+import MicroCFTA.SourceCurrentRequiredSupport
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOpenExposure.collect
+#check @MicroCFTA.SourceCurrentConstrainedCapOpenExposure.collect
+#print MicroCFTA.SourceCurrentConstrainedCapOpenExposure.collect
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOpenExposure.nodeEdges
+#check @MicroCFTA.SourceCurrentConstrainedCapOpenExposure.nodeEdges
+#print MicroCFTA.SourceCurrentConstrainedCapOpenExposure.nodeEdges
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOpenExposure.head
+#check @MicroCFTA.SourceCurrentConstrainedCapOpenExposure.head
+#print MicroCFTA.SourceCurrentConstrainedCapOpenExposure.head
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.node
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.node
+#print MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.node
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.children
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.children
+#print MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.children
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.rows
+#print MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.rows
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.requireAll
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.requireAll
+#print MicroCFTA.SourceCurrentConstrainedCapSelectedRequired.requireAll
