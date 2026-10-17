@@ -29,6 +29,7 @@ jobs:
             cfta/**/*.hs
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
+            cfta-th/**/*.hs
             decision-model/**/*.hs
 
       - name: Set up hlint
@@ -39,7 +40,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-th", "decision-model"]'
           fail-on: warning
 
   build-test-bench:
@@ -92,6 +93,7 @@ jobs:
           (cd cfta && cabal check)
           (cd cfta-generator && cabal check)
           (cd cfta-ghc && cabal check)
+          (cd cfta-th && cabal check)
           (cd decision-model && cabal check)
 
       - name: Build with strict warnings
