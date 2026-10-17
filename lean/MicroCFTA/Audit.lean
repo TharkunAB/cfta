@@ -2488,6 +2488,12 @@ import MicroCFTA.SourceCurrentParentForecast
 import MicroCFTA.SourceCurrentParentNumeric
 import MicroCFTA.SourceCurrentEdgeBodyNumeric
 import MicroCFTA.SourceCurrentEdgeCallNumeric
+import MicroCFTA.SourceCurrentRawRebuildNumeric
+import MicroCFTA.SourceCurrentInheritedNumeric
+import MicroCFTA.SourceCurrentNodeTerminalNumeric
+import MicroCFTA.SourceCurrentNodeCallNumeric
+import MicroCFTA.SourceCurrentDescendantsNumeric
+import MicroCFTA.SourceCurrentOuterHeightBarrier
 /-!
 # Proof dependency audit
 
