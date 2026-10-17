@@ -52,6 +52,38 @@ identities, and suggests typed references in a future quoter. Its macro expansio
 is not a portable saved value. See
 [syntax-spec](https://docs.racket-lang.org/syntax-spec-v3/Specifying_languages.html).
 
+## Nanopass and Turnstile
+
+Nanopass directly addresses a sequence of related languages. An `extends` clause
+selects a base language; `+` and `-` clauses add and remove productions. For a base
+with a `wrap` production, an extension can have this form:
+
+```racket
+(define-language L1
+  (extends L0)
+  (Expr (e)
+    (- (wrap e))
+    (+ (two))))
+```
+
+It also generates term parsers and unparsers. `language->s-expression` exposes
+the complete extended language. This is close to the desired define, modify,
+inspect workflow. Terminal predicates and optional prettifiers can still depend
+on host code; the format alone does not supply portable constraints or stable
+ranks. See [Nanopass](https://docs.racket-lang.org/nanopass/index.html).
+
+For CFTA, use a complete snapshot for reopening and a typed update expression
+for changes. Preserve named facts when adding or removing constructors. A later
+portable constructor schema could generate term readers and printers together,
+so a displayed term remains a complete selector for an update.
+
+Turnstile combines type checking and macro expansion through declarative rules.
+Its bidirectional judgments distinguish synthesizing a type from checking an
+expression against a supplied type. This is relevant to a typed language quoter:
+show premises and type errors in terms of the declared language. It is not a
+portable constraint engine or an enumeration guarantee. See the
+[Turnstile guide](https://docs.racket-lang.org/turnstile/The_Turnstile_Guide.html).
+
 ## Data notation comparison
 
 These are format properties and proposed mappings, not implemented importers.
