@@ -6,22 +6,32 @@ cases.
 -}
 module Specftacular.DecisionTree (
     DecisionTree,
+    Evaluator (Evaluator),
     Inserted (..),
     empty,
     leaf,
+    leafWith,
     insert,
     insertWith,
     size,
 ) where
 
-import Specftacular.Types (Term, TestCase, Value)
+import qualified Data.Map.Strict as Map
+import Specftacular.Types (Sig, Term, TestCase, Value, VarVals, testCaseValues)
+
+{- | A term evaluator and the generators of its variables. Evaluators must
+use the same generator for each shared variable name.
+-}
+data Evaluator
+    = Evaluator Sig (VarVals -> Value)
+    | PerCase (TestCase -> Value)
 
 -- | A decision tree of terms.
 data DecisionTree
     = -- | No representatives.
       Empty
     | -- | A representative and its evaluator.
-      Leaf Term (TestCase -> Value)
+      Leaf Term Evaluator
     | -- | A test case and the children for its distinct values.
       Branch TestCase [(Value, DecisionTree)]
 
@@ -40,7 +50,11 @@ empty = Empty
 
 -- | The tree with one representative and its evaluator.
 leaf :: Term -> (TestCase -> Value) -> DecisionTree
-leaf = Leaf
+leaf t eval = Leaf t (PerCase eval)
+
+-- | A representative with explicit generators for shared test inputs.
+leafWith :: Term -> Evaluator -> DecisionTree
+leafWith = Leaf
 
 -- | The number of representatives in a tree.
 size :: DecisionTree -> Int
@@ -60,7 +74,7 @@ insert ::
     (TestCase -> Value) ->
     DecisionTree ->
     IO Inserted
-insert = insertWith (const (const False))
+insert equal cases t eval = insertWith (const (const False)) equal cases t (PerCase eval)
 
 {- | Insert a term, but skip the test schedule when the predicate proves
 that it equals the representative. Branch comparisons still select the
@@ -71,7 +85,7 @@ insertWith ::
     (Value -> Value -> IO (Maybe Bool)) ->
     [TestCase] ->
     Term ->
-    (TestCase -> Value) ->
+    Evaluator ->
     DecisionTree ->
     IO Inserted
 insertWith known equal cases t eval = go
@@ -79,7 +93,7 @@ insertWith known equal cases t eval = go
     go Empty = return (Distinct (Leaf t eval))
     go (Branch tc children) = find [] children
       where
-        v = eval tc
+        v = evaluateWith eval tc (testCaseValues (requiredVariables eval) tc)
         find before [] = return $ Distinct $ Branch tc $ reverse before ++ [(v, Leaf t eval)]
         find before (child@(w, sub) : after) = do
             e <- equal w v
@@ -93,15 +107,27 @@ insertWith known equal cases t eval = go
         | known t y = return (EqualTo y)
         | otherwise = compareCases cases
       where
+        required = requiredVariables eval <> requiredVariables evalY
         compareCases [] = return (EqualTo y)
         compareCases (tc : rest) = do
-            let w = evalY tc
-                v = eval tc
+            let inputs = testCaseValues required tc
+                w = evaluateWith evalY tc inputs
+                v = evaluateWith eval tc inputs
             e <- equal w v
             case e of
                 Nothing -> return Untested
                 Just False -> return $ Distinct $ Branch tc [(w, Leaf y evalY), (v, Leaf t eval)]
                 Just True -> compareCases rest
+
+-- | The generators needed by an evaluator with explicit variables.
+requiredVariables :: Evaluator -> Sig
+requiredVariables (Evaluator required _) = required
+requiredVariables (PerCase _) = Map.empty
+
+-- | Evaluate with shared inputs, or use a caller's case evaluator.
+evaluateWith :: Evaluator -> TestCase -> VarVals -> Value
+evaluateWith (Evaluator _ eval) _ inputs = eval inputs
+evaluateWith (PerCase eval) tc _ = eval tc
 
 -- | Put the tree of a new representative in its place in the parent.
 below :: (DecisionTree -> DecisionTree) -> Inserted -> Inserted
