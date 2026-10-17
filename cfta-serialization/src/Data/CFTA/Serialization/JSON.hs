@@ -110,7 +110,9 @@ encodeLanguage language =
             , "source" .= documentJSON (Language.source language)
             , "exclusions"
                 .= object
-                    [Key.fromText name .= exclusionJSON exclusion | (name, exclusion) <- Map.toAscList $ Language.exclusions language]
+                    [ Key.fromText (Language.exclusionNameText name) .= exclusionJSON exclusion
+                    | (name, exclusion) <- Map.toAscList $ Language.exclusions language
+                    ]
             ]
 
 -- | Read source and exclusions without lowering, pruning, or invoking a solver.
@@ -133,7 +135,7 @@ decodeLanguage input = do
                 o
                 "exclusions"
         pure (source, exclusions)
-    parseEntry (name, value) = (,) (Key.toText name) <$> (parseExclusion value <?> Key name)
+    parseEntry (name, value) = (,) (Language.ExclusionName $ Key.toText name) <$> (parseExclusion value <?> Key name)
 
 -- | Encode the scope of an exclusion and its complete template.
 exclusionJSON :: Language.Exclusion -> Value

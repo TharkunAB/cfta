@@ -2,6 +2,9 @@
 module Data.CFTA.Language (
     Language (..),
     Exclusion (..),
+    ProductionName (..),
+    FactName (..),
+    ExclusionName (..),
     ProductionRef (..),
     Update (..),
     Operation (..),
@@ -26,6 +29,7 @@ import Control.Monad (foldM)
 import Data.Bifunctor (first)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
+import Data.String (IsString)
 import Data.Text (Text)
 
 import qualified Data.CFTA as FTA
@@ -40,7 +44,7 @@ import qualified Data.CFTA.Term as Term
 -- | Editable source and named exclusions. Compilation never replaces this source.
 data Language state = Language
     { source :: !(Document.Document state)
-    , exclusions :: !(Map Text Exclusion)
+    , exclusions :: !(Map ExclusionName Exclusion)
     }
     deriving (Eq, Show)
 
@@ -50,15 +54,27 @@ data Exclusion
     | Anywhere !(Template Symbol)
     deriving (Eq, Ord, Show)
 
+-- | A source production name. Text belongs at the declaration and codec boundary.
+newtype ProductionName = ProductionName {productionNameText :: Text}
+    deriving (Eq, Ord, Show, IsString)
+
+-- | A named source obligation, distinct from production and exclusion names.
+newtype FactName = FactName {factNameText :: Text}
+    deriving (Eq, Ord, Show, IsString)
+
+-- | The identity of a reversible exclusion.
+newtype ExclusionName = ExclusionName {exclusionNameText :: Text}
+    deriving (Eq, Ord, Show, IsString)
+
 -- | A stable production name within one source state.
-data ProductionRef state = ProductionRef !state !Text
+data ProductionRef state = ProductionRef !state !ProductionName
     deriving (Eq, Ord, Show)
 
 -- | One inspectable operation in a reusable update expression.
 data Operation state
     = EditSource !(Document.Edit state)
-    | Exclude !Text !Exclusion
-    | Restore !Text
+    | Exclude !ExclusionName !Exclusion
+    | Restore !ExclusionName
     deriving (Eq, Show)
 
 -- | An ordered update expression. Composition appends operations from left to right.
@@ -68,7 +84,7 @@ newtype Update state = Update {operations :: [Operation state]}
 -- | An invalid source edit or removal of an absent exclusion.
 data UpdateError state
     = InvalidSource !(Document.DocumentError state)
-    | MissingExclusion !Text
+    | MissingExclusion !ExclusionName
     deriving (Eq, Show)
 
 -- | Start with the complete source language and no exclusions.
@@ -76,7 +92,7 @@ fromDocument :: Document.Document state -> Language state
 fromDocument document = Language document Map.empty
 
 -- | Select a production by source state and name.
-at :: state -> Text -> ProductionRef state
+at :: state -> ProductionName -> ProductionRef state
 at = ProductionRef
 
 {- | Install a complete production with no facts. Replace the same name in place
@@ -84,19 +100,22 @@ or append a new name. The state must exist. Compose 'require' to add facts.
 -}
 define :: ProductionRef state -> Symbol -> [state] -> Update state
 define (ProductionRef state name) symbol children =
-    editSource $ Document.PutTransition state $ FTA.Transition symbol children $ Document.Annotation name Map.empty
+    editSource
+        $ Document.PutTransition state
+        $ FTA.Transition symbol children
+        $ Document.Annotation (productionNameText name) Map.empty
 
 -- | Remove an existing production. Keep its state even when the row becomes empty.
 remove :: ProductionRef state -> Update state
-remove (ProductionRef state name) = editSource $ Document.DeleteTransition state name
+remove (ProductionRef state name) = editSource $ Document.DeleteTransition state (productionNameText name)
 
 -- | Add or replace one named fact on an existing production.
-require :: ProductionRef state -> Text -> Constraint -> Update state
-require (ProductionRef state name) fact constraint = editSource $ Document.SetFact state name fact constraint
+require :: ProductionRef state -> FactName -> Constraint -> Update state
+require (ProductionRef state name) fact constraint = editSource $ Document.SetFact state (productionNameText name) (factNameText fact) constraint
 
 -- | Remove one existing fact. Keep the production and all its other facts.
-relax :: ProductionRef state -> Text -> Update state
-relax (ProductionRef state name) fact = editSource $ Document.RemoveFact state name fact
+relax :: ProductionRef state -> FactName -> Update state
+relax (ProductionRef state name) fact = editSource $ Document.RemoveFact state (productionNameText name) (factNameText fact)
 
 -- | Include a checked source edit, such as an atomic state-row change.
 editSource :: Document.Edit state -> Update state
@@ -115,11 +134,11 @@ exact :: Term Symbol -> Template Symbol
 exact (Term.Node symbol children) = Template.TemplateNode symbol $ map exact children
 
 -- | Add or replace a named exclusion without changing the source document.
-without :: Text -> Exclusion -> Update state
+without :: ExclusionName -> Exclusion -> Update state
 without name exclusion = Update [Exclude name exclusion]
 
 -- | Remove an existing exclusion. Other exclusions and source facts still apply.
-restore :: Text -> Update state
+restore :: ExclusionName -> Update state
 restore name = Update [Restore name]
 
 {- | Apply one reusable expression atomically. Resolve source edits in their order
@@ -174,4 +193,4 @@ numberStates graph = FTA.mapStates (numbers Map.!) graph
 explainUpdateError :: (Show state) => UpdateError state -> String
 explainUpdateError failure = case failure of
     InvalidSource error' -> Document.explainDocumentError error'
-    MissingExclusion name -> "exclusion " <> show name <> " does not exist"
+    MissingExclusion name -> "exclusion " <> show (exclusionNameText name) <> " does not exist"

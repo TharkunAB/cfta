@@ -222,13 +222,17 @@ Use `Data.CFTA.Language` for the user-facing update expression. Start with
 ```haskell
 modified <- either (fail . Language.explainUpdateError) pure $
     Language.update before $
-        Language.define (Language.at "Atom" "two") two []
-            <> Language.relax (Language.at "Expr" "pair") "positive"
-            <> Language.without "zero-pair" (Language.wholeTerm zeroPair)
+        Language.define twoRef twoSymbol []
+            <> Language.relax pairRef positive
+            <> Language.without zeroPairRule (Language.wholeTerm zeroPair)
 ```
 
-Here `before` is a `Language String`, `two` is its complete constructor symbol,
-and `zeroPair` is a term with complete symbols. See
+Here `before` is a `Language State`, with an ADT for `State`. `twoRef` and
+`pairRef` are `ProductionRef State` values. `positive` is a `FactName`, and
+`zeroPairRule` is an `ExclusionName`. `twoSymbol` is the complete constructor
+symbol, and `zeroPair` is a term with complete symbols. Declare identifiers once
+and reuse these typed bindings. Production, fact, and exclusion names have
+distinct types; raw text is used at declaration and codec boundaries. See
 [LanguageExpressions.hs](examples/LanguageExpressions.hs) for the complete
 program, including the source definition and refined symbols.
 

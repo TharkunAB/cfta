@@ -6,16 +6,20 @@ with named exclusions, then apply the complete expression once:
 
 ```haskell
 update before $
-    define (at "Atom" "two") two []
-        <> relax (at "Pair" "pair") "positive"
-        <> without "zero-pair" (wholeTerm zeroPair)
+    define twoRef twoSymbol []
+        <> relax pairRef positive
+        <> without zeroPairRule (wholeTerm zeroPair)
 ```
 
 Add `Data.CFTA.Language`. A `Language state` retains a checked source document
 and a map of named exclusions. An `Update state` is an ordered sequence of
 first-order operations. It supports `Semigroup` and `Monoid`, so callers can
 name and combine reusable changes without host callbacks. A production
-reference contains its source state and stable production name.
+reference contains its source state and stable production name. Use an ADT for
+states. `ProductionName`, `FactName`, and `ExclusionName` are distinct identifier
+types. Declare names once, then reuse typed references and bindings. Text stays
+at declaration and codec boundaries. A fact identifier cannot select a production
+or exclusion by mistake.
 
 `define` installs a complete production with no facts. It replaces a production
 with the same name in place or appends a new one. Use `require` after `define`
@@ -83,3 +87,10 @@ fixtures round-trip with every template form. Eighteen malformed language files
 are rejected with the expected locations or source errors. The previous document
 probe still passes after sharing its JSON encoder. A writer and two fresh readers
 with different prior symbol interning reproduce the same ranks and rank inverses.
+
+Production, fact, and exclusion identifiers have distinct types. The example
+uses an ADT for states and reuses typed references. Three negative compilation
+checks reject identifiers used in the wrong role. The example's saved and
+restored JSON bytes remain identical after introducing the typed identifiers
+and state ADT. The semantic, malformed-file, and fresh-process replay probes
+still pass. All six suites, strict builds, and format checks pass again.
