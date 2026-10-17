@@ -2385,6 +2385,13 @@ import MicroCFTA.SourceCurrentMemoMergeResourceTrace
 import MicroCFTA.SourceCurrentMemoMergeNumericControl
 import MicroCFTA.SourceCurrentMemoMergeResourceIteration
 import MicroCFTA.SourceCurrentMemoMergeNumeric
+import MicroCFTA.SourceCurrentProjectionNumericReplay
+import MicroCFTA.SourceCurrentProjectionUnionResources
+import MicroCFTA.SourceCurrentProjectionNumericControl
+import MicroCFTA.SourceCurrentMemoMergeUniformNumeric
+import MicroCFTA.SourceCurrentProjectionInitialResources
+import MicroCFTA.SourceCurrentProjectionNumeric
+import MicroCFTA.SourceCurrentConstrainedCapOperandNumeric
 /-!
 # Proof dependency audit
 
