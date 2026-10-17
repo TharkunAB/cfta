@@ -1,0 +1,59 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-parent/edge-call-direct-1.source.lean:135:7: error: unexpected token 'protected'; expected '(', ':=', '|' or term
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-parent/edge-call-direct-1.source.lean:135:7: error: Missing cases:
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-parent/edge-call-direct-1.source.lean:119:76: error: unsolved goals
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller (bits + 2)
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+reserved : Reserved bits budget request before profile
+handle : Nat
+original : EdgeRequest
+running : Caller (bits + 2)
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running)
+runningContext : Context formulas solver inventory running memos
+owner :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := original, status := FlatMemoThunk.Status.evaluating }
+left✝ : original.key = request.key
+cell : running.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+checked : running.checked = before.checked
+_merge : running.merge = before.merge
+_fourth : running.fourth = before.fourth
+nodes : running.nodeResults = before.nodeResults
+runningFrame : Frame formulas solver inventory running.checked
+runningFits : Fits profile running.checked
+room : SourceCurrentParentForecast.residentReserved bits budget original running.checked profile
+result : Edge
+middle : Caller (bits + 2)
+next : Inventory
+final : Memos
+body :
+  SourceCurrentEdgeBodyNumeric.Receipt formulas solver next profile budget original running memos result middle final
+post : Post formulas solver next before (finishEdge handle result middle) final
+output : Resident (finishEdge handle result middle).checked.native.machine.heap result
+law : SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+⊢ ∃ result after next final,
+    Receipt formulas solver next profile budget request before memos result after final ∧
+      after.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.returned result }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-parent/edge-call-direct-1.source.lean:135:16: error: unexpected token ':='; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'structure' or 'theorem'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-parent/edge-call-direct-1.source.lean:198:37: error: Application type mismatch: The argument
+  started
+has type
+  beginEdge request before = (handle, FlatMemoThunk.Observation.busy, running)
+but is expected to have type
+  (handle, FlatMemoThunk.Observation.busy, running) = (handle, FlatMemoThunk.Observation.busy, running)
+in the application
+  And.intro started

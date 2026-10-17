@@ -1,0 +1,348 @@
+MicroCFTA.BodyIndependentIntegration.constructed_live_body : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+  And
+    (∀ (depth : Nat),
+      Not
+        (∀
+          (child :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          @Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                MicroCFTA.BodyIndependentIntegration.liveEdge)
+              child →
+            @MicroCFTA.SourceCurrentConstrainedCap.Cap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceCurrentConstrainedCapCheckedJointClosed.Plain depth child))
+    (@Exists.{1} Nat fun bits =>
+      @Exists.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        fun result =>
+        @Exists.{2}
+          (MicroCFTA.SourceCurrentAllocatedPartialState.State
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          fun after =>
+          @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+            @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun final =>
+              @Exists.{0}
+                (@MicroCFTA.SourceCurrentEdgeBodyNumeric.Receipt
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+                  (fun a b =>
+                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+                      MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean a b)
+                  MicroCFTA.BodyIndependentIntegration.instDecidableEqValueLabelFormulaConstraint_lean formulas solver
+                  next MicroCFTA.BodyIndependentIntegration.profile
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  MicroCFTA.BodyIndependentIntegration.liveRequest
+                  (MicroCFTA.BodyIndependentIntegration.caller
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  MicroCFTA.EndpointMemoGateTrace.empty result after final)
+                fun _receipt =>
+                And
+                  (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    formulas solver next
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      after))
+                  (And
+                    (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+                      (fun a b =>
+                        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (fun a b =>
+                            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                              instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a
+                              b)
+                          MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean a b)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      formulas solver next
+                      (MicroCFTA.BodyIndependentIntegration.caller
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                      after final)
+                    (∀ (f g s r e p h m c n : Nat),
+                      @LE.le.{0} Nat instLENat
+                          (MicroCFTA.BodyIndependentIntegration.commonFuel
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                          g →
+                        @LE.le.{0} Nat instLENat
+                            (MicroCFTA.BodyIndependentIntegration.commonFuel
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                            s →
+                          @LE.le.{0} Nat instLENat
+                              (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                              r →
+                            @LE.le.{0} Nat instLENat
+                                (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                e →
+                              @LE.le.{0} Nat instLENat
+                                  (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                  p →
+                                @LE.le.{0} Nat instLENat
+                                    (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                    h →
+                                  @LE.le.{0} Nat instLENat
+                                      (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                      m →
+                                    @LE.le.{0} Nat instLENat
+                                        (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                        c →
+                                      @LE.le.{0} Nat instLENat
+                                          (MicroCFTA.BodyIndependentIntegration.commonFuel
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                          n →
+                                        @Eq.{2}
+                                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeBody
+                                            (fun a b =>
+                                              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name
+                                                MicroCFTA.FullSyntax.Formula instDecidableEqString
+                                                MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+                                            (fun a b =>
+                                              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun a b =>
+                                                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name
+                                                    MicroCFTA.FullSyntax.Formula instDecidableEqString
+                                                    MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a
+                                                    b)
+                                                MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean
+                                                a b)
+                                            MicroCFTA.BodyIndependentIntegration.instDecidableEqValueLabelFormulaConstraint_lean
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            f g s r e p h m c n
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                            MicroCFTA.BodyIndependentIntegration.liveRequest
+                                            (MicroCFTA.BodyIndependentIntegration.caller
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            result after))))
+'MicroCFTA.BodyIndependentIntegration.constructed_live_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.BodyIndependentIntegration.constructed_rejected_body : ∀ (bits : Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (children :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  have request := MicroCFTA.BodyIndependentIntegration.rejectedRequest inherited children;
+  have actual :=
+    @MicroCFTA.SourceCurrentAllocatedMkEdge.reject
+      (fun a b =>
+        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+          MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean a b)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      (@Prod.mk.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula "rejected-body"
+        MicroCFTA.FullSyntax.Formula.top)
+      (MicroCFTA.BodyIndependentIntegration.before
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))));
+  have returned :=
+    @MicroCFTA.SourceCurrentAllocatedPartialState.advance
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      (MicroCFTA.BodyIndependentIntegration.caller
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+      (@Prod.snd.{0, 1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (MicroCFTA.SourceEqualityNativeDemand.State
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+        actual)
+      MicroCFTA.SourceCurrentEmptinessMemo.empty
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.empty (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula));
+  And
+    (Not
+      (@MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.BodyIndependentIntegration.heap request.value))
+    (And
+      (@Eq.{1}
+        (Except.{0, 0} String
+          (Option.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+        (@MicroCFTA.SourceEqualityConstraintFieldLookup.load MicroCFTA.FullSyntax.Formula
+          MicroCFTA.BodyIndependentIntegration.rejectedGuard
+          MicroCFTA.BodyIndependentIntegration.operations.constraints)
+        (@Except.ok.{0, 0} String
+          (Option.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+          (@Option.none.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))))
+      (@Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+        @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun final =>
+          @Exists.{0}
+            (@MicroCFTA.SourceCurrentEdgeBodyNumeric.Receipt
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+                  MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean a b)
+              MicroCFTA.BodyIndependentIntegration.instDecidableEqValueLabelFormulaConstraint_lean formulas solver next
+              MicroCFTA.BodyIndependentIntegration.profile (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              request
+              (MicroCFTA.BodyIndependentIntegration.caller
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+              MicroCFTA.EndpointMemoGateTrace.empty
+              (@Prod.fst.{0, 1}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.SourceEqualityNativeDemand.State
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                actual)
+              returned final)
+            fun _receipt =>
+            And
+              (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                formulas solver next
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  returned))
+              (And
+                (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+                  (fun a b =>
+                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+                      MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean a b)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  formulas solver next
+                  (MicroCFTA.BodyIndependentIntegration.caller
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  returned final)
+                (∀ (f g s r e p h m c n : Nat),
+                  @Eq.{2}
+                    (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                    (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeBody
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a b)
+                      (fun a b =>
+                        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (fun a b =>
+                            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                              instDecidableEqString MicroCFTA.BodyIndependentIntegration.instDecidableEqFormula_lean a
+                              b)
+                          MicroCFTA.BodyIndependentIntegration.instDecidableEqConstraintFormula_lean a b)
+                      MicroCFTA.BodyIndependentIntegration.instDecidableEqValueLabelFormulaConstraint_lean
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      f g s r e p h m c n (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) request
+                      (MicroCFTA.BodyIndependentIntegration.caller
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                    (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      (@Prod.fst.{0, 1}
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (MicroCFTA.SourceEqualityNativeDemand.State
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                        actual)
+                      returned)))))
+'MicroCFTA.BodyIndependentIntegration.constructed_rejected_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

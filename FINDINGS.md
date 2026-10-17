@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `25726a34`.
+Status rechecked on 2026-10-17 at proof checkpoint `5899990d`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-local-numeric.md` for the current proof boundaries.
+Read `lean/notes-current-parent-numeric.md` for the current proof boundaries.
 
-The current complete local reduction proofs add no Haskell change.
+The current initial parent and outer edge-call proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 3020 jobs and 65987 dependency checks.
+The last completed pinned Lean Audit passes: 3025 jobs and 66039 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -3619,6 +3619,64 @@ Reuse the strict Nix build, 798 examples plus golden, six-file Fourmolu,
 and four-package Cabal-gild and metadata checks for source `c0cc8a05`.
 Root FINDINGS.md keeps the Haskell repair handoff first. Earlier sections
 are historical checkpoints. This is progress; the full goal remains active.
+
+## Current initial parent and outer edge calls
+
+Updated: 2026-10-17 15:20 CEST. Starting checkpoint is 6adf1878.
+Proof commit is 5899990d. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-parent-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-initial-parent/.
+
+Initial Context, full Frame, Fits, live cached fields and availability,
+and pure initial reservations now construct the actual checked parent,
+outer edge body, and first-writer edge result call. The parent runs its
+complete local producer and the constructor at the actual returned state.
+Raw rejection skips fields, inherited readiness, children, and query Room.
+The resident endpoint derives the live field and availability facts.
+
+The initial outer demand selects the actual stored owner and post-demand
+caller. Only evaluation reserves parent work. Ready hits retain the whole
+caller without a parent reservation. Busy cells retain their exact fault
+for every fuel choice. Successful completion excludes only the queried
+initial busy observation. It does not require every table cell to be idle.
+The finish publishes the exact returned result in the selected owner cell.
+
+The same execution retains actual source graphs, strict reads, complete
+old semantic receipts, same-inventory Frame/Post, forecast Fits, guarded
+language, physical stores, and saved memo laws. All nine lower worker fuels
+can increase independently. Edge bodies and edge calls accept any outer
+fuel, including zero, because they do not consume that fuel. No future
+graph, reached range, worker success, returned invariant, finite input Cap,
+or whole-forest closedness is an initial producer premise. No finite
+output Cap is claimed. Pure majorants are partly noncomputable. They do
+not establish extracted Haskell budgets or concrete host capacity.
+
+Next compose node calls, rows, descendants, inherited prefixes, and full
+mutual recursion. Progress, convergence, general constrained Mu and
+supported open inputs, current Haskell adapters, lazy forcing, publication,
+concrete memo events, runtime capacity, and complete public Haskell
+correspondence remain open. Keep exactness, inclusion, and representative
+restriction as distinct contracts. The whole-library goal remains active.
+
+Audit passes 3025 jobs and 66039 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 361 MiB peak memory. All five final strict
+logs are empty. All five canonical targets pass. Read checkpoint-validation.json
+and README for exact signature, axiom, component, and hash counts.
+Failed attempts retain immutable source and raw logs. Only standard kernel
+axioms are permitted. Preservation retains 16349 starting files, 3019 older
+non-Audit sources, 239 Haskell files, 206 active-package files, both stashes,
+three other worktrees, and 99 frozen module manifests with 782 entries.
+Audit adds five imports. Older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
 
 ## Current literal outer correctness and root language preservation
 

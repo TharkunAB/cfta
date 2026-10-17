@@ -1,0 +1,59 @@
+SourceCurrentParentNumeric SHA256 7828277a754fb1a0dfeaeae3bf64caf82b30b8be52acde61795a9a294ebe71e0
+
+45: def LiveInputs (original : Guard) (loaded : Allocated) (inherited : EqValue)
+46:     (values : List (Value Symbol Guard)) (before : Caller width) : Prop :=
+47:   contradictory original = false →
+48:     SourceEqualityGuardReadback.Cached original.equalities ∧
+49:     SourceEqualityConstraintFieldLookup.load original before.checked.operations.constraints = .ok (some loaded) ∧
+50:     SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited ∧
+51:     Values before.checked.native.machine.heap values
+52: 
+
+54: structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+55:     (inventory : Inventory) (profile : Profile) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated)
+56:     (inherited : EqValue) (values : List (Value Symbol Guard)) (before : Caller width) (memos : Memos)
+57:     (result : EdgeValue Symbol Guard) (after : Checked width) (savedFourth : Fourth) (saved : Memo) (final : Memos) : Prop where
+
+90: theorem rejected (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+91:     (inventory : Inventory) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+92:     (values : List (Value Symbol Guard)) (before : Caller width) (memos : Memos)
+93:     (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+94:     (profile : Profile) (fits : Fits profile before.checked) (test : contradictory original = true) :
+95:     Receipt formulas solver inventory profile budget symbol original loaded inherited values before memos
+96:       (SourceCurrentAllocatedMkEdge.reject symbol before.checked).1 (SourceCurrentAllocatedMkEdge.reject symbol before.checked).2
+97:       before.fourth before.merge memos := by
+
+119: theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+120:     (inventory : Inventory) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+121:     (values : List (Value Symbol Guard)) (before : Caller (bits + 2)) (memos : Memos)
+122:     (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+123:     (profile : Profile) (fits : Fits profile before.checked) (live : LiveInputs original loaded inherited values before)
+124:     (reserved : SourceCurrentParentForecast.Reserved bits budget values.length original loaded inherited before.checked profile) :
+125:     ∃ result after savedFourth saved next final,
+126:       Receipt formulas solver next profile budget symbol original loaded inherited values before memos result after savedFourth saved final := by
+
+203: theorem resident_complete (formulas : SourceGuards.Formulas FullSyntax.Formula)
+204:     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : Request)
+205:     (before : Caller (bits + 2)) (memos : Memos) (initial : Context formulas solver inventory before memos)
+206:     (frame : Frame formulas solver inventory before.checked) (profile : Profile) (fits : Fits profile before.checked)
+207:     (resident : contradictory request.value.entry.key.constraint = false → Resident before.checked.native.machine.heap request.value)
+208:     (inheritedReady : contradictory request.value.entry.key.constraint = false →
+209:       SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+210:     (reserved : SourceCurrentParentForecast.residentReserved bits budget request before.checked profile) :
+211:     ∃ loaded result after savedFourth saved next final,
+212:       Receipt formulas solver next profile budget request.value.entry.key.symbol request.value.entry.key.constraint loaded
+213:         request.inherited request.value.children before memos result after savedFourth saved final ∧
+214:       Fits (SourceCurrentParentForecast.residentProfile budget request before.checked profile) after ∧
+215:       ∀ g s r e p h m c n,
+216:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ g →
+217:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ s →
+218:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ r →
+219:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ e →
+220:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ p →
+221:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ h →
+222:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ m →
+223:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ c →
+224:         SourceCurrentParentForecast.residentFuel budget request before.checked profile ≤ n →
+225:         SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget request.value.entry.key.symbol
+226:           request.value.entry.key.constraint request.inherited request.value.children before.checked before.fourth before.merge =
+227:           .done result after savedFourth saved := by
