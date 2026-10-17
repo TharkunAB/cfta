@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/raw-numeric-direct-1.source.lean:27:8: warning: automatically included section variable(s) unused in theorem `_private.lean.«restart-evidence».«20261017-initial-outer».«raw-numeric-direct-1.source».0.MicroCFTA.SourceCurrentRawRebuildNumeric.scalar_fits`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/raw-numeric-direct-1.source.lean:27:0: warning: `scalar_fits` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/raw-numeric-direct-1.source.lean:72:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  rawModify ?m.146 oldRows newRows ?m.149
+in the target expression
+  let original := Value.node entry oldRows depth free;
+  let actual := rawModify original oldRows newRows before;
+  SourceCurrentAllocatedRawRebuild.NodeReceipt formulas solver inventory original oldRows newRows before actual.fst
+      actual.snd ∧
+    Frame formulas solver inventory actual.snd ∧
+      Fits (constructorProfile newRows.length profile) actual.snd ∧
+        actual.snd.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + 1 ∧
+          actual.snd.native.machine.heap.edges.next = before.native.machine.heap.edges.next
+
+case pos
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+entry : Interned InternedBinderProtocol.NodeKey
+oldRows newRows : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+before : Checked width
+frame : Frame formulas solver inventory before
+profile : Profile
+fits : Fits profile before
+available : Available before.native.machine.heap (Value.node entry oldRows depth free)
+resident : Edges before.native.machine.heap newRows
+receipt :
+  SourceCurrentAllocatedRawRebuild.NodeReceipt formulas solver inventory (Value.node entry oldRows depth free) oldRows
+    newRows before (Value.node entry oldRows depth free, before).fst (Value.node entry oldRows depth free, before).snd
+same : List.map (fun row => row.entry.identity) newRows = List.map (fun row => row.entry.identity) oldRows
+⊢ let original := Value.node entry oldRows depth free;
+  let actual := rawModify original oldRows newRows before;
+  SourceCurrentAllocatedRawRebuild.NodeReceipt formulas solver inventory original oldRows newRows before actual.fst
+      actual.snd ∧
+    Frame formulas solver inventory actual.snd ∧
+      Fits (constructorProfile newRows.length profile) actual.snd ∧
+        actual.snd.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + 1 ∧
+          actual.snd.native.machine.heap.edges.next = before.native.machine.heap.edges.next
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/raw-numeric-direct-1.source.lean:83:6: error: Type mismatch: After simplification, term
+  have this :=
+    { nodes := resources.left.nodes, edges := resources.left.edges, domains := fits.domains,
+      stored := resources.left.stored };
+  this
+ has type
+  @Fits width (constructorProfile newRows.length profile)
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before
+      { heap := (run (makeNode newRows) before.native.machine.heap).snd, equality := before.operations })
+but is expected to have type
+  @Fits width (constructorProfile newRows.length profile)
+    {
+      native :=
+        SourceEqualityNativeScoped.advanceHeap before.native (run (makeNode newRows) before.native.machine.heap).snd,
+      operations := before.operations }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/raw-numeric-direct-1.source.lean:88:6: error: Type mismatch: After simplification, term
+  resources.right.right
+ has type
+  And ((run (makeNode newRows) before.native.machine.heap).snd.nodes.next ≤ before.native.machine.heap.nodes.next + 1)
+    ((run (makeNode newRows) before.native.machine.heap).snd.edges.next = before.native.machine.heap.edges.next)
+but is expected to have type
+  And
+    ((SourceEqualityNativeScoped.advanceHeap before.native
+                (run (makeNode newRows) before.native.machine.heap).snd).machine.heap.nodes.next ≤
+      before.native.machine.heap.nodes.next + 1)
+    ((SourceEqualityNativeScoped.advanceHeap before.native
+                (run (makeNode newRows) before.native.machine.heap).snd).machine.heap.edges.next =
+      before.native.machine.heap.edges.next)

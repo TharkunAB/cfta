@@ -1,0 +1,46 @@
+SourceCurrentInheritedNumeric SHA256 5a6c754a410949d23b56819888fa2bdcc50f1d96c2791c9ce3879c459fd7dbd1
+
+48: theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+49:     (inventory : Inventory) (original : Guard) (inherited : EqValue) (before : Caller width) (memos : Memos)
+50:     (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+51:     (profile : Profile) (fits : Fits profile before.checked)
+52:     (live : inherited ≠ .contradiction → FieldAvailable before.checked.operations original ∧
+53:       EqReady before.checked.operations.constraints inherited) :
+54:     ∃ combined, SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory original inherited before.checked combined ∧
+55:       Frame formulas solver inventory (SourceCurrentAllocatedInheritedPrefix.state before.checked original inherited) ∧
+56:       Fits profile (SourceCurrentAllocatedInheritedPrefix.state before.checked original inherited) ∧
+57:       Post formulas solver inventory before
+58:         (advance before (SourceCurrentAllocatedInheritedPrefix.state before.checked original inherited) before.fourth before.merge) memos := by
+
+73: theorem resident_complete (formulas : SourceGuards.Formulas FullSyntax.Formula)
+74:     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+75:     (edge : EdgeValue Symbol Guard) (inherited : EqValue) (before : Caller width) (memos : Memos)
+76:     (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+77:     (profile : Profile) (fits : Fits profile before.checked)
+78:     (resident : inherited ≠ .contradiction → InternedEdgeResidency.EdgeResident before.checked.native.machine.heap edge)
+79:     (inheritedReady : inherited ≠ .contradiction → EqReady before.checked.operations.constraints inherited) :
+80:     ∃ combined, SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited before.checked combined ∧
+81:       Frame formulas solver inventory (prefixState before edge inherited).checked ∧ Fits profile (prefixState before edge inherited).checked ∧
+82:       Post formulas solver inventory before (prefixState before edge inherited) memos := by
+
+88: theorem descent (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+89:     (inventory : Inventory) (before : Caller width) (memos : Memos) (combined : EqValue) (index : Nat)
+90:     (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+91:     (profile : Profile) (fits : Fits profile before.checked) (inheritedReady : EqReady before.checked.operations.constraints combined) :
+92:     SourceCurrentAllocatedPartialDescent.Receipt formulas solver inventory before combined index ∧
+93:       Frame formulas solver inventory (descend before combined index).2.checked ∧
+94:       Fits profile (descend before combined index).2.checked ∧
+95:       Post formulas solver inventory before (descend before combined index).2 memos := by
+
+102: theorem prefix_descent (formulas : SourceGuards.Formulas FullSyntax.Formula)
+103:     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+104:     (edge : EdgeValue Symbol Guard) (inherited : EqValue) (index : Nat) (before : Caller width) (memos : Memos)
+105:     (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+106:     (profile : Profile) (fits : Fits profile before.checked)
+107:     (resident : inherited ≠ .contradiction → InternedEdgeResidency.EdgeResident before.checked.native.machine.heap edge)
+108:     (inheritedReady : inherited ≠ .contradiction → EqReady before.checked.operations.constraints inherited) :
+109:     ∃ combined, SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited before.checked combined ∧
+110:       SourceCurrentAllocatedPartialDescent.Receipt formulas solver inventory (prefixState before edge inherited) combined index ∧
+111:       Frame formulas solver inventory (descend (prefixState before edge inherited) combined index).2.checked ∧
+112:       Fits profile (descend (prefixState before edge inherited) combined index).2.checked ∧
+113:       Post formulas solver inventory before (descend (prefixState before edge inherited) combined index).2 memos := by

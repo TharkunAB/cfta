@@ -1,0 +1,170 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-1.source.lean:73:6: error: Dependent elimination failed: Failed to solve equation
+  (match
+      keepFirst middle.checked.native.machine.heap.edgeRecords
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+          constraint := edge.entry.key.constraint }
+        ((fun entry => EdgeValue.mk entry results)
+          (intern middle.checked.native.machine.heap.edges
+              { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+                constraint := edge.entry.key.constraint }).fst)
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+          constraint := edge.entry.key.constraint } with
+    | some x => x
+    | none =>
+      (fun entry => EdgeValue.mk entry results)
+        (intern middle.checked.native.machine.heap.edges
+            { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results,
+              constraint := edge.entry.key.constraint }).fst) =
+    match
+      keepFirst middle✝.checked.native.machine.heap.edgeRecords
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+          constraint := edge.entry.key.constraint }
+        ((fun entry => EdgeValue.mk entry results✝)
+          (intern middle✝.checked.native.machine.heap.edges
+              { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+                constraint := edge.entry.key.constraint }).fst)
+        { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+          constraint := edge.entry.key.constraint } with
+    | some x => x
+    | none =>
+      (fun entry => EdgeValue.mk entry results✝)
+        (intern middle✝.checked.native.machine.heap.edges
+            { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf results✝,
+              constraint := edge.entry.key.constraint }).fst
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-1.source.lean:80:21: error: Tactic `rfl` failed: The left-hand side
+  SourceCurrentAllocatedPartialWorker.children f g s r e p h m c n budget
+    SourceEqualityConstraintAllocation.Value.contradiction values before
+is not definitionally equal to the right-hand side
+  SourceCurrentAllocatedPartialWorker.Outcome.done (EqualityLeafProjectionRuntimeEmpty.erase values) before
+
+case contradiction
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width budget : Nat
+values : List Node
+before : Caller width
+f g s r e p h m c n : Nat
+terminal :
+  SourceEqualityConstraintAllocation.Value.contradiction = SourceEqualityConstraintAllocation.Value.contradiction ∨
+    values = []
+⊢ SourceCurrentAllocatedPartialWorker.children f g s r e p h m c n budget
+      SourceEqualityConstraintAllocation.Value.contradiction values before =
+    SourceCurrentAllocatedPartialWorker.Outcome.done (EqualityLeafProjectionRuntimeEmpty.erase values) before
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-1.source.lean:86:8: error: Tactic `rfl` failed: The left-hand side
+  SourceCurrentAllocatedPartialWorker.children f g s r e p h m c n budget
+    (SourceEqualityConstraintAllocation.Value.live identity✝ records✝) [] before
+is not definitionally equal to the right-hand side
+  SourceCurrentAllocatedPartialWorker.Outcome.done [] before
+
+case live.inr.nil
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width budget : Nat
+before : Caller width
+f g s r e p h m c n identity✝ : Nat
+records✝ : List SourceEqualityClassOrder.Record
+⊢ SourceCurrentAllocatedPartialWorker.children f g s r e p h m c n budget
+      (SourceEqualityConstraintAllocation.Value.live identity✝ records✝) [] before =
+    SourceCurrentAllocatedPartialWorker.Outcome.done [] before
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-1.source.lean:145:8: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  edge.children = []
+
+case live
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+inherited : EqValue
+edge : Edge
+before : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+resident : EdgeResident before.checked.native.machine.heap edge
+inheritedReady : EqReady before.checked.operations.constraints inherited
+terminal✝ :
+  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+      Except.ok (some SourceEqualityConstraintAllocation.Value.contradiction) ∨
+    edge.children = []
+firstFrame : Frame formulas solver inventory (prefixState before edge inherited).checked
+firstFits : Fits profile (prefixState before edge inherited).checked
+firstPost : Post formulas solver inventory before (prefixState before edge inherited) memos
+identity : Nat
+records : List SourceEqualityClassOrder.Record
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited
+    before.checked (SourceEqualityConstraintAllocation.Value.live identity records)
+terminal :
+  SourceEqualityConstraintAllocation.Value.live identity records =
+      SourceEqualityConstraintAllocation.Value.contradiction ∨
+    edge.children = []
+empty : edge.children = []
+⊢ ∃ results children,
+    ChildrenReads formulas solver children memos memos ∧
+      Values (prefixState before edge inherited).checked.native.machine.heap results
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-1.source.lean:123:113: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+inherited : EqValue
+edge : Edge
+before : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+resident : EdgeResident before.checked.native.machine.heap edge
+inheritedReady : EqReady before.checked.operations.constraints inherited
+terminal✝ :
+  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+      Except.ok (some SourceEqualityConstraintAllocation.Value.contradiction) ∨
+    edge.children = []
+combined : EqValue
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited
+    before.checked combined
+firstFrame : Frame formulas solver inventory (prefixState before edge inherited).checked
+firstFits : Fits profile (prefixState before edge inherited).checked
+firstPost : Post formulas solver inventory before (prefixState before edge inherited) memos
+terminal : combined = SourceEqualityConstraintAllocation.Value.contradiction ∨ edge.children = []
+results : List Node
+children :
+  Children budget combined edge.children (prefixState before edge inherited) results (prefixState before edge inherited)
+childReads : ChildrenReads formulas solver children memos memos
+available : Values (prefixState before edge inherited).checked.native.machine.heap results
+same : results.length = edge.children.length
+kept : EdgeResident (SourceCurrentAllocatedNativeEffects.physical (prefixState before edge inherited).checked).heap edge
+rebuilt :
+  have actual := rawEdge edge results (prefixState before edge inherited).checked;
+  SourceCurrentAllocatedRawRebuild.EdgeReceipt formulas solver inventory edge results
+      (prefixState before edge inherited).checked actual.fst actual.snd ∧
+    Frame formulas solver inventory actual.snd ∧
+      Fits (constructorProfile results.length profile) actual.snd ∧
+        actual.snd.native.machine.heap.nodes.next =
+            (prefixState before edge inherited).checked.native.machine.heap.nodes.next ∧
+          actual.snd.native.machine.heap.edges.next ≤
+            (prefixState before edge inherited).checked.native.machine.heap.edges.next + 1
+last :
+  Post formulas solver inventory (prefixState before edge inherited)
+    (advance (prefixState before edge inherited) (rawEdge edge results (prefixState before edge inherited).checked).snd
+      (prefixState before edge inherited).fourth (prefixState before edge inherited).merge)
+    memos
+actual : Descendants budget inherited edge before (rawEdge edge results (prefixState before edge inherited).checked).fst
+  (advance (prefixState before edge inherited) (rawEdge edge results (prefixState before edge inherited).checked).snd
+    (prefixState before edge inherited).fourth (prefixState before edge inherited).merge) :=
+  Descendants.run prefixReceipt.actual children
+⊢ ∃ result after, Receipt formulas solver inventory profile budget inherited edge before memos result after

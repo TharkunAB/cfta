@@ -1,0 +1,18 @@
+SourceCurrentDescendantsNumeric SHA256 660c6a355f9b071f639e1db7706495149887e641acaeffcac5bae50380c246e9
+
+66: structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+67:     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+68:     (profile : Profile) (budget : Nat) (inherited : EqValue) (edge : Edge)
+69:     (before : Caller width) (memos : Memos) (result : Edge) (after : Caller width) : Prop where
+
+91: theorem terminal_complete
+92:     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+93:     (inventory : Inventory) (budget : Nat) (inherited : EqValue) (edge : Edge) (before : Caller width) (memos : Memos)
+94:     (initial : Context formulas solver inventory before memos)
+95:     (frame : Frame formulas solver inventory before.checked) (profile : Profile) (fits : Fits profile before.checked)
+96:     (resident : EdgeResident before.checked.native.machine.heap edge)
+97:     (inheritedReady : EqReady before.checked.operations.constraints inherited)
+98:     (terminal : (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).1 =
+99:       .ok (some .contradiction) ∨ edge.children = []) :
+100:     ∃ result after, Receipt formulas solver inventory profile budget inherited edge before memos result after := by
+

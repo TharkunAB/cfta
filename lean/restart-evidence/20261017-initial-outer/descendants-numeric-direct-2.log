@@ -1,0 +1,119 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-2.source.lean:134:70: error: don't know how to synthesize implicit argument `combined`
+  @DescendantsReads.run inst✝² inst✝¹ inst✝ width formulas solver budget combined edge before inherited results
+    (prefixState before edge inherited) children memos memos ?m.563 childReads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+inherited : EqValue
+edge : Edge
+before : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+resident : EdgeResident before.checked.native.machine.heap edge
+inheritedReady : EqReady before.checked.operations.constraints inherited
+terminal✝ :
+  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+      Except.ok (some SourceEqualityConstraintAllocation.Value.contradiction) ∨
+    edge.children = []
+combined : EqValue
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited
+    before.checked combined
+firstFrame : Frame formulas solver inventory (prefixState before edge inherited).checked
+firstFits : Fits profile (prefixState before edge inherited).checked
+firstPost : Post formulas solver inventory before (prefixState before edge inherited) memos
+terminal : combined = SourceEqualityConstraintAllocation.Value.contradiction ∨ edge.children = []
+results : List Node
+children :
+  Children budget combined edge.children (prefixState before edge inherited) results (prefixState before edge inherited)
+childReads : ChildrenReads formulas solver children memos memos
+available : Values (prefixState before edge inherited).checked.native.machine.heap results
+same : results.length = edge.children.length
+kept : EdgeResident (SourceCurrentAllocatedNativeEffects.physical (prefixState before edge inherited).checked).heap edge
+rebuilt :
+  have actual := rawEdge edge results (prefixState before edge inherited).checked;
+  SourceCurrentAllocatedRawRebuild.EdgeReceipt formulas solver inventory edge results
+      (prefixState before edge inherited).checked actual.fst actual.snd ∧
+    Frame formulas solver inventory actual.snd ∧
+      Fits (constructorProfile results.length profile) actual.snd ∧
+        actual.snd.native.machine.heap.nodes.next =
+            (prefixState before edge inherited).checked.native.machine.heap.nodes.next ∧
+          actual.snd.native.machine.heap.edges.next ≤
+            (prefixState before edge inherited).checked.native.machine.heap.edges.next + 1
+last :
+  Post formulas solver inventory (prefixState before edge inherited)
+    (advance (prefixState before edge inherited) (rawEdge edge results (prefixState before edge inherited).checked).snd
+      (prefixState before edge inherited).fourth (prefixState before edge inherited).merge)
+    memos
+actual : Descendants budget inherited edge before (rawEdge edge results (prefixState before edge inherited).checked).fst
+  (advance (prefixState before edge inherited) (rawEdge edge results (prefixState before edge inherited).checked).snd
+    (prefixState before edge inherited).fourth (prefixState before edge inherited).merge) := ⋯
+⊢ (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+    Except.ok (some combined)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-outer/descendants-numeric-direct-2.source.lean:100:113: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+inherited : EqValue
+edge : Edge
+before : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+resident : EdgeResident before.checked.native.machine.heap edge
+inheritedReady : EqReady before.checked.operations.constraints inherited
+terminal✝ :
+  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+      Except.ok (some SourceEqualityConstraintAllocation.Value.contradiction) ∨
+    edge.children = []
+combined : EqValue
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited
+    before.checked combined
+firstFrame : Frame formulas solver inventory (prefixState before edge inherited).checked
+firstFits : Fits profile (prefixState before edge inherited).checked
+firstPost : Post formulas solver inventory before (prefixState before edge inherited) memos
+terminal : combined = SourceEqualityConstraintAllocation.Value.contradiction ∨ edge.children = []
+results : List Node
+children :
+  Children budget combined edge.children (prefixState before edge inherited) results (prefixState before edge inherited)
+childReads : ChildrenReads formulas solver children memos memos
+available : Values (prefixState before edge inherited).checked.native.machine.heap results
+same : results.length = edge.children.length
+kept : EdgeResident (SourceCurrentAllocatedNativeEffects.physical (prefixState before edge inherited).checked).heap edge
+rebuilt :
+  have actual := rawEdge edge results (prefixState before edge inherited).checked;
+  SourceCurrentAllocatedRawRebuild.EdgeReceipt formulas solver inventory edge results
+      (prefixState before edge inherited).checked actual.fst actual.snd ∧
+    Frame formulas solver inventory actual.snd ∧
+      Fits (constructorProfile results.length profile) actual.snd ∧
+        actual.snd.native.machine.heap.nodes.next =
+            (prefixState before edge inherited).checked.native.machine.heap.nodes.next ∧
+          actual.snd.native.machine.heap.edges.next ≤
+            (prefixState before edge inherited).checked.native.machine.heap.edges.next + 1
+last :
+  Post formulas solver inventory (prefixState before edge inherited)
+    (advance (prefixState before edge inherited) (rawEdge edge results (prefixState before edge inherited).checked).snd
+      (prefixState before edge inherited).fourth (prefixState before edge inherited).merge)
+    memos
+actual : Descendants budget inherited edge before (rawEdge edge results (prefixState before edge inherited).checked).fst
+  (advance (prefixState before edge inherited) (rawEdge edge results (prefixState before edge inherited).checked).snd
+    (prefixState before edge inherited).fourth (prefixState before edge inherited).merge) :=
+  Descendants.run prefixReceipt.actual children
+⊢ ∃ result after, Receipt formulas solver inventory profile budget inherited edge before memos result after

@@ -1,5 +1,73 @@
 # Full formalization coverage
 
+## Current initial outer branches and recursive height boundary
+
+Updated: 2026-10-17 15:55 CEST. Starting checkpoint is 48fdc955.
+Proof commit is 85ba15b0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-outer-branches.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-initial-outer/.
+
+Initial Context, Frame, Fits, availability, inherited readiness, and pure
+initial branch conditions now construct raw rebuilds, inherited prefixes
+and descents, terminal node bodies, terminal node memo calls, and terminal
+descendants. Their actual returns retain strict reads, reached checks,
+same-inventory Post, Frame, Fits, availability, and guarded language.
+The terminal outer branches accept all ten worker fuels, including zero.
+
+Ready node hits support every input shape and retain the exact caller.
+Fresh terminal calls run their actual captured owner and finish that exact
+cell. Successful terminal completion excludes only the queried initial
+busy observation. It does not require globally idle tables. Empty, explicit
+Union, and resident Mu are terminal bodies. Open Union alternatives remain
+permitted. General ordinary node evaluation remains open.
+
+Descendants construct their own inherited prefix and raw rebuild. They
+complete when the initial prefix yields contradiction or the original
+child list is empty. The contradiction branch erases child slots. The live
+empty branch uses the empty walk. No future graph, successful worker,
+returned invariant, finite input Cap, or whole-forest closedness is a
+producer premise. General nonempty live child walks remain open.
+
+A source-constructed accepted plain Mu increases ordinary height from
+zero to one under actual Head and Required execution. This refutes a
+general Required height nonincrease lemma. It does not prove an outer
+cycle, divergence, a full Parent height counterexample, or a Haskell defect.
+The old finite-ordinary theorem retains its stated shape domain. The old
+OuterCallerCycle input is repaired by the current endpoint gate.
+
+Next prove causal progress for actual returned children and captured warm
+owners. A candidate rank must account for constraint origins, pending path
+work, and unequal-length edits that can move constrained values deeper.
+This rank is not yet proved. Then complete nonempty live walks, ordered
+rows, ordinary node bodies, and full mutual recursion. Logical resource
+majorants do not supply a decreasing outer rank or concrete host capacity.
+Repeated-pass convergence, current Haskell adapters, lazy forcing and
+publication, concrete memo events, runtime capacity, and complete public
+Haskell correspondence remain open. The whole-library goal remains active.
+
+Audit passes 3031 jobs and 66145 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 367 MiB peak memory. All six final strict
+logs are empty. All six canonical targets pass. Public probes cover 17
+handwritten declarations and 27 Receipt projections. Constructed probes
+cover twelve integrations. Read checkpoint-validation.json and README for
+exact signature, axiom, component, and hash counts. Failed attempts retain
+their source and raw logs. Only standard kernel axioms are permitted.
+Preservation retains 16493 starting files, 3024 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 100 frozen module manifests with 788 entries. Audit adds
+six imports. Older proofs and evidence retain their bytes.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+
 ## Current initial parent and outer edge calls
 
 Updated: 2026-10-17 15:20 CEST. Starting checkpoint is 6adf1878.
