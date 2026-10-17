@@ -1,0 +1,174 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:74:56: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:120:24: error: unsolved goals
+case cons.mk
+Symbol Guard : Type
+valid : Guard → Prop
+depth : Nat
+rest : List (EdgeValue Symbol Guard)
+ih :
+  Within (depth + 1) (rows valid rest) ↔
+    ∀ (child : Value Symbol Guard), child ∈ List.flatMap EdgeValue.children rest → Within depth (profile valid child)
+entry : Cache.Interned (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+⊢ ((∀ (value : Value Symbol Guard), value ∈ values → Within depth (profile valid value)) ∧
+      ∀ (child : Value Symbol Guard) (x : EdgeValue Symbol Guard),
+        x ∈ rest →
+          (child ∈
+              match x with
+              | EdgeValue.mk entry children => children) →
+            Within depth (profile valid child)) ↔
+    ∀ (child : Value Symbol Guard),
+      (child ∈ values ∨
+          ∃ a,
+            a ∈ rest ∧
+              child ∈
+                match a with
+                | EdgeValue.mk entry children => children) →
+        Within depth (profile valid child)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:128:46: error: Type mismatch
+  Nat.le_refl ?m.42
+has type
+  ?m.42 ≤ ?m.42
+but is expected to have type
+  Within 0 (profile valid Value.empty)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:129:64: error: Type mismatch
+  Nat.le_refl ?m.62
+has type
+  ?m.62 ≤ ?m.62
+but is expected to have type
+  Within 0 (profile valid (Value.reference name))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:162:30: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:134:72: error: unsolved goals
+Symbol Guard : Type
+valid : Guard → Prop
+value : Value Symbol Guard
+a✝¹ :
+  ∀ (y : Value Symbol Guard),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => sizeOf x) y value → (Within 0 (profile valid y) ↔ Annotated valid y)
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+x✝ :
+  ∀ (y : Value Symbol Guard),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => sizeOf x) y (Value.node entry edges level free) →
+      (Within 0 (profile valid y) ↔ Annotated valid y)
+h✝ : value = Value.node entry edges level free
+a✝ :
+  (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → valid edge.entry.key.constraint) ∧
+    ∀ (child : Value Symbol Guard), child ∈ List.flatMap EdgeValue.children edges → Within 0 (profile valid child)
+guards : ∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → valid edge.entry.key.constraint
+children :
+  ∀ (child : Value Symbol Guard), child ∈ List.flatMap EdgeValue.children edges → Within 0 (profile valid child)
+child : Value Symbol Guard
+member : child ∈ List.flatMap EdgeValue.children edges
+⊢ sizeOf (List.flatMap EdgeValue.children edges) ≤ level + sizeOf free + sizeOf edges + sizeOf entry + 1
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:138:48: error: unsolved goals
+Symbol Guard : Type
+valid : Guard → Prop
+value : Value Symbol Guard
+a✝ :
+  ∀ (y : Value Symbol Guard),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => sizeOf x) y value → (Within 0 (profile valid y) ↔ Annotated valid y)
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+x✝ :
+  ∀ (y : Value Symbol Guard),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => sizeOf x) y (Value.node entry edges level free) →
+      (Within 0 (profile valid y) ↔ Annotated valid y)
+h✝² : value = Value.node entry edges level free
+annotated : Annotated valid (Value.node entry edges level free)
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+guards✝ : ∀ (edge : EdgeValue Symbol Guard), edge ∈ edges✝ → valid edge.entry.key.constraint
+children✝ : ∀ (child : Value Symbol Guard), child ∈ List.flatMap EdgeValue.children edges✝ → Annotated valid child
+h✝¹ : Value.node entry edges level free = Value.node entry✝ edges✝ depth✝ free✝
+entry_eq✝ : entry = entry✝
+edges_eq✝ : edges ≍ edges✝
+guards : ∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → valid edge.entry.key.constraint
+children : ∀ (child : Value Symbol Guard), child ∈ List.flatMap EdgeValue.children edges → Annotated valid child
+depth_eq✝ : level = depth✝
+free_eq✝ : free = free✝
+h✝ : annotated ≍ ⋯
+child : Value Symbol Guard
+member : child ∈ List.flatMap EdgeValue.children edges
+⊢ sizeOf (List.flatMap EdgeValue.children edges) ≤ level + sizeOf free + sizeOf edges + sizeOf entry + 1
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:172:54: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:172:54: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑val✝
+ b := ↑depth
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:173:53: error: Type mismatch
+  (rows_within_succ valid depth edges).mpr ih
+has type
+  Within (depth + 1) (rows valid edges)
+but is expected to have type
+  Within (depth + 1) (profile valid (Value.node entry edges level free))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:174:56: error: Type mismatch
+  (children_within valid depth members).mpr ih
+has type
+  Within depth (SourceCurrentConstrainedCapGuardDepth.children valid members)
+but is expected to have type
+  Within depth (profile valid (Value.union entry members level free))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:187:53: error: Application type mismatch: The argument
+  bounded
+has type
+  Within (depth + 1) (profile valid (Value.node entry edges level free))
+but is expected to have type
+  Within (depth + 1) (rows valid edges)
+in the application
+  (rows_within_succ valid depth edges).mp bounded
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:190:60: error: Application type mismatch: The argument
+  bounded
+has type
+  Within (depth + 1) (profile valid (Value.union entry members level free))
+but is expected to have type
+  Within (depth + 1) (children valid members)
+in the application
+  (children_within valid (depth + 1) members).mp bounded
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:194:18: error: Tactic `split` failed: Specifying multiple targets (the goal and hypothesis`bounded`) is not supported
+
+Hint: Specify a single target to split, or use `split at *` to split the first target that can be automatically split
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:186:72: error: unsolved goals
+Symbol Guard : Type
+valid : Guard → Prop
+_x : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)
+a✝² :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y _x →
+      Cap valid y.1 y.2.1
+depth : Nat
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+bounded✝¹ : Within (depth + 1) (profile valid (Value.node entry edges level free))
+child : Value Symbol Guard
+member : child ∈ List.flatMap EdgeValue.children edges
+value : (value : Value Symbol Guard) ×' Within (depth + 1) (profile valid value)
+a✝¹ :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y
+        ⟨depth + 1, value⟩ →
+      Cap valid y.1 y.2.1
+bounded✝ bounded : Within (depth + 1) (profile valid (Value.node entry edges level free))
+a✝ :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y
+        ⟨depth + 1, ⟨Value.node entry edges level free, bounded⟩⟩ →
+      Cap valid y.1 y.2.1
+⊢ sizeOf (List.flatMap EdgeValue.children edges) ≤ level + sizeOf free + sizeOf edges + sizeOf entry + 1

@@ -1,0 +1,81 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:223:56: error: unsolved goals
+Symbol Guard : Type
+valid : Guard → Prop
+_x : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)
+a✝² :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y _x →
+      Cap valid y.1 y.2.1
+depth✝ : Nat
+value✝ : (value : Value Symbol Guard) ×' Within depth✝ (profile valid value)
+a✝¹ :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y
+        ⟨depth✝, value✝⟩ →
+      Cap valid y.1 y.2.1
+value : Value Symbol Guard
+bounded✝¹ : Within depth✝ (profile valid value)
+a✝ :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y
+        ⟨depth✝, ⟨value, bounded✝¹⟩⟩ →
+      Cap valid y.1 y.2.1
+depth : Nat
+h✝¹ : depth✝ = depth + 1
+bounded✝ : Within (depth + 1) (profile valid value)
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+h✝ : value = Value.node entry edges level free
+bounded : Within (depth + 1) (profile valid (Value.node entry edges level free))
+child : Value Symbol Guard
+member : child ∈ List.flatMap EdgeValue.children edges
+⊢ sizeOf child < sizeOf value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:223:56: error: unsolved goals
+Symbol Guard : Type
+valid : Guard → Prop
+_x : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)
+a✝² :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y _x →
+      Cap valid y.1 y.2.1
+depth✝ : Nat
+value✝ : (value : Value Symbol Guard) ×' Within depth✝ (profile valid value)
+a✝¹ :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y
+        ⟨depth✝, value✝⟩ →
+      Cap valid y.1 y.2.1
+value : Value Symbol Guard
+bounded✝¹ : Within depth✝ (profile valid value)
+a✝ :
+  ∀ (y : (depth : Nat) ×' (value : Value Symbol Guard) ×' Within depth (profile valid value)),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x => PSigma.casesOn x fun depth value => PSigma.casesOn value fun value bounded => sizeOf value) y
+        ⟨depth✝, ⟨value, bounded✝¹⟩⟩ →
+      Cap valid y.1 y.2.1
+depth : Nat
+h✝¹ : depth✝ = depth + 1
+bounded✝ : Within (depth + 1) (profile valid value)
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+h✝ : value = Value.union entry members level free
+bounded : Within (depth + 1) (profile valid (Value.union entry members level free))
+child : Value Symbol Guard
+member : child ∈ members
+⊢ sizeOf child < sizeOf value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapGuardDepth.lean:219:84: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all only [profile, ite_true, ite_false, Within, Nat.zero_le]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

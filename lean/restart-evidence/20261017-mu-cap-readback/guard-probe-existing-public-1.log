@@ -1,0 +1,194 @@
+'MicroCFTA.InternedGuardedProbeHeap.hit_language' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedGuardedProbeHeap.hit_language : ∀ {Guard Symbol : Type}
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (environment : MicroCFTA.InternedGuardedLanguage.Env Symbol)
+  (smart : Bool) (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @MicroCFTA.InternedGuardedProbeHeap.Heap Symbol Guard state →
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+                (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+              (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+            @Eq.{1} (MicroCFTA.BinderLanguage.Lang Symbol)
+              (@MicroCFTA.InternedGuardedLanguage.meaning Guard Symbol holds environment
+                (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard smart value))
+              (@MicroCFTA.BinderLanguage.least Symbol fun candidate =>
+                @MicroCFTA.InternedGuardedLanguage.meaning Guard Symbol holds
+                  (@MicroCFTA.InternedGuardedLanguage.bind Symbol environment
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    candidate)
+                  ordinary)
+'MicroCFTA.InternedGuardedBudgetProbeHeap.hit_language' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedGuardedBudgetProbeHeap.hit_language : ∀ {Guard Symbol : Type}
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (environment : MicroCFTA.InternedGuardedBudget.Env Symbol)
+  (smart : Bool) (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @MicroCFTA.InternedGuardedBudgetProbeHeap.Heap Symbol Guard state →
+          @MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard state →
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+                  (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+                (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+              @Eq.{1} (MicroCFTA.BinderBudgetLanguage.Lang Symbol)
+                (@MicroCFTA.InternedGuardedBudget.meaning Guard Symbol holds environment
+                  (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard smart value))
+                (@ite.{1} (MicroCFTA.BinderBudgetLanguage.Lang Symbol)
+                  (@Eq.{1} Bool
+                    (smart.not.or (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Symbol Guard depth ordinary))
+                    true)
+                  (instDecidableEqBool
+                    (smart.not.or (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Symbol Guard depth ordinary))
+                    true)
+                  (@MicroCFTA.BinderBudgetLanguage.mu Symbol fun candidate =>
+                    @MicroCFTA.InternedGuardedBudget.meaning Guard Symbol holds
+                      (@MicroCFTA.InternedGuardedBudget.bind Symbol environment
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        candidate)
+                      ordinary)
+                  (@MicroCFTA.InternedGuardedBudget.meaning Guard Symbol holds
+                    (@MicroCFTA.InternedGuardedBudget.bind Symbol environment
+                      (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                      fun x x_1 => False)
+                    ordinary))
+'MicroCFTA.InternedGuardedBudgetProbeHeap.uses_eq' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedGuardedBudgetProbeHeap.uses_eq : ∀ {Symbol Guard : Type}
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.InternedDeepLocalNormal.Local Symbol Guard
+          (MicroCFTA.InternedBinderProtocol.Reference.interned
+            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+          body →
+        @MicroCFTA.InternedFreshOrdinaryDepthHeap.Correct Symbol Guard entry body depth ordinary →
+          @Eq.{1} Bool
+            (@decide
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedDeepFreeDepth.deepNames Symbol Guard body)
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)))
+              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedDeepFreeDepth.deepNames Symbol Guard body)))
+            (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Symbol Guard depth ordinary)
+'MicroCFTA.InternedFreshOrdinarySemanticOrigins.build_origins' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinarySemanticOrigins.build_origins : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard state environment →
+    @MicroCFTA.InternedFreshOrdinarySemanticOrigins.Heap Symbol Guard inst state →
+      @MicroCFTA.InternedFreshOrdinarySemanticOrigins.Heap Symbol Guard inst
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))
+'MicroCFTA.InternedFreshOrdinarySemanticOrigins.closed_origins' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinarySemanticOrigins.closed_origins : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinarySemanticOrigins.Heap Symbol Guard inst
+    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)))
+'MicroCFTA.InternedFreshOrdinaryDepthHeap.hit_observation' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryDepthHeap.hit_observation : ∀ {Symbol Guard : Type} (smart : Bool)
+  (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard state →
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+                (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+              (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+            And
+              (@Eq.{1} Nat
+                (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard smart value))
+                (@MicroCFTA.InternedFreshOrdinaryDepthHeap.decodedDepth Symbol Guard smart depth ordinary))
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                Iff
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedDeepFreeDepth.deepNames Symbol Guard
+                      (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard smart value))
+                    name)
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.decodedDeep Symbol Guard smart depth ordinary) name))
+'MicroCFTA.InternedProfileHeap.stored_probes' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedProfileHeap.stored_probes : ∀ {Symbol Guard : Type}
+  (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+            (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun entry =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun body =>
+              @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup : ∀ {Symbol Guard : Type}
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+            (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+            @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  bound)
+                bound ordinary →
+              @Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun entry =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun body =>
+                  And
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value) body)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+'MicroCFTA.SourceCurrentHereditaryConstruction.MuStored' does not depend on any axioms
+@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored : {Guard Symbol : Type} →
+  (Guard → Prop) → MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop

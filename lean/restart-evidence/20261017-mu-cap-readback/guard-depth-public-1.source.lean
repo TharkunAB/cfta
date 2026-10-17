@@ -1,0 +1,66 @@
+import MicroCFTA.SourceCurrentConstrainedCapGuardDepth
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.join
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.join
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.raise
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.raise
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_join
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_join
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_zero
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_zero
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_succ
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_zero
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_zero
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_succ
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_within
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_within
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_zero
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_zero
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_succ
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.zero_iff_annotated
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.zero_iff_annotated
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_of_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_of_cap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.cap_of_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.cap_of_profile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_iff_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_iff_cap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_zero_iff
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_zero_iff
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_none_iff
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_none_iff
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_minimal
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_minimal
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_iff_caps
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_iff_caps
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_iff_caps
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_iff_caps
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeNode
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeNode
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeEdge
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeEdge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeUnion
+#check @MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeUnion

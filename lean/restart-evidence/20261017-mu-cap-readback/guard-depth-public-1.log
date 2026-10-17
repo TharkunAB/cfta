@@ -1,0 +1,297 @@
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.join' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapGuardDepth.join : Option.{0} Nat → Option.{0} Nat → Option.{0} Nat
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.raise' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapGuardDepth.raise : Option.{0} Nat → Option.{0} Nat
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost : {Guard : Type} → (Guard → Prop) → Guard → Nat
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within : Nat → Option.{0} Nat → Prop
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile : {Symbol Guard : Type} →
+  (Guard → Prop) → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Option.{0} Nat
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children : {Symbol Guard : Type} →
+  (Guard → Prop) → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Option.{0} Nat
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows : {Symbol Guard : Type} →
+  (Guard → Prop) → List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Option.{0} Nat
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_join' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_join : ∀ (depth : Nat) (first second : Option.{0} Nat),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.join first second))
+    (And (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth first)
+      (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth second))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_zero' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_zero : ∀ (value : Option.{0} Nat),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.raise value))
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_succ' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_raise_succ : ∀ (depth : Nat) (value : Option.{0} Nat),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.raise value))
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_zero' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_zero : ∀ {Guard : Type} (valid : Guard → Prop)
+  (guard : Guard),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@Option.some.{0} Nat (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost Guard valid guard)))
+    (valid guard)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_succ' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost_succ : ∀ {Guard : Type} (valid : Guard → Prop)
+  (guard : Guard) (depth : Nat),
+  MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (@Option.some.{0} Nat (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.guardCost Guard valid guard))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_within' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_within : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children Symbol Guard valid values))
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_zero' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_zero : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows Symbol Guard valid edges))
+    (And
+      (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+          valid
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+              (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge))))
+      (∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard) edges)
+            child →
+          MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid child)))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_succ' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_within_succ : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows Symbol Guard valid edges))
+    (∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard) edges)
+          child →
+        MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid child))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_mono : ∀ {first last : Nat} {value : Option.{0} Nat},
+  MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within first value →
+    @LE.le.{0} Nat instLENat first last → MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within last value
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.zero_iff_annotated' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.zero_iff_annotated : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value))
+    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_of_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_of_cap : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {depth : Nat} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+    MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.cap_of_profile' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.cap_of_profile : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value) →
+    @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_iff_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.within_iff_cap : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value))
+    (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_zero_iff' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_zero_iff : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff
+    (@Eq.{1} (Option.{0} Nat) (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value)
+      (@Option.some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_none_iff' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_none_iff : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff
+    (@Eq.{1} (Option.{0} Nat) (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value)
+      (@Option.none.{0} Nat))
+    (∀ (depth : Nat), Not (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_minimal' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile_minimal : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (actual : Nat),
+  @Eq.{1} (Option.{0} Nat) (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid value)
+      (@Option.some.{0} Nat actual) →
+    ∀ (depth : Nat),
+      Iff (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value)
+        (@LE.le.{0} Nat instLENat actual depth)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_iff_caps' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children_iff_caps : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children Symbol Guard valid values))
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_iff_caps' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows_iff_caps : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+      (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows Symbol Guard valid edges))
+    (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+        @MicroCFTA.SourceCurrentConstrainedCap.Edge Symbol Guard valid depth edge)
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeNode' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeNode : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedEdgeResidency.Linked Symbol Guard state →
+      (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+            @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard state edge) →
+        MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows Symbol Guard valid edges) →
+          MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state)))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeEdge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeEdge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (symbol : Symbol) (guard : Guard)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Cached Symbol Guard state →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value) →
+        (@Eq.{1} Nat depth (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) → valid guard) →
+          MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within
+              (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) depth
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children Symbol Guard valid values) →
+            MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.rows Symbol Guard valid
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                  (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) state))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))
+'MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeUnion' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.makeUnion : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value) →
+      MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.children Symbol Guard valid values) →
+        MicroCFTA.SourceCurrentConstrainedCapGuardDepth.Within depth
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Symbol Guard valid
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values) state)))

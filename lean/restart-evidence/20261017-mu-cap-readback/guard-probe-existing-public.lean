@@ -1,0 +1,31 @@
+import MicroCFTA.InternedGuardedBudgetExecution
+import MicroCFTA.InternedFreshOrdinarySemanticOrigins
+import MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences
+import MicroCFTA.SourceCurrentHereditaryConstruction
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.InternedGuardedProbeHeap.hit_language
+#check @MicroCFTA.InternedGuardedProbeHeap.hit_language
+#print axioms MicroCFTA.InternedGuardedBudgetProbeHeap.hit_language
+#check @MicroCFTA.InternedGuardedBudgetProbeHeap.hit_language
+#print axioms MicroCFTA.InternedGuardedBudgetProbeHeap.uses_eq
+#check @MicroCFTA.InternedGuardedBudgetProbeHeap.uses_eq
+#print axioms MicroCFTA.InternedFreshOrdinarySemanticOrigins.build_origins
+#check @MicroCFTA.InternedFreshOrdinarySemanticOrigins.build_origins
+#print axioms MicroCFTA.InternedFreshOrdinarySemanticOrigins.closed_origins
+#check @MicroCFTA.InternedFreshOrdinarySemanticOrigins.closed_origins
+#print axioms MicroCFTA.InternedFreshOrdinaryDepthHeap.hit_observation
+#check @MicroCFTA.InternedFreshOrdinaryDepthHeap.hit_observation
+#print axioms MicroCFTA.InternedProfileHeap.stored_probes
+#check @MicroCFTA.InternedProfileHeap.stored_probes
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup
+#print axioms MicroCFTA.SourceCurrentHereditaryConstruction.MuStored
+#check @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored

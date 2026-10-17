@@ -1,0 +1,102 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-cap-readback/guard-depth-kernels.lean:85:4: error: Tactic `decide` failed for proposition
+  @Eq.{1} Bool
+    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Nat Bool MicroCFTA.GuardDepthKernels.badValue
+      MicroCFTA.GuardDepthKernels.badValue)
+    Bool.false
+because its `Decidable` instance
+  instDecidableEqBool
+    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Nat Bool MicroCFTA.GuardDepthKernels.badValue
+      MicroCFTA.GuardDepthKernels.badValue)
+    Bool.false
+did not reduce to `Decidable.isTrue` or `Decidable.isFalse`.
+
+After unfolding the instances `decidable_of_decidable_of_iff`, `instDecidableEqBool`, `Bool.decEq`, and `List.instDecidableMemOfLawfulBEq.{u}`, reduction got stuck at the `Decidable` instance
+  Bool.decEq.match_1.{1} (fun a b => Decidable (@Eq.{1} Bool a b))
+    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Nat Bool MicroCFTA.GuardDepthKernels.badValue
+      MicroCFTA.GuardDepthKernels.badValue)
+    Bool.false (fun _ => @Decidable.isTrue (@Eq.{1} Bool Bool.false Bool.false) (@rfl.{1} Bool Bool.false))
+    (fun _ =>
+      @Decidable.isFalse (@Eq.{1} Bool Bool.false Bool.true) fun h =>
+        @Bool.noConfusion.{0} False Bool.false Bool.true h)
+    (fun _ =>
+      @Decidable.isFalse (@Eq.{1} Bool Bool.true Bool.false) fun h =>
+        @Bool.noConfusion.{0} False Bool.true Bool.false h)
+    fun _ => @Decidable.isTrue (@Eq.{1} Bool Bool.true Bool.true) (@rfl.{1} Bool Bool.true)
+'MicroCFTA.GuardDepthKernels.constructed_least_two' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.GuardDepthKernels.constructed_least_two : @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool)
+  fun after =>
+  And
+    (@Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+        (fun a b =>
+          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool
+            a b)
+        MicroCFTA.GuardDepthKernels.ordinaryPlan (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+        (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+        (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) MicroCFTA.GuardDepthKernels.ordinaryValue after))
+    (And
+      (@Eq.{1} (Option.{0} Nat)
+        (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+          MicroCFTA.GuardDepthKernels.ordinaryValue)
+        (@Option.some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+      (And
+        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) MicroCFTA.GuardDepthKernels.ordinaryValue)
+        (Not
+          (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) MicroCFTA.GuardDepthKernels.ordinaryValue))))
+'MicroCFTA.GuardDepthKernels.constructed_positive_probe_warm' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.GuardDepthKernels.constructed_positive_probe_warm : @Exists.{1}
+  (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun before =>
+  And
+    (@Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+        (fun a b =>
+          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool
+            a b)
+        MicroCFTA.GuardDepthKernels.winnerPlan (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+        (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+        (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) MicroCFTA.GuardDepthKernels.winnerValue before))
+    (And
+      (@Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+        (@MicroCFTA.InternedNestedConstruction.request Nat Bool
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+              instDecidableEqBool a b)
+          Bool.true MicroCFTA.GuardDepthKernels.badValue MicroCFTA.GuardDepthKernels.badValue
+          (fun x state =>
+            @MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Nat Bool) state)
+          before)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) MicroCFTA.GuardDepthKernels.badValue before))
+      (And
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Nat Bool MicroCFTA.GuardDepthKernels.badValue
+            MicroCFTA.GuardDepthKernels.badValue)
+          Bool.false)
+        (And
+          (@Eq.{1} (Option.{0} Nat)
+            (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Nat Bool
+              (fun guard => @Eq.{1} Bool guard Bool.true) MicroCFTA.GuardDepthKernels.badValue)
+            (@Option.some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (And
+            (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) MicroCFTA.GuardDepthKernels.badValue)
+            (And
+              (Not
+                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+                  Nat MicroCFTA.GuardDepthKernels.badValue))
+              (@Eq.{1} (Option.{0} Nat)
+                (@MicroCFTA.SourceCurrentConstrainedCapGuardDepth.profile Nat Bool
+                  (fun guard => @Eq.{1} Bool guard Bool.true) MicroCFTA.GuardDepthKernels.winnerValue)
+                (@Option.none.{0} Nat)))))))
