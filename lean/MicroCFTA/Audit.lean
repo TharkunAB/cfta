@@ -2408,6 +2408,9 @@ import MicroCFTA.SourceCurrentConstrainedCapEditForecast
 import MicroCFTA.SourceCurrentConstrainedCapEditScans
 import MicroCFTA.SourceCurrentConstrainedCapEditNumeric
 import MicroCFTA.SourceCurrentConstrainedCapEditListNumeric
+import MicroCFTA.SourceCurrentConstrainedCapClassForecast
+import MicroCFTA.SourceCurrentConstrainedCapClassNumeric
+import MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric
 /-!
 # Proof dependency audit
 
