@@ -1,0 +1,118 @@
+import MicroCFTA.SourceCurrentConstrainedCapClassForecast
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_nil
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_nil
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_nil
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_cons
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_cons
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_cons
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_nil
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_nil
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_nil
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_cons
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_cons
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_cons
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_mono
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_tail
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_tail
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_tail
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_head
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_head
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_head
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_initial
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_initial
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_initial
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_reserved_head
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_reserved_head
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_reserved_head
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_tail
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_tail
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_tail
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_class
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_class
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_class
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_append
+#check @MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_append
+#print MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_append

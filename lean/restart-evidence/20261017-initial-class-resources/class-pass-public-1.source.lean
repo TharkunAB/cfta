@@ -1,0 +1,16 @@
+import MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric.fold
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric.fold
+#print MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric.fold
+#check @MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric.pass
+#print axioms MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric.pass
+#print MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric.pass

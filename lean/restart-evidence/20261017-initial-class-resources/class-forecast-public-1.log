@@ -1,0 +1,1497 @@
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+def MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun record count profile =>
+  MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+    (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+def MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat :=
+fun record count profile =>
+  MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.fuel record count
+    (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count profile) :=
+fun record count profile =>
+  @id.{0}
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count profile))
+    (@id.{0}
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile))
+      (@MicroCFTA.SourceEqualityEdits.Edits.casesOn.{0} MicroCFTA.EqualityNormalize.Path
+        (fun t =>
+          @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) t →
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) (fun action => profile) fun children =>
+                MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                      (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                        (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+                  count profile))
+        (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+        (fun token h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token)
+            (fun x =>
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                  (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) x
+                  (fun action => profile) fun children =>
+                  MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        x))
+                    count profile))
+            (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.refl profile)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+              (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token) h))
+        (fun entries h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+            (fun x =>
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                  (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) x
+                  (fun action => profile) fun children =>
+                  MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        x))
+                    count profile))
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_ge
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                  (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                    (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                  (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_ge record count
+                (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                  (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                    (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                  (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+              count profile)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+              (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) h))
+        (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record))))
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count last)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count last) :=
+fun record count {first last} increase =>
+  @id.{0}
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count last))
+    (@id.{0}
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count first)
+        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count last))
+      (@MicroCFTA.SourceEqualityEdits.Edits.casesOn.{0} MicroCFTA.EqualityNormalize.Path
+        (fun t =>
+          @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) t →
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) (fun action => first) fun children =>
+                MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                      (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                        (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+                  count first)
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) (fun action => last) fun children =>
+                MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                      (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                        (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+                  count last))
+        (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+        (fun token h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token)
+            (fun x =>
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                  (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) x (fun action => first)
+                  fun children =>
+                  MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        x))
+                    count first)
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                  (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) x (fun action => last)
+                  fun children =>
+                  MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        x))
+                    count last))
+            increase (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+              (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token) h))
+        (fun entries h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+            (fun x =>
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                  (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) x (fun action => first)
+                  fun children =>
+                  MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        x))
+                    count first)
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1}
+                  (fun edits => MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) x (fun action => last)
+                  fun children =>
+                  MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        x))
+                    count last))
+            (@MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_mono
+              (fun {first} =>
+                MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                    (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                      (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries))
+                  first)
+              (fun {first last} =>
+                @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_mono record count
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                    (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                      (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries))
+                  first last)
+              count first last increase)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+              (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) h))
+        (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record))))
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count last)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count last) :=
+fun record count {first last} increase =>
+  have returned := @MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono record count first last increase;
+  @id.{0}
+    (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count last))
+    (@id.{0}
+      (@LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.fuel record count
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count first)
+        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.fuel record count
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count last))
+      (@MicroCFTA.SourceEqualityEdits.Edits.casesOn.{0} MicroCFTA.EqualityNormalize.Path
+        (fun t =>
+          @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) t →
+            @LE.le.{0} Nat instLENat
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+                (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                @Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                      (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                        (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count first)))
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+                (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                @Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                      (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                        (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count last))))
+        (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+        (fun token h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token)
+            (fun x =>
+              @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                  (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) x →
+                @LE.le.{0} Nat instLENat
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat) x
+                    (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                    @Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          x))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count x count first)))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat) x
+                    (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                    @Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          x))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count x count last))))
+            (fun built =>
+              Nat.le_refl
+                (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                  (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token)
+                  (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                  @Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token)))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token) count
+                        first))))
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+              (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token) h)
+            (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+        (fun entries h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+            (fun x =>
+              @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                  (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) x →
+                @LE.le.{0} Nat instLENat
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat) x
+                    (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                    @Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          x))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count x count first)))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat) x
+                    (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                    @Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          x))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count x count last))))
+            (fun built =>
+              @Iff.mpr
+                (@LE.le.{0} Nat instLENat
+                  (@Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        first)))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                    (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                    @Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                          count last))))
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                      (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                      @Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                            (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                              (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count last))))
+                  (@LE.le.{0} Nat instLENat
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        first))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                      (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                      @Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                            (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                              (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count last)))))
+                (@Nat.max_le
+                  (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                      (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                        (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                      first))
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                    (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                    @Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                          count last))))
+                (@And.intro
+                  (@LE.le.{0} Nat instLENat
+                    (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                      (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                      @Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                            (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                              (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count last))))
+                  (@LE.le.{0} Nat instLENat
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        first))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                      (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                      @Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                            (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                              (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count last))))
+                  (Nat.le_max_left
+                    (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                          (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        last)))
+                  (@Nat.le_trans
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        first))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        last))
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Nat)
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                      (fun action => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun children =>
+                      @Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                            (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                              (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count last)))
+                    (@MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel_mono record count
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        first)
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                        last)
+                      (@Eq.mp.{0}
+                        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count first)
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count last))
+                        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count first)
+                          (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                            count last))
+                        (@congrArg.{1, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path) Prop
+                          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                          (fun _a =>
+                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count _a count
+                                first)
+                              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count _a count
+                                last))
+                          built)
+                        returned))
+                    (Nat.le_max_right
+                      (MicroCFTA.SourceCurrentConstrainedCapEditScans.editFuel
+                        (@SizeOf.sizeOf.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                          (@MicroCFTA.SourceEqualityEdits.Edits._sizeOf_inst MicroCFTA.EqualityNormalize.Path
+                            (@List._sizeOf_inst.{0} Nat instSizeOfNat))
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                          count last))))))
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+              (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) h)
+            (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+              (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+        (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record))))
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count profile) →
+    MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count profile) →
+    MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile :=
+fun bits record count profile room =>
+  @id.{0}
+    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile)
+    (@MicroCFTA.SourceEqualityEdits.Edits.casesOn.{0} MicroCFTA.EqualityNormalize.Path
+      (fun t =>
+        @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) t →
+          MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Prop)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) (fun action => True) fun children =>
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile))
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+      (fun token h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+          (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token)
+          (fun x =>
+            @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) x →
+              MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Prop) x
+                (fun action => True) fun children =>
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count x count profile))
+          (fun built => True.intro) (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+          (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editAt MicroCFTA.EqualityNormalize.Path token) h)
+          (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+      (fun entries h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+          (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+          (fun x =>
+            @Eq.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) x →
+              MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Prop) x
+                (fun action => True) fun children =>
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count x count profile))
+          (fun built =>
+            @id.{0}
+              (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile.match_1.{1} (fun edits => Prop)
+                (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                (fun action => True) fun children =>
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                    profile))
+              (@Eq.mp.{0}
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                    (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile))
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                    profile))
+                (@congrArg.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile Prop
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                    (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count profile)
+                  (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                    (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count
+                    profile)
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits)
+                  (@congrFun'.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count)
+                    (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                      (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) count)
+                    (@congrFun'.{1, 1} Nat
+                      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record))
+                      (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries))
+                      (@congrArg.{1, 1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+                        (Nat →
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                        (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+                        (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries)
+                        (MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile record count) built)
+                      count)
+                    profile))
+                room))
+          (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+          (@Eq.symm.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)
+            (@MicroCFTA.SourceEqualityEdits.Edits.editBelow MicroCFTA.EqualityNormalize.Path entries) h)
+          (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+            (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+      (@Eq.refl.{1} (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+        (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record)))
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+def MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile : List.{0}
+    MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun x x_1 x_2 =>
+  @List.brecOn.{1, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun x =>
+      Nat →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+    x MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile._f x_1 x_2
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+def MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat :=
+fun x x_1 x_2 =>
+  @List.brecOn.{1, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun x => Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat) x
+    MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel._f x_1 x_2
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved : Nat →
+  List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+    Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Prop
+def MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved : Nat →
+  List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+    Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Prop :=
+fun bits records count profile =>
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved.match_1.{1} (fun records => Prop) records (fun _ => True)
+    fun head tail =>
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_nil : ∀ (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count profile)
+    profile
+@[defeq] theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_nil : ∀ (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count profile)
+    profile :=
+fun count profile =>
+  @rfl.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_cons' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_cons : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+@[defeq] theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_cons : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)) :=
+fun record records count profile =>
+  @rfl.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_nil : ∀ (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count profile)
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+@[defeq] theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_nil : ∀ (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count profile)
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) :=
+fun count profile =>
+  @rfl.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_cons' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_cons : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+    (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count profile)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)))
+@[defeq] theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_cons : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+    (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count profile)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))) :=
+fun record records count profile =>
+  @rfl.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) :=
+fun records count profile =>
+  @List.rec.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun records =>
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.refl profile)
+    (fun record records ih =>
+      @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.trans profile
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+        ih
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge record count
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)))
+    records
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last) :=
+fun records count {first last} increase =>
+  @List.rec.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun records =>
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last))
+    increase
+    (fun record records ih =>
+      @MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_mono record count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last) ih)
+    records
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_mono : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count last)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_mono : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count last) :=
+fun records count {first last} increase =>
+  @List.rec.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun records =>
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count last))
+    (Nat.le_refl
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+        (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count first))
+    (fun record records ih =>
+      @Iff.mpr
+        (@LE.le.{0} Nat instLENat
+          (@Max.max.{0} Nat Nat.instMax
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first)))
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last))
+        (And
+          (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last))
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first))
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last)))
+        (@Nat.max_le (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first))
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last))
+        (@And.intro
+          (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last))
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first))
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last))
+          (@Nat.le_trans (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count first)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count last)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last)
+            ih
+            (Nat.le_max_left (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count last)
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last))))
+          (@Nat.le_trans
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first))
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last))
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count last)
+            (@MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel_mono record count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count first)
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last)
+              (@MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_mono records count first last increase))
+            (Nat.le_max_right (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count last)
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count last))))))
+    records
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) :=
+fun record records count profile =>
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_ge record count
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_tail' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_tail : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_tail : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) :=
+fun record records count profile =>
+  Nat.le_max_left (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_head' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_head : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_head : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) :=
+fun record records count profile =>
+  Nat.le_max_right (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_initial' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_initial : ∀ (bits : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_initial : ∀ (bits : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile :=
+fun bits records count profile room =>
+  @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) room
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_ge records count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) :=
+fun bits record records count profile room =>
+  @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile)
+    room (MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_tail record records count profile)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_reserved_head' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_reserved_head : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) →
+    MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_reserved_head : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile) →
+    MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) :=
+fun bits record records count profile room =>
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved bits record count
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) room
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile))
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)) :=
+fun bits record records count profile reserved => reserved
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_tail' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_tail : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+    MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count profile
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_tail : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+    MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count profile :=
+fun bits record records count profile reserved =>
+  @List.casesOn.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun t =>
+      @Eq.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records t →
+        MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count profile)
+    records
+    (fun h =>
+      @Eq.ndrec.{0, 1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (fun records =>
+          MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+            MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count profile)
+        (fun reserved => True.intro) records
+        (@Eq.symm.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) h)
+        reserved)
+    (fun next rest h =>
+      @Eq.ndrec.{0, 1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record next rest)
+        (fun records =>
+          MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+            MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count profile)
+        (fun reserved =>
+          MicroCFTA.SourceCurrentConstrainedCapClassForecast.fold_room_tail bits record
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record next rest) count profile reserved)
+        records
+        (@Eq.symm.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record next rest) h)
+        reserved)
+    (@Eq.refl.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_class' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_class : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+    MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_class : ∀ (bits : Nat)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) count profile →
+    MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved bits record count
+      (MicroCFTA.SourceCurrentAllocatedClassEditPlan.compiled record) count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile) :=
+fun bits record records count profile reserved =>
+  MicroCFTA.SourceCurrentConstrainedCapClassForecast.class_reserved bits record count
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.reserved_head bits record records count profile reserved)
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append : ∀
+  (first last : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+        first last)
+      count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile first count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append : ∀
+  (first last : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+        first last)
+      count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile first count
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)) :=
+fun first last count profile =>
+  @List.rec.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun first =>
+      @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+            first last)
+          count profile)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile first count
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))
+    (@Eq.refl.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) last)
+        count profile))
+    (fun record records ih =>
+      @congrArg.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+          (@List.append.{0} MicroCFTA.SourceEqualityClassOrder.Record records last) count profile)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classProfile record count) ih)
+    first
+'MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_append' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_append : ∀
+  (first last : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+        first last)
+      count profile)
+    (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel first count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))
+theorem MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel_append : ∀
+  (first last : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+        first last)
+      count profile)
+    (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel first count
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))) :=
+fun first last count profile =>
+  @List.rec.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun first =>
+      @Eq.{1} Nat
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+            first last)
+          count profile)
+        (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel first count
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))
+    (@of_eq_true
+      (@Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+        (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+            (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))
+      (@Eq.trans.{1} Prop
+        (@Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+          (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))
+        (@Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile))
+        True
+        (@congrArg.{1, 1} Nat Prop
+          (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) count
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+          (@Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile))
+          (Nat.max_zero (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)))
+        (@eq_self.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile))))
+    (fun record records ih =>
+      @of_eq_true
+        (@Eq.{1} Nat
+          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) last)
+            count profile)
+          (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+            (@Max.max.{0} Nat Nat.instMax
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))))
+        (@Eq.trans.{1} Prop
+          (@Eq.{1} Nat
+            (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) last)
+              count profile)
+            (@Max.max.{0} Nat Nat.instMax
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))))
+          (@Eq.{1} Nat
+            (@Max.max.{0} Nat Nat.instMax
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))))
+            (@Max.max.{0} Nat Nat.instMax
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))))
+          True
+          (@congrFun'.{1, 1} Nat Prop
+            (@Eq.{1} Nat
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                  (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) last)
+                count profile))
+            (@Eq.{1} Nat
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                (@Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))))
+            (@congrArg.{1, 1} Nat (Nat → Prop)
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                  (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records) last)
+                count profile)
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                (@Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))))
+              (@Eq.{1} Nat)
+              (@Eq.trans.{1} Nat
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                  (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                      records last))
+                  count profile)
+                (@Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                      records last)
+                    count profile)
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                        records last)
+                      count profile)))
+                (@Max.max.{0} Nat Nat.instMax
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                  (@Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))))
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel.eq_2 count profile record
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                    records last))
+                (@Eq.trans.{1} Nat
+                  (@Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                        records last)
+                      count profile)
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          records last)
+                        count profile)))
+                  (@Max.max.{0} Nat Nat.instMax
+                    (@Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))
+                  (@Max.max.{0} Nat Nat.instMax
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                    (@Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))))
+                  (@congr.{1, 1} Nat Nat
+                    (@Max.max.{0} Nat Nat.instMax
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          records last)
+                        count profile))
+                    (@Max.max.{0} Nat Nat.instMax
+                      (@Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          records last)
+                        count profile))
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))
+                    (@congrArg.{1, 1} Nat (Nat → Nat)
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          records last)
+                        count profile)
+                      (@Max.max.{0} Nat Nat.instMax
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                          (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))
+                      (@Max.max.{0} Nat Nat.instMax) ih)
+                    (@congrArg.{1, 1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile Nat
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.instAppend.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          records last)
+                        count profile)
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count)
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile_append records last count
+                        profile)))
+                  (Nat.max_assoc (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                      (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile)))))))
+            (@Max.max.{0} Nat Nat.instMax
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))))
+          (@eq_self.{1} Nat
+            (@Max.max.{0} Nat Nat.instMax
+              (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel last count profile)
+              (@Max.max.{0} Nat Nat.instMax
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.classFuel record count
+                  (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count
+                    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile last count profile))))))))
+    first
