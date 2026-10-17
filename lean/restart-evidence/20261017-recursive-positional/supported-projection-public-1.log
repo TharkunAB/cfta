@@ -1,0 +1,83 @@
+'MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {path : List.{0} Int} {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result)
+'MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {path : List.{0} Int} {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst path values before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid path values →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result)
+'MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (path : List.{0} Int) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+          @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                        (And
+                          (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard result)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                            (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result))))))
+'MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (path : List.{0} Int) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+      @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+          @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid path values →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And (@MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst path values before result after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                        (And
+                          (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard result)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                            (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result))))))

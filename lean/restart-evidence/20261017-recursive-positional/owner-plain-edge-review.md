@@ -1,0 +1,15 @@
+# Constructed plain edge calls in mixed tables
+
+`SourceCurrentAllocatedPartialConditionalPlainEdge.lean` is frozen at SHA 0c65af5d63bd92a45b628b832c58fc82606147999f8281ceff7b07a4ee754d75. `SourceCurrentAllocatedPartialHereditaryPlainEdge.lean` is frozen at SHA 4d01b4b1755c4dda17968416347533eeeacb59b448f0a84285b84d3ab72c60d0. No earlier source was changed.
+
+The first module constructs an actual finite EdgeCall for a PlainEdge candidate in arbitrary mixed outer tables. Context, inherited readiness, physical residency, the conditional returned-edge store, and the filtered active-owner bound are initial inputs. A stronger unconditional returned table or all-owner bound is not required.
+
+The evaluating branch obtains the exact stored owner from the actual begin. Complete resident identity readback proves that its full edge value equals the candidate. That equality transfers empty effective own equalities. ParentPlain.finite then constructs the actual parent body, strict reads, semantic receipt, full Post and result shape. The literal advance retains the same evaluating cell. ConditionalDomain.Stored.finishEdge installs the already derived shape at that exact handle and preserves all other returned owners. No future body, returned shape, or range plan is an input.
+
+The ready branch reads the complete actual returned owner through the sound table and physical edge identity. Conditional shape is applied only after proving that owner's empty effective own accessor. The actual hit preserves the whole caller. Worker graph completion produces stable literal execution for the same returned result and full state in both branches.
+
+The second module derives PlainEdge from a local hereditary row annotation. The guard's actual plain test gives empty effective equalities. Initial Facts and edge residency give availability of each literal child. Each child's local annotation and closedness then give its Region. Other records may remain constrained; no global heap annotation is used. Its finite endpoint retains the entire first module's conclusion.
+
+These modules complete a plain edge call, not its later descendant walk or a mixed ordinary node. They do not retain a hereditary annotation on arbitrary warm returned nodes, prove cap-to-cap descent, close class-edit mask overlap, establish general selected termination, or transfer logical completion to host scheduling. Those boundaries remain explicit.
+
+Validation uses strict direct source checks with all linters. Each module's first failed attempt is retained. The first failure required unfolding the new own-empty accessor. The second required an explicit constructor-annotation import. Neither change altered the intended theorem domain. Imported probes cover all three public declarations. Two integration kernels independently construct serial edge calls through the actual returned Context, and derive Region plus strict owner-relative rank for every child returned by the hereditary edge producer. The kernels supply no completed graph or future result law.

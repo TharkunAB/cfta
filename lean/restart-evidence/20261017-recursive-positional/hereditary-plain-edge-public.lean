@@ -1,0 +1,14 @@
+import MicroCFTA.SourceCurrentAllocatedPartialHereditaryPlainEdge
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialHereditaryPlainEdge.plain_edge
+#check @MicroCFTA.SourceCurrentAllocatedPartialHereditaryPlainEdge.plain_edge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialHereditaryPlainEdge.finite
+#check @MicroCFTA.SourceCurrentAllocatedPartialHereditaryPlainEdge.finite

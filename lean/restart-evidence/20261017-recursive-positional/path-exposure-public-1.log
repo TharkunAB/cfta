@@ -1,0 +1,102 @@
+'MicroCFTA.SourceCurrentConstrainedCapPathExposure.Row' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPathExposure.Row : {Guard Symbol : Type} →
+  (Guard → Prop) → Int → List.{0} Int → MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapPathExposure.makeNode' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPathExposure.makeNode : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (index : Int) (path : List.{0} Int) (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedEdgeResidency.Linked Symbol Guard state →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard state edges →
+        (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+              @MicroCFTA.SourceCurrentConstrainedCapPathExposure.Row Guard Symbol valid index path edge) →
+          @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.cons.{0} Int index path)
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state))
+'MicroCFTA.SourceCurrentConstrainedCapPathExposure.collect' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPathExposure.collect : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (index : Int) (path : List.{0} Int) (fuel : Nat) (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        state →
+      ∀ (seen : List.{0} Nat) (pending : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state pending →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard pending →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) pending
+                    value →
+                  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid
+                    (@List.cons.{0} Int index path) value) →
+              @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid state →
+                ∀ (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                      (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst fuel state seen pending)
+                      (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard edges after) →
+                    And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                      (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            edges edge →
+                          @MicroCFTA.SourceCurrentConstrainedCapPathExposure.Row Guard Symbol valid index path edge)
+'MicroCFTA.SourceCurrentConstrainedCapPathExposure.nodeEdges' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPathExposure.nodeEdges : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (index : Int) (path : List.{0} Int) (fuel : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        state →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.cons.{0} Int index path)
+              value →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid state →
+              ∀ (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                    (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value state)
+                    (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard edges after) →
+                  And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                    (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          edges edge →
+                        @MicroCFTA.SourceCurrentConstrainedCapPathExposure.Row Guard Symbol valid index path edge)
+'MicroCFTA.SourceCurrentConstrainedCapPathExposure.head' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPathExposure.head : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (index : Int) (path : List.{0} Int) {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after →
+    @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.cons.{0} Int index path)
+              value →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid
+                  (@List.cons.{0} Int index path) result)

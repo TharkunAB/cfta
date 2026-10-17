@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentConstrainedCapSupportedProjection
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.node
+#check @MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.node
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest
+#check @MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.complete
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapSupportedProjection.forest_complete

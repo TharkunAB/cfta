@@ -1,0 +1,222 @@
+'MicroCFTA.SourceCurrentConstrainedCapProjection.read' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst value before edges after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges
+                      edge →
+                    @MicroCFTA.SourceCurrentConstrainedCap.Edge Symbol Guard valid depth edge)
+'MicroCFTA.SourceCurrentConstrainedCapProjection.readAll' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.readAll : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceEqualityProjectionUnion.ReadAll Symbol Guard inst values before edges after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                    value →
+                  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges
+                      edge →
+                    @MicroCFTA.SourceCurrentConstrainedCap.Edge Symbol Guard valid depth edge)
+'MicroCFTA.SourceCurrentConstrainedCapProjection.union' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.union : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionUnion.Union Symbol Guard inst values before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                    value →
+                  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth result)
+'MicroCFTA.SourceCurrentConstrainedCapProjection.node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) {path : List.{0} Int} {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+                  (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) depth (@List.length.{0} Int path))
+                  result)
+'MicroCFTA.SourceCurrentConstrainedCapProjection.endpoint' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.endpoint : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) {path : List.{0} Int} {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+              @LE.le.{0} Nat instLENat depth (@List.length.{0} Int path) →
+                And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                  (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result)
+'MicroCFTA.SourceCurrentConstrainedCapProjection.forest' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.forest : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) {path : List.{0} Int} {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst path values before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                    value →
+                  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+              And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+                  (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) depth
+                    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) (@List.length.{0} Int path)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  result)
+'MicroCFTA.SourceCurrentConstrainedCapProjection.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (path : List.{0} Int) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+          @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                        (And
+                          (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard result)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                            (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+                              (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) depth
+                                (@List.length.{0} Int path))
+                              result))))))
+'MicroCFTA.SourceCurrentConstrainedCapProjection.complete_endpoint' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.complete_endpoint : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (path : List.{0} Int) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+          @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+            @LE.le.{0} Nat instLENat depth (@List.length.{0} Int path) →
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                  And
+                    (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after)
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                      (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                          (And
+                            (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard result)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                              (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result))))))
+'MicroCFTA.SourceCurrentConstrainedCapProjection.forest_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapProjection.forest_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (path : List.{0} Int) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+      @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+                @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And (@MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst path values before result after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                        (And
+                          (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard result)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                            (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+                              (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) depth
+                                (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                                  (@List.length.{0} Int path)
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                              result))))))

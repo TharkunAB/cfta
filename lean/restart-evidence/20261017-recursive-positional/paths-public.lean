@@ -1,0 +1,69 @@
+import MicroCFTA.SourceCurrentConstrainedCapPaths
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.Supported
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.root
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.root
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.root_iff
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.root_iff
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.node_selected
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.node_selected
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.union_member
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.union_member
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.binder_iff
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.binder_iff
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.reference
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.reference
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.mono
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.append
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.append
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.of_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.of_cap
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.forest_plain
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.forest_plain
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.selected
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.selected
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.forest_of_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.forest_of_cap
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.forest_missing
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.forest_missing
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.append
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.append
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.operand_paths
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.operand_paths
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.no_reference_project
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.no_reference_project
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.project_rows_root
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.project_rows_root
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapPaths.root_guard_obstruction
+#check @MicroCFTA.SourceCurrentConstrainedCapPaths.root_guard_obstruction

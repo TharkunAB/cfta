@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.OwnEmpty
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.OwnEmpty
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.of_unconditional
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.of_unconditional
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.initial
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.initial
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.advance
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.beginNode
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.beginNode
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.finishNode
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.finishNode
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.beginEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.beginEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.finishEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.finishEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.edge_ready_owner
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.edge_ready_owner
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.edge_ready_shape
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.edge_ready_shape
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.child
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored.child

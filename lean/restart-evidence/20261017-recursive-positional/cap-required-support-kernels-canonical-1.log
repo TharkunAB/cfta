@@ -1,0 +1,95 @@
+'MicroCFTA.ConstrainedCapRequiredSupportKernels.required_then_two_paths' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@required_then_two_paths : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  (valid : Guard → Prop) (depth : Nat) (needed : SourceEqualityNeeded.Needed) (value : Value Symbol Guard)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  @SemanticReady Symbol Guard before →
+    @InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @Available Symbol Guard before value →
+        @Eq.{1} (List.{0} InternedBinderProtocol.Reference) (@Value.free Symbol Guard value)
+            (@List.nil.{0} InternedBinderProtocol.Reference) →
+          @MuStored Guard Symbol valid before →
+            @Cap Symbol Guard valid depth value →
+              ∀ (firstPath secondPath : List.{0} Int),
+                @Supported Symbol Guard valid firstPath value →
+                  @Supported Symbol Guard valid secondPath value →
+                    @Exists.{1} (Value Symbol Guard) fun required =>
+                      @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                        @Exists.{1} (Value Symbol Guard) fun first =>
+                          @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun afterFirst =>
+                            @Exists.{1} (Value Symbol Guard) fun second =>
+                              @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun after =>
+                                And (@RequireNode Symbol Guard inst needed value before required middle)
+                                  (And (@Preserves Symbol Guard valid value required)
+                                    (And (@Project Symbol Guard inst firstPath required middle first afterFirst)
+                                      (And (@Annotated Guard valid Symbol first)
+                                        (And (@Project Symbol Guard inst secondPath required afterFirst second after)
+                                          (And (@Annotated Guard valid Symbol second)
+                                            (And (@MuStored Guard Symbol valid after)
+                                              (And (@Keeps Symbol Guard before after)
+                                                (And (@Available Symbol Guard after second)
+                                                  (And
+                                                    (@Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+                                                      (@Value.free Symbol Guard second)
+                                                      (@List.nil.{0} InternedBinderProtocol.Reference))
+                                                    (And
+                                                      (@SourceEqualityRequiredWorkerComplete.StableRun Symbol Guard
+                                                        (Value Symbol Guard)
+                                                        (fun fuel headFuel =>
+                                                          @SourceEqualityRequiredWorker.require Symbol Guard inst fuel
+                                                            headFuel needed value before)
+                                                        required middle)
+                                                      (@SourceEqualityRequiredWorkerComplete.StableRun Symbol Guard
+                                                        (Value Symbol Guard)
+                                                        (fun fuel readFuel =>
+                                                          @SourceEqualityProjectionWorker.project Symbol Guard inst fuel
+                                                            readFuel secondPath required afterFirst)
+                                                        second after)))))))))))
+'MicroCFTA.ConstrainedCapRequiredSupportKernels.children_then_forest' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@children_then_forest : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} (EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (entries : List.{0} (Prod.{0, 0} Int SourceEqualityNeeded.Needed))
+  (values : List.{0} (Value Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  @SemanticReady Symbol Guard before →
+    @InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @Values Symbol Guard before values →
+        @ClosedValues Symbol Guard values →
+          @MuStored Guard Symbol valid before →
+            (∀ (value : Value Symbol Guard),
+                @Membership.mem.{0, 0} (Value Symbol Guard) (List.{0} (Value Symbol Guard))
+                    (@List.instMembership.{0} (Value Symbol Guard)) values value →
+                  @Cap Symbol Guard valid depth value) →
+              ∀ (path : List.{0} Int),
+                @ForestSupported Symbol Guard valid path values →
+                  @Exists.{1} (List.{0} (Value Symbol Guard)) fun results =>
+                    @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                      @Exists.{1} (Value Symbol Guard) fun output =>
+                        @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun after =>
+                          And
+                            (@RequireChildren Symbol Guard inst entries
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results
+                              middle)
+                            (And
+                              (@Language.All₂ (Value Symbol Guard) (Value Symbol Guard) (@Preserves Symbol Guard valid)
+                                values results)
+                              (And (@ForestSupported Symbol Guard valid path results)
+                                (And (@Forest Symbol Guard inst path results middle output after)
+                                  (And (@Annotated Guard valid Symbol output)
+                                    (And (@MuStored Guard Symbol valid after)
+                                      (And (@Keeps Symbol Guard before after)
+                                        (And (@Available Symbol Guard after output)
+                                          (And
+                                            (@Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+                                              (@Value.free Symbol Guard output)
+                                              (@List.nil.{0} InternedBinderProtocol.Reference))
+                                            (@SourceEqualityRequiredWorkerComplete.StableRun Symbol Guard
+                                              (List.{0} (Value Symbol Guard))
+                                              (fun fuel readFuel =>
+                                                @SourceEqualityRequiredWorker.children Symbol Guard
+                                                  (@SourceEqualityRequiredWorker.require Symbol Guard inst fuel
+                                                    readFuel)
+                                                  entries (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                                  values before)
+                                              results middle)))))))))

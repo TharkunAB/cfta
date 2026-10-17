@@ -1,0 +1,56 @@
+'MicroCFTA.OwnerCapProjectionKernels.serial_endpoints' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.OwnerCapProjectionKernels.serial_endpoints : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (first second : List.{0} Int) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+          @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+            @LE.le.{0} Nat instLENat depth
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Int first)
+                  (@List.length.{0} Int second)) →
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun middle =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun current =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                      And
+                        (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst first value before middle
+                          current)
+                        (And
+                          (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst second middle current
+                            result after)
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                            (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                              (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result))))
+'MicroCFTA.OwnerCapProjectionKernels.root_index' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.OwnerCapProjectionKernels.root_index : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (index : Int) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.SourceEqualityProjectionGraph.select.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        values index)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            (∀ (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                    input →
+                  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth input) →
+              @Exists.{0}
+                (@MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst
+                  (@List.cons.{0} Int index (@List.nil.{0} Int)) values before value before)
+                fun _actual =>
+                And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before)
+                  (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value)

@@ -1,0 +1,193 @@
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_mono' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_mono : ∀ {width small bound : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width},
+  @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+    @LE.le.{0} Nat instLENat small bound →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width small before
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_above' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_above : ∀ {width : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width},
+  @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive width before after →
+    ∀ {bound : Nat},
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+        @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_call' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_call : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall inst inst_1 inst_2 width budget request before result after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_body : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody inst inst_1 inst_2 width budget request before result after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_call' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_call : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall inst inst_1 inst_2 width budget request before result after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_body : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody inst inst_1 inst_2 width budget request before result after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.rows : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows inst inst_1 inst_2 width budget inherited values before results
+      after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.descendants' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.descendants : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants inst inst_1 inst_2 width budget inherited value before
+      result after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.children : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.Children inst inst_1 inst_2 width budget combined values before results
+      after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after
+'MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.walk' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.walk : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width budget bound : Nat} {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value} {index : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+  @MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk inst inst_1 inst_2 width budget combined index values before
+      results after →
+    @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound before →
+      @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound after

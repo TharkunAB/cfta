@@ -1,0 +1,140 @@
+restart-evidence/20261017-recursive-positional/paths-kernels.lean:64:69: error: Expected type must not contain free variables
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@ite.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@LT.lt.{0} Int Int.instLTInt
+        (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+      ((@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))).decLt
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+      (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (fun as i =>
+          @LT.lt.{0} Nat instLTNat i (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+        (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))).toNat))
+    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+restart-evidence/20261017-recursive-positional/paths-kernels.lean:70:4: error: don't know how to synthesize implicit argument `Symbol`
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported (@?m.13 inst✝ valid index path name before after result) Guard
+    valid (List.cons.{0} index path)
+    (@MicroCFTA.InternedConstructorTemplates.Value.reference (@?m.13 inst✝ valid index path name before after result)
+      Guard name)
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+valid : Guard → Prop
+index : Int
+path : List.{0} Int
+name : MicroCFTA.InternedBinderProtocol.Reference
+before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard
+result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+restart-evidence/20261017-recursive-positional/paths-kernels.lean:70:37: error: don't know how to synthesize implicit argument `Symbol`
+  @MicroCFTA.InternedConstructorTemplates.Value.reference (@?m.13 inst✝ valid index path name before after result) Guard
+    name
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+valid : Guard → Prop
+index : Int
+path : List.{0} Int
+name : MicroCFTA.InternedBinderProtocol.Reference
+before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard
+result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+'ConstrainedCapPathsChecks.original_class_targets' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@ConstrainedCapPathsChecks.original_class_targets : ∀ {Symbol Guard : Type} (valid : Guard → Prop) (depth : Nat)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+    ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+      (∀ (path : MicroCFTA.EqualityNormalize.Path),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+            @LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@List.length.{0} Nat path)) →
+        ∀ (selected : MicroCFTA.EqualityNormalize.Path) (path : List.{0} Int),
+          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+              (MicroCFTA.SourceEqualityClassTarget.operandPaths paths selected) path →
+            @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid path values
+'ConstrainedCapPathsChecks.actual_selected_rows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@ConstrainedCapPathsChecks.actual_selected_rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference),
+  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) →
+    ∀ (index : Int) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+      @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst (@List.nil.{0} Int) index edges before
+          results after →
+        ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value
+'ConstrainedCapPathsChecks.short_endpoint_counterexample' depends on axioms: [propext, Quot.sound.{u}]
+@ConstrainedCapPathsChecks.short_endpoint_counterexample : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edgeEntry : MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)),
+  Not
+      (valid
+        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+          (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) edgeEntry))) →
+    ∀ (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      have value :=
+        @MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard edgeEntry
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference);
+      And
+        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)
+        (And
+          (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst (@List.nil.{0} Int) value state value
+            state)
+          (Not (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.nil.{0} Int) value)))
+'ConstrainedCapPathsChecks.recursive_boundary' depends on axioms: [propext]
+@ConstrainedCapPathsChecks.recursive_boundary : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol body →
+    ∀ (first second : List.{0} Int),
+      And
+        (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid first
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+        (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid second
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+'ConstrainedCapPathsChecks.negative_missing' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+@ConstrainedCapPathsChecks.negative_missing : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (path : List.{0} Int)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid
+      (@List.cons.{0} Int (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+        path)
+      values)
+    (@MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst
+      (@List.cons.{0} Int (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+        path)
+      values state (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) state)
+restart-evidence/20261017-recursive-positional/paths-kernels.lean:86:14: error(lean.unknownIdentifier): Unknown constant `ConstrainedCapPathsChecks.reference_boundary`
+restart-evidence/20261017-recursive-positional/paths-kernels.lean:87:8: error(lean.unknownIdentifier): Unknown identifier `ConstrainedCapPathsChecks.reference_boundary`

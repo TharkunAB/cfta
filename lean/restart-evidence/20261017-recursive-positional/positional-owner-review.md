@@ -1,0 +1,39 @@
+# Recursive selected paths and active owners
+
+## Current call relation
+
+The current source memoizes the complete inherited equality value with each node or edge. The Lean keys retain the allocated inherited identity and the tagged node reference or edge identity (`SourceCurrentAllocatedPartialState.lean:27–49`). Key agreement is useful only with the resident and coherent complete-value readback.
+
+The recursive ordinary route is literal: `Rows.cons` calls an edge, uses that returned edge in Descendants, then processes the later original rows. Descendants combines inherited equalities with the returned edge field once. Walk descends that exact combined payload at its current offset and calls the returned child (`SourceCurrentAllocatedPartialGraph.lean:94–130`; `PartialWorker.lean:120–174`). A progress theorem must order these actual returned children against the active captured owners. It cannot order only the original syntax children.
+
+Haskell has the same sequence in `cfta/src/Data/CFTA/Equality/Operations.hs:80–96,143–145`. Mu and explicit union are outer stop cases. Required and Edit may still expose either at selected paths (`Operations.hs:292–303,324–334`). Each class captures the current forest after the earlier right-fold tail; target callbacks use that immutable capture (`Operations.hs:226–242`). Therefore a finite static set of original physical node IDs is not a complete request inventory.
+
+## Why the earlier measures do not settle this family
+
+`MergedOrdinaryHeight.lean:17–35` assigns height zero to Mu and explicit union. `PartialActiveOrder.lean:29–69` uses this height, separates node and edge phases, and proves original row/child descent. The finite ordinary construction also has a produced bound for the actual narrowed edge. That last implication is the missing generalization. A selected plain recursive value can expose ordinary layers of arbitrary height while remaining hereditary plain. Treating its old Mu height as the future height is invalid.
+
+`SourceEqualityPartialHeightBoundary.child_exceeds_original_root` is an exact older branch counterexample to such a height argument. Its hidden binders contain constraints. The current endpoint refusal must be respected: `Operations.hs:246–271` detects constrained recursion at or below endpoints, and `182–192` retains refused classes. Do not present that older selected fixture as a new accepted current-source cycle. The older `SourceEqualityOuterCallerCycle` similarly records an earlier dependency cycle; the current refusal and tests at `EqualitySpec.hs:512–551` address that case.
+
+A fixed maximum local path length is also insufficient. `SourceEqualityInheritedGrowthBoundary.actual_prefix` derives inherited maxima 0,3,4,5,6 from one local payload with maximum four. `not_local_length_bound` disproves that proposed recurrence bound. The fixture explicitly does not prove that a real outer caller reaches an infinite sequence. Its separate `first_not_literal_derived` also rules out treating inherited payloads as only conjunctions of the original full guards. None of these measure counterexamples proves general divergence.
+
+The source itself distinguishes the unsettled case: unequal path lengths can move a constrained node deeper into a plain recursive unfolding (`Operations.hs:129–142`). An initial finite cap must therefore carry occurrence and path-placement evidence. Guard origins, a current hereditary plain result, a finite memo key universe, and language narrowing alone do not supply strict cap-to-cap descent.
+
+## Independent progress component completed here
+
+`PartialConditionalDomain.Stored` requires the original/erased/sentinel shape only for an actual returned edge owner whose full effective own accessor is empty. It permits other completed cap parents. `edge_ready_owner` identifies the literal returned owner, its complete value equality with the candidate, its own-empty property, and the unchanged full caller. `edge_ready_shape` then consumes only that owner's conditional certificate. Finish requires the local conditional law at the exact evaluating handle.
+
+`PartialConditionalActive.ActiveAbove` bounds only Region node owners and edges with both empty own equalities and Region children. Own-empty alone is too weak to classify an edge with constrained descendants as plain. Complete resident key agreement proves that a plain candidate cannot be the unrelated constrained owner that is evaluating. The two begin-safe theorems exclude busy and absent observations for that candidate.
+
+`PartialConditionalFrames` transports the filtered bound through each of the eight actual completed graph families. It uses the existing NoNewActive theorem, which retains the complete owner requests. It supplies no future completion. Lower advancement and lowering the bound are also explicit.
+
+The concrete cache kernel proves that a literal nonplain finish can violate the old unconditional shape invariant while retaining the new one. A different returned plain cell survives that finish and is read by the actual begin-ready operation. This is a strictness and lifecycle test of the logical cache specifications. It does not assert that a real parent body produced the deliberately non-shape candidate. A second kernel constructs an actual Empty node call and a later contradiction Children prefix while an unrelated non-Region node owner remains active. It preserves an arbitrary filtered bound and disproves the old all-owner bound for that fixture.
+
+## Small next proof and remaining boundary
+
+The existing `HereditaryUnconstrained.to_plain_region` (`SourceCurrentHereditaryUnconstrained.lean:132`) already maps local annotations, availability, and closedness to Region. `PartialPlainNode.finite` (`117`) constructs one actual literal pass for arbitrary ready inherited equalities. `LocalPlain.prefix_cases` (`50`) explains why: an empty effective own accessor selects unchanged, erasure, or classes[]. Inherited constraints alone cannot create a new selected class there.
+
+The old PlainNode theorem uses unconditional ReturnedDomain.Stored. It can be used directly after fresh outer initialization over arbitrary lower warm state. It cannot be applied to mixed cap histories by assuming that stronger store. The next useful adapter should reconstruct the plain-region finite proof with ConditionalDomain.Stored and filtered ActiveAbove. It needs filtered start/push handling at the selected exact owner, then the existing completed-frame transport. Its public input should be Context, EqReady, Available, Region, the conditional store, and the filtered initial bound. Its output should be its own graph/strict Reads/Checks/Post, availability, retained conditional store, literal worker stability, and the semantic node law. It must not assume a successful body or return annotation. Sound node cache laws alone do not imply a hereditary annotation for an arbitrary warm returned node.
+
+This adapter would close wholly plain suffix progress inside mixed histories. It would not settle cap-to-cap descent. That remaining proof must retain every outstanding selected mask through Required, target/leaf narrowing, edits, and the tail-first class pass. It must derive the actual returned child's smaller constrained support before publication. A lexicographic split may put wholly plain calls below constrained-support calls, then use ordinary rank within the plain part. The constrained-support component and its strict descent remain to be proved. A smaller finite key set alone does not exclude busy cycles.
+
+General recursive selected completion, repeated convergence, total caller resource bounds, frontend/runtime correspondence, warm public pipelines, and full library composition remain in scope. No Haskell edit or new defect is reported. Keep every later repair first in root FINDINGS with its reproducer and upstream status.

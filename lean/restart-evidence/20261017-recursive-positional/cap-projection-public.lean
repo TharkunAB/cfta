@@ -1,0 +1,36 @@
+import MicroCFTA.SourceCurrentConstrainedCapProjection
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.read
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.read
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.readAll
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.readAll
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.union
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.union
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.node
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.node
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.endpoint
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.endpoint
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.forest
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.forest
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.complete
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.complete_endpoint
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.complete_endpoint
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjection.forest_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapProjection.forest_complete
+

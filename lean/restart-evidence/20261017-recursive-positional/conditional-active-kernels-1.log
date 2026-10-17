@@ -1,0 +1,72 @@
+lean/restart-evidence/20261017-recursive-positional/conditional-active-kernels.lean:59:6: warning: Variable name `actual` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _actual
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261017-recursive-positional/conditional-active-kernels.lean:60:8: warning: Variable name `erased` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _erased
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'MicroCFTA.ConditionalActiveKernels.completed_mixed_prefix' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.ConditionalActiveKernels.completed_mixed_prefix : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (budget bound : Nat) (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+  @Exists.{0}
+    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall inst inst_1 inst_2 width budget
+      MicroCFTA.ConditionalActiveKernels.emptyOwner
+      (@MicroCFTA.ConditionalActiveKernels.before width checked merge fourth)
+      (@MicroCFTA.InternedConstructorTemplates.Value.empty
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@MicroCFTA.ConditionalActiveKernels.after width checked merge fourth))
+    fun actual =>
+    @Exists.{0}
+      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.Children inst inst_1 inst_2 width budget
+        MicroCFTA.SourceEqualityConstraintAllocation.Value.contradiction
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.ConditionalActiveKernels.capValue
+          (@List.nil.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+        (@MicroCFTA.ConditionalActiveKernels.after width checked merge fourth)
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@List.nil.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+        (@MicroCFTA.ConditionalActiveKernels.after width checked merge fourth))
+      fun erased =>
+      And
+        (@MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width bound
+          (@MicroCFTA.ConditionalActiveKernels.after width checked merge fourth))
+        (Not
+          (@MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove width
+            (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank MicroCFTA.ConditionalActiveKernels.capOwner)
+            (@MicroCFTA.ConditionalActiveKernels.before width checked merge fourth)))

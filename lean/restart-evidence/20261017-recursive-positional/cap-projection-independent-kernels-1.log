@@ -1,0 +1,124 @@
+'MicroCFTA.ConstrainedCapProjectionKernels.constructed_bad_shell_endpoint' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@constructed_bad_shell_endpoint : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  (valid : Guard → Prop) (symbol : Symbol) (good bad : Guard),
+  valid good →
+    Not (valid bad) →
+      @Exists.{1} (Value Symbol Guard) fun recursive =>
+        @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun initial =>
+          @Exists.{1} (EdgeValue Symbol Guard) fun row =>
+            @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun edgeHeap =>
+              @Exists.{1} (Value Symbol Guard) fun shell =>
+                @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun before =>
+                  @Exists.{1} (Value Symbol Guard) fun result =>
+                    @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun after =>
+                      And
+                        (@Eq.{1} (Outcome Symbol Guard (Value Symbol Guard))
+                          (@InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                            (@Syntax.binder Symbol Guard false
+                              (@Syntax.node Symbol Guard
+                                (@List.cons.{0} (EdgeSyntax Symbol Guard)
+                                  (@EdgeSyntax.mk Symbol Guard symbol good
+                                    (@List.cons.{0} (Syntax Symbol Guard)
+                                      (@Syntax.var Symbol Guard
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                                      (@List.nil.{0} (Syntax Symbol Guard))))
+                                  (@List.nil.{0} (EdgeSyntax Symbol Guard)))))
+                            (@List.nil.{0} (Value Symbol Guard)) (@empty Symbol Guard))
+                          (@Outcome.done Symbol Guard (Value Symbol Guard) recursive initial))
+                        (And
+                          (@Eq.{1}
+                            (Prod.{0, 0} (EdgeValue Symbol Guard) (InternedConstructorTemplates.State Symbol Guard))
+                            (@run Symbol Guard (EdgeValue Symbol Guard) inst
+                              (@makeEdge Symbol Guard symbol bad
+                                (@List.cons.{0} (Value Symbol Guard) recursive (@List.nil.{0} (Value Symbol Guard))))
+                              initial)
+                            (@Prod.mk.{0, 0} (EdgeValue Symbol Guard) (InternedConstructorTemplates.State Symbol Guard)
+                              row edgeHeap))
+                          (And
+                            (@Eq.{1}
+                              (Prod.{0, 0} (Value Symbol Guard) (InternedConstructorTemplates.State Symbol Guard))
+                              (@run Symbol Guard (Value Symbol Guard) inst
+                                (@makeNode Symbol Guard
+                                  (@List.cons.{0} (EdgeValue Symbol Guard) row
+                                    (@List.nil.{0} (EdgeValue Symbol Guard))))
+                                edgeHeap)
+                              (@Prod.mk.{0, 0} (Value Symbol Guard) (InternedConstructorTemplates.State Symbol Guard)
+                                shell before))
+                            (And
+                              (@Eq.{1} Guard
+                                (@EdgeKey.constraint Symbol Guard
+                                  (@Interned.key (EdgeKey Symbol Guard) (@EdgeValue.entry Symbol Guard row)))
+                                bad)
+                              (And
+                                (Not
+                                  (valid
+                                    (@EdgeKey.constraint Symbol Guard
+                                      (@Interned.key (EdgeKey Symbol Guard) (@EdgeValue.entry Symbol Guard row)))))
+                                (And
+                                  (@Cap Symbol Guard valid (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                    shell)
+                                  (And
+                                    (@Project Symbol Guard inst
+                                      (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                        (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                          (@List.nil.{0} Int)))
+                                      shell before result after)
+                                    (And (@MuStored Guard Symbol valid after)
+                                      (And (@Annotated Guard valid Symbol result)
+                                        (And (@Keeps Symbol Guard before after)
+                                          (And (@SemanticReady Symbol Guard after)
+                                            (And (@Available Symbol Guard after result)
+                                              (And
+                                                (@Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+                                                  (@Value.free Symbol Guard result)
+                                                  (@List.nil.{0} InternedBinderProtocol.Reference))
+                                                (@SourceEqualityRequiredWorkerComplete.StableRun Symbol Guard
+                                                  (Value Symbol Guard)
+                                                  (fun fuel readFuel =>
+                                                    @SourceEqualityProjectionWorker.project Symbol Guard inst fuel
+                                                      readFuel
+                                                      (@List.cons.{0} Int
+                                                        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                                        (@List.cons.{0} Int
+                                                          (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                                          (@List.nil.{0} Int)))
+                                                      shell before)
+                                                  result after)))))))))))))
+'MicroCFTA.ConstrainedCapProjectionKernels.forest_offset' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@forest_offset : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} (EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (value : Value Symbol Guard) (before : InternedConstructorTemplates.State Symbol Guard),
+  @SemanticReady Symbol Guard before →
+    @Available Symbol Guard before value →
+      @Eq.{1} (List.{0} InternedBinderProtocol.Reference) (@Value.free Symbol Guard value)
+          (@List.nil.{0} InternedBinderProtocol.Reference) →
+        @MuStored Guard Symbol valid before →
+          @Cap Symbol Guard valid (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value →
+            @Exists.{1} (Value Symbol Guard) fun selected =>
+              @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                @Exists.{1} (Value Symbol Guard) fun result =>
+                  @Exists.{1} (InternedConstructorTemplates.State Symbol Guard) fun after =>
+                    And
+                      (@Forest Symbol Guard inst
+                        (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                          (@List.nil.{0} Int))
+                        (@List.cons.{0} (Value Symbol Guard) value (@List.nil.{0} (Value Symbol Guard))) before selected
+                        middle)
+                      (And
+                        (@Cap Symbol Guard valid (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) selected)
+                        (And
+                          (@Forest Symbol Guard inst
+                            (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                              (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                (@List.nil.{0} Int)))
+                            (@List.cons.{0} (Value Symbol Guard) value (@List.nil.{0} (Value Symbol Guard))) middle
+                            result after)
+                          (And (@MuStored Guard Symbol valid after)
+                            (And (@Annotated Guard valid Symbol result)
+                              (And (@Keeps Symbol Guard before after)
+                                (And (@Available Symbol Guard after result)
+                                  (@Eq.{1} (List.{0} InternedBinderProtocol.Reference) (@Value.free Symbol Guard result)
+                                    (@List.nil.{0} InternedBinderProtocol.Reference))))))))

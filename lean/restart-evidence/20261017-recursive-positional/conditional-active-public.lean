@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedPartialConditionalActive
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.PlainEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.PlainEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.initial_above
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.initial_above
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove.of_unconditional
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove.of_unconditional
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove.advance
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.node_begin_safe
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.node_begin_safe
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.edge_begin_safe
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.edge_begin_safe

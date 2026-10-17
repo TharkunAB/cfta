@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_mono
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_above
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.active_above
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_call
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.node_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.rows
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.descendants
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.descendants
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.children
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.children
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.walk
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalFrames.walk

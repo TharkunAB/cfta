@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredSupport
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.Preserves
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.Preserves
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.node
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.children
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.children
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.rows
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.forest_supported
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.forest_supported
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.requireAll
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.requireAll

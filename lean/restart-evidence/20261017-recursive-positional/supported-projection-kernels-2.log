@@ -1,0 +1,75 @@
+restart-evidence/20261017-recursive-positional/supported-projection-kernels.lean:106:8: error: Dependent elimination failed: Failed to solve equation
+  @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) atom
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+'SupportedProjectionChecks.Wrap' depends on axioms: [propext, Quot.sound.{u}]
+@SupportedProjectionChecks.Wrap : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Symbol →
+      Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+            MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+              MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'SupportedProjectionChecks.short_recursive_endpoint' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SupportedProjectionChecks.short_recursive_endpoint : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (symbol : Symbol) (guard : Guard) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) →
+      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+        @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol body →
+          @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun inner =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun cap =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun capState =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                        And
+                          (@SupportedProjectionChecks.Wrap Symbol Guard inst symbol guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                            before inner middle)
+                          (And
+                            (@SupportedProjectionChecks.Wrap Symbol Guard inst symbol guard inner middle cap capState)
+                            (And
+                              (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) cap)
+                              (And
+                                (@MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst
+                                  (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))
+                                    (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                      (@List.nil.{0} Int)))
+                                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) cap
+                                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                        ordinary)
+                                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                                  capState result after)
+                                (And
+                                  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    fun exposed =>
+                                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                                      fun headState =>
+                                      And
+                                        (@MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                            depth ordinary)
+                                          capState exposed headState)
+                                        (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst
+                                          (@List.cons.{0} Int
+                                            (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                            (@List.nil.{0} Int))
+                                          exposed headState result after))
+                                  (And
+                                    (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                                    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+                                      result))))))

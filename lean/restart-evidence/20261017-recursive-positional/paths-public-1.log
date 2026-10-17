@@ -1,0 +1,197 @@
+'MicroCFTA.SourceCurrentConstrainedCapPaths.Supported' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported : {Symbol Guard : Type} →
+  (Guard → Prop) → List.{0} Int → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported : {Symbol Guard : Type} →
+  (Guard → Prop) → List.{0} Int → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.root' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.root : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.nil.{0} Int) value →
+    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value
+'MicroCFTA.SourceCurrentConstrainedCapPaths.root_iff' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.root_iff : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.nil.{0} Int) value)
+    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value)
+'MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.node_selected' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.node_selected : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {index : Int} {path : List.{0} Int} {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.cons.{0} Int index path)
+      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+        ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.SourceEqualityProjectionGraph.select.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) index)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+            @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path child
+'MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.union_member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.union_member : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {path : List.{0} Int} {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path
+      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) →
+    ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) members child →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path child
+'MicroCFTA.SourceCurrentConstrainedCapPaths.binder_iff' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.binder_iff : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (path : List.{0} Int) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff
+    (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+'MicroCFTA.SourceCurrentConstrainedCapPaths.reference' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.reference : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (path : List.{0} Int) (name : MicroCFTA.InternedBinderProtocol.Reference),
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path
+    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+'MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.mono' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.mono : ∀ {Symbol Guard : Type} {first second : Guard → Prop}
+  {path : List.{0} Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard first path value →
+    (∀ (guard : Guard), first guard → second guard) →
+      @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard second path value
+'MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.append' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported.append : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {path : List.{0} Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value →
+    ∀ (suffix : List.{0} Int),
+      @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+          (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int)) path suffix)
+        value
+'MicroCFTA.SourceCurrentConstrainedCapPaths.of_cap' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.of_cap : ∀ {Symbol Guard : Type} {valid : Guard → Prop} {depth : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+    ∀ (path : List.{0} Int),
+      @LE.le.{0} Nat instLENat depth (@List.length.{0} Int path) →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value
+'MicroCFTA.SourceCurrentConstrainedCapPaths.forest_plain' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.forest_plain : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+    ∀ (path : List.{0} Int), @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid path values
+'MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.selected' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.selected : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {index : Int} {path : List.{0} Int} {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid (@List.cons.{0} Int index path)
+      values →
+    ∀ {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceEqualityProjectionGraph.select.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values index)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value
+'MicroCFTA.SourceCurrentConstrainedCapPaths.forest_of_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.forest_of_cap : ∀ {Symbol Guard : Type} (valid : Guard → Prop) (depth : Nat)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+    ∀ (index : Int) (path : List.{0} Int),
+      @LE.le.{0} Nat instLENat depth (@List.length.{0} Int path) →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid (@List.cons.{0} Int index path)
+          values
+'MicroCFTA.SourceCurrentConstrainedCapPaths.forest_missing' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.forest_missing : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (index : Int) (path : List.{0} Int),
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.SourceEqualityProjectionGraph.select.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        values index)
+      (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) →
+    @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid (@List.cons.{0} Int index path)
+      values
+'MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.append' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported.append : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {path : List.{0} Int} {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid path values →
+    ∀ (suffix : List.{0} Int),
+      @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+          (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int)) path suffix)
+        values
+'MicroCFTA.SourceCurrentConstrainedCapPaths.operand_paths' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.operand_paths : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (paths : MicroCFTA.EqualityNormalize.Class) (selected : MicroCFTA.EqualityNormalize.Path)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  (∀ (path : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid
+          (@List.map.{0, 0} Nat Int Int.ofNat path) values) →
+    ∀ (path : List.{0} Int),
+      @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths paths selected) path →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.ForestSupported Symbol Guard valid path values
+'MicroCFTA.SourceCurrentConstrainedCapPaths.no_reference_project' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.no_reference_project : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (index : Int)
+  (path : List.{0} Int) (name : MicroCFTA.InternedBinderProtocol.Reference)
+  (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Not
+    (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst (@List.cons.{0} Int index path)
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) before result after)
+'MicroCFTA.SourceCurrentConstrainedCapPaths.project_rows_root' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.project_rows_root : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {index : Int} {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst (@List.nil.{0} Int) index edges before results
+      after →
+    (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+          ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.SourceEqualityProjectionGraph.select.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) index)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+              @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.nil.{0} Int) child) →
+      ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results result →
+          @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result
+'MicroCFTA.SourceCurrentConstrainedCapPaths.root_guard_obstruction' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapPaths.root_guard_obstruction : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+    Not
+        (valid
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))) →
+      Not
+        (@MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid (@List.nil.{0} Int)
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
