@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentConstrainedCapForestSupport
+import MicroCFTA.SourceCurrentConstrainedCapRichRequiredCompletion
+import MicroCFTA.SourceCurrentConstrainedCapRichRequiredClassPass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.trans
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.trans
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.record_masks
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.record_masks
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_domains
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_domains
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_transport
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_transport
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.propagate
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.propagate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichRequiredCompletion.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapRichRequiredCompletion.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichRequiredClassPass.verified
+#check @MicroCFTA.SourceCurrentConstrainedCapRichRequiredClassPass.verified

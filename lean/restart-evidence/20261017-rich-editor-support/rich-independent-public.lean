@@ -1,0 +1,37 @@
+import MicroCFTA.SourceCurrentConstrainedCapRichEditSupport
+import MicroCFTA.SourceCurrentConstrainedCapForestSupport
+import MicroCFTA.SourceCurrentConstrainedCapRichClassSupport
+import MicroCFTA.SourceCurrentConstrainedCapRichClassPassSupport
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.node
+#check @MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.children
+#check @MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.children
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.rows
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.list
+#check @MicroCFTA.SourceCurrentConstrainedCapRichEditSupport.list
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.trans
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.trans
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.record_masks
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.record_masks
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_domains
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_domains
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_transport
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.closed_transport
+#print axioms MicroCFTA.SourceCurrentConstrainedCapForestSupport.propagate
+#check @MicroCFTA.SourceCurrentConstrainedCapForestSupport.propagate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichClassSupport.verified
+#check @MicroCFTA.SourceCurrentConstrainedCapRichClassSupport.verified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichClassPassSupport.fold
+#check @MicroCFTA.SourceCurrentConstrainedCapRichClassPassSupport.fold
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRichClassPassSupport.pass
+#check @MicroCFTA.SourceCurrentConstrainedCapRichClassPassSupport.pass

@@ -1,0 +1,292 @@
+'MicroCFTA.RichStoreEffectsKernels.raw_guard_then_node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@raw_guard_then_node : ∀
+  [inst :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0} (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base : State (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SharedState width},
+  @SourceCurrentAllocatedSharedTargetState.Ready width
+      (fun a b =>
+        @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+          FormulaExecutable.formulaDecidableEq a b)
+      inst formulas solver inventory record originals base before →
+    @SourceCurrentConstrainedCapSharedSupport.Stored width record originals before →
+      ∀ (symbol : SourceObservations.Label FullSyntax.Formula)
+        (guard : SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (children :
+          List.{0}
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))),
+        @SourceCurrentConjunctionEquality.FieldAvailable FullSyntax.Formula
+            (@SourceEqualityNativeDemand.State.operations width
+              (@SourceCurrentAllocatedSharedTargetState.State.checked width before))
+            guard →
+          @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width
+                    (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+              children →
+            (∀
+                (value :
+                  Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+                @Membership.mem.{0, 0}
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    (List.{0}
+                      (Value (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                    (@List.instMembership.{0}
+                      (Value (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                    children value →
+                  @SourceEqualityAnnotationLanguage.Annotated (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                    (SourceObservations.Label FullSyntax.Formula) value) →
+              have edge :=
+                @run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  inst
+                  (@makeEdge (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) symbol guard children)
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width
+                        (@SourceCurrentAllocatedSharedTargetState.State.checked width before))));
+              have middle :=
+                @advanceHeap width before
+                  (@Prod.snd.{0, 0}
+                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    (State (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    edge);
+              have node :=
+                @run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  inst
+                  (@makeNode (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@List.cons.{0}
+                      (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                      (@Prod.fst.{0, 0}
+                        (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (State (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        edge)
+                      (@List.nil.{0}
+                        (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width
+                        (@SourceCurrentAllocatedSharedTargetState.State.checked width middle))));
+              have after :=
+                @advanceHeap width middle
+                  (@Prod.snd.{0, 0}
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    (State (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    node);
+              And (@SourceCurrentConstrainedCapSharedSupport.Stored width record originals after)
+                (And
+                  (@SourceCurrentAllocatedSharedTargetState.Ready width
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                        FormulaExecutable.formulaDecidableEq a b)
+                    inst formulas solver inventory record originals base after)
+                  (And
+                    (@SourceCurrentConstrainedCap.Cap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Prod.fst.{0, 0}
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (State (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        node))
+                    (And
+                      (@Eq.{1} (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@Cache.Interned.key
+                            (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@Prod.fst.{0, 0}
+                                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                (State (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                edge))))
+                        guard)
+                      (And
+                        (@Eq.{1}
+                          (EqualityNormalize.Path →
+                            Option.{0}
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                          (@SourceCurrentAllocatedSharedTargetState.State.targets width after)
+                          (@SourceCurrentAllocatedSharedTargetState.State.targets width before))
+                        (@Eq.{1}
+                          (SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          (@SourceCurrentAllocatedSharedTargetState.State.memo width after)
+                          (@SourceCurrentAllocatedSharedTargetState.State.memo width before))))))
+'MicroCFTA.RichStoreEffectsKernels.own_head_then_node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@own_head_then_node : ∀
+  [inst :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0} (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {base : State (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before : SharedState width},
+  @SourceCurrentAllocatedSharedTargetState.Ready width
+      (fun a b =>
+        @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+          FormulaExecutable.formulaDecidableEq a b)
+      inst formulas solver inventory record originals base before →
+    @SourceCurrentConstrainedCapSharedSupport.Stored width record originals before →
+      ∀ (depth : Nat)
+        (input :
+          Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+        @Available (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native width
+                  (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+            input →
+          @Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+              (@Value.free (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) input)
+              (@List.nil.{0} InternedBinderProtocol.Reference) →
+            @SourceCurrentConstrainedCap.Cap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) depth input →
+              @Exists.{1}
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                fun exposed =>
+                @Exists.{1}
+                  (State (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  fun heap =>
+                  And
+                    (@SourceEqualityRequiredHead.Head (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst input
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width
+                            (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                      exposed heap)
+                    (have middle := @advanceHeap width before heap;
+                    have result :=
+                      @run (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        inst
+                        (@makeNode (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@InternedEdgeResidency.nodeEdges (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) exposed))
+                        heap;
+                    And
+                      (@SourceCurrentConstrainedCapSharedSupport.Stored width record originals
+                        (@advanceHeap width middle
+                          (@Prod.snd.{0, 0}
+                            (Value (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            (State (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            result)))
+                      (And
+                        (@SourceCurrentAllocatedSharedTargetState.Ready width
+                          (fun a b =>
+                            @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                              FormulaExecutable.formulaDecidableEq a b)
+                          inst formulas solver inventory record originals base
+                          (@advanceHeap width middle
+                            (@Prod.snd.{0, 0}
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              (State (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              result)))
+                        (And
+                          (@SourceCurrentConstrainedCap.Cap (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) depth exposed)
+                          (And
+                            (@SourceCurrentConstrainedCapRequiredSupport.Preserves
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) input exposed)
+                            (And
+                              (@SourceCurrentConstrainedCap.Cap (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) depth
+                                (@Prod.fst.{0, 0}
+                                  (Value (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (State (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  result))
+                              (And
+                                (@Eq.{1}
+                                  (EqualityNormalize.Path →
+                                    Option.{0}
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                  (@SourceCurrentAllocatedSharedTargetState.State.targets width
+                                    (@advanceHeap width middle
+                                      (@Prod.snd.{0, 0}
+                                        (Value (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        (State (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        result)))
+                                  (@SourceCurrentAllocatedSharedTargetState.State.targets width before))
+                                (@Eq.{1}
+                                  (SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (@SourceCurrentAllocatedSharedTargetState.State.memo width
+                                    (@advanceHeap width middle
+                                      (@Prod.snd.{0, 0}
+                                        (Value (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        (State (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        result)))
+                                  (@SourceCurrentAllocatedSharedTargetState.State.memo width before))))))))

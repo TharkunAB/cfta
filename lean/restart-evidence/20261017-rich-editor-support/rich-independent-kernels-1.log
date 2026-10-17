@@ -1,0 +1,285 @@
+'MicroCFTA.RichIndependentChecks.overlapping_classes' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@overlapping_classes : ∀
+  [inst :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (F : SourceGuards.Formulas FullSyntax.Formula) (S : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (firstRecord secondRecord : SourceEqualityClassOrder.Record) (depth : Nat)
+  (common : EqualityNormalize.Path),
+  @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+      (@List.instMembership.{0} EqualityNormalize.Path) firstRecord.paths common →
+    @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+        (@List.instMembership.{0} EqualityNormalize.Path) secondRecord.paths common →
+      SourceEqualityClassOrder.Coherent firstRecord →
+        SourceEqualityClassOrder.Coherent secondRecord →
+          EqualityNormalize.Nontrivial firstRecord.paths →
+            EqualityNormalize.Nontrivial secondRecord.paths →
+              ∀
+                {values middle results :
+                  List.{0}
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+                {before current after : SourceEqualityNativeDemand.State width}
+                {memo currentMemo saved :
+                  SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+                {memos currentMemos final : EndpointMemoGateTrace.Memos}
+                {first :
+                  @Class width
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                        FormulaExecutable.formulaDecidableEq a b)
+                    inst firstRecord values before memo middle current currentMemo}
+                {second :
+                  @Class width
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                        FormulaExecutable.formulaDecidableEq a b)
+                    inst secondRecord middle current currentMemo results after saved},
+                @ClassReads width
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                        FormulaExecutable.formulaDecidableEq a b)
+                    inst F S firstRecord values before current memo currentMemo middle first memos currentMemos →
+                  @ClassReads width
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                          FormulaExecutable.formulaDecidableEq a b)
+                      inst F S secondRecord middle current after currentMemo saved results second currentMemos final →
+                    @SourceCurrentConjunctionClassScan.Ready width before →
+                      @At width F S inventory before →
+                        @Values (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceRecursiveIntersectionKernel.Machine.heap
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceRecursiveIntersectionThunks.State.machine width
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceEqualityNativeDemand.State.native width before)))
+                            values →
+                          @ClosedValues (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) values →
+                            @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width before)))
+                                memo →
+                              (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                                  @SourceCurrentMemoMergeLanguage.CacheCovers
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                      FormulaExecutable.formulaDecidableEq F S)
+                                    ambient memo) →
+                                @EndpointMemoGateTrace.Valid inst
+                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceRecursiveIntersectionThunks.State.machine width
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@SourceEqualityNativeDemand.State.native width before)))
+                                    memos →
+                                  @SourceCurrentHereditaryNativeUniversalStore.Stored width
+                                      (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) before →
+                                    @SourceCurrentHereditaryMerge.Stored (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) memo →
+                                      (∀
+                                          (value :
+                                            Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+                                          @Membership.mem.{0, 0}
+                                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (List.{0}
+                                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                              (@List.instMembership.{0}
+                                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                              values value →
+                                            @SourceCurrentConstrainedCap.Cap
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true) depth
+                                              value) →
+                                        (∀ (path : EqualityNormalize.Path),
+                                            @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                                                (@List.instMembership.{0} EqualityNormalize.Path) firstRecord.paths
+                                                path →
+                                              @ForestSupported (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                (@List.map.{0, 0} Nat Int Int.ofNat path) values) →
+                                          (∀ (path : EqualityNormalize.Path),
+                                              @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                                                  (@List.instMembership.{0} EqualityNormalize.Path) secondRecord.paths
+                                                  path →
+                                                @ForestSupported (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                  (@List.map.{0, 0} Nat Int Int.ofNat path) values) →
+                                            @Exists.{1} Inventory fun firstInventory =>
+                                              @Exists.{1} Inventory fun next =>
+                                                And
+                                                  (@SourceCurrentAllocatedClassEdits.Receipt width
+                                                    (fun a b =>
+                                                      @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula
+                                                        instDecidableEqString FormulaExecutable.formulaDecidableEq a b)
+                                                    inst F S firstInventory firstRecord values before memo middle
+                                                    current currentMemo memos currentMemos)
+                                                  (And
+                                                    (@SourceCurrentAllocatedClassEdits.Receipt width
+                                                      (fun a b =>
+                                                        @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula
+                                                          instDecidableEqString FormulaExecutable.formulaDecidableEq a
+                                                          b)
+                                                      inst F S next secondRecord middle current currentMemo results
+                                                      after saved currentMemos final)
+                                                    (And
+                                                      (@SourceCurrentHereditaryNativeUniversalStore.Stored width
+                                                        (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                        after)
+                                                      (And
+                                                        (@SourceCurrentHereditaryMerge.Stored
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          (fun guard => @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                          saved)
+                                                        (And
+                                                          (@All₂
+                                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                            (@Preserves (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                              fun guard =>
+                                                              @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                            values results)
+                                                          (And
+                                                            (∀
+                                                              (value :
+                                                                Value (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+                                                              @Membership.mem.{0, 0}
+                                                                  (Value (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                                  (List.{0}
+                                                                    (Value (SourceObservations.Label FullSyntax.Formula)
+                                                                      (SourceSymbolicIndex.Constraint
+                                                                        FullSyntax.Formula)))
+                                                                  (@List.instMembership.{0}
+                                                                    (Value (SourceObservations.Label FullSyntax.Formula)
+                                                                      (SourceSymbolicIndex.Constraint
+                                                                        FullSyntax.Formula)))
+                                                                  results value →
+                                                                @SourceCurrentConstrainedCap.Cap
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                  (fun guard =>
+                                                                    @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                                  depth value)
+                                                            (And
+                                                              (@ClosedValues
+                                                                (SourceObservations.Label FullSyntax.Formula)
+                                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                results)
+                                                              (And
+                                                                (@ForestSupported
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                  (fun guard =>
+                                                                    @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                                  (@List.map.{0, 0} Nat Int Int.ofNat common) middle)
+                                                                (And
+                                                                  (@ForestSupported
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (fun guard =>
+                                                                      @Eq.{1} Bool (SourceMemoGate.plain guard) true)
+                                                                    (@List.map.{0, 0} Nat Int Int.ofNat common) results)
+                                                                  (@Exists.{0}
+                                                                    (@Fold
+                                                                      (fun a b =>
+                                                                        @instDecidableEqProd.{0, 0} SourceGuards.Name
+                                                                          FullSyntax.Formula instDecidableEqString
+                                                                          FormulaExecutable.formulaDecidableEq a b)
+                                                                      inst width
+                                                                      (@List.cons.{0} SourceEqualityClassOrder.Record
+                                                                        secondRecord
+                                                                        (@List.cons.{0} SourceEqualityClassOrder.Record
+                                                                          firstRecord
+                                                                          (@List.nil.{0}
+                                                                            SourceEqualityClassOrder.Record)))
+                                                                      values before memo results after saved)
+                                                                    fun fold =>
+                                                                    And
+                                                                      (@FoldReads
+                                                                        (fun a b =>
+                                                                          @instDecidableEqProd.{0, 0} SourceGuards.Name
+                                                                            FullSyntax.Formula instDecidableEqString
+                                                                            FormulaExecutable.formulaDecidableEq a b)
+                                                                        inst width F S
+                                                                        (@List.cons.{0} SourceEqualityClassOrder.Record
+                                                                          secondRecord
+                                                                          (@List.cons.{0}
+                                                                            SourceEqualityClassOrder.Record firstRecord
+                                                                            (@List.nil.{0}
+                                                                              SourceEqualityClassOrder.Record)))
+                                                                        values results before after memo saved fold
+                                                                        memos final)
+                                                                      (@Exists.{0}
+                                                                        (@Pass
+                                                                          (fun a b =>
+                                                                            @instDecidableEqProd.{0, 0}
+                                                                              SourceGuards.Name FullSyntax.Formula
+                                                                              instDecidableEqString
+                                                                              FormulaExecutable.formulaDecidableEq a b)
+                                                                          inst width
+                                                                          (@List.cons.{0}
+                                                                            SourceEqualityClassOrder.Record secondRecord
+                                                                            (@List.cons.{0}
+                                                                              SourceEqualityClassOrder.Record
+                                                                              firstRecord
+                                                                              (@List.nil.{0}
+                                                                                SourceEqualityClassOrder.Record)))
+                                                                          values before memo
+                                                                          (@EqualityLeafProjectionRuntimeEmpty.propagate
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            results)
+                                                                          after saved)
+                                                                        fun pass =>
+                                                                        @PassReads
+                                                                          (fun a b =>
+                                                                            @instDecidableEqProd.{0, 0}
+                                                                              SourceGuards.Name FullSyntax.Formula
+                                                                              instDecidableEqString
+                                                                              FormulaExecutable.formulaDecidableEq a b)
+                                                                          inst width F S
+                                                                          (@List.cons.{0}
+                                                                            SourceEqualityClassOrder.Record secondRecord
+                                                                            (@List.cons.{0}
+                                                                              SourceEqualityClassOrder.Record
+                                                                              firstRecord
+                                                                              (@List.nil.{0}
+                                                                                SourceEqualityClassOrder.Record)))
+                                                                          values
+                                                                          (@EqualityLeafProjectionRuntimeEmpty.propagate
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            results)
+                                                                          before after memo saved pass memos
+                                                                          final))))))))))
