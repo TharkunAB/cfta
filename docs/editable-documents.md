@@ -46,3 +46,70 @@ stale patches, invalid atomic batches, duplicate names, and unchanged old
 versions. Compare results with independent bounded acceptance checks. Re-run
 all graph-codec cases after sharing the parser code. Use the normal capped PR
 gates and record edit costs separately from core-query benchmarks.
+
+## Minimal example
+
+This complete program reopens a source document before removing its false fact:
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+module Main (main) where
+
+import qualified Data.Map.Strict as Map
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (equalityConstraint)
+import qualified Data.CFTA.Document as Document
+import Data.CFTA.Equality.Constraint (EqConstraints (EqContradiction))
+import Data.CFTA.Serialization.JSON (decodeDocument, encodeDocument, explainDecodeError)
+import qualified Data.CFTA.Term as Term
+
+main :: IO ()
+main = do
+    before <- either (fail . Document.explainDocumentError) pure $
+        Document.mkDocument ("Atom" :: String)
+            [("Atom", [FTA.Transition "zero" [] $ Document.Annotation "zero" $
+                Map.singleton "disabled" $ equalityConstraint EqContradiction])]
+    reopened <- either (fail . explainDecodeError) pure $ decodeDocument $ encodeDocument before
+    let request :: Document.Patch String
+        request = Document.patch reopened [Document.RemoveFact "Atom" "zero" "disabled"]
+    after <- either (fail . Document.explainDocumentError) pure $ Document.applyPatch request reopened
+    let term = Term.Node "zero" []
+    print (FTA.accepts (Document.compileGraph reopened) term, FTA.accepts (Document.compileGraph after) term)
+```
+
+The result is `(False,True)`. Add `cfta`, `cfta-serialization`, and
+`containers` to the caller's dependencies. Keep `before` to undo the edit.
+This example needs no solver. See `cfta-editable-document` for the complete
+separate-process workflow with equality and semantic facts and a new constructor.
+
+`FTA.terms` lists the underlying ordinary tree shapes without interpreting
+constraints. Do not use it to list a compiled document's constrained language.
+`FTA.accepts` handles the equality constraints in this minimal example. Use
+`Sized.sized` for equality size classes or `Sized.sizedUpTo` with an entailment
+solver for semantic guards. The complete executable uses the latter route.
+
+## Validation
+
+The fresh strict build, all six suites, formatting, lint, and metadata checks
+pass. The save/edit/show executable runs in separate processes and produces
+exactly three equal pairs after the edit.
+
+A standalone probe checks false-fact removal, individual equality removal,
+constructor addition and removal, name-based selection after insertion, atomic
+forward references and arity changes, missing targets, duplicate names, stale
+patches, failed-batch rollback, and unchanged old documents. Its finite fixture
+counts are `[0,2,4,8,27,8,3]`. Cyclic size counts and rank inverses replay after
+saving and reopening the restored document.
+
+Every existing graph-codec fixture imports as one fact per production, passes
+through a document round trip, and compiles back to the exact graph. This
+includes every raw formula and guard form. Thirteen malformed document cases
+pass. The previous 31 graph errors and all graph rank-replay checks still pass.
+Graph version 1 fixture bytes are unchanged. The minimal example compiles and
+prints `(False,True)`.
+
+Template exclusion can copy one source annotation to several generated
+transitions. The probe confirms that those copies need distinct identities or
+retained source provenance before they can become an editable document. Keep
+the original source when applying such transformations to a compiled graph.
+A reversible filter layer is separate work.

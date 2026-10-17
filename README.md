@@ -96,7 +96,9 @@ syntax.
 
 The optional [cfta-serialization](cfta-serialization/README.md) package saves
 and reopens complete explicit graphs as versioned JSON. Its example displays
-and queries a saved recursive LTA in a fresh process.
+and queries a saved recursive LTA in a fresh process. It also stores editable
+source documents with named facts. See [editable documents](docs/editable-documents.md)
+for atomic patches and a complete fact-removal example.
 
 ## Three flagship languages
 

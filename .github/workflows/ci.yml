@@ -135,6 +135,9 @@ jobs:
           cabal v2-run cfta-automaton-interop
           cabal v2-run cfta-graph-snapshot -- save /tmp/cfta-graph.json
           cabal v2-run cfta-graph-snapshot -- load /tmp/cfta-graph.json
+          cabal v2-run cfta-editable-document -- save /tmp/cfta-source.json
+          cabal v2-run cfta-editable-document -- edit /tmp/cfta-source.json /tmp/cfta-edited.json
+          cabal v2-run cfta-editable-document -- show /tmp/cfta-edited.json
 
       # The release check builds every dependency again, with documentation,
       # and takes about 30 minutes. It runs after a merge into main, and on
