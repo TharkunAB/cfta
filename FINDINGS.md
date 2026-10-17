@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `85ba15b0`.
+Status rechecked on 2026-10-17 at proof checkpoint `a68b3c9b`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-outer-branches.md` for the current proof boundaries.
+Read `lean/notes-current-outer-progress.md` for the current proof boundaries.
 
-The current initial outer branch and height-boundary proofs add no Haskell change.
+The current guard-origin and parent-height proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 3031 jobs and 66145 dependency checks.
+The last completed pinned Lean Audit passes: 3035 jobs and 66550 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -174,6 +174,74 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current guard origins, selected endpoint bounds, and actual parent growth
+
+Updated: 2026-10-17 16:28 CEST. Starting checkpoint is 76dcdddc.
+Proof commits are 2d63272f and a68b3c9b. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-outer-progress.md for the
+whole-library target, proof map, exact support, and remaining obligations.
+Evidence is in lean/restart-evidence/20261017-outer-progress/.
+
+The actual visited source gate now derives hereditary local plain
+annotations and empty own equality fields from Coherent and Available.
+It adds no global plain-heap or closure condition. Initial endpoint
+descendant exclusion derives a finite selected-value Cap at complete
+payload mass. The actual false primary endpoint trace supplies that
+exclusion. No input Cap or whole-forest closure is assumed. Secondary
+endpoint checks admit constrained Mu and do not imply this primary fact.
+
+Ordinary Required returns retain original root-row guards, symbols, and
+arities. Actual accepted plain unfolding, Head, and Required retain empty
+own fields at the same returned heaps. Causal Mu body/probe observations
+remain explicit. These are actual-read preservation laws. They do not
+construct general outer completion or replace its missing initial producer.
+
+A source-built, primary-admitted parent now proves actual edge-height
+growth from 2 to 3. Its returned second child has height 3, equal to the
+original parent node. The literal worker retains the raw outer guard,
+both slots, and the constrained finite child's physical reference at a
+deeper position. This refutes strict ordinary-height descent on that
+transition. It proves no cycle, divergence, or Haskell behavior defect.
+The same fixture completes a literal outer call with returned height 4.
+A post-return B demand observes ready B and retains the exact caller.
+The internal copied-B hit event is not separately isolated.
+
+Next prove causal progress for actual returned children and captured
+owners. The certificate must distinguish origin occurrences, account for
+inherited combine/descent and unequal-length edits, and respect actual
+memo keys. Keys omit historical occurrence labels. Ghost-label descent
+alone cannot exclude a busy physical cell. Do not replace this producer
+with a desired future returned-child rank or globally idle tables.
+General live walks, ordered rows, ordinary nodes, mutual completion,
+repeated-pass convergence, current Haskell adapters, lazy forcing and
+publication, concrete memo events, host capacity, and full public Haskell
+correspondence remain open. The whole-library goal stays active.
+
+Audit passes 3035 jobs and 66550 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 361 MiB peak memory. All four final strict
+logs are empty. All four canonical targets pass. Final probes check 15
+public declarations and five constructed integrations. Only standard
+kernel axioms are permitted. Read checkpoint-validation.json and README
+for exact final signature, axiom, component, and hash counts.
+The parent proof uses a private witness to permit complete public proof
+printing. Its public statement is byte-identical to the earlier version.
+All failed and terminated attempts retain their source and raw output.
+The optional native-product draft is unverified and is not counted.
+Preservation retains 16657 starting files, 3030 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 101 frozen module manifests with 792 entries. Audit adds
+four imports. Older proof and evidence bytes stay preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
 
 ## Current initial outer branches and recursive height boundary
 
