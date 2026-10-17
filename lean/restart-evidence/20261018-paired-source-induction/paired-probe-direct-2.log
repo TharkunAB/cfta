@@ -1,0 +1,209 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:45:37: error: Type mismatch: After simplification, term
+  included
+ has type
+  atom = other
+but is expected to have type
+  other = atom
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:80:32: error: Type mismatch: After simplification, term
+  member
+ has type
+  Sum.inl value = Sum.inr (a, b) ∨ Sum.inl value ∈ inputs
+but is expected to have type
+  Sum.inl value ∈ inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:98:33: error: Type mismatch: After simplification, term
+  member
+ has type
+  Sum.inr atom = Sum.inl Value.empty ∨ Sum.inr atom ∈ inputs
+but is expected to have type
+  Sum.inr atom ∈ inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:98:33: error: Type mismatch: After simplification, term
+  member
+ has type
+  Sum.inr atom = Sum.inl (Value.node entry✝ edges✝ depth✝ free✝) ∨ Sum.inr atom ∈ inputs
+but is expected to have type
+  Sum.inr atom ∈ inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:98:33: error: Type mismatch: After simplification, term
+  member
+ has type
+  Sum.inr atom = Sum.inl (Value.union entry✝ members✝ depth✝ free✝) ∨ Sum.inr atom ∈ inputs
+but is expected to have type
+  Sum.inr atom ∈ inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:98:33: error: Type mismatch: After simplification, term
+  member
+ has type
+  Sum.inr atom = Sum.inl (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) ∨ Sum.inr atom ∈ inputs
+but is expected to have type
+  Sum.inr atom ∈ inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:126:17: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Reference → Value x_0 x_1 → Environment x_0 x_1 → Environment x_0 x_1
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:125:4: error: unsolved goals
+case pos
+Atom Symbol Guard : Type
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+first second : Environment Symbol Guard
+compatible : Compatible (Syntax.binder true body) inputs firstNames secondNames first second
+firstArgument secondArgument : Reference
+replacement : Value Symbol Guard
+aliases :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ support (Syntax.binder true body) inputs →
+      (Sum.elim id firstNames label = firstArgument ↔ Sum.elim id secondNames label = secondArgument)
+name : Reference
+member : Sum.inl name ∈ support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+captured : Sum.inl name ∈ support (Syntax.binder true body) inputs
+alias : name = firstArgument ↔ name = secondArgument
+left : name = firstArgument
+right : name = secondArgument
+⊢ SourceCurrentStoredMuBinderChildLineage.bind firstArgument replacement first firstArgument =
+    SourceCurrentStoredMuBinderChildLineage.bind secondArgument replacement second firstArgument
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:128:17: error: Ambiguous term
+  bind
+Possible interpretations:
+  SourceCurrentStoredMuBinderChildLineage.bind : Reference →
+    Value ?m.105 ?m.106 → Environment ?m.105 ?m.106 → Environment ?m.105 ?m.106
+  
+  Bind.bind : ?m.105 ?m.107 → (?m.107 → ?m.105 ?m.108) → ?m.105 ?m.108
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:128:6: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:131:43: error: Ambiguous term
+  bind
+Possible interpretations:
+  SourceCurrentStoredMuBinderChildLineage.bind : Reference →
+    Value ?m.134 ?m.135 → Environment ?m.134 ?m.135 → Environment ?m.134 ?m.135
+  
+  Bind.bind : ?m.134 ?m.136 → (?m.136 → ?m.134 ?m.137) → ?m.134 ?m.137
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:131:16: error: unsolved goals
+case right.inl
+Atom Symbol Guard : Type
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+first second : Environment Symbol Guard
+compatible : Compatible (Syntax.binder true body) inputs firstNames secondNames first second
+firstArgument secondArgument : Reference
+replacement : Value Symbol Guard
+aliases :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ support (Syntax.binder true body) inputs →
+      (Sum.elim id firstNames label = firstArgument ↔ Sum.elim id secondNames label = secondArgument)
+token : Unit
+member : Sum.inr (Sum.inl token) ∈ support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+⊢ (SourceCurrentStoredMuBinderChildLineage.bind firstArgument replacement first firstArgument).getD
+      (Value.reference firstArgument) =
+    (SourceCurrentStoredMuBinderChildLineage.bind secondArgument replacement second secondArgument).getD
+      (Value.reference secondArgument)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:138:34: error: Ambiguous term
+  bind
+Possible interpretations:
+  SourceCurrentStoredMuBinderChildLineage.bind : Reference →
+    Value ?m.183 ?m.184 → Environment ?m.183 ?m.184 → Environment ?m.183 ?m.184
+  
+  Bind.bind : ?m.183 ?m.185 → (?m.185 → ?m.183 ?m.186) → ?m.183 ?m.186
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:137:8: error: unsolved goals
+case pos
+Atom Symbol Guard : Type
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+first second : Environment Symbol Guard
+compatible : Compatible (Syntax.binder true body) inputs firstNames secondNames first second
+firstArgument secondArgument : Reference
+replacement : Value Symbol Guard
+aliases :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ support (Syntax.binder true body) inputs →
+      (Sum.elim id firstNames label = firstArgument ↔ Sum.elim id secondNames label = secondArgument)
+atom : Atom
+member : Sum.inr (Sum.inr atom) ∈ support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+captured : Sum.inr atom ∈ support (Syntax.binder true body) inputs
+alias : firstNames atom = firstArgument ↔ secondNames atom = secondArgument
+left : firstNames atom = firstArgument
+right : secondNames atom = secondArgument
+⊢ (SourceCurrentStoredMuBinderChildLineage.bind firstArgument replacement first firstArgument).getD
+      (Value.reference firstArgument) =
+    (SourceCurrentStoredMuBinderChildLineage.bind secondArgument replacement second secondArgument).getD
+      (Value.reference secondArgument)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:140:35: error: Ambiguous term
+  bind
+Possible interpretations:
+  SourceCurrentStoredMuBinderChildLineage.bind : Reference →
+    Value ?m.190 ?m.191 → Environment ?m.190 ?m.191 → Environment ?m.190 ?m.191
+  
+  Bind.bind : ?m.190 ?m.192 → (?m.192 → ?m.190 ?m.193) → ?m.190 ?m.193
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:140:10: error: Type mismatch: After simplification, term
+  compatible.right atom captured
+ has type
+  (first (firstNames atom)).getD (Value.reference (firstNames atom)) =
+    (second (secondNames atom)).getD (Value.reference (secondNames atom))
+but is expected to have type
+  (SourceCurrentStoredMuBinderChildLineage.bind firstArgument replacement first (firstNames atom)).getD
+      (Value.reference (firstNames atom)) =
+    (SourceCurrentStoredMuBinderChildLineage.bind secondArgument replacement second (secondNames atom)).getD
+      (Value.reference (secondNames atom))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:126:27: warning: This simp argument is unused:
+  right
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, left, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:126:33: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, left, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:131:48: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Sum.elim_inl, bind, Option.getD_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:131:57: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Sum.elim_inl, bind, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:138:50: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Sum.elim_inr, bind, left, right, Option.getD_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:138:59: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Sum.elim_inr, bind, left, right, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:153:39: error(lean.unknownIdentifier): Unknown identifier `InternedNestedConstruction.ordinaryLevel`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:154:39: error(lean.unknownIdentifier): Unknown identifier `InternedNestedConstruction.ordinaryLevel`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:155:7: error: overloaded, errors 
+  155:26 Unknown identifier `InternedNestedConstruction.ordinaryLevel`
+  
+  155:86 Application type mismatch: The argument
+    replacement
+  has type
+    Value Symbol Guard
+  but is expected to have type
+    ?m.63 → ?m.61 ?m.64
+  in the application
+    ?m.65 >>= replacement
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-paired-source-induction/paired-probe-direct-2.source.lean:156:7: error: overloaded, errors 
+  156:26 Unknown identifier `InternedNestedConstruction.ordinaryLevel`
+  
+  156:87 Application type mismatch: The argument
+    replacement
+  has type
+    Value Symbol Guard
+  but is expected to have type
+    ?m.63 → ?m.61 ?m.64
+  in the application
+    ?m.65 >>= replacement

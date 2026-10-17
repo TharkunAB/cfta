@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.Aligned
+#print MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.Aligned
+#print axioms MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.Aligned
+
+#check @MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.StrictChild
+#print MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.StrictChild
+#print axioms MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.StrictChild
+
+#check @MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.reference
+#print MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.reference
+#print axioms MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.reference
+
+#check @MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.symbolic_inputs
+#print MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.symbolic_inputs
+#print axioms MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.symbolic_inputs
+
+#check @MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.ordinary
+#print MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.ordinary
+#print axioms MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.ordinary
+
+#check @MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.node_complete
+#print MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.node_complete
+#print axioms MicroCFTA.SourceCurrentStoredPairedOrdinaryLineage.node_complete

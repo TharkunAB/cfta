@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentStoredProbeCompatibility
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredProbeCompatibility.Compatible
+#print MicroCFTA.SourceCurrentStoredProbeCompatibility.Compatible
+#print axioms MicroCFTA.SourceCurrentStoredProbeCompatibility.Compatible
+
+#check @MicroCFTA.SourceCurrentStoredProbeCompatibility.paired_inputs
+#print MicroCFTA.SourceCurrentStoredProbeCompatibility.paired_inputs
+#print axioms MicroCFTA.SourceCurrentStoredProbeCompatibility.paired_inputs
+
+#check @MicroCFTA.SourceCurrentStoredProbeCompatibility.extend
+#print MicroCFTA.SourceCurrentStoredProbeCompatibility.extend
+#print axioms MicroCFTA.SourceCurrentStoredProbeCompatibility.extend
+
+#check @MicroCFTA.SourceCurrentStoredProbeCompatibility.publication_ordinary
+#print MicroCFTA.SourceCurrentStoredProbeCompatibility.publication_ordinary
+#print axioms MicroCFTA.SourceCurrentStoredProbeCompatibility.publication_ordinary
+

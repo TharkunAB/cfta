@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 00:36 CEST. Proof checkpoint is `2d59402e`.
+Full pinned Audit passes 3162 jobs and 69585 dependency checks. Paired ordinary
+source induction now supports unequal reference tails. Actual selected native
+cells and captured writers persist to the full class reader with a derived
+reader history. Live ordinary-probe compatibility is proved. Binder-result
+alignment, earlier memo winners, general outer progress, convergence, and
+complete public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Repair `b9219b9e` remains
+merged and validated in source `c0cc8a05`. Read
+`lean/notes-current-paired-source-induction.md`. Keep this repair registry
+first. Record each later fix with its failure, reproducer, paths, commit,
+validation, and upstream status. Earlier reports below retain their dates.
+
 Current proof update: 2026-10-18 00:20 CEST. Proof checkpoint is `5daed6fb`.
 Full pinned Audit passes 3158 jobs and 69534 dependency checks. Actual class
 leaves retain their selected input, historical target, exact native query,

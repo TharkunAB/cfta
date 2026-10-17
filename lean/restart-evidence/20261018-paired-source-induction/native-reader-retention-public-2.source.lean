@@ -1,0 +1,53 @@
+import MicroCFTA.SourceCurrentNativeReaderRetention
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.target
+#print MicroCFTA.SourceCurrentNativeReaderRetention.target
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.target
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.force
+#print MicroCFTA.SourceCurrentNativeReaderRetention.force
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.force
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.leaf
+#print MicroCFTA.SourceCurrentNativeReaderRetention.leaf
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.leaf
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.edit_children
+#print MicroCFTA.SourceCurrentNativeReaderRetention.edit_children
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.edit_children
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.edit_rows
+#print MicroCFTA.SourceCurrentNativeReaderRetention.edit_rows
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.edit_rows
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.edit_node
+#print MicroCFTA.SourceCurrentNativeReaderRetention.edit_node
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.edit_node
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.edit_list
+#print MicroCFTA.SourceCurrentNativeReaderRetention.edit_list
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.edit_list
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.class_read
+#print MicroCFTA.SourceCurrentNativeReaderRetention.class_read
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.class_read
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.class_fold
+#print MicroCFTA.SourceCurrentNativeReaderRetention.class_fold
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.class_fold
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.class_pass
+#print MicroCFTA.SourceCurrentNativeReaderRetention.class_pass
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.class_pass
+
+#check @MicroCFTA.SourceCurrentNativeReaderRetention.selected_leaf
+#print MicroCFTA.SourceCurrentNativeReaderRetention.selected_leaf
+#print axioms MicroCFTA.SourceCurrentNativeReaderRetention.selected_leaf
