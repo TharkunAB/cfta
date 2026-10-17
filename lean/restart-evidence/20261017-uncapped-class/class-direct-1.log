@@ -1,0 +1,96 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-uncapped-class/class-direct-1.source.lean:71:4: error: Type mismatch: After simplification, term
+  room
+ has type
+  Room bits
+    (SourceCurrentConstrainedCapEditListNumeric.finalProfile record values.length
+      (SourceEqualityEdits.Edits.editBelow entries) values.length profile)
+but is expected to have type
+  Room bits
+    (SourceCurrentEditListNumeric.finalProfile record values.length (SourceEqualityEdits.Edits.editBelow entries)
+      values.length profile)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-uncapped-class/class-direct-1.source.lean:90:78: error: unsolved goals
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+before : Checked (bits + 2)
+memo : Memo
+profile : Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+domains : ∀ (path : EqualityNormalize.Path), path ∈ record.paths → ForestClosed (List.map Int.ofNat path) values
+physical : PhysicalStored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+room : Room bits (classProfile record values.length profile)
+ready :
+  SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values before.native.machine.heap
+    (SourceCurrentAllocatedSharedTargetState.initial before memo)
+safe : SourceCurrentAllocatedSharedEditEffects.ListSafe (compiled record) values
+reserved : SourceCurrentEditListNumeric.Reserved bits record values.length (compiled record) values.length profile
+results : List (Value Symbol Guard)
+shared : SourceCurrentAllocatedSharedEditGraph.SharedState (bits + 2)
+next : Inventory
+final : Memos
+lower :
+  SourceCurrentAllocatedSharedEditGraph.EditList record values (compiled record) values
+    (SourceCurrentAllocatedSharedTargetState.initial before memo) results shared
+lowerReads :
+  SourceCurrentAllocatedSharedEditGraph.ListReads formulas solver before.native.machine.heap lower memos final
+lowerReceipt :
+  SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt formulas solver next record values before.native.machine.heap
+    values (SourceCurrentAllocatedSharedTargetState.initial before memo) results shared memos final
+returned : Frame formulas solver next shared.checked
+numeric :
+  Fits (SourceCurrentEditListNumeric.finalProfile record values.length (compiled record) values.length profile)
+    shared.checked
+done :
+  SourceCurrentAllocatedSharedEditWorker.editList
+      (SourceCurrentAllocatedSharedEditWorker.edit record values
+        (SourceCurrentEditListNumeric.fuel record values.length (compiled record) values.length profile)
+        (SourceCurrentEditListNumeric.fuel record values.length (compiled record) values.length profile)
+        (SourceCurrentEditListNumeric.fuel record values.length (compiled record) values.length profile)
+        (SourceCurrentEditListNumeric.fuel record values.length (compiled record) values.length profile)
+        (SourceCurrentEditListNumeric.fuel record values.length (compiled record) values.length profile)
+        (SourceCurrentEditListNumeric.fuel record values.length (compiled record) values.length profile))
+      (compiled record) values (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results shared
+actual : Class record values before memo results shared.checked shared.memo
+reads : ClassReads formulas solver actual memos final
+_previousInventory : Inventory
+previous :
+  Receipt formulas solver _previousInventory record values before memo results shared.checked shared.memo memos final
+receipt : Receipt formulas solver next record values before memo results shared.checked shared.memo memos final
+⊢ (match
+      SourceCurrentAllocatedSharedEditWorker.editList
+        (SourceCurrentAllocatedSharedEditWorker.edit record values
+          (SourceCurrentConstrainedCapEditListNumeric.fuel record values.length (compiled record) values.length profile)
+          (SourceCurrentConstrainedCapEditListNumeric.fuel record values.length (compiled record) values.length profile)
+          (SourceCurrentConstrainedCapEditListNumeric.fuel record values.length (compiled record) values.length profile)
+          (SourceCurrentConstrainedCapEditListNumeric.fuel record values.length (compiled record) values.length profile)
+          (SourceCurrentConstrainedCapEditListNumeric.fuel record values.length (compiled record) values.length profile)
+          (SourceCurrentConstrainedCapEditListNumeric.fuel record values.length (compiled record) values.length
+            profile))
+        (compiled record) values (SourceCurrentAllocatedSharedTargetState.initial before memo) with
+    | SourceCurrentAllocatedSharedEditWorker.Outcome.done results shared =>
+      SourceCurrentAllocatedClassWorker.Outcome.done results shared.checked shared.memo
+    | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault shared =>
+      SourceCurrentAllocatedClassWorker.Outcome.failed fault shared) =
+    SourceCurrentAllocatedClassWorker.Outcome.done results shared.checked shared.memo
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-uncapped-class/class-direct-1.source.lean:91:111: warning: This simp argument is unused:
+  done
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentAllocatedClassWorker.runClass, SourceCurrentConstrainedCapClassForecast.classFuel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,178 @@
+## SourceCurrentLocalForecast
+SHA256 43ed9307c3705abc6fd412f12d9cab18b39ae205601b08781a898c79a8d5e6a7
+
+23: noncomputable def finalProfile (budget count : Nat) (loaded : Allocated) (inherited : EqValue)
+24:     (before : Checked width) (profile : Profile) : Profile :=
+25:   match (runPrefix loaded.stored loaded.guard inherited before.operations).1 with
+26:   | .ok (.classes records) =>
+27:       SourceCurrentClassesForecast.finalProfile budget count records (guards before.native.machine.heap) profile
+28:   | _ => profile
+
+31: noncomputable def fuel (budget count : Nat) (loaded : Allocated) (inherited : EqValue)
+32:     (before : Checked width) (profile : Profile) : Nat :=
+33:   match (runPrefix loaded.stored loaded.guard inherited before.operations).1 with
+34:   | .ok (.classes records) =>
+35:       SourceCurrentClassesForecast.fuel budget count records (guards before.native.machine.heap) profile
+36:   | _ => 0
+
+39: noncomputable def Reserved (bits budget count : Nat) (loaded : Allocated) (inherited : EqValue)
+40:     (before : Checked width) (profile : Profile) : Prop :=
+41:   match (runPrefix loaded.stored loaded.guard inherited before.operations).1 with
+42:   | .ok (.classes records) =>
+43:       SourceCurrentClassesForecast.Reserved bits budget count records (guards before.native.machine.heap) profile
+44:   | _ => True
+
+## SourceCurrentLocalNumeric
+SHA256 e70403ae1da770e3a08ec4f4a7bf27bc28d06e5fca10248fd1da2b58ae750624
+
+42: structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+43:     (inventory : Inventory) (profile : Profile) (budget : Nat) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+44:     (values : List (Value Symbol Guard)) (before : Caller width) (memos : Memos) (results : List (Value Symbol Guard))
+
+47:   actual : Graph.Reduction budget loaded inherited values before.checked before.fourth before.merge results after savedFourth saved
+48:   /-- Strict source reads retain the exact returned global memo bundle. -/
+49:   reads : Graph.Reads formulas solver actual memos final
+50:   /-- The complete old receipt retains guarded language and every physical memo law. -/
+51:   semantic : Graph.Receipt formulas solver inventory original loaded inherited values results before.checked after
+52:     before.fourth savedFourth before.merge saved final
+53:   /-- The full query Frame uses the same returned inventory as the caller Post. -/
+54:   frame : Frame formulas solver inventory after
+55:   /-- Initial fields and operations bound the complete local return. -/
+56:   fits : Fits (SourceCurrentLocalForecast.finalProfile budget values.length loaded inherited before.checked profile) after
+57:   /-- The caller retains its actual context and both outer result tables. -/
+58:   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+59:   /-- All nine local fuels can increase independently with the same complete return. -/
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+49:   reads : Graph.Reads formulas solver actual memos final
+50:   /-- The complete old receipt retains guarded language and every physical memo law. -/
+51:   semantic : Graph.Receipt formulas solver inventory original loaded inherited values results before.checked after
+52:     before.fourth savedFourth before.merge saved final
+53:   /-- The full query Frame uses the same returned inventory as the caller Post. -/
+54:   frame : Frame formulas solver inventory after
+55:   /-- Initial fields and operations bound the complete local return. -/
+56:   fits : Fits (SourceCurrentLocalForecast.finalProfile budget values.length loaded inherited before.checked profile) after
+57:   /-- The caller retains its actual context and both outer result tables. -/
+58:   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+59:   /-- All nine local fuels can increase independently with the same complete return. -/
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+51:   semantic : Graph.Receipt formulas solver inventory original loaded inherited values results before.checked after
+52:     before.fourth savedFourth before.merge saved final
+53:   /-- The full query Frame uses the same returned inventory as the caller Post. -/
+54:   frame : Frame formulas solver inventory after
+55:   /-- Initial fields and operations bound the complete local return. -/
+56:   fits : Fits (SourceCurrentLocalForecast.finalProfile budget values.length loaded inherited before.checked profile) after
+57:   /-- The caller retains its actual context and both outer result tables. -/
+58:   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+59:   /-- All nine local fuels can increase independently with the same complete return. -/
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+54:   frame : Frame formulas solver inventory after
+55:   /-- Initial fields and operations bound the complete local return. -/
+56:   fits : Fits (SourceCurrentLocalForecast.finalProfile budget values.length loaded inherited before.checked profile) after
+57:   /-- The caller retains its actual context and both outer result tables. -/
+58:   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+59:   /-- All nine local fuels can increase independently with the same complete return. -/
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+56:   fits : Fits (SourceCurrentLocalForecast.finalProfile budget values.length loaded inherited before.checked profile) after
+57:   /-- The caller retains its actual context and both outer result tables. -/
+58:   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+59:   /-- All nine local fuels can increase independently with the same complete return. -/
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+58:   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+59:   /-- All nine local fuels can increase independently with the same complete return. -/
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+60:   run : ∀ g s r e p h m c n,
+61:     fuel budget values.length loaded inherited before.checked profile ≤ g →
+62:     fuel budget values.length loaded inherited before.checked profile ≤ s →
+63:     fuel budget values.length loaded inherited before.checked profile ≤ r →
+64:     fuel budget values.length loaded inherited before.checked profile ≤ e →
+65:     fuel budget values.length loaded inherited before.checked profile ≤ p →
+66:     fuel budget values.length loaded inherited before.checked profile ≤ h →
+67:     fuel budget values.length loaded inherited before.checked profile ≤ m →
+68:     fuel budget values.length loaded inherited before.checked profile ≤ c →
+69:     fuel budget values.length loaded inherited before.checked profile ≤ n →
+70:     SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+71:       before.checked before.fourth before.merge = .done results after savedFourth saved
+
+88: theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+89:     (inventory : Inventory) (budget : Nat) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+90:     (values : List (Value Symbol Guard)) (before : Caller (bits + 2)) (memos : Memos)
+91:     (initial : Context formulas solver inventory before memos)
+92:     (frame : Frame formulas solver inventory before.checked) (profile : Profile) (fits : Fits profile before.checked)
+93:     (cached : SourceEqualityGuardReadback.Cached original.equalities)
+94:     (found : SourceEqualityConstraintFieldLookup.load original before.checked.operations.constraints = .ok (some loaded))
+95:     (inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited)
+96:     (available : Values before.checked.native.machine.heap values)
+97:     (reserved : SourceCurrentLocalForecast.Reserved bits budget values.length loaded inherited before.checked profile) :
+98:     ∃ results after savedFourth saved next final,

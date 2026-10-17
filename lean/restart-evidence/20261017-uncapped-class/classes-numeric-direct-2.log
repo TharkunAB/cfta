@@ -1,0 +1,189 @@
+lean/restart-evidence/20261017-uncapped-class/classes-numeric-direct-2.source.lean:165:8: error: Tactic `assumption` failed
+
+case none.refine_2
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+values : List (Value Symbol Guard)
+records : List Record
+before : Caller (bits + 2)
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+available : Values before.checked.native.machine.heap values
+proper : ∀ (record : Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+coherent : ∀ (record : Record), record ∈ records → Coherent record
+active : ∀ (record : Record), record ∈ records → Nontrivial record.paths
+reserved :
+  SourceCurrentClassesForecast.Reserved bits budget values.length records (guards before.checked.native.machine.heap)
+    profile
+kept : List Record
+prepared : List (Value Symbol Guard)
+middle : Checked (bits + 2)
+savedFourth : Fourth
+next : Inventory
+current : Memos
+prefixEnough :
+  SourceCurrentScanRequiredForecast.fuel budget values.length records (guards before.checked.native.machine.heap)
+      profile ≤
+    fuel budget values.length records (guards before.checked.native.machine.heap) profile
+preparedReceipt :
+  SourceCurrentScanRequiredNumeric.Receipt formulas solver next profile budget records values before memos none kept
+    prepared middle savedFourth current
+keptCoherent : ∀ (record : Record), record ∈ kept → Coherent record
+keptActive : ∀ (record : Record), record ∈ kept → Nontrivial record.paths
+room :
+  SourceCurrentConstrainedCapClassForecast.Reserved bits kept values.length
+    (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+      (guards before.checked.native.machine.heap) profile)
+reservedPass :
+  SourceCurrentConstrainedCapClassForecast.Reserved bits kept prepared.length
+    (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+      (guards before.checked.native.machine.heap) profile)
+results : List (Value Symbol Guard)
+after : Checked (bits + 2)
+saved : Memo
+lastInventory : Inventory
+final : Memos
+pass :
+  SourceCurrentAllocatedClassPass.Pass kept prepared (advance before middle savedFourth before.merge).checked
+    (advance before middle savedFourth before.merge).merge results after saved
+passReads : SourceCurrentAllocatedClassPass.PassReads formulas solver pass current final
+checked :
+  SourceCurrentAllocatedClassPass.Receipt formulas solver lastInventory kept prepared
+    (advance before middle savedFourth before.merge).checked (advance before middle savedFourth before.merge).merge
+    results after saved current final
+passPost :
+  Post formulas solver lastInventory (advance before middle savedFourth before.merge)
+    (advance (advance before middle savedFourth before.merge) after
+      (advance before middle savedFourth before.merge).fourth saved)
+    final
+returned : Frame formulas solver lastInventory after
+passFits :
+  Fits
+    (SourceCurrentConstrainedCapClassForecast.foldProfile kept values.length
+      (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+        (guards before.checked.native.machine.heap) profile))
+    after
+length : results.length = prepared.length
+_nodes :
+  (advance (advance before middle savedFourth before.merge) after
+        (advance before middle savedFourth before.merge).fourth saved).nodeResults =
+    (advance before middle savedFourth before.merge).nodeResults
+_edges :
+  (advance (advance before middle savedFourth before.merge) after
+        (advance before middle savedFourth before.merge).fourth saved).edgeResults =
+    (advance before middle savedFourth before.merge).edgeResults
+_fourth :
+  (advance (advance before middle savedFourth before.merge) after
+        (advance before middle savedFourth before.merge).fourth saved).fourth =
+    (advance before middle savedFourth before.merge).fourth
+_done :
+  SourceCurrentAllocatedClassWorker.pass
+      (SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+        (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      (SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+        (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      (SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+        (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      (SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+        (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      (SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+        (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      (SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+        (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      kept prepared (advance before middle savedFourth before.merge).checked
+      (advance before middle savedFourth before.merge).merge =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+stable :
+  ∀ (e p h m s n : Nat),
+    SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+          (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+            (guards before.checked.native.machine.heap) profile) ≤
+        e →
+      SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+            (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+              (guards before.checked.native.machine.heap) profile) ≤
+          p →
+        SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+              (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+                (guards before.checked.native.machine.heap) profile) ≤
+            h →
+          SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+                (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+                  (guards before.checked.native.machine.heap) profile) ≤
+              m →
+            SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+                  (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+                    (guards before.checked.native.machine.heap) profile) ≤
+                s →
+              SourceCurrentConstrainedCapClassForecast.foldFuel kept prepared.length
+                    (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+                      (guards before.checked.native.machine.heap) profile) ≤
+                  n →
+                SourceCurrentAllocatedClassWorker.pass e p h m s n kept prepared
+                    (advance before middle savedFourth before.merge).checked
+                    (advance before middle savedFourth before.merge).merge =
+                  SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+actual :
+  SourceCurrentConjunctionScanClassPass.Reduction budget records values before.checked before.fourth
+    (advance before middle savedFourth before.merge).merge none results after savedFourth saved
+reads : SourceCurrentConjunctionScanClassPassActual.Reads formulas solver actual memos final
+post : Post formulas solver lastInventory before (advance before after savedFourth saved) final
+language :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol) (symbol : Symbol) (terms : List (Term Symbol)),
+    (All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) results terms →
+        All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms) ∧
+      ((∀ (record : Record), record ∈ records → ClassSat (Term.node symbol terms) record.paths) →
+        (All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) results terms ↔
+          All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms))
+semantic :
+  SourceCurrentConjunctionScanClassPass.Receipt formulas solver lastInventory records values results before.checked
+    after before.fourth savedFourth before.merge saved none final
+finalFits :
+  Fits
+    (SourceCurrentClassesForecast.finalProfile budget values.length records (guards before.checked.native.machine.heap)
+      profile)
+    after
+classEnough :
+  SourceCurrentConstrainedCapClassForecast.foldFuel kept values.length
+      (SourceCurrentScanRequiredForecast.finalProfile budget values.length records
+        (guards before.checked.native.machine.heap) profile) ≤
+    fuel budget values.length records (guards before.checked.native.machine.heap) profile
+g s r e p h m c n : Nat
+hg : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ g
+hs : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ s
+hr : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ r
+he : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ e
+hp : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ p
+hh : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ h
+hm : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ m
+hc : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ c
+hn : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ n
+done :
+  SourceCurrentScanRequiredWorker.prepare g s r p h n budget records values before.checked before.fourth before.merge =
+    SourceCurrentAllocatedLocalWorker.Outcome.done (none, kept, prepared) middle savedFourth before.merge
+passDone :
+  SourceCurrentAllocatedClassWorker.pass e p h m c n kept prepared
+      (advance before middle savedFourth before.merge).checked (advance before middle savedFourth before.merge).merge =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+⊢ (match SourceCurrentAllocatedClassWorker.pass e p h m c n kept prepared middle before.merge with
+    | SourceCurrentAllocatedClassWorker.Outcome.done results after saved =>
+      SourceCurrentAllocatedLocalWorker.Outcome.done results after savedFourth saved
+    | raw@h:(SourceCurrentAllocatedClassWorker.Outcome.failed fault shared) =>
+      SourceCurrentAllocatedLocalWorker.Outcome.failed (SourceCurrentAllocatedLocalWorker.Fault.classes raw)
+        shared.checked savedFourth shared.memo) =
+    SourceCurrentAllocatedLocalWorker.Outcome.done results after savedFourth saved
