@@ -13,7 +13,8 @@ The format is `cfta-graph`, version 1. A graph snapshot does not contain named
 source facts, host functions, a query plan, a cursor, or count caches. Use the
 same query route and ordering policy after loading to retain ranks.
 
-For editable languages, start with [composable updates](#compose-updates-to-a-language-value).
+For editable languages, use [composable updates](#compose-updates-to-a-language-value)
+and [readable exact definitions](#readable-definitions-with-exact-round-trips).
 Change the language value through typed expressions, then save it. The graph
 snapshot API below also supports callers that already have a compiled automaton.
 
@@ -305,3 +306,88 @@ cabal run cfta-language-expressions -- show /tmp/restored.json
 The saved language gives `[2,3]`. Removing its named exclusion gives `[3,3]`.
 The program changes the loaded value through `restore`; it does not edit JSON.
 Storage does not include query indexes, cursor state, or update requests.
+
+## Readable definitions with exact round trips
+
+`Data.CFTA.Serialization.Text.printLanguage` prints the complete editable
+language. `parseLanguage` reads that form and returns the same value. Use an
+expected state type, such as `Language State`, when parsing. The same state
+codec and source validation apply to JSON and readable text.
+
+```text
+language 1;
+start Expr;
+
+state Atom {
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
+  two = two @{ v == 2 };
+}
+
+state Expr {
+  pair = pair(Atom, Atom) {
+    same = equal([0], [1]);
+  };
+  wrap = wrap(Expr);
+}
+
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+```
+
+This is a stored language value. The constructor, fact, and exclusion names
+remain available for typed updates. Parsing does not run a solver, prune the
+graph, combine facts, or normalize formulas. State rows with no productions
+and rows that the root cannot reach remain present.
+
+The law is `parseLanguage (printLanguage value) == Right value`. Printed text
+is canonical. Reprinting a parsed canonical form gives the same text. The parser
+also accepts whitespace and `//` line comments; these are not part of the stored
+language value and are not preserved by printing.
+
+Names use ASCII identifiers or JSON-quoted strings. The printer quotes unusual
+names, `_`, and `json`. Non-string state values use `json(VALUE)`, so ADTs,
+records, numbers, arrays, booleans, and null values keep their caller-supplied
+state codec. That codec must preserve equality and ordering on a round trip.
+
+A symbol refinement follows `@{ ... }`. Simple comparisons use `v == 0`,
+`v /= 0`, `v > 0`, `v >= 0`, `v < 0`, or `v <= 0`. `v` denotes the library's
+refinement value. Integers are exact and can exceed machine integer ranges.
+`true` and `false` are also formulas. Other formula syntax uses `raw JSON`,
+with the complete formula schema above. The printer does not simplify an
+`And []`, change `Neg (Lit 1)` to `Lit (-1)`, or discard any other source syntax.
+
+Facts use `true`, `false`, `impossible`, `equal(PATH, ...)`, or
+`satisfies(PATH, FORMULA)` when those forms preserve the exact constraint.
+For example, `positive = satisfies([0], v > 0);` constrains the first child.
+`impossible` keeps an equality contradiction distinct from a false guard.
+`equal` stores exactly one equality class, including an empty or singleton
+class. All other constraints use `raw JSON` with both equality and guard fields.
+
+Exclusions use `root` or `anywhere`. A template uses `_` for a hole,
+`f(a, b)` for an exact node, and `_(a, b)` for any root with those exact children.
+A final `...` gives a prefix, such as `f(a, ...)` or `_(...)`. Quote the symbol
+`"_"` to distinguish it from a hole. Refinements remain part of symbol matching.
+
+Syntax failures report a line, column, and expected form. Schema and source
+failures report their existing JSON path or source identity. Duplicate facts,
+exclusions, states, and production names are errors. Unknown versions and
+trailing data are errors.
+
+The complete typed example uses the same update API after loading either format:
+
+```sh
+cabal run cfta-language-expressions -- print
+cabal run cfta-language-expressions -- save-text /tmp/language.cfta
+cabal run cfta-language-expressions -- show-text /tmp/language.cfta
+cabal run cfta-language-expressions -- restore-text /tmp/language.cfta /tmp/restored.cfta
+cabal run cfta-language-expressions -- show-text /tmp/restored.cfta
+```
+
+The stored language gives counts `[2,3]` at sizes three and four. Removing the
+named exclusion gives `[3,3]`, exactly as for JSON. File and standard-output
+encoding is UTF-8. No manual file edit is needed. A quasiquoter can reuse this
+pure parser; this package does not add a separate quote semantics.
+
+See the [language authoring comparison](../docs/language-authoring-prior-art.md)
+for Redex and data-format prior art, implementation limits, and planned
+pattern bindings and portable update expressions.

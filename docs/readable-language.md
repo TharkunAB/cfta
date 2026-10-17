@@ -39,7 +39,8 @@ State values that encode as JSON strings use identifiers or JSON-quoted strings.
 Other state shapes use `json(VALUE)`. Production, fact, exclusion, and symbol
 names use identifiers or quoted strings. Names start with an ASCII letter or
 underscore and continue with ASCII letters, digits, underscores, or hyphens.
-Quote the symbol name `_` to distinguish it from a template hole.
+The printer quotes `_` and `json`. The former is a template hole; the latter
+introduces a complete JSON state value.
 
 A production gives its name, symbol, ordered child state references, and optional
 named facts. A symbol can have an explicit refinement after `@{ ... }`. The
@@ -97,3 +98,7 @@ needs a language-specific representation for the constraints and references.
 is separate from normalization. Preserve source syntax here as well; semantic
 normalization cannot serve as the identity of an editable definition. The small
 grammar surface reuses this package's existing complete schema and dependencies.
+
+The [prior-art comparison](language-authoring-prior-art.md) covers Redex,
+syntax-spec, S-expressions, EDN, KDL, JSON5, and Hjson. It gives concrete mappings,
+Haskell implementation findings, and independent authoring follow-ups.
