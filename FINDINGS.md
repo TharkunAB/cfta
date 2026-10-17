@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `b72ecdc9`.
+Status rechecked on 2026-10-17 at proof checkpoint `1a0ad30e`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-causal-guard-producer.md` for the current proof boundaries.
+Read `lean/notes-current-joint-source-native-laws.md` for the current proof boundaries.
 
-The current causal guard producer and finite binder proofs add no Haskell change.
+The current joint source and generic native proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2805 jobs and 62806 dependency checks.
+The last completed pinned Lean Audit passes: 2816 jobs and 62897 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,44 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current joint source laws and generic native composition
+
+Updated: 2026-10-17 04:55 CEST. This checkpoint starts at published `0ebb832d`.
+The proof commits are `ad5c409b`, `bd85cd40`, `86d2c5f1`, and `1a0ad30e`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-joint-source-native-laws.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-joint-native-producer/`.
+
+Eleven additive modules prove the joint cap, ranked occurrence, scope,
+semantic heap, and guard heap laws through every actual source branch.
+The proof uses source fuel. Pair rank alone need not decrease at Mu entry.
+Exact generic native meaning transfers these laws to the same machine.
+Closed inputs construct finite generic cold execution under WordRanges.
+An actual warm return derives the same laws. General WordRanges still
+constrains future prefixes; initial numerical range production remains open.
+The current checked equality-cache Control worker also needs the joint lift.
+
+The pinned Audit passes 2816 jobs and 62897 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eleven strict source checks are
+clean. All 83 imported pairs pass in 17 groups. Eight component manifests
+verify 198 entries. Read checkpoint-validation.json for hashes and groups.
+Failed attempts remain recorded. Preservation
+retains 11398 starting files, 2804 older non-Audit proofs, all 239 Haskell
+files, and 68 frozen production manifests with 573 entries.
+
+Next derive initial numerical ranges and lift the laws through current
+checked equality control. Finite general warm callers, constrained descent,
+repeated convergence, remaining recursive callers, frontend/runtime adapters,
+capacity, serial public pipelines, and complete public composition remain
+open. The full library goal stays active. Read
+next-native-ranges-and-checked-control.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
 
 ## Current causal source guard production and finite optional binders
 
