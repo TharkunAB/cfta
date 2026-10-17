@@ -40,3 +40,19 @@ Each constant must be parametric in these types. It must not inspect their
 representation or capture class dictionaries for them. Use concrete types
 such as `Int` for arithmetic and ordering. Phases 3 and 4 instantiate each
 constant separately. `SPECFTACULAR_CHECKED=1` retains runtime type checks.
+
+Set `SPECFTACULAR_DIAGNOSTICS=phases` to trace phase and size/type buckets.
+Set it to `1` to include candidate demands, schema and instance exploration,
+tree insertion, and completion. Events use versioned TSV on stderr. They
+include the actual phase, monotonic wall time, process CPU time, and sampled
+RTS counters. Add `+RTS -T -RTS` to enable the RTS counters.
+
+Begin events contain input counts. Checkpoints contain completed counts.
+End and abort events leave those fields empty. Nested intervals include
+their children. A candidate demand can perform enumeration, pruning,
+eligibility checks, and sorting. Tree insertion includes proofs and all
+demanded generation, evaluation, and equality. Detailed mode forces new rules
+to WHNF to measure completion. It does not force test values for logging.
+Logging is off by default. Diagnostic timings include its overhead.
+Use phase-only mode to identify the phase of a timeout. Detailed logging
+can change which phase reaches the time limit.
