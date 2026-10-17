@@ -8,19 +8,19 @@ does not imply a better result. False and redundant laws increase the count.
 Specftacular recovers the general `concat` laws and list-monad laws that the
 port previously missed. Native checked execution, native unchecked execution,
 and the GHC frontend produce the same laws in the selected controls. Sparse
-evaluation reduces retained memory. It costs more allocation because it
-regenerates inputs. The machine has other activity, so elapsed times do not
+evaluation reduces retained memory. It regenerates inputs when needed.
+The machine has other activity, so elapsed times do not
 establish a speed improvement. Several current workloads still reach the
 time limit where the original artifact completes.
 
 ## Sources and method
 
-The runs took place on 2026-10-16.
+The runs took place on 2026-10-17.
 
 | Input | Revision |
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
-| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/01ab62e05aec3a6888bedd456d949c3f89c8d975/specftacular) | `01ab62e0`; native changes through `7410f1c4`, GHC frontend through `e608bdf0` |
+| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/e27d61a9b686e3e29255b065f586df7bb7cb14dc/specftacular) | `e27d61a9` |
 | [Published QuickSpec 2 benchmark artifact](https://zenodo.org/records/7565011) | Version 2.1.5, commit `967151eae493fa08a414386cdfb5ce7072477972` |
 | [Extended ICST paper](https://mpg.is/papers/gissurarson2023spectacular-extended.pdf) | PDF SHA-256 `44fcc9a6c67a5ddefccb29c37ce721a354b427bc99d6a01dadbb5b9355535882` |
 
@@ -31,25 +31,35 @@ The QuickSpec ZIP SHA-256 is
 QuickSpec 2 was not rerun. Its source and saved outputs provide reference
 evidence.
 
+The matrix executables were built from
+`ce9327fbe055a5e91d17c1074173b5ce89356e17`.
+A final lint cleanup uses `zipWithM` in two matcher expressions.
+Rebuilding all five native benchmark executables produces identical
+SHA-256 hashes. The matrix therefore measures the current optimized programs.
+The frontend and memory controls also pass after that cleanup.
+
 The host runs Ubuntu 24.04 under WSL2 on an AMD Ryzen 9 7950X. It exposes
 24 logical CPUs and 94.29 GiB of RAM. Spectacular uses GHC 8.10.7 and
 QuickCheck 2.14.2. Specftacular uses GHC 9.14.1 and QuickCheck 2.18.0.0.
-Both versions use optimized libraries and executables, with one RTS
-capability per process.
+The runs use separate Cabal projects with `optimization: 2` globally and
+in `package *`. They do not use the workspace development defaults. The
+executables and all Cabal-built dependencies use `-O2`. The build audit
+checks effective GHC flags and store settings for 53 original
+and 100 current dependency units. Compiler-distributed libraries
+keep their toolchain settings. They were not rebuilt.
+A separate store audit verifies 111 external units for the GHC controls.
 
-Current builds and runs use `nix-shell`, `heavy-management`, and pueue.
-Recorded benchmark cells run serially. Each current job has a verified
-16 GiB cgroup cap, no job swap, and `+RTS -N1 -M6G -s -RTS`. Small controls
-use heap caps of 2 to 4 GiB. The earlier original-artifact runs have an
-80,000,000,000-byte cgroup cap, no swap, and a 64 GiB heap cap. No reported
-process reaches either cap. These runs stay below the requested 80 GB limit.
+Both builds and all runs use `nix-shell`, `heavy-management`, and pueue.
+The jobs run serially. Each job has a verified 16 GiB cgroup cap and no job
+swap. Benchmarks use `+RTS -N1 -M6G -s -RTS`. Small controls use heap caps
+of 2 to 4 GiB. These limits stay below the requested 80 GB maximum.
 
-The matrix uses the 27 configurations from Table I. Each process has a
-60-second timeout. The paper used 3600 seconds. A separate current Lists7P4
-run has a 180-second timeout. The original-artifact measurements remain the
-reference for the unchanged artifact. Every Specftacular matrix result below
-comes from the current revision. Machine activity differs between the runs.
-Do not interpret elapsed-time ratios as isolated engine speedups.
+The matrix compares all 27 Table I configurations. The original measurements
+come from the all-`-O2` baseline run. The final current build has a fresh run
+of every configuration.
+Each process has a 60-second timeout. The paper used 3600 seconds. Every
+matrix result below comes from these new builds. Machine activity differs
+between runs. Elapsed-time ratios do not isolate engine speed.
 
 Spectacular runs 100 fresh QuickCheck tests per comparison. Specftacular
 uses 1000 shared random cases, eight separately seeded cases, and 32 directed
@@ -71,50 +81,58 @@ results for identical workloads.
 
 | Signature | Size | Through phase | Original s | Original MiB | Original laws | Specftacular s | Specftacular MiB | Specftacular laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists | 7 | 2 | 1.00 | 30.3 | 32 | 0.50 | 21.7 | 16 |
-| Lists | 7 | 3 | 17.29 | 77.5 | 73 | 23.74 | 74.4 | 44 |
-| Lists | 7 | 4 | 58.74 | 151.2 | 93 | T | 157.6 | — |
-| Octonions | 7 | 2 | 0.13 | 21.1 | 8 | 3.64 | 22.1 | 15 |
-| Octonions | 7 | 3 | 0.16 | 20.9 | 8 | 3.55 | 24.3 | 15 |
-| Octonions | 7 | 4 | 0.22 | 20.1 | 8 | 3.60 | 24.1 | 15 |
-| Regex | 7 | 2 | 2.87 | 17.6 | 42 | T | 17.7 | — |
-| Regex | 7 | 3 | 4.27 | 17.1 | 42 | T | 17.8 | — |
-| Regex | 7 | 4 | 6.01 | 17.6 | 42 | T | 17.6 | — |
-| ListMonad | 7 | 2 | 0.23 | 15.3 | 8 | 3.02 | 36.7 | 11 |
-| ListMonad | 7 | 3 | 0.45 | 24.0 | 8 | 3.13 | 36.7 | 11 |
-| ListMonad | 7 | 4 | 18.18 | 209.3 | 42 | T | 1194.5 | — |
-| HugeLists | 3 | 2 | 0.07 | 11.5 | 22 | 0.10 | 16.5 | 30 |
-| HugeLists | 3 | 3 | 0.17 | 16.9 | 27 | 0.21 | 22.4 | 42 |
-| HugeLists | 3 | 4 | 0.89 | 28.4 | 33 | 2.56 | 50.4 | 51 |
-| HugeLists | 4 | 2 | 0.18 | 14.4 | 37 | 0.45 | 25.2 | 56 |
-| HugeLists | 4 | 3 | 1.42 | 36.2 | 68 | 4.51 | 92.1 | 97 |
-| HugeLists | 4 | 4 | 27.87 | 122.4 | 90 | 28.60 | 195.9 | 176 |
-| HugeLists | 5 | 2 | 0.85 | 25.1 | 66 | 6.25 | 176.7 | 106 |
-| HugeLists | 5 | 3 | 26.23 | 105.7 | 144 | T | 309.9 | — |
-| HugeLists | 5 | 4 | T | 165.5 | — | T | 309.9 | — |
-| HugeLists | 6 | 2 | 6.61 | 43.9 | 99 | 11.65 | 257.7 | 149 |
-| HugeLists | 6 | 3 | T | 304.7 | — | T | 385.9 | — |
-| HugeLists | 6 | 4 | T | 308.3 | — | T | 386.0 | — |
-| HugeLists | 7 | 2 | T | 51.1 | — | T | 452.6 | — |
-| HugeLists | 7 | 3 | T | 55.5 | — | T | 453.0 | — |
-| HugeLists | 7 | 4 | T | 48.4 | — | T | 452.6 | — |
+| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.53 | 21.5 | 16 |
+| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 11.74 | 81.6 | 34 |
+| Lists | 7 | 4 | T | 139.5 | — | 27.59 | 192.3 | 48 |
+| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 1.00 | 20.7 | 15 |
+| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 1.01 | 20.5 | 15 |
+| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 1.04 | 20.5 | 15 |
+| Regex | 7 | 2 | 3.06 | 18.7 | 42 | T | 19.4 | — |
+| Regex | 7 | 3 | 4.29 | 16.8 | 42 | T | 19.2 | — |
+| Regex | 7 | 4 | 5.84 | 17.1 | 42 | T | 19.4 | — |
+| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 2.84 | 42.5 | 11 |
+| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 2.98 | 45.5 | 11 |
+| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 13.33 | 188.5 | 21 |
+| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.11 | 17.1 | 30 |
+| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.20 | 22.5 | 42 |
+| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 1.87 | 50.0 | 50 |
+| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.50 | 26.8 | 56 |
+| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 1.88 | 64.5 | 96 |
+| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 20.77 | 201.0 | 171 |
+| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 6.66 | 177.6 | 106 |
+| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | T | 211.6 | — |
+| HugeLists | 5 | 4 | T | 165.1 | — | T | 211.3 | — |
+| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 12.60 | 266.6 | 149 |
+| HugeLists | 6 | 3 | T | 305.6 | — | T | 428.2 | — |
+| HugeLists | 6 | 4 | T | 308.9 | — | T | 429.2 | — |
+| HugeLists | 7 | 2 | T | 60.2 | — | T | 379.5 | — |
+| HugeLists | 7 | 3 | T | 58.0 | — | T | 379.3 | — |
+| HugeLists | 7 | 4 | T | 55.6 | — | T | 379.1 | — |
 
-The current matrix contains 15 completed runs and 12 timeouts.
+Spectacular completes 20 runs and reaches the limit in 7. Specftacular
+completes 17 runs and reaches the limit in 10. No run has an unexpected exit
+status.
 
-The extended current Lists7P4 run completes with **63 laws**, **207.7 MiB
-peak RSS**, **69.4 MiB maximum residency**, and **667.88 GiB
-allocated**. Its observed elapsed time is 116.16 seconds. This is a
-completed run with a larger time limit than the matrix cell.
+Lists size 7 through phase 4 completes in Specftacular and reaches the limit
+in the original. Regex size 7 through phases 2, 3, and 4 completes in the
+original and reaches the limit in Specftacular. HugeLists size 5 through
+phase 3 also completes only in the original. The HugeLists definitions differ
+as stated above. Both implementations time out in the other six cells.
+
+The current Lists7P4 run completes within the matrix limit. It prints 48 laws,
+uses 192.3 MiB peak RSS, retains 62.1 MiB at the largest GC sample, and
+allocates 121.39 GiB.
 
 Selected completed runs have these costs:
 
 | Signature, size, phase | Original allocation GiB | Specftacular allocation GiB | Original residency MiB | Specftacular residency MiB | Original GC CPU s | Specftacular GC CPU s |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists-7-p2 | 4.256 | 4.034 | 11.02 | 3.22 | 0.213 | 0.040 |
-| Octonions-7-p2 | 0.423 | 8.203 | 11.92 | 3.53 | 0.024 | 0.045 |
-| HugeLists-4-p4 | 126.944 | 161.465 | 39.68 | 75.11 | 8.635 | 9.282 |
-| HugeLists-6-p2 | 24.788 | 69.020 | 17.70 | 102.08 | 1.285 | 1.714 |
-| Lists-7-p4, extended current limit | 239.298 | 667.885 | 50.81 | 69.40 | 17.473 | 29.192 |
+| Lists-7-p2 | 4.275 | 3.456 | 5.35 | 2.98 | 0.231 | 0.032 |
+| Octonions-7-p2 | 0.419 | 2.852 | 12.58 | 2.94 | 0.026 | 0.021 |
+| ListMonad-7-p2 | 0.961 | 17.972 | 3.47 | 13.29 | 0.030 | 0.966 |
+| ListMonad-7-p4 | 52.501 | 76.257 | 72.02 | 81.97 | 7.004 | 2.741 |
+| HugeLists-4-p4 | 126.783 | 116.336 | 39.68 | 72.78 | 8.920 | 4.794 |
+| HugeLists-6-p2 | 24.723 | 68.357 | 17.60 | 102.07 | 1.246 | 1.713 |
 
 ## Differences in laws
 
@@ -156,14 +174,15 @@ Native checked execution constructs the specialized runtime type and retains
 `Dynamic` application checks.
 
 Rewrite rules share one substitution for term variables and type variables.
-Repeated occurrences must agree. Abstract type instances precede concrete
-instances during exploration. This suppresses many ground consequences.
+Repeated occurrences must agree. Smaller type sizes come first. Among
+equal-sized types, abstract instances precede concrete instances during
+exploration. This suppresses many ground consequences.
 QuickSpec 2's [polymorphism layer][qs-poly] provides the design reference.
 
-Lists5P4 produces the same 31 numbered laws in native checked execution,
+Lists5P4 produces the same 29 numbered laws in native checked execution,
 native unchecked execution, and the GHC frontend. There are no exact
 text duplicates after law numbers are removed. The normalized law text has
-SHA-256 `fd2bdf51ce4f4e9160d52a8d491b135f0308459417dbd6a837e67070d0d21f6a`.
+SHA-256 `528f224e2d6794e9ff6a73f97cd4a9218a71eb455c1a92fe0e5543ecba8b6f89`.
 Both general laws are present:
 
 ```haskell
@@ -175,11 +194,36 @@ The completed size-7 run also contains
 `concat (concat xsss) == concat (map concat xsss)`. It has no exact duplicate
 law text. These checks do not establish a minimal or independent law basis.
 
+### Completion follows nested polymorphic consequences
+
+Completion gives distinct names to the term and type variables of each
+rule before it computes an overlap. It unifies type constructors and rejects
+cyclic term and type substitutions. This permits overlaps that require
+`a := [b]` or `a := [[b]]`. A literal annotation comparison misses these
+consequences. For example, double reverse, map/reverse, and an earlier
+concat/reverse law can prove
+
+```haskell
+reverse (concat xss) == concat (reverse (map reverse xss))
+```
+
+The proof control checks all 63 equations of the previous size-7 Lists
+output against the current 48-equation basis. All 63 follow, including the
+15 equations that the stronger prover suppresses. A false concat/reverse
+equation remains unproved. This is a software proof check, not an independent
+formal verification or a proof that the basis is minimal.
+
+Polymorphic completion has an explicit annotation-depth budget. Program
+leaf count alone does not bound type depth. The budget depends on the
+requested size and declared signature types. It can omit valid critical
+pairs. It is not a completeness bound for the grammar and does not bound
+transient unification or normalization cost.
+
 ### Higher-order ListMonad coverage improves
 
 The native resolver composes function generators from a `CoArbitrary` domain
 and a generated codomain. It supports the `A -> [B]` variables required by
-ListMonad. User overrides take priority. Function values do not receive a
+ListMonad. User overrides take priority in random generation. Function values do not receive a
 fabricated `Eq` instance. Unsupported generator types produce warnings.
 See QuickSpec 2's [generator resolution][qs-generators].
 
@@ -191,7 +235,7 @@ return x >>= f == f x
 ```
 
 At size 6 through phase 4, native checked execution, native unchecked
-execution, and GHC each produce the same 21 numbered laws. These include
+execution, and GHC each produce the same 18 numbered laws. These include
 right identity, the applied Kleisli definition, and general bind
 associativity in this form:
 
@@ -234,8 +278,10 @@ independent-seed cases and 32 cases that combine integer boundaries with
 empty and singleton lists. Both counterexamples occur with 100 and with
 1000 random cases. A native checked reduced HugeLists signature still
 finds `xs == take n xs ++ drop n xs`. `SPECFTACULAR_TESTS` counts only the
-random cases. The total is that count plus 40. These cases fix the recorded
-failures. Finite testing can still admit false laws that affect later pruning.
+random cases. The total is that count plus 40. The 32 directed cases supply
+values for `Int`, the abstract carriers, and their first three list types.
+They can therefore supply values outside a custom generator for those types.
+Other types use their generators. These cases fix the recorded failures. Finite testing can still admit false laws that affect later pruning.
 
 ### Representative instances change the equation basis
 
@@ -248,7 +294,7 @@ The original gives commutativity only at the supplied constants 1029, 1071,
 and 21. Fewer laws give a more general result in this example.
 
 At Octonions size 7 through phase 2, the current run prints 15 laws. The
-original prints eight. The saved QuickSpec output has 15. Equal counts do not
+original prints 8. The saved QuickSpec output has 15. Equal counts do not
 establish equivalent laws. Current equations include flexibility and three
 Moufang forms. The original output does not print these forms.
 
@@ -257,48 +303,134 @@ The paper already explains this kind of difference. Section IV-A,
 their effect on Octonion laws. A different basis or orientation is not itself
 an error. See QuickSpec 2's [schema layer][qs-schemas].
 
-## Memory and allocation
+## Enumeration and pruning
 
-The search rejects already seen, ill-typed, and reducible candidates before
-it retains the sort bucket. It checks candidates again as new rewrite rules
-become available. It does not restore the original unsafe node pruning.
+The phase order follows paper section III-C. Each phase visits increasing
+program sizes, then type buckets ordered by type size. Among equal-sized
+types, abstract carriers precede concrete types.
+The search orders ties within a size/type bucket by Knuth-Bendix order.
+Smaller terms therefore supply rules before larger terms in that phase.
+The search shares rules between phases.
+
+The current partial-term oracle follows section III-D. It suspends a match
+when a required subterm is unresolved. It resumes that match when the
+subterm expands. A proven match rejects the branch during enumeration,
+before the remaining choices expand. Rules are refreshed between size/type
+buckets, as section III-E describes. This retains enumeration pruning.
+It does not enumerate the complete language before applying templates.
+
+Early templates contain only linear, decreasing rules. A repeated term
+variable cannot become independent holes. An annotation can become a hole
+only when a principal-type check proves that the rule covers every type
+instance of that pattern. Other templates retain exact type annotations.
+Typed structural rewriting also checks complete candidates before value
+generation. That check can use nonlinear rules. The current search does
+not use the published node oracle that the source marks as too strong.
+
+Parametricity also permits reuse across type instances. This requires each
+signature constant to be parametric in the abstract carriers. It must not
+inspect their representations or capture class dictionaries. A law about
+parametric `map` does not need an independent test at every carrier type.
+Typed rewriting uses the shared type substitution to apply that law.
+Concrete arithmetic types remain rigid. Independently renaming the carriers
+of each candidate is insufficient: it can lose comparisons between terms
+that the grammar introduces in different phases.
+
+Schema generalization remains in place, as section III-G describes. The
+grammar uses one variable of each type. Testing renames variable occurrences
+independently and tries more general instances first. A repeated-variable
+identity is a search schema, not proof of every renamed equation. Local
+checked and unchecked probes find addition commutativity and reject
+subtraction commutativity. New representative schemas of up to five leaves
+also get instances, following [QuickSpec 2][qs-schemas]. Instance enumeration
+uses up to four variable names of each type. The initial most general
+instance can use more names.
+
+Cost-centre profiles separated template graph construction, typed
+rewriting, input generation, and equality tests. The development runs used
+external dependencies at `-O2` and local libraries at `-O0`. Profiling adds
+substantial overhead. Completed uninstrumented runs determine which changes
+are retained. The selected search uses the suspended oracle. It does not
+build an exclusion product for every bucket. CFTA source remains unchanged.
+
+A development Lists size-7 profile stopped after 300 seconds. It recorded
+284,404,205 calls to `matchPartial` under newly started checks and 2,311,899
+under resumed checks. Newly started checks account for 99.2% of those calls.
+The current oracle indexes exact template heads
+and application counts. It skips only incompatible fixed heads. Wildcards,
+prefixes, and unknown heads retain the generic path. The index preserves
+template order and duplicates. It does not change suspended matches.
+
+A completed all-`-O2` control changes only this index. Lists size 7 through
+phase 4 allocates 140.93 GiB without it and 121.39 GiB with it, a 13.9%
+reduction. Both runs print the same 48 equations in the same order. Peak RSS
+is 193.2 and 192.4 MiB. Regex size 4 through phase 2 keeps the same 17 laws;
+allocation changes by less than 0.01%. All 88 finite language and order
+checks pass. These checks include generic templates, aliases, and duplicate
+templates. They support the filter contract; the larger completed run
+provides the allocation evidence.
+
+The oracle uses these assumptions. Its holes match independently. A repeated
+term variable therefore cannot become independent holes. A template must
+prove that every match rewrites to a smaller well-typed term. Type erasure
+also needs principal-type coverage and an order that is independent of the
+annotations. Equal-weight rules qualify only when function structure or
+constant names prove the decrease. These restrictions belong to
+Specftacular. They do not change CFTA's template language or formal contracts.
+
+The schema and instance trees check whether existing rules prove equality before they
+run the full validation schedule. [QuickSpec 2][qs-terms] makes a similar
+check before its tester. New equalities still use every test case.
+An ordinary equality exception discards the candidate. Cancellation and timeouts
+propagate to the caller.
+
+A separate current Regex7P2 diagnostic with 100 random cases plus the same 40
+validation cases also reaches the 60-second limit. It does not replace the
+default-budget matrix cell.
+
+## Memory and allocation
 
 QuickSpec 2's sparse [decision tree][qs-tree] retains counterexamples that
 separate representatives. The current engine follows that design. A leaf
 retains a term evaluator. A branch retains one discriminator case and its
-values. An apparent equality still checks the complete test schedule.
-Test cases store seeds and boundary indexes. Evaluation generates only the
-variables used by that term. It does not retain all generated nested lists
-and complete result vectors at every representative.
+values. Test cases store seeds and boundary indexes. Each comparison generates
+only the variables used by either term. Both evaluators use the same valuation
+for that case. The tree retains a valuation only through discriminator values.
+It does not retain all generated
+nested lists and complete result vectors at every representative.
 
-A local control uses the same corrected engine and validation schedule, but
-restores shared input maps and retained result vectors. Both variants produce
-exactly the same 31 numbered Lists5P4 laws.
+A fresh local control restores shared input maps and retained result vectors
+in the current engine. It also restores the legacy decision tree's prefix
+comparisons. It keeps the same pruning, proof shortcut, and available
+validation cases. The strategies compare cases in different orders.
+They can therefore treat partial values differently. This control compares
+evaluation strategies, including storage. It does not isolate storage alone.
+All variants produce the same 29 numbered Lists5P4 laws.
 
 | Current Lists5P4 control, 1000 + 40 cases | Peak RSS, MiB | Allocated, GiB |
 | --- | ---: | ---: |
-| Shared inputs and retained result vectors | 3075.8 | 18.29 |
-| Sparse evaluation | 59.6 | 50.32 |
-| Sparse evaluation with native runtime checks | 64.4 | 51.08 |
+| Shared inputs and retained result vectors | 1920.5 | 20.93 |
+| Sparse evaluation | 51.4 | 20.59 |
+| Sparse evaluation with native runtime checks | 54.2 | 21.36 |
 
-The GHC Lists5P4 control produces the same laws and uses 531.2 MiB peak RSS.
-That process includes the compiler and interpreter.
+The GHC Lists5P4 control uses 537.8 MiB peak RSS. That process includes
+the compiler and interpreter. Its output agrees with both native modes.
 
-Sparse evaluation trades allocation for lower retained memory. On the small
-corrected Lists4P1 control, retained vectors use 366,964,713 instructions and
-allocate 93,605,016 bytes. Sparse evaluation uses 536,859,602 instructions and
-allocates 245,073,984 bytes. The increases are 46.3% and 161.8%. They exceed
-the repository's 5% cost budget. The measured implementation experiments
-support the decision to retain sparse evaluation for its lower peak memory.
-An experimental scalar cache saved less than 1% of full-size allocation and
-retained substantially more memory. That cache was removed. A cache with an
-explicit memory budget remains possible work. These figures do not establish
-a speed improvement.
+Sparse evaluation regenerates inputs to reduce retained memory.
+The sparse run uses 97.3% less peak RSS and allocates 1.6% less. Retaining the
+complete input maps and result vectors restores the large peak. These
+controls do not establish an isolated automaton speed improvement.
+
+On Lists4P1, Cachegrind records 1,426,503,315 instructions for retained
+vectors and 445,870,706 for sparse evaluation. RTS allocation is 521,257,520
+and 178,430,168 bytes respectively. These are controls of the current source
+with different evaluation strategies. They are not measurements of an earlier
+port.
 
 ## GHC frontend
 
 `specftacular-ghc` shares the type checks, rewrite rules, validation schedule,
-and sparse evaluator. It assigns distinct carriers to unconstrained type
+partial-term oracle, and sparse evaluator. It assigns distinct carriers to unconstrained type
 variables in binder order. Variables that occur in constraints remain
 concrete. Container class variables use lists. Other constrained variables
 use `Int`. An independent `HasCallStack` predicate does not prevent an
@@ -364,16 +496,19 @@ retroactively repair the historical cross-tool comparison.
 
 2. **Pruning must preserve repeated variables and types.** The published
    enumeration matcher accepts each template hole independently. Its node
-   oracle can discard a node when only some terms match. The source marks
+   [oracle][original-node-oracle] can discard a node when only some terms match. The source marks
    that case as too strong. Current structural matching records shared term
    and type substitutions. Repeated variables must match equal subterms.
-   Current search does not use that node oracle. See the
+   Current partial-term pruning uses linear typed patterns and suspends
+   unresolved matches. It does not use that node oracle. See the
    [published matcher][original-matcher] and [current rewriter](../src/Specftacular/Rewriting.hs).
 
-3. **Schemas need representative instances.** The paper describes generalizing
-   discovered laws. The current search also tests variable permutations of
-   new representative schemas. This recovers general gcd commutativity that the original misses. The fix changes the equation
-   basis. Raw law counts are not counts of independent facts.
+3. **Representative instances improve coverage.** Section III-G generalizes
+   discovered laws. The current search also tests independent variable
+   assignments of new representative schemas through five leaves. This
+   recovers general gcd commutativity that the original misses. The fix
+   changes the equation basis. Section IV-A already explains schema-related
+   basis differences. Raw law counts are not counts of independent facts.
 
 4. **Type checking must include each polymorphic occurrence.** The original
    uses unqualified names and unchecked coercions. The port also had a
@@ -408,12 +543,19 @@ retroactively repair the historical cross-tool comparison.
    Current directed cases reject both recorded counterexamples. Neither
    these cases nor the larger random budget prove the surviving laws.
 
+9. **The artifact does not register the suspended matches from section III-D.**
+   The [published matcher][original-matcher] comments out both calls that
+   register checks on unresolved holes. Its dependency map starts empty.
+   Its registration helpers use `IntMap.adjust`, which does not insert a
+   missing key. The current oracle records branch-local pending matches
+   and resumes them through the current union-find representatives. This
+   implements the paper's described strategy.
+
 ## Limits and remaining work
 
 Phases 2 to 4 remain experimental. `ftacularSpec` runs phase 1. This report
-calls `experimentalPhases` for later phases. Rewrite completion remains
-conservative for unresolved type patterns. The output is not proved minimal
-or complete.
+calls `experimentalPhases` for later phases. The type-depth budget can omit
+completion consequences. The output is not proved minimal or complete.
 
 A partial representative can block later candidates after an equality
 exception. The sparse evaluator does not fix partial-term discovery.
@@ -436,6 +578,7 @@ remain outside this package. This report contains the results and the
 source references needed to interpret them.
 
 [original-matcher]: https://github.com/Tritlo/spectacular/blob/00621f4f0f03e5d0afea3c730434a8842e473546/src/Data/ECTA/Internal/ECTA/Enumeration.hs#L411
+[original-node-oracle]: https://github.com/Tritlo/spectacular/blob/00621f4f0f03e5d0afea3c730434a8842e473546/spectacular/src/Spectacular.hs#L330
 [qs-arith]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/src/QuickSpec/Internal.hs#L423
 [qs-driver]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/src/QuickSpec/Internal/Haskell.hs#L737
 [qs-paper]: https://doi.org/10.1017/S0956796817000090
@@ -448,3 +591,5 @@ source references needed to interpret them.
 [qs-octonions-output]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/examples/tests/Octonions.output
 
 [qs-observe]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/src/QuickSpec/Internal/Haskell.hs#L181
+
+[qs-terms]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/src/QuickSpec/Internal/Explore/Terms.hs#L70
