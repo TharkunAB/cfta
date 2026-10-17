@@ -1,0 +1,22 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/root-erasure-direct-1.source.lean:38:2: error: unsolved goals
+case pos
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+name : Reference
+values : List (Value Symbol Guard)
+state : State Symbol Guard
+normal : Normal state
+inputs : Values state values
+singleton : distinctNodes (List.flatMap unionMembers values) = [Value.reference name]
+⊢ (Value.empty, state) =
+    run
+      (match distinctNodes [] with
+      | [] => Work.pure Value.empty
+      | [value] => Work.pure value
+      | members =>
+        match ordinaryEdges members with
+        | some edges => makeNode edges
+        | none =>
+          Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+            (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure)
+      state

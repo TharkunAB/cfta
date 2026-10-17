@@ -1,0 +1,55 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-native-direct-2.source.lean:130:8: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have checked :=
+      SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le second✝¹ second✝ request.left.children.length
+        request.right.children.length before.operations;
+    have after := { native := before.native, operations := checked.snd };
+    match checked.fst with
+    | Except.error message => Outcome.constraintError message after
+    | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.mismatch => sentinel request next after
+    | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.rejected => sentinel request next after
+    | Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) =>
+      Outcome.yielded
+        (Control.code
+          ((SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined).bind next))
+        after) =
+    Outcome.yielded rest after
+of `one`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_3
+A : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : EdgeRequest Symbol Guard
+next : EdgeValue Symbol Guard → Code Symbol Guard A
+before after : Checked width
+rest : Control A
+later : ∀ (value : EdgeValue Symbol Guard), Safe (next value)
+h✝ : ¬request.left.children.length ≠ request.right.children.length
+x✝¹ : Except String (Option (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+second✝¹ : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+heq✝¹ :
+  SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+    Except.ok (some second✝¹)
+x✝ : Except String (Option (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+second✝ : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+heq✝ :
+  SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints =
+    Except.ok (some second✝)
+one :
+  (have checked :=
+      SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le second✝¹ second✝ request.left.children.length
+        request.right.children.length before.operations;
+    have after := { native := before.native, operations := checked.snd };
+    match checked.fst with
+    | Except.error message => Outcome.constraintError message after
+    | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.mismatch => sentinel request next after
+    | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.rejected => sentinel request next after
+    | Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) =>
+      Outcome.yielded
+        (Control.code
+          ((SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined).bind next))
+        after) =
+    Outcome.yielded rest after
+⊢ ControlSafe rest

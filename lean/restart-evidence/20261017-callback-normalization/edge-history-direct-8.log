@@ -1,0 +1,44 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-8.source.lean:262:67: error: Tactic `assumption` failed
+
+case h_1
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+resident : InternedNestedProvenance.Edges state rows
+job✝ : Work Symbol Guard (Value Symbol Guard)
+key✝ : EdgeKey Symbol Guard
+identify✝ : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard
+next✝ : EdgeValue Symbol Guard → Work Symbol Guard (Value Symbol Guard)
+heq✝ :
+  (have kept := canonicalEdges (surviving rows);
+    match kept with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure) =
+    Work.edge key✝ identify✝ next✝
+⊢ Values state (identify✝ { identity := 0, key := key✝ }).children
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-8.source.lean:265:81: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_1
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+x✝³ : List (Value Symbol Guard)
+x✝² : distinctNodes (List.flatMap unionMembers values) = [] → False
+x✝¹ : ∀ (value : Value Symbol Guard), distinctNodes (List.flatMap unionMembers values) = [value] → False
+x✝ : Option (List (EdgeValue Symbol Guard))
+edges✝ : List (EdgeValue Symbol Guard)
+heq✝ : ordinaryEdges (distinctNodes (List.flatMap unionMembers values)) = some edges✝
+⊢ EdgeArguments state
+    (have kept := canonicalEdges (surviving edges✝);
+    match kept with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure)

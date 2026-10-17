@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/root-erasure-direct-3.source.lean:77:65: error: Application type mismatch: The argument
+  leftRequest
+has type
+  (eraseSelf firstName
+        (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).fst,
+      (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).snd) =
+    run (makeUnion (remove firstName (distinctNodes (List.flatMap unionMembers first))))
+      (run (makeUnion first) left).snd
+but is expected to have type
+  run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd =
+    run (makeUnion (remove firstName (distinctNodes (List.flatMap unionMembers first))))
+      (run (makeUnion first) left).snd
+in the application
+  congrArg Prod.snd leftRequest
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/root-erasure-direct-3.source.lean:67:45: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+firstName secondName : Reference
+first second : List (Value Symbol Guard)
+left right common : State Symbol Guard
+ln : Normal left
+rn : Normal right
+li : Values left first
+ri : Values right second
+same : remove firstName (List.flatMap unionMembers first) = remove secondName (List.flatMap unionMembers second)
+lg :
+  Grows (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).snd
+    common
+rg :
+  Grows
+    (run (withoutSelfReference secondName (run (makeUnion second) right).fst) (run (makeUnion second) right).snd).snd
+    common
+leftRequest :
+  (eraseSelf firstName
+        (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).fst,
+      (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).snd) =
+    run (makeUnion (remove firstName (distinctNodes (List.flatMap unionMembers first))))
+      (run (makeUnion first) left).snd
+rightRequest :
+  (eraseSelf secondName
+        (run (withoutSelfReference secondName (run (makeUnion second) right).fst)
+            (run (makeUnion second) right).snd).fst,
+      (run (withoutSelfReference secondName (run (makeUnion second) right).fst)
+          (run (makeUnion second) right).snd).snd) =
+    run (makeUnion (remove secondName (distinctNodes (List.flatMap unionMembers second))))
+      (run (makeUnion second) right).snd
+selectedSame :
+  remove firstName (distinctNodes (List.flatMap unionMembers first)) =
+    remove secondName (distinctNodes (List.flatMap unionMembers second))
+leftGrowth :
+  Grows (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).snd
+    common
+rightGrowth :
+  Grows
+    (run (withoutSelfReference secondName (run (makeUnion second) right).fst) (run (makeUnion second) right).snd).snd
+    common
+⊢ eraseSelf firstName
+      (run (withoutSelfReference firstName (run (makeUnion first) left).fst) (run (makeUnion first) left).snd).fst =
+    eraseSelf secondName
+      (run (withoutSelfReference secondName (run (makeUnion second) right).fst) (run (makeUnion second) right).snd).fst

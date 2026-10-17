@@ -1,0 +1,83 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-14.source.lean:306:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261017-callback-normalization».«edge-history-direct-14.source».0.MicroCFTA.SourceCurrentNativeEdgeHistory.body_choice`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-14.source.lean:306:0: warning: `body_choice` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#2)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-14.source.lean:386:42: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+    Except.ok (some first)
+
+case cons.inr
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : EdgeRequest Symbol Guard
+result : EdgeValue Symbol Guard
+live : ¬Value.empty ∈ result.children
+handle : Nat
+before after : Checked width
+good : Good before
+ready : EdgeReady before.native.machine request
+owner : before.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+retained : after.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finished :
+  Trace 1 (Control.code (Code.finishEdge handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishEdge handle result after.native, operations := after.operations }
+resume : Control (EdgeValue Symbol Guard)
+current : Checked width
+rest : Nat
+inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs (Control.edgeBody request Code.pure) before
+tail : Trace rest resume current (Control.code (Code.pure result)) after
+fields : Fields (Control.edgeBody request Code.pure) before
+next : Good current ∧ Fields resume current
+one : SourceEqualityNativeDemand.body request Code.pure before = Outcome.yielded resume current
+first second combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+arity : request.left.children.length = request.right.children.length
+left✝ :
+  SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+    Except.ok (some first)
+right✝ :
+  SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints =
+      Except.ok (some second) ∧
+    (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second request.left.children.length
+            request.right.children.length before.operations).fst =
+        Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) ∧
+      resume =
+          Control.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) ∧
+        current =
+          { native := before.native,
+            operations :=
+              (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                  request.left.children.length request.right.children.length before.operations).snd }
+⊢ ∃ before middle after values count,
+    Good before ∧
+      SourceCurrentAllocatedNativeSemanticTraceReadback.Walk (fun pair => requestNode request.domain pair.fst pair.snd)
+          (request.left.children.zip request.right.children) middle values after count ∧
+        result.entry.key.symbol = request.left.entry.key.symbol ∧
+          result.entry.key.constraint =
+              SourceEqualityPCSNativeEdge.conjoin request.left.entry.key.constraint request.right.entry.key.constraint ∧
+            result.children = values ∧
+              ∃ first second combined,
+                SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint
+                      before.operations.constraints =
+                    Except.ok (some first) ∧
+                  SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint
+                        before.operations.constraints =
+                      Except.ok (some second) ∧
+                    (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                            request.left.children.length request.right.children.length before.operations).fst =
+                        Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) ∧
+                      middle =
+                        { native := before.native,
+                          operations :=
+                            (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                                request.left.children.length request.right.children.length before.operations).snd }

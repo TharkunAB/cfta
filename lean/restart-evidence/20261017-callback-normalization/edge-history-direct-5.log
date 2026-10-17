@@ -1,0 +1,54 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-5.source.lean:258:58: error: Tactic `assumption` failed
+
+case h_1
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+resident : InternedNestedProvenance.Edges state rows
+x✝ : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state (makeNode rows)
+job✝ : Work Symbol Guard (Value Symbol Guard)
+inputs✝¹ : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state job✝
+key✝ : EdgeKey Symbol Guard
+identify✝ : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard
+next✝ : EdgeValue Symbol Guard → Work Symbol Guard (Value Symbol Guard)
+inputs✝ : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state (Work.edge key✝ identify✝ next✝)
+heq✝¹ :
+  (match canonicalEdges (surviving rows) with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure) =
+    Work.edge key✝ identify✝ next✝
+heq✝ : x✝ ≍ inputs✝
+⊢ Values state (identify✝ { identity := 0, key := key✝ }).children
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-5.source.lean:261:35: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_1
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+x✝ : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state (makeUnion values)
+job✝ : Work Symbol Guard (Value Symbol Guard)
+inputs✝¹ : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state job✝
+key✝ : EdgeKey Symbol Guard
+identify✝ : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard
+next✝ : EdgeValue Symbol Guard → Work Symbol Guard (Value Symbol Guard)
+inputs✝ : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state (Work.edge key✝ identify✝ next✝)
+heq✝¹ :
+  (match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure) =
+    Work.edge key✝ identify✝ next✝
+heq✝ : x✝ ≍ inputs✝
+⊢ Values state (identify✝ { identity := 0, key := key✝ }).children

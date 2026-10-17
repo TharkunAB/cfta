@@ -1,0 +1,21 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/normalization-inputs-direct-1.source.lean:119:82: error: unsolved goals
+Atom Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+expression : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+names : Atom → Reference
+state : InternedConstructorTemplates.State Symbol Guard
+context : Context state (List.map (input names) inputs)
+key : NodeKey
+missing : state.nodes.table key = none
+member : Sum.inl (Reference.interned (intern state.nodes key).fst.identity) ∈ support expression inputs
+value : Value Symbol Guard
+source : Sum.inl value ∈ inputs
+free : Reference.interned (intern state.nodes key).fst.identity ∈ value.free
+available : Available state value
+issuedKey : NodeKey
+issued : state.nodes.issued (intern state.nodes key).fst.identity = some issuedKey
+smaller : (intern state.nodes key).fst.identity < state.nodes.next
+⊢ ((keepFirst state.nodes.table key { identity := state.nodes.next, key := key } key).getD
+        { identity := state.nodes.next, key := key }).identity =
+    state.nodes.next

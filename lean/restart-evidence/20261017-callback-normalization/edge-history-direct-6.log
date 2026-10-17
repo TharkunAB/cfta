@@ -1,0 +1,167 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-6.source.lean:258:23: error: unsolved goals
+case node.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+resident : InternedNestedProvenance.Edges state rows
+kept : canonicalEdges (surviving rows) = []
+⊢ match
+    match canonicalEdges (surviving rows) with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+
+case node.cons
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+resident : InternedNestedProvenance.Edges state rows
+head✝ : EdgeValue Symbol Guard
+tail✝ : List (EdgeValue Symbol Guard)
+kept : canonicalEdges (surviving rows) = head✝ :: tail✝
+⊢ match
+    match canonicalEdges (surviving rows) with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-6.source.lean:262:12: error: unsolved goals
+case union.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+members : distinctNodes (List.flatMap unionMembers values) = []
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-6.source.lean:265:16: error: unsolved goals
+case union.cons.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first : Value Symbol Guard
+members : distinctNodes (List.flatMap unionMembers values) = [first]
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-6.source.lean:268:21: error: unsolved goals
+case union.cons.cons.none
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first second : Value Symbol Guard
+rest : List (Value Symbol Guard)
+members : distinctNodes (List.flatMap unionMembers values) = first :: second :: rest
+ordinary : ordinaryEdges (first :: second :: rest) = none
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-6.source.lean:269:26: error: unsolved goals
+case union.cons.cons.some.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first second : Value Symbol Guard
+rest : List (Value Symbol Guard)
+members : distinctNodes (List.flatMap unionMembers values) = first :: second :: rest
+rows : List (EdgeValue Symbol Guard)
+ordinary : ordinaryEdges (first :: second :: rest) = some rows
+kept : canonicalEdges (surviving rows) = []
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges =>
+        match canonicalEdges (surviving edges) with
+        | [] => Work.pure Value.empty
+        | first :: rest =>
+          Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+            (identifyNode (first :: rest)) Work.pure
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+
+case union.cons.cons.some.cons
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first second : Value Symbol Guard
+rest : List (Value Symbol Guard)
+members : distinctNodes (List.flatMap unionMembers values) = first :: second :: rest
+rows : List (EdgeValue Symbol Guard)
+ordinary : ordinaryEdges (first :: second :: rest) = some rows
+head✝ : EdgeValue Symbol Guard
+tail✝ : List (EdgeValue Symbol Guard)
+kept : canonicalEdges (surviving rows) = head✝ :: tail✝
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges =>
+        match canonicalEdges (surviving edges) with
+        | [] => Work.pure Value.empty
+        | first :: rest =>
+          Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+            (identifyNode (first :: rest)) Work.pure
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True

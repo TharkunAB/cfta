@@ -1,0 +1,105 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:35:70: error: Type mismatch
+  afterNormal
+has type
+  UnionNormal x✝
+but is expected to have type
+  StoppedNormal (?m.90 x✝¹ x✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:86:8: error: Type mismatch
+  normal
+has type
+  UnionNormal state
+but is expected to have type
+  StoppedNormal (SourceEqualityProjectionWorker.union reader values state)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:87:8: error: Type mismatch
+  project worker reader path ?m.85 state normal
+has type
+  StoppedNormal (SourceEqualityProjectionWorker.project worker reader path ?m.85 state)
+but is expected to have type
+  StoppedNormal
+    (match SourceEqualityProjectionGraph.select values index✝ with
+    | none => SourceEqualityRequiredWorker.Result.done Value.empty state
+    | some value => SourceEqualityProjectionWorker.project worker reader path✝ value state)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:139:33: error: Type mismatch
+  anyKnown ?m.186
+has type
+  (∀ (item : ?m.183) (state : State ?m.184 ?m.185),
+      UnionNormal state → UnionNormal (InternedNestedConstruction.Outcome.state (?m.186 item state))) →
+    ∀ (items : List ?m.183) (state : State ?m.184 ?m.185),
+      UnionNormal state → UnionNormal (InternedFreshOrdinaryStatefulGate.anyKnown ?m.186 items state).state
+but is expected to have type
+  UnionNormal (InternedNestedConstruction.Outcome.done (some true) state).state
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:133:36: error: unsolved goals
+case h_3
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+belowEnd : Bool
+unconstrained reaches : Value Symbol Guard → Bool
+fuel : Nat
+ih :
+  ∀ (path : EqualityNormalize.Path) (value : Value Symbol Guard) (state : State Symbol Guard),
+    UnionNormal state →
+      UnionNormal (SourceCurrentMuEndpoint.nodeMeets belowEnd unconstrained reaches fuel path value state).state
+path : EqualityNormalize.Path
+state : State Symbol Guard
+normal : UnionNormal state
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+value✝ : Value Symbol Guard
+x✝¹ : ∀ (name : InternedBinderProtocol.Reference), Value.node entry edges depth free = Value.reference name → False
+x✝ :
+  ∀ (entry_1 : Cache.Interned InternedBinderProtocol.NodeKey) (members : List (Value Symbol Guard)) (depth_1 : Nat)
+    (free_1 : List InternedBinderProtocol.Reference),
+    Value.node entry edges depth free = Value.union entry_1 members depth_1 free_1 → False
+⊢ UnionNormal
+    (if ((Value.node entry edges depth free).depth == 0 && (Value.node entry edges depth free).free.isEmpty) = true then
+        InternedNestedConstruction.Outcome.done (some false) state
+      else
+        match Value.node entry edges depth free with
+        | Value.mu entry_1 body depthShape ordinaryShape =>
+          if (!unconstrained (Value.node entry edges depth free)) = true then
+            match path with
+            | [] =>
+              if (Value.node entry edges depth free).free.isEmpty = true then
+                InternedNestedConstruction.Outcome.done (some belowEnd) state
+              else InternedNestedConstruction.Outcome.done (some true) state
+            | head :: tail => InternedNestedConstruction.Outcome.done (some true) state
+          else
+            if (Value.node entry edges depth free).free.isEmpty = true then
+              InternedNestedConstruction.Outcome.done (some false) state
+            else
+              (InternedFreshOrdinaryStoredSubstitution.unfold (Value.node entry edges depth free) state).bind
+                fun next after => SourceCurrentMuEndpoint.nodeMeets belowEnd unconstrained reaches fuel path next after
+        | x =>
+          match path with
+          | [] =>
+            InternedNestedConstruction.Outcome.done
+              (some
+                (!(Value.node entry edges depth free).free.isEmpty ||
+                  belowEnd && reaches (Value.node entry edges depth free)))
+              state
+          | index :: rest =>
+            match Value.node entry edges depth free with
+            | Value.node entry edges depth free =>
+              InternedFreshOrdinaryStatefulGate.anyKnown
+                (fun edge current =>
+                  InternedFreshOrdinaryStatefulGate.child
+                    (SourceCurrentMuEndpoint.nodeMeets belowEnd unconstrained reaches fuel) edge.children index rest
+                    current)
+                edges state
+            | x => InternedNestedConstruction.Outcome.done (some false) state).state
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:131:6: error: Alternative `mu` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:140:16: error: unexpected token '('; expected command
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:164:23: error: Type mismatch
+  child (SourceCurrentMuEndpoint.nodeMeets belowEnd unconstrained reaches fuel) fun path value state normal =>
+    nodeMeets belowEnd unconstrained reaches fuel path value state normal
+has type
+  ∀ (values : List (Value Symbol Guard)) (index : Nat) (path : EqualityNormalize.Path) (state : State Symbol Guard),
+    UnionNormal state →
+      UnionNormal
+        (InternedFreshOrdinaryStatefulGate.child (SourceCurrentMuEndpoint.nodeMeets belowEnd unconstrained reaches fuel)
+            values index path state).state
+but is expected to have type
+  UnionNormal (SourceCurrentMuEndpoint.meets belowEnd unconstrained reaches fuel values (index :: path) current).state
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-projection-direct-1.source.lean:165:6: error: unexpected identifier; expected command

@@ -1,0 +1,52 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-2.source.lean:82:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))
+worker reader : Nat
+edges : List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))
+state : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula
+normal : UnionNormal state.heap
+x✝ : Except String (Option SourceEqualityConstraintAllocation.Value)
+heq✝ : (SourceCurrentConjunctionEquality.fold edges state.equality).fst = Except.ok none
+⊢ UnionNormal
+    (SourceCurrentConjunctionRowsWorker.Outcome.failed SourceCurrentConjunctionRowsWorker.Fault.missingEquality
+          { heap := state.heap,
+            equality := (SourceCurrentConjunctionEquality.fold edges state.equality).snd }).state.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-2.source.lean:77:99: error: unsolved goals
+case h_3
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))
+worker reader : Nat
+edges : List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))
+state : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula
+normal : UnionNormal state.heap
+x✝ : Except String (Option SourceEqualityConstraintAllocation.Value)
+result✝ : SourceEqualityConstraintAllocation.Value
+heq✝ : (SourceCurrentConjunctionEquality.fold edges state.equality).fst = Except.ok (some result✝)
+⊢ UnionNormal
+    (match SourceEqualityInheritedPayload.classes result✝.payload with
+        | none =>
+          SourceCurrentConjunctionRowsWorker.Outcome.done none
+            { heap := state.heap, equality := (SourceCurrentConjunctionEquality.fold edges state.equality).snd }
+        | some constraints =>
+          (SourceCurrentConjunctionRowsWorker.requirements worker reader edges constraints
+                { heap := state.heap,
+                  equality := (SourceCurrentConjunctionEquality.fold edges state.equality).snd }).bind
+            fun rows after => SourceCurrentConjunctionRowsWorker.Outcome.done (some rows) after).state.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-2.source.lean:109:2: error: Invalid alternative name `h`: Expected `ind`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-2.source.lean:108:2: error: Alternative `ind` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-2.source.lean:163:4: error: Type mismatch: After simplification, term
+  retained
+ has type
+  @UnionNormal Symbol Guard state✝.heap
+but is expected to have type
+  @UnionNormal Symbol Guard (SourceCurrentAllocatedQueryMemo.advancePhysical before state✝).native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-2.source.lean:163:4: error: Type mismatch: After simplification, term
+  retained
+ has type
+  @UnionNormal Symbol Guard state✝.heap
+but is expected to have type
+  @UnionNormal Symbol Guard (SourceCurrentAllocatedQueryMemo.advancePhysical before state✝).native.machine.heap

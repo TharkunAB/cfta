@@ -1,0 +1,230 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:259:85: error: Tactic `assumption` failed
+
+case node.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+resident : InternedNestedProvenance.Edges state rows
+kept : canonicalEdges (surviving rows) = []
+⊢ match
+    match canonicalEdges (surviving rows) with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:259:85: error: Tactic `assumption` failed
+
+case node.cons
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+resident : InternedNestedProvenance.Edges state rows
+head✝ : EdgeValue Symbol Guard
+tail✝ : List (EdgeValue Symbol Guard)
+kept : canonicalEdges (surviving rows) = head✝ :: tail✝
+⊢ match
+    match canonicalEdges (surviving rows) with
+    | [] => Work.pure Value.empty
+    | first :: rest =>
+      Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:262:46: error: Tactic `assumption` failed
+
+case union.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+members : distinctNodes (List.flatMap unionMembers values) = []
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:265:50: error: Tactic `assumption` failed
+
+case union.cons.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first : Value Symbol Guard
+members : distinctNodes (List.flatMap unionMembers values) = [first]
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:268:64: error: Tactic `assumption` failed
+
+case union.cons.cons.none
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first second : Value Symbol Guard
+rest : List (Value Symbol Guard)
+members : distinctNodes (List.flatMap unionMembers values) = first :: second :: rest
+ordinary : ordinaryEdges (first :: second :: rest) = none
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges => makeNode edges
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:270:124: error: Tactic `assumption` failed
+
+case union.cons.cons.some.nil
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first second : Value Symbol Guard
+rest : List (Value Symbol Guard)
+members : distinctNodes (List.flatMap unionMembers values) = first :: second :: rest
+rows : List (EdgeValue Symbol Guard)
+ordinary : ordinaryEdges (first :: second :: rest) = some rows
+kept : canonicalEdges (surviving rows) = []
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges =>
+        match canonicalEdges (surviving edges) with
+        | [] => Work.pure Value.empty
+        | first :: rest =>
+          Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+            (identifyNode (first :: rest)) Work.pure
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:270:124: error: Tactic `assumption` failed
+
+case union.cons.cons.some.cons
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+available : Values state values
+first second : Value Symbol Guard
+rest : List (Value Symbol Guard)
+members : distinctNodes (List.flatMap unionMembers values) = first :: second :: rest
+rows : List (EdgeValue Symbol Guard)
+ordinary : ordinaryEdges (first :: second :: rest) = some rows
+head✝ : EdgeValue Symbol Guard
+tail✝ : List (EdgeValue Symbol Guard)
+kept : canonicalEdges (surviving rows) = head✝ :: tail✝
+⊢ match
+    match distinctNodes (List.flatMap unionMembers values) with
+    | [] => Work.pure Value.empty
+    | [value] => Work.pure value
+    | members =>
+      match ordinaryEdges members with
+      | some edges =>
+        match canonicalEdges (surviving edges) with
+        | [] => Work.pure Value.empty
+        | first :: rest =>
+          Work.node (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+            (identifyNode (first :: rest)) Work.pure
+      | none =>
+        Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+          (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure,
+    ⋯ with
+  | Work.edge key identify next, inputs => Values state (identify { identity := 0, key := key }).children
+  | x, inputs => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:259:75: warning: This simp argument is unused:
+  kept
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeNode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:262:36: warning: This simp argument is unused:
+  members
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:265:40: warning: This simp argument is unused:
+  members
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:268:45: warning: This simp argument is unused:
+  members
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, ordinary]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:268:53: warning: This simp argument is unused:
+  ordinary
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, members]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:270:88: warning: This simp argument is unused:
+  members
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, ordinary, makeNode, kept]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:270:96: warning: This simp argument is unused:
+  ordinary
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, members, makeNode, kept]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/edge-history-direct-7.source.lean:270:114: warning: This simp argument is unused:
+  kept
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, members, ordinary, makeNode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

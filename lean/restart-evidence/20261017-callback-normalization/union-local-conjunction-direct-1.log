@@ -1,0 +1,39 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:79:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))
+worker reader : Nat
+edges : List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))
+state : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula
+normal : UnionNormal state.heap
+⊢ UnionNormal
+    (have folded := SourceCurrentConjunctionEquality.fold edges state.equality;
+        have current := { heap := state.heap, equality := folded.snd };
+        match folded.fst with
+        | Except.error message =>
+          SourceCurrentConjunctionRowsWorker.Outcome.failed (SourceCurrentConjunctionRowsWorker.Fault.equality message)
+            current
+        | Except.ok none =>
+          SourceCurrentConjunctionRowsWorker.Outcome.failed SourceCurrentConjunctionRowsWorker.Fault.missingEquality
+            current
+        | Except.ok (some result) =>
+          match SourceEqualityInheritedPayload.classes result.payload with
+          | none => SourceCurrentConjunctionRowsWorker.Outcome.done none current
+          | some constraints =>
+            (SourceCurrentConjunctionRowsWorker.requirements worker reader edges constraints current).bind
+              fun rows after => SourceCurrentConjunctionRowsWorker.Outcome.done (some rows) after).state.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:107:25: error(lean.unknownIdentifier): Unknown constant `Nat.strong_induction_on`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:151:83: error: Application type mismatch: The argument
+  memo
+has type
+  SourceCurrentEmptinessMemo.Memo
+but is expected to have type
+  Value Symbol Guard
+in the application
+  SourceCurrentAllocatedConjunctionWorker.call worker reader budget memo
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:153:7: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentAllocatedQueryMemo.physical`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:157:59: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentAllocatedQueryMemo.physical`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:158:89: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentAllocatedQueryMemo.physical`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-callback-normalization/union-local-conjunction-direct-1.source.lean:161:7: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentAllocatedQueryMemo.physical`
