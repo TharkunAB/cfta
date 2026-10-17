@@ -1,0 +1,47 @@
+import MicroCFTA.SourceCurrentConstrainedCapKernelJoint
+import MicroCFTA.SourceCurrentConstrainedCapKernelJointEffects
+import MicroCFTA.SourceCurrentConstrainedCapKernelJointCalls
+import MicroCFTA.SourceCurrentConstrainedCapKernelJointExecution
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Checked
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Checked
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.after
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.after
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.pure
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.pure
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.failed
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.failed
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.bind
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.bind
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.map
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.map
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.walk
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.walk
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Calls
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Calls
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.edge
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.node
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.union
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context.union
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.body_rank
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.body_rank
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.mu_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.mu_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.reference_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.reference_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.onNode_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.onNode_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.execute_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.execute_joint

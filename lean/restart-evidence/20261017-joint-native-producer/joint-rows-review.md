@@ -1,0 +1,19 @@
+# Actual kernel row and union producers
+
+Frozen: 2026-10-17 04:48 CEST. Source SHA256: `e5bb9c06e90e104740b9260e9135da0aaba3c33c077694ae7155a7f28d81a181`.
+
+`SourceCurrentConstrainedCapKernelJointRows` supplies five actual kernel helpers: `edge_joint`, `rows_joint`, `node_joint`, `left_union_joint`, and `right_union_joint`. Their recursive `Calls` assumptions are the smaller-call induction interface. The module does not claim completion or hide a final result premise.
+
+`edge_joint` follows the literal arity decision. Equal arity runs the original ordered child zip. Each child gets the source-backed original input facts, the correct smaller cap depth, and the same domain. The produced child classifier supplies its free-name bound at the exact child rank. The edge post bounds every actual returned child by the maximum of those literal zip ranks. It retains `EdgeScope`. Mismatch emits only the actual sentinel with `[Empty]`; it does not request a child. Conjunction closure and the allowed sentinel guard are used to prove guard validity at depth zero. Positive cap depths impose no extra guard restriction.
+
+`rows_joint` follows the actual hash-join pair order. Both original complete node operands determine source scope, cap, and current resident rows. At positive enclosing rank, every actual row budget is strictly smaller. At rank zero, the explicit zero alternative remains. These facts give both free-name and deep-name bounds for the canonical node constructor. The proof uses the full coherent resident payload, including constructor cache hits and discarded normalized rows.
+
+`node_joint` constructs the actual canonical node after the row walk. Both union helpers follow original member order, pass each actual returned context to the suffix, and widen each child classifier only by the proven request-rank inequality. Actual union normalization supplies the same cap, classifier, and scope. No callback supplies a desired union result.
+
+All actual constructors use the root-owned `Context.edge`, `Context.node`, and `Context.union` producers. Thus the exact returned machine retains validity, the semantic heap, the causal guard heap, fixed-source record growth, and issued history. Existing physical `Calls` supplies validity and extension for ordered sequencing, including failure states. Joint `Calls` supplies cap/classifier/scope at successful smaller returns. There is no `ScopedCalls`, headroom, `WordRanges`, future graph, or enclosing successful-query premise.
+
+Strict direct4 passes with an empty log. The root canonical batch passes 1163 jobs; its copied raw log retains dependency diagnostics. All five public axiom/full-signature pairs pass with no warnings, errors, or `sorryAx`.
+
+The imported `constructed_nullary_rows` kernel builds two ordinary source alternatives from empty. Their matching nullary rows have opposite Boolean guards. It derives the initial joint context from actual construction, derives both source operands and caps, and executes the nonempty matched-row walk plus both constructors. The literal child zip is empty, so the recursive bound-zero call is never used. The proof discharges that call's contracts from actual exhaustion instead of taking any callback premise. Canonical cache hits return the exact constrained left value and entire original machine. The helper derives the output cap, classifier, scope, and retained joint context. The kernel has no premises and passes strict3 with one complete axiom/signature pair.
+
+The earlier independent generic native experiments remain in the separate frozen `joint-native-manifest.json`. They exercise mixed recursive operands and exact warm returns. This component is a produced local step for the full joint induction. It is not a new Haskell runtime theorem or general whole-library completion result. No older production file changed.

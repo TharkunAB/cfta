@@ -1,0 +1,16 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed.request_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed.request_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed.done_joint_of_ranges
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed.done_joint_of_ranges
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed.cold_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeJointClosed.cold_complete

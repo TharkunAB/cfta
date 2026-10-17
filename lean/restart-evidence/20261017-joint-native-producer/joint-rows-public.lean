@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentConstrainedCapKernelJointRows
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.edge_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.edge_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.rows_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.rows_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.node_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.node_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.left_union_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.left_union_joint
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.right_union_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJointRows.right_union_joint

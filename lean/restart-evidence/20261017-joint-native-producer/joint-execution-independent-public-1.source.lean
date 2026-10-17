@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentConstrainedCapKernelJointExecution
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.body_rank
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.body_rank
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.mu_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.mu_joint
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.reference_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.reference_joint
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.onNode_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.onNode_joint
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapKernelJoint.execute_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.execute_joint

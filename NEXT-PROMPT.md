@@ -1,5 +1,43 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current joint source laws and generic native composition
+
+Updated: 2026-10-17 04:55 CEST. This checkpoint starts at published `0ebb832d`.
+The proof commits are `ad5c409b`, `bd85cd40`, `86d2c5f1`, and `1a0ad30e`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-joint-source-native-laws.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-joint-native-producer/`.
+
+Eleven additive modules prove the joint cap, ranked occurrence, scope,
+semantic heap, and guard heap laws through every actual source branch.
+The proof uses source fuel. Pair rank alone need not decrease at Mu entry.
+Exact generic native meaning transfers these laws to the same machine.
+Closed inputs construct finite generic cold execution under WordRanges.
+An actual warm return derives the same laws. General WordRanges still
+constrains future prefixes; initial numerical range production remains open.
+The current checked equality-cache Control worker also needs the joint lift.
+
+The pinned Audit passes 2816 jobs and 62897 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eleven strict source checks are
+clean. All 83 imported pairs pass in 17 groups. Eight component manifests
+verify 198 entries. Read checkpoint-validation.json for hashes and groups.
+Failed attempts remain recorded. Preservation
+retains 11398 starting files, 2804 older non-Audit proofs, all 239 Haskell
+files, and 68 frozen production manifests with 573 entries.
+
+Next derive initial numerical ranges and lift the laws through current
+checked equality control. Finite general warm callers, constrained descent,
+repeated convergence, remaining recursive callers, frontend/runtime adapters,
+capacity, serial public pipelines, and complete public composition remain
+open. The full library goal stays active. Read
+next-native-ranges-and-checked-control.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
 ## Current causal source guard production and finite optional binders
 
 Updated: 2026-10-17 04:31 CEST. This checkpoint starts at published `5ce2c90f`.

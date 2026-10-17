@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.work_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.work_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.step_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.step_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.execute_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.execute_heap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.trace_heap
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeGuardHeap.trace_heap
