@@ -10,7 +10,7 @@ import Data.CFTA.Equality (
     EnumerateM,
     Node,
     PartialSymbol (..),
-    TermFragment,
+    TermFragment (..),
     UVar,
     expandPartialTermFrag,
     getUVarRepresentative,
@@ -46,6 +46,9 @@ prunedTerms templates = termsPruneWith "Mu" [] order oracle
          in find (`Set.member` waiting) candidates
     oracle :: [Pending] -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, [Pending])
     oracle pending _ (Right _) = pure (False, pending)
+    -- This concrete root starts no program match, and no check waits.
+    oracle [] _ (Left (TermFragmentNode symbol children))
+        | (symbol, length children) `notElem` [("app", 4), ("filter", 2)] = pure (False, [])
     oracle pending uv (Left fragment) = do
         partial <- expandPartialTermFrag fragment
         resumed <- traverse (resume uv partial) pending
