@@ -4,6 +4,10 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.replaceRows` applies row replacements and deletions to an
+  existing explicit automaton. It shares unchanged rows and validates the
+  complete result after the batch. The original automaton stays unchanged.
+  The operation works for ordinary, equality, and liquid annotations.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
   the input becomes, so that a caller can carry data about the edges of a
   graph through `refold`, whose new edges have new identities.
