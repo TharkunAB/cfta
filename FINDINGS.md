@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 01:36 CEST. Proof checkpoint is `c517b225`.
+Full pinned Audit passes 3179 jobs and 70083 dependency checks. Actual lower
+and outer workers derive operation growth. Busy-failure inversion produces
+all active ancestors with growth into the reader. Source construction recovers
+actual first writers and supplies filtered reconstruction for BinderFree
+recovered bodies. Native raw stored fields derive local own-class origins.
+General key exclusion, fresh-call bounds, nested bodies, convergence and full
+public Haskell correspondence remain open. No Haskell patch or new production
+defect is added. Repair `b9219b9e` remains merged and validated in `c0cc8a05`.
+Read `lean/notes-current-active-growth-lineage.md`. Keep this registry first.
+Record every later repair with failure, executable reproducer, paths, commit,
+checks and upstream status for external work.
+
 Current proof update: 2026-10-18 01:13 CEST. Proof checkpoint is `0dbe7e4e`.
 Full pinned Audit passes 3174 jobs and 69812 dependency checks. Every
 BinderFree publication body now derives agreement of its two actual filtered
