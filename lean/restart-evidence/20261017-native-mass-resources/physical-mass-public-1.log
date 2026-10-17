@@ -1,0 +1,149 @@
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.NodeMass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.NodeMass : {Symbol Guard : Type} →
+  Nat →
+    MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) →
+      Prop
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.EdgeMass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.EdgeMass : {Symbol Guard : Type} →
+  Nat →
+    MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) →
+      Prop
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.node_cell' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.node_cell : ∀ {Symbol Guard : Type} {width bound : Nat}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state)) →
+      ∀ (handle : Nat)
+        (cell :
+          MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard state) handle)
+            (@Option.some.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              cell) →
+          @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.NodeMass Symbol Guard bound cell
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_cell' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_cell : ∀ {Symbol Guard : Type} {width bound : Nat}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state)) →
+      ∀ (handle : Nat)
+        (cell :
+          MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+            (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges width Symbol Guard state) handle)
+            (@Option.some.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              cell) →
+          @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.EdgeMass Symbol Guard bound cell
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.initial_cells' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.initial_cells : ∀ {Symbol Guard : Type} {width : Nat}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    And
+      (∀ (handle : Nat)
+        (cell :
+          MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard state) handle)
+            (@Option.some.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              cell) →
+          @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.NodeMass Symbol Guard
+            (@MicroCFTA.InternedValueMassHeap.initialBound Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state)))
+            cell)
+      (∀ (handle : Nat)
+        (cell :
+          MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+            (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges width Symbol Guard state) handle)
+            (@Option.some.{0}
+              (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              cell) →
+          @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.EdgeMass Symbol Guard
+            (@MicroCFTA.InternedValueMassHeap.initialBound Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state)))
+            cell)
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.read_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.read_bound : ∀ {Symbol Guard : Type} {bound : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+    ∀ (identity : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_read_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_read_bound : ∀ {Symbol Guard : Type} {bound : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+    ∀ (identity : Nat) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge) bound
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.resident_children' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.resident_children : ∀ {Symbol Guard : Type} {bound : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard source edge →
+        And
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@MicroCFTA.InternedValueMass.values Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)))
+            bound)
+          (And
+            (@LT.lt.{0} Nat instLTNat
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge))
+              bound)
+            (∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) child →
+                @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard child) bound))

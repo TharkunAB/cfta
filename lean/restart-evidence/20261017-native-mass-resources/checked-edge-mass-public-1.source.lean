@@ -1,0 +1,31 @@
+import MicroCFTA.SourceEqualityNativeCheckedMass
+import MicroCFTA.SourceEqualityNativeCheckedMassInputs
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.operand_width
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.operand_width
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.zip_width
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.zip_width
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.children_prefix
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.children_prefix
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.accumulated_mass
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.accumulated_mass
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.children_assembled
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.children_assembled
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.sentinel_assembled
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.sentinel_assembled
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.checked_edge_step
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.checked_edge_step
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMass.body_choice
+#check @MicroCFTA.SourceEqualityNativeCheckedMass.body_choice
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMassInputs.children_inputs
+#check @MicroCFTA.SourceEqualityNativeCheckedMassInputs.children_inputs
+#print axioms MicroCFTA.SourceEqualityNativeCheckedMassInputs.sentinel_inputs
+#check @MicroCFTA.SourceEqualityNativeCheckedMassInputs.sentinel_inputs

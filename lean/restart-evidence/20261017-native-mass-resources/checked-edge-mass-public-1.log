@@ -1,0 +1,1023 @@
+'MicroCFTA.SourceEqualityNativeCheckedMass.operand_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.operand_width : ∀ {Symbol Formula : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) bound state →
+    ∀
+      (edge :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) state
+          edge →
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) edge))
+          bound
+'MicroCFTA.SourceEqualityNativeCheckedMass.zip_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.zip_width : ∀ {Symbol Formula : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) bound state →
+    ∀
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) state
+          left →
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0}
+            (Prod.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+            (@List.zip.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) right)))
+          bound
+'MicroCFTA.SourceEqualityNativeCheckedMass.children_prefix' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.children_prefix : ∀ {Symbol Formula : Type}
+  (nodes :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeCall Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  (@MicroCFTA.SourceRecursiveIntersectionKernel.Calls Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      fun domain left right =>
+      nodes
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) domain left right)) →
+    ∀ (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (before current :
+        MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (values :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+      @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          before →
+        @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            before domain →
+          @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)
+              left →
+            @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)
+                right →
+              @MicroCFTA.SourceRecursiveIntersectionKernel.WalkTrace.{0}
+                  (Prod.{0, 0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                  Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (fun pair =>
+                    nodes
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) domain
+                        (@Prod.fst.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          pair)
+                        (@Prod.snd.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          pair)))
+                  (@List.zip.{0, 0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) right))
+                  before values current →
+                And
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current)
+                  (And
+                    (@MicroCFTA.InternedNestedProvenance.Values Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current)
+                      values)
+                    (@Eq.{1} Nat
+                      (@List.length.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                        values)
+                      (@List.length.{0}
+                        (Prod.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                        (@List.zip.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) right)))))
+'MicroCFTA.SourceEqualityNativeCheckedMass.accumulated_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.accumulated_mass : ∀ {Symbol Formula : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) bound state →
+    ∀
+      (values :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+      @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) state
+          values →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.InternedValueMass.values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) values)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@List.length.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              values)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) bound))
+'MicroCFTA.SourceEqualityNativeCheckedMass.children_assembled' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.children_assembled : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (nodes : MicroCFTA.SourceRecursiveIntersectionCode.NodeCall Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (edges :
+    MicroCFTA.SourceRecursiveIntersectionCode.EdgeCall Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  (@MicroCFTA.SourceRecursiveIntersectionKernel.Calls Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      fun domain left right =>
+      nodes
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) domain left right)) →
+    ∀ (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula)
+      (before current :
+        MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (values :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+      @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          before →
+        @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            before domain →
+          @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)
+              left →
+            @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)
+                right →
+              ∀ (initialBound currentBound : Nat),
+                @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                    initialBound
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before) →
+                  @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                      currentBound
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current) →
+                    @MicroCFTA.SourceRecursiveIntersectionKernel.WalkTrace.{0}
+                        (Prod.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                        Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                        (fun pair =>
+                          nodes
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) domain
+                              (@Prod.fst.{0, 0}
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                pair)
+                              (@Prod.snd.{0, 0}
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                pair)))
+                        (@List.zip.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) right))
+                        before values current →
+                      have made :=
+                        @MicroCFTA.InternedConstructorTemplates.run Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          inst
+                          (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)))
+                            (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula combined) values)
+                          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current);
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.SourceRecursiveIntersectionKernel.Result Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                          (@MicroCFTA.SourceRecursiveIntersectionCode.interpret Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            inst nodes edges
+                            (@MicroCFTA.SourceEqualityNativeCheckedCode.children Formula Symbol domain left right
+                              combined)
+                            before)
+                          (@MicroCFTA.SourceRecursiveIntersectionKernel.Result.done Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            (@Prod.fst.{0, 0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              made)
+                            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                              (@Prod.snd.{0, 0}
+                                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                made)
+                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current))))
+                        (And
+                          (@Eq.{1} Nat
+                            (@List.length.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              values)
+                            (@List.length.{0}
+                              (Prod.{0, 0}
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                              (@List.zip.{0, 0}
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) right))))
+                          (And
+                            (@Eq.{1} Symbol
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                    (@Prod.fst.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                      (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                      made))))
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left))))
+                            (And
+                              (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                  (@MicroCFTA.Cache.Interned.key
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                      (@Prod.fst.{0, 0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                        (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                        made))))
+                                (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula combined))
+                              (And
+                                (@Eq.{1}
+                                  (List.{0}
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                    (@Prod.fst.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                      (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                      made))
+                                  values)
+                                (And
+                                  (@MicroCFTA.InternedValueMassHeap.Stored Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                    (MicroCFTA.InternedFreshOrdinaryResultMass.inflate initialBound currentBound)
+                                    (@Prod.snd.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                      (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                      made))
+                                  (And
+                                    (@LE.le.{0} Nat instLENat
+                                      (@MicroCFTA.InternedValueMass.edge Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                        (@Prod.fst.{0, 0}
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                          (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                          made))
+                                      (MicroCFTA.InternedFreshOrdinaryResultMass.inflate initialBound currentBound))
+                                    (And
+                                      (@Eq.{1} Nat
+                                        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                            (@Prod.snd.{0, 0}
+                                              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                              (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                              made)))
+                                        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current))))
+                                      (@LE.le.{0} Nat instLENat
+                                        (@MicroCFTA.Cache.State.next
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                            (@Prod.snd.{0, 0}
+                                              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                              (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                              made)))
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                          (@MicroCFTA.Cache.State.next
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current)))
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))))
+'MicroCFTA.SourceEqualityNativeCheckedMass.sentinel_assembled' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.sentinel_assembled : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (nodes : MicroCFTA.SourceRecursiveIntersectionCode.NodeCall Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (edges : MicroCFTA.SourceRecursiveIntersectionCode.EdgeCall Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (left : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (before :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+    ∀ (bound : Nat),
+      @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) bound
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before) →
+        have made :=
+          @MicroCFTA.InternedConstructorTemplates.run Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            inst
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)))
+              (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula)
+              (@List.cons.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@List.nil.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before);
+        And
+          (@Eq.{1}
+            (MicroCFTA.SourceRecursiveIntersectionKernel.Result Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+            (@MicroCFTA.SourceRecursiveIntersectionCode.interpret Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst nodes edges (@MicroCFTA.SourceEqualityNativeCheckedCode.sentinel Formula Symbol left) before)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Result.done Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                made)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@Prod.snd.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  made)
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before))))
+          (And
+            (@Eq.{1} Symbol
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                    (@Prod.fst.{0, 0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      made))))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left))))
+            (And
+              (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                  (@MicroCFTA.Cache.Interned.key
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                      (@Prod.fst.{0, 0}
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                        (MicroCFTA.InternedConstructorTemplates.State Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                        made))))
+                (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula))
+              (And
+                (@Eq.{1}
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                    (@Prod.fst.{0, 0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      made))
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                    (@List.nil.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))
+                (And
+                  (@MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                    (@Max.max.{0} Nat Nat.instMax bound (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                    (@Prod.snd.{0, 0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      made))
+                  (And
+                    (@LE.le.{0} Nat instLENat
+                      (@MicroCFTA.InternedValueMass.edge Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                        (@Prod.fst.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          made))
+                      (@Max.max.{0} Nat Nat.instMax bound
+                        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))
+                    (And
+                      (@Eq.{1} Nat
+                        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (@Prod.snd.{0, 0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              made)))
+                        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before))))
+                      (@LE.le.{0} Nat instLENat
+                        (@MicroCFTA.Cache.State.next
+                          (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (@Prod.snd.{0, 0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              (MicroCFTA.InternedConstructorTemplates.State Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                              made)))
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@MicroCFTA.Cache.State.next
+                            (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))))))
+'MicroCFTA.SourceEqualityNativeCheckedMass.checked_edge_step' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.checked_edge_step : ∀ {width : Nat} {Output : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) bound
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) →
+    @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+        values →
+      ∀
+        (next :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourceRecursiveIntersectionCode.Code
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output),
+        have made :=
+          @MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            inst_1
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) symbol guard values)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)));
+        have after :=
+          @MicroCFTA.SourceEqualityNativeDemand.State.mk width
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.advance width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)
+              (have __src :=
+                @MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width before);
+              @MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@Prod.snd.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  made)
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) __src)))
+            (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before);
+        And
+          (@Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Outcome width Output)
+            (@MicroCFTA.SourceEqualityNativeDemand.step Output width inst inst_1
+              (@MicroCFTA.SourceEqualityNativeDemand.Control.code Output
+                (@MicroCFTA.SourceRecursiveIntersectionCode.Code.work
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.makeEdge
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) symbol guard values)
+                  next))
+              before)
+            (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width Output
+              (@MicroCFTA.SourceEqualityNativeDemand.Control.code Output
+                (next
+                  (@Prod.fst.{0, 0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    made)))
+              after))
+          (And
+            (@MicroCFTA.InternedValueMassHeap.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.InternedFreshOrdinaryResultMass.inflate
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  values)
+                bound)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width after))))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.InternedValueMass.edge (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@Prod.fst.{0, 0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    made))
+                (MicroCFTA.InternedFreshOrdinaryResultMass.inflate
+                  (@List.length.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    values)
+                  bound))
+              (And
+                (@Eq.{1} Nat
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))))
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))))))
+                (@LE.le.{0} Nat instLENat
+                  (@MicroCFTA.Cache.State.next
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@MicroCFTA.Cache.State.next
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.State.edges
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+'MicroCFTA.SourceEqualityNativeCheckedMass.body_choice' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMass.body_choice : ∀ {width : Nat}
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (code :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  @Eq.{2}
+      (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.SourceEqualityNativeDemand.body
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        width request
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+        before)
+      (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          code)
+        after) →
+    And
+      (@Eq.{1}
+        (MicroCFTA.SourceRecursiveIntersectionThunks.State width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)
+        (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))
+      (Or
+        (@Eq.{2}
+          (MicroCFTA.SourceRecursiveIntersectionCode.Code
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          code
+          (@MicroCFTA.SourceEqualityNativeCheckedCode.sentinel MicroCFTA.FullSyntax.Formula
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)))
+        (@Exists.{1} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula) fun combined =>
+          And
+            (@Eq.{1} Nat
+              (@List.length.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)))
+              (@List.length.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))))
+            (@Eq.{2}
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              code
+              (@MicroCFTA.SourceEqualityNativeCheckedCode.children MicroCFTA.FullSyntax.Formula
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+                combined))))
+'MicroCFTA.SourceEqualityNativeCheckedMassInputs.children_inputs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMassInputs.children_inputs : ∀ {Symbol Formula : Type}
+  (nodes :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeCall Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  (@MicroCFTA.SourceRecursiveIntersectionKernel.Calls Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      fun domain left right =>
+      nodes
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) domain left right)) →
+    ∀ (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (left right :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint Formula)
+      (before current :
+        MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (values :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+      @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          before →
+        @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            before domain →
+          @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)
+              left →
+            @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before)
+                right →
+              ∀ (bound currentBound : Nat),
+                @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) bound
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before) →
+                  @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                      currentBound
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current) →
+                    @LE.le.{0} Nat instLENat bound currentBound →
+                      @MicroCFTA.SourceRecursiveIntersectionKernel.WalkTrace.{0}
+                          (Prod.{0, 0}
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                          Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (fun pair =>
+                            nodes
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) domain
+                                (@Prod.fst.{0, 0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                  pair)
+                                (@Prod.snd.{0, 0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                  pair)))
+                          (@List.zip.{0, 0}
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) right))
+                          before values current →
+                        @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) currentBound currentBound)
+                          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) current)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)))
+                            (@MicroCFTA.SourceEqualityConjoinAllocation.readback Formula combined) values)
+'MicroCFTA.SourceEqualityNativeCheckedMassInputs.sentinel_inputs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeCheckedMassInputs.sentinel_inputs : ∀ {Symbol Formula : Type}
+  (left : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) bound before →
+    @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound) before
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          (@MicroCFTA.Cache.Interned.key
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) left)))
+        (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula)
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+          (@List.nil.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))

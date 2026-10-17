@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentAllocatedNativePhysicalMass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.NodeMass
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.NodeMass
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.EdgeMass
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.EdgeMass
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.node_cell
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.node_cell
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_cell
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_cell
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.initial_cells
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.initial_cells
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.read_bound
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.read_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_read_bound
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.edge_read_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.resident_children
+#check @MicroCFTA.SourceCurrentAllocatedNativePhysicalMass.resident_children

@@ -1,0 +1,72 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 10000
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.values_le
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.values_le
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.edges_le
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.edges_le
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.inflate_width
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.inflate_width
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.edge
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.node
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.node
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.union_requests
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.union_requests
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.union
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.union
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.physical
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.physical
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.run_bound
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.run_bound
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.pure
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.pure
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.edge
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.node
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.node
+#print axioms MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.union
+#check @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs.union
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.listLimit
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.listLimit
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling_ge
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling_ge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.charge
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.charge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.Inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.Inputs
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.step_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.step_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter_ge
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter_ge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter_add
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter_add
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit_add
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit_add
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.domain_step_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.domain_step_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.domain_prefix_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.domain_prefix_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.InputsThrough
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.InputsThrough
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.prefix_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.prefix_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.initial_prefix
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.initial_prefix

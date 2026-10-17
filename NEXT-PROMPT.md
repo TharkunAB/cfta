@@ -1,5 +1,55 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current native worker mass and numeric checked prefixes
+
+Updated: 2026-10-17 06:59 CEST. This checkpoint starts at published `3d1c966a`.
+The proof commits are `de18ec41`, `7f435218`, and `f8efa29a`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-native-mass-resources.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-mass-resources/`.
+
+Seven additive modules connect causal mass to literal native query workers.
+Current physical validity derives captured and returned payload bounds for
+both populated native memo families and every phase. Exact current reads
+and resident child lists inherit the same bound. Actual checked accepted
+edges, rejected sentinels, row hash joins, and union suffixes construct their
+own final constructor results from their actual earlier ordered prefixes.
+Original operand mass and literal walk length derive emitted Work widths.
+
+A numeric recurrence now bounds every checked instruction's constructor
+store and both identity supplies. It covers every stopping outcome. Actual
+certified prefixes use the original computed source mass and step count.
+Their domain allocations are at most the step count. The source compiler
+must still produce every reached Work width certificate and a complete-query
+instruction bound. Current-prefix Stored and completed ordered walks remain
+explicit local assembler inputs. These are not whole-query resource results.
+
+The pinned Audit passes 2871 jobs and 63915 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All seven final strict logs are empty.
+All 75 imported signature and axiom pairs pass in ten groups.
+Five component manifests verify 161 entries.
+Read checkpoint-validation.json for imported full signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12629 starting
+files, 2863 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 75 frozen manifests with 628 entries. Stashes and three other
+worktrees retain their initial state.
+
+Next produce the quantitative Code and protected-frame invariant for a
+complete generated query. Derive all prefix widths, stores, and the complete
+step count from initial inputs. Compose queries that consume their actual
+earlier results. General Target and Force misses, editor/class completion,
+outer active/stored producers, arbitrary constrained Mu bodies, convergence,
+remaining callers, current frontend/runtime adapters, concrete capacity,
+and complete public Haskell correspondence remain open. Mass is not bytes.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the repair
+registry first. Field-pool repair `b9219b9e` is merged and validated. Reuse
+unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier artifacts and the optimized interned core.
+The full library goal stays active. Read next-complete-query-width-producer.md
+in the evidence directory.
+
 ## Current causal payload bounds and generated checked binders
 
 Updated: 2026-10-17 06:42 CEST. This checkpoint starts at published `1a8e5b7b`.

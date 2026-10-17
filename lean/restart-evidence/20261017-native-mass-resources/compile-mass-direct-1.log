@@ -1,0 +1,94 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileMass.lean:129:109: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+nodes : SourceRecursiveIntersectionCode.NodeCall Symbol Guard
+edges : SourceRecursiveIntersectionCode.EdgeCall Symbol Guard
+domain : Interned DomainKey
+left right : List (EdgeValue Symbol Guard)
+before middle : Machine Symbol Guard
+values : List (EdgeValue Symbol Guard)
+bound : Nat
+trace :
+  WalkTrace (fun rows => edges { domain := domain, left := rows.fst, right := rows.snd }) (pairs left right) before
+    values middle
+stored : Stored bound middle.heap
+resident : ∀ (row : EdgeValue Symbol Guard), row ∈ values → EdgeResident middle.heap row
+actual : Value Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  InternedConstructorTemplates.run (makeNode values) middle.heap
+raw :
+  Stored (inflate values.length bound) (InternedConstructorTemplates.run (makeNode values) middle.heap).snd ∧
+    InternedValueMass.value (InternedConstructorTemplates.run (makeNode values) middle.heap).fst ≤
+        inflate values.length bound ∧
+      (InternedConstructorTemplates.run (makeNode values) middle.heap).snd.nodes.next ≤ middle.heap.nodes.next + 1 ∧
+        (InternedConstructorTemplates.run (makeNode values) middle.heap).snd.edges.next = middle.heap.edges.next
+width : values.length ≤ left.length * right.length
+enough : inflate values.length bound ≤ inflate (left.length * right.length) bound
+walked :
+  SourceRecursiveIntersectionCode.interpret nodes edges
+      (SourceRecursiveIntersectionCode.walk
+        (fun rows => SourceRecursiveIntersectionCode.requestEdge domain rows.fst rows.snd) (pairs left right))
+      before =
+    Result.done values middle
+⊢ Result.done (InternedConstructorTemplates.run (makeNode values) middle.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeNode values) middle.heap).snd, domains := middle.domains } =
+    Result.done actual.fst { heap := actual.snd, domains := middle.domains }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileMass.lean:141:68: warning: This simp argument is unused:
+  SourceRecursiveIntersectionCode.result_bind_pure
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionCode.compileRows, SourceRecursiveIntersectionCode.interpret_bind,
+    walked, Result.bind, SourceRecursiveIntersectionCode.interpret, SourceRecursiveIntersectionKernel.work]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileMass.lean:176:2: error: unsolved goals
+case refine_1
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+nodes : SourceRecursiveIntersectionCode.NodeCall Symbol Guard
+edges : SourceRecursiveIntersectionCode.EdgeCall Symbol Guard
+domain : Interned DomainKey
+members : List (Value Symbol Guard)
+other : Value Symbol Guard
+left : Bool
+before middle : Machine Symbol Guard
+values : List (Value Symbol Guard)
+bound : Nat
+trace :
+  WalkTrace
+    (fun member =>
+      nodes
+        (if left = true then { domain := domain, left := member, right := other }
+        else { domain := domain, left := other, right := member }))
+    members before values middle
+stored : Stored bound middle.heap
+available : ∀ (value : Value Symbol Guard), value ∈ values → Available middle.heap value
+actual : Value Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  InternedConstructorTemplates.run (makeUnion values) middle.heap
+raw :
+  Stored (inflate values.length bound) (InternedConstructorTemplates.run (makeUnion values) middle.heap).snd ∧
+    InternedValueMass.value (InternedConstructorTemplates.run (makeUnion values) middle.heap).fst ≤
+        inflate values.length bound ∧
+      (InternedConstructorTemplates.run (makeUnion values) middle.heap).snd.nodes.next ≤ middle.heap.nodes.next + 1 ∧
+        (InternedConstructorTemplates.run (makeUnion values) middle.heap).snd.edges.next = middle.heap.edges.next
+enough : inflate values.length bound = inflate members.length bound
+walked :
+  SourceRecursiveIntersectionCode.interpret nodes edges
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if left = true then SourceRecursiveIntersectionCode.requestNode domain member other
+          else SourceRecursiveIntersectionCode.requestNode domain other member)
+        members)
+      before =
+    Result.done values middle
+⊢ Result.done (InternedConstructorTemplates.run (makeUnion values) middle.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeUnion values) middle.heap).snd, domains := middle.domains } =
+    Result.done actual.fst { heap := actual.snd, domains := middle.domains }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileMass.lean:177:49: warning: This simp argument is unused:
+  SourceRecursiveIntersectionCode.result_bind_pure
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionCode.interpret_bind, walked, Result.bind,
+    SourceRecursiveIntersectionCode.interpret, SourceRecursiveIntersectionKernel.work]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

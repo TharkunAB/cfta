@@ -1,0 +1,41 @@
+import MicroCFTA.SourceRecursiveIntersectionCompileMass
+import MicroCFTA.InternedFreshOrdinaryClosedCompletion
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 20000
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.values_length
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.values_length
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.edges_length
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.edges_length
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.pairs_length
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.pairs_length
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.pairs_mass
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.pairs_mass
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.node_pairs_mass
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.node_pairs_mass
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.pair_input_mass
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.pair_input_mass
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.rows_request_charges
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.rows_request_charges
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.union_request_charges
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.union_request_charges
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.rows_trace
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.rows_trace
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.union_trace
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.union_trace
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.compileRows
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.compileRows
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.union
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.union
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.compileNode_leftUnion
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.compileNode_leftUnion
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileMass.compileNode_rightUnion
+#check @MicroCFTA.SourceRecursiveIntersectionCompileMass.compileNode_rightUnion
