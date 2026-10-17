@@ -1,0 +1,13 @@
+# Independent initial numeric checked closure review
+
+Reviewed: 2026-10-17 05:11 CEST.
+
+No material defect was found in final `CheckedJointClosed.cold_complete`. Its initial premises are physical and semantic readiness, the causal guard-observation heap invariant, closed original available operands, their common finite cap, and three numeric bounds. No successful query, future range predicate, completed trace, or desired returned cap is an input.
+
+The existing `RecursiveInitialRanges.cold_complete` constructs the contextual physical receipt from the initial numeric bounds. The new proof applies the joint trace induction to that exact receipt trace. It does not construct a second return and substitute its state. Initial joint native stores hold because the native tables are empty. The universal request law yields the cap and source-weight classifier for the actual result. Scope and closed-output readback yield Original and ProbeFree at the same heap. The final public tuple also retains `Current` for the original source and domain inventory.
+
+The source constructor and guard-observation invariants remain explicit. The guard heap does not require unrelated records to have plain guards. It records causal relationships between actual Mu bodies and their probes. The finite cap permits constrained ordinary prefixes above hereditary recursive atoms. This endpoint covers their general closed supported source requests rather than finite ordinary syntax alone.
+
+Imported validation passed for both public declarations against the final appended-Current interface. The independent kernel exposes literal checked `execute = done`, complete final Good, exact machine extension and operation-cache growth, joint context and stores, cap, classifier, closedness, Original, ProbeFree, and exact intersection language. It assumes only the initial endpoint facts. The final kernel log is attempt 3 and passed without diagnostics. Attempt 1 preserves a parser failure. Attempt 2 passed against the earlier interface and remains historical. The old source hash `b40e6f5e...` resolves to the immutable root-owned direct-2 source snapshot; final production is `b3175c0d...`.
+
+The final canonical target passed with 1252 jobs. Only the historical dependency warning was replayed. This is a current checked executor theorem. It does not transfer state or word admission to the distinct generic native executor. The domain inventory is conservative; the initial inequalities remain real resource premises. The result does not close general selected-class, repeated outer reduction, runtime, or frontend correspondence.

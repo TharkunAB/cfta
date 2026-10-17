@@ -1,5 +1,44 @@
 # Public API and source correspondence
 
+## Current checked joint execution from initial numeric resources
+
+Updated: 2026-10-17 05:14 CEST. This checkpoint starts at published `0ea50f68`.
+The proof commits are `a041f192`, `c1156f5e`, `22fb0df2`, and `eecce203`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-checked-joint-initial-resources.md` for the top-level
+target, current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-initial-resources/`.
+
+Eleven additive modules prove joint structural laws through the current
+checked equality worker, every node branch, and exact memo owner finishes.
+The full physical trace induction derives cap, ranked occurrence, scope,
+Context, and returned-cell laws. Existing initial counter admission and
+finite contextual completion construct that same cold result. The endpoint
+takes no WordRanges, supplied execution, or desired result-law premise.
+It retains the earlier exact intersection language and current allocation
+history. Same-source warm calls construct their own result from actual past
+stores and warm-entry counters. Mixed cold integration derives an exact
+two-step warm repeat with the full checked state unchanged.
+
+The pinned Audit passes 2827 jobs and 63006 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eleven strict source checks are
+clean. All 85 imported pairs pass in 16 groups. Ten component manifests
+verify 157 entries. Read checkpoint-validation.json for hashes and groups.
+Preservation retains 11605 starting files, 2815 older non-Audit proofs, all
+239 Haskell files, and 69 frozen production manifests with 584 entries.
+
+Next rebase laws for newly produced operands and derive cumulative serial
+allocation bounds. Integrate full Target, Leaf, editor, and class callers.
+General constrained descent, repeated convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, and complete public composition
+remain open. The complete library goal stays active. Read
+next-source-rebase-and-constrained-callers.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
 ## Current joint source laws and generic native composition
 
 Updated: 2026-10-17 04:55 CEST. This checkpoint starts at published `0ebb832d`.

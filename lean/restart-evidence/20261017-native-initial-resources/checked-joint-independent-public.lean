@@ -1,0 +1,70 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointTrace
+
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.Certified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.Certified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.certified_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.certified_bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.certified_forall
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.certified_forall
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.certified_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.certified_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.BodyCertified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.BodyCertified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.Certified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.Certified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.pure_result
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.pure_result
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.certified_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.certified_bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.physical_inputs
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.physical_inputs
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.yielded_context
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.yielded_context
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Plain
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Plain
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Return
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Return
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Return.prepend
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Return.prepend
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Preserves
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.Preserves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.node_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.node_bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.edge_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.edge_bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointTrace.completed
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointTrace.completed

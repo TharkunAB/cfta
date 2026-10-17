@@ -1,0 +1,34 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointControl.lean:43:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentConstrainedCapCheckedJointControl.pure_result`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointControl.lean:42:0: warning: `pure_result` does not use the following hypothesis in its type:
+  • [DecidableEq Symbol] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointControl.lean:55:17: error: Type mismatch
+  SourceCurrentConstrainedCapCheckedJointCode.certified_bind annotation source code next state context
+has type
+  ∀ (intermediate : Machine Symbol Guard → A → Prop) (post : Machine Symbol Guard → B → Prop),
+    CodeCertified annotation source code state intermediate →
+      (∀ (value : A) (after : Machine Symbol Guard),
+          Extension state after →
+            Context annotation source after →
+              intermediate after value → CodeCertified annotation source (next value) after post) →
+        CodeCertified annotation source (code.bind next) state post
+but is expected to have type
+  Certified annotation source ((Control.code code).bind next) state post
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointControl.lean:54:2: error: Alternative `edgeBody` has not been provided
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointControl.lean:56:6: error: unexpected identifier; expected command
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointControl.lean:75:40: error: Application type mismatch: The argument
+  initial
+has type
+  (width : Nat) → Machine ?m.11 ?m.12 → SourceRecursiveIntersectionThunks.State width ?m.11 ?m.12
+but is expected to have type
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+in the application
+  Current source inventory initial

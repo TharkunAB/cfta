@@ -1,0 +1,280 @@
+'MicroCFTA.CheckedJointClosedIndependentKernels.literal_joint_return' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@literal_joint_return : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (bits depth : Nat) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (machine : Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (operations : SourceEqualityConstraintMemoAllocation.State),
+  @SourceCurrentAllocatedNativePhysicalCompletion.Good
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      (@SourceEqualityNativeDemand.State.mk
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (@initial (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          machine)
+        operations) →
+    @SourceEqualityRequiredSemanticCache.SemanticReady (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Machine.heap (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          machine) →
+      @SourceCurrentConstrainedCapGuardHeap.Heap (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) SourceCurrentConstrainedCapCheckedJointClosed.Plain
+          (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine) →
+        ∀
+          (left right :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          @Original (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              left →
+            @Original (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                right →
+              @Available (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)
+                  left →
+                @Available (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)
+                    right →
+                  @Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+                      (@Value.free (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) left)
+                      (@List.nil.{0} InternedBinderProtocol.Reference) →
+                    @Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+                        (@Value.free (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) right)
+                        (@List.nil.{0} InternedBinderProtocol.Reference) →
+                      @SourceCurrentConstrainedCap.Cap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          SourceCurrentConstrainedCapCheckedJointClosed.Plain depth left →
+                        @SourceCurrentConstrainedCap.Cap (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            SourceCurrentConstrainedCapCheckedJointClosed.Plain depth right →
+                          @LT.lt.{0} Nat instLTNat
+                              (@State.next InternedBinderProtocol.NodeKey
+                                (@InternedConstructorTemplates.State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)))
+                              (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+                            @LE.le.{0} Nat instLENat
+                                (@State.next
+                                  (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (@InternedConstructorTemplates.State.edges
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)))
+                                (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                  (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                              @LT.lt.{0} Nat instLTNat
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                    (@State.next IntersectionFlatMemoKeyDomain.DomainKey
+                                      (@Machine.domains (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine))
+                                    (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                      (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        (@State.next InternedBinderProtocol.NodeKey
+                                          (@InternedConstructorTemplates.State.nodes
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)))
+                                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                                          (@State.next InternedBinderProtocol.NodeKey
+                                            (@InternedConstructorTemplates.State.nodes
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)))
+                                          (@State.next InternedBinderProtocol.NodeKey
+                                            (@InternedConstructorTemplates.State.nodes
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)))))))
+                                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                    (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+                                @Exists.{1} Nat fun fuel =>
+                                  @Exists.{1}
+                                    (Value (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    fun value =>
+                                    @Exists.{2}
+                                      (SourceEqualityNativeDemand.State
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                      fun after =>
+                                      And
+                                        (@Eq.{2}
+                                          (Outcome
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                          (@SourceEqualityNativeDemand.execute
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            inst inst_1 fuel
+                                            (@Control.code
+                                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (@requestNode (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                IntersectionEmptyDomain.emptyDomain left right))
+                                            (@SourceEqualityNativeDemand.State.mk
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                              (@initial (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                machine)
+                                              operations))
+                                          (@Outcome.done
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                            value after))
+                                        (And
+                                          (@SourceCurrentAllocatedNativePhysicalCompletion.Good
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            after)
+                                          (And
+                                            (@Extension (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine
+                                              (@State.machine
+                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@State.native
+                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                  after)))
+                                            (And
+                                              (SourceEqualityConstraintMemoAllocation.Grows operations
+                                                (@State.operations
+                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                  after))
+                                              (And
+                                                (@SourceCurrentConstrainedCapKernelJoint.Context
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  SourceCurrentConstrainedCapCheckedJointClosed.Plain
+                                                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)
+                                                  (@State.machine
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@State.native
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      after)))
+                                                (And
+                                                  (@SourceCurrentConstrainedCapCheckedJointCache.Stored
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    SourceCurrentConstrainedCapCheckedJointClosed.Plain
+                                                    (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) machine)
+                                                    (@State.native
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      after))
+                                                  (And
+                                                    (@SourceCurrentConstrainedCap.Cap
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      SourceCurrentConstrainedCapCheckedJointClosed.Plain depth value)
+                                                    (And
+                                                      (@SourceCurrentConstrainedCapPairOccurrences.Classified
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@SourceCurrentConstrainedCapPairOccurrences.sourceWeight
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          SourceCurrentConstrainedCapCheckedJointClosed.Plain
+                                                          (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                            machine))
+                                                        (@SourceCurrentConstrainedCapNonplainRank.pairRank
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          SourceCurrentConstrainedCapCheckedJointClosed.Plain left
+                                                          right)
+                                                        value)
+                                                      (And
+                                                        (@Eq.{1} (List.{0} InternedBinderProtocol.Reference)
+                                                          (@Value.free (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) value)
+                                                          (@List.nil.{0} InternedBinderProtocol.Reference))
+                                                        (And
+                                                          (@Original (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) value)
+                                                          (And
+                                                            (@SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree
+                                                              (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) value)
+                                                            (∀
+                                                              (output :
+                                                                InternedGuardedLanguage.Env
+                                                                  (SourceObservations.Label FullSyntax.Formula))
+                                                              (term :
+                                                                Term (SourceObservations.Label FullSyntax.Formula)),
+                                                              Iff
+                                                                (@InternedGuardedLanguage.meaning
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                                                    FormulaExecutable.formulaDecidableEq formulas
+                                                                    solver)
+                                                                  output value term)
+                                                                (And
+                                                                  (@InternedGuardedLanguage.meaning
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                                                      FormulaExecutable.formulaDecidableEq formulas
+                                                                      solver)
+                                                                    output left term)
+                                                                  (@InternedGuardedLanguage.meaning
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                                                      FormulaExecutable.formulaDecidableEq formulas
+                                                                      solver)
+                                                                    output right term)))))))))))))

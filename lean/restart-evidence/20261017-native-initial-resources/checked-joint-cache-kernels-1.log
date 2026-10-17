@@ -1,0 +1,89 @@
+'MicroCFTA.CheckedJointCacheKernels.node_finish_warm' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@node_finish_warm : ∀ {width : Nat} {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request actual : NodeRequest Symbol Guard) (handle : Nat) (value : Value Symbol Guard),
+  @SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+    @SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source before →
+      @NodeReady Symbol Guard (@State.machine width Symbol Guard before) request →
+        @SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width (@NodeRequest.domain Symbol Guard request)
+            (@NodeRequest.left Symbol Guard request) (@NodeRequest.right Symbol Guard request) →
+          @Eq.{1}
+              (Prod.{0, 0} (NodeSelection Symbol Guard) (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+              (@lookupNode Symbol Guard width request before)
+              (@Prod.mk.{0, 0} (NodeSelection Symbol Guard) (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                (@NodeSelection.memoized Symbol Guard handle) chosen) →
+            @Eq.{1}
+                (Prod.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                  (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                (@demandNode width Symbol Guard handle chosen)
+                (@Prod.mk.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                  (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                  (@FlatMemoThunk.Observation.evaluate (NodeRequest Symbol Guard) (Value Symbol Guard) actual)
+                  running) →
+              @Available Symbol Guard (@Machine.heap Symbol Guard (@State.machine width Symbol Guard running)) value →
+                @SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation source actual value →
+                  And (@Eq.{1} (NodeRequest Symbol Guard) actual request)
+                    (And
+                      (@SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard
+                        (@finishNode Symbol Guard width handle value running))
+                      (And
+                        (@SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source
+                          (@finishNode Symbol Guard width handle value running))
+                        (And
+                          (@Eq.{1}
+                            (Prod.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                            (@demandNode width Symbol Guard handle
+                              (@finishNode Symbol Guard width handle value running))
+                            (@Prod.mk.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                              (@FlatMemoThunk.Observation.ready (NodeRequest Symbol Guard) (Value Symbol Guard) value)
+                              (@finishNode Symbol Guard width handle value running)))
+                          (@SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation source request
+                            value))))
+'MicroCFTA.CheckedJointCacheKernels.edge_finish_warm' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@edge_finish_warm : ∀ {width : Nat} {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request actual : EdgeRequest Symbol Guard) (handle : Nat) (value : EdgeValue Symbol Guard),
+  @SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+    @SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source before →
+      @EdgeReady Symbol Guard (@State.machine width Symbol Guard before) request →
+        @SourceRecursiveIntersectionEdgeMemo.KeySafe Symbol Guard width (@EdgeRequest.domain Symbol Guard request)
+            (@EdgeRequest.left Symbol Guard request) (@EdgeRequest.right Symbol Guard request) →
+          @Eq.{1} (Prod.{0, 0} Nat (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+              (@lookupEdge Symbol Guard width request before)
+              (@Prod.mk.{0, 0} Nat (SourceRecursiveIntersectionThunks.State width Symbol Guard) handle chosen) →
+            @Eq.{1}
+                (Prod.{0, 0} (FlatMemoThunk.Observation (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard))
+                  (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                (@demandEdge width Symbol Guard handle chosen)
+                (@Prod.mk.{0, 0} (FlatMemoThunk.Observation (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard))
+                  (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                  (@FlatMemoThunk.Observation.evaluate (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard) actual)
+                  running) →
+              @EdgeResident Symbol Guard (@Machine.heap Symbol Guard (@State.machine width Symbol Guard running))
+                  value →
+                @SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw Symbol Guard annotation source actual value →
+                  And (@Eq.{1} (EdgeRequest Symbol Guard) actual request)
+                    (And
+                      (@SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard
+                        (@finishEdge Symbol Guard width handle value running))
+                      (And
+                        (@SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source
+                          (@finishEdge Symbol Guard width handle value running))
+                        (And
+                          (@Eq.{1}
+                            (Prod.{0, 0} (FlatMemoThunk.Observation (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard))
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                            (@demandEdge width Symbol Guard handle
+                              (@finishEdge Symbol Guard width handle value running))
+                            (@Prod.mk.{0, 0}
+                              (FlatMemoThunk.Observation (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard))
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                              (@FlatMemoThunk.Observation.ready (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard)
+                                value)
+                              (@finishEdge Symbol Guard width handle value running)))
+                          (@SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw Symbol Guard annotation source request
+                            value))))

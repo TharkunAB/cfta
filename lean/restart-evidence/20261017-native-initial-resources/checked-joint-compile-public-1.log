@@ -1,0 +1,51 @@
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.Post' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.Post : {Symbol Guard : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      Nat →
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard →
+          MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard →
+            MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.node_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.node_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) [inst_1 : DecidableEq.{1} Symbol],
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard) (depth : Nat)
+      (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard annotation source state →
+        @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) →
+          @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation source
+              (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)) →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard source request →
+              @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request) →
+                @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request) →
+                  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.Certified Symbol Guard annotation source
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                    (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode Symbol Guard inst_1 request) state
+                    (@MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.Post Symbol Guard annotation source depth
+                      request)
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.node_law_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.node_law_certified : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) [inst_1 : DecidableEq.{1} Symbol],
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+      (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard annotation source state →
+        @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) →
+          @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.Certified Symbol Guard annotation source
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode Symbol Guard inst_1 request) state fun x value =>
+            @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation source request value

@@ -1,0 +1,115 @@
+'MicroCFTA.CheckedJointCompileIntegration.constrained_self' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.CheckedJointCompileIntegration.constrained_self : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard annotation source state →
+        ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) (level : Nat),
+          @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) →
+            Not
+                (annotation
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                    (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))) →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)) →
+                have input :=
+                  @MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference);
+                And
+                  (@Eq.{2}
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode Symbol Guard inst
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain input input))
+                    (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input))
+                  (And
+                    (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) input)
+                    (And
+                      (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                        (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation
+                          source)
+                        (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation input
+                          input)
+                        input)
+                      (Not (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol input))))
+'MicroCFTA.CheckedJointCompileIntegration.mixed_mu_empty_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.CheckedJointCompileIntegration.mixed_mu_empty_body : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard annotation source state →
+        ∀ (nodeEntry muEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) (level : Nat),
+          @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) →
+            Not
+                (annotation
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                    (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))) →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)) →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)) →
+                  have domain := MicroCFTA.IntersectionEmptyDomain.emptyDomain;
+                  have left :=
+                    @MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                      level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference);
+                  have right :=
+                    @MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard);
+                  have actual :=
+                    @MicroCFTA.SourceRecursiveIntersectionEnvironment.enter Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains Symbol Guard state)
+                      (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) left
+                      right (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey nodeEntry)
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey muEntry);
+                  have entered :=
+                    @MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state)
+                      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) actual);
+                  And
+                    (@Eq.{2}
+                      (MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode Symbol Guard inst
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard domain left right))
+                      (@MicroCFTA.SourceRecursiveIntersectionCode.compileMu Symbol Guard domain left right))
+                    (And (@MicroCFTA.SourceRecursiveIntersectionKernel.Extension Symbol Guard state entered)
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard annotation source
+                          entered)
+                        (And
+                          (@MicroCFTA.SourceCurrentConstrainedCapCheckedJointCompile.Post Symbol Guard annotation source
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard domain left right)
+                            entered (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (Not (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol left)))))

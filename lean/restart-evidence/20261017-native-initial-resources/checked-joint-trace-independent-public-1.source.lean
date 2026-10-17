@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.node_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.node_bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.edge_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInduction.edge_bind
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointTrace.completed
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointTrace.completed

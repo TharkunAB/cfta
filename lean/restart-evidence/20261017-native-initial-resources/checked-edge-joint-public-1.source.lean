@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.Post
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.Post
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.children_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.children_certified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.sentinel_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.sentinel_certified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.body_effects
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.body_effects
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.body_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.body_certified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.body_law_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointEdge.body_law_certified

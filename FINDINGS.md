@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `1a0ad30e`.
+Status rechecked on 2026-10-17 at proof checkpoint `eecce203`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-joint-source-native-laws.md` for the current proof boundaries.
+Read `lean/notes-current-checked-joint-initial-resources.md` for the current proof boundaries.
 
-The current joint source and generic native proofs add no Haskell change.
+The current checked joint initial-resource proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2816 jobs and 62897 dependency checks.
+The last completed pinned Lean Audit passes: 2827 jobs and 63006 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,45 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current checked joint execution from initial numeric resources
+
+Updated: 2026-10-17 05:14 CEST. This checkpoint starts at published `0ea50f68`.
+The proof commits are `a041f192`, `c1156f5e`, `22fb0df2`, and `eecce203`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-checked-joint-initial-resources.md` for the top-level
+target, current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-initial-resources/`.
+
+Eleven additive modules prove joint structural laws through the current
+checked equality worker, every node branch, and exact memo owner finishes.
+The full physical trace induction derives cap, ranked occurrence, scope,
+Context, and returned-cell laws. Existing initial counter admission and
+finite contextual completion construct that same cold result. The endpoint
+takes no WordRanges, supplied execution, or desired result-law premise.
+It retains the earlier exact intersection language and current allocation
+history. Same-source warm calls construct their own result from actual past
+stores and warm-entry counters. Mixed cold integration derives an exact
+two-step warm repeat with the full checked state unchanged.
+
+The pinned Audit passes 2827 jobs and 63006 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eleven strict source checks are
+clean. All 85 imported pairs pass in 16 groups. Ten component manifests
+verify 157 entries. Read checkpoint-validation.json for hashes and groups.
+Preservation retains 11605 starting files, 2815 older non-Audit proofs, all
+239 Haskell files, and 69 frozen production manifests with 584 entries.
+
+Next rebase laws for newly produced operands and derive cumulative serial
+allocation bounds. Integrate full Target, Leaf, editor, and class callers.
+General constrained descent, repeated convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, and complete public composition
+remain open. The complete library goal stays active. Read
+next-source-rebase-and-constrained-callers.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
 
 ## Current joint source laws and generic native composition
 

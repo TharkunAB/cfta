@@ -1,0 +1,47 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache
+
+set_option pp.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.Stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.initial_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.initial_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.advance_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.advance_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.lookupNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.lookupNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.lookupEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.lookupEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.demandNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.demandNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.demandEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.demandEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.finishNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.finishNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.finishEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.finishEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.node_observed_ready
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.node_observed_ready
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.edge_observed_ready
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.edge_observed_ready
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.node_started
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.node_started
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.edge_started
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.edge_started

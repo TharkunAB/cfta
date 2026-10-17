@@ -1,0 +1,59 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointCompile.lean:311:8: error: Type mismatch: After simplification, term
+  request_node annotation source depth { domain := domain, left := other, right := bound } state bindings
+    ⟨original, ⟨boundOriginal, ⟨available, ⟨resident, ⟨covered, boundCovered⟩⟩⟩⟩⟩ bounded (Cap.plain depth annotated)
+ has type
+  Certified annotation source (requestNode domain other bound) state
+    (Post annotation source depth { domain := domain, left := other, right := bound })
+but is expected to have type
+  Certified annotation source (requestNode domain other bound) state fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source) (rank annotation other) value ∧ Scope domain.key.seen value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointCompile.lean:316:8: error: Type mismatch: After simplification, term
+  request_node annotation source depth { domain := domain, left := bound, right := other } state bindings
+    ⟨boundOriginal, ⟨original, ⟨resident, ⟨available, ⟨boundCovered, covered⟩⟩⟩⟩⟩ (Cap.plain depth annotated) bounded
+ has type
+  Certified annotation source (requestNode domain bound other) state
+    (Post annotation source depth { domain := domain, left := bound, right := other })
+but is expected to have type
+  Certified annotation source (requestNode domain bound other) state fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source) (rank annotation other) value ∧ Scope domain.key.seen value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointCompile.lean:351:6: error: Type mismatch: After simplification, term
+  request_node annotation source depth { domain := domain, left := right, right := left } state bindings
+    ⟨inputs.right.left,
+      ⟨inputs.left,
+        ⟨inputs.right.right.right.left,
+          ⟨inputs.right.right.left, ⟨inputs.right.right.right.right.right, inputs.right.right.right.right.left⟩⟩⟩⟩⟩
+    rightCap leftCap
+ has type
+  Certified annotation source (requestNode domain right left) state
+    (Post annotation source depth { domain := domain, left := right, right := left })
+but is expected to have type
+  Certified annotation source (requestNode domain right left) state
+    (Post annotation source depth { domain := domain, left := left, right := right })
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointCompile.lean:383:10: error: Type mismatch: After simplification, term
+  reference_certified annotation source depth domain name right true state context bindings inputs.right.left
+    inputs.right.right.right.left inputs.right.right.right.right.right rightCap
+ has type
+  Certified annotation source (compileReference domain name right true) state fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source) (rank annotation right) value ∧ Scope domain.key.seen value
+but is expected to have type
+  Certified annotation source (compileReference domain name right true) state
+    (Post annotation source depth
+      { domain := domain, left := Value.reference (Reference.interned name), right := right })
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapCheckedJointCompile.lean:393:10: error: Type mismatch: After simplification, term
+  reference_certified annotation source depth domain name left false state context bindings inputs.left
+    inputs.right.right.left inputs.right.right.right.right.left leftCap
+ has type
+  Certified annotation source (compileReference domain name left false) state fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source) (rank annotation left) value ∧ Scope domain.key.seen value
+but is expected to have type
+  Certified annotation source (compileReference domain name left false) state
+    (Post annotation source depth
+      { domain := domain, left := left, right := Value.reference (Reference.interned name) })
