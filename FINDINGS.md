@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `a68b3c9b`.
+Status rechecked on 2026-10-17 at proof checkpoint `ba6639ec`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-outer-progress.md` for the current proof boundaries.
+Read `lean/notes-current-outer-owners.md` for the current proof boundaries.
 
-The current guard-origin and parent-height proofs add no Haskell change.
+The current owner, internal-reuse, and native-product proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 3035 jobs and 66550 dependency checks.
+The last completed pinned Lean Audit passes: 3040 jobs and 67182 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -3813,6 +3813,64 @@ evaluation. Record every later Haskell repair there with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
 Preserve all earlier proofs, counterexamples, repairs, marked drafts,
 stashes, worktrees, and the optimized interned core.
+
+## Current outer owner identity, internal reuse, and edge busy exclusion
+
+Updated: 2026-10-17 16:53 CEST. Starting checkpoint is 4e4f0d60.
+Proof commit is ba6639ec. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-outer-owners.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-owner-progress/.
+
+Equal actual keys identify complete ready available node requests and
+ready resident edge requests. Actual evaluation captures that exact
+request. Ready includes coherent canonical inherited metadata. Stored
+alone is insufficient. Any rank on those literal arguments is therefore
+key-compatible under the stated physical premises. Historical occurrence
+labels still need a separate compatibility argument.
+
+Every bounded mutual worker retains an evaluating owner cell for any
+reported outer busy fault. This is existential cell retention, not query
+identity for malformed tables or a general busy-exclusion theorem.
+A caller with no evaluating edge cells cannot report an outer edge-busy
+fault. Success preserves that condition. Node owners may remain active.
+A failed parent can leave its selected edge owner evaluating, but its
+failure propagates immediately. Initial empty edge tables suffice.
+
+The source-built copied-B fixture now reaches its INTERNAL ready hit
+while root and wrapper owners remain active. It proves full inherited
+value equality, same key, exact returned B cell, and unchanged hit caller.
+Its prefix relation has checked failure transport through literal phases.
+This is not a full event trace, successful-continuation simulation, host
+demand correspondence, or general completion theorem. A separate actual
+native product proves constrained-level counts 1,1 -> 2. Maximum
+preservation for that count is false. Existing Cap profiles remain valid.
+
+Next derive causal progress for fresh node evaluations after actual
+parent returns and warm owner selection. Account for native products,
+inherited combine/descent, unequal-length copying, and ready hits.
+Then finish nonempty live walks, rows, ordinary nodes, and full mutual
+completion. Repeated-pass convergence, current Haskell adapters, lazy
+forcing and publication, concrete memo events, host capacity, public
+pipeline composition, and complete Haskell correspondence remain open.
+Do not assume a future result, graph, returned-child rank, or globally
+idle node table. The whole-library goal stays active.
+
+Audit passes 3040 jobs and 67182 dependency checks under 4 GiB MemoryMax,
+4 GiB MemoryHigh, zero swap, and 608 MiB peak memory. All five final strict
+source logs are empty. All five final canonical targets pass. Public and
+constructed probes allow only standard kernel axioms. Read the evidence
+README and checkpoint-validation.json for exact probe and manifest counts.
+All earlier proofs, counterexamples, repairs, marked drafts, optimized
+interned code, stashes, and other worktrees remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain example returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+
 
 ## Current literal outer correctness and root language preservation
 

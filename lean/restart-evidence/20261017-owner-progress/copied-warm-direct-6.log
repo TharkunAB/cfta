@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/copied-warm-direct-6.source.lean:153:6: error: Type mismatch: After simplification, term
+  actualFailed
+ has type
+  SourceCurrentAllocatedPartialWorker.children fuel✝ g s r e p h m c n budget combined✝ edge✝.children
+      (advance before✝
+        (SourceCurrentAllocatedQueryMemo.advancePhysical before✝.checked
+          { heap := before✝.checked.native.machine.heap,
+            equality :=
+              (SourceCurrentAllocatedInheritedPrefix.run edge✝.entry.key.constraint inherited✝
+                  before✝.checked.operations).snd })
+        before✝.fourth before✝.merge) =
+    SourceCurrentAllocatedPartialWorker.Outcome.failed fault after
+but is expected to have type
+  (match
+      match
+        SourceCurrentAllocatedPartialWorker.children fuel✝ g s r e p h m c n budget combined✝ edge✝.children
+          (advance before✝
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before✝.checked
+              { heap := before✝.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run edge✝.entry.key.constraint inherited✝
+                      before✝.checked.operations).snd })
+            before✝.fourth before✝.merge) with
+      | SourceCurrentAllocatedPartialWorker.Outcome.done value state =>
+        SourceCurrentAllocatedPartialWorker.Outcome.done
+          (SourceCurrentAllocatedRawRebuild.edge edge✝ value state.checked).fst
+          (advance state (SourceCurrentAllocatedRawRebuild.edge edge✝ value state.checked).snd state.fourth state.merge)
+      | SourceCurrentAllocatedPartialWorker.Outcome.failed fault state =>
+        SourceCurrentAllocatedPartialWorker.Outcome.failed fault state with
+    | SourceCurrentAllocatedPartialWorker.Outcome.done value state =>
+      SourceCurrentAllocatedPartialWorker.Outcome.done () state
+    | SourceCurrentAllocatedPartialWorker.Outcome.failed fault state =>
+      SourceCurrentAllocatedPartialWorker.Outcome.failed fault state) =
+    SourceCurrentAllocatedPartialWorker.Outcome.failed fault after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/copied-warm-direct-6.source.lean:157:12: error(lean.unknownIdentifier): Unknown identifier `combined`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/copied-warm-direct-6.source.lean:157:6: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.372
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case children_walk
+g s r e p h m c n budget width✝ : Nat
+fault : SourceCurrentAllocatedPartialWorker.Fault width✝
+after : Caller width✝
+combined✝ : EqValue
+fuel✝ : Nat
+values✝ : List Node
+live : combined✝ ≠ SourceEqualityConstraintAllocation.Value.contradiction
+before✝ : Caller width✝
+failed :
+  ((SourceCurrentAllocatedPartialWorker.walk fuel✝ g s r e p h m c n budget combined✝ 0 values✝ before✝).bind
+      fun x after => SourceCurrentAllocatedPartialWorker.Outcome.done () after) =
+    SourceCurrentAllocatedPartialWorker.Outcome.failed fault after
+x✝ : ?m.372
+⊢ ((SourceCurrentAllocatedPartialWorker.children fuel✝ g s r e p h m c n budget combined✝ values✝ before✝).bind
+      fun x after => SourceCurrentAllocatedPartialWorker.Outcome.done () after) =
+    SourceCurrentAllocatedPartialWorker.Outcome.failed fault after

@@ -1,0 +1,87 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/copied-warm-direct-3.source.lean:246:32: error: unsolved goals
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+shape : original = Value.node entry [sourceEdge] depth free
+wrapperEntry : Interned InternedBinderProtocol.NodeKey
+wrapperDepth : Nat
+wrapperFree : List InternedBinderProtocol.Reference
+wrapperShape : wrapper = Value.node wrapperEntry [wrapperEdge] wrapperDepth wrapperFree
+rootStarted : beginNode rootRequest before = (0, FlatMemoThunk.Observation.evaluate rootRequest, rootRunning)
+originalRows : nodeEdges original = [sourceEdge]
+rootDone : rootEdgeCall = SourceCurrentAllocatedPartialWorker.Outcome.done narrowed rootAfter
+rootLive : rootCombined = outerValue
+rootChildren : narrowed.children = [b, wrapper]
+firstDone : firstCall = SourceCurrentAllocatedPartialWorker.Outcome.done b afterB
+firstStarted :
+  beginNode firstRequest firstDescent.snd =
+    (1, FlatMemoThunk.Observation.evaluate firstRequest, (beginNode firstRequest firstDescent.snd).snd.snd)
+wrapperStarted :
+  beginNode wrapperRequest secondDescent.snd = (3, FlatMemoThunk.Observation.evaluate wrapperRequest, wrapperRunning)
+wrapperRows : nodeEdges wrapper = [wrapperEdge]
+wrapperDone : wrapperEdgeCall = SourceCurrentAllocatedPartialWorker.Outcome.done wrapperNarrowed wrapperAfter
+innerLive : innerCombined = plainValue
+wrapperChildren : wrapperNarrowed.children = [copied, tau]
+copiedB : copied = b
+sameKey : firstRequest.key = hitRequest.key
+published : atHit.nodeResults.table hitRequest.key = some 1
+returned : atHit.nodeResults.cells 1 = some { request := firstRequest, status := FlatMemoThunk.Status.returned b }
+rootActive : atHit.nodeResults.cells 0 = some { request := rootRequest, status := FlatMemoThunk.Status.evaluating }
+wrapperActive :
+  atHit.nodeResults.cells 3 = some { request := wrapperRequest, status := FlatMemoThunk.Status.evaluating }
+rootPrefixDone :
+  (SourceCurrentAllocatedInheritedPrefix.run narrowed.entry.key.constraint plainValue
+        rootAfter.checked.operations).fst =
+    Except.ok (some outerValue)
+innerPrefixDone :
+  (SourceCurrentAllocatedInheritedPrefix.run wrapperNarrowed.entry.key.constraint wrapperRequest.inherited
+        wrapperAfter.checked.operations).fst =
+    Except.ok (some plainValue)
+⊢ SourceEqualityConstraintAllocation.Value.live 0
+        [{
+            trie :=
+              EqualityTrie.Trie.branch
+                [(0, EqualityTrie.Trie.terminal), (1, EqualityTrie.Trie.branch [(0, EqualityTrie.Trie.terminal)])],
+            paths := [[0], [1, 0]] }] =
+      SourceEqualityConstraintAllocation.Value.contradiction →
+    False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/copied-warm-direct-3.source.lean:254:32: error: unsolved goals
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+shape : original = Value.node entry [sourceEdge] depth free
+wrapperEntry : Interned InternedBinderProtocol.NodeKey
+wrapperDepth : Nat
+wrapperFree : List InternedBinderProtocol.Reference
+wrapperShape : wrapper = Value.node wrapperEntry [wrapperEdge] wrapperDepth wrapperFree
+rootStarted : beginNode rootRequest before = (0, FlatMemoThunk.Observation.evaluate rootRequest, rootRunning)
+originalRows : nodeEdges original = [sourceEdge]
+rootDone : rootEdgeCall = SourceCurrentAllocatedPartialWorker.Outcome.done narrowed rootAfter
+rootLive : rootCombined = outerValue
+rootChildren : narrowed.children = [b, wrapper]
+firstDone : firstCall = SourceCurrentAllocatedPartialWorker.Outcome.done b afterB
+firstStarted :
+  beginNode firstRequest firstDescent.snd =
+    (1, FlatMemoThunk.Observation.evaluate firstRequest, (beginNode firstRequest firstDescent.snd).snd.snd)
+wrapperStarted :
+  beginNode wrapperRequest secondDescent.snd = (3, FlatMemoThunk.Observation.evaluate wrapperRequest, wrapperRunning)
+wrapperRows : nodeEdges wrapper = [wrapperEdge]
+wrapperDone : wrapperEdgeCall = SourceCurrentAllocatedPartialWorker.Outcome.done wrapperNarrowed wrapperAfter
+innerLive : innerCombined = plainValue
+wrapperChildren : wrapperNarrowed.children = [copied, tau]
+copiedB : copied = b
+sameKey : firstRequest.key = hitRequest.key
+published : atHit.nodeResults.table hitRequest.key = some 1
+returned : atHit.nodeResults.cells 1 = some { request := firstRequest, status := FlatMemoThunk.Status.returned b }
+rootActive : atHit.nodeResults.cells 0 = some { request := rootRequest, status := FlatMemoThunk.Status.evaluating }
+wrapperActive :
+  atHit.nodeResults.cells 3 = some { request := wrapperRequest, status := FlatMemoThunk.Status.evaluating }
+rootPrefixDone :
+  (SourceCurrentAllocatedInheritedPrefix.run narrowed.entry.key.constraint plainValue
+        rootAfter.checked.operations).fst =
+    Except.ok (some outerValue)
+innerPrefixDone :
+  (SourceCurrentAllocatedInheritedPrefix.run wrapperNarrowed.entry.key.constraint wrapperRequest.inherited
+        wrapperAfter.checked.operations).fst =
+    Except.ok (some plainValue)
+⊢ SourceEqualityConstraintAllocation.Value.live 2 [] = SourceEqualityConstraintAllocation.Value.contradiction → False

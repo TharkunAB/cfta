@@ -1,0 +1,14 @@
+import os
+from pathlib import Path
+import json
+metadata = {}
+cgroup = Path('/sys/fs/cgroup')
+current = next(line.split(':', 2)[2] for line in Path('/proc/self/cgroup').read_text().splitlines() if line.startswith('0::'))
+actual = cgroup / current.lstrip('/')
+for name, expected in [('memory.max', '4294967296'), ('memory.high', '4294967296'), ('memory.swap.max', '0')]:
+    value = (actual / name).read_text().strip()
+    metadata[name] = value
+    assert value == expected, (name, value)
+Path(os.environ['OWNER_PROGRESS_CAPS']).write_text(json.dumps(metadata, sort_keys=True) + '\n')
+os.chdir('/home/tritlo/Code/mcfta/lean')
+os.execv('/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake', ['lake', 'build', 'MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth'])

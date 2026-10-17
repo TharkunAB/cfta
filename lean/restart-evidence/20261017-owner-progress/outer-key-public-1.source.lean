@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentOuterKeyIdentity
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentOuterKeyIdentity.node_eq_of_key
+#print MicroCFTA.SourceCurrentOuterKeyIdentity.node_eq_of_key
+#print axioms MicroCFTA.SourceCurrentOuterKeyIdentity.node_eq_of_key
+#check @MicroCFTA.SourceCurrentOuterKeyIdentity.edge_eq_of_key
+#print MicroCFTA.SourceCurrentOuterKeyIdentity.edge_eq_of_key
+#print axioms MicroCFTA.SourceCurrentOuterKeyIdentity.edge_eq_of_key
+#check @MicroCFTA.SourceCurrentOuterKeyIdentity.node_evaluate_owner
+#print MicroCFTA.SourceCurrentOuterKeyIdentity.node_evaluate_owner
+#print axioms MicroCFTA.SourceCurrentOuterKeyIdentity.node_evaluate_owner
+#check @MicroCFTA.SourceCurrentOuterKeyIdentity.edge_evaluate_owner
+#print MicroCFTA.SourceCurrentOuterKeyIdentity.edge_evaluate_owner
+#print axioms MicroCFTA.SourceCurrentOuterKeyIdentity.edge_evaluate_owner

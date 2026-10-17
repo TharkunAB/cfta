@@ -1,0 +1,44 @@
+import MicroCFTA.SourceCurrentOuterBusyOwners
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.BusyOwner
+#print MicroCFTA.SourceCurrentOuterBusyOwners.BusyOwner
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.BusyOwner
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.RetainsOwner
+#print MicroCFTA.SourceCurrentOuterBusyOwners.RetainsOwner
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.RetainsOwner
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.node_busy
+#print MicroCFTA.SourceCurrentOuterBusyOwners.node_busy
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.node_busy
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.edge_busy
+#print MicroCFTA.SourceCurrentOuterBusyOwners.edge_busy
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.edge_busy
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.node_call
+#print MicroCFTA.SourceCurrentOuterBusyOwners.node_call
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.node_call
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.node_body
+#print MicroCFTA.SourceCurrentOuterBusyOwners.node_body
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.node_body
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.edge_call
+#print MicroCFTA.SourceCurrentOuterBusyOwners.edge_call
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.edge_call
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.row_pass
+#print MicroCFTA.SourceCurrentOuterBusyOwners.row_pass
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.row_pass
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.descendant_pass
+#print MicroCFTA.SourceCurrentOuterBusyOwners.descendant_pass
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.descendant_pass
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.child_pass
+#print MicroCFTA.SourceCurrentOuterBusyOwners.child_pass
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.child_pass
+#check @MicroCFTA.SourceCurrentOuterBusyOwners.indexed_walk
+#print MicroCFTA.SourceCurrentOuterBusyOwners.indexed_walk
+#print axioms MicroCFTA.SourceCurrentOuterBusyOwners.indexed_walk

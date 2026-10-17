@@ -1,0 +1,77 @@
+import MicroCFTA.SourceCurrentOuterCopiedWarmHit
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.node_evaluate
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.node_evaluate
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.node_evaluate
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.body_rows
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.body_rows
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.body_rows
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.rows_edge
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.rows_edge
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.rows_edge
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.descendants_children
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.descendants_children
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.descendants_children
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.children_walk
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.children_walk
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.children_walk
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.walk_head
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.walk_head
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.walk_head
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.walk_tail
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.walk_tail
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.walk_tail
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.refl
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.refl
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.refl
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.step
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.step
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.step
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.run
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.run
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.run
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.failed
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.failed
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Step.failed
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.failed
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.failed
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.Reached.failed
+#check @MicroCFTA.SourceCurrentOuterCopiedWarmHit.copied_ready_while_owners_active
+#print MicroCFTA.SourceCurrentOuterCopiedWarmHit.copied_ready_while_owners_active
+#print axioms MicroCFTA.SourceCurrentOuterCopiedWarmHit.copied_ready_while_owners_active

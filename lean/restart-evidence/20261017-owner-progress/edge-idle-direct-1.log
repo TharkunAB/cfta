@@ -1,0 +1,232 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:45:26: error: Type mismatch
+  safe
+has type
+  Safe (Outcome.failed fault after)
+but is expected to have type
+  Safe ((Outcome.failed fault after).bind next)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:144:17: error: Type mismatch
+  idle
+has type
+  EdgeIdle before
+but is expected to have type
+  Safe (walk fuel g s r e p h m c n budget inherited index [] before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:147:22: error: Tactic `assumption` failed
+
+case cons.zero
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+inherited : EqValue
+index : Nat
+before : Caller width
+idle : EdgeIdle before
+value : Node
+rest : List Node
+ih : ∀ (m : Nat), m < 0 → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+⊢ Safe (walk 0 g s r e p h m c n budget inherited index (value :: rest) before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:150:16: error: Tactic `apply` failed: could not unify the conclusion of `bind
+  (nodeCall fuel ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139 ?m.140 ?m.141 ?m.142 before) ?m.128
+  ((ih fuel (Nat.lt_succ_self fuel)).left ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139 ?m.140 ?m.141 ?m.142
+    before idle)`
+  Safe ((nodeCall fuel ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139 ?m.140 ?m.141 ?m.142 before).bind ?m.128)
+with the goal
+  Safe
+    ((nodeCall fuel g s r e p h m c n budget
+          { inherited := (SourceCurrentAllocatedPartialGraph.descend before inherited index).fst, value := value }
+          (SourceCurrentAllocatedPartialGraph.descend before inherited index).snd).bind
+      fun result middle =>
+      (walk fuel g s r e p h m c n budget inherited (index + 1) rest middle).bind fun results after =>
+        Outcome.done (result :: results) after)
+
+Note: The full type of `bind
+  (nodeCall fuel ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139 ?m.140 ?m.141 ?m.142 before) ?m.128
+  ((ih fuel (Nat.lt_succ_self fuel)).left ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139 ?m.140 ?m.141 ?m.142
+    before idle)` is
+  (∀ (value : Node) (after : Caller width), EdgeIdle after → Safe (?m.128 value after)) →
+    Safe
+      ((nodeCall fuel ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139 ?m.140 ?m.141 ?m.142 before).bind ?m.128)
+
+case cons.succ
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+inherited : EqValue
+index : Nat
+before : Caller width
+idle : EdgeIdle before
+value : Node
+rest : List Node
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+⊢ Safe
+    ((nodeCall fuel g s r e p h m c n budget
+          { inherited := (SourceCurrentAllocatedPartialGraph.descend before inherited index).fst, value := value }
+          (SourceCurrentAllocatedPartialGraph.descend before inherited index).snd).bind
+      fun result middle =>
+      (walk fuel g s r e p h m c n budget inherited (index + 1) rest middle).bind fun results after =>
+        Outcome.done (result :: results) after)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:158:27: error: Type mismatch
+  idle
+has type
+  EdgeIdle before
+but is expected to have type
+  Safe (children fuel g s r e p h m c n budget SourceEqualityConstraintAllocation.Value.contradiction values before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:159:35: error: Type mismatch
+  walkAt ?m.206 ?m.207 ?m.208 ?m.209 ?m.210 ?m.211 ?m.212 ?m.213 ?m.214 ?m.215 ?m.216 ?m.217 ?m.218 before idle
+has type
+  Safe (walk fuel ?m.206 ?m.207 ?m.208 ?m.209 ?m.210 ?m.211 ?m.212 ?m.213 ?m.214 ?m.215 ?m.216 ?m.217 ?m.218 before)
+but is expected to have type
+  Safe
+    (children fuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) values
+      before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:166:10: error: Tactic `apply` failed: could not unify the conclusion of `bind
+  (children fuel ?m.311 ?m.312 ?m.313 ?m.314 ?m.315 ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 before) ?m.310
+  (childrenAt ?m.311 ?m.312 ?m.313 ?m.314 ?m.315 ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 before idle)`
+  Safe
+    ((children fuel ?m.311 ?m.312 ?m.313 ?m.314 ?m.315 ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 before).bind
+      ?m.310)
+with the goal
+  Safe
+    ((children fuel g s r e p h m c n budget combined✝ edge.children
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := before.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+                      before.checked.operations).snd })
+            before.fourth before.merge)).bind
+      fun results after =>
+      Outcome.done (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).fst
+        (advance after (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).snd after.fourth after.merge))
+
+Note: The full type of `bind
+  (children fuel ?m.311 ?m.312 ?m.313 ?m.314 ?m.315 ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 before) ?m.310
+  (childrenAt ?m.311 ?m.312 ?m.313 ?m.314 ?m.315 ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 before idle)` is
+  (∀ (value : List Node) (after : Caller width), EdgeIdle after → Safe (?m.310 value after)) →
+    Safe
+      ((children fuel ?m.311 ?m.312 ?m.313 ?m.314 ?m.315 ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 before).bind
+        ?m.310)
+
+case h_3
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt fuel
+childrenAt : ChildrenAt fuel
+g s r e p h m c n budget : Nat
+inherited : EqValue
+edge : Edge
+before : Caller width
+idle : EdgeIdle before
+x✝ : Except String (Option EqValue)
+combined✝ : EqValue
+heq✝ :
+  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+    Except.ok (some combined✝)
+⊢ Safe
+    ((children fuel g s r e p h m c n budget combined✝ edge.children
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := before.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+                      before.checked.operations).snd })
+            before.fourth before.merge)).bind
+      fun results after =>
+      Outcome.done (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).fst
+        (advance after (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).snd after.fourth after.merge))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:172:17: error: Type mismatch
+  idle
+has type
+  EdgeIdle before
+but is expected to have type
+  Safe (rows fuel g s r e p h m c n budget inherited [] before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:175:22: error: Tactic `assumption` failed
+
+case cons.zero
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+inherited : EqValue
+before : Caller width
+idle : EdgeIdle before
+value : Edge
+rest : List Edge
+ih : ∀ (m : Nat), m < 0 → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt 0
+childrenAt : ChildrenAt 0
+descendantsAt : DescendantsAt 0
+⊢ Safe (rows 0 g s r e p h m c n budget inherited (value :: rest) before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:189:27: error: Type mismatch
+  idle
+has type
+  EdgeIdle before
+but is expected to have type
+  Safe (nodeBody fuel g s r e p h m c n budget { inherited := inherited, value := Value.empty } before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:189:27: error: Type mismatch
+  idle
+has type
+  EdgeIdle before
+but is expected to have type
+  Safe
+    (nodeBody fuel g s r e p h m c n budget
+      { inherited := inherited, value := Value.union entry✝ members✝ depth✝ free✝ } before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:190:23: error: Tactic `assumption` failed
+
+case reference
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt fuel
+childrenAt : ChildrenAt fuel
+descendantsAt : DescendantsAt fuel
+rowsAt : RowsAt fuel
+g s r e p h m c n budget : Nat
+before : Caller width
+idle : EdgeIdle before
+inherited : EqValue
+name✝ : InternedBinderProtocol.Reference
+⊢ Safe (nodeBody fuel g s r e p h m c n budget { inherited := inherited, value := Value.reference name✝ } before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:198:22: error: Tactic `assumption` failed
+
+case node.zero
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+before : Caller width
+idle : EdgeIdle before
+inherited : EqValue
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+originals : List Edge
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ih : ∀ (m : Nat), m < 0 → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt 0
+childrenAt : ChildrenAt 0
+descendantsAt : DescendantsAt 0
+rowsAt : RowsAt 0
+⊢ Safe
+    (nodeBody 0 g s r e p h m c n budget { inherited := inherited, value := Value.node entry originals depth free }
+      before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-owner-progress/edge-idle-direct-1.source.lean:210:10: error: Type mismatch: After simplification, term
+  idle
+ has type
+  ∀ (handle : Nat) (owner : EdgeRequest),
+    before.edgeResults.cells handle ≠ some { request := owner, status := FlatMemoThunk.Status.evaluating }
+but is expected to have type
+  ∀ (handle : Nat) (owner : EdgeRequest),
+    after.edgeResults.cells handle ≠ some { request := owner, status := FlatMemoThunk.Status.evaluating }

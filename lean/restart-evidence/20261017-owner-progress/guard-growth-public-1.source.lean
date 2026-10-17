@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.depth
+#print MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.depth
+#print axioms MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.depth
+
+#check @MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.valuesDepth
+#print MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.valuesDepth
+#print axioms MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.valuesDepth
+
+#check @MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.rowsDepth
+#print MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.rowsDepth
+#print axioms MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.rowsDepth
+
+#check @MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.supported_product_growth
+#print MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.supported_product_growth
+#print axioms MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth.supported_product_growth
+
