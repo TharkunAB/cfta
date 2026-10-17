@@ -30,17 +30,28 @@ splice. Such types need a manual view where the existing APIs support them.
 Views with records of measures also remain manual; this operation generates
 the scalar views used by typing rules and single-measure invariants.
 
-## Use and validation
+## Use
 
 Enable `TemplateHaskell` and `DeriveGeneric`. Put `$(deriveNode ''Expr)` after
 the source datatype. The splice ends the declaration group, so subsequent
 rules can use the generated constructors. A source change regenerates the
-view in the same compilation.
+view in the same compilation. An empty datatype also needs
+`EmptyDataDeriving` for the generated instance.
 
-Compare a generated arithmetic view with a manual view through the existing
-typing and refinement APIs. Check bounded terms, counts, rank/unrank, records,
-parameters, and newtypes. Compile unsupported declarations and name collisions
-to check diagnostics. Run the repository PR gate under the memory cap.
+## Validation
+
+A standalone check compares generated and manual views through the existing
+APIs. All 38 arithmetic terms have the same ranks and decode correctly.
+Scalar refinement counts and rank order also agree. Two processes produce
+the same results. Records, source parameters, named infix constructors,
+newtypes, and empty datatypes have the expected shapes.
+
+Nine invalid declarations produce the expected diagnostics. The complete
+README module compiles with strict warnings. Editing a source datatype and
+recompiling the same module adds the new constructor to its generated view.
+A fresh `-O0 -Werror` build and all six existing suites pass. Formatting and
+lint pass. Validation runs serially through heavy-management with a 12 GiB
+process cap and a 4 GiB test RTS limit.
 
 ## Authoring follow-ups
 
