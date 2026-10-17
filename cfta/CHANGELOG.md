@@ -4,6 +4,7 @@
 
 Before release, the package was called `microcfta`.
 
+- Add direct put/delete operations for named source productions.
 - Add editable source documents with named facts and atomic, checked patches.
 
 - `refoldEdges` is `refold` with the edge of the result that each edge of

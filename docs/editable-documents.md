@@ -135,3 +135,41 @@ integration remain follow-ups.
 Measurements use GHC 9.14.1 at `-O2` with the workspace dependency settings.
 All local jobs run serially through heavy-management with 12 GiB process caps
 and 4 GiB RTS caps.
+
+## Direct named-production edits
+
+Add `PutTransition state transition` and `DeleteTransition state name` to the
+same atomic patch API. The target state must exist. `PutTransition` uses the
+name in the supplied annotation. It replaces that production in place, or
+appends it when the name is new. The complete supplied production replaces the
+old one, including its facts. Other productions and their order stay unchanged.
+Use `SetFact` when only one fact needs to change.
+
+`DeleteTransition` requires a unique existing name. Removing the last production
+leaves an empty state row. Neither operation renumbers the remaining names.
+An ambiguous name introduced earlier in the batch is an error. Graph references
+and symbol arities are still checked after the complete batch. These edits do
+not change the snapshot format: patches are not serialized by that format.
+
+Use `PutTransition` in the source-editing example to add `two` directly. Verify
+append and replacement order, removal of the last production, retained facts on
+other productions, missing states and names, ambiguous names, stale patches,
+atomic forward references, and simultaneous global arity changes. Compare
+compiled terms with the equivalent complete-row edits and retain all existing
+source-document and graph-codec checks.
+
+The direct operations pass the fresh strict all-component build, all six test
+suites, formatting, lint, and metadata checks. A focused probe verifies append,
+replacement, deletion, retained order and facts, missing and ambiguous targets,
+new productions followed by fact edits, stale patches, final-batch validation,
+and equivalence with complete-row edits. The prior document probe also passes.
+The saved edited example is byte-identical to the complete-row version.
+
+These operations are the low-level source edit layer. The primary user interface
+will compose language expressions for constructor and fact changes and named
+term or subtree exclusions. Saving the resulting value is a persistence step.
+
+The direct-edit change retains all eight standard benchmark checksums. The six
+core executables are byte-identical to main. Instruction differences are below
+0.11%, and allocation differences are below 0.01%. The shared JSON and 100-fact
+edit probes remain within 0.01% of the preceding document implementation.

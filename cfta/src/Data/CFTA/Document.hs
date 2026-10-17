@@ -18,6 +18,7 @@ import Control.Monad (foldM, foldM_)
 import Data.Bifunctor (first)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (maybeToList)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -52,6 +53,8 @@ data DocumentError state
 data Edit state
     = PutRow !state ![FTA.Transition state Symbol Annotation]
     | DeleteRow !state
+    | PutTransition !state !(FTA.Transition state Symbol Annotation)
+    | DeleteTransition !state !Text
     | SetFact !state !Text !Text !Constraint
     | RemoveFact !state !Text !Text
     deriving (Eq, Show)
@@ -120,7 +123,10 @@ patch = Patch
 
 {- | Apply a batch only to its starting document. A stale snapshot or an invalid
 edit returns an error. SetFact adds or replaces a named fact; RemoveFact and
-DeleteRow require their targets to exist. Fact edits resolve names at that step
+DeleteRow require their targets to exist. PutTransition replaces a named
+production in place or appends a new one. DeleteTransition requires an existing
+name and leaves the state row. Named edits require an existing state and a unique
+production name. They resolve their targets at that step
 in the sequence. Validate graph references and arities after the complete batch.
 The initial state stays fixed. The old document is unchanged.
 
@@ -140,6 +146,14 @@ applyPatch (Patch expected edits) current
         DeleteRow state
             | Map.member state rows -> Right $ Map.delete state rows
             | otherwise -> Left $ MissingState state
+        PutTransition state transition -> case Map.lookup state rows of
+            Nothing -> Left $ MissingState state
+            Just transitions
+                | any (named name) transitions -> changeTransition state name (const $ Right $ Just transition) rows
+                | otherwise -> Right $ Map.insert state (transitions <> [transition]) rows
+              where
+                name = annotationName $ FTA.transitionConstraint transition
+        DeleteTransition state name -> changeTransition state name (const $ Right Nothing) rows
         SetFact state transition fact constraint ->
             changeFacts state transition (Right . Map.insert fact constraint) rows
         RemoveFact state transition fact ->
@@ -147,17 +161,19 @@ applyPatch (Patch expected edits) current
     remove state transition fact facts
         | Map.member fact facts = Right $ Map.delete fact facts
         | otherwise = Left $ MissingFact state transition fact
-    changeFacts state name update rows = case Map.lookup state rows of
+    changeFacts state name update = changeTransition state name $ \selected -> do
+        let annotation = FTA.transitionConstraint selected
+        facts <- update $ annotationFacts annotation
+        Right $ Just selected{FTA.transitionConstraint = annotation{annotationFacts = facts}}
+    changeTransition state name update rows = case Map.lookup state rows of
         Nothing -> Left $ MissingState state
         Just transitions -> case break (named name) transitions of
             (_, []) -> Left $ MissingTransition state name
             (before, selected : after)
                 | any (named name) after -> Left $ DuplicateTransition state name
                 | otherwise -> do
-                    let annotation = FTA.transitionConstraint selected
-                    facts <- update $ annotationFacts annotation
-                    let changed = selected{FTA.transitionConstraint = annotation{annotationFacts = facts}}
-                    Right $ Map.insert state (before <> (changed : after)) rows
+                    changed <- update selected
+                    Right $ Map.insert state (before <> maybeToList changed <> after) rows
     named name = (== name) . annotationName . FTA.transitionConstraint
 
 -- | Describe an invalid document or edit with its selected state and name.

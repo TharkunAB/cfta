@@ -158,10 +158,13 @@ or invalid final graph is an error. Nothing commits partially.
 | --- | --- |
 | `PutRow state transitions` | Add or replace a complete row. Preserve the written alternative order. |
 | `DeleteRow state` | Remove an existing row. The final graph must still have its initial state and all referenced children. |
+| `PutTransition state transition` | Replace the complete named production in place, or append it if the name is new. Use the supplied annotation and facts. |
+| `DeleteTransition state transitionName` | Remove one named production. Keep the state row, even when it becomes empty. |
 | `SetFact state transitionName factName body` | Add a fact or replace that fact's body. |
 | `RemoveFact state transitionName factName` | Remove exactly one existing named fact. |
 
-Fact edits resolve their named target at that point in the edit sequence. Row
+Named edits require an existing state and a unique production name. They resolve
+their target at that point in the edit sequence. Row
 edits can introduce forward references if the complete batch supplies the rows.
 The initial state stays fixed. There is no implication that an old rank remains
 valid after an edit. Rebuild the query for the new graph.
