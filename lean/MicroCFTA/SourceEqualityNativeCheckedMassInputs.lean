@@ -1,0 +1,54 @@
+import MicroCFTA.SourceEqualityNativeCheckedMass
+
+/-!
+# Literal Work width checks from checked edge prefixes
+
+The original resident row bounds the accepted zip length. The physical
+prefix derives availability at the actual assembly heap. Rejection emits
+one Empty child. The accepted case compares the initial row bound with
+the current causal store bound. No output size or width law is supplied.
+-/
+namespace MicroCFTA.SourceEqualityNativeCheckedMassInputs
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open InternedBinderProtocol IntersectionFlatMemoKeyDomain
+variable {Symbol Formula : Type}
+local notation "Guard" => SourceSymbolicIndex.Constraint Formula
+
+/-- The earlier actual accepted prefix derives the exact emitted Work input check. -/
+theorem children_inputs (nodes : NodeCall Symbol Guard)
+    (calls : Calls (fun domain left right => nodes ⟨domain, left, right⟩))
+    (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard)
+    (combined : SourceEqualityConjoinAllocation.Constraint Formula)
+    (before current : Machine Symbol Guard) (values : List (Value Symbol Guard))
+    (valid : SourceRecursiveIntersectionKernel.Valid before) (known : Domain before domain)
+    (leftResident : EdgeResident before.heap left) (rightResident : EdgeResident before.heap right)
+    (bound currentBound : Nat) (stored : InternedValueMassHeap.Stored bound before.heap)
+    (prefixStored : InternedValueMassHeap.Stored currentBound current.heap) (increase : bound ≤ currentBound)
+    (actual : WalkTrace (fun pair => nodes ⟨domain, pair.1, pair.2⟩)
+      (left.children.zip right.children) before values current) :
+    SourceRecursiveIntersectionWorkMass.Inputs (currentBound * currentBound) current.heap
+      (makeEdge left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) := by
+  obtain ⟨_valid, available, length⟩ := SourceEqualityNativeCheckedMass.children_prefix nodes calls domain left right
+    before current values valid known leftResident rightResident actual
+  have width : values.length ≤ bound := by
+    rw [length]
+    exact SourceEqualityNativeCheckedMass.zip_width before.heap bound stored left right leftResident
+  have square := Nat.mul_le_mul_left currentBound prefixStored.positive
+  simp only [Nat.mul_one] at square
+  exact .edge _ _ values available (Nat.le_trans (Nat.le_trans width increase) square)
+
+/-- A positive causal store bound derives the literal rejected Work input check. -/
+theorem sentinel_inputs (left : EdgeValue Symbol Guard) (before : State Symbol Guard) (bound : Nat)
+    (stored : InternedValueMassHeap.Stored bound before) :
+    SourceRecursiveIntersectionWorkMass.Inputs (bound * bound) before
+      (makeEdge left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) := by
+  have square := Nat.mul_le_mul_left bound stored.positive
+  refine .edge _ _ [.empty] ?_ ?_
+  · intro value member
+    cases List.mem_singleton.mp member
+    exact empty_available _
+  · simp only [List.length_singleton]
+    exact Nat.le_trans stored.positive (by simpa only [Nat.mul_one] using square)
+
+end MicroCFTA.SourceEqualityNativeCheckedMassInputs
