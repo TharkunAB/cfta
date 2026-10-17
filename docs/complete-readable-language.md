@@ -49,3 +49,44 @@ checks; reuse measured tests/benchmarks only when rebuilt executables are identi
 Measure the new text path against the previous text and JSON baselines on the
 same values. Record useful follow-ups as pending. The typed-language/Lean spike
 remains pending; finish this format change, publish its PR, and stop.
+
+## Validation and cost
+
+The fresh all-component `-O0 -Werror` build passes. Six rebuilt suite executables
+are byte-identical to the passing base (798 examples plus the golden suite).
+Focused checks cover all logical forms, exact graph/document/language values,
+128 unusual-name/constraint cases, generic and explicit state codecs, all template
+forms, malformed inputs, typed source errors, and edits after reopening. Two
+fresh readers with different prior symbol interning reproduce the writer's terms,
+counts, ranks and inverses. The complete language workflow matches the previous
+implementation. UTF-8 also round-trips under `LC_ALL=C`, and malformed Unicode
+escapes report their specific cause. Format, lint and package metadata pass.
+
+The six rebuilt `-O2` core benchmark executables equal main. All eight standard
+cells therefore retain their measured checksums and costs. No core query code
+or existing benchmark changed.
+
+| Workload | Format | Encoded bytes | Instructions | Allocated bytes |
+| --- | --- | ---: | ---: | ---: |
+| 10,000-state graph | Previous JSON | 1,437,836 | 6,137,964,915 | 1,719,841,536 |
+| 10,000-state graph | Complete text | 297,795 | 688,285,874 | 238,896,040 |
+| Same chain as an editable language | Previous text | 737,798 | 2,154,434,344 | 655,248,568 |
+| Same chain as an editable language | Complete text | 617,798 | 1,065,608,795 | 356,649,568 |
+| Refined pair language | Complete text | 283 | 1,365,875 | 384,504 |
+
+The graph and chain cells include the same source construction, encoding,
+decoding and exact value comparison. Complete text reduces the editable-language
+round trip by 50.5% in instructions and 45.6% in allocation versus the previous
+text implementation. It needs 16.3% fewer bytes. The small pair cell first loads
+a text fixture; its setup differs from the previous JSON-based fixture load, so
+its instruction/allocation numbers are not a direct comparison with that cell.
+These are complete-process costs, not isolated parser or query costs.
+
+All builds, probes and measurements run serially through heavy-management.
+Process caps are 12 GiB and program RTS caps are 4 GiB. Measurements use
+Cachegrind instructions and RTS allocation with GHC 9.14.1 at `-O2`.
+
+Pending follow-ups include Liquid-style authoring notation and measures, named
+pattern bindings, serialized update expressions, portable state/constructor
+schemas, query checkpoints and the typed-language/Lean spike. The complete
+format preserves the existing logic; it does not supply a new type checker.

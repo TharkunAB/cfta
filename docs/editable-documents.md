@@ -30,13 +30,11 @@ format. Undo uses the retained starting document. The first implementation
 validates and rebuilds the explicit graph; measure its cost before introducing
 incremental indexes or a document digest.
 
-Add a `cfta-document` version 1 encoding to the optional serialization package.
-It shares the graph, symbol, formula, and constraint codecs with graph snapshots.
-A transition stores `name` and `facts` in place of the compiled `constraint`.
-The fact object maps names to full constraints. Duplicate JSON keys remain
-errors. A document round trip must retain names, individual facts, order, and
-the complete graph. Graph and document formats are distinct and reject each
-other's format tag. Query plans, cursors, and patches are not part of this file.
+Use `document 2;` in the complete readable serialization format. Source rows
+store stable production names and separate named constraints. Duplicate states,
+production names and fact names are errors. Exact round trips retain names,
+facts, ordering and the complete graph. Graph and document headers remain
+distinct. Query plans, cursors and patches are not stored here.
 
 Provide a complete workflow that creates named facts, saves and reopens the
 source document, changes facts and constructor rows, compiles the new graph,
@@ -60,7 +58,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (equalityConstraint)
 import qualified Data.CFTA.Document as Document
 import Data.CFTA.Equality.Constraint (EqConstraints (EqContradiction))
-import Data.CFTA.Serialization.JSON (decodeDocument, encodeDocument, explainDecodeError)
+import Data.CFTA.Serialization.Text (parseDocument, printDocument, explainTextError)
 import qualified Data.CFTA.Term as Term
 
 main :: IO ()
@@ -69,7 +67,7 @@ main = do
         Document.mkDocument ("Atom" :: String)
             [("Atom", [FTA.Transition "zero" [] $ Document.Annotation "zero" $
                 Map.singleton "disabled" $ equalityConstraint EqContradiction])]
-    reopened <- either (fail . explainDecodeError) pure $ decodeDocument $ encodeDocument before
+    reopened <- either (fail . explainTextError) pure $ parseDocument $ printDocument before
     let request :: Document.Patch String
         request = Document.patch reopened [Document.RemoveFact "Atom" "zero" "disabled"]
     after <- either (fail . Document.explainDocumentError) pure $ Document.applyPatch request reopened
@@ -88,7 +86,7 @@ constraints. Do not use it to list a compiled document's constrained language.
 `Sized.sized` for equality size classes or `Sized.sizedUpTo` with an entailment
 solver for semantic guards. The complete executable uses the latter route.
 
-## Validation
+## Initial validation (before the text-format replacement)
 
 The fresh strict build, all six suites, formatting, lint, and metadata checks
 pass. The save/edit/show executable runs in separate processes and produces

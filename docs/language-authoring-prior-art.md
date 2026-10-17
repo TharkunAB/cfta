@@ -95,7 +95,7 @@ Every candidate still needs the CFTA graph, constraint, and identity checks.
 | EDN | Lists, vectors, maps, keywords, and tagged values can represent typed syntax directly. | Keep alternatives in vectors; map order has no meaning. Validate the domain after reading. Require exact integers and reject duplicate identities. |
 | KDL | Named nodes, arguments, properties, and ordered children give compact block notation. | Specify how facts, formulas, state references, and term trees map to nodes. Preserve order where ranks depend on it. |
 | JSON5 / Hjson | Comments and less punctuation can improve an existing JSON document. | The verbose graph schema remains. Neither supplies language extension or constraint semantics. |
-| Grammar blocks in this PR | Common productions, refinements, facts, and exclusions are concise. | Maintain a small domain parser. Complex constraints still use the full JSON form. |
+| Grammar blocks in this PR | Common productions, refinements, facts, and exclusions are concise. | Maintain a small domain parser. Complex constraints use exact structural forms. |
 
 Sources: [EDN specification](https://github.com/edn-format/edn),
 [KDL specification](https://kdl.dev/spec/), [JSON5 specification](https://spec.json5.org/),
@@ -167,17 +167,17 @@ to store a formula establishes complete type checking. See the
 [Liquid Haskell specification reference](https://ucsd-progsys.github.io/liquidhaskell/specifications/)
 and [Lean's introduction](https://lean-lang.org/doc/reference/latest/Introduction/).
 
-The small grammar-block codec in this PR shares the existing complete
-value codec and validation, adds no parser dependency, and keeps the common
-language example short. Its cost is a domain-specific syntax and a verbose full
-form for complex constraints. Do not describe it as EDN or as a Redex frontend.
+The grammar-block codec builds typed values directly and uses the existing
+graph and document validation. It adds no parser dependency and keeps the common
+language example short. Its cost is a domain-specific syntax and structural
+forms for complex constraints. Do not describe it as EDN or as a Redex frontend.
 The roundtrip contract is between language values and canonical text; comments
 and arbitrary input spelling are not retained.
 
-The next format change should remove the JSON fallback and the need for a
-separate JSON format. Give every formula and guard a readable exact form, and
-keep state codecs typed. This is pending; the implementation in this PR still
-uses JSON for complex constraints and structured state values.
+The complete version 2 format removes the JSON codec and fallback. Every formula
+and guard has an exact readable form. State codecs remain typed, with derived
+Show/Read defaults. More concise Liquid-style authoring remains a separate
+follow-up; it must preserve the stored meaning and source fact identities.
 
 Follow-ups, each with its own acceptance criteria:
 

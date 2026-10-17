@@ -1,11 +1,7 @@
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- | Compose language updates in memory, then save, reopen, and restore an exclusion.
 module Main (main) where
-
-import Data.Aeson (FromJSON, ToJSON)
-import GHC.Generics (Generic)
 
 import Control.Exception (bracketOnError, finally)
 import qualified Data.ByteString.Lazy as ByteString
@@ -24,7 +20,6 @@ import qualified Data.CFTA.Language as Language
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
-import Data.CFTA.Serialization.JSON (decodeLanguage, encodeLanguage, explainDecodeError)
 import qualified Data.CFTA.Serialization.Text as LanguageText
 import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Symbol (Symbol (RefinedSymbol), eraseRefinements)
@@ -32,10 +27,7 @@ import qualified Data.CFTA.Term as Term
 
 -- | The two source states. Unknown state labels fail during decoding.
 data State = Atom | Expr
-    deriving (Eq, Ord, Show, Generic)
-
-instance FromJSON State
-instance ToJSON State
+    deriving (Eq, Ord, Show, Read)
 
 -- | Production identities are declared once and reused by updates.
 pairName, twoName :: Language.ProductionName
@@ -113,33 +105,21 @@ inspect language = withZ3 [] $ \solver -> do
     print $ map (Sized.countOfSize classes) [3, 4]
     mapM_ (print . map eraseRefinements . Sized.termsOfSize classes) [3, 4]
 
--- | Save the retained source and expressions with atomic file replacement.
+-- | Save the readable source and expressions with atomic file replacement.
 save :: FilePath -> Language.Language State -> IO ()
-save = saveWith encodeLanguage
-
--- | Save the readable form through the same atomic file operation.
-saveText :: FilePath -> Language.Language State -> IO ()
-saveText = saveWith $ ByteString.fromStrict . Text.encodeUtf8 . LanguageText.printLanguage
-
--- | Replace one file with the complete result of a chosen encoder.
-saveWith :: (Language.Language State -> ByteString.ByteString) -> FilePath -> Language.Language State -> IO ()
-saveWith encode target language =
+save target language =
     bracketOnError
         (openBinaryTempFile (takeDirectory target) ".cfta-language")
         (\(temporary, handle) -> hClose handle `finally` removeFile temporary)
         ( \(temporary, handle) -> do
-            ByteString.hPut handle $ encode language
+            ByteString.hPut handle $ ByteString.fromStrict $ Text.encodeUtf8 $ LanguageText.printLanguage language
             hClose handle
             renameFile temporary target
         )
 
--- | Reopen the source and expressions without compiling or invoking a solver.
+-- | Read a complete UTF-8 definition with typed state and source validation.
 load :: FilePath -> IO (Language.Language State)
-load filename = ByteString.readFile filename >>= either (fail . explainDecodeError) pure . decodeLanguage
-
--- | Read a complete text definition with the same typed source validation.
-loadText :: FilePath -> IO (Language.Language State)
-loadText filename = do
+load filename = do
     bytes <- ByteString.readFile filename
     text <- either (fail . show) pure $ Text.decodeUtf8' $ ByteString.toStrict bytes
     either (fail . LanguageText.explainTextError) pure $ LanguageText.parseLanguage text
@@ -155,14 +135,9 @@ main = do
             change modified (Language.without zeroPairRule $ Language.subterm zeroPair) >>= inspect
             change modified (Language.restore zeroPairRule) >>= inspect
         ["print"] -> change original changes >>= ByteString.putStr . ByteString.fromStrict . Text.encodeUtf8 . LanguageText.printLanguage
-        ["save-text", target] -> change original changes >>= saveText target
-        ["show-text", filename] -> loadText filename >>= inspect
-        ["restore-text", filename, target] -> do
-            before <- loadText filename
-            change before (Language.restore zeroPairRule) >>= saveText target
         ["save", target] -> change original changes >>= save target
         ["show", filename] -> load filename >>= inspect
         ["restore", filename, target] -> do
             before <- load filename
             change before (Language.restore zeroPairRule) >>= save target
-        _ -> fail "usage: cfta-language-expressions [print | save[-text] FILE | show[-text] FILE | restore[-text] INPUT OUTPUT]"
+        _ -> fail "usage: cfta-language-expressions [print | save FILE | show FILE | restore INPUT OUTPUT]"

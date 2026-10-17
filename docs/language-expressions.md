@@ -49,12 +49,11 @@ compiled states in their existing ascending order to give the result one simple
 state type. The compiled graph retains constraints. Use a constraint-aware query
 route to enumerate it. Editing invalidates prepared query indexes and cursors.
 
-Store the language as `cfta-language` version 1 in the optional JSON package.
-Store the complete source document and all named exclusion expressions. Reject
-unknown fields, versions, tags, malformed operands, and duplicate keys. Do not
-store a lowered graph in place of the source. A reader must be able to remove a
-saved exclusion and recover the original source language. Query plans, cursors,
-and serialized update requests remain separate work.
+Store the complete source document and named exclusion expressions with
+`printLanguage` and `parseLanguage` in `Data.CFTA.Serialization.Text`. The format
+starts with `language 2;`. Reject unsupported versions, malformed operands and
+duplicate identities. Do not store a lowered graph in place of editable source.
+Query plans, cursors and serialized update requests remain separate work.
 
 Provide a complete in-memory example and a save/reopen/update example. Verify
 constructor and fact composition, false-fact restoration, root versus subtree
@@ -66,7 +65,7 @@ Measure compiled graph size and instruction/allocation cost. Run the normal
 capped PR gates. Exact term addition and union, quoted update syntax, portable
 constructor types, and query checkpoints remain separate items.
 
-## Validation
+## Initial validation (before the text-format replacement)
 
 The fresh all-component build passes at `-O0 -Werror`. All six suites pass,
 with 798 examples and the hole-fit golden suite. Fourmolu, HLint, cabal-gild,

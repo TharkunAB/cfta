@@ -133,21 +133,17 @@ jobs:
           cabal v2-run cfta-sorted-lists
           cabal v2-run cfta-typed-values
           cabal v2-run cfta-automaton-interop
-          cabal v2-run cfta-graph-snapshot -- save /tmp/cfta-graph.json
-          cabal v2-run cfta-graph-snapshot -- load /tmp/cfta-graph.json
-          cabal v2-run cfta-editable-document -- save /tmp/cfta-source.json
-          cabal v2-run cfta-editable-document -- edit /tmp/cfta-source.json /tmp/cfta-edited.json
-          cabal v2-run cfta-editable-document -- show /tmp/cfta-edited.json
+          cabal v2-run cfta-graph-snapshot -- save /tmp/cfta-graph.cfta
+          cabal v2-run cfta-graph-snapshot -- load /tmp/cfta-graph.cfta
+          cabal v2-run cfta-editable-document -- save /tmp/cfta-source.cfta
+          cabal v2-run cfta-editable-document -- edit /tmp/cfta-source.cfta /tmp/cfta-edited.cfta
+          cabal v2-run cfta-editable-document -- show /tmp/cfta-edited.cfta
           cabal v2-run cfta-language-expressions
-          cabal v2-run cfta-language-expressions -- save /tmp/cfta-language.json
-          cabal v2-run cfta-language-expressions -- show /tmp/cfta-language.json
-          cabal v2-run cfta-language-expressions -- restore /tmp/cfta-language.json /tmp/cfta-restored.json
-          cabal v2-run cfta-language-expressions -- show /tmp/cfta-restored.json
+          cabal v2-run cfta-language-expressions -- save /tmp/cfta-language.cfta
+          cabal v2-run cfta-language-expressions -- show /tmp/cfta-language.cfta
+          cabal v2-run cfta-language-expressions -- restore /tmp/cfta-language.cfta /tmp/cfta-restored.cfta
+          cabal v2-run cfta-language-expressions -- show /tmp/cfta-restored.cfta
           cabal v2-run cfta-language-expressions -- print
-          cabal v2-run cfta-language-expressions -- save-text /tmp/cfta-language.cfta
-          cabal v2-run cfta-language-expressions -- show-text /tmp/cfta-language.cfta
-          cabal v2-run cfta-language-expressions -- restore-text /tmp/cfta-language.cfta /tmp/cfta-restored.cfta
-          cabal v2-run cfta-language-expressions -- show-text /tmp/cfta-restored.cfta
 
       # The release check builds every dependency again, with documentation,
       # and takes about 30 minutes. It runs after a merge into main, and on

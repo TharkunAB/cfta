@@ -1,311 +1,592 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Readable, exact language values with one canonical printed form.
+-- | Complete readable snapshots of graphs, editable documents, and languages.
 module Data.CFTA.Serialization.Text (
+    StateCodec (..),
     TextError (..),
+    explainTextError,
+    printGraph,
+    parseGraph,
+    printGraphWith,
+    parseGraphWith,
+    printDocument,
+    parseDocument,
+    printDocumentWith,
+    parseDocumentWith,
     printLanguage,
     parseLanguage,
-    explainTextError,
+    printLanguageWith,
+    parseLanguageWith,
 ) where
 
 import Control.Applicative ((<|>))
 import Control.Monad (foldM_, unless, when)
-import Data.Aeson (FromJSON, ToJSON, Value (..), encode, object, toJSON, (.=))
-import qualified Data.Aeson.Key as Key
-import Data.Aeson.Parser (jsonNoDup')
-import qualified Data.Attoparsec.ByteString.Char8 as A
 import Data.Attoparsec.Combinator (lookAhead, (<?>))
+import qualified Data.Attoparsec.Text as A
 import Data.Bifunctor (first)
-import qualified Data.ByteString as Bytes
-import qualified Data.ByteString.Char8 as Bytes8
-import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
+import Data.Char (chr, isAsciiLower, isAsciiUpper, isDigit, ord)
 import Data.Functor (($>))
 import Data.List (intersperse)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
-import qualified Data.Text.Encoding as Text
-import Data.Text.Encoding.Error (lenientDecode)
 import qualified Data.Text.Lazy as Lazy
 import Data.Text.Lazy.Builder (Builder, fromText, toLazyText)
-import qualified Data.Text.Lazy.Builder as Builder
-import qualified Data.Text.Lazy.Encoding as Lazy
+import Numeric (showHex)
+import Text.Read (readEither)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint (..), Guard (..))
-import qualified Data.CFTA.Document as Document
-import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints, EqContradiction), unPathEClass)
-import qualified Data.CFTA.Formula as Formula
-import qualified Data.CFTA.Language as Language
-import qualified Data.CFTA.Serialization.Internal.JSON as Codec
-import Data.CFTA.Symbol (Symbol, symbolRefinement, symbolText, valueName)
+import qualified Data.CFTA.Constraint as C
+import qualified Data.CFTA.Document as D
+import Data.CFTA.Equality.Constraint (
+    EqConstraints (EqConstraints, EqContradiction),
+    PathEClass (PathEClass),
+    unPathEClass,
+ )
+import qualified Data.CFTA.Formula as F
+import Data.CFTA.Index (ChildIndex (ChildIndex))
+import qualified Data.CFTA.Language as L
+import Data.CFTA.Path (Path (Path), unPath)
+import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 import Data.CFTA.Template (Template (..))
 
--- | A text location for syntax errors, or a shared schema and source error.
+{- | A typed codec for portable state labels. Decoding an encoded state must
+return that state and preserve equality and ordering. Labels are escaped by the
+snapshot printer; callers do not add quotes.
+-}
+data StateCodec state = StateCodec
+    { encodeState :: state -> Text
+    , decodeState :: Text -> Either String state
+    }
+
+-- | A syntax location or a checked graph/source-definition error.
 data TextError state
     = SyntaxError !Int !Int !String
-    | InvalidLanguage !(Codec.DecodeError state)
+    | InvalidDefinition !(D.DocumentError state)
     deriving (Eq, Show)
 
--- | Describe a syntax location or the rejected source identity.
+-- | Describe the input location or rejected source identity.
 explainTextError :: (Show state) => TextError state -> String
 explainTextError failure = case failure of
     SyntaxError line column message -> "line " <> show line <> ", column " <> show column <> ": " <> message
-    InvalidLanguage error' -> Codec.explainDecodeError error'
+    InvalidDefinition failure' -> D.explainDocumentError failure'
 
-{- | Print the complete language without normalization. Parsing this form returns
-that exact value when the state codec preserves equality and ordering.
-Comments and input whitespace are not part of a language value.
+-- | Print a graph with state labels from its 'Show' instance.
+printGraph :: (Show state) => FTA.PlainFTA state Symbol -> Text
+printGraph = renderGraph (Text.pack . show)
+
+-- | Print a graph with an explicit typed state codec.
+printGraphWith :: StateCodec state -> FTA.PlainFTA state Symbol -> Text
+printGraphWith = renderGraph . encodeState
+
+-- | Read a graph with its state's 'Read' instance and validate its structure.
+parseGraph :: (Ord state, Read state) => Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
+parseGraph = readGraph (readEither . Text.unpack)
+
+-- | Read a graph with an explicit typed state codec.
+parseGraphWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
+parseGraphWith = readGraph . decodeState
+
+-- | Print a source document with state labels from its 'Show' instance.
+printDocument :: (Show state) => D.Document state -> Text
+printDocument = renderDocument (Text.pack . show)
+
+-- | Print a source document with an explicit typed state codec.
+printDocumentWith :: StateCodec state -> D.Document state -> Text
+printDocumentWith = renderDocument . encodeState
+
+-- | Read and validate a source document with its state's 'Read' instance.
+parseDocument :: (Ord state, Read state) => Text -> Either (TextError state) (D.Document state)
+parseDocument = readDocument (readEither . Text.unpack)
+
+-- | Read a source document with an explicit typed state codec.
+parseDocumentWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (D.Document state)
+parseDocumentWith = readDocument . decodeState
+
+{- | Print an exact language value with state labels from its 'Show' instance.
+A matching lawful 'Read' instance gives @parseLanguage (printLanguage x) == Right x@.
+Comments and input whitespace are not part of the stored value.
 -}
-printLanguage :: (ToJSON state) => Language.Language state -> Text
-printLanguage language =
-    Lazy.toStrict
-        $ toLazyText
-        $ "language 1;\nstart "
-            <> stateText (toJSON $ FTA.initialState graph)
-            <> ";\n\n"
-            <> foldMap rowText (Map.toAscList $ FTA.transitionTable graph)
-            <> foldMap exclusionText (Map.toAscList $ Language.exclusions language)
-  where
-    graph = Document.sourceGraph $ Language.source language
-    rowText (state, transitions) =
-        "state " <> stateText (toJSON state) <> " {\n" <> foldMap transitionText transitions <> "}\n\n"
-    transitionText transition =
-        "  "
-            <> nameText (Document.annotationName annotation)
-            <> " = "
-            <> symbolText' (FTA.transitionSymbol transition)
-            <> childrenText (map (stateText . toJSON) $ FTA.transitionChildren transition)
-            <> if Map.null facts then ";\n" else " {\n" <> foldMap factText (Map.toAscList facts) <> "  };\n"
-      where
-        annotation = FTA.transitionConstraint transition
-        facts = Document.annotationFacts annotation
-    factText (name, constraint) = "    " <> nameText name <> " = " <> constraintText constraint <> ";\n"
-    exclusionText (name, exclusion) =
-        "exclude " <> nameText (Language.exclusionNameText name) <> " = " <> case exclusion of
-            Language.AtRoot template -> "root " <> templateText template <> ";\n"
-            Language.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+printLanguage :: (Show state) => L.Language state -> Text
+printLanguage = renderLanguage (Text.pack . show)
 
--- | Encode a string name without changing arbitrary text or reserved names.
+-- | Print a language with an explicit typed state codec.
+printLanguageWith :: StateCodec state -> L.Language state -> Text
+printLanguageWith = renderLanguage . encodeState
+
+-- | Read an exact language value with its state's 'Read' instance.
+parseLanguage :: (Ord state, Read state) => Text -> Either (TextError state) (L.Language state)
+parseLanguage = readLanguage (readEither . Text.unpack)
+
+-- | Read a language with an explicit typed state codec.
+parseLanguageWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (L.Language state)
+parseLanguageWith = readLanguage . decodeState
+
+-- | Render graph rows with their complete transition constraints.
+renderGraph :: (state -> Text) -> FTA.PlainFTA state Symbol -> Text
+renderGraph encode = built . graphText "graph" encode transition
+  where
+    transition edge = "  " <> edgeText encode edge <> obligation (FTA.transitionConstraint edge) <> ";\n"
+    obligation constraint
+        | constraint == C.noConstraint = mempty
+        | otherwise = " where " <> constraintText constraint
+
+-- | Render source rows without compiling their individual facts.
+renderDocument :: (state -> Text) -> D.Document state -> Text
+renderDocument encode = built . graphText "document" encode (sourceTransitionText encode) . D.sourceGraph
+
+-- | Render source rows and the retained exclusion expressions.
+renderLanguage :: (state -> Text) -> L.Language state -> Text
+renderLanguage encode language =
+    built $
+        graphText "language" encode (sourceTransitionText encode) (D.sourceGraph $ L.source language)
+            <> foldMap exclusionText (Map.toAscList $ L.exclusions language)
+  where
+    exclusionText (name, exclusion) =
+        "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
+            L.AtRoot template -> "root " <> templateText template <> ";\n"
+            L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+
+-- | Render the shared version, initial state, and finite row table.
+graphText ::
+    Text ->
+    (state -> Text) ->
+    (FTA.Transition state Symbol annotation -> Builder) ->
+    FTA.FTA state Symbol annotation ->
+    Builder
+graphText format encode transition graph =
+    fromText format
+        <> " 2;\nstart "
+        <> nameText (encode $ FTA.initialState graph)
+        <> ";\n\n"
+        <> foldMap row (Map.toAscList $ FTA.transitionTable graph)
+  where
+    row (state, edges) = "state " <> nameText (encode state) <> " {\n" <> foldMap transition edges <> "}\n\n"
+
+-- | Render one named production and its individual facts.
+sourceTransitionText :: (state -> Text) -> FTA.Transition state Symbol D.Annotation -> Builder
+sourceTransitionText encode edge =
+    "  "
+        <> nameText (D.annotationName annotation)
+        <> " = "
+        <> edgeText encode edge
+        <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> "  };\n"
+  where
+    annotation = FTA.transitionConstraint edge
+    facts = D.annotationFacts annotation
+    fact (name, constraint) = "    " <> nameText name <> " = " <> constraintText constraint <> ";\n"
+
+-- | Render a complete symbol and ordered child state references.
+edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
+edgeText encode edge = symbolText' (FTA.transitionSymbol edge) <> childrenText (map (nameText . encode) $ FTA.transitionChildren edge)
+
+-- | Render arbitrary labels with Unicode and escaped control characters.
 nameText :: Text -> Builder
 nameText name
-    | Just (firstChar, rest) <- Text.uncons name
-    , nameStart firstChar
-    , Text.all nameContinue rest
-    , name /= "_" && name /= "json" =
-        fromText name
-    | otherwise = jsonText $ String name
+    | not (Text.null name), Text.all nameCharacter name, name /= "_" = fromText name
+    | otherwise = "\"" <> foldMap escape (Text.unpack name) <> "\""
+  where
+    escape '\\' = "\\\\"
+    escape '"' = "\\\""
+    escape '\n' = "\\n"
+    escape '\r' = "\\r"
+    escape '\t' = "\\t"
+    escape character
+        | ord character < 32 =
+            let digits = showHex (ord character) "" in fromText $ Text.pack $ "\\u" <> replicate (4 - length digits) '0' <> digits
+        | otherwise = fromText $ Text.singleton character
 
--- | Retain a generic state codec when the value is not a string label.
-stateText :: Value -> Builder
-stateText (String name) = nameText name
-stateText value = "json(" <> jsonText value <> ")"
-
--- | Render a complete symbol with its exact refinement.
+-- | Render a complete symbol; omit only an exact top refinement.
 symbolText' :: Symbol -> Builder
 symbolText' symbol =
     nameText (symbolText symbol) <> case symbolRefinement symbol of
-        Formula.Top -> mempty
-        refinement -> " @{ " <> formulaText refinement <> " }"
+        F.Top -> mempty
+        formula -> " @{ " <> formulaText formula <> " }"
 
--- | Render common formulas exactly, with a complete form for all other syntax.
-formulaText :: Formula.Formula -> Builder
-formulaText Formula.Top = "true"
-formulaText Formula.Bottom = "false"
-formulaText formula@(Formula.Atom relation (Formula.Var name) (Formula.Lit number))
-    | name == Formula.Name (Text.pack valueName) =
-        "v " <> relationText relation <> " " <> fromText (Text.pack $ show number)
-    | otherwise = "raw " <> jsonText (Codec.formulaJSON formula)
-formulaText formula = "raw " <> jsonText (Codec.formulaJSON formula)
+-- | Render each formula constructor without normalization.
+formulaText :: F.Formula -> Builder
+formulaText formula = case formula of
+    F.Top -> "true"
+    F.Bottom -> "false"
+    F.And parts -> call "and" $ map formulaText parts
+    F.Or parts -> call "or" $ map formulaText parts
+    F.Not inner -> call "not" [formulaText inner]
+    F.Atom relation (F.Var (F.Name name)) (F.Lit number)
+        | name == Text.pack valueName ->
+            "v " <> relationText relation <> " " <> integerText number
+    F.Atom relation left right -> call (relationName relation) [termText left, termText right]
+    F.Forall bindings inner -> quantified "forall" bindings inner
+    F.Exists bindings inner -> quantified "exists" bindings inner
+  where
+    quantified name bindings inner =
+        call name [listText [nameText binding <> ": " <> sortText sort | (F.Name binding, sort) <- bindings], formulaText inner]
 
--- | The six comparison tokens, in the formula's original orientation.
-relationText :: Formula.Relation -> Builder
+-- | The structural name of a comparison.
+relationName :: F.Relation -> Text
+relationName relation = case relation of
+    F.Eq -> "eq"
+    F.Ne -> "ne"
+    F.Gt -> "gt"
+    F.Ge -> "ge"
+    F.Lt -> "lt"
+    F.Le -> "le"
+
+-- | The infix token for a distinguished-value comparison.
+relationText :: F.Relation -> Builder
 relationText relation = case relation of
-    Formula.Eq -> "=="
-    Formula.Ne -> "/="
-    Formula.Gt -> ">"
-    Formula.Ge -> ">="
-    Formula.Lt -> "<"
-    Formula.Le -> "<="
+    F.Eq -> "=="
+    F.Ne -> "/="
+    F.Gt -> ">"
+    F.Ge -> ">="
+    F.Lt -> "<"
+    F.Le -> "<="
 
--- | Use concise syntax only when it preserves the complete constraint.
-constraintText :: Constraint -> Builder
-constraintText (Constraint (EqConstraints []) Top) = "true"
-constraintText (Constraint (EqConstraints []) Bottom) = "false"
-constraintText (Constraint EqContradiction Top) = "impossible"
-constraintText (Constraint (EqConstraints [paths]) Top) =
-    "equal(" <> separated ", " (map (jsonText . Codec.pathJSON) $ Set.toAscList $ unPathEClass paths) <> ")"
-constraintText (Constraint (EqConstraints []) (Satisfies path formula)) =
-    "satisfies(" <> jsonText (Codec.pathJSON path) <> ", " <> formulaText formula <> ")"
-constraintText constraint = "raw " <> jsonText (Codec.constraintJSON constraint)
+-- | Render each logic term; retain negation as distinct from a negative literal.
+termText :: F.Term -> Builder
+termText term = case term of
+    F.Lit number -> integerText number
+    F.Var (F.Name name) | name == Text.pack valueName -> "v"
+    F.Var (F.Name name) -> call "var" [nameText name]
+    F.App (F.Name name) operands -> call "app" [nameText name, listText $ map termText operands]
+    F.Neg inner -> call "negate" [termText inner]
+    F.Add left right -> binary "add" left right
+    F.Sub left right -> binary "subtract" left right
+    F.Mul left right -> binary "multiply" left right
+    F.Div left right -> binary "divide" left right
+    F.Mod left right -> binary "modulo" left right
+    F.Ite condition yes no -> call "if" [formulaText condition, termText yes, termText no]
+    F.Cast inner sort -> call "cast" [termText inner, sortText sort]
+  where
+    binary name left right = call name [termText left, termText right]
 
--- | Preserve exact, prefix, wildcard, and refined-symbol template forms.
+-- | Render primitive and function sorts.
+sortText :: F.Sort -> Builder
+sortText sort = case sort of
+    F.IntSort -> "int"
+    F.RealSort -> "real"
+    F.BoolSort -> "bool"
+    F.FunctionSort inputs result -> call "function" [listText $ map sortText inputs, sortText result]
+
+-- | Render all guard constructors, including scoped substitutions.
+guardText :: C.Guard -> Builder
+guardText guard = case guard of
+    C.Top -> "true"
+    C.Bottom -> "false"
+    C.Same left right -> call "same" [pathText left, pathText right]
+    C.Entails left right -> call "entails" [pathText left, pathText right]
+    C.Satisfies at formula -> call "satisfies" [pathText at, formulaText formula]
+    C.Holds paths formula -> call "holds" [listText $ map pathText paths, formulaText formula]
+    C.Substitute substitutions inner ->
+        call
+            "substitute"
+            [ listText ["(" <> pathText actual <> ", " <> pathText formal <> ")" | C.Substitution actual formal <- substitutions]
+            , guardText inner
+            ]
+    C.Not inner -> call "not" [guardText inner]
+    C.And parts -> call "and" $ map guardText parts
+    C.Or parts -> call "or" $ map guardText parts
+
+-- | Retain the equality field separately from the guard.
+constraintText :: C.Constraint -> Builder
+constraintText (C.Constraint (EqConstraints []) guard) = guardText guard
+constraintText (C.Constraint EqContradiction C.Top) = "impossible"
+constraintText (C.Constraint (EqConstraints [paths]) C.Top) = call "equal" $ map pathText $ Set.toAscList $ unPathEClass paths
+constraintText (C.Constraint classes guard) = call "constraint" [classesText classes, guardText guard]
+
+-- | Render equality classes without merging or deleting them.
+classesText :: EqConstraints -> Builder
+classesText EqContradiction = "impossible"
+classesText (EqConstraints classes) = listText [listText $ map pathText $ Set.toAscList $ unPathEClass part | part <- classes]
+
+-- | Render all stored child indexes, including invalid paths.
+pathText :: Path -> Builder
+pathText = listText . map (\(ChildIndex index) -> integerText $ toInteger index) . unPath
+
+-- | Retain each template constructor and complete refined symbol.
 templateText :: Template Symbol -> Builder
-templateText Hole = "_"
-templateText (AnyNode children) = "_(" <> separated ", " (map templateText children) <> ")"
-templateText (TemplateNode symbol children) = symbolText' symbol <> childrenText (map templateText children)
-templateText (AnyPrefix children) = "_(" <> separated ", " (map templateText children <> ["..."]) <> ")"
-templateText (TemplatePrefix symbol children) = symbolText' symbol <> "(" <> separated ", " (map templateText children <> ["..."]) <> ")"
+templateText template = case template of
+    Hole -> "_"
+    AnyNode children -> call "_" $ map templateText children
+    TemplateNode symbol children -> symbolText' symbol <> childrenText (map templateText children)
+    AnyPrefix children -> call "_" $ map templateText children <> ["..."]
+    TemplatePrefix symbol children -> symbolText' symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
 
 -- | Omit parentheses only for an exact leaf.
 childrenText :: [Builder] -> Builder
 childrenText [] = mempty
-childrenText children = "(" <> separated ", " children <> ")"
+childrenText children = "(" <> separated children <> ")"
 
--- | Join already rendered values without copying their text repeatedly.
-separated :: Builder -> [Builder] -> Builder
-separated separator = mconcat . intersperse separator
+-- | Render an application of a fixed syntax constructor.
+call :: Text -> [Builder] -> Builder
+call name operands = fromText name <> "(" <> separated operands <> ")"
 
--- | The shared full representation for an arbitrary scalar or structured value.
-jsonText :: Value -> Builder
-jsonText = Builder.fromLazyText . Lazy.decodeUtf8 . encode
+-- | Render an ordered list.
+listText :: [Builder] -> Builder
+listText values = "[" <> separated values <> "]"
 
-{- | Parse one complete language and apply the shared source validation.
-No solver, imports, host bindings, or graph transformations run here.
--}
-parseLanguage :: (Ord state, FromJSON state) => Text -> Either (TextError state) (Language.Language state)
-parseLanguage input = do
-    value <- finish $ A.parse (spaces *> languageParser <* A.endOfInput) bytes
-    first InvalidLanguage $ Codec.languageFromJSON value
+-- | Join already rendered values without repeated copying.
+separated :: [Builder] -> Builder
+separated = mconcat . intersperse ", "
+
+-- | Render an exact integer without a precision limit.
+integerText :: Integer -> Builder
+integerText = fromText . Text.pack . show
+
+-- | Finish one text builder.
+built :: Builder -> Text
+built = Lazy.toStrict . toLazyText
+
+-- | Read graph syntax and validate identities before constructing its row map.
+readGraph ::
+    (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
+readGraph decode input = do
+    (initial, rows) <- runParser (graphParser "graph" decode $ graphTransitionParser decode) input
+    first InvalidDefinition $ do
+        foldM_ distinct Set.empty $ map fst rows
+        first D.InvalidGraph $ FTA.mkFTA initial rows
   where
-    bytes = Text.encodeUtf8 input
+    distinct seen state
+        | Set.member state seen = Left $ D.DuplicateState state
+        | otherwise = Right $ Set.insert state seen
+
+-- | Read source syntax and validate names and graph structure together.
+readDocument :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (D.Document state)
+readDocument decode input = do
+    (initial, rows) <- runParser (graphParser "document" decode $ sourceTransitionParser decode) input
+    first InvalidDefinition $ D.mkDocument initial rows
+
+-- | Read a complete language without compiling its constraints or exclusions.
+readLanguage :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (L.Language state)
+readLanguage decode input = do
+    (initial, rows, exclusions) <- runParser parser input
+    document <- first InvalidDefinition $ D.mkDocument initial rows
+    pure $ L.Language document exclusions
+  where
+    parser = do
+        (initial, rows) <- graphParser "language" decode $ sourceTransitionParser decode
+        exclusions <- untilEnd exclusionParser >>= namedMap "exclusion"
+        pure (initial, rows, Map.mapKeys L.ExclusionName exclusions)
+
+-- | Parse one complete input and retain Unicode-aware syntax locations.
+runParser :: A.Parser value -> Text -> Either (TextError state) value
+runParser parser input = finish $ A.parse (spaces *> parser <* A.endOfInput) input
+  where
     finish (A.Done _ value) = Right value
-    finish (A.Partial continue) = finish $ continue Bytes.empty
+    finish (A.Partial continue) = finish $ continue Text.empty
     finish (A.Fail remaining contexts message) =
-        let prefix = Text.decodeUtf8With lenientDecode $ Bytes.take (Bytes.length bytes - Bytes.length remaining) bytes
+        let prefix = Text.take (Text.length input - Text.length remaining) input
             line = 1 + Text.count "\n" prefix
             column = 1 + Text.length (Text.takeWhileEnd (/= '\n') prefix)
             detail = if null contexts then message else Text.unpack (Text.intercalate ": " $ map Text.pack contexts) <> ": " <> message
          in Left $ SyntaxError line column detail
 
--- | Parse the finite source rows and named exclusions of one language.
-languageParser :: A.Parser Value
-languageParser = do
-    keyword "language"
-    version <- lexeme (A.decimal :: A.Parser Integer)
-    unless (version == 1) $ fail "unsupported language version"
+-- | Read the common header and finite rows, preserving duplicates for validation.
+graphParser ::
+    Text ->
+    (Text -> Either String state) ->
+    A.Parser (FTA.Transition state Symbol annotation) ->
+    A.Parser (state, [(state, [FTA.Transition state Symbol annotation])])
+graphParser format decode transition = do
+    keyword format
+    version <- integerParser
+    unless (version == 2) $ fail "unsupported snapshot version; expected 2"
     token ";"
     keyword "start"
-    initial <- stateParser
+    initial <- stateParser decode
     token ";"
-    rows <- whileKeyword "state" stateParserRow
-    exclusions <- untilEnd exclusionParser
-    namedExclusions <- namedObject "exclusion" exclusions
-    pure $
-        object
-            [ "format" .= ("cfta-language" :: Text)
-            , "version" .= (1 :: Int)
-            , "source"
-                .= object ["format" .= ("cfta-document" :: Text), "version" .= (1 :: Int), "initial" .= initial, "states" .= rows]
-            , "exclusions" .= namedExclusions
-            ]
+    rows <- whileKeyword "state" row
+    pure (initial, rows)
+  where
+    row = do
+        keyword "state"
+        state <- stateParser decode
+        token "{"
+        transitions <- untilClose '}' transition
+        token "}"
+        ifNext ';' (token ";") ()
+        pure (state, transitions)
 
--- | Parse a state without discarding duplicate state identities.
-stateParserRow :: A.Parser Value
-stateParserRow = do
-    keyword "state"
-    state <- stateParser
-    token "{"
-    transitions <- untilClose '}' transitionParser
-    token "}"
-    ifNext ';' (token ";") ()
-    pure $ object ["state" .= state, "transitions" .= transitions]
+-- | Decode one escaped state label through its typed codec.
+stateParser :: (Text -> Either String state) -> A.Parser state
+stateParser decode = do
+    label <- nameParser
+    either (\message -> fail $ "invalid state " <> show label <> ": " <> message) pure $ decode label
 
--- | Parse an ordered production and its separate named facts.
-transitionParser :: A.Parser Value
-transitionParser = do
+-- | Read a graph transition with an optional complete constraint.
+graphTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transition state Symbol C.Constraint)
+graphTransitionParser decode = do
+    (symbol, children) <- edgeParser decode
+    present <- startsKeyword "where"
+    constraint <- if present then keyword "where" *> constraintParser else pure C.noConstraint
+    token ";"
+    pure $ FTA.Transition symbol children constraint
+
+-- | Read a named production and its separate facts.
+sourceTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transition state Symbol D.Annotation)
+sourceTransitionParser decode = do
     name <- nameParser
     token "="
-    symbol <- symbolParser
-    children <- ifNext '(' (parenthesized $ commaSeparated stateParser) []
-    facts <- ifNext '{' (token "{" *> untilClose '}' factParser <* token "}") []
-    namedFacts <- namedObject "fact" facts
+    (symbol, children) <- edgeParser decode
+    facts <- ifNext '{' (token "{" *> untilClose '}' fact <* token "}") []
+    namedFacts <- namedMap "fact" facts
     token ";"
-    pure $ object ["name" .= name, "symbol" .= symbol, "children" .= children, "facts" .= namedFacts]
+    pure $ FTA.Transition symbol children $ D.Annotation name namedFacts
+  where
+    fact = do
+        name <- nameParser
+        token "="
+        constraint <- constraintParser
+        token ";"
+        pure (name, constraint)
 
--- | Parse one named source constraint.
-factParser :: A.Parser (Text, Value)
-factParser = do
+-- | Read a symbol and ordered child state references.
+edgeParser :: (Text -> Either String state) -> A.Parser (Symbol, [state])
+edgeParser decode = (,) <$> symbolParser <*> ifNext '(' (arguments $ stateParser decode) []
+
+-- | Read a complete symbol with an optional explicit refinement.
+symbolParser :: A.Parser Symbol
+symbolParser = do
     name <- nameParser
-    token "="
-    constraint <- constraintParser
-    token ";"
-    pure (name, constraint)
+    refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") F.Top
+    pure $ RefinedSymbol (Symbol name) refinement
 
--- | Parse a root or subtree exclusion without losing its name.
-exclusionParser :: A.Parser (Text, Value)
+-- | Read a named whole-term or subtree exclusion.
+exclusionParser :: A.Parser (Text, L.Exclusion)
 exclusionParser = do
     keyword "exclude"
     name <- nameParser
     token "="
-    scope <- lexeme identifier
-    unless (scope == "root" || scope == "anywhere") $ fail "expected root or anywhere exclusion scope"
+    scope <- nameParser
+    constructor <- case scope of
+        "root" -> pure L.AtRoot
+        "anywhere" -> pure L.Anywhere
+        _ -> fail "expected root or anywhere exclusion scope"
     template <- templateParser
     token ";"
-    pure (name, Codec.tag scope [template])
+    pure (name, constructor template)
 
--- | Preserve complete state values through the caller's JSON codec.
-stateParser :: A.Parser Value
-stateParser = do
-    raw <- startsKeyword "json"
-    if raw then keyword "json" *> parenthesized jsonParser else String <$> nameParser
-
--- | Parse a symbol with an optional complete refinement.
-symbolParser :: A.Parser Value
-symbolParser = do
-    name <- nameParser
-    refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") (Codec.tag "top" [])
-    pure $ object ["text" .= name, "refinement" .= refinement]
-
--- | Parse common formulas or an exact full formula representation.
-formulaParser :: A.Parser Value
+-- | Read every formula constructor without invoking a simplifier.
+formulaParser :: A.Parser F.Formula
 formulaParser = do
-    form <- lexeme identifier
+    form <- nameParser
     case form of
-        "raw" -> jsonParser
-        "true" -> pure $ Codec.tag "top" []
-        "false" -> pure $ Codec.tag "bottom" []
-        "v" -> do
-            relation <- relationParser
-            number <- lexeme $ A.signed A.decimal
-            pure $ Codec.formulaJSON $ Formula.Atom relation (Formula.Var $ Formula.Name $ Text.pack valueName) (Formula.Lit number)
-        _ -> fail "expected a value comparison, true, false, or raw formula"
-
--- | Prefer multi-character comparisons before their prefixes.
-relationParser :: A.Parser Formula.Relation
-relationParser =
-    token "==" $> Formula.Eq
-        <|> token "/=" $> Formula.Ne
-        <|> token ">=" $> Formula.Ge
-        <|> token "<=" $> Formula.Le
-        <|> token ">" $> Formula.Gt
-        <|> token "<" $> Formula.Lt
-
--- | Build exact constraint syntax without conjoining or simplifying it.
-constraintParser :: A.Parser Value
-constraintParser = do
-    form <- lexeme identifier
-    case form of
-        "raw" -> jsonParser
-        "true" -> pure $ constraint [] $ Codec.tag "top" []
-        "false" -> pure $ constraint [] $ Codec.tag "bottom" []
-        "impossible" -> pure $ object ["equalities" .= Null, "guard" .= Codec.tag "top" []]
-        "equal" -> do
-            paths <- parenthesized $ commaSeparated jsonParser
-            pure $ constraint [paths] $ Codec.tag "top" []
-        "satisfies" -> parenthesized $ do
-            path <- jsonParser
-            token ","
-            formula <- formulaParser
-            pure $ constraint [] $ Codec.tag "satisfies" [path, formula]
-        _ -> fail "expected true, false, impossible, equal, satisfies, or raw constraint"
+        "true" -> pure F.Top
+        "false" -> pure F.Bottom
+        "and" -> F.And <$> arguments formulaParser
+        "or" -> F.Or <$> arguments formulaParser
+        "not" -> F.Not <$> parenthesized formulaParser
+        "v" -> F.Atom <$> relationParser <*> pure (F.Var $ F.Name $ Text.pack valueName) <*> (F.Lit <$> integerParser)
+        "eq" -> comparison F.Eq
+        "ne" -> comparison F.Ne
+        "gt" -> comparison F.Gt
+        "ge" -> comparison F.Ge
+        "lt" -> comparison F.Lt
+        "le" -> comparison F.Le
+        "forall" -> quantified F.Forall
+        "exists" -> quantified F.Exists
+        _ -> fail "unknown formula constructor"
   where
-    constraint :: [[Value]] -> Value -> Value
-    constraint equalities guard = object ["equalities" .= equalities, "guard" .= guard]
+    comparison relation = pairArguments (F.Atom relation) termParser termParser
+    quantified constructor = pairArguments constructor (bracketed binding) formulaParser
+    binding = (,) <$> (F.Name <$> nameParser <* token ":") <*> sortParser
 
--- | Parse all five template forms while distinguishing a quoted underscore.
-templateParser :: A.Parser Value
+-- | Read all six infix comparison tokens.
+relationParser :: A.Parser F.Relation
+relationParser =
+    token "==" $> F.Eq
+        <|> token "/=" $> F.Ne
+        <|> token ">=" $> F.Ge
+        <|> token "<=" $> F.Le
+        <|> token ">" $> F.Gt
+        <|> token "<" $> F.Lt
+
+-- | Read exact logic terms, keeping each arithmetic constructor distinct.
+termParser :: A.Parser F.Term
+termParser = do
+    next <- A.peekChar
+    if maybe False (\c -> isDigit c || c == '-' || c == '+') next
+        then F.Lit <$> integerParser
+        else do
+            form <- nameParser
+            case form of
+                "v" -> pure $ F.Var $ F.Name $ Text.pack valueName
+                "var" -> F.Var . F.Name <$> parenthesized nameParser
+                "app" -> pairArguments F.App (F.Name <$> nameParser) (bracketed termParser)
+                "negate" -> F.Neg <$> parenthesized termParser
+                "add" -> binary F.Add
+                "subtract" -> binary F.Sub
+                "multiply" -> binary F.Mul
+                "divide" -> binary F.Div
+                "modulo" -> binary F.Mod
+                "if" -> parenthesized $ F.Ite <$> formulaParser <*> (token "," *> termParser) <*> (token "," *> termParser)
+                "cast" -> pairArguments F.Cast termParser sortParser
+                _ -> fail "unknown formula term constructor"
+  where
+    binary constructor = pairArguments constructor termParser termParser
+
+-- | Read primitive and function sorts.
+sortParser :: A.Parser F.Sort
+sortParser = do
+    form <- nameParser
+    case form of
+        "int" -> pure F.IntSort
+        "real" -> pure F.RealSort
+        "bool" -> pure F.BoolSort
+        "function" -> pairArguments F.FunctionSort (bracketed sortParser) sortParser
+        _ -> fail "unknown sort constructor"
+
+-- | Read every guard constructor and ordered actual/formal substitutions.
+guardParser :: A.Parser C.Guard
+guardParser = nameParser >>= guardAfterName
+
+-- | Parse the operands of one already selected guard constructor.
+guardAfterName :: Text -> A.Parser C.Guard
+guardAfterName form = case form of
+    "true" -> pure C.Top
+    "false" -> pure C.Bottom
+    "same" -> pairArguments C.Same pathParser pathParser
+    "entails" -> pairArguments C.Entails pathParser pathParser
+    "satisfies" -> pairArguments C.Satisfies pathParser formulaParser
+    "holds" -> pairArguments C.Holds (bracketed pathParser) formulaParser
+    "substitute" -> pairArguments C.Substitute (bracketed substitution) guardParser
+    "not" -> C.Not <$> parenthesized guardParser
+    "and" -> C.And <$> arguments guardParser
+    "or" -> C.Or <$> arguments guardParser
+    _ -> fail "unknown guard constructor"
+  where
+    substitution = pairArguments C.Substitution pathParser pathParser
+
+-- | Read exact equality syntax and the complete guard separately.
+constraintParser :: A.Parser C.Constraint
+constraintParser = do
+    form <- nameParser
+    case form of
+        "equal" -> (\paths -> C.Constraint (EqConstraints [PathEClass $ Set.fromList paths]) C.Top) <$> arguments pathParser
+        "impossible" -> pure $ C.Constraint EqContradiction C.Top
+        "constraint" -> pairArguments C.Constraint classesParser guardParser
+        _ -> C.Constraint (EqConstraints []) <$> guardAfterName form
+
+-- | Read stored equality classes without combining or removing them.
+classesParser :: A.Parser EqConstraints
+classesParser = do
+    impossible <- startsKeyword "impossible"
+    if impossible
+        then keyword "impossible" $> EqContradiction
+        else EqConstraints <$> bracketed (PathEClass . Set.fromList <$> bracketed pathParser)
+
+-- | Retain invalid stored paths, but reject indexes outside the machine range.
+pathParser :: A.Parser Path
+pathParser = Path <$> bracketed index
+  where
+    index = do
+        value <- integerParser
+        when (value < toInteger (minBound :: Int) || value > toInteger (maxBound :: Int)) $
+            fail "child index is outside the Int range"
+        pure $ ChildIndex $ fromInteger value
+
+-- | Parse all five templates, distinguishing an unquoted hole from a symbol.
+templateParser :: A.Parser (Template Symbol)
 templateParser = do
     wildcard <- startsKeyword "_"
     if wildcard
@@ -315,16 +596,16 @@ templateParser = do
                 '('
                 ( do
                     (children, prefix) <- templateArguments
-                    pure $ Codec.tag (if prefix then "any-prefix" else "any-node") [toJSON children]
+                    pure $ if prefix then AnyPrefix children else AnyNode children
                 )
-                (Codec.tag "hole" [])
+                Hole
         else do
             symbol <- symbolParser
             (children, prefix) <- ifNext '(' templateArguments ([], False)
-            pure $ Codec.tag (if prefix then "prefix" else "node") [symbol, toJSON children]
+            pure $ if prefix then TemplatePrefix symbol children else TemplateNode symbol children
 
--- | Parse ordered children and an optional final prefix marker.
-templateArguments :: A.Parser ([Value], Bool)
+-- | Read ordered template children and an optional final prefix marker.
+templateArguments :: A.Parser ([Template Symbol], Bool)
 templateArguments = parenthesized $ go []
   where
     go reversed = do
@@ -340,48 +621,83 @@ templateArguments = parenthesized $ go []
         when (next == Just ')') $ fail "expected a template or prefix marker after comma"
         go reversed
 
--- | Reject duplicate names before a map could discard their earlier values.
-namedObject :: String -> [(Text, Value)] -> A.Parser Value
-namedObject role entries = do
+-- | Reject duplicate named facts or exclusions before constructing a map.
+namedMap :: String -> [(Text, value)] -> A.Parser (Map.Map Text value)
+namedMap role entries = do
     foldM_ distinct Set.empty $ map fst entries
-    pure $ object [Key.fromText name .= value | (name, value) <- entries]
+    pure $ Map.fromList entries
   where
     distinct seen name
         | Set.member name seen = fail ("duplicate " <> role <> " name: " <> show name)
         | otherwise = pure $ Set.insert name seen
 
--- | Parse a quoted name or an ASCII identifier.
+-- | Read an unquoted label or a quoted Unicode string.
 nameParser :: A.Parser Text
 nameParser = lexeme $ do
     next <- A.peekChar
-    if next == Just '"'
+    if next == Just '"' then quotedName else A.takeWhile1 nameCharacter <?> "name or quoted label"
+
+-- | Read escaped strings without a second data-format dependency.
+quotedName :: A.Parser Text
+quotedName = A.char '"' *> chunks []
+  where
+    chunks reversed = do
+        next <- A.peekChar
+        case next of
+            Nothing -> fail "unterminated quoted label"
+            Just '"' -> A.anyChar $> Text.concat (reverse reversed)
+            Just '\\' -> do
+                _ <- A.anyChar
+                escaped <- escape
+                chunks (escaped : reversed)
+            Just character
+                | ord character < 32 -> fail "unescaped control character in quoted label"
+                | otherwise -> do
+                    plain <- A.takeWhile1 (\c -> c /= '"' && c /= '\\' && ord c >= 32)
+                    chunks (plain : reversed)
+    escape = do
+        character <- A.anyChar
+        case character of
+            '"' -> pure "\""
+            '\\' -> pure "\\"
+            '/' -> pure "/"
+            'b' -> pure "\b"
+            'f' -> pure "\f"
+            'n' -> pure "\n"
+            'r' -> pure "\r"
+            't' -> pure "\t"
+            'u' -> Text.singleton <$> unicodeEscape
+            _ -> fail "unknown string escape"
+
+-- | Decode one four-digit Unicode escape, including a valid surrogate pair.
+unicodeEscape :: A.Parser Char
+unicodeEscape = do
+    code <- hexQuad
+    if code >= 0xd800 && code <= 0xdbff
         then do
-            value <- jsonNoDup'
-            case value of
-                String name -> pure name
-                _ -> fail "expected a quoted name"
-        else identifier
+            _ <- A.string "\\u"
+            low <- hexQuad
+            unless (low >= 0xdc00 && low <= 0xdfff) $ fail "expected a low surrogate"
+            pure $ chr $ 0x10000 + (code - 0xd800) * 0x400 + low - 0xdc00
+        else do
+            when (code >= 0xdc00 && code <= 0xdfff) $ fail "unexpected low surrogate"
+            pure $ chr code
+  where
+    hexQuad = do
+        digits <- A.take 4
+        case A.parseOnly (A.hexadecimal <* A.endOfInput) digits of
+            Left _ -> fail "expected four hexadecimal digits"
+            Right value -> pure value
 
--- | Read one raw JSON value with duplicate-key rejection.
-jsonParser :: A.Parser Value
-jsonParser = lexeme jsonNoDup'
+-- | The ASCII characters permitted in an unquoted label.
+nameCharacter :: Char -> Bool
+nameCharacter character = isAsciiLower character || isAsciiUpper character || isDigit character || character `elem` ['_', '-', '+']
 
--- | Read an identifier without consuming presentation whitespace.
-identifier :: A.Parser Text
-identifier = do
-    firstChar <- A.satisfy nameStart <?> "identifier or quoted name"
-    rest <- A.takeWhile nameContinue
-    pure $ Text.decodeUtf8 $ Bytes8.cons firstChar rest
+-- | Read a signed integer without silent machine overflow.
+integerParser :: A.Parser Integer
+integerParser = lexeme $ A.signed A.decimal
 
--- | The first ASCII character of an unquoted name.
-nameStart :: Char -> Bool
-nameStart character = character == '_' || isAsciiLower character || isAsciiUpper character
-
--- | A remaining ASCII character of an unquoted name.
-nameContinue :: Char -> Bool
-nameContinue character = nameStart character || isDigit character || character == '-'
-
--- | Consume ASCII whitespace and line comments between tokens.
+-- | Consume presentation whitespace and line comments.
 spaces :: A.Parser ()
 spaces =
     A.skipMany $
@@ -389,53 +705,65 @@ spaces =
             <|> (A.string "//" *> A.takeTill (== '\n') $> ())
 
 -- | Attach presentation whitespace to one token.
-lexeme :: A.Parser a -> A.Parser a
+lexeme :: A.Parser value -> A.Parser value
 lexeme parser = parser <* spaces
 
 -- | Require one punctuation token.
-token :: Bytes.ByteString -> A.Parser ()
-token spelling = lexeme (A.string spelling <?> ("expected " <> show (Bytes8.unpack spelling))) $> ()
+token :: Text -> A.Parser ()
+token spelling = lexeme (A.string spelling <?> ("expected " <> show spelling)) $> ()
 
--- | Require a complete keyword, not the prefix of an identifier.
-keyword :: Bytes.ByteString -> A.Parser ()
+-- | Require a complete keyword rather than a label prefix.
+keyword :: Text -> A.Parser ()
 keyword spelling = lexeme $ do
-    _ <- A.string spelling <?> ("keyword " <> show (Bytes8.unpack spelling))
+    _ <- A.string spelling <?> ("keyword " <> show spelling)
     next <- A.peekChar
-    when (maybe False nameContinue next) $ fail "expected keyword boundary"
+    when (maybe False nameCharacter next) $ fail "expected keyword boundary"
 
--- | Inspect a keyword without consuming it or hiding errors in its later body.
-startsKeyword :: Bytes.ByteString -> A.Parser Bool
+-- | Inspect a keyword without consuming it or hiding errors in its body.
+startsKeyword :: Text -> A.Parser Bool
 startsKeyword spelling = (lookAhead (keyword spelling) $> True) <|> pure False
 
--- | Parse an optional syntactic form only when its opening character is present.
-ifNext :: Char -> A.Parser a -> a -> A.Parser a
+-- | Read an optional form only when its opening character is present.
+ifNext :: Char -> A.Parser value -> value -> A.Parser value
 ifNext opening parser fallback = do
     next <- A.peekChar
     if next == Just opening then parser else pure fallback
 
--- | Parse parentheses around a complete body.
-parenthesized :: A.Parser a -> A.Parser a
+-- | Read parentheses around a complete body.
+parenthesized :: A.Parser value -> A.Parser value
 parenthesized parser = token "(" *> parser <* token ")"
 
--- | Read a comma-separated list without accepting a trailing comma.
-commaSeparated :: A.Parser a -> A.Parser [a]
-commaSeparated parser = do
+-- | Read two fixed operands separated by a comma.
+pairArguments :: (left -> right -> value) -> A.Parser left -> A.Parser right -> A.Parser value
+pairArguments constructor left right = parenthesized $ constructor <$> left <*> (token "," *> right)
+
+-- | Read a list in square brackets.
+bracketed :: A.Parser value -> A.Parser [value]
+bracketed parser = token "[" *> commaSeparated ']' parser <* token "]"
+
+-- | Read a list of constructor operands.
+arguments :: A.Parser value -> A.Parser [value]
+arguments parser = parenthesized $ commaSeparated ')' parser
+
+-- | Read an ordered list without accepting a trailing comma.
+commaSeparated :: Char -> A.Parser value -> A.Parser [value]
+commaSeparated closing parser = do
     next <- A.peekChar
-    if next == Just ')' then pure [] else go
+    if next == Just closing then pure [] else go
   where
     go = do
         value <- parser
         rest <- ifNext ',' (token "," *> go) []
         pure $ value : rest
 
--- | Read a block without treating an invalid item as its end.
-untilClose :: Char -> A.Parser a -> A.Parser [a]
+-- | Read a block without treating malformed items as its end.
+untilClose :: Char -> A.Parser value -> A.Parser [value]
 untilClose closing parser = do
     next <- A.peekChar
     if next == Just closing then pure [] else (:) <$> parser <*> untilClose closing parser
 
--- | Read all remaining statements without swallowing a malformed statement.
-untilEnd :: A.Parser a -> A.Parser [a]
+-- | Read remaining statements without swallowing syntax errors.
+untilEnd :: A.Parser value -> A.Parser [value]
 untilEnd parser = do
     next <- A.peekChar
     case next of
@@ -443,7 +771,7 @@ untilEnd parser = do
         Just _ -> (:) <$> parser <*> untilEnd parser
 
 -- | Read consecutive declarations with a known leading keyword.
-whileKeyword :: Bytes.ByteString -> A.Parser a -> A.Parser [a]
+whileKeyword :: Text -> A.Parser value -> A.Parser [value]
 whileKeyword spelling parser = do
     present <- startsKeyword spelling
     if present then (:) <$> parser <*> whileKeyword spelling parser else pure []
