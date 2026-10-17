@@ -60,3 +60,26 @@ rank replay. Compare bounded results with independently filtered source terms.
 Measure compiled graph size and instruction/allocation cost. Run the normal
 capped PR gates. Exact term addition and union, quoted update syntax, portable
 constructor types, and query checkpoints remain separate items.
+
+## Validation
+
+The fresh all-component build passes at `-O0 -Werror`. All six suites pass,
+with 798 examples and the hole-fit golden suite. Fourmolu, HLint, cabal-gild,
+and package metadata checks pass. The complete example runs both in memory
+and in separate save, query, restore, and query processes. Its count pairs are
+`[2,3]`, `[2,2]`, and `[3,3]`.
+
+Thirty ordinary and equality cases compare the compiled language through size
+seven with direct filtering of source terms. These cover every template form,
+root and subtree scope, overlapping patterns, combined scopes, recursive input,
+complete refined symbols, and absence of duplicate retained terms. Selective
+restoration retains other exclusions. Removing all exclusions restores the
+exact source value and source term order. Invalid source or exclusion updates
+return errors without changing the old value.
+
+A separate solver-backed check retains liquid guards while applying root,
+subtree, and prefix exclusions through size five. All source formula and guard
+fixtures round-trip with every template form. Eighteen malformed language files
+are rejected with the expected locations or source errors. The previous document
+probe still passes after sharing its JSON encoder. A writer and two fresh readers
+with different prior symbol interning reproduce the same ranks and rank inverses.

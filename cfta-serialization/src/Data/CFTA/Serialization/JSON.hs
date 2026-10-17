@@ -8,6 +8,8 @@ module Data.CFTA.Serialization.JSON (
     decodeGraph,
     encodeDocument,
     decodeDocument,
+    encodeLanguage,
+    decodeLanguage,
 ) where
 
 import Control.Monad (foldM_, unless)
@@ -51,8 +53,10 @@ import Data.CFTA.Equality.Constraint (
  )
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Index (ChildIndex (..))
+import qualified Data.CFTA.Language as Language
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText)
+import Data.CFTA.Template (Template (..))
 
 -- | A malformed document with its JSON path, or an invalid explicit graph.
 data DecodeError state
@@ -81,7 +85,11 @@ encodeGraph = encode . graphJSON "cfta-graph" (\constraint -> ["constraint" .= c
 
 -- | Encode named source facts and transition identities as @cfta-document@ version 1.
 encodeDocument :: (ToJSON state) => Document.Document state -> ByteString.ByteString
-encodeDocument = encode . graphJSON "cfta-document" annotationFields . Document.sourceGraph
+encodeDocument = encode . documentJSON
+
+-- | Encode the source value for document and language snapshots.
+documentJSON :: (ToJSON state) => Document.Document state -> Value
+documentJSON = graphJSON "cfta-document" annotationFields . Document.sourceGraph
   where
     annotationFields annotation =
         [ "name" .= Document.annotationName annotation
@@ -91,6 +99,73 @@ encodeDocument = encode . graphJSON "cfta-document" annotationFields . Document.
                 | (name, constraint) <- Map.toAscList $ Document.annotationFacts annotation
                 ]
         ]
+
+-- | Store editable source and named exclusions as @cfta-language@ version 1.
+encodeLanguage :: (ToJSON state) => Language.Language state -> ByteString.ByteString
+encodeLanguage language =
+    encode $
+        object
+            [ "format" .= ("cfta-language" :: Text)
+            , "version" .= (1 :: Int)
+            , "source" .= documentJSON (Language.source language)
+            , "exclusions"
+                .= object
+                    [Key.fromText name .= exclusionJSON exclusion | (name, exclusion) <- Map.toAscList $ Language.exclusions language]
+            ]
+
+-- | Read source and exclusions without lowering, pruning, or invoking a solver.
+decodeLanguage ::
+    (Ord state, FromJSON state) => ByteString.ByteString -> Either (DecodeError state) (Language.Language state)
+decodeLanguage input = do
+    ((initial, rows), exclusions) <- first (uncurry InvalidDocument) $ readJSON parseLanguage input
+    document <- first InvalidDefinition $ Document.mkDocument initial rows
+    pure $ Language.Language document exclusions
+  where
+    parseLanguage = fields "language" ["format", "version", "source", "exclusions"] $ \o -> do
+        format <- o .: "format"
+        unless (format == ("cfta-language" :: Text)) $ fail "expected format cfta-language" <?> Key "format"
+        version <- o .: "version"
+        unless (version == (1 :: Int)) $ fail "unsupported cfta-language version" <?> Key "version"
+        source <- field (parseGraphData "cfta-document" parseSourceTransition) o "source"
+        exclusions <-
+            field
+                (withObject "named exclusions" $ \values -> Map.fromList <$> traverse parseEntry (KeyMap.toList values))
+                o
+                "exclusions"
+        pure (source, exclusions)
+    parseEntry (name, value) = (,) (Key.toText name) <$> (parseExclusion value <?> Key name)
+
+-- | Encode the scope of an exclusion and its complete template.
+exclusionJSON :: Language.Exclusion -> Value
+exclusionJSON exclusion = case exclusion of
+    Language.AtRoot template -> tag "root" [templateJSON template]
+    Language.Anywhere template -> tag "anywhere" [templateJSON template]
+
+-- | Read one exclusion with an explicit scope.
+parseExclusion :: Value -> Parser Language.Exclusion
+parseExclusion = tagged "exclusion" $ \name args -> case (name, args) of
+    ("root", [template]) -> Language.AtRoot <$> at parseTemplate 1 template
+    ("anywhere", [template]) -> Language.Anywhere <$> at parseTemplate 1 template
+    _ -> fail "unknown exclusion tag or invalid operands"
+
+-- | Encode all template forms, including full refined symbols.
+templateJSON :: Template Symbol -> Value
+templateJSON template = case template of
+    Hole -> tag "hole" []
+    AnyNode children -> tag "any-node" [toJSON $ map templateJSON children]
+    TemplateNode symbol children -> tag "node" [symbolJSON symbol, toJSON $ map templateJSON children]
+    AnyPrefix children -> tag "any-prefix" [toJSON $ map templateJSON children]
+    TemplatePrefix symbol children -> tag "prefix" [symbolJSON symbol, toJSON $ map templateJSON children]
+
+-- | Read one exact or prefix template without changing its syntax.
+parseTemplate :: Value -> Parser (Template Symbol)
+parseTemplate = tagged "template" $ \name args -> case (name, args) of
+    ("hole", []) -> pure Hole
+    ("any-node", [children]) -> AnyNode <$> at (list parseTemplate) 1 children
+    ("node", [symbol, children]) -> TemplateNode <$> at parseSymbol 1 symbol <*> at (list parseTemplate) 2 children
+    ("any-prefix", [children]) -> AnyPrefix <$> at (list parseTemplate) 1 children
+    ("prefix", [symbol, children]) -> TemplatePrefix <$> at parseSymbol 1 symbol <*> at (list parseTemplate) 2 children
+    _ -> fail "unknown template tag or invalid operands"
 
 -- | Encode shared graph structure with the annotation fields of its format.
 graphJSON :: (ToJSON state) => Text -> (annotation -> [(Key, Value)]) -> FTA.FTA state Symbol annotation -> Value
