@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at proof checkpoint `17b9e2fe`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `c8272004`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -15,7 +15,9 @@ a family of theorems, with this schematic form for each operation P:
 The support predicate must describe initial inputs and resource limits.
 It must not assume successful completion. The specification must include
 the documented errors and validation order where the API returns errors.
-There is no completed single whole-library theorem.
+There is no completed single whole-library theorem. The largest mathematical
+gap is general recursive outer progress and repeated-pass convergence.
+Concrete public Haskell correspondence is a separate remaining obligation.
 
 The main observable contracts are:
 
@@ -42,11 +44,11 @@ interned core remains the construction and transformation path. Read
 | Exact Sized queries | Exact accepted size classes, finite class evaluation, counts, size-major enumeration, retained row order, and both distinct-term rank/unrank inverses. The finite carrier comes from validated raw graph keys. | Concrete host and solver adapters and complete public pipeline composition. See [Sized contracts](notes-sized-finite-keys.md). |
 | Interned construction | Repaired closed syntax has a finite constructor execution. Syntax includes binders and unions. Actual construction and field histories derive physical and semantic entry facts. | Concrete lazy Haskell publication, interning, and runtime correspondence. The word Ordinary in older module names does not by itself exclude binders. |
 | Normalized source callbacks | Actual source publication histories derive the unused stored-Mu body-to-ordinary law, including earlier warm winners. Nested raw source calls have equal ordered stripped alternatives under the stated finite coverage, freshness, noDeep, and actual cache-history premises. Actual native steps and traces now produce the causal publication history. Unused native returns preserve the current raw ordinary callback rows. | Recursive row occurrence transport through retained Mu and concrete runtime correspondence. The common heap of closed_compared comes from actual closed source construction. This is not raw record equality or general termination. |
-| Stored substitution | Recursive node-row matching constructs both plans with one exact Value. Initial Ready and available data construct both union-normalization/substitution orders with physical empty agreement and equal observations at every depth and fixed view. Actual parent construction preserves this relation, including row survival, full guards, and ordered children. Closed and open roots and nested Mu values remain included. | Connect the actual retained-Mu body and ordinary-probe writers through recursive reconstruction, root self filtering, smart cleanup, and warm winners. A checked filter counterexample shows that the relation and equal aggregate metadata still need literal immediate member provenance. See [constructor observations](notes-current-constructor-observations.md). |
+| Stored substitution | Recursive node-row matching constructs both plans with one exact Value. Initial Ready and available data construct both union-normalization/substitution orders with physical empty agreement, equal observations at every depth and fixed view, and exact literal root parts. Actual self filtering preserves those parts from the derived final heap. Actual parent construction preserves this relation, including row survival, full guards, and ordered children. Closed and open roots and nested Mu values remain included. | Derive the literal relation for the actual retained-Mu body and ordinary-probe writers, then compose smart cleanup and warm winners. General root self-filter congruence is proved for normal available roots with the same literal atoms and exact rows. See [literal provenance](notes-current-literal-union-provenance.md). |
 | Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
 | General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
-| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. | General node-busy exclusion still needs a compatible progress or owner-disjointness argument. The constructed case is not a general host schedule theorem. |
+| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. | General node-busy exclusion still needs a compatible progress or owner-disjointness argument across local combination and all active ancestors. The local descent fixture is a protocol prefix, not a reached general outer execution. |
 | Other library components | Checked language, equality, enumeration, arithmetic, union-find, memo, ranking, generation, and sampling results exist. Some source drivers and restricted adapters are complete. | Their remaining adapters and recursive callers do not yet form a complete current-library implementation theorem. See [API coverage](API-COVERAGE.md). |
 
 The finite ordinary result is in
@@ -87,21 +89,25 @@ origins. It assumes no future Required result. Read
    both actual calls with one exact result from initial Ready and available
    captures. Their pure structural relation is not yet derived for arbitrary
    retained Mu histories. Prior union normalization now has an actual
-   initial-input theorem with physical empty agreement and all finite
-   observations. Actual ordinary parents preserve that relation. Root self
-   filtering still needs literal immediate member provenance: equal free
-   and deep-name lists, equal depth, nonbare roots, and the relation do not
-   suffice. Compose the actual selected body and ordinary probe through
-   that filter, smart cleanup, fixed captures, and earlier warm winners.
-   Retain full guards, exact child survival, bare references, and epsilon
-   origins. Derive freshness and
+   initial-input theorem with physical empty agreement, all finite
+   observations, and exact literal reference and Mu atoms and complete rows.
+   Actual ordinary parents preserve the observation relation. Root self
+   filtering now preserves exact literal parts for normal available roots.
+   The initial theorem derives the required parts for the two union orders.
+   It does not derive them for arbitrary selected body and ordinary-probe
+   writers. Compose those actual writers through the filter, smart cleanup,
+   fixed captures, and earlier warm winners. Retain full guards, exact child
+   survival, bare references, and epsilon origins. Derive freshness and
    issued-reference transport from actual execution; four-table Grows does
    not supply the latter. Compose with native callbacks and protected edge
    histories on the same trace. Read
-   [constructor observations](notes-current-constructor-observations.md).
+   [literal provenance](notes-current-literal-union-provenance.md).
 2. Derive progress for actual outer-node children after parent returns and
    inherited combine/descent. The measure must respect physical memo keys,
-   or prove that a fresh request differs from every active owner. Ordinary
+   or prove that a fresh request differs from every active owner. Actual
+   immediate descent now strictly lowers the path height of a Ready live
+   nonempty inherited payload and changes its canonical identity. The full
+   proof must control local combination and all active ancestors. Ordinary
    height and maximum constrained depth do not give that measure. Then
    complete nonempty live child walks, ordered rows, ordinary node bodies,
    and the full mutual outer pass. Mu and union roots can be terminal while

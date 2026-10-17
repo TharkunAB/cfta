@@ -2,20 +2,20 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 21:15 CEST. Proof checkpoint is `17b9e2fe`.
-The full pinned Audit passes 3119 jobs and 68380 dependency checks.
-Initial Ready and available values now construct both union-normalization
-and stored-substitution orders with physical empty agreement and matching
-finite observations. Actual parent construction preserves that relation,
-including full guards, ordered children, and derived row survival.
-A checked source shows that this relation and equal aggregate metadata
-still do not make root self filtering congruent. Literal immediate union
-member provenance is required. The actual retained-Mu writer relation
-remains open. This proof boundary establishes no Haskell defect.
-No Haskell change is added. Field-pool repair `b9219b9e` remains merged and
-validated in source `c0cc8a05`. Read
-`lean/notes-current-constructor-observations.md` for the proof boundary.
-Keep this repair registry before historical failure reports.
+Current proof update: 2026-10-17 21:38 CEST. Proof checkpoint is `c8272004`.
+The full pinned Audit passes 3126 jobs and 68475 dependency checks.
+Initial Ready and available values now derive matching literal atoms and
+complete rows for both union-normalization/substitution orders. Actual root
+self filtering preserves those parts. The retained-Mu writer relation and
+smart cleanup remain open. Actual immediate inherited descent strictly
+lowers nonempty payload path height and changes its memo identity. General
+outer progress and repeated-pass convergence remain unproved.
+These proof results establish no new Haskell defect. No Haskell change is
+added. Field-pool repair `b9219b9e` remains merged and validated in source
+`c0cc8a05`. Read `lean/notes-current-literal-union-provenance.md`.
+Keep this repair registry before historical failure reports. Record each
+later repair with its failure, reproducer, paths, commit, checks, and upstream
+status so external work can use it.
 
 Audited source main is `c0cc8a05`, merged into `formalize` at `896b0a1c`.
 PR #64 adds drawn typing fields. PR #65 repairs the recursive field-pool
@@ -190,6 +190,41 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current literal union provenance and inherited descent
+
+Updated: 2026-10-17 21:38 CEST. Starting checkpoint is `82823d78`.
+Proof commit is `c8272004`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-literal-union-provenance.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, original availability, and replacement availability now
+construct both union-normalization/substitution orders with exact literal
+reference and Mu atoms and complete ordinary rows. Physical empty agreement
+and all finite observations remain. For every name, actual self filtering
+preserves equal literal parts. Both filters start independently in the
+derived final heap. No future output relation or completed call is assumed.
+
+Actual descent of a Ready live nonempty inherited payload strictly lowers
+its maximum class-path length and changes its canonical identity. This law
+covers cold and warm operations and separates immediate requests for the
+same node. New local combination and all active ancestors remain outside
+this local result. General outer progress and repeated-pass convergence
+remain the largest mathematical gap. The actual retained-Mu writer relation,
+smart cleanup, frontend/runtime adapters, and whole Haskell correspondence
+also remain open. Keep the full goal active.
+
+Full pinned Audit passes 3126 jobs and 68475 dependency checks under verified
+4 GiB maximum, 4 GiB high, zero swap, and 374 MiB peak. All seven new strict
+source logs are empty. Public checks and constructed cases are retained in
+`lean/restart-evidence/20261017-literal-union-provenance/`.
+All earlier proofs, counterexamples, repairs, drafts, evidence, stashes,
+other worktrees, and optimized code remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair with its reproducer, paths,
+commit, checks, and upstream status.
 
 ## Current physical empty agreement and parent construction
 
