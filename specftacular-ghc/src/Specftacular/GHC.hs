@@ -176,7 +176,15 @@ withGhcSignature imports declarations functions extras action = do
         let sig = Map.fromList (sigFunctions <> extraFunctions)
             types = Map.keys (Map.fromList [(t, ()) | t <- instanceTypes monomorphiseType sig <> instanceTypes id sig])
         table <- Map.fromList . catMaybes <$> traverse instanceOf types
-        action sig (`Map.lookup` table)
+        -- Each physical key has the same generator and equality source.
+        -- Ascending logical keys give a deterministic choice on collisions.
+        let physicalTable = Map.fromList [(physicalType t, inst) | (t, inst) <- Map.toAscList table]
+            resolve t = case Map.lookup t table of
+                Just inst -> Just inst
+                Nothing ->
+                    (\inst -> inst{inst_text = typeText t, inst_prefix = prefixOf t})
+                        <$> Map.lookup (physicalType t) physicalTable
+        action sig resolve
 
 {- | The unit of QuickCheck of the program: the package of the type of its
 generators.
@@ -224,6 +232,16 @@ skeletonOf typ = convert <$> erase (const Nothing) typ
     convert (Hectare.TCons "Unit" []) = TCons "()" []
     convert (Hectare.TCons "Pair" [a, b]) = TCons "(,)" [convert a, convert b]
     convert (Hectare.TCons name args) = TCons (Map.findWithDefault name (T.unpack name) names) (map convert args)
+
+{- | The physical type used by the session. This uses the carrier test of
+'sourceType' and keeps all other type constructors. Equal physical types
+therefore use the same compiled generator and equality expressions.
+-}
+physicalType :: TypeSkeleton -> TypeSkeleton
+physicalType t | t `elem` map fst carriers = typeSkeletonOf (Proxy :: Proxy Int)
+physicalType (TCons name args) = TCons name (map physicalType args)
+physicalType (TFun a b) = TFun (physicalType a) (physicalType b)
+physicalType t = t
 
 {- | A type as Haskell source, with each type constructor by its name
 without its module, and Int for each abstract carrier.
