@@ -1,0 +1,85 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:163:27: error: Application type mismatch: The argument
+  failed
+has type
+  (Outcome.failed fault✝ state✝).bind next = Outcome.failed fault after
+but is expected to have type
+  Outcome.failed fault✝ state✝ = Outcome.failed fault after
+in the application
+  Or.inl failed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:609:15: error: unexpected token 'prefix'; expected '(', ':=', '|' or term
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:609:15: error: Missing cases:
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:605:6: error: unsolved goals
+case h_3.inr
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width fuel : Nat
+ih :
+  ∀ (m : Nat),
+    m < fuel →
+      NodeFailureAt m ∧
+        BodyFailureAt m ∧ RowsFailureAt m ∧ DescendantsFailureAt m ∧ ChildrenFailureAt m ∧ WalkFailureAt m
+walkAt : WalkFailureAt fuel
+childrenAt : ChildrenFailureAt fuel
+g s r e p h m c n budget : Nat
+inherited : EqValue
+value : Edge
+before : Caller width
+handle : Nat
+after : Caller width
+valid : NodeValid before
+x✝ : Except String (Option EqValue)
+combined : EqValue
+observed :
+  (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited before.checked.operations).fst =
+    Except.ok (some combined)
+failed :
+  ((children fuel g s r e p h m c n budget combined value.children
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := before.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                      before.checked.operations).snd })
+            before.fourth before.merge)).bind
+      fun results after =>
+      Outcome.done (SourceCurrentAllocatedRawRebuild.edge value results after.checked).fst
+        (advance after (SourceCurrentAllocatedRawRebuild.edge value results after.checked).snd after.fourth
+          after.merge)) =
+    Outcome.failed (Fault.nodeMemo handle FlatMemoThunk.Observation.busy) after
+outputs : List Node
+middle : Caller width
+childDone :
+  children fuel g s r e p h m c n budget combined value.children
+      (advance before
+        (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+          { heap := before.checked.native.machine.heap,
+            equality :=
+              (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                  before.checked.operations).snd })
+        before.fourth before.merge) =
+    Outcome.done outputs middle
+impossible :
+  Outcome.done (SourceCurrentAllocatedRawRebuild.edge value outputs middle.checked).fst
+      (advance middle (SourceCurrentAllocatedRawRebuild.edge value outputs middle.checked).snd middle.fourth
+        middle.merge) =
+    Outcome.failed (Fault.nodeMemo handle FlatMemoThunk.Observation.busy) after
+⊢ Dispatch g s r e p h m c n budget (Phase.descendants fuel inherited value before) handle after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:574:16: error: unsolved goals
+case ind
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width fuel : Nat
+ih :
+  ∀ (m : Nat),
+    m < fuel →
+      NodeFailureAt m ∧
+        BodyFailureAt m ∧ RowsFailureAt m ∧ DescendantsFailureAt m ∧ ChildrenFailureAt m ∧ WalkFailureAt m
+walkAt : WalkFailureAt fuel
+childrenAt : ChildrenFailureAt fuel
+descendantsAt : DescendantsFailureAt fuel
+⊢ NodeFailureAt fuel ∧
+    BodyFailureAt fuel ∧ RowsFailureAt fuel ∧ DescendantsFailureAt fuel ∧ ChildrenFailureAt fuel ∧ WalkFailureAt fuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:609:23: error: unexpected identifier; expected prec
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-direct-5.source.lean:614:20: error: unexpected token ']'; expected ':'

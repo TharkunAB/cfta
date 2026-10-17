@@ -1,0 +1,112 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:46:29: error: Tactic `assumption` failed
+
+case empty
+Symbol Guard : Type
+captures : List (Value Symbol Guard)
+own : Reference
+fresh :
+  ¬own ∈
+      InternedFreeNameSemantics.evaluate (Syntax.binder true Syntax.empty)
+        (List.map InternedRootProfile.profile captures) (List.map Value.free captures)
+⊢ RootFresh Syntax.empty captures own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:46:29: error: Tactic `assumption` failed
+
+case node
+Symbol Guard : Type
+captures : List (Value Symbol Guard)
+own : Reference
+edges✝ : List (EdgeSyntax Symbol Guard)
+fresh :
+  ¬own ∈
+      InternedFreeNameSemantics.evaluate (Syntax.binder true (Syntax.node edges✝))
+        (List.map InternedRootProfile.profile captures) (List.map Value.free captures)
+⊢ RootFresh (Syntax.node edges✝) captures own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:46:29: error: Tactic `assumption` failed
+
+case binder
+Symbol Guard : Type
+captures : List (Value Symbol Guard)
+own : Reference
+smart✝ : Bool
+body✝ : Syntax Symbol Guard
+fresh :
+  ¬own ∈
+      InternedFreeNameSemantics.evaluate (Syntax.binder true (Syntax.binder smart✝ body✝))
+        (List.map InternedRootProfile.profile captures) (List.map Value.free captures)
+⊢ RootFresh (Syntax.binder smart✝ body✝) captures own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:49:16: error: Tactic `assumption` failed
+
+case var.zero
+Symbol Guard : Type
+captures : List (Value Symbol Guard)
+own : Reference
+fresh :
+  ¬own ∈
+      InternedFreeNameSemantics.evaluate (Syntax.binder true (Syntax.var 0))
+        (List.map InternedRootProfile.profile captures) (List.map Value.free captures)
+⊢ RootFresh (Syntax.var 0) captures own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:51:10: error: Type mismatch: After simplification, term
+  fresh
+ has type
+  ∀ (x : Unit ⊕ Reference),
+    x ∈ (Option.map (fun x => List.map Sum.inr x.free) captures[index]?).getD [] →
+      ¬(match x with
+          | Sum.inl val => none
+          | Sum.inr value => some value) =
+          some own
+but is expected to have type
+  ¬own ∈ (captures[index]?.getD Value.empty).free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:54:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case union
+Symbol Guard : Type
+captures : List (Value Symbol Guard)
+own : Reference
+members : List (Syntax Symbol Guard)
+fresh :
+  ¬own ∈
+      InternedFreeNameSemantics.evaluate (Syntax.binder true (Syntax.union members))
+        (List.map InternedRootProfile.profile captures) (List.map Value.free captures)
+⊢ RootFresh (Syntax.union members) captures own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:61:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:121:20: error: Type mismatch
+  free
+has type
+  BinderFree Syntax.empty
+but is expected to have type
+  BinderFree (rootErase Syntax.empty)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:121:20: error: Type mismatch
+  free
+has type
+  BinderFree (Syntax.node edges✝)
+but is expected to have type
+  BinderFree (rootErase (Syntax.node edges✝))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:122:33: error: Tactic `assumption` failed
+
+case var.zero
+Symbol Guard : Type
+free : BinderFree (Syntax.var 0)
+⊢ BinderFree (rootErase (Syntax.var 0))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:122:33: error: Tactic `assumption` failed
+
+case var.succ
+Symbol Guard : Type
+n✝ : Nat
+free : BinderFree (Syntax.var (n✝ + 1))
+⊢ BinderFree (rootErase (Syntax.var (n✝ + 1)))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:123:14: error: Tactic `cases` failed: major premise type is not an inductive type
+  BinderFree (Syntax.binder smart✝ body✝)
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case binder
+Symbol Guard : Type
+smart✝ : Bool
+body✝ : Syntax Symbol Guard
+free : BinderFree (Syntax.binder smart✝ body✝)
+⊢ BinderFree (rootErase (Syntax.binder smart✝ body✝))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:125:6: error: 'change' tactic failed, pattern
+  ManyBinderFree (List.map rootErase members)
+is not definitionally equal to target
+  BinderFree (rootErase (Syntax.union members))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-2.source.lean:134:0: warning: unused `termination_by`, function is not recursive

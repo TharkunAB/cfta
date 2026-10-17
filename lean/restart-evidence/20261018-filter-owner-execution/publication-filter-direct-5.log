@@ -1,0 +1,111 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:127:77: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.extra.unreachableTactic false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:205:79: error: Application type mismatch: The argument
+  value
+has type
+  Value Symbol Guard
+of sort `Type` but is expected to have type
+  Work ?m.16 ?m.17 ?m.18
+of sort `Type 1` in the application
+  Ordinary value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:220:2: error: Invalid target: Index in target's type is not a variable (consider using the `cases` tactic instead)
+  Value.reference own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:228:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261018-filter-owner-execution».«publication-filter-direct-5.source».0.MicroCFTA.SourceCurrentPublicationFilterSource.unchanged_parts`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:228:0: warning: `unchanged_parts` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:250:6: error: unsolved goals
+case cons.left
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+own : Reference
+first second : List (Value Symbol Guard)
+raw erased : Value Symbol Guard
+rest remaining : List (Value Symbol Guard)
+head :
+  (∀ (atom : Value Symbol Guard), Literal erased atom ↔ Literal raw atom ∧ atom ≠ Value.reference own) ∧
+    ∀ (row : EdgeValue Symbol Guard), Row erased row ↔ Row raw row
+tail :
+  All₂
+    (fun raw erased =>
+      (∀ (atom : Value Symbol Guard), Literal erased atom ↔ Literal raw atom ∧ atom ≠ Value.reference own) ∧
+        ∀ (row : EdgeValue Symbol Guard), Row erased row ↔ Row raw row)
+    rest remaining
+ih :
+  (∀ (atom : Value Symbol Guard),
+      (∃ erased, erased ∈ remaining ∧ Literal erased atom) ↔
+        (∃ raw, raw ∈ rest ∧ Literal raw atom) ∧ atom ≠ Value.reference own) ∧
+    ∀ (row : EdgeValue Symbol Guard), (∃ erased, erased ∈ remaining ∧ Row erased row) ↔ ∃ raw, raw ∈ rest ∧ Row raw row
+atom : Value Symbol Guard
+⊢ (∃ erased_1, erased_1 = erased ∧ Literal erased_1 atom ∨ erased_1 ∈ remaining ∧ Literal erased_1 atom) ↔
+    (∃ raw_1, raw_1 = raw ∧ Literal raw_1 atom ∨ raw_1 ∈ rest ∧ Literal raw_1 atom) ∧ atom ≠ Value.reference own
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:247:52: warning: This simp argument is unused:
+  and_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.not_mem_nil, exists_false, false_and, iff_self, implies_true, and_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:251:33: warning: This simp argument is unused:
+  exists_eq_or_imp
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.mem_cons, head.1 atom, ih.1 atom, or_and_right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:251:50: warning: This simp argument is unused:
+  head.1 atom
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.mem_cons, exists_eq_or_imp, ih.1 atom, or_and_right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:251:62: warning: This simp argument is unused:
+  ih.1 atom
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.mem_cons, exists_eq_or_imp, head.1 atom, or_and_right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:290:10: error: Tactic `apply` failed: could not unify the type of `fresh`
+  RootFresh (Syntax.var (index + 1)) captures own
+with the goal
+  False
+
+case var.succ
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+captures : List (Value Symbol Guard)
+own : Reference
+common : InternedConstructorTemplates.State Symbol Guard
+context : Context common (Value.reference own :: captures)
+index : Nat
+free : BinderFree (Syntax.var (index + 1))
+fresh : RootFresh (Syntax.var (index + 1)) captures own
+right✝¹ right✝ : True
+present : Literal (captures[index]?.getD Value.empty) (Value.reference own)
+⊢ False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:298:23: error(lean.unknownIdentifier): Unknown identifier `node_result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/publication-filter-direct-5.source.lean:333:22: error: Application type mismatch: The argument
+  fun expression included => children expression (List.mem_cons_of_mem child included)
+has type
+  ∀ (expression : Syntax Symbol Guard),
+    expression ∈ rest →
+      ∀ (first second : Value Symbol Guard),
+        build expression (Value.reference own :: captures) common = Outcome.done first common →
+          build (rootErase expression) (Value.reference own :: captures) common = Outcome.done second common →
+            (∀ (atom : Value Symbol Guard), Literal second atom ↔ Literal first atom ∧ atom ≠ Value.reference own) ∧
+              ∀ (row : EdgeValue Symbol Guard), Row second row ↔ Row first row
+of sort `Prop` but is expected to have type
+  List (Value Symbol Guard)
+of sort `Type` in the application
+  ih fun expression included => children expression (List.mem_cons_of_mem child included)

@@ -1,0 +1,2399 @@
+@MicroCFTA.SourceCurrentStoredLiteralCongruence.warm : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (first second left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard common →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common first →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common second →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common environment →
+          @MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard first second →
+            @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common) →
+              @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common) →
+                @MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right
+theorem MicroCFTA.SourceCurrentStoredLiteralCongruence.warm : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (first second left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard common →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common first →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common second →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common environment →
+          @MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard first second →
+            @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common) →
+              @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common) →
+                @MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] first second
+    left right environment common ready firstAvailable secondAvailable replacements parts firstDone secondDone =>
+  have firstParts :=
+    @MicroCFTA.SourceCurrentStoredLiteralCongruence.raw_parts✝ Symbol Guard inst first left environment common ready
+      firstAvailable replacements firstDone;
+  have secondParts :=
+    @MicroCFTA.SourceCurrentStoredLiteralCongruence.raw_parts✝ Symbol Guard inst second right environment common ready
+      secondAvailable replacements secondDone;
+  @And.intro
+    (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+        (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+    (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+    (fun atom =>
+      @Eq.mpr.{0}
+        (Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+          (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+        (Iff
+          (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+            atom)
+          (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+            (Iff
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+                atom)
+              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom)))
+          (@congrArg.{1, 1} Prop Prop (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+              atom)
+            (fun _a => Iff _a (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+            (@propext (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+                atom)
+              (@And.left
+                (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+                    (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                      first atom))
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+                    (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                      first row))
+                firstParts atom))))
+        (@Eq.mpr.{0}
+          (Iff
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+              atom)
+            (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+          (Iff
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+              atom)
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common second
+              atom))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (Iff
+                (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                  first atom)
+                (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom))
+              (Iff
+                (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                  first atom)
+                (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                  second atom)))
+            (@congrArg.{1, 1} Prop Prop (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom)
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                second atom)
+              (fun _a =>
+                Iff
+                  (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                    first atom)
+                  _a)
+              (@propext (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom)
+                (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                  second atom)
+                (@And.left
+                  (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom)
+                      (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment
+                        common second atom))
+                  (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row)
+                      (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                        second row))
+                  secondParts atom))))
+          (@Iff.intro
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common first
+              atom)
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common second
+              atom)
+            (fun a =>
+              @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun source =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom)))
+                (fun x =>
+                  @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                    second atom)
+                a fun source h =>
+                @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                      second atom)
+                  h fun literal right =>
+                  @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun output =>
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                    (fun x =>
+                      @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment
+                        common second atom)
+                    right fun output h =>
+                    @And.casesOn.{0}
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom)
+                      (fun x =>
+                        @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment
+                          common second atom)
+                      h fun called found =>
+                      @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun source =>
+                          And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                              And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                    environment common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom)))
+                        source
+                        (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                          (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                            And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                          (@Iff.mp (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                            (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                            (@And.left
+                              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                                Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first atom)
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second atom))
+                              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first row)
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second row))
+                              parts source)
+                            literal)
+                          (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (fun output =>
+                              And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                    environment common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                            output
+                            (@And.intro
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom) called
+                              found))))
+            fun a =>
+            @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun source =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom)))
+              (fun x =>
+                @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                  first atom)
+              a fun source h =>
+              @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                        common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                    (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                (fun x =>
+                  @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                    first atom)
+                h fun literal right =>
+                @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun output =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                      first atom)
+                  right fun output h =>
+                  @And.casesOn.{0}
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                        common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                    (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom)
+                    (fun x =>
+                      @MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment
+                        common first atom)
+                    h fun called found =>
+                    @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun source =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                          (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                            And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom)))
+                      source
+                      (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                        (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                          And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                environment common)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                            (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                        (@Iff.mpr (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                          (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                          (@And.left
+                            (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                              Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first atom)
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second atom))
+                            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                              Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first row)
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second row))
+                            parts source)
+                          literal)
+                        (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (fun output =>
+                            And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom))
+                          output
+                          (@And.intro
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                environment common)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                            (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard output atom) called
+                            found))))))
+    fun row =>
+    @Eq.mpr.{0}
+      (Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+      (Iff (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+            (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+          (Iff
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+            (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row)))
+        (@congrArg.{1, 1} Prop Prop (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+          (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+          (fun _a => Iff _a (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+          (@propext (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+            (@And.right
+              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard left atom)
+                  (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                    first atom))
+              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard left row)
+                  (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                    row))
+              firstParts row))))
+      (@Eq.mpr.{0}
+        (Iff (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+          (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+        (Iff (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+          (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second row))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (Iff
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                row)
+              (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row))
+            (Iff
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                row)
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second
+                row)))
+          (@congrArg.{1, 1} Prop Prop (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row)
+            (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second row)
+            (fun _a =>
+              Iff
+                (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                  row)
+                _a)
+            (@propext (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row)
+              (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second
+                row)
+              (@And.right
+                (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard right atom)
+                    (@MicroCFTA.SourceCurrentStoredLiteralCongruence.LiteralOutput✝ Symbol Guard inst environment common
+                      second atom))
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard right row)
+                    (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                      second row))
+                secondParts row))))
+        (@Iff.intro
+          (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+          (@MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second row)
+          (fun a =>
+            @Or.casesOn
+              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun source =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun source =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                  (And
+                    (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source
+                      row)
+                    (@Eq.{1} Bool
+                      (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                      Bool.true)))
+              (fun x =>
+                @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second
+                  row)
+              a
+              (fun h =>
+                @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun source =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                      (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                              environment common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                          (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                      second row)
+                  h fun source h =>
+                  @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                    (fun x =>
+                      @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                        second row)
+                    h fun literal right =>
+                    @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun output =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                              environment common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                          (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                      (fun x =>
+                        @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                          second row)
+                      right fun output h =>
+                      @And.casesOn.{0}
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)
+                        (fun x =>
+                          @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment
+                            common second row)
+                        h fun called found =>
+                        @Or.inl
+                          (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun source =>
+                            And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                      environment common)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                          (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun source =>
+                            And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                              (And
+                                (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment
+                                  common source row)
+                                (@Eq.{1} Bool
+                                  (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                      fun child =>
+                                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                        MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                                  Bool.true)))
+                          (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (fun source =>
+                              And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                                  And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        source environment common)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                    (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                            source
+                            (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                      environment common)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                              (@Iff.mp (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                                (@And.left
+                                  (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                                    Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first atom)
+                                      (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second atom))
+                                  (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                    Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first row)
+                                      (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second row))
+                                  parts source)
+                                literal)
+                              (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (fun output =>
+                                  And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        source environment common)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                    (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                                output
+                                (@And.intro
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                      environment common)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row) called
+                                  found)))))
+              fun h =>
+              @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (fun source =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                    (And
+                      (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source
+                        row)
+                      (@Eq.{1} Bool
+                        (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                        Bool.true)))
+                (fun x =>
+                  @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common second
+                    row)
+                h fun source h =>
+                @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                  (And
+                    (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source
+                      row)
+                    (@Eq.{1} Bool
+                      (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                      Bool.true))
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                      second row)
+                  h fun part right =>
+                  @And.casesOn.{0}
+                    (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source
+                      row)
+                    (@Eq.{1} Bool
+                      (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                      Bool.true)
+                    (fun x =>
+                      @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                        second row)
+                    right fun called live =>
+                    @Or.inr
+                      (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun source =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                          (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                            And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                              (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                      (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun source =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                          (And
+                            (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                              source row)
+                            (@Eq.{1} Bool
+                              (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                  fun child =>
+                                  @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                    MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                              Bool.true)))
+                      (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (fun source =>
+                          And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                            (And
+                              (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                                source row)
+                              (@Eq.{1} Bool
+                                (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                    fun child =>
+                                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                      MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                                Bool.true)))
+                        source
+                        (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                          (And
+                            (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                              source row)
+                            (@Eq.{1} Bool
+                              (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                  fun child =>
+                                  @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                    MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                              Bool.true))
+                          (@Iff.mp (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                            (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                            (@And.right
+                              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                                Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first atom)
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second atom))
+                              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first row)
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second row))
+                              parts source)
+                            part)
+                          (@And.intro
+                            (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                              source row)
+                            (@Eq.{1} Bool
+                              (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                  fun child =>
+                                  @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                    MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                              Bool.true)
+                            called live))))
+          fun a =>
+          @Or.casesOn
+            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun source =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                        common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                    (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun source =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                (And
+                  (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source row)
+                  (@Eq.{1} Bool
+                    (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                    Bool.true)))
+            (fun x =>
+              @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first row)
+            a
+            (fun h =>
+              @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun source =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                (fun x =>
+                  @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                    row)
+                h fun source h =>
+                @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                      first row)
+                  h fun literal right =>
+                  @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun output =>
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                    (fun x =>
+                      @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                        first row)
+                    right fun output h =>
+                    @And.casesOn.{0}
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)
+                      (fun x =>
+                        @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                          first row)
+                      h fun called found =>
+                      @Or.inl
+                        (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun source =>
+                          And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                              And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                    environment common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                        (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun source =>
+                          And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                            (And
+                              (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                                source row)
+                              (@Eq.{1} Bool
+                                (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                    fun child =>
+                                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                      MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                                Bool.true)))
+                        (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (fun source =>
+                            And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                      environment common)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                          source
+                          (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                              And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                    environment common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                            (@Iff.mpr (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                              (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second source)
+                              (@And.left
+                                (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                                  Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first atom)
+                                    (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second atom))
+                                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                  Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first row)
+                                    (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second row))
+                                parts source)
+                              literal)
+                            (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (fun output =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                      environment common)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                  (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row))
+                              output
+                              (@And.intro
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                    environment common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row) called found)))))
+            fun h =>
+            @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (fun source =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                  (And
+                    (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source
+                      row)
+                    (@Eq.{1} Bool
+                      (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                      Bool.true)))
+              (fun x =>
+                @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                  row)
+              h fun source h =>
+              @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                (And
+                  (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source row)
+                  (@Eq.{1} Bool
+                    (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                    Bool.true))
+                (fun x =>
+                  @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common first
+                    row)
+                h fun part right =>
+                @And.casesOn.{0}
+                  (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common source row)
+                  (@Eq.{1} Bool
+                    (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) fun child =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                    Bool.true)
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentStoredLiteralCongruence.RowOutput✝ Symbol Guard inst environment common
+                      first row)
+                  right fun called live =>
+                  @Or.inr
+                    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun source =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first source)
+                        (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun output =>
+                          And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst source
+                                environment common)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                            (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard output row)))
+                    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun source =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                        (And
+                          (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                            source row)
+                          (@Eq.{1} Bool
+                            (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                fun child =>
+                                @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                  MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                            Bool.true)))
+                    (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (fun source =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                          (And
+                            (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                              source row)
+                            (@Eq.{1} Bool
+                              (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                  fun child =>
+                                  @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                    MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                              Bool.true)))
+                      source
+                      (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                        (And
+                          (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                            source row)
+                          (@Eq.{1} Bool
+                            (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                fun child =>
+                                @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                  MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                            Bool.true))
+                        (@Iff.mpr (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first source)
+                          (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second source)
+                          (@And.right
+                            (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                              Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard first atom)
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard second atom))
+                            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                              Iff (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard first row)
+                                (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard second row))
+                            parts source)
+                          part)
+                        (@And.intro
+                          (@MicroCFTA.SourceCurrentStoredNodeExpansion.RowCalls Symbol Guard inst environment common
+                            source row)
+                          (@Eq.{1} Bool
+                            (@List.any.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                                fun child =>
+                                @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard child)
+                                  MicroCFTA.InternedBinderProtocol.NodeRef.empty).not
+                            Bool.true)
+                          called live)))))
+'MicroCFTA.SourceCurrentStoredLiteralCongruence.warm' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredLiteralCongruence.initial : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before first →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before second →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+          @MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard first second →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                          before)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                            environment middle)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                              environment after)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                environment after)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                              (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before
+                                          middle))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle
+                                            after))
+                                        (And
+                                          (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                          (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst
+                                            left right)))))))))))
+theorem MicroCFTA.SourceCurrentStoredLiteralCongruence.initial : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before first →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before second →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+          @MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard first second →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                          before)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                            environment middle)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                              environment after)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                environment after)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                              (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before
+                                          middle))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle
+                                            after))
+                                        (And
+                                          (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                          (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst
+                                            left right))))))))))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] first second
+    environment before ready firstAvailable secondAvailable replacements parts =>
+  @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (fun result =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+              (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before after)))))
+    (fun x =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+              And
+                (@Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                    before)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                      middle)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                        after)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                          after)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before middle))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle
+                                      after))
+                                  (And (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst left
+                                      right))))))))))))
+    (@MicroCFTA.SourceCurrentStoredReconstruction.execute Symbol Guard inst first environment before ready
+      firstAvailable replacements)
+    fun left h =>
+    @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+              (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before after)))))
+      (fun x =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                      before)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                        middle)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                          after)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                            environment after)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before
+                                      middle))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle
+                                        after))
+                                    (And (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                      (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst left
+                                        right))))))))))))
+      h fun middle h =>
+      @And.casesOn.{0}
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment before)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard middle left)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before middle))))
+        (fun x =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                        before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                          middle)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                            environment after)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                              environment after)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before
+                                        middle))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle
+                                          after))
+                                      (And (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                        (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst left
+                                          right))))))))))))
+        h fun firstDone right =>
+        @And.casesOn.{0} (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard middle left)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before middle)))
+          (fun x =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first environment
+                          before)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                            environment middle)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                              environment after)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                environment after)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                              (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before
+                                          middle))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle
+                                            after))
+                                        (And
+                                          (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                          (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst
+                                            left right))))))))))))
+          right fun firstKept right =>
+          @And.casesOn.{0} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard middle left)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before middle))
+            (fun x =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                      And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                            environment before)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                              environment middle)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                environment after)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                            (And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                  environment after)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                              (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before
+                                            middle))
+                                        (And
+                                          (Nonempty.{1}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                              middle after))
+                                          (And
+                                            (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left right)
+                                            (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst
+                                              left right))))))))))))
+            right fun leftAvailable firstHistory =>
+            @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun result =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                        middle)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle after)))))
+              (fun x =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                              environment before)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                environment middle)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                            (And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                  environment after)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                              (And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                    environment after)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                        (And
+                                          (Nonempty.{1}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                              before middle))
+                                          (And
+                                            (Nonempty.{1}
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                middle after))
+                                            (And
+                                              (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left
+                                                right)
+                                              (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard inst
+                                                left right))))))))))))
+              (@MicroCFTA.SourceCurrentStoredReconstruction.execute Symbol Guard inst second environment middle
+                (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready Symbol Guard before middle firstKept)
+                (@MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard before middle firstKept second
+                  secondAvailable)
+                fun name value found =>
+                @MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard before middle firstKept value
+                  (replacements name value found))
+              fun right h =>
+              @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (fun after =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                        middle)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle after)))))
+                (fun x =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                          And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                environment before)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                            (And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                  environment middle)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                              (And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                    environment after)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                (And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                      environment after)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                          (And
+                                            (Nonempty.{1}
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                before middle))
+                                            (And
+                                              (Nonempty.{1}
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                  middle after))
+                                              (And
+                                                (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left
+                                                  right)
+                                                (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard
+                                                  inst left right))))))))))))
+                h fun after h =>
+                @And.casesOn.{0}
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second environment
+                      middle)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                      (Nonempty.{1}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle after))))
+                  (fun x =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                            And
+                              (@Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                  environment before)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                              (And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                    environment middle)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                (And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                      environment after)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        second environment after)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                            (And
+                                              (Nonempty.{1}
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                  before middle))
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    middle after))
+                                                (And
+                                                  (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard left
+                                                    right)
+                                                  (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol Guard
+                                                    inst left right))))))))))))
+                  h fun secondDone right_1 =>
+                  @And.casesOn.{0} (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                      (Nonempty.{1}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle after)))
+                    (fun x =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                              And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                    environment before)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                (And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                      environment middle)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        first environment after)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          second environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right))))))))))))
+                    right_1 fun secondKept right_2 =>
+                    @And.casesOn.{0} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                      (Nonempty.{1}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst middle after))
+                      (fun x =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+                          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                      environment before)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        second environment middle)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          first environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            second environment after)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                              (And
+                                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst before middle))
+                                                  (And
+                                                    (Nonempty.{1}
+                                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                        inst middle after))
+                                                    (And
+                                                      (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                        left right)
+                                                      (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                        Guard inst left right))))))))))))
+                      right_2 fun rightAvailable secondHistory =>
+                      have kept :=
+                        @MicroCFTA.SourceEqualityRequiredCache.Keeps.trans Symbol Guard before middle after firstKept
+                          secondKept;
+                      have firstWarm :=
+                        @MicroCFTA.InternedFreshOrdinaryReplay.build_replay Symbol Guard inst
+                          (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) first)
+                          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment)
+                            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                          before after left middle
+                          (@MicroCFTA.InternedRecordCoherence.Coherent.valid Symbol Guard before
+                            (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard before
+                              (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard before
+                                (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard before
+                                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@And.left
+                                    (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard before
+                                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard before)
+                                    (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard before
+                                      ready))))))
+                          firstDone
+                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps.growth Symbol Guard middle after secondKept);
+                      have secondWarm :=
+                        @MicroCFTA.InternedFreshOrdinaryReplay.build_replay Symbol Guard inst
+                          (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) second)
+                          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment)
+                            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))
+                          middle after right after
+                          (@MicroCFTA.InternedRecordCoherence.Coherent.valid Symbol Guard middle
+                            (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard middle
+                              (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard middle
+                                (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard middle
+                                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@And.left
+                                    (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard middle
+                                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard middle)
+                                    (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard middle
+                                      (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready Symbol Guard before middle
+                                        firstKept)))))))
+                          secondDone (@MicroCFTA.InternedConstructorTemplates.grows_refl Symbol Guard after);
+                      have resultParts :=
+                        @MicroCFTA.SourceCurrentStoredLiteralCongruence.warm Symbol Guard inst first second left right
+                          environment after
+                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready Symbol Guard middle after secondKept)
+                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard before after kept first
+                            firstAvailable)
+                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard before after kept second
+                            secondAvailable)
+                          (fun name value found =>
+                            @MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard before after kept value
+                              (replacements name value found))
+                          parts firstWarm secondWarm;
+                      have finalLeft :=
+                        @MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard middle after secondKept left
+                          leftAvailable;
+                      have related :=
+                        @MicroCFTA.SourceCurrentLiteralPartsObservations.related Symbol Guard inst after after
+                          (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard after
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@And.left
+                              (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard after
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after)
+                              (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard after
+                                (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready Symbol Guard middle after
+                                  secondKept))))
+                          (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard after
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@And.left
+                              (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard after
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after)
+                              (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard after
+                                (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready Symbol Guard middle after
+                                  secondKept))))
+                          left right finalLeft rightAvailable resultParts;
+                      @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun left =>
+                          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                      environment before)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        second environment middle)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          first environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            second environment after)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                              (And
+                                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst before middle))
+                                                  (And
+                                                    (Nonempty.{1}
+                                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                        inst middle after))
+                                                    (And
+                                                      (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                        left right)
+                                                      (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                        Guard inst left right))))))))))))
+                        left
+                        (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                          (fun middle =>
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                      environment before)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        second environment middle)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          first environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            second environment after)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                              (And
+                                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst before middle))
+                                                  (And
+                                                    (Nonempty.{1}
+                                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                        inst middle after))
+                                                    (And
+                                                      (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                        left right)
+                                                      (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                        Guard inst left right))))))))))))
+                          middle
+                          (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (fun right =>
+                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                      environment before)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        second environment middle)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          first environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            second environment after)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                              (And
+                                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst before middle))
+                                                  (And
+                                                    (Nonempty.{1}
+                                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                        inst middle after))
+                                                    (And
+                                                      (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                        left right)
+                                                      (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                        Guard inst left right))))))))))))
+                            right
+                            (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                              (fun after =>
+                                And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                      environment before)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        second environment middle)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          first environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            second environment after)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                              (And
+                                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst before middle))
+                                                  (And
+                                                    (Nonempty.{1}
+                                                      (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                        inst middle after))
+                                                    (And
+                                                      (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                        left right)
+                                                      (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                        Guard inst left right))))))))))))
+                              after
+                              (@And.intro
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst first
+                                    environment before)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+                                (And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                      environment middle)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        first environment after)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          second environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right)))))))))))
+                                firstDone
+                                (@And.intro
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst second
+                                      environment middle)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        first environment after)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          second environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right))))))))))
+                                  secondDone
+                                  (@And.intro
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        first environment after)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left after))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          second environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right)))))))))
+                                    firstWarm
+                                    (@And.intro
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          second environment after)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+                                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right))))))))
+                                      secondWarm
+                                      (@And.intro
+                                        (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right)))))))
+                                        firstKept
+                                        (@And.intro
+                                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard middle after)
+                                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right))))))
+                                          secondKept
+                                          (@And.intro
+                                            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after left)
+                                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right)))))
+                                            finalLeft
+                                            (@And.intro
+                                              (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after right)
+                                              (And
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right))))
+                                              rightAvailable
+                                              (@And.intro
+                                                (Nonempty.{1}
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                    before middle))
+                                                (And
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right)))
+                                                firstHistory
+                                                (@And.intro
+                                                  (Nonempty.{1}
+                                                    (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard
+                                                      inst middle after))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right))
+                                                  secondHistory
+                                                  (@And.intro
+                                                    (@MicroCFTA.SourceCurrentLiteralRootParts.SameParts Symbol Guard
+                                                      left right)
+                                                    (@MicroCFTA.SourceCurrentOpenObservationSurvival.Related Symbol
+                                                      Guard inst left right)
+                                                    resultParts related))))))))))))))
+'MicroCFTA.SourceCurrentStoredLiteralCongruence.initial' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

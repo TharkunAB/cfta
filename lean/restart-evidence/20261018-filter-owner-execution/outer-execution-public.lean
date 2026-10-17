@@ -1,0 +1,101 @@
+import MicroCFTA.SourceCurrentOuterExecutionAncestry
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.NodeValid
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.NodeValid
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.NodeValid
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.node_evaluate
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.node_evaluate
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.node_evaluate
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.body_rows
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.body_rows
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.body_rows
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_edge
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_edge
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_edge
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_tail
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_tail
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_tail
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.descendants_children
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.descendants_children
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.descendants_children
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.children_walk
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.children_walk
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.children_walk
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.walk_head
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.walk_head
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.walk_head
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.walk_tail
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.walk_tail
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.walk_tail
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.refl
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.refl
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.refl
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.snoc
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.snoc
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.snoc
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.trans
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.trans
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.trans
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.valid
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.valid
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.valid
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.running
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.running
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.running
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Ancestor
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Ancestor
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Ancestor
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.owners
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.owners
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.owners
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.failed
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.failed
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.failed
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.failed
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.failed
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.failed
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.Dispatch
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.Dispatch
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.Dispatch
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.failed
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.failed
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.failed
+
+#check @MicroCFTA.SourceCurrentOuterExecutionAncestry.initial
+#print MicroCFTA.SourceCurrentOuterExecutionAncestry.initial
+#print axioms MicroCFTA.SourceCurrentOuterExecutionAncestry.initial

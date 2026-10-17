@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 01:13 CEST. Proof checkpoint is `0dbe7e4e`.
+Full pinned Audit passes 3174 jobs and 69812 dependency checks. Every
+BinderFree publication body now derives agreement of its two actual filtered
+stored reconstructions, including union roots and recursive captures.
+Actual node-busy failure constructs its own dispatch and all active-owner
+ancestry. Selected same-index own paths separate a child request from Top
+owner keys. These results do not prove general key exclusion or termination.
+Nested source binders, earlier winners, convergence, and complete public
+Haskell correspondence remain open. No Haskell patch or new production
+defect is added. Repair `b9219b9e` remains merged and validated in source
+`c0cc8a05`. Read `lean/notes-current-filter-owner-execution.md`.
+Keep this repair registry first. Record every later repair with its failure,
+executable reproducer, affected paths, commit, validation, and upstream status.
+
 Current proof update: 2026-10-18 00:55 CEST. Proof checkpoint is `a2b9b924`.
 Full pinned Audit passes 3167 jobs and 69679 dependency checks. BinderFree
 source induction now covers nodes, references, and unions with recursive

@@ -1,0 +1,43 @@
+import MicroCFTA.SourceCurrentPublicationFilterAlignment
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentPublicationFilterSource.rootErase
+#print MicroCFTA.SourceCurrentPublicationFilterSource.rootErase
+#print axioms MicroCFTA.SourceCurrentPublicationFilterSource.rootErase
+
+#check @MicroCFTA.SourceCurrentPublicationFilterSource.filtered_literal
+#print MicroCFTA.SourceCurrentPublicationFilterSource.filtered_literal
+#print axioms MicroCFTA.SourceCurrentPublicationFilterSource.filtered_literal
+
+#check @MicroCFTA.SourceCurrentPublicationFilterSource.filtered_row
+#print MicroCFTA.SourceCurrentPublicationFilterSource.filtered_row
+#print axioms MicroCFTA.SourceCurrentPublicationFilterSource.filtered_row
+
+#check @MicroCFTA.SourceCurrentPublicationFilterSource.rootErase_binder_free
+#print MicroCFTA.SourceCurrentPublicationFilterSource.rootErase_binder_free
+#print axioms MicroCFTA.SourceCurrentPublicationFilterSource.rootErase_binder_free
+
+#check @MicroCFTA.SourceCurrentPublicationFilterSource.source_parts
+#print MicroCFTA.SourceCurrentPublicationFilterSource.source_parts
+#print axioms MicroCFTA.SourceCurrentPublicationFilterSource.source_parts
+
+#check @MicroCFTA.SourceCurrentPublicationFilterSource.support_included
+#print MicroCFTA.SourceCurrentPublicationFilterSource.support_included
+#print axioms MicroCFTA.SourceCurrentPublicationFilterSource.support_included
+
+#check @MicroCFTA.SourceCurrentPublicationFilterAlignment.warm
+#print MicroCFTA.SourceCurrentPublicationFilterAlignment.warm
+#print axioms MicroCFTA.SourceCurrentPublicationFilterAlignment.warm
+
+#check @MicroCFTA.SourceCurrentPublicationFilterAlignment.publication_binder_free
+#print MicroCFTA.SourceCurrentPublicationFilterAlignment.publication_binder_free
+#print axioms MicroCFTA.SourceCurrentPublicationFilterAlignment.publication_binder_free
+

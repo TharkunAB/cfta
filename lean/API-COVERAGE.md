@@ -1,5 +1,49 @@
 # Public API and source correspondence
 
+## Current filtered publication alignment and actual busy ancestry
+
+Updated: 2026-10-18 01:13 CEST. Starting checkpoint is `98254f5d`.
+Proof commit is `0dbe7e4e`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-filter-owner-execution.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Every actual publication with a BinderFree source body now constructs both
+filtered body and ordinary-probe reconstructions. Union roots are included.
+Captured values can contain arbitrary recursive Mu records. Actual root
+filtering and source root erasure derive exact root parts. Stored
+reconstruction preserves those parts. Actual callbacks derive matching
+bare-self cases with the repaired ordinaryLevel. No desired result relation
+or future completion is a producer premise. Nested source binders, smart
+cleanup composition, and chronological earlier winners remain open.
+
+An actual bounded worker node-busy failure now constructs its exact
+same-state busy dispatch, enclosing key-equal activation, and ancestry of
+all active node owners. It requires no supplied prefix, completed-call graph,
+range certificate, or future completion. This identifies a possible collision;
+it does not exclude it. General recursive outer progress remains open.
+
+A selected own class with two distinct paths under one child index derives
+an actual nonempty child payload and separation from every initially Ready
+Top owner key. A normalized crossing-class example loses its constraints at
+both immediate children. General all-ancestor key exclusion still needs a
+stronger argument with actual class-edit provenance.
+
+Full pinned Audit passes 3174 jobs and 69812 dependency checks. Only the
+unchanged old unused-variable warning remains. Seven new strict source logs
+are empty. Selected checks use the standard axioms and effective 4 GiB
+maximum/high memory limits with zero swap. Evidence is in
+`lean/restart-evidence/20261018-filter-owner-execution/`.
+Preserve all earlier proofs, counterexamples, repairs, drafts, and raw attempts.
+
+The complete finite ordinary outer-pass domain is unchanged. General
+recursive progress, repeated-pass convergence, retained-binder and earlier
+winner alignment, and complete public Haskell correspondence remain open.
+Keep the full-library goal active. No Haskell patch or new production defect
+is added. FINDINGS keeps the repair registry first. Field-pool repair
+`b9219b9e` remains merged and validated. Record each later Haskell fix there
+with its failure, reproducer, paths, commit, checks, and status.
+Keep the optimized interned core.
+
 ## Current union source induction and active owner ancestry
 
 Updated: 2026-10-18 00:55 CEST. Starting checkpoint is `b4741c6e`.

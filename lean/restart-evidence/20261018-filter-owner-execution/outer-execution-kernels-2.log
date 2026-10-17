@@ -1,0 +1,108 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filter-owner-execution/outer-execution-kernels-2.source.lean:100:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  beginNode busyRequest busyAfter
+in the target expression
+  ((match
+          (beginNode
+                { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst, value := original }
+                (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.fst with
+        | FlatMemoThunk.Observation.ready result =>
+          Outcome.done result
+            (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd
+        | FlatMemoThunk.Observation.evaluate original =>
+          (nodeBody 0 0 0 0 0 0 0 0 0 0 0 original
+                (beginNode
+                      { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                        value := OuterExecutionKernels.original }
+                      (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd).bind
+            fun result after =>
+            Outcome.done result
+              (finishNode
+                (beginNode
+                    { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                      value := OuterExecutionKernels.original }
+                    (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).fst
+                result after)
+        | FlatMemoThunk.Observation.busy =>
+          Outcome.failed
+            (Fault.nodeMemo
+              (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).fst
+              FlatMemoThunk.Observation.busy)
+            (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd
+        | FlatMemoThunk.Observation.absent =>
+          Outcome.failed
+            (Fault.nodeMemo
+              (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).fst
+              FlatMemoThunk.Observation.absent)
+            (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd).bind
+      fun result middle =>
+      (walk 0 0 0 0 0 0 0 0 0 0 0 inherited (0 + 1) [] middle).bind fun results after =>
+        Outcome.done (result :: results) after) =
+    Outcome.failed (Fault.nodeMemo 0 FlatMemoThunk.Observation.busy) busyAfter
+
+⊢ ((match
+          (beginNode
+                { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst, value := original }
+                (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.fst with
+        | FlatMemoThunk.Observation.ready result =>
+          Outcome.done result
+            (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd
+        | FlatMemoThunk.Observation.evaluate original =>
+          (nodeBody 0 0 0 0 0 0 0 0 0 0 0 original
+                (beginNode
+                      { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                        value := OuterExecutionKernels.original }
+                      (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd).bind
+            fun result after =>
+            Outcome.done result
+              (finishNode
+                (beginNode
+                    { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                      value := OuterExecutionKernels.original }
+                    (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).fst
+                result after)
+        | FlatMemoThunk.Observation.busy =>
+          Outcome.failed
+            (Fault.nodeMemo
+              (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).fst
+              FlatMemoThunk.Observation.busy)
+            (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd
+        | FlatMemoThunk.Observation.absent =>
+          Outcome.failed
+            (Fault.nodeMemo
+              (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).fst
+              FlatMemoThunk.Observation.absent)
+            (beginNode
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend running inherited 0).fst,
+                    value := original }
+                  (SourceCurrentAllocatedPartialGraph.descend running inherited 0).snd).snd.snd).bind
+      fun result middle =>
+      (walk 0 0 0 0 0 0 0 0 0 0 0 inherited (0 + 1) [] middle).bind fun results after =>
+        Outcome.done (result :: results) after) =
+    Outcome.failed (Fault.nodeMemo 0 FlatMemoThunk.Observation.busy) busyAfter
