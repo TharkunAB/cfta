@@ -672,32 +672,35 @@ contexts t@(Term x _)
     | isTemplateVar x = []
     | otherwise = [(t, id)]
 
-{- | The critical pairs of two rules: the left side of the second rule
-unifies with a subterm of the left side of the first rule, which is not a
-template variable. The instance of the first left side then rewrites in
-two ways, and the two results are equal.
+{- | The critical pairs of two rules whose binders are already apart.
+The first rule supplies its contexts and right side. Reuse these contexts
+when the first rule is the incoming rule of a completion batch.
 -}
-criticalPairs :: (Term, Term) -> (Term, Term) -> [(Term, Term)]
-criticalPairs (l1, r1) (l2, r2) =
-    [ (substitute s r1', substitute s (put r2'))
-    | (u, put) <- contexts l1'
-    , Just s <- [unify u l2']
+criticalPairs :: [(Term, Term -> Term)] -> Term -> (Term, Term) -> [(Term, Term)]
+criticalPairs places r1 (l2, r2) =
+    [ (substitute s r1, substitute s (put r2))
+    | (u, put) <- places
+    , Just s <- [unify u l2]
     ]
+
+{- | The critical pairs of a rule with each rule of the index, in the two
+orders. Share the incoming rule's renamed terms and left contexts within
+this batch. Keep the original binder names and pair order.
+-}
+criticalPairsWith :: Rules -> (Term, Term) -> [(Term, Term)]
+criticalPairsWith rules (l, r) =
+    concat
+        [ criticalPairs incomingPlaces incomingRight (right oldL, right oldR)
+            ++ criticalPairs (contexts (left oldL)) (left oldR) incomingReverse
+        | (oldL, oldR) <- allRules rules
+        ]
   where
     apart prefix (Symbol x) = Symbol (prefix <> T.drop 3 x)
     left = rename (apart "<v>L:") (apart "<t>L:")
     right = rename (apart "<v>R:") (apart "<t>R:")
-    l1' = left l1
-    r1' = left r1
-    l2' = right l2
-    r2' = right r2
-
-{- | The critical pairs of a rule with each rule of the index, in the two
-orders.
--}
-criticalPairsWith :: Rules -> (Term, Term) -> [(Term, Term)]
-criticalPairsWith rules new =
-    concat [criticalPairs new old ++ criticalPairs old new | old <- allRules rules]
+    incomingPlaces = contexts (left l)
+    incomingRight = left r
+    incomingReverse = (right l, right r)
 
 {- | Whether an equation is an instance of a rule of the index, in the same
 context on the two sides, as in Twee. Then the equation follows from the
