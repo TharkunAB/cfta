@@ -1,5 +1,49 @@
 # cfta formalization restart handoff
 
+## Current union source induction and active owner ancestry
+
+Updated: 2026-10-18 00:55 CEST. Starting checkpoint is `b4741c6e`.
+Proof commit is `a2b9b924`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-union-source-induction.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Initial Ready inputs now construct both raw source calls and both stored
+reconstructions for every BinderFree source. This includes Empty, variables,
+nodes, and unions. Captured values can contain arbitrary recursive Mu
+records. The live-support variant permits incompatible unused captures.
+Actual row liveness derives the child compatibility needed by node induction.
+The results retain full guards, ordered children, exact sequential heaps,
+common-reader replays, publication histories, physical Empty agreement,
+and observations at every finite depth and fixed view.
+
+An actual node-root binder publication now constructs both filtered body
+and ordinary-probe reconstructions. A static BinderFree body supplies all
+child cases. Union-root filtering, nested source binders, smart cleanup
+composition, and chronological earlier winners remain open.
+
+Literal unfinished outer prefixes now derive every evaluating node owner's
+exact enclosing activation. Actual busy dispatch identifies the same-key
+ancestor and leaves the full caller unchanged. This does not exclude a key
+collision or extract such a prefix from every failed worker automatically.
+Completed earlier calls retain both their graph and same-bound worker call.
+
+Full pinned Audit passes 3167 jobs and 69679 dependency checks. Only the
+unchanged old unused-variable warning remains. Five new strict source logs
+are empty. All 39 public declaration pairs have full proof output and only
+the three standard axioms. Effective caps are 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-union-source-induction/`.
+Preserve all earlier proofs, counterexamples, repairs, drafts, and raw attempts.
+
+The strongest complete outer-pass theorem still excludes Mu, references,
+and explicit unions in every descendant. General recursive outer progress,
+physical-key compatibility with every active ancestor, repeated-pass
+convergence, and complete public Haskell correspondence remain open.
+Keep the full-library goal active. No Haskell patch or new production defect
+is added. FINDINGS keeps the external repair registry first. Field-pool
+repair `b9219b9e` remains merged and validated. Record each later Haskell fix
+there with its failure, reproducer, paths, commit, checks, and status.
+Keep the optimized interned core.
+
 ## Current paired ordinary induction and retained native readers
 
 Updated: 2026-10-18 00:36 CEST. Starting checkpoint is `0a5fe3b7`.
