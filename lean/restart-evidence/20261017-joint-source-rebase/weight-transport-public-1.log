@@ -1,0 +1,246 @@
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → List.{0} (Prod.{0, 0} Nat Nat) → Prop
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.supported_empty' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.supported_empty : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard source
+    (@List.nil.{0} (Prod.{0, 0} Nat Nat))
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.mono : ∀ {Symbol Guard : Type}
+  {source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {first last : List.{0} (Prod.{0, 0} Nat Nat)},
+  @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard source last →
+    (∀ (pair : Prod.{0, 0} Nat Nat),
+        @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+            (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) first pair →
+          @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+            (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) last pair) →
+      @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard source first
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.cons' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.cons : ∀ {Symbol Guard : Type}
+  {source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {pairs : List.{0} (Prod.{0, 0} Nat Nat)},
+  @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard source pairs →
+    ∀ (pair : Prod.{0, 0} Nat Nat) (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source (@Prod.fst.{0, 0} Nat Nat pair))
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left) →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source (@Prod.snd.{0, 0} Nat Nat pair))
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right) →
+          @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard source
+            (@List.cons.{0} (Prod.{0, 0} Nat Nat) pair pairs)
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.read_grows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.read_grows : ∀ {Symbol Guard : Type}
+  (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (number : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard before number)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard after number)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value)
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.identity_weight' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.identity_weight : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (number : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard before number)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @Eq.{1} Nat
+            (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.identityWeight Symbol Guard annotation after number)
+            (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.identityWeight Symbol Guard annotation before number)
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.pair_weight' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.pair_weight : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before pairs →
+          ∀ (pair : Prod.{0, 0} Nat Nat),
+            @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+                (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) pairs pair →
+              @Eq.{1} Nat
+                (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation after
+                  (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                    (@Prod.snd.{0, 0} Nat Nat pair)))
+                (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation before
+                  (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                    (@Prod.snd.{0, 0} Nat Nat pair)))
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.grows' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.grows : ∀ {Symbol Guard : Type}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {pairs : List.{0} (Prod.{0, 0} Nat Nat)},
+  @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before pairs →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard after pairs
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_weight' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_weight : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before pairs →
+          ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.SourceRecursiveIntersectionResultScope.Scope Symbol Guard pairs value →
+              ∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                @Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) name →
+                  @Eq.{1} Nat
+                    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation after
+                      name)
+                    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation before
+                      name)
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_le : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before pairs →
+          ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.SourceRecursiveIntersectionResultScope.Scope Symbol Guard pairs value →
+              ∀ (bound : Nat),
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.FreeLE Symbol Guard
+                    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation before)
+                    bound value →
+                  @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.FreeLE Symbol Guard
+                    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation after)
+                    bound value
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_below' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_below : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before pairs →
+          ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.SourceRecursiveIntersectionResultScope.Scope Symbol Guard pairs value →
+              ∀ (bound : Nat),
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.FreeBelow Symbol Guard
+                    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation before)
+                    bound value →
+                  @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.FreeBelow Symbol Guard
+                    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation after)
+                    bound value
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.classified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.classified : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before pairs →
+          ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard after →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value →
+                @MicroCFTA.SourceRecursiveIntersectionResultScope.Scope Symbol Guard pairs value →
+                  ∀ (bound : Nat),
+                    @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                        (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation
+                          before)
+                        bound value →
+                      @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                        (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation
+                          after)
+                        bound value
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.node_law' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.node_law : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before
+            (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)).seen →
+          @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard after →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result →
+              @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation
+                  before
+                  (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)) →
+                @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard before request →
+                  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation before request
+                      result →
+                    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation after request
+                      result
+'MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.edge_law' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.edge_law : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+      ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+        (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard before
+            (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain Symbol Guard request)).seen →
+          @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation before
+              (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain Symbol Guard request)) →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.EdgeInputs Symbol Guard before request →
+              @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw Symbol Guard annotation before request
+                  result →
+                @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw Symbol Guard annotation after request
+                  result

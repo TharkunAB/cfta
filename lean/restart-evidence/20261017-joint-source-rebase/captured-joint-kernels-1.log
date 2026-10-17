@@ -1,0 +1,120 @@
+'MicroCFTA.CapturedJointKernels.actual_node_work_rebase' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@actual_node_work_rebase : ∀ {width : Nat} {Symbol Guard : Type} [inst : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  (annotation : Guard → Prop) (source : InternedConstructorTemplates.State Symbol Guard)
+  (before : SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @Facts Symbol Guard source →
+    @Grows Symbol Guard source (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)) →
+      @Extends Nat InternedBinderProtocol.NodeKey
+          (@State.issued InternedBinderProtocol.NodeKey (@InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@State.issued InternedBinderProtocol.NodeKey
+            (@InternedConstructorTemplates.State.nodes Symbol Guard
+              (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)))) →
+        @SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+          @SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source before →
+            @SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source before →
+              ∀ (rows : List.{0} (EdgeValue Symbol Guard)),
+                (∀ (row : EdgeValue Symbol Guard),
+                    @Membership.mem.{0, 0} (EdgeValue Symbol Guard) (List.{0} (EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (EdgeValue Symbol Guard)) rows row →
+                      @EdgeResident Symbol Guard (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before))
+                        row) →
+                  have actual :=
+                    @run Symbol Guard (Value Symbol Guard) inst (@makeNode Symbol Guard rows)
+                      (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before));
+                  have machine :=
+                    have __src := @State.machine width Symbol Guard before;
+                    @Machine.mk Symbol Guard
+                      (@Prod.snd.{0, 0} (Value Symbol Guard) (InternedConstructorTemplates.State Symbol Guard) actual)
+                      (@Machine.domains Symbol Guard __src);
+                  have after := @advance width Symbol Guard before machine;
+                  And
+                    (@Eq.{1} (Result Symbol Guard (Value Symbol Guard))
+                      (@work Symbol Guard (Value Symbol Guard) inst (@makeNode Symbol Guard rows)
+                        (@State.machine width Symbol Guard before))
+                      (@Result.done Symbol Guard (Value Symbol Guard)
+                        (@Prod.fst.{0, 0} (Value Symbol Guard) (InternedConstructorTemplates.State Symbol Guard) actual)
+                        machine))
+                    (And
+                      (@Eq.{1}
+                        (FlatMemoThunk.State (IntersectionFlatMemoKeyDomain.Triple width) (NodeRequest Symbol Guard)
+                          (Value Symbol Guard))
+                        (@SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after)
+                        (@SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard before))
+                      (And
+                        (@Eq.{1}
+                          (FlatMemoThunk.State (IntersectionFlatMemoKeyDomain.Triple width) (EdgeRequest Symbol Guard)
+                            (EdgeValue Symbol Guard))
+                          (@SourceRecursiveIntersectionThunks.State.edges width Symbol Guard after)
+                          (@SourceRecursiveIntersectionThunks.State.edges width Symbol Guard before))
+                        (And (@SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard after)
+                          (And
+                            (@SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation
+                              (@Machine.heap Symbol Guard (@State.machine width Symbol Guard after)) after)
+                            (@SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard
+                              (@Machine.heap Symbol Guard (@State.machine width Symbol Guard after)) after)))))
+'MicroCFTA.CapturedJointKernels.warm_hit_rebased' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@warm_hit_rebased : ∀ {width : Nat} {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : NodeRequest Symbol Guard) (handle depth : Nat) (value : Value Symbol Guard),
+  @Facts Symbol Guard source →
+    @Grows Symbol Guard source (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)) →
+      @Extends Nat InternedBinderProtocol.NodeKey
+          (@State.issued InternedBinderProtocol.NodeKey (@InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@State.issued InternedBinderProtocol.NodeKey
+            (@InternedConstructorTemplates.State.nodes Symbol Guard
+              (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)))) →
+        @SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+          @SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source before →
+            @SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source before →
+              @NodeReady Symbol Guard (@State.machine width Symbol Guard before) request →
+                @SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width (@NodeRequest.domain Symbol Guard request)
+                    (@NodeRequest.left Symbol Guard request) (@NodeRequest.right Symbol Guard request) →
+                  @Eq.{1}
+                      (Prod.{0, 0} (NodeSelection Symbol Guard)
+                        (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                      (@lookupNode Symbol Guard width request before)
+                      (@Prod.mk.{0, 0} (NodeSelection Symbol Guard)
+                        (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                        (@NodeSelection.memoized Symbol Guard handle) chosen) →
+                    @Eq.{1}
+                        (Prod.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                          (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                        (@demandNode width Symbol Guard handle chosen)
+                        (@Prod.mk.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                          (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                          (@FlatMemoThunk.Observation.ready (NodeRequest Symbol Guard) (Value Symbol Guard) value)
+                          after) →
+                      @SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation
+                          (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before))
+                          (@Interned.key IntersectionFlatMemoKeyDomain.DomainKey
+                            (@NodeRequest.domain Symbol Guard request)) →
+                        @SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard
+                            (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)) request →
+                          @SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth
+                              (@NodeRequest.left Symbol Guard request) →
+                            @SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth
+                                (@NodeRequest.right Symbol Guard request) →
+                              And (@Eq.{1} (SourceRecursiveIntersectionThunks.State width Symbol Guard) after chosen)
+                                (And
+                                  (@Available Symbol Guard
+                                    (@Machine.heap Symbol Guard (@State.machine width Symbol Guard after)) value)
+                                  (And
+                                    (@SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation
+                                      (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)) after)
+                                    (And (@SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth value)
+                                      (And
+                                        (@SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                                          (@SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard
+                                            annotation
+                                            (@Machine.heap Symbol Guard (@State.machine width Symbol Guard before)))
+                                          (@SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation
+                                            (@NodeRequest.left Symbol Guard request)
+                                            (@NodeRequest.right Symbol Guard request))
+                                          value)
+                                        (@SourceRecursiveIntersectionResultScope.Scope Symbol Guard
+                                          (@Interned.key IntersectionFlatMemoKeyDomain.DomainKey
+                                              (@NodeRequest.domain Symbol Guard request)).seen
+                                          value)))))

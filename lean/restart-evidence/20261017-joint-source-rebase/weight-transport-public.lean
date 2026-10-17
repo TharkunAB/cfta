@@ -1,0 +1,51 @@
+import MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.supported_empty
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.supported_empty
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.mono
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.cons
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.cons
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.read_grows
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.read_grows
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.identity_weight
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.identity_weight
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.pair_weight
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.pair_weight
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.grows
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported.grows
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_weight
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_weight
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_le
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_le
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_below
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.free_below
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.classified
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.classified
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.node_law
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.node_law
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.edge_law
+#check @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.edge_law

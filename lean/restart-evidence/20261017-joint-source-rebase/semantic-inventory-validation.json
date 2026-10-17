@@ -1,0 +1,67 @@
+{
+  "component": "semantic-inventory",
+  "verified_at": "2026-10-17T05:27:00.266202+02:00",
+  "production": {
+    "SourceCurrentAllocatedNativeInventoryRebase": {
+      "sha256": "5a7165afce605c62c5c1b84b68127d3c93a8bce1a9c7204ac58ae352c91ff5b6",
+      "strict_log": "semantic-inventory-rebase-direct-1.log",
+      "exit_code": 0,
+      "diagnostics": 0
+    },
+    "SourceCurrentAllocatedNativeInventoryCold": {
+      "sha256": "fe5c9ea882e70d9d52f3ecb61273fa32415de4e4f4ff593a804d08232443fe8d",
+      "strict_log": "semantic-inventory-cold-direct-1.log",
+      "exit_code": 0,
+      "diagnostics": 0
+    }
+  },
+  "canonical": [
+    {
+      "log": "canonical-components-1.log",
+      "jobs": 1281,
+      "result": "Build completed successfully",
+      "owned_target": "SourceCurrentAllocatedNativeInventoryRebase"
+    },
+    {
+      "log": "canonical-inventory-query-1.log",
+      "jobs": 1318,
+      "result": "Build completed successfully",
+      "owned_target": "SourceCurrentAllocatedNativeInventoryCold"
+    }
+  ],
+  "public_probes": [
+    {
+      "source": "semantic-inventory-rebase-public.lean",
+      "log": "semantic-inventory-rebase-public-1.log",
+      "pairs": 2,
+      "exit_code": 0
+    },
+    {
+      "source": "semantic-inventory-cold-public.lean",
+      "log": "semantic-inventory-cold-public-1.log",
+      "pairs": 2,
+      "exit_code": 0
+    }
+  ],
+  "integration": {
+    "source": "semantic-inventory-kernels.lean",
+    "log": "semantic-inventory-kernels-1.log",
+    "pairs": 2,
+    "exit_code": 0,
+    "cases": [
+      "Initial numeric resources construct a concrete-model cold receipt, then admit its produced closed result in the exact returned checked state.",
+      "Two ordered inventory expansions preserve the same full checked state and populated native tables."
+    ]
+  },
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "warning_scope": "All owned strict source and imported probe logs are clean. Canonical logs replay only the older InternedFreshOrdinaryClosedCompletion.lean:24 unused inputs warning.",
+  "boundaries": [
+    "Semantic inventory transport does not derive a desired cap or occurrence classifier.",
+    "The cold endpoint constructs its own fixed-model receipt; it does not identify an arbitrary existential model.",
+    "No cumulative future query headroom or general mixed caller completion is claimed."
+  ]
+}

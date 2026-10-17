@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt.inventoryAt
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt.inventoryAt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.of_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.of_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.generated_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.generated_complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold.cold_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold.cold_complete

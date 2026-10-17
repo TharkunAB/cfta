@@ -1,0 +1,253 @@
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey → Prop
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.empty_seen' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.empty_seen : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen Symbol Guard source
+    (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Captured' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Captured : {Request Key Answer : Type} →
+  (Request → Prop) → MicroCFTA.FlatMemoThunk.State Key Request Answer → Prop
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored : {width : Nat} →
+  {Symbol Guard : Type} →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin.inputs_back' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin.inputs_back : ∀ {Symbol Guard : Type}
+  {source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin Symbol Guard source request →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard later request →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard source request
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin.inputs_back' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin.inputs_back : ∀ {Symbol Guard : Type}
+  {source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard},
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin Symbol Guard source request →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.EdgeInputs Symbol Guard later request →
+        @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.EdgeInputs Symbol Guard source request
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.bindings_back' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.bindings_back : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+      @MicroCFTA.InternedNestedFacts.Facts Symbol Guard later →
+        ∀ (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+          @MicroCFTA.SourceRecursiveIntersectionCode.OriginalBindings Symbol Guard source domain →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation later
+                domain →
+              @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation
+                source domain
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.initial_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.initial_stored : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (width : Nat)
+  (machine : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width machine)
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.advance_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.advance_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.advance width Symbol Guard state after)
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupNode_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin Symbol Guard source request →
+      @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+        (@Prod.snd.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+          (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request state))
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupEdge_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin Symbol Guard source request →
+      @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+        (@Prod.snd.{0, 0} Nat (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge Symbol Guard width request state))
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandNode_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+      (@Prod.snd.{0, 0}
+        (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard handle state))
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandEdge_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+      (@Prod.snd.{0, 0}
+        (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge width Symbol Guard handle state))
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishNode_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.finishNode Symbol Guard width handle value state)
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishEdge_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+    @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.finishEdge Symbol Guard width handle value state)
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_supported' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_supported : ∀ {Symbol Guard : Type}
+  {source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen Symbol Guard source domain →
+    @MicroCFTA.SourceCurrentConstrainedCapSourceWeightTransport.Supported Symbol Guard source domain.seen
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_grows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_grows : ∀ {Symbol Guard : Type}
+  {source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen Symbol Guard source domain →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+        @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen Symbol Guard later domain
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_origin' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_origin : ∀ {Symbol Guard : Type}
+  {source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin Symbol Guard source request →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+        @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin Symbol Guard later request
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_origin' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_origin : ∀ {Symbol Guard : Type}
+  {source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin Symbol Guard source request →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+        @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin Symbol Guard later request
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.origins' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.origins : ∀ {width : Nat} {Symbol Guard : Type}
+  {source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+      @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+        @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard later state
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_law' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_law : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+      @MicroCFTA.InternedNestedFacts.Facts Symbol Guard later →
+        ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+          (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin Symbol Guard source request →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard later result →
+              @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation source request
+                  result →
+                @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.NodeLaw Symbol Guard annotation later request
+                  result
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_law' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_law : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source later →
+    @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard later)) →
+      @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+        @MicroCFTA.InternedNestedFacts.Facts Symbol Guard later →
+          ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+            (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin Symbol Guard source request →
+              @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw Symbol Guard annotation source request
+                  result →
+                @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCode.EdgeLaw Symbol Guard annotation later request
+                  result
+'MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.rebase' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.rebase : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state)) →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state)))) →
+        @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+          @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard source state →
+            @MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation source state →
+              And
+                (@MicroCFTA.SourceCurrentConstrainedCapCheckedJointCache.Stored width Symbol Guard annotation
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state))
+                  state)
+                (@MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored width Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state))
+                  state)

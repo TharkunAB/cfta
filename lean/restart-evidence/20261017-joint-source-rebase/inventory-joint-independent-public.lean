@@ -1,0 +1,42 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold
+
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.name_read
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.name_read
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.seen
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.seen
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.RequestOrigin
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.RequestOrigin
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.current
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.current
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.step_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.step_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.Trace.origins
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOriginTrace.Trace.origins
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt.inventoryAt
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt.inventoryAt
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.of_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.of_receipt
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.generated_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryQuery.generated_complete
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold.cold_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold.cold_complete

@@ -1,0 +1,83 @@
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase
+
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Seen
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.empty_seen
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.empty_seen
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Captured
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Captured
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.Stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin.inputs_back
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.NodeOrigin.inputs_back
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin.inputs_back
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.EdgeOrigin.inputs_back
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.bindings_back
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.bindings_back
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.initial_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.initial_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.advance_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.advance_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.lookupEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.demandEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointOrigins.finishEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_supported
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_supported
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_grows
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.seen_grows
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_origin
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_origin
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_origin
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_origin
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.origins
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.origins
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_law
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.node_law
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_law
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.edge_law
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.rebase
+#check @MicroCFTA.SourceCurrentConstrainedCapCheckedJointRebase.rebase
