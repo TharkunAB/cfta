@@ -1,0 +1,906 @@
+@MicroCFTA.SourceCurrentStoredMuChildLineage.independent : ∀ {Atom Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+  (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+  (before after later final common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard before
+      (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs) →
+    @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard later
+        (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+      ∀ (rawFirst rawSecond : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+              (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+              before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst after) →
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs)
+                later)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawSecond final) →
+            @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+              @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final common →
+                (∀ (atom : Atom),
+                    Not
+                      (@Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                        (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                        (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                        (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs)
+                        (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom))) →
+                  ∀
+                    (firstEnvironment secondEnvironment :
+                      MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard),
+                    (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                        @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                            (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                            (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                            (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression
+                              inputs)
+                            (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom name) →
+                          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (firstEnvironment name) (secondEnvironment name)) →
+                      @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard common →
+                        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common rawFirst →
+                          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common firstEnvironment →
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+                                And
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst
+                                    rawSecond)
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        rawFirst firstEnvironment common)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          rawSecond secondEnvironment resultHeap)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                                          resultHeap))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            rawFirst firstEnvironment resultHeap)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                                            resultHeap))
+                                        (And
+                                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                                          (And
+                                            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap
+                                              result)
+                                            (Nonempty.{1}
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                common resultHeap)))))))
+theorem MicroCFTA.SourceCurrentStoredMuChildLineage.independent : ∀ {Atom Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+  (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+  (before after later final common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard before
+      (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs) →
+    @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard later
+        (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+      ∀ (rawFirst rawSecond : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+              (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+              before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst after) →
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs)
+                later)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawSecond final) →
+            @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+              @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final common →
+                (∀ (atom : Atom),
+                    Not
+                      (@Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                        (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                        (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                        (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs)
+                        (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom))) →
+                  ∀
+                    (firstEnvironment secondEnvironment :
+                      MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard),
+                    (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                        @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                            (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                            (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                            (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression
+                              inputs)
+                            (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom name) →
+                          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (firstEnvironment name) (secondEnvironment name)) →
+                      @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard common →
+                        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common rawFirst →
+                          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common firstEnvironment →
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+                                And
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst
+                                    rawSecond)
+                                  (And
+                                    (@Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        rawFirst firstEnvironment common)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          rawSecond secondEnvironment resultHeap)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                                          resultHeap))
+                                      (And
+                                        (@Eq.{1}
+                                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                            rawFirst firstEnvironment resultHeap)
+                                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                                            resultHeap))
+                                        (And
+                                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                                          (And
+                                            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap
+                                              result)
+                                            (Nonempty.{1}
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+                                                common resultHeap))))))) :=
+fun {Atom Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    expression inputs firstNames secondNames before after later final common firstContext secondContext rawFirst
+    rawSecond firstActual secondActual firstGrowth secondGrowth independent firstEnvironment secondEnvironment
+    compatible ready available replacements =>
+  have agreement := fun label member =>
+    @Sum.casesOn.{0, 0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom
+      (fun t =>
+        @Eq.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label t →
+          @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+            (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+              MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference) firstNames
+              label)
+            (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+              MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+              secondNames label))
+      label
+      (fun name h =>
+        @Eq.ndrec.{0, 1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+          (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom name)
+          (fun label =>
+            @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                (@MicroCFTA.InternedFreshOrdinaryLiveInputs.liveInputs Symbol Guard Atom expression inputs) label →
+              @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                  MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                  firstNames label)
+                (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                  MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                  secondNames label))
+          (fun member =>
+            @Eq.refl.{1} MicroCFTA.InternedBinderProtocol.Reference
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                firstNames (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom name)))
+          label
+          (@Eq.symm.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label
+            (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom name) h)
+          member)
+      (fun atom h =>
+        @Eq.ndrec.{0, 1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+          (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom)
+          (fun label =>
+            @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                (@MicroCFTA.InternedFreshOrdinaryLiveInputs.liveInputs Symbol Guard Atom expression inputs) label →
+              @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                  MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                  firstNames label)
+                (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                  MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                  secondNames label))
+          (fun member =>
+            @False.elim.{0}
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                  MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                  firstNames (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom))
+                (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                  MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                  secondNames (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom)))
+              (independent atom
+                (@MicroCFTA.SourceCurrentStoredMuChildLineage.live_supported✝ Atom Symbol Guard expression inputs
+                  (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom) member)))
+          label
+          (@Eq.symm.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label
+            (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom) h)
+          member)
+      (@Eq.refl.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label);
+  have same :=
+    @MicroCFTA.InternedFreshOrdinaryLiveInputReplay.build_same Symbol Guard inst expression Atom inputs firstNames
+      secondNames agreement before later common after final firstContext secondContext
+      (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard common
+        (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard common
+          (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard common
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@And.left
+              (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard common
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard common)
+              (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard common ready)))))
+      rawFirst rawSecond firstActual secondActual firstGrowth secondGrowth;
+  have freeAgreement := fun name member =>
+    @Exists.casesOn.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+      (fun a =>
+        And
+          (@Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+            (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+            (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+            (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs) a)
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+            (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+              MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference) firstNames
+              a)
+            name))
+      (fun x =>
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (firstEnvironment name)
+          (secondEnvironment name))
+      (@Iff.mp
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.map.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+            MicroCFTA.InternedBinderProtocol.Reference
+            (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+              MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+              firstNames)
+            (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs))
+          name)
+        (@Exists.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) fun a =>
+          And
+            (@Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+              (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+              (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+              (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs) a)
+            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                firstNames a)
+              name))
+        (@List.mem_map.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+          MicroCFTA.InternedBinderProtocol.Reference name
+          (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+            MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference) firstNames)
+          (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs))
+        (@Iff.mp
+          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard rawFirst) name)
+          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.map.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+              MicroCFTA.InternedBinderProtocol.Reference
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                firstNames)
+              (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs))
+            name)
+          (@MicroCFTA.SourceCurrentNativeNormalizationInputs.actual_free Atom Symbol Guard inst expression inputs
+            firstNames before after firstContext rawFirst firstActual name)
+          member))
+      fun label h =>
+      @And.casesOn.{0}
+        (@Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+          (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+          (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+          (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs) label)
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+          (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+            MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference) firstNames
+            label)
+          name)
+        (fun x =>
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (firstEnvironment name)
+            (secondEnvironment name))
+        h fun present equal =>
+        @Sum.casesOn.{0, 0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom
+          (fun t =>
+            @Eq.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label t →
+              @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (firstEnvironment name)
+                (secondEnvironment name))
+          label
+          (fun fixed h =>
+            @Eq.ndrec.{0, 1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+              (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom fixed)
+              (fun label =>
+                @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                    (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                    (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                    (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs)
+                    label →
+                  @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                      (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                        MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                        firstNames label)
+                      name →
+                    @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (firstEnvironment name) (secondEnvironment name))
+              (fun present equal =>
+                @Eq.rec.{0, 1} MicroCFTA.InternedBinderProtocol.Reference
+                  (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                    MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                    firstNames (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom fixed))
+                  (fun x h =>
+                    @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (firstEnvironment x) (secondEnvironment x))
+                  (compatible fixed present) name equal)
+              label
+              (@Eq.symm.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label
+                (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom fixed) h)
+              present equal)
+          (fun atom h =>
+            @Eq.ndrec.{0, 1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+              (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom)
+              (fun label =>
+                @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                    (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                    (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                    (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs)
+                    label →
+                  @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                      (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                        MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                        firstNames label)
+                      name →
+                    @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (firstEnvironment name) (secondEnvironment name))
+              (fun present equal =>
+                @False.elim.{0}
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (firstEnvironment name) (secondEnvironment name))
+                  (independent atom present))
+              label
+              (@Eq.symm.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label
+                (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom) h)
+              present equal)
+          (@Eq.refl.{1} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom) label);
+  @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (fun result =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst firstEnvironment
+              common)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+              (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common after)))))
+    (fun x =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+          And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+            (And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst firstEnvironment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+              (And
+                (@Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                    secondEnvironment resultHeap)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                      firstEnvironment resultHeap)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                      (Nonempty.{1}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common resultHeap))))))))
+    (@MicroCFTA.SourceCurrentStoredReconstruction.execute Symbol Guard inst rawFirst firstEnvironment common ready
+      available replacements)
+    fun result h =>
+    @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst firstEnvironment
+              common)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+              (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common after)))))
+      (fun x =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+            And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+              (And
+                (@Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                    firstEnvironment common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                      secondEnvironment resultHeap)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                        firstEnvironment resultHeap)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                            resultHeap))))))))
+      h fun resultHeap h =>
+      @And.casesOn.{0}
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst firstEnvironment
+            common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common resultHeap))))
+        (fun x =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+              And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                      firstEnvironment common)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                        secondEnvironment resultHeap)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                          firstEnvironment resultHeap)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                              resultHeap))))))))
+        h fun done right =>
+        @And.casesOn.{0} (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common resultHeap)))
+          (fun x =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+                And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                        firstEnvironment common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                          secondEnvironment resultHeap)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            firstEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                resultHeap))))))))
+          right fun kept right =>
+          @And.casesOn.{0} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common resultHeap))
+            (fun x =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+                  And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                          firstEnvironment common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                            secondEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                              firstEnvironment resultHeap)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                  resultHeap))))))))
+            right fun output history =>
+            have replay :=
+              @MicroCFTA.InternedFreshOrdinaryReplay.build_replay Symbol Guard inst
+                (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard rawFirst)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) rawFirst)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard rawFirst))
+                common resultHeap result resultHeap
+                (@MicroCFTA.InternedRecordCoherence.Coherent.valid Symbol Guard common
+                  (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard common
+                    (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard common
+                      (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard common
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@And.left
+                          (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard common
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard common)
+                          (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard common ready))))))
+                done (@MicroCFTA.InternedConstructorTemplates.grows_refl Symbol Guard resultHeap);
+            have changed :=
+              @MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute_congr Symbol Guard inst rawFirst
+                firstEnvironment secondEnvironment resultHeap
+                (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard resultHeap
+                  (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard resultHeap
+                    (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard resultHeap
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@And.left
+                        (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard resultHeap
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard resultHeap)
+                        (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard resultHeap
+                          (@MicroCFTA.SourceEqualityRequiredCache.Keeps.ready Symbol Guard common resultHeap kept))))))
+                (@MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard common resultHeap kept rawFirst
+                  available)
+                freeAgreement;
+            @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun result =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun resultHeap =>
+                  And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                          firstEnvironment common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                            secondEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                              firstEnvironment resultHeap)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                  resultHeap))))))))
+              result
+              (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (fun resultHeap =>
+                  And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                          firstEnvironment common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                            secondEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                              firstEnvironment resultHeap)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                  resultHeap))))))))
+                resultHeap
+                (@And.intro (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond)
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                        firstEnvironment common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                          secondEnvironment resultHeap)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            firstEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                resultHeap)))))))
+                  same
+                  (@And.intro
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                        firstEnvironment common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                          secondEnvironment resultHeap)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            firstEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                resultHeap))))))
+                    done
+                    (@And.intro
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                          secondEnvironment resultHeap)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            firstEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                resultHeap)))))
+                      (@Eq.mpr.{0}
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                            secondEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            secondEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (@id.{0}
+                          (@Eq.{1} Prop
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond
+                                secondEnvironment resultHeap)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                                secondEnvironment resultHeap)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap)))
+                          (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Prop rawSecond
+                            rawFirst
+                            (fun _a =>
+                              @Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst _a
+                                  secondEnvironment resultHeap)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                            (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst rawSecond
+                              same)))
+                        (@Eq.trans.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            secondEnvironment resultHeap)
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            firstEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap)
+                          (@Eq.symm.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                              firstEnvironment resultHeap)
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                              secondEnvironment resultHeap)
+                            changed)
+                          replay))
+                      (@And.intro
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst
+                            firstEnvironment resultHeap)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result resultHeap))
+                        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                resultHeap))))
+                        replay
+                        (@And.intro (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard common resultHeap)
+                          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common
+                                resultHeap)))
+                          kept
+                          (@And.intro (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard resultHeap result)
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst common resultHeap))
+                            output history)))))))
+'MicroCFTA.SourceCurrentStoredMuChildLineage.independent' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

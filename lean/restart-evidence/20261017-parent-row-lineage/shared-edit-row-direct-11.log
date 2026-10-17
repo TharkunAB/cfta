@@ -1,0 +1,117 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:92:7: error: unexpected token 'prefix'; expected '(', '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:92:16: error: unexpected identifier; expected prec
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:95:45: error: unexpected identifier; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:164:29: error: unexpected token 'prefix'; expected rcasesPat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:116:47: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List (Value Symbol Guard)
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+edges : List (EdgeValue Symbol Guard)
+before : SharedState width
+results : List (EdgeValue Symbol Guard)
+after : SharedState width
+memos✝ final : Memos
+actual : EditRows record✝ originals✝ entries✝ edges before results after
+reads : RowsReads formulas solver base actual memos✝ final
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+entries : List (Int × Edits EqualityNormalize.Path)
+state : SharedState width
+memos : Memos
+⊢ RowsLaw formulas solver base record originals entries [] state [] state memos
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:127:50: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List (Value Symbol Guard)
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+edges✝ : List (EdgeValue Symbol Guard)
+before✝ : SharedState width
+results✝ : List (EdgeValue Symbol Guard)
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditRows record✝ originals✝ entries✝ edges✝ before✝ results✝ after✝
+reads : RowsReads formulas solver base actual memos✝ final
+nilCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos},
+    RowsLaw formulas solver base record originals entries [] state [] state memos
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+before : SharedState width
+values : List (Value Symbol Guard)
+middle : SharedState width
+result : EdgeValue Symbol Guard
+heap : Heap
+edges results : List (EdgeValue Symbol Guard)
+after : SharedState width
+edge : EdgeValue Symbol Guard
+children : EditChildren record originals entries 0 edge.children before values middle
+rebuilt :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)
+rest : EditRows record originals entries edges (advanceHeap middle heap) results after
+firstRead : ChildrenReads formulas solver base children memos current
+restRead : RowsReads formulas solver base rest current saved
+ih : RowsLaw formulas solver base record originals entries edges (advanceHeap middle heap) results after current
+⊢ RowsLaw formulas solver base record originals entries (edge :: edges) before (result :: results) after memos
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:113:94: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+entries : List (Int × Edits EqualityNormalize.Path)
+edges : List (EdgeValue Symbol Guard)
+before : SharedState width
+results : List (EdgeValue Symbol Guard)
+after : SharedState width
+memos final : Memos
+actual : EditRows record originals entries edges before results after
+reads : RowsReads formulas solver base actual memos final
+nilCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos},
+    RowsLaw formulas solver base record originals entries [] state [] state memos
+consCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos current saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState width}
+    {values : List (Value Symbol Guard)} {middle : SharedState width} {result : EdgeValue Symbol Guard} {heap : Heap}
+    {edges results : List (EdgeValue Symbol Guard)} {after : SharedState width} {edge : EdgeValue Symbol Guard}
+    {children : EditChildren record originals entries 0 edge.children before values middle}
+    {rebuilt :
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+        (result, heap)}
+    {rest : EditRows record originals entries edges (advanceHeap middle heap) results after},
+    ChildrenReads formulas solver base children memos current →
+      RowsReads formulas solver base rest current saved →
+        RowsLaw formulas solver base record originals entries edges (advanceHeap middle heap) results after current →
+          RowsLaw formulas solver base record originals entries (edge :: edges) before (result :: results) after memos
+⊢ RowsLaw formulas solver base record originals entries edges before results after memos
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:164:36: error: unexpected token ','; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:170:86: error: unexpected token 'have'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:198:5: error: unexpected token 'prefix'; expected '(', '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:198:14: error: unexpected identifier; expected prec
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:201:43: error: unexpected identifier; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:230:5: error: unexpected token 'prefix'; expected '(', '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:230:14: error: unexpected identifier; expected prec
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:233:43: error: unexpected identifier; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:256:30: error: unexpected token ','; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-11.source.lean:265:30: error: unexpected token ','; expected ':'

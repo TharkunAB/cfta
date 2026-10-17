@@ -1,0 +1,120 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-parent-row-lineage/shared-edit-row-direct-12.source.lean:172:49: error: don't know how to synthesize implicit argument `rebuilt`
+  @RowsReads.cons inst✝¹ inst✝ width formulas solver base record originals memos current rowMemos entries before values
+    middle result heap (List.take index edges) (List.take index results) start edge children ?m.1161 earlierRows
+    firstRead prefixRead
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List (Value Symbol Guard)
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+edges✝ : List (EdgeValue Symbol Guard)
+before✝ : SharedState width
+results✝ : List (EdgeValue Symbol Guard)
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditRows record✝ originals✝ entries✝ edges✝ before✝ results✝ after✝
+reads : RowsReads formulas solver base actual memos✝ final
+nilCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos},
+    RowsLaw formulas solver base record originals entries [] state [] state memos
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+before : SharedState width
+values : List (Value Symbol Guard)
+middle : SharedState width
+result : EdgeValue Symbol Guard
+heap : Heap
+edges results : List (EdgeValue Symbol Guard)
+after : SharedState width
+edge : EdgeValue Symbol Guard
+children : EditChildren record originals entries 0 edge.children before values middle
+rebuilt :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)
+rest : EditRows record originals entries edges (advanceHeap middle heap) results after
+firstRead : ChildrenReads formulas solver base children memos current
+restRead : RowsReads formulas solver base rest current saved
+ih : RowsLaw formulas solver base record originals entries edges (advanceHeap middle heap) results after current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : Ready formulas solver inventory record originals base before
+resident : Edges before.checked.native.machine.heap (edge :: edges)
+safe : RowsSafe entries (edge :: edges)
+valid : Valid before.checked.native.machine.heap memos
+output : EdgeValue Symbol Guard
+facts : InternedNestedFacts.Facts before.checked.native.machine.heap
+middleInventory : Inventory
+first :
+  ChildrenReceipt formulas solver middleInventory record originals base edge.children before values middle memos current
+field :
+  SourceCurrentConjunctionEquality.FieldAvailable (SourceCurrentAllocatedNativeEffects.physical middle.checked).equality
+    edge.entry.key.constraint
+raw :
+  Ready formulas solver middleInventory record originals base
+      (advanceHeap middle
+        (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values)
+            middle.checked.native.machine.heap).snd) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical middle.checked)
+        (SourceCurrentAllocatedNativeEffects.physical
+          (advanceHeap middle
+              (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values)
+                  middle.checked.native.machine.heap).snd).checked) ∧
+      InternedEdgeResidency.EdgeResident
+          (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap).snd
+          (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values)
+              middle.checked.native.machine.heap).fst ∧
+        (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values)
+                middle.checked.native.machine.heap).fst.children =
+          values
+edgeResult :
+  Ready formulas solver middleInventory record originals base (advanceHeap middle heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical middle.checked)
+        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap middle heap).checked) ∧
+      InternedEdgeResidency.EdgeResident heap result ∧ result.children = values
+nextValid : Valid heap current
+preceding :
+  SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+    (SourceCurrentAllocatedNativeEffects.physical (advanceHeap middle heap).checked)
+tailResident : Edges (advanceHeap middle heap).checked.native.machine.heap edges
+tailSafe : RowsSafe entries edges
+index : Nat
+selected : (result :: results)[index + 1]? = some output
+original : EdgeValue Symbol Guard
+start rowMiddle : SharedState width
+rowValues : List (Value Symbol Guard)
+rowHeap : Heap
+startInventory rowInventory : Inventory
+rowMemos rowFinal : Memos
+earlierRows :
+  EditRows record originals entries (List.take index edges) (advanceHeap middle heap) (List.take index results) start
+actualChildren : EditChildren record originals entries 0 original.children start rowValues rowMiddle
+sourceIndex : edges[index]? = some original
+prefixRead : RowsReads formulas solver base earlierRows current rowMemos
+actualReads : ChildrenReads formulas solver base actualChildren rowMemos rowFinal
+startValid : Valid start.checked.native.machine.heap rowMemos
+actualBuilt :
+  run (makeEdge original.entry.key.symbol original.entry.key.constraint rowValues)
+      rowMiddle.checked.native.machine.heap =
+    (output, rowHeap)
+symbol : output.entry.key.symbol = original.entry.key.symbol
+guard : output.entry.key.constraint = original.entry.key.constraint
+exactChildren : output.children = rowValues
+startReady : Ready formulas solver startInventory record originals base start
+middleReady : Ready formulas solver rowInventory record originals base rowMiddle
+startGrowth : Grows start.checked.native.machine.heap after.checked.native.machine.heap
+middleGrowth : Grows rowMiddle.checked.native.machine.heap after.checked.native.machine.heap
+heapGrowth : Grows rowHeap after.checked.native.machine.heap
+combined :
+  EditRows record originals entries (List.take (index + 1) (edge :: edges)) before
+    (List.take (index + 1) (result :: results)) start
+⊢ run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)
