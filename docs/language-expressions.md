@@ -21,9 +21,10 @@ types. Declare names once, then reuse typed references and bindings. Text stays
 at declaration and codec boundaries. A fact identifier cannot select a production
 or exclusion by mistake.
 
-`define` installs a complete production with no facts. It replaces a production
-with the same name in place or appends a new one. Use `require` after `define`
-to supply facts. Use `require` or `relax` alone to change one existing fact.
+`define` sets the constructor symbol and child states at a named production.
+It changes an existing production in place and retains its facts, or appends a
+new production with no facts. Use `require` and `relax` to change facts explicitly.
+Constructor edits cannot silently remove an existing obligation.
 `remove` removes the selected production. `editSource` exposes the checked
 source edits for state-row changes. Source edits retain their order and validate
 the final graph. The initial state remains fixed.
@@ -94,3 +95,11 @@ checks reject identifiers used in the wrong role. The example's saved and
 restored JSON bytes remain identical after introducing the typed identifiers
 and state ADT. The semantic, malformed-file, and fresh-process replay probes
 still pass. All six suites, strict builds, and format checks pass again.
+
+Constructor redefinition uses `Document.DefineTransition`. It retains every
+existing fact while changing the symbol and children. A focused check confirms
+that equality still rejects unequal children until explicit relaxation. A
+solver-backed check also confirms that a redefined constructor retains its
+liquid guard. Missing states and ambiguous production names remain errors.
+The final six existing test executables are byte-identical to the passing runs;
+focused expression checks exercise the new operations separately.

@@ -4,7 +4,8 @@
 
 Before release, the package was called `microcfta`.
 
-- Add composable language updates and reversible named term exclusions.
+- Add typed composable language updates and reversible named term exclusions.
+- Retain source facts when redefining a constructor with `DefineTransition`.
 - Add direct put/delete operations for named source productions.
 - Add editable source documents with named facts and atomic, checked patches.
 

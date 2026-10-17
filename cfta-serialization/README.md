@@ -163,6 +163,7 @@ or invalid final graph is an error. Nothing commits partially.
 | `PutRow state transitions` | Add or replace a complete row. Preserve the written alternative order. |
 | `DeleteRow state` | Remove an existing row. The final graph must still have its initial state and all referenced children. |
 | `PutTransition state transition` | Replace the complete named production in place, or append it if the name is new. Use the supplied annotation and facts. |
+| `DefineTransition state name symbol children` | Change the constructor and children while retaining existing facts, or append a new production with no facts. |
 | `DeleteTransition state transitionName` | Remove one named production. Keep the state row, even when it becomes empty. |
 | `SetFact state transitionName factName body` | Add a fact or replace that fact's body. |
 | `RemoveFact state transitionName factName` | Remove exactly one existing named fact. |
@@ -238,7 +239,7 @@ program, including the source definition and refined symbols.
 
 | Expression | Effect |
 | --- | --- |
-| `define (at state name) symbol children` | Install a complete production with no facts. Replace the same name in place or append a new name. |
+| `define (at state name) symbol children` | Change the constructor and children while retaining its facts, or append a new production with no facts. |
 | `remove (at state name)` | Remove that production. Other derivations of a term can remain. |
 | `require (at state name) fact constraint` | Add or replace one named fact. |
 | `relax (at state name) fact` | Remove one existing fact, without negating it. |
@@ -249,9 +250,10 @@ program, including the source definition and refined symbols.
 | `restore name` | Remove that named exclusion. Other exclusions and facts still apply. |
 | `editSource edit` | Include a checked source edit, such as a state-row change. |
 
-`define` replaces the complete production, including its facts. Compose
-`require` to supply facts on a new definition. Use `require` and `relax` alone
-when the constructor and its other facts must stay unchanged. State references
+`define` retains an existing production's facts. Compose `require` or `relax`
+to change its obligations explicitly. A new production starts with no facts.
+The low-level `editSource (PutTransition ...)` operation remains available when
+a complete source replacement, including its facts, is intended. State references
 and constructor arities are checked after the complete source batch. Missing
 fact, production, state, or exclusion targets report an error.
 

@@ -95,15 +95,13 @@ fromDocument document = Language document Map.empty
 at :: state -> ProductionName -> ProductionRef state
 at = ProductionRef
 
-{- | Install a complete production with no facts. Replace the same name in place
-or append a new name. The state must exist. Compose 'require' to add facts.
+{- | Define a constructor at a named production. Change its symbol and children
+in place while retaining its facts, or append a new production with no facts.
+The state must exist. Use 'require' and 'relax' to change its facts explicitly.
 -}
 define :: ProductionRef state -> Symbol -> [state] -> Update state
 define (ProductionRef state name) symbol children =
-    editSource
-        $ Document.PutTransition state
-        $ FTA.Transition symbol children
-        $ Document.Annotation (productionNameText name) Map.empty
+    editSource $ Document.DefineTransition state (productionNameText name) symbol children
 
 -- | Remove an existing production. Keep its state even when the row becomes empty.
 remove :: ProductionRef state -> Update state
