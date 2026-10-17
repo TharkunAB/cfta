@@ -1,0 +1,15 @@
+# Actual comparison unfolding histories
+
+The new module pairs the existing `SourceMergedComparisonBudget.Budget` with the exact `SourceCurrentAllocatedUnfoldHistory.History`. `Recorded` inherits the old semantic effects, fixed degree bound, and progress law. It adds only the actual unfolding history. Ordered composition shares the literal complete middle heap.
+
+The pure branch derives equality of its returned heap and records an empty history. The read branch uses the same supplied successful repaired read for both the old budget and the new reader history. The zip stage records only demanded child comparisons. The cover stage retains a candidate's history when its Boolean answer is false before it tries the next candidate. Skipped row labels and guards add no event. The all-rows stage records the actual wide read before its cover search, then passes that exact returned heap to the next row.
+
+The final `check_recorded` proof follows every literal branch of the current repaired comparison. Empty, identity, and already-above returns preserve the same heap. The recursive branch records the narrow read, then derives every recursive callback by the strictly smaller comparison-fuel induction. The final public theorem has no callback certificate premise. The generic stage lemmas expose their callback premise explicitly. Successful equations are verification inputs; this module does not construct a sufficient initial comparison fuel.
+
+Actual availability, row residency, semantic readiness, and degree bounds pass through the inherited old effects at each exact intermediate heap. Closedness remains a property of the original literal values. No earlier source is replaced by a generated value. Histories include allocation-free actual unfolds and preserve their full heaps. The downstream initial-bound theorem can remove exact heap replays independently of an outer comparison fuel.
+
+Validation: strict source attempt 1 exits 0 and its log has zero bytes. The single owned canonical target exits 0 after 1219 jobs. Its log replays the older `InternedFreshOrdinaryClosedCompletion` unused-input warning. The new source has no warning. All nine public declarations have imported explicit signatures and axiom checks. Both integration declarations have the same checks. All eleven pairs use only standard axioms.
+
+The first integration builds a literal closed source with a productive smart Mu and an ordinary alternative. It performs an actual non-identity comparison, proves both constructor supplies increase, and derives its exact Recorded and History conclusions. The second performs a comparison from the exact first returned heap. It proves the same Boolean result and identical full returned heap. It composes the two produced histories. The fixture supplies no completed comparison, future callback, later store, or numerical resource bound as an initial premise.
+
+The module and evidence use new paths. No older production, frozen evidence, Haskell, Audit, root document, or Git state was changed. The complete initial numeric comparison and selected Operand resource proofs remain separate composition tasks.

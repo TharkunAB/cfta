@@ -1,0 +1,97 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:50:8: warning: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourceCurrentAllocatedUnfoldHistory.0.MicroCFTA.SourceCurrentAllocatedUnfoldHistory.singleton_good`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:50:0: warning: `singleton_good` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:57:8: warning: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourceCurrentAllocatedUnfoldHistory.0.MicroCFTA.SourceCurrentAllocatedUnfoldHistory.singleton_fits`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:57:0: warning: `singleton_fits` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:79:12: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `MicroCFTA.SourceCurrentAllocatedReaderControl.Good.mk` has 6 explicit field, but only 5 were provided
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:80:53: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+limit : Nat
+before after : InternedConstructorTemplates.State Symbol Guard
+good : Good limit before
+result : Value Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Value Symbol Guard
+available : Available before (Value.mu entry body depth ordinary)
+closed : (Value.mu entry body depth ordinary).free = []
+done :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry body depth ordinary) before = Outcome.done result after
+step :
+  SourceCurrentAllocatedReaderControl.Step
+    { heap := before, seen := [], pending := [Value.mu entry body depth ordinary] }
+    { heap := after, seen := [entry.identity], pending := [result] }
+checked :
+  SourceCurrentAllocatedReaderControl.Good limit { heap := after, seen := [entry.identity], pending := [result] }
+item : Value Symbol Guard
+member : item ∈ { heap := after, seen := [], pending := [] }.pending
+⊢ ?m.278
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:80:30: error: Missing eliminator: An eliminator must be provided when multiple induction targets are specified and no default eliminator has been registered
+
+Hint: Write `using <eliminator-name>` to specify an eliminator, or register a default eliminator with the attribute `[cases_eliminator]`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:162:34: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `MicroCFTA.SourceCurrentAllocatedReaderControl.Good.mk` has 6 explicit field, but only 5 were provided
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:164:49: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+mass : Nat
+before after : InternedConstructorTemplates.State Symbol Guard
+actual : History before after
+semantic : SemanticHeap before
+covered : Covered [] before
+depth : InternedOpenDepthReadback.Heap before
+stored : InternedValueMassHeap.Stored mass before
+item : Value Symbol Guard
+member : item ∈ { heap := before, seen := [], pending := [] }.pending
+⊢ ?m.41
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:164:26: error: Missing eliminator: An eliminator must be provided when multiple induction targets are specified and no default eliminator has been registered
+
+Hint: Write `using <eliminator-name>` to specify an eliminator, or register a default eliminator with the attribute `[cases_eliminator]`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:166:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑{ heap := before, seen := [], pending := [] }.heap.nodes.next
+ b := ↑mass
+ c := ↑before.edges.next
+ d := ↑before.nodes.next
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedUnfoldHistory.lean:167:30: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑{ heap := before, seen := [], pending := [] }.heap.edges.next
+ b := ↑mass
+ c := ↑before.edges.next
+ d := ↑before.nodes.next

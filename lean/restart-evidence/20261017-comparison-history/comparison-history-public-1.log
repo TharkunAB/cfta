@@ -1,0 +1,165 @@
+'MicroCFTA.SourceMergedComparisonHistory.Recorded' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.Recorded : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceMergedComparisonHistory.Recorded.trans' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.Recorded.trans : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before middle →
+    @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit middle after →
+      @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after
+'MicroCFTA.SourceMergedComparisonHistory.pure_recorded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.pure_recorded : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit : Nat)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+      ∀ (answer result : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+            (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer before)
+            (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool result after) →
+          @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after
+'MicroCFTA.SourceMergedComparisonHistory.read_recorded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.read_recorded : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit fuel : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          ∀ (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+            @Eq.{1}
+                (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                (@MicroCFTA.MergedFreshOrdinaryExposure.read Symbol Guard inst fuel value before)
+                (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges after) →
+              @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after
+'MicroCFTA.SourceMergedComparisonHistory.Callback' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.Callback : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+            MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+              MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool) →
+        Prop
+'MicroCFTA.SourceMergedComparisonHistory.children_recorded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.children_recorded : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit : Nat)
+  (compare :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool),
+  @MicroCFTA.SourceMergedComparisonHistory.Callback Symbol Guard inst limit compare →
+    ∀ (wides narrows : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+        @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+          @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before wides →
+            @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before narrows →
+              @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard wides →
+                @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard narrows →
+                  ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                    @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                        (@MicroCFTA.MergedSourceComparison.children Symbol Guard compare wides narrows before)
+                        (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                      @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after
+'MicroCFTA.SourceMergedComparisonHistory.anyCover_recorded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.anyCover_recorded : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (limit : Nat) (clear : Guard → Bool)
+  (compare :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool),
+  @MicroCFTA.SourceMergedComparisonHistory.Callback Symbol Guard inst limit compare →
+    ∀ (narrow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (wides : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+        @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+          @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard narrow) →
+            @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before wides →
+              @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard narrow) →
+                @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard wides →
+                  ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                    @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                        (@MicroCFTA.MergedSourceComparison.anyCover Symbol Guard inst_1 clear compare narrow wides
+                          before)
+                        (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                      @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after
+'MicroCFTA.SourceMergedComparisonHistory.allRows_recorded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.allRows_recorded : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (limit fuel : Nat) (clear : Guard → Bool)
+  (compare :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool),
+  @MicroCFTA.SourceMergedComparisonHistory.Callback Symbol Guard inst limit compare →
+    ∀ (wide : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (narrows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+        @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before wide →
+            @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before narrows →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard wide)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard narrows →
+                  ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                    @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                        (@MicroCFTA.MergedFreshOrdinaryComparison.allRows Symbol Guard inst inst_1 fuel clear compare
+                          wide narrows before)
+                        (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                      @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after
+'MicroCFTA.SourceMergedComparisonHistory.check_recorded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceMergedComparisonHistory.check_recorded : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (limit : Nat) (clear : Guard → Bool) (fuel : Nat)
+  (above : List.{0} (Prod.{0, 0} Nat Nat)) (wide narrow : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before wide →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before narrow →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard wide)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard narrow)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+              ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                    (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst inst_1 clear fuel above wide
+                      narrow before)
+                    (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                  @MicroCFTA.SourceMergedComparisonHistory.Recorded Symbol Guard inst limit before after

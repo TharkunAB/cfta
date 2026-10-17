@@ -1,0 +1,69 @@
+'MicroCFTA.SourceCurrentAllocatedReaderHistory.Run.history' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderHistory.Run.history : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {count : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedReaderConsumed.Run Symbol Guard inst count before rows after →
+    ∀ (limit : Nat),
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+        @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst
+          (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard before)
+          (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard after)
+'MicroCFTA.SourceCurrentAllocatedReaderHistory.collect_history' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderHistory.collect_history : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit fuel : Nat)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (seen : List.{0} Nat)
+  (pending : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard before seen pending) →
+    ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+          (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst fuel before seen pending)
+          (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after) →
+        @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after
+'MicroCFTA.SourceCurrentAllocatedReaderHistory.nodeEdges_history' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderHistory.nodeEdges_history : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit fuel : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+            @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before)
+                (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after) →
+              @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after
+'MicroCFTA.SourceCurrentAllocatedReaderHistory.read_history' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderHistory.read_history : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit fuel : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard before limit →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+            @Eq.{1}
+                (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                (@MicroCFTA.MergedFreshOrdinaryExposure.read Symbol Guard inst fuel value before)
+                (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows after) →
+              @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after

@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentAllocatedRowReadUniform
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRowReadUniform.readFuel_mono
+#check @MicroCFTA.SourceCurrentAllocatedRowReadUniform.readFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRowReadUniform.complete
+#check @MicroCFTA.SourceCurrentAllocatedRowReadUniform.complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRowReadUniform.of_read
+#check @MicroCFTA.SourceCurrentAllocatedRowReadUniform.of_read
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRowReadUniform.identity_bound
+#check @MicroCFTA.SourceCurrentAllocatedRowReadUniform.identity_bound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRowReadUniform.remainingPairs_length_le
+#check @MicroCFTA.SourceCurrentAllocatedRowReadUniform.remainingPairs_length_le
+

@@ -1,0 +1,386 @@
+[
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean",
+    "sha256": "5701546cc13508e40e8cfc07cf48330cc6b353f6d880211aa1d8520562a0092c",
+    "declaration": "Code",
+    "first_line": 39,
+    "last_line": 46,
+    "text": "inductive Code (Symbol Guard : Type) : Type → Type 1 where\n  | pure (value : Result) : Code Symbol Guard Result\n  | work (job : Work Symbol Guard Result) : Code Symbol Guard Result\n  | select (inputs : List (Value Symbol Guard)) : Code Symbol Guard (List (Value Symbol Guard))\n  | request (input : Value Symbol Guard) : Code Symbol Guard (Value Symbol Guard)\n  | bind (first : Code Symbol Guard First) (next : First → Code Symbol Guard Result) : Code Symbol Guard Result\n\n/-- Ordered traversal threads both the physical heap and the result table between children. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean",
+    "sha256": "5701546cc13508e40e8cfc07cf48330cc6b353f6d880211aa1d8520562a0092c",
+    "declaration": "body",
+    "first_line": 86,
+    "last_line": 91,
+    "text": "def body [DecidableEq Symbol] (top : Guard) (input : Value Symbol Guard) : Code Symbol Guard (Value Symbol Guard) :=\n  match input with\n  | .node _ edges _ free => if free = [] then root top (MergedSourceGrouping.groups edges) else .pure input\n  | _ => .pure input\n\nmutual\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean",
+    "sha256": "5701546cc13508e40e8cfc07cf48330cc6b353f6d880211aa1d8520562a0092c",
+    "declaration": "Call",
+    "first_line": 110,
+    "last_line": 120,
+    "text": "  inductive Call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (top : Guard) :\n      Value Symbol Guard → State Symbol Guard → Memo Symbol Guard → Value Symbol Guard →\n        State Symbol Guard → Memo Symbol Guard → Prop where\n    | hit (found : memo input.referenceOf = some entry) :\n        Call clear top input before memo entry.result before memo\n    | miss (absent : memo input.referenceOf = none)\n        (actual : Run clear top (body top input) before memo candidate after current) :\n        Call clear top input before memo (winner current input candidate).result after (remember current input candidate)\nend\n\n/-- Completion retains every previously stored original and result. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeGraph.lean",
+    "sha256": "5701546cc13508e40e8cfc07cf48330cc6b353f6d880211aa1d8520562a0092c",
+    "declaration": "remember",
+    "first_line": 31,
+    "last_line": 32,
+    "text": "def remember (memo : Memo Symbol Guard) (input output : Value Symbol Guard) : Memo Symbol Guard :=\n  keepFirst memo input.referenceOf ⟨input, output⟩\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeWorker.lean",
+    "sha256": "4ce9f2ecf7482e1fcc07a326fcb00809ed3a26a01e38ce9aa7cf080bc67089ed",
+    "declaration": "execute",
+    "first_line": 38,
+    "last_line": 55,
+    "text": "  def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n      (clear : Guard → Bool) (top : Guard) : Nat → Nat → Code Symbol Guard Output →\n        State Symbol Guard → Memo Symbol Guard → Outcome Symbol Guard Output\n    | 0, _, _, heap, memo => .failed .exhausted heap memo\n    | remaining + 1, selectionFuel, code, heap, memo =>\n        match code with\n        | .pure value => .done value heap memo\n        | .work job =>\n            let actual := run job heap\n            .done actual.1 actual.2 memo\n        | .select inputs =>\n            match SourceMergedSelection.select clear selectionFuel inputs heap with\n            | .done values after => .done values after memo\n            | .failed fault after => .failed fault after memo\n        | .request input => call clear top remaining selectionFuel input heap memo\n        | .bind first next =>\n            (execute clear top remaining selectionFuel first heap memo).bind fun value after saved =>\n              execute clear top remaining selectionFuel (next value) after saved\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeWorker.lean",
+    "sha256": "4ce9f2ecf7482e1fcc07a326fcb00809ed3a26a01e38ce9aa7cf080bc67089ed",
+    "declaration": "call",
+    "first_line": 58,
+    "last_line": 68,
+    "text": "  def call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n      (clear : Guard → Bool) (top : Guard) : Nat → Nat → Value Symbol Guard →\n        State Symbol Guard → Memo Symbol Guard → Outcome Symbol Guard (Value Symbol Guard)\n    | 0, _, _, heap, memo => .failed .exhausted heap memo\n    | remaining + 1, selectionFuel, input, heap, memo =>\n        match memo input.referenceOf with\n        | some entry => .done entry.result heap memo\n        | none =>\n            (execute clear top remaining selectionFuel (body top input) heap memo).bind fun candidate after current =>\n              .done (winner current input candidate).result after (remember current input candidate)\nend\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeWorkerProofs.lean",
+    "sha256": "79639b4580a7f41dc25670603a4b9579b1e10309aa9a72e62d577a84466fb7e6",
+    "declaration": "StableCall",
+    "first_line": 151,
+    "last_line": 253,
+    "text": "def StableCall [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (clear : Guard → Bool) (top : Guard) (input : Value Symbol Guard)\n    (before : State Symbol Guard) (memo : Memo Symbol Guard) (output : Value Symbol Guard)\n    (after : State Symbol Guard) (saved : Memo Symbol Guard) : Prop :=\n  ∃ workBound selectionBound, ∀ workFuel selectionFuel, workBound ≤ workFuel → selectionBound ≤ selectionFuel →\n    call clear top workFuel selectionFuel input before memo = .done output after saved\n\nprivate theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    {clear : Guard → Bool} {top : Guard} :\n    (∀ {Output} (code : Code Symbol Guard Output) before memo output after saved, Run clear top code before memo output after saved →\n      StableRun clear top code before memo output after saved) ∧\n    (∀ (input : Value Symbol Guard) before memo output after saved, Call clear top input before memo output after saved →\n      StableCall clear top input before memo output after saved) := by\n  have pureCase : ∀ {Output} (value : Output) (state : State Symbol Guard) (memo : Memo Symbol Guard),\n      StableRun clear top (.pure value) state memo value state memo := by\n    intro Output value state memo\n    refine ⟨1, 0, ?_⟩\n    intro workFuel selectionFuel workEnough _\n    cases workFuel with\n    | zero => omega\n    | succ => rfl\n  have workCase : ∀ {Output} (job : Work Symbol Guard Output) state memo,\n      StableRun clear top (.work job) state memo (run job state).1 (run job state).2 memo := by\n    intro Output job state memo\n    refine ⟨1, 0, ?_⟩\n    intro workFuel selectionFuel workEnough _\n    cases workFuel with\n    | zero => omega\n    | succ => rfl\n  have selectCase : ∀ fuel (inputs : List (Value Symbol Guard)) before values after memo,\n      SourceMergedSelection.select clear fuel inputs before = .done values after →\n      StableRun clear top (.select inputs) before memo values after memo := by\n    intro fuel inputs before values after memo actual\n    refine ⟨1, fuel, ?_⟩\n    intro workFuel selectionFuel workEnough selectionEnough\n    cases workFuel with\n    | zero => omega\n    | succ => simp only [execute, selection_stable clear fuel selectionFuel inputs before values after actual selectionEnough]\n  have requestCase : ∀ (input : Value Symbol Guard) before memo output after saved,\n      Call clear top input before memo output after saved → StableCall clear top input before memo output after saved →\n      StableRun clear top (.request input) before memo output after saved := by\n    intro input before memo output after saved _ stable\n    obtain ⟨work, selection, done⟩ := stable\n    refine ⟨work + 1, selection, ?_⟩\n    intro workFuel selectionFuel workEnough selectionEnough\n    cases workFuel with\n    | zero => omega\n    | succ remaining => exact done remaining selectionFuel (by omega) selectionEnough\n  have bindCase : ∀ {Input Output : Type} (first : Code Symbol Guard Input) (next : Input → Code Symbol Guard Output)\n      before memo (value : Input) middle current (output : Output) after saved,\n      Run clear top first before memo value middle current → Run clear top (next value) middle current output after saved →\n      StableRun clear top first before memo value middle current → StableRun clear top (next value) middle current output after saved →\n      StableRun clear top (.bind first next) before memo output after saved := by\n    intro Input Output first next before memo value middle current output after saved _ _ firstStable laterStable\n    obtain ⟨firstWork, firstSelection, firstDone⟩ := firstStable\n    obtain ⟨laterWork, laterSelection, laterDone⟩ := laterStable\n    refine ⟨max firstWork laterWork + 1, max firstSelection laterSelection, ?_⟩\n    intro workFuel selectionFuel workEnough selectionEnough\n    cases workFuel with\n    | zero => omega\n    | succ remaining =>\n        simp only [execute, firstDone remaining selectionFuel (by omega) (by omega), Outcome.bind]\n        exact laterDone remaining selectionFuel (by omega) (by omega)\n  have hitCase : ∀ (input : Value Symbol Guard) before memo entry, memo input.referenceOf = some entry →\n      StableCall clear top input before memo entry.result before memo := by\n    intro input before memo entry found\n    refine ⟨1, 0, ?_⟩\n    intro workFuel selectionFuel workEnough _\n    cases workFuel with\n    | zero => omega\n    | succ => exact call_hit _ _ _ _ _ _ _ _ found\n  have missCase : ∀ (input : Value Symbol Guard) before memo candidate after current,\n      memo input.referenceOf = none → Run clear top (body top input) before memo candidate after current →\n      StableRun clear top (body top input) before memo candidate after current →\n      StableCall clear top input before memo (winner current input candidate).result after (remember current input candidate) := by\n    intro input before memo candidate after current absent _ stable\n    obtain ⟨work, selection, done⟩ := stable\n    refine ⟨work + 1, selection, ?_⟩\n    intro workFuel selectionFuel workEnough selectionEnough\n    cases workFuel with\n    | zero => omega\n    | succ remaining => simp only [call, absent, done remaining selectionFuel (by omega) selectionEnough, Outcome.bind]\n  constructor\n  · intro Output code before memo output after saved actual\n    exact Run.rec\n      (motive_1 := fun {_} code before memo output after saved _ => StableRun clear top code before memo output after saved)\n      (motive_2 := fun input before memo output after saved _ => StableCall clear top input before memo output after saved)\n      pureCase workCase\n      (by intros; apply selectCase; assumption)\n      (by intros; apply requestCase <;> assumption)\n      (by intros; apply bindCase <;> assumption)\n      (by intros; apply hitCase; assumption)\n      (by intros; apply missCase <;> assumption) actual\n  · intro input before memo output after saved actual\n    exact Call.rec\n      (motive_1 := fun {_} code before memo output after saved _ => StableRun clear top code before memo output after saved)\n      (motive_2 := fun input before memo output after saved _ => StableCall clear top input before memo output after saved)\n      pureCase workCase\n      (by intros; apply selectCase; assumption)\n      (by intros; apply requestCase <;> assumption)\n      (by intros; apply bindCase <;> assumption)\n      (by intros; apply hitCase; assumption)\n      (by intros; apply missCase <;> assumption) actual\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeWorkerProofs.lean",
+    "sha256": "79639b4580a7f41dc25670603a4b9579b1e10309aa9a72e62d577a84466fb7e6",
+    "declaration": "call_uniform",
+    "first_line": 304,
+    "last_line": 308,
+    "text": "theorem call_uniform [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    {clear : Guard → Bool} {top : Guard} {input output : Value Symbol Guard}\n    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard}\n    (actual : Call clear top input before memo output after saved) :\n    ∃ bound, ∀ fuel, bound ≤ fuel → call clear top fuel fuel input before memo = .done output after saved := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeCompletion.lean",
+    "sha256": "6d1bd12da1c2ab067161284e08ceeece4848d39515be15d7939209c91c97f729",
+    "declaration": "call_complete",
+    "first_line": 325,
+    "last_line": 329,
+    "text": "theorem call_complete (clear : Guard → Bool) (top : Guard) (input : Value Symbol Guard)\n    (before : State Symbol Guard) (memo : Memo Symbol Guard)\n    (semantic : SemanticReady before) (costs : CostHeap before) (stored : Stored before memo) (available : Available before input) :\n    ∃ result after saved, Call clear top input before memo result after saved ∧\n      Effect before after ∧ Stored after saved ∧ Available after result ∧ (input.free = [] → result.free = []) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeEffects.lean",
+    "sha256": "59e412eb3b6fe5089af77b4d2f3f79fae69bedefd2eab29e874853a907f77d5b",
+    "declaration": "Stored",
+    "first_line": 21,
+    "last_line": 24,
+    "text": "def Stored (heap : State Symbol Guard) (memo : Memo Symbol Guard) : Prop :=\n  ∀ key entry, memo key = some entry → entry.original.referenceOf = key ∧\n    Available heap entry.original ∧ Available heap entry.result ∧\n      (entry.original.free = [] → entry.result.free = [])\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeEffects.lean",
+    "sha256": "59e412eb3b6fe5089af77b4d2f3f79fae69bedefd2eab29e874853a907f77d5b",
+    "declaration": "hit_original",
+    "first_line": 50,
+    "last_line": 54,
+    "text": "theorem hit_original [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    {heap : State Symbol Guard} {memo : Memo Symbol Guard} {input : Value Symbol Guard} {entry : Entry Symbol Guard}\n    (semantic : SemanticReady heap) (available : Available heap input) (stored : Stored heap memo)\n    (found : memo input.referenceOf = some entry) :\n    entry.original = input ∧ Available heap entry.result ∧ (input.free = [] → entry.result.free = []) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeEffects.lean",
+    "sha256": "59e412eb3b6fe5089af77b4d2f3f79fae69bedefd2eab29e874853a907f77d5b",
+    "declaration": "Effect",
+    "first_line": 61,
+    "last_line": 67,
+    "text": "structure Effect (before after : State Symbol Guard) : Prop where\n  keeps : Keeps before after\n  semantic : SemanticReady after\n  costs : CostHeap after\n\ntheorem Effect.trans {before middle after : State Symbol Guard}\n    (first : Effect before middle) (later : Effect middle after) : Effect before after :=\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentMemoMergeMass.lean",
+    "sha256": "457e8df20e929dc8475966a5cd31fc9c9351b3e02257a602263304c4682d40ca",
+    "declaration": "winner_bound",
+    "first_line": 42,
+    "last_line": 47,
+    "text": "theorem winner_bound {heap : State Symbol Guard} {memo : Memo Symbol Guard}\n    (physical : SourceCurrentMemoMergeEffects.Stored heap memo)\n    (stored : InternedValueMassHeap.Stored bound heap)\n    (input candidate : Value Symbol Guard) (available : Available heap candidate) :\n    Available heap (winner memo input candidate).result ∧\n      InternedValueMass.value (winner memo input candidate).result ≤ bound := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedOrdinaryHeight.lean",
+    "sha256": "278e40fc5846b6f8614e4bf1025b8c7711c03dbad7b298bcccc2f1442f47a636",
+    "declaration": "height",
+    "first_line": 16,
+    "last_line": 18,
+    "text": "def height : Value Symbol Guard → Nat\n  | .node _ edges _ _ => edgesHeight edges + 1\n  | _ => 0\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedOrdinaryHeight.lean",
+    "sha256": "278e40fc5846b6f8614e4bf1025b8c7711c03dbad7b298bcccc2f1442f47a636",
+    "declaration": "child_lt",
+    "first_line": 50,
+    "last_line": 54,
+    "text": "theorem child_lt (entry : Interned InternedBinderProtocol.NodeKey)\n    (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference)\n    (edge : EdgeValue Symbol Guard) (present : edge ∈ edges)\n    (child : Value Symbol Guard) (member : child ∈ edge.children) :\n    height child < height (.node entry edges depth free) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedOrdinaryHeight.lean",
+    "sha256": "278e40fc5846b6f8614e4bf1025b8c7711c03dbad7b298bcccc2f1442f47a636",
+    "declaration": "ordinaryUnion_bound",
+    "first_line": 134,
+    "last_line": 139,
+    "text": "theorem ordinaryUnion_bound [DecidableEq (EdgeKey Symbol Guard)]\n    (values : List (Value Symbol Guard)) (state : State Symbol Guard)\n    (coherent : Coherent state) (linked : Linked state)\n    (resident : ∀ value ∈ values, Resident state value) (bound : Nat)\n    (bounded : ∀ value ∈ values, height value ≤ bound) :\n    height (run (ordinaryUnion values) state).1 ≤ bound := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedOrdinaryHeight.lean",
+    "sha256": "278e40fc5846b6f8614e4bf1025b8c7711c03dbad7b298bcccc2f1442f47a636",
+    "declaration": "column_union_lt",
+    "first_line": 154,
+    "last_line": 161,
+    "text": "theorem column_union_lt [DecidableEq (EdgeKey Symbol Guard)]\n    (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard))\n    (depth : Nat) (free : List InternedBinderProtocol.Reference)\n    (values : List (Value Symbol Guard))\n    (selected : ∀ value ∈ values, ∃ edge ∈ edges, value ∈ edge.children)\n    (state : State Symbol Guard) (coherent : Coherent state) (linked : Linked state)\n    (resident : ∀ value ∈ values, Resident state value) :\n    height (run (ordinaryUnion values) state).1 < height (.node entry edges depth free) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedSelectionNumeric.lean",
+    "sha256": "396787dbf9c2fb36ace3e80e68caf9d93da86fe573ae522e70aea6057881e3d2",
+    "declaration": "select_complete",
+    "first_line": 194,
+    "last_line": 202,
+    "text": "theorem select_complete (clear : Guard → Bool) (inputs : List (Value Symbol Guard))\n    (before : State Symbol Guard) (mass : Nat) (semantic : SemanticReady before)\n    (stored : InternedValueMassHeap.Stored mass before) (available : Values before inputs) (closed : ClosedValues inputs) :\n    ∃ result after,\n      select clear (comparisonFuel before.nodes.next before.edges.next mass) inputs before = .done result after ∧\n      Effect before after ∧ SourceCurrentAllocatedUnfoldHistory.Fits (heapBound before.nodes.next before.edges.next mass) after ∧\n      SourceMergedComparisonMass.Resources\n        (SourceMergedSelectionMass.selectionBound (comparisonFuel before.nodes.next before.edges.next mass) inputs.length mass) before after ∧\n      ∀ extra, select clear (comparisonFuel before.nodes.next before.edges.next mass + extra) inputs before = .done result after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonNumeric.lean",
+    "sha256": "84882dded44f4c8c232d58a1388351ed6fee3b19b3bb89f5162a95db06742cbb",
+    "declaration": "comparisonFuel",
+    "first_line": 31,
+    "last_line": 35,
+    "text": "def comparisonFuel (nodes edges mass : Nat) : Nat :=\n  let bound := heapBound nodes edges mass\n  1 + bound * bound + readerFuel nodes edges mass\n\nvariable [DecidableEq (EdgeKey Symbol Guard)]\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonNumeric.lean",
+    "sha256": "84882dded44f4c8c232d58a1388351ed6fee3b19b3bb89f5162a95db06742cbb",
+    "declaration": "check_complete",
+    "first_line": 128,
+    "last_line": 140,
+    "text": "theorem check_complete [DecidableEq Symbol] (clear : Guard → Bool) (before : State Symbol Guard)\n    (mass : Nat) (semantic : SemanticReady before) (stored : InternedValueMassHeap.Stored mass before)\n    (above : List (Nat × Nat)) (wide narrow : Value Symbol Guard)\n    (wideInput : Available before wide) (narrowInput : Available before narrow)\n    (wideClosed : wide.free = []) (narrowClosed : narrow.free = []) :\n    ∃ answer after,\n      check clear (comparisonFuel before.nodes.next before.edges.next mass) above wide narrow before = .done answer after ∧\n      Effect before after ∧\n      SourceCurrentAllocatedUnfoldHistory.Fits (heapBound before.nodes.next before.edges.next mass) after ∧\n      SourceMergedComparisonMass.Resources\n        (SourceMergedComparisonMass.comparisonBound (comparisonFuel before.nodes.next before.edges.next mass) mass) before after ∧\n      ∀ extra, check clear (comparisonFuel before.nodes.next before.edges.next mass + extra)\n        above wide narrow before = .done answer after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedValueMassConstructors.lean",
+    "sha256": "3051a422e70b9d49fb8c3b38a9af326885ed87ec2400c803647b0c2b7a1dfba5",
+    "declaration": "edge",
+    "first_line": 97,
+    "last_line": 101,
+    "text": "theorem edge [DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)\n    (children : List (Value Symbol Guard)) (state : State Symbol Guard) (stored : Stored bound state) :\n    Stored (max bound (1 + InternedValueMass.values children)) (run (makeEdge symbol guard children) state).2 ∧\n      InternedValueMass.edge (run (makeEdge symbol guard children) state).1 ≤\n        max bound (1 + InternedValueMass.values children) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedValueMassConstructors.lean",
+    "sha256": "3051a422e70b9d49fb8c3b38a9af326885ed87ec2400c803647b0c2b7a1dfba5",
+    "declaration": "node",
+    "first_line": 107,
+    "last_line": 110,
+    "text": "theorem node [DecidableEq (EdgeKey Symbol Guard)] (rows : List (EdgeValue Symbol Guard))\n    (state : State Symbol Guard) (stored : Stored bound state) :\n    Stored (max bound (1 + InternedValueMass.edges rows)) (run (makeNode rows) state).2 ∧\n      InternedValueMass.value (run (makeNode rows) state).1 ≤ max bound (1 + InternedValueMass.edges rows) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedValueMassConstructors.lean",
+    "sha256": "3051a422e70b9d49fb8c3b38a9af326885ed87ec2400c803647b0c2b7a1dfba5",
+    "declaration": "union",
+    "first_line": 128,
+    "last_line": 131,
+    "text": "theorem union [DecidableEq (EdgeKey Symbol Guard)] (nodes : List (Value Symbol Guard))\n    (state : State Symbol Guard) (stored : Stored bound state) :\n    Stored (max bound (1 + InternedValueMass.values nodes)) (run (makeUnion nodes) state).2 ∧\n      InternedValueMass.value (run (makeUnion nodes) state).1 ≤ max bound (1 + InternedValueMass.values nodes) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean",
+    "sha256": "1df14599b09a4c93dfacb0ea2a0172aa16353b091213f825f245de6ec0c9e224",
+    "declaration": "nodeBudget",
+    "first_line": 21,
+    "last_line": 26,
+    "text": "def nodeBudget : Syntax Symbol Guard → Nat\n  | .empty | .var _ => 0\n  | .node rows => rowNodes rows + 1\n  | .union values => manyNodes values + 1\n  | .binder _ body => 3 * nodeBudget body + 4\ntermination_by expression => sizeOf expression\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean",
+    "sha256": "1df14599b09a4c93dfacb0ea2a0172aa16353b091213f825f245de6ec0c9e224",
+    "declaration": "edgeBudget",
+    "first_line": 43,
+    "last_line": 48,
+    "text": "def edgeBudget : Syntax Symbol Guard → Nat\n  | .empty | .var _ => 0\n  | .node rows => rowEdges rows\n  | .union values => manyEdges values\n  | .binder _ body => 3 * edgeBudget body\ntermination_by expression => sizeOf expression\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean",
+    "sha256": "1df14599b09a4c93dfacb0ea2a0172aa16353b091213f825f245de6ec0c9e224",
+    "declaration": "build_bound",
+    "first_line": 146,
+    "last_line": 149,
+    "text": "theorem build_bound (expression : Syntax Symbol Guard) (environment : List (Value Symbol Guard))\n    (state : State Symbol Guard) :\n    (build expression environment state).state.nodes.next ≤ state.nodes.next + nodeBudget expression ∧\n      (build expression environment state).state.edges.next ≤ state.edges.next + edgeBudget expression := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean",
+    "sha256": "592150198bd4beeff98eb2ba4a562b23be4cd393b59c2e3e5578f10b8bce9bc0",
+    "declaration": "constructionSyntax",
+    "first_line": 22,
+    "last_line": 24,
+    "text": "def constructionSyntax (key : Nat × Nat) (body : Value Symbol Guard) : Syntax Symbol Guard :=\n  .binder true (InternedStoredSubstitution.encode (InternedStoredSubstitution.leaves body)\n    [.intersection key.1 key.2] body)\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean",
+    "sha256": "592150198bd4beeff98eb2ba4a562b23be4cd393b59c2e3e5578f10b8bce9bc0",
+    "declaration": "bound",
+    "first_line": 37,
+    "last_line": 40,
+    "text": "theorem bound [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)\n    (state : State Symbol Guard) (facts : Facts state) (available : Available state body) :\n    (maybeMu key body state).state.nodes.next ≤ state.nodes.next + nodeBudget key body ∧\n    (maybeMu key body state).state.edges.next ≤ state.edges.next + edgeBudget key body := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshOrdinaryCostHeap.lean",
+    "sha256": "6688bbbd03a8e2e9611362bd381ef55e47816d56a34b8b2a1a1f4e9d40cc3647",
+    "declaration": "Correct",
+    "first_line": 20,
+    "last_line": 26,
+    "text": "structure Correct (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) : Prop where\n  localNormal : InternedDeepLocalNormal.Local (.interned entry.identity) body\n  external : ∀ name count,\n    ((name, count) ∈ costs body ∧ name ≠ .interned entry.identity) ↔\n      ((name, count) ∈ costs ordinary ∧ name ≠ .uninterned (ordinaryLevel depth))\n\n/-- Every complete stored recursive payload retains weighted ordinary-probe readback. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshOrdinaryCostHeap.lean",
+    "sha256": "6688bbbd03a8e2e9611362bd381ef55e47816d56a34b8b2a1a1f4e9d40cc3647",
+    "declaration": "Heap",
+    "first_line": 27,
+    "last_line": 29,
+    "text": "def Heap (state : State Symbol Guard) : Prop :=\n  ∀ key entry body depth ordinary, state.nodeRecords key = some (.mu entry body depth ordinary) →\n    Correct entry body depth ordinary\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedSourceGrouping.lean",
+    "sha256": "eb3b1d1f8f83334a73a036c82e281afc8f9aeaeef8f10a4bc369b006cde4e419",
+    "declaration": "groups_correct",
+    "first_line": 51,
+    "last_line": 52,
+    "text": "theorem groups_correct [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard)) :\n    Grouping edges (groups edges) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedAlternativesGroups.lean",
+    "sha256": "aa113e1f320c07f6e3e3a16d9d142eb493f0b153fe191879b9cd46cd174019f0",
+    "declaration": "columns",
+    "first_line": 16,
+    "last_line": 18,
+    "text": "def columns (rows : List (List Node)) : Nat → List (List Node)\n  | 0 => []\n  | arity + 1 => rows.filterMap List.head? :: columns (rows.map List.tail) arity\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentConstrainedCapOperandFrame.lean",
+    "sha256": "b2d8151c78198256ece4c0e604724e3c360360072e896932b50de15dccd93bb8",
+    "declaration": "advance",
+    "first_line": 39,
+    "last_line": 45,
+    "text": "theorem advance {formulas : SourceGuards.Formulas FullSyntax.Formula}\n    {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory} {before after : Checked width}\n    (frame : Frame formulas solver inventory before) (ready : Ready after)\n    (extension : Extension before.native.machine after.native.machine)\n    (nodes : after.native.nodes = before.native.nodes) (edges : after.native.edges = before.native.edges)\n    (guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain after.native.machine.heap) :\n    Frame formulas solver inventory after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentConstrainedCapOperandFrame.lean",
+    "sha256": "b2d8151c78198256ece4c0e604724e3c360360072e896932b50de15dccd93bb8",
+    "declaration": "complete",
+    "first_line": 84,
+    "last_line": 94,
+    "text": "theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)\n    (path : List Int) (values : List (Value Symbol Guard)) (before : Checked width) (memo : Memo)\n    (frame : Frame formulas solver inventory before) (available : Values before.native.machine.heap values)\n    (domain : Domain path values) (physicalStored : PhysicalStored before.native.machine.heap memo)\n    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)\n    (memos : Memos) (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos) :\n    ∃ result after saved final,\n      Operand path values before memo result after saved ∧\n      SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values\n        before memo result after saved memos final ∧ Frame formulas solver inventory after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedMergeOperand.lean",
+    "sha256": "40cb6d47de31a9d44c66dd6c09f9462b9a4a20ec3f19398ba0a15b68dffaa3b2",
+    "declaration": "Receipt",
+    "first_line": 30,
+    "last_line": 62,
+    "text": "structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (path : List Int) (values : List (Value Symbol Guard))\n    (before : Checked width) (memo : Memo) (output : Value Symbol Guard) (after : Checked width)\n    (saved : Memo) (memos final : Memos) : Prop where\n  actual : ∃ projected middle current,\n    SourceCurrentConjunctionTargetProjection.Receipt formulas solver inventory path values before projected middle memos current ∧\n    SourceCurrentAllocatedMerge.Receipt formulas solver inventory SourceCurrentAllocatedMerge.literalClear\n      projected middle memo output after saved current final\n  ready : Ready after\n  admitted : At formulas solver inventory after\n  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)\n  stored : Stored after.native.machine.heap saved\n  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved\n  available : Available after.native.machine.heap output\n  closed : output.free = []\n  originals : Values after.native.machine.heap values\n  nodes : after.native.nodes = before.native.nodes\n  edges : after.native.edges = before.native.edges\n  domains : after.native.machine.domains = before.native.machine.domains\n  retained : Extends memo saved\n  globals : Valid after.native.machine.heap final\n  unfolding : Extends memos.unfolding final.unfolding\n  query : final.query = memos.query\n  included : path ≠ [] → ∀ ambient symbol terms part,\n    All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →\n    SymbolicSignedPaths.lookup (.node symbol terms) path = some part →\n    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient output part\n  root_covered : path = [] → ∀ ambient term,\n    (∃ value ∈ values, meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term) →\n    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient output term\n\n/-- Initial selected support constructs projection, merge, and all returned invariants. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedMergeOperand.lean",
+    "sha256": "40cb6d47de31a9d44c66dd6c09f9462b9a4a20ec3f19398ba0a15b68dffaa3b2",
+    "declaration": "complete",
+    "first_line": 63,
+    "last_line": 72,
+    "text": "theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (path : List Int) (values : List (Value Symbol Guard))\n    (before : Checked width) (memo : Memo) (ready : Ready before)\n    (admitted : At formulas solver inventory before) (available : Values before.native.machine.heap values)\n    (domain : SourceEqualityProjectionPathDomain.ForestClosed path values)\n    (stored : Stored before.native.machine.heap memo)\n    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)\n    (memos : Memos) (valid : Valid before.native.machine.heap memos) :\n    ∃ output after saved final, Receipt formulas solver inventory path values before memo output after saved memos final := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean",
+    "sha256": "1c000463a2386e431d217641d6b6c083c0874f2d3f31d11d5970db77b74f9cf7",
+    "declaration": "fold_complete",
+    "first_line": 172,
+    "last_line": 182,
+    "text": "theorem fold_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (values : List (Value Symbol Guard)) (seed : List Int) (paths : List (List Int))\n    (before : Checked width) (memo : Memo) (ready : Ready before)\n    (admitted : At formulas solver inventory before) (available : Values before.native.machine.heap values)\n    (domains : ∀ path ∈ seed :: paths, Domain path values) (stored : Stored before.native.machine.heap memo)\n    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)\n    (ranges : FoldRanges values seed paths before memo) (memos : Memos) (valid : Valid before.native.machine.heap memos) :\n    ∃ result after saved next final, ∃ actual : Fold values seed paths before memo result after saved,\n      FoldReads formulas solver actual memos final ∧\n      Receipt formulas solver next values (seed :: paths) before memo result after saved memos final := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean",
+    "sha256": "1c000463a2386e431d217641d6b6c083c0874f2d3f31d11d5970db77b74f9cf7",
+    "declaration": "target_complete",
+    "first_line": 203,
+    "last_line": 213,
+    "text": "theorem target_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (values : List (Value Symbol Guard)) (paths : List (List Int))\n    (before : Checked width) (memo : Memo) (ready : Ready before)\n    (admitted : At formulas solver inventory before) (available : Values before.native.machine.heap values)\n    (domains : ∀ path ∈ paths, Domain path values) (stored : Stored before.native.machine.heap memo)\n    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)\n    (ranges : TargetRanges values paths before memo) (memos : Memos) (valid : Valid before.native.machine.heap memos) :\n    ∃ result after saved next final, ∃ actual : Target values paths before memo result after saved,\n      TargetReads formulas solver actual memos final ∧\n      Receipt formulas solver next values paths before memo result after saved memos final := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedConstructorTemplates.lean",
+    "sha256": "75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8",
+    "declaration": "State",
+    "first_line": 62,
+    "last_line": 68,
+    "text": "structure State (Symbol Guard : Type) where\n  edges : Cache.State (EdgeKey Symbol Guard)\n  nodes : Cache.State NodeKey\n  edgeRecords : Table (EdgeKey Symbol Guard) (EdgeValue Symbol Guard)\n  nodeRecords : Table NodeKey (Value Symbol Guard)\n\n/-- Both source cache families and both record maps start empty. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedConstructorTemplates.lean",
+    "sha256": "75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8",
+    "declaration": "Work",
+    "first_line": 107,
+    "last_line": 114,
+    "text": "inductive Work (Symbol Guard : Type) : Type → Type 1 where\n  | pure (value : Result) : Work Symbol Guard Result\n  | edge (key : EdgeKey Symbol Guard) (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard)\n      (next : EdgeValue Symbol Guard → Work Symbol Guard Result) : Work Symbol Guard Result\n  | node (key : NodeKey) (identify : Interned NodeKey → Value Symbol Guard)\n      (next : Value Symbol Guard → Work Symbol Guard Result) : Work Symbol Guard Result\n\n/-- Preserve both cache effects when sequencing generated templates. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedConstructorTemplates.lean",
+    "sha256": "75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8",
+    "declaration": "run",
+    "first_line": 122,
+    "last_line": 131,
+    "text": "def run [DecidableEq (EdgeKey Symbol Guard)] (work : Work Symbol Guard Result) (state : State Symbol Guard) :\n    Result × State Symbol Guard :=\n  match work with\n  | .pure value => (value, state)\n  | .edge key identify resume =>\n      let result := edgeStep key identify state\n      run (resume result.1) result.2\n  | .node key identify resume =>\n      let result := nodeStep key identify state\n      run (resume result.1) result.2\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedConstructorTemplates.lean",
+    "sha256": "75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8",
+    "declaration": "makeEdge",
+    "first_line": 229,
+    "last_line": 231,
+    "text": "def makeEdge (symbol : Symbol) (constraint : Guard) (children : List (Value Symbol Guard)) :\n    Work Symbol Guard (EdgeValue Symbol Guard) :=\n  .edge ⟨symbol, children.map Value.referenceOf, constraint⟩ (fun entry => .mk entry children) Work.pure\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedConstructorTemplates.lean",
+    "sha256": "75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8",
+    "declaration": "makeNode",
+    "first_line": 248,
+    "last_line": 253,
+    "text": "def makeNode (edges : List (EdgeValue Symbol Guard)) : Work Symbol Guard (Value Symbol Guard) :=\n  let kept := canonicalEdges (surviving edges)\n  match kept with\n  | [] => .pure .empty\n  | first :: rest => .node (.node ((first :: rest).map (fun edge => edge.entry.identity)))\n      (identifyNode (first :: rest)) Work.pure\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedConstructorTemplates.lean",
+    "sha256": "75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8",
+    "declaration": "makeUnion",
+    "first_line": 275,
+    "last_line": 285,
+    "text": "def makeUnion (values : List (Value Symbol Guard)) : Work Symbol Guard (Value Symbol Guard) :=\n  match distinctNodes (values.flatMap unionMembers) with\n  | [] => .pure .empty\n  | [value] => .pure value\n  | members =>\n      match ordinaryEdges members with\n      | some edges => makeNode edges\n      | none => .node (.union (members.map Value.referenceOf))\n          (fun entry => .union entry members (maximumDepth members) (childFree members)) Work.pure\n\nmutual\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean",
+    "sha256": "60fd0c927d22dfb9db9a4a776383077c87040c7e81b299a8f998905f8a9618e2",
+    "declaration": "run_next_le",
+    "first_line": 161,
+    "last_line": 163,
+    "text": "theorem run_next_le (work : Work Symbol Guard Result) (state : State Symbol Guard) :\n    (run work state).2.nodes.next ≤ state.nodes.next + nodeRequests (observe work state) ∧\n    (run work state).2.edges.next ≤ state.edges.next + edgeRequests (observe work state) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean",
+    "sha256": "60fd0c927d22dfb9db9a4a776383077c87040c7e81b299a8f998905f8a9618e2",
+    "declaration": "makeEdge_next",
+    "first_line": 200,
+    "last_line": 203,
+    "text": "theorem makeEdge_next (symbol : Symbol) (guard : Guard) (children : List (Value Symbol Guard))\n    (state : State Symbol Guard) :\n    (run (makeEdge symbol guard children) state).2.nodes.next = state.nodes.next ∧\n    (run (makeEdge symbol guard children) state).2.edges.next ≤ state.edges.next + 1 := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean",
+    "sha256": "60fd0c927d22dfb9db9a4a776383077c87040c7e81b299a8f998905f8a9618e2",
+    "declaration": "makeNode_next",
+    "first_line": 218,
+    "last_line": 220,
+    "text": "theorem makeNode_next (edges : List (EdgeValue Symbol Guard)) (state : State Symbol Guard) :\n    (run (makeNode edges) state).2.nodes.next ≤ state.nodes.next + 1 ∧\n    (run (makeNode edges) state).2.edges.next = state.edges.next := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean",
+    "sha256": "60fd0c927d22dfb9db9a4a776383077c87040c7e81b299a8f998905f8a9618e2",
+    "declaration": "intern_next",
+    "first_line": 19,
+    "last_line": 20,
+    "text": "theorem intern_next (state : Cache.State Key) (key : Key) :\n    (Cache.intern state key).2.next = state.next + (if (state.table key).isNone then 1 else 0) := by\n"
+  }
+]

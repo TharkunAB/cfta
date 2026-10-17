@@ -1,0 +1,127 @@
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.trans' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.trans : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before middle →
+    @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst middle after →
+      @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event.good' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event.good : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit after
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event.fits' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event.fits : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit bound : Nat}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard bound before →
+        @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentAllocatedReaderControl.g bound) after
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event.progress' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event.progress : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Event Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit before →
+      @MicroCFTA.InternedFreshMuUnfoldBudget.Progress Symbol Guard inst limit before after
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (limit : Nat) → MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Fin limit → Nat
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure_le : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {bound limit : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard bound heap →
+    ∀ (index : Fin limit),
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure Symbol Guard inst limit heap index) bound
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.path_control' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.path_control : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after →
+    ∀ (limit bound : Nat),
+      @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit before →
+        @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard bound before →
+          @Exists.{1} Nat fun count =>
+            @Exists.{1} Nat fun finalBound =>
+              And (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit after)
+                (And (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard finalBound after)
+                  (MicroCFTA.HeightOrderControlled.Path MicroCFTA.SourceCurrentAllocatedReaderControl.g limit
+                    (@MicroCFTA.HeightOrder.extend limit
+                      (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure Symbol Guard inst limit before))
+                    bound
+                    (@MicroCFTA.HeightOrder.extend limit
+                      (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.measure Symbol Guard inst limit after))
+                    finalBound count))
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit bound : Nat}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard bound before →
+        And (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard limit after)
+          (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard
+            (MicroCFTA.HeightOrderControlled.majorant MicroCFTA.SourceCurrentAllocatedReaderControl.g limit bound)
+            after)
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.initialBound' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedUnfoldHistory.initialBound : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.heapBound' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedUnfoldHistory.heapBound : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {mass : Nat}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedUnfoldHistory.History Symbol Guard inst before after →
+    @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard before →
+      @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+          before →
+        @MicroCFTA.InternedOpenDepthReadback.Heap Symbol Guard before →
+          @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass before →
+            And (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Good Symbol Guard mass after)
+              (@MicroCFTA.SourceCurrentAllocatedUnfoldHistory.Fits Symbol Guard
+                (MicroCFTA.SourceCurrentAllocatedUnfoldHistory.heapBound
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard before))
+                  mass)
+                after)

@@ -1,0 +1,19 @@
+# Initial numeric selection
+
+The new module closes the initial sufficient-fuel boundary for the actual ordered selection worker on its existing closed available input family. Its comparison fuel is `SourceMergedComparisonNumeric.comparisonFuel` applied to the initial node counter, edge counter, and causal mass bound. The number of selected inputs does not increase comparison depth fuel. Initial input length enters only the existing outer selection resource envelope.
+
+`any_recorded`, `retain_recorded`, and `select_recorded` compose exact unfolding histories with the existing physical Budget. False cover answers retain their effects before the next candidate. Recursive children are retained without a comparison. The original filtered recursive family stays fixed through the scan. The duplicate-removal suffix has no heap effect.
+
+The three replay theorems retain one fixed initial origin and mass bound. Every actual comparison starts at a heap reached by the accumulated original History. That history supplies the uniform initial heap ceiling. The root comparison replay theorem then supplies the same Boolean answer and complete returned heap at the initial comparison fuel. Recorded effects transport original availability to each exact returned heap. No source is rebased or replaced by generated values. All later histories compose at those literal heaps.
+
+`select_complete` obtains a qualitative successful selection internally. It uses this witness only to replay the same selection at the independently computed initial fuel. The replay theorem bounds every comparison through the initial history ceiling. It does not put the arbitrary successful witness fuel into the numeric formula. The final actual computed execution supplies Effect, the uniform heap Fits bound, and the old `selectionBound` mass and counter envelope at that chosen fuel. The same original witness replays at every larger fuel. No completed selection, future resource bound, or callback certificate is an initial premise of `select_complete`.
+
+The input conditions are exactly the old completion conditions plus causal Stored mass: SemanticReady, available inputs, and closed input values. There is no noMu, prepared, ordinary-only, or whole unrelated forest closure condition. This theorem does not yet compose the initial bounds through memo-aware Merge or the full selected Operand/Target/editor/outer pipeline.
+
+Validation: strict attempt 2 exits 0 with an empty log. Attempt 1 had three local heap-name errors after equality elimination; its exact source and raw log remain. Canonical single-target build exits 0 after 1226 jobs. It replays the older ClosedCompletion unused-input warning. The new source has no warnings. All seven public declarations and both integration declarations have imported full signatures and axiom checks. All nine pairs use only standard axioms.
+
+The first kernel builds its own productive smart Mu, ordinary child, and union child in one literal closed source. It calls `select_complete` using only the constructed initial facts and initial computed mass. It aligns the own computed return with the actual small literal selection by replay and full-result injectivity. Both constructor counters strictly increase. The large computed fuel and resource ceilings remain symbolic.
+
+The warm kernel starts at that exact first returned heap. It reuses the same initial origin, mass, and comparison fuel through the produced History. It returns the same selected values and the identical full heap. Its resource store is derived from the first initial Fits bound. No later entry bound, finished-run premise, or desired returned resource law is supplied.
+
+All production and evidence additions use new paths. Earlier ComparisonHistory production and its frozen manifest remain unchanged. No Haskell, Audit, root document, Git, or older evidence file was changed.

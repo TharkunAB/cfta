@@ -1,0 +1,43 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonReplayStages.lean:54:21: error: Ambiguous term
+  children
+Possible interpretations:
+  MergedSourceComparison.children : (Value ?m.159 ?m.160 →
+      Value ?m.159 ?m.160 → State ?m.159 ?m.160 → Result ?m.159 ?m.160 Bool) →
+    List (Value ?m.159 ?m.160) → List (Value ?m.159 ?m.160) → State ?m.159 ?m.160 → Result ?m.159 ?m.160 Bool
+  
+  InternedProbeProvenance.children : Value ?m.159 ?m.160 → List (Value ?m.159 ?m.160)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonReplayStages.lean:54:10: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonReplayStages.lean:97:14: error: Application type mismatch: The argument
+  narrowClosed
+has type
+  ClosedValues narrow.children
+but is expected to have type
+  ClosedEdges wides
+in the application
+  ih middle checked.effect.right checked.bounded
+    (fun value member => Keeps.available checked.effect.left value (narrowInputs value member))
+    (fun edge member =>
+      InternedEdgeResidency.edge_grows before middle checked.effect.left.growth edge
+        (wideInputs edge (List.mem_cons_of_mem wide member)))
+    narrowClosed
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonReplayStages.lean:101:79: error: Application type mismatch: The argument
+  narrowClosed
+has type
+  ClosedValues narrow.children
+but is expected to have type
+  ClosedEdges wides
+in the application
+  ih before semantic bounded narrowInputs (fun edge member => wideInputs edge (List.mem_cons_of_mem wide member))
+    narrowClosed
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonReplayStages.lean:143:67: error: Application type mismatch: The argument
+  wideClosed
+has type
+  wide.free = []
+but is expected to have type
+  ClosedEdges narrows
+in the application
+  ih middle firstPrefix.effect.right firstPrefix.bounded (Keeps.available firstPrefix.effect.left wide wideInput)
+    (fun edge member =>
+      InternedEdgeResidency.edge_grows before middle firstPrefix.effect.left.growth edge
+        (narrowInputs edge (List.mem_cons_of_mem narrow member)))
+    wideClosed

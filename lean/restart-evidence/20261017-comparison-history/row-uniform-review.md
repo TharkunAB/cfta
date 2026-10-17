@@ -1,0 +1,11 @@
+# Uniform recursive row reads
+
+The source fixes a causal mass bound and widens only the two issued counters. `readFuel_mono` applies the controlled majorant at the same degree dimension. `complete` constructs its own initial numeric read at actual counters, then replays it at `readFuel Q Q Q`. The returned rows, full heap, physical Keeps, semantic readiness, residency and closedness are the same. The returned mass and both supplies fit that uniform fuel. `of_read` aligns any supplied successful graph through the existing premise-free `Read.unique`; no output or later-capacity law is assumed.
+
+`identity_bound` derives an actual issued identity below Q for a nonempty closed available value. `remainingPairs_length_le` bounds the filtered ordered Cartesian universe by Q squared. These lemmas do not assert that the initial issued range contains later allocations; Q must cover the actual current counters.
+
+Two imported kernels construct their own source from empty. One source is a productive Mu with a constant row and a recursive child. The other is a real union containing that Mu. Each obtains its own uniform finite read, derives availability and semantic facts at the actual returned heap, and constructs a second uniform read with the returned mass/counter envelope. Warm replay returns the exact same complete heap and rows. The kernels take no future graph, fuel, store, or result as input. Numeric ceilings stay symbolic.
+
+Validation: absolute-path strict attempt 2 is empty; delegated canonical target passes 1218 jobs. Public 5 and kernel 2 complete axiom/signature pairs pass with all pretty-print options and only standard axioms. Kernel attempt 1 had a reserved identifier; its exact source and raw log remain. Production attempt 1 had an unused section instance and an incomplete pure list sum; both are preserved.
+
+Scope: complete uniform row reads for full closed recursive endpoints, including Mu and union. This module does not require the surrounding forest closed and does not change the selected-path gate. The kernels exercise closed endpoints; an explicit unrelated-open-sibling fixture is not included here. Whole initial comparison completion is a separate caller composition. No new Haskell behavior claim.
