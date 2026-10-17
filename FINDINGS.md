@@ -2,16 +2,16 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 23:39 CEST. Proof checkpoint is `c1be0445`.
-Full pinned Audit passes 3148 jobs and 69431 dependency checks. Actual Parent
-execution retains native writer history. Actual edited rows retain full fields,
-indexed execution prefixes, and captured writer histories. Independent Mu
-children construct equal sequential stored results. General node-owner
-exclusion, active-child alignment, convergence, and full correspondence remain
-open. No Haskell change or new production defect is added.
+Current proof update: 2026-10-18 00:01 CEST. Proof checkpoint is `5f88f078`.
+Full pinned Audit passes 3154 jobs and 69499 dependency checks. Selected child
+and class phases retain exact executions and captured histories. Native node
+writers retain ready cells into final-reader edge histories. Active-reference
+and ordinary stored-substitution induction cases are checked. General outer
+progress, nested-binder and warm-winner alignment, convergence, and full public
+Haskell correspondence remain open. No Haskell change or new defect is added.
 
 Field-pool repair `b9219b9e` remains merged and validated in source `c0cc8a05`.
-Read `lean/notes-current-parent-row-lineage.md`. Keep this repair registry
+Read `lean/notes-current-selected-child-lineage.md`. Keep this repair registry
 before historical failure reports. Record each later repair with its failure,
 reproducer, paths, commit, checks, and upstream status for external work.
 
@@ -188,6 +188,49 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current selected children and retained native writers
+
+Updated: 2026-10-18 00:01 CEST. Starting checkpoint is `26b30c7e`.
+Proof commit is `5f88f078`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-selected-child-lineage.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual selected edits retain the exact preceding and following child calls,
+captured states, memo bundles, Ready data, native histories, and heap growth.
+Actual normalized row survivors retain the same source row and child indices,
+full fields, and selected call. Actual class right folds retain each selected
+class occurrence between its completed tail and later head schedule.
+These laws describe completed executions. They do not prove outer progress.
+
+Current returned native node cells retain their actual captured compiled body
+and protected finish. Actual steps retain ready cells from the body return
+to the final reader. The reader's history then supplies earlier edge writers
+without requiring history at an internal active owner. Actual surviving rows
+retain full joined guards and ordered historical child calls. A warm writer's
+child call can precede the current body; current-body ancestry is not claimed.
+
+Stored substitution now has the active-reference base case and ordinary-node
+induction step. The latter uses an explicit hypothesis for actual strict
+source children. Initial Ready data constructs both sequential stored calls
+and derives physical Empty agreement and observations at every depth and
+fixed view. Nested binders, smart erasure, and chronological warm winners
+still need alignment. This is not a complete retained-Mu theorem.
+
+Full pinned Audit passes 3154 jobs and 69499 dependency checks. Six new strict
+source logs are empty. All 23 public declaration proof and axiom checks pass.
+Only the unchanged old unused-variable warning remains. Verified caps are
+4 GiB maximum/high and zero swap. Audit peak is 366 MiB. Evidence is in
+`lean/restart-evidence/20261017-selected-child-lineage/`. Preserve all older
+proofs, counterexamples, repairs, drafts, and raw attempts. Keep the goal active.
+
+The largest gap remains general recursive outer progress with physical-key
+compatibility against all active ancestors. Repeated-pass convergence,
+retained-Mu binder alignment, frontend/runtime adapters, and complete public
+Haskell correspondence remain open. No Haskell patch or new production defect
+is added. FINDINGS retains the external repair registry first. Field-pool
+repair `b9219b9e` remains merged and validated. Record each later Haskell fix
+with its failure, reproducer, paths, commit, checks, and upstream status.
 
 ## Current parent histories and indexed rows
 

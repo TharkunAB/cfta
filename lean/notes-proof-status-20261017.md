@@ -1,6 +1,6 @@
-# Proof status at 2026-10-17
+# Proof status at 2026-10-18
 
-Checked at proof checkpoint `c1be0445`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `5f88f078`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -38,6 +38,15 @@ not establish that every valid public Haskell call terminates and satisfies
 its contract. General outer progress, repeated-pass convergence, retained-Mu
 callback alignment, and the remaining concrete adapters are still open.
 
+The latest supporting results retain exact selected-child prefixes and
+class-fold phases. Completed native node calls now retain captured compiled
+bodies and protected finishes. Ready-cell retention permits final-reader
+history to recover earlier row writers without internal history at an active
+owner. Stored substitution has an active-reference base case and an ordinary
+node induction step with an explicit strict-child hypothesis. These results
+do not extend the completed outer-pass domain or prove general termination.
+Read [the current lineage results](notes-current-selected-child-lineage.md).
+
 ## Observable contracts
 
 The main observable contracts are:
@@ -66,9 +75,9 @@ interned core remains the construction and transformation path. Read
 | Interned construction | Repaired closed syntax has a finite constructor execution. Syntax includes binders and unions. Actual construction and field histories derive physical and semantic entry facts. | Concrete lazy Haskell publication, interning, and runtime correspondence. The word Ordinary in older module names does not by itself exclude binders. |
 | Normalized source callbacks | Actual source publication histories derive the unused stored-Mu body-to-ordinary law, including earlier warm winners. Nested raw source calls have equal ordered stripped alternatives under the stated finite coverage, freshness, noDeep, and actual cache-history premises. Actual native steps and traces now produce the causal publication history. Unused native returns preserve the current raw ordinary callback rows. | Recursive row occurrence transport through retained Mu and concrete runtime correspondence. The common heap of closed_compared comes from actual closed source construction. This is not raw record equality or general termination. |
 | Stored substitution | Recursive node-row matching constructs both plans with one exact Value. Initial Ready and available data construct both union-normalization/substitution orders with physical empty agreement, equal observations at every depth and fixed view, and exact literal root parts. Actual self filtering preserves those parts from the derived final heap. Initial Ready data now constructs filtered reconstruction and the retained-member schedule with exact literal parts, including the bare-self exception. Actual parent construction preserves this relation, including row survival, full guards, and ordered children. Source-indexed ordinary-node Mu publication callbacks now retain both exact schedules, common-reader growth, and equal ordered child Empty and row-drop tests. Closed and open roots and nested Mu values remain included. | Derive the literal relation for the actual retained-Mu body and ordinary-probe writers, then compose smart cleanup and warm winners. General root self-filter congruence is proved for normal available roots with the same literal atoms and exact rows. See [literal provenance](notes-current-literal-union-provenance.md). |
-| Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. Persistent native histories now derive actual earlier edge writers, exact captured handles, writer-to-reader heap growth, and indexed full guard origins. Initial numeric query inputs produce completion and the same history with all resource bounds. Actual surviving compileRows rows now retain source row/child indices, full joined guards, and historical child calls at growing heaps. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
+| Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. Persistent native histories now derive actual earlier edge writers, exact captured handles, writer-to-reader heap growth, and indexed full guard origins. Initial numeric query inputs produce completion and the same history with all resource bounds. Actual surviving compileRows rows now retain source row/child indices, full joined guards, and historical child calls at growing heaps. Returned node cells retain their captured compiled body and protected finish. Ready-cell retention allows final-reader history to recover earlier row writers without internal active-owner history. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
-| General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. Initial Ready data and field availability derive exact normalization fixedness through the actual inherited prefix and indexed descent. Actual completed Parent reads now retain native writer history through Scan, Required, class passes, local reduction, and construction, with the existing explicit Parent range plan. Actual edited normalized rows retain indexed source prefixes, full fields, and derived writer histories at the same captured row states. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
+| General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. Initial Ready data and field availability derive exact normalization fixedness through the actual inherited prefix and indexed descent. Actual completed Parent reads now retain native writer history through Scan, Required, class passes, local reduction, and construction, with the existing explicit Parent range plan. Actual edited normalized rows retain indexed source prefixes, full fields, and derived writer histories at the same captured row states. Selected child calls now retain exact prefixes and suffixes with captured histories. Actual class right folds retain source-indexed tail, class, and head execution phases. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
 | Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. An actual empty-own prefix retains normalized inherited values. Actual normalization and combination produce fixed payloads, and indexed descent preserves fixedness. Strict class dependencies remain exact among retained classes of one normalized payload. Initial fields and Ready operands now produce original-constituent containment and dependency preservation through actual accessor, combination, normalization, and retained indexed descent. A mirrored copied-child case reaches a fresh demand before its original sibling, then completes. Another source reaches the exact original node under a different inherited key while its root owner evaluates; the local precheck and both completed calls produce Empty. | General node-busy exclusion still needs a causal progress or owner-disjointness argument for nonempty local classes and all active ancestors. The constructed prefix and descent cases do not prove a general outer parent-and-child execution. See [actual row progress](notes-current-active-row-progress.md). |
 | Other library components | Checked language, equality, enumeration, arithmetic, union-find, memo, ranking, generation, and sampling results exist. Some source drivers and restricted adapters are complete. | Their remaining adapters and recursive callers do not yet form a complete current-library implementation theorem. See [API coverage](API-COVERAGE.md). |
 
@@ -106,27 +115,29 @@ origins. It assumes no future Required result. Read
 ## Remaining work
 
 1. Derive retained-Mu row and ordered-child provenance from actual causal
-   writers. Recursive normalized plan and stored congruence now construct
-   both actual calls with one exact result from initial Ready and available
-   captures. Their pure structural relation is not yet derived for arbitrary
-   retained Mu histories. Prior union normalization now has an actual
-   initial-input theorem with physical empty agreement, all finite
-   observations, and exact literal reference and Mu atoms and complete rows.
-   Actual ordinary parents preserve the observation relation. Root self
-   filtering now preserves exact literal parts for normal available roots.
-   The initial theorem derives the required parts for the two union orders.
-   It does not derive them for arbitrary selected body and ordinary-probe
-   writers. Actual ordinary-node publication callbacks now have paired source
-   row schedules and derived child Empty and row-drop agreement. Nonempty
-   child records, observations, and literal Mu atoms remain unaligned. The new filter-reconstruction producer constructs each filtered
-   stored call and its retained-member schedule from initial data. Align
-   those schedules for the actual body and ordinary-probe writers. Then
-   compose smart cleanup, fixed captures, and earlier warm winners. Retain full guards, exact child
-   survival, bare references, and epsilon origins. Derive freshness and
-   issued-reference transport from actual execution; four-table Grows does
-   not supply the latter. Compose with native callbacks and protected edge
-   histories on the same trace. Read
-   [literal provenance](notes-current-literal-union-provenance.md).
+   writers. Recursive normalized plan and stored congruence construct both
+   calls with one exact result from initial Ready and available captures.
+   Their structural relation is not yet derived for arbitrary retained-Mu
+   histories. Union normalization already has physical Empty agreement,
+   all-depth observations, and exact literal atoms and complete rows.
+   Ordinary parents preserve observations. Root self filtering preserves
+   exact literal parts for normal available roots. The initial theorem
+   derives these parts for the two union orders, but not for arbitrary
+   selected body and ordinary-probe writers.
+   Actual ordinary-node callback publications retain source row schedules,
+   child Empty tests, and row-drop agreement. Active references and ordinary
+   source nodes now derive all-depth observations and physical Empty
+   agreement. The ordinary induction hypothesis ranges only over actual
+   strict source children and retains a syntax-size witness. Initial Ready
+   data constructs both sequential stored calls and their local histories.
+   Complete the nested-binder case and chronological older-winner alignment.
+   Then compose smart cleanup, fixed captures, and root filtering. Retain
+   full guards, ordered children, literal Mu atoms, bare references, and
+   epsilon origins. Derive freshness and issued-reference transport from
+   actual execution; four-table Grows does not supply the latter. Compose
+   native callbacks and protected edge histories on the same trace. Read
+   [literal provenance](notes-current-literal-union-provenance.md) and
+   [the new induction cases](notes-current-selected-child-lineage.md).
 2. Derive progress for actual outer-node children after parent returns and
    inherited combine/descent. The measure must respect physical memo keys,
    or prove that a fresh request differs from every active owner. Actual
@@ -140,8 +151,14 @@ origins. It assumes no future Required result. Read
    sibling is visited. The remaining argument must control nonempty local
    classes and all active ancestors. Persistent native histories supply
    actual earlier full guard writers, exact owner handles, and growth into
-   the reader heap, but not a global occurrence rank. A checked source now
-   repeats the exact original value under a different inherited key; its
+   the reader heap, but not a global occurrence rank. Exact selected-child
+   prefixes and class-fold phases now retain their actual captured histories.
+   Actual returned native node cells retain their compiled body and finish.
+   Ready cells at a past body return persist into the final reader, whose
+   history recovers earlier edge writers without internal active-owner
+   history. A warm writer's child call can precede the current body. These
+   results still need a compatible causal rank for all active outer owners.
+   A checked source now repeats the exact original value under a different inherited key; its
    local precheck and both complete calls produce Empty. This rejects whole
    physical-value descent, not proper row-origin measures. Ordinary height
    and maximum constrained depth do not suffice.
