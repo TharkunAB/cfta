@@ -1,10 +1,11 @@
 cabal-version: 3.0
 name: cfta-th
 version: 0.1.0.0
-synopsis: Generated node views for constrained tree automata
+synopsis: Language authoring for constrained tree automata
 description:
   Template Haskell support for the typing and refinement APIs of
-  cfta-generator. Generate scalar node views from source datatypes.
+  cfta-generator. Generate scalar node views from source datatypes,
+  and read or quote explicit automaton definitions.
 
 homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-th#readme
 bug-reports: https://github.com/TharkunAB/cfta/issues
@@ -27,7 +28,12 @@ source-repository head
 
 library
   hs-source-dirs: src
-  exposed-modules: Data.CFTA.TH
+  exposed-modules:
+    Data.CFTA.Syntax.Automaton
+    Data.CFTA.TH
+    Data.CFTA.TH.Automaton
+
+  other-modules: Data.CFTA.Syntax.Automaton.Internal
   default-language: Haskell2010
   ghc-options:
     -Wall
@@ -41,5 +47,22 @@ library
 
   build-depends:
     base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
     cfta-generator >=0.1.0.0 && <0.2,
+    containers >=0.8 && <0.9,
+    parsec >=3.1.18 && <3.2,
     template-haskell >=2.24 && <2.25,
+
+executable cfta-quoted-automaton
+  main-is: QuotedAutomaton.hs
+  hs-source-dirs: examples
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -rtsopts
+
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-generator >=0.1.0.0 && <0.2,
+    cfta-th,
