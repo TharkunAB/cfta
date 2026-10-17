@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.RowsAlpha
+#print MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.RowsAlpha
+#print axioms MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.RowsAlpha
+#check @MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.encode_rows
+#print MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.encode_rows
+#print axioms MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.encode_rows
+#check @MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.complete
+#print MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.complete
+#print axioms MicroCFTA.SourceCurrentStoredAlphaNodeReconstruction.complete

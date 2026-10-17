@@ -1,0 +1,77 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-plans-direct-2.source.lean:88:48: error: don't know how to synthesize placeholder for argument `b`
+context:
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+left right : Value Symbol Guard
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstCovered : ∀ (leaf : Value Symbol Guard), leaf ∈ leaves left → leaf ∈ firstContext
+secondCovered : ∀ (leaf : Value Symbol Guard), leaf ∈ leaves right → leaf ∈ secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+related :
+  if left.free.isEmpty = true then left = right
+  else
+    right.free.isEmpty = false ∧
+      match left, right with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+closed : ¬left.free.isEmpty = true
+opened : left.free.isEmpty = false
+⊢ Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-plans-direct-2.source.lean:161:107: error: unsolved goals
+case nil.cons
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+firstCovered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves [] → leaf ∈ firstContext
+head✝ : EdgeValue Symbol Guard
+tail✝ : List (EdgeValue Symbol Guard)
+secondCovered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves (head✝ :: tail✝) → leaf ∈ secondContext
+related : EdgesAlpha firstLocals secondLocals firstValues secondValues first second [] (head✝ :: tail✝)
+⊢ EdgesEquivalent (encodeEdges firstContext firstLocals []) (firstValues ++ List.map (input first) firstContext)
+    (encodeEdges secondContext secondLocals (head✝ :: tail✝)) (secondValues ++ List.map (input second) secondContext)
+
+case cons.nil
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+head✝ : EdgeValue Symbol Guard
+tail✝ : List (EdgeValue Symbol Guard)
+firstCovered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves (head✝ :: tail✝) → leaf ∈ firstContext
+secondCovered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves [] → leaf ∈ secondContext
+related : EdgesAlpha firstLocals secondLocals firstValues secondValues first second (head✝ :: tail✝) []
+⊢ EdgesEquivalent (encodeEdges firstContext firstLocals (head✝ :: tail✝))
+    (firstValues ++ List.map (input first) firstContext) (encodeEdges secondContext secondLocals [])
+    (secondValues ++ List.map (input second) secondContext)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-plans-direct-2.source.lean:122:0: warning: unused `termination_by`, function is not recursive

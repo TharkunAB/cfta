@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at proof checkpoint `7a441d2d`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `df79f802`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -42,7 +42,7 @@ interned core remains the construction and transformation path. Read
 | Exact Sized queries | Exact accepted size classes, finite class evaluation, counts, size-major enumeration, retained row order, and both distinct-term rank/unrank inverses. The finite carrier comes from validated raw graph keys. | Concrete host and solver adapters and complete public pipeline composition. See [Sized contracts](notes-sized-finite-keys.md). |
 | Interned construction | Repaired closed syntax has a finite constructor execution. Syntax includes binders and unions. Actual construction and field histories derive physical and semantic entry facts. | Concrete lazy Haskell publication, interning, and runtime correspondence. The word Ordinary in older module names does not by itself exclude binders. |
 | Normalized source callbacks | Actual source publication histories derive the unused stored-Mu body-to-ordinary law, including earlier warm winners. Nested raw source calls have equal ordered stripped alternatives under the stated finite coverage, freshness, noDeep, and actual cache-history premises. Actual native steps and traces now produce the causal publication history. Unused native returns preserve the current raw ordinary callback rows. | Recursive row occurrence transport through retained Mu and concrete runtime correspondence. The common heap of closed_compared comes from actual closed source construction. This is not raw record equality or general termination. |
-| Stored substitution | Independent captures preserve exact execution. Node and union returns retain source fields and ordered child calls. Selected-Mu body and ordinary reconstructions complete in sequence and replay at one final heap. Actual source paths retain writer growth into that heap. Open observations retain references, full guards, and ordered children through actual Mu unfolding. | General two-reconstruction equality and retained-used Mu row congruence remain open. Open observations use one fixed view. Physical equality to the unreconstructed ordinary probe is false. See [retained Mu reconstruction](notes-current-retained-mu-reconstruction.md). |
+| Stored substitution | Selected-Mu reconstructions complete and replay at one final heap. Actual source paths retain writer growth. Pure lexical Alpha gives exact stored execution at any common heap. Matching open node rows construct sequential reconstructions with one value, allowing exposed row permutations and duplicates. | Derive the normalized relation from arbitrary causal Mu writers, including nested normalization and warm winners. Retained-used Mu row correspondence remains open. Open observations use one fixed view and do not imply physical empty-child agreement. See [stored congruence](notes-current-mu-congruence.md). |
 | Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
 | General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
@@ -82,18 +82,19 @@ origins. It assumes no future Required result. Read
 
 ## Remaining work
 
-1. Prove the retained-Mu source row relation through actual reconstruction
-   and epsilon exposure. Both selected reconstruction calls now complete
-   and replay at their common final heap. Actual source paths derive the
-   selected first writer and raw callback growth into that reader. Open
-   observations preserve bare references, full guards, and ordered children.
-   General reconstruction equality and the retained-used Mu congruence
-   remain open. Finite successes do not discharge those obligations.
-   Derive freshness and issued-reference transport from actual execution.
-   Four-table Grows does not imply issued-reference extension. Compose the
-   recursive row relation with native callbacks and protected edge histories
-   on the same trace. Read
-   [retained Mu reconstruction](notes-current-retained-mu-reconstruction.md).
+1. Derive normalized reconstruction relations from actual causal Mu writers.
+   Pure Alpha and RowsAlpha now prove exact stored reconstruction congruence.
+   Initial Ready and available inputs construct both sequential node calls.
+   These relations are not yet derived for arbitrary retained Mu histories.
+   Handle normalization at every nested row list, root union filtering and
+   merging, unused raw Mu cleanup, fixed captures, and earlier warm winners.
+   Preserve exact closed captures, full guards, physical child survival,
+   bare references, and epsilon origins. Arbitrary mixed-union permutation
+   is not a valid physical equality claim. Then derive retained-used Mu row
+   and ordered-child provenance. Derive freshness and issued-reference
+   transport from actual execution; four-table Grows does not supply the
+   latter. Compose with native callbacks and protected edge histories on
+   the same trace. Read [stored congruence](notes-current-mu-congruence.md).
 2. Derive progress for actual outer-node children after parent returns and
    inherited combine/descent. The measure must respect physical memo keys,
    or prove that a fresh request differs from every active owner. Ordinary
@@ -133,7 +134,7 @@ the failure, reproducer, affected paths, commit, validation, and merge status.
 It also records the earlier negative-bound and named-measure repairs.
 The historical failure reports retain their original bytes and source dates.
 
-The last completed full pinned Audit passes 3095 jobs and 68057 dependency
+The last completed full pinned Audit passes 3100 jobs and 68149 dependency
 checks. Only propext, Classical.choice, and Quot.sound occur. The unchanged
 Haskell source has a strict Nix all-component build, 798 examples plus golden,
 Fourmolu, and Cabal-gild validation. These checks are component evidence.
@@ -142,7 +143,7 @@ The Lean Audit and new public theorem checks were run for this
 checkpoint. The unchanged Haskell source reuses its earlier validation.
 
 The latest completed audit evidence is in
-`restart-evidence/20261017-retained-mu-reconstruction/`. It includes strict source,
+`restart-evidence/20261017-mu-congruence/`. It includes strict source,
 public signature, kernel axiom, constructed integration, and preservation
 checks. Earlier evidence retains selected recursive endpoints,
 unequal-depth paths, failed height bounds, and inherited path-depth growth.

@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentOpenObservationConstructors
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentOpenObservationConstructors.seeds
+#print MicroCFTA.SourceCurrentOpenObservationConstructors.seeds
+#print axioms MicroCFTA.SourceCurrentOpenObservationConstructors.seeds
+#check @MicroCFTA.SourceCurrentOpenObservationConstructors.node
+#print MicroCFTA.SourceCurrentOpenObservationConstructors.node
+#print axioms MicroCFTA.SourceCurrentOpenObservationConstructors.node
+#check @MicroCFTA.SourceCurrentOpenObservationConstructors.makeNode
+#print MicroCFTA.SourceCurrentOpenObservationConstructors.makeNode
+#print axioms MicroCFTA.SourceCurrentOpenObservationConstructors.makeNode
+#check @MicroCFTA.SourceCurrentOpenObservationConstructors.makeUnion_normalize
+#print MicroCFTA.SourceCurrentOpenObservationConstructors.makeUnion_normalize
+#print axioms MicroCFTA.SourceCurrentOpenObservationConstructors.makeUnion_normalize
+#check @MicroCFTA.SourceCurrentOpenObservationConstructors.makeUnion
+#print MicroCFTA.SourceCurrentOpenObservationConstructors.makeUnion
+#print axioms MicroCFTA.SourceCurrentOpenObservationConstructors.makeUnion

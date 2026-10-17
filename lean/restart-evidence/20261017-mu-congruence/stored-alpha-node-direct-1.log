@@ -1,0 +1,85 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-node-direct-1.source.lean:35:11: error: Tactic `rfl` failed: The left-hand side
+  encodeEdges context [] []
+is not definitionally equal to the right-hand side
+  List.map (fun row => EdgeSyntax.mk row.entry.key.symbol row.entry.key.constraint (encodeMany context [] row.children))
+    []
+
+case nil
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+⊢ encodeEdges context [] [] =
+    List.map
+      (fun row => EdgeSyntax.mk row.entry.key.symbol row.entry.key.constraint (encodeMany context [] row.children)) []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-node-direct-1.source.lean:36:21: error: unsolved goals
+case cons.mk
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+rest : List (EdgeValue Symbol Guard)
+ih :
+  encodeEdges context [] rest =
+    List.map
+      (fun row => EdgeSyntax.mk row.entry.key.symbol row.entry.key.constraint (encodeMany context [] row.children)) rest
+entry✝ : Interned (EdgeKey Symbol Guard)
+children✝ : List (Value Symbol Guard)
+⊢ EdgeSyntax.mk entry✝.key.symbol entry✝.key.constraint (encodeMany context [] children✝) ::
+      List.map
+        (fun row => EdgeSyntax.mk row.entry.key.symbol row.entry.key.constraint (encodeMany context [] row.children))
+        rest =
+    EdgeSyntax.mk (EdgeValue.mk entry✝ children✝).entry.key.symbol (EdgeValue.mk entry✝ children✝).entry.key.constraint
+        (encodeMany context [] (EdgeValue.mk entry✝ children✝).children) ::
+      List.map
+        (fun row => EdgeSyntax.mk row.entry.key.symbol row.entry.key.constraint (encodeMany context [] row.children))
+        rest
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-node-direct-1.source.lean:104:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  leaves ?value
+in the target expression
+  firstContext = edgeLeaves left
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+firstEntry secondEntry : Interned InternedBinderProtocol.NodeKey
+left right : List (EdgeValue Symbol Guard)
+firstLevel secondLevel : Nat
+firstFree secondFree : List InternedBinderProtocol.Reference
+first second : Environment Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+leftAvailable : Available before (Value.node firstEntry left firstLevel firstFree)
+rightAvailable : Available before (Value.node secondEntry right secondLevel secondFree)
+firstReplacements : Replacements before first
+secondReplacements : Replacements before second
+firstOpen : firstFree.isEmpty = false
+secondOpen : secondFree.isEmpty = false
+related : RowsAlpha first second left right
+firstRoot : Value Symbol Guard := Value.node firstEntry left firstLevel firstFree
+secondRoot : Value Symbol Guard := Value.node secondEntry right secondLevel secondFree
+firstContext : List (Value Symbol Guard) := leaves firstRoot
+secondContext : List (Value Symbol Guard) := leaves secondRoot
+⊢ firstContext = edgeLeaves left
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-node-direct-1.source.lean:107:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  leaves ?value
+in the target expression
+  secondContext = edgeLeaves right
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+firstEntry secondEntry : Interned InternedBinderProtocol.NodeKey
+left right : List (EdgeValue Symbol Guard)
+firstLevel secondLevel : Nat
+firstFree secondFree : List InternedBinderProtocol.Reference
+first second : Environment Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+leftAvailable : Available before (Value.node firstEntry left firstLevel firstFree)
+rightAvailable : Available before (Value.node secondEntry right secondLevel secondFree)
+firstReplacements : Replacements before first
+secondReplacements : Replacements before second
+firstOpen : firstFree.isEmpty = false
+secondOpen : secondFree.isEmpty = false
+related : RowsAlpha first second left right
+firstRoot : Value Symbol Guard := Value.node firstEntry left firstLevel firstFree
+secondRoot : Value Symbol Guard := Value.node secondEntry right secondLevel secondFree
+firstContext : List (Value Symbol Guard) := leaves firstRoot
+secondContext : List (Value Symbol Guard) := leaves secondRoot
+firstLeaves : firstContext = edgeLeaves left
+⊢ secondContext = edgeLeaves right

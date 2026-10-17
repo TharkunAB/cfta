@@ -1,0 +1,1020 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-plans-direct-3.source.lean:104:8: error: Type mismatch
+  Eq.trans leftRead (Eq.trans details.right (Eq.symm rightRead))
+has type
+  (firstValues ++ List.map (input first) firstContext)[left]?.getD Value.empty =
+    (secondValues ++ List.map (input second) secondContext)[right]?.getD Value.empty
+but is expected to have type
+  Equivalent (InternedNestedConstruction.Syntax.var left) (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.var right) (secondValues ++ List.map (input second) secondContext)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-plans-direct-3.source.lean:87:2: error: unsolved goals
+case neg.reference.empty
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+name✝ : Reference
+closed : ¬(Value.reference name✝).free.isEmpty = true
+opened : (Value.reference name✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.empty with
+        | Value.empty => [Value.empty]
+        | Value.reference name => [Value.empty]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.reference name✝).free.isEmpty = true then Value.reference name✝ = Value.empty
+  else
+    Value.empty.free.isEmpty = false ∧
+      match Value.reference name✝, Value.empty with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : Value.empty.free.isEmpty = false ∧ False
+⊢ Equivalent
+    (match List.findIdx? (fun x => x == name✝) firstLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (firstLocals.length + slot firstContext (Value.reference name✝)))
+    (firstValues ++ List.map (input first) firstContext) InternedNestedConstruction.Syntax.empty
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.reference.node
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+name✝ : Reference
+closed : ¬(Value.reference name✝).free.isEmpty = true
+opened : (Value.reference name✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.empty => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.reference name => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.reference name✝).free.isEmpty = true then Value.reference name✝ = Value.node entry✝ edges✝ depth✝ free✝
+  else
+    (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false ∧
+      match Value.reference name✝, Value.node entry✝ edges✝ depth✝ free✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false ∧ False
+⊢ Equivalent
+    (match List.findIdx? (fun x => x == name✝) firstLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (firstLocals.length + slot firstContext (Value.reference name✝)))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.node (encodeEdges secondContext secondLocals edges✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.reference.union
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+name✝ : Reference
+closed : ¬(Value.reference name✝).free.isEmpty = true
+opened : (Value.reference name✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝ members✝ depth✝ free✝ with
+        | Value.empty => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.reference name => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.reference name✝).free.isEmpty = true then Value.reference name✝ = Value.union entry✝ members✝ depth✝ free✝
+  else
+    (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false ∧
+      match Value.reference name✝, Value.union entry✝ members✝ depth✝ free✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false ∧ False
+⊢ Equivalent
+    (match List.findIdx? (fun x => x == name✝) firstLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (firstLocals.length + slot firstContext (Value.reference name✝)))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.union (encodeMany secondContext secondLocals members✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.reference.mu
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+name✝ : Reference
+closed : ¬(Value.reference name✝).free.isEmpty = true
+opened : (Value.reference name✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.reference name✝).free.isEmpty = true then
+    Value.reference name✝ = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+  else
+    (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false ∧
+      match Value.reference name✝, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false ∧ False
+⊢ Equivalent
+    (match List.findIdx? (fun x => x == name✝) firstLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (firstLocals.length + slot firstContext (Value.reference name✝)))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.binder true
+      (encode secondContext (Reference.interned entry✝.identity :: secondLocals) body✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.node.empty
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+closed : ¬(Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = true
+opened : (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.empty => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.reference name => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.empty with
+        | Value.empty => [Value.empty]
+        | Value.reference name => [Value.empty]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = true then
+    Value.node entry✝ edges✝ depth✝ free✝ = Value.empty
+  else
+    Value.empty.free.isEmpty = false ∧
+      match Value.node entry✝ edges✝ depth✝ free✝, Value.empty with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : Value.empty.free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.node (encodeEdges firstContext firstLocals edges✝))
+    (firstValues ++ List.map (input first) firstContext) InternedNestedConstruction.Syntax.empty
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.node.reference
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+closed : ¬(Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = true
+opened : (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.empty => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.reference name => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+name✝ : Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = true then
+    Value.node entry✝ edges✝ depth✝ free✝ = Value.reference name✝
+  else
+    (Value.reference name✝).free.isEmpty = false ∧
+      match Value.node entry✝ edges✝ depth✝ free✝, Value.reference name✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.reference name✝).free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.node (encodeEdges firstContext firstLocals edges✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (match List.findIdx? (fun x => x == name✝) secondLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (secondLocals.length + slot secondContext (Value.reference name✝)))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.node.union
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List Reference
+closed : ¬(Value.node entry✝¹ edges✝ depth✝¹ free✝¹).free.isEmpty = true
+opened : (Value.node entry✝¹ edges✝ depth✝¹ free✝¹).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝¹ edges✝ depth✝¹ free✝¹ with
+        | Value.empty => [Value.node entry✝¹ edges✝ depth✝¹ free✝¹]
+        | Value.reference name => [Value.node entry✝¹ edges✝ depth✝¹ free✝¹]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝ members✝ depth✝ free✝ with
+        | Value.empty => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.reference name => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.node entry✝¹ edges✝ depth✝¹ free✝¹).free.isEmpty = true then
+    Value.node entry✝¹ edges✝ depth✝¹ free✝¹ = Value.union entry✝ members✝ depth✝ free✝
+  else
+    (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false ∧
+      match Value.node entry✝¹ edges✝ depth✝¹ free✝¹, Value.union entry✝ members✝ depth✝ free✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.node (encodeEdges firstContext firstLocals edges✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.union (encodeMany secondContext secondLocals members✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.node.mu
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+closed : ¬(Value.node entry✝¹ edges✝ depth✝ free✝).free.isEmpty = true
+opened : (Value.node entry✝¹ edges✝ depth✝ free✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝¹ edges✝ depth✝ free✝ with
+        | Value.empty => [Value.node entry✝¹ edges✝ depth✝ free✝]
+        | Value.reference name => [Value.node entry✝¹ edges✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.node entry✝¹ edges✝ depth✝ free✝).free.isEmpty = true then
+    Value.node entry✝¹ edges✝ depth✝ free✝ = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+  else
+    (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false ∧
+      match Value.node entry✝¹ edges✝ depth✝ free✝, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.node (encodeEdges firstContext firstLocals edges✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.binder true
+      (encode secondContext (Reference.interned entry✝.identity :: secondLocals) body✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.union.empty
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+closed : ¬(Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = true
+opened : (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝ members✝ depth✝ free✝ with
+        | Value.empty => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.reference name => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.empty with
+        | Value.empty => [Value.empty]
+        | Value.reference name => [Value.empty]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = true then
+    Value.union entry✝ members✝ depth✝ free✝ = Value.empty
+  else
+    Value.empty.free.isEmpty = false ∧
+      match Value.union entry✝ members✝ depth✝ free✝, Value.empty with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : Value.empty.free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.union (encodeMany firstContext firstLocals members✝))
+    (firstValues ++ List.map (input first) firstContext) InternedNestedConstruction.Syntax.empty
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.union.reference
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+closed : ¬(Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = true
+opened : (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝ members✝ depth✝ free✝ with
+        | Value.empty => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.reference name => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+name✝ : Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = true then
+    Value.union entry✝ members✝ depth✝ free✝ = Value.reference name✝
+  else
+    (Value.reference name✝).free.isEmpty = false ∧
+      match Value.union entry✝ members✝ depth✝ free✝, Value.reference name✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.reference name✝).free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.union (encodeMany firstContext firstLocals members✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (match List.findIdx? (fun x => x == name✝) secondLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (secondLocals.length + slot secondContext (Value.reference name✝)))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.union.node
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List Reference
+closed : ¬(Value.union entry✝¹ members✝ depth✝¹ free✝¹).free.isEmpty = true
+opened : (Value.union entry✝¹ members✝ depth✝¹ free✝¹).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝¹ members✝ depth✝¹ free✝¹ with
+        | Value.empty => [Value.union entry✝¹ members✝ depth✝¹ free✝¹]
+        | Value.reference name => [Value.union entry✝¹ members✝ depth✝¹ free✝¹]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.empty => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.reference name => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.union entry✝¹ members✝ depth✝¹ free✝¹).free.isEmpty = true then
+    Value.union entry✝¹ members✝ depth✝¹ free✝¹ = Value.node entry✝ edges✝ depth✝ free✝
+  else
+    (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false ∧
+      match Value.union entry✝¹ members✝ depth✝¹ free✝¹, Value.node entry✝ edges✝ depth✝ free✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.union (encodeMany firstContext firstLocals members✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.node (encodeEdges secondContext secondLocals edges✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.union.mu
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+closed : ¬(Value.union entry✝¹ members✝ depth✝ free✝).free.isEmpty = true
+opened : (Value.union entry✝¹ members✝ depth✝ free✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝¹ members✝ depth✝ free✝ with
+        | Value.empty => [Value.union entry✝¹ members✝ depth✝ free✝]
+        | Value.reference name => [Value.union entry✝¹ members✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.union entry✝¹ members✝ depth✝ free✝).free.isEmpty = true then
+    Value.union entry✝¹ members✝ depth✝ free✝ = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+  else
+    (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false ∧
+      match Value.union entry✝¹ members✝ depth✝ free✝, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false ∧ False
+⊢ Equivalent (InternedNestedConstruction.Syntax.union (encodeMany firstContext firstLocals members✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.binder true
+      (encode secondContext (Reference.interned entry✝.identity :: secondLocals) body✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.mu.empty
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+closed : ¬(Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true
+opened : (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.empty with
+        | Value.empty => [Value.empty]
+        | Value.reference name => [Value.empty]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true then
+    Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ = Value.empty
+  else
+    Value.empty.free.isEmpty = false ∧
+      match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝, Value.empty with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : Value.empty.free.isEmpty = false ∧ False
+⊢ Equivalent
+    (InternedNestedConstruction.Syntax.binder true
+      (encode firstContext (Reference.interned entry✝.identity :: firstLocals) body✝))
+    (firstValues ++ List.map (input first) firstContext) InternedNestedConstruction.Syntax.empty
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.mu.reference
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+closed : ¬(Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true
+opened : (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+name✝ : Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.reference name✝ with
+        | Value.empty => [Value.reference name✝]
+        | Value.reference name => [Value.reference name✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true then
+    Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ = Value.reference name✝
+  else
+    (Value.reference name✝).free.isEmpty = false ∧
+      match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝, Value.reference name✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.reference name✝).free.isEmpty = false ∧ False
+⊢ Equivalent
+    (InternedNestedConstruction.Syntax.binder true
+      (encode firstContext (Reference.interned entry✝.identity :: firstLocals) body✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (match List.findIdx? (fun x => x == name✝) secondLocals with
+    | some index => InternedNestedConstruction.Syntax.var index
+    | none => InternedNestedConstruction.Syntax.var (secondLocals.length + slot secondContext (Value.reference name✝)))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.mu.node
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+closed : ¬(Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true
+opened : (Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.empty => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.reference name => [Value.node entry✝ edges✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true then
+    Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝ = Value.node entry✝ edges✝ depth✝ free✝
+  else
+    (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false ∧
+      match Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝, Value.node entry✝ edges✝ depth✝ free✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty = false ∧ False
+⊢ Equivalent
+    (InternedNestedConstruction.Syntax.binder true
+      (encode firstContext (Reference.interned entry✝¹.identity :: firstLocals) body✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.node (encodeEdges secondContext secondLocals edges✝))
+    (secondValues ++ List.map (input second) secondContext)
+
+case neg.mu.union
+Symbol Guard : Type
+firstContext secondContext : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+source : State Symbol Guard
+coherent : Coherent source
+firstAvailable : Values source firstContext
+secondAvailable : Values source secondContext
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+closed : ¬(Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true
+opened : (Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = false
+firstCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.empty => [Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝]
+        | Value.reference name => [Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ firstContext
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+secondCovered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.union entry✝ members✝ depth✝ free✝ with
+        | Value.empty => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.reference name => [Value.union entry✝ members✝ depth✝ free✝]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ secondContext
+related :
+  if (Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝).free.isEmpty = true then
+    Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝ = Value.union entry✝ members✝ depth✝ free✝
+  else
+    (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false ∧
+      match Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝, Value.union entry✝ members✝ depth✝ free✝ with
+      | Value.reference a, Value.reference b =>
+        resolve firstLocals firstValues first a = resolve secondLocals secondValues second b
+      | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+        EdgesAlpha firstLocals secondLocals firstValues secondValues first second edges other
+      | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+        ManyAlpha firstLocals secondLocals firstValues secondValues first second members other
+      | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+        ∀ (argument : Value Symbol Guard),
+          Alpha (Reference.interned entry.identity :: firstLocals) (Reference.interned other.identity :: secondLocals)
+            (argument :: firstValues) (argument :: secondValues) first second body later
+      | x, x_1 => False
+details : (Value.union entry✝ members✝ depth✝ free✝).free.isEmpty = false ∧ False
+⊢ Equivalent
+    (InternedNestedConstruction.Syntax.binder true
+      (encode firstContext (Reference.interned entry✝¹.identity :: firstLocals) body✝))
+    (firstValues ++ List.map (input first) firstContext)
+    (InternedNestedConstruction.Syntax.union (encodeMany secondContext secondLocals members✝))
+    (secondValues ++ List.map (input second) secondContext)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-congruence/stored-alpha-plans-direct-3.source.lean:123:0: warning: unused `termination_by`, function is not recursive
