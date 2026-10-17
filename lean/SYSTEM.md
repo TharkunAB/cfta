@@ -1,5 +1,65 @@
 # Constrained languages, indexing, and distributions
 
+## Current complete uncapped Scan and Required preparation
+
+Updated: 2026-10-17 14:33 CEST. Starting checkpoint is 612aeec2.
+Proof commit is 565b99ed. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-scan-required.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-local-scan-required/.
+
+Initial caller invariants, coherent active original records, and pure Scan
+reservations now construct exact record Scan and uncapped Required
+preparation. Positional retention preserves original record occurrences.
+The actual Scan return derives selected false primary certificates.
+Required starts at that exact return. The initial original record list
+joins forecasts for every possible positional selection. No future
+selection, graph, reached ranges, worker success, finite input Cap, or
+whole-forest closedness is a producer premise.
+
+The same preparation retains strict source reads, full Frame, forecast
+Fits, same-inventory caller Post, original and returned availability,
+equal length, selected path domains, stopped-class refutation, and
+conditional language preservation. Both outer tables and Merge remain
+exact. The saved fourth memo remains correct with Extends. Six preparation
+fuels can increase independently with the same complete return. Its
+continuation factors the original local classes worker on successes and
+failures. Required guard retention and the initial Target producer also
+remove their finite Cap premises. No finite output Cap is claimed.
+
+The public target remains that valid and explicitly supported initial
+inputs terminate and satisfy each operation's intended contract. These
+are logical, partly noncomputable majorants, not extracted Haskell budgets
+or host capacity. Next lift the uncapped Target through Force, Leaf,
+editors, and the class pass. Then compose the class continuation and
+initial allocated precheck. Outer recursion, arbitrary constrained Mu and
+open recursive inputs, convergence, current adapters, lazy forcing,
+runtime, capacity, and full public Haskell correspondence remain open.
+Do not restore a whole-forest Cap to bypass the remaining editor work.
+The complete library goal stays active.
+
+Audit passes 3006 jobs and 65912 dependency checks. All eight final strict
+logs are empty and all eight canonical targets pass. Thirteen probe groups
+check 46 handwritten public declarations, fourteen Receipt projections,
+four explicit constructors, and fourteen constructed integrations. Only
+propext, Classical.choice, and Quot.sound occur in successful probes.
+Eight component manifests retain 269 entries and 269 hash references.
+Read checkpoint-validation.json and README for exact hashes, component
+counts, constructed witnesses, and evidence boundaries.
+Preservation retains 15941 starting files, 2997 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 97 frozen module manifests with 763 entries. Audit adds
+eight imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
 ## Current complete initial Scan resources
 
 Updated: 2026-10-17 14:14 CEST. Starting checkpoint is ba44d54f.
