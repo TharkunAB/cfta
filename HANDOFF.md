@@ -2,6 +2,18 @@
 
 Updated: **2026-10-17 17:31 CEST (Europe/Stockholm)**.
 
+Publication rechecked at 17:41 CEST: `formalize` reached `c7abe75a`.
+Remote main remains `c0cc8a05`. SSH port 22 timed out. HTTPS reads worked,
+but HTTPS push had no username provider. The existing SSH identity worked
+on port 443 with the existing trusted github.com host key:
+
+```sh
+git -c 'core.sshCommand=ssh -o BatchMode=yes -o ConnectTimeout=20 -o HostName=ssh.github.com -o HostKeyAlias=github.com -o StrictHostKeyChecking=yes -p 443' push origin formalize:formalize
+```
+
+This command changes no repository or SSH configuration. Keep publication
+scoped to `formalize`. It requires the existing trusted host key.
+
 ## Current complete Required origins and callback erasure
 
 Updated: 2026-10-17 17:31 CEST. Starting checkpoint is e4b949a5.
