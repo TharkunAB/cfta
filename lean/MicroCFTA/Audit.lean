@@ -2503,6 +2503,13 @@ import MicroCFTA.SourceCurrentOuterBusyOwners
 import MicroCFTA.SourceCurrentOuterEdgeIdle
 import MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth
 import MicroCFTA.SourceCurrentOuterCopiedWarmHit
+import MicroCFTA.SourceCurrentRequiredExposureSafe
+import MicroCFTA.SourceCurrentRequiredUnionNormal
+import MicroCFTA.SourceCurrentRequiredFiniteExposure
+import MicroCFTA.SourceCurrentRequiredRowOrigins
+import MicroCFTA.SourceCurrentRequiredPrimaryExposure
+import MicroCFTA.SourceCurrentRequiredPrimaryOrigins
+import MicroCFTA.SourceCurrentNativeCallbackErasure
 /-!
 # Proof dependency audit
 
