@@ -1,0 +1,181 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:100:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.InternedFreshOrdinaryAllocationBudget.0.MicroCFTA.InternedFreshOrdinaryAllocationBudget.raw_node_bound`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:100:0: warning: `raw_node_bound` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:114:29: error: don't know how to synthesize placeholder for argument `identify`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+x✝³ : List (Value Symbol Guard)
+x✝² : distinctNodes (List.flatMap unionMembers values) = [] → False
+x✝¹ : ∀ (value : Value Symbol Guard), distinctNodes (List.flatMap unionMembers values) = [value] → False
+x✝ : Option (List (EdgeValue Symbol Guard))
+heq✝ : ordinaryEdges (distinctNodes (List.flatMap unionMembers values)) = none
+⊢ Interned InternedBinderProtocol.NodeKey → Value Symbol Guard
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:154:25: error: Type mismatch
+  bound_refl ?m.151
+has type
+  Bound ?m.151 ?m.151 0 0
+but is expected to have type
+  (build Syntax.empty environment state).state.nodes.next ≤ state.nodes.next + nodeBudget Syntax.empty ∧
+    (build Syntax.empty environment state).state.edges.next ≤ state.edges.next + edgeBudget Syntax.empty
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:154:25: error: Type mismatch
+  bound_refl ?m.164
+has type
+  Bound ?m.164 ?m.164 0 0
+but is expected to have type
+  (build (Syntax.var index) environment state).state.nodes.next ≤ state.nodes.next + nodeBudget (Syntax.var index) ∧
+    (build (Syntax.var index) environment state).state.edges.next ≤ state.edges.next + edgeBudget (Syntax.var index)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:157:130: error: Type mismatch
+  node_bound values after
+has type
+  Bound after (run (makeNode values) after).snd 1 0
+but is expected to have type
+  Bound after (Outcome.state (?m.195 values after)) 1 0
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:160:131: error: Type mismatch
+  union_bound values after
+has type
+  Bound after (run (makeUnion values) after).snd 1 0
+but is expected to have type
+  Bound after (Outcome.state (?m.243 values after)) 1 0
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:167:30: error: Type mismatch
+  filter_bound name value after
+has type
+  Bound after (run (withoutSelfReference name value) after).snd 1 0
+but is expected to have type
+  Bound after (Outcome.state (?m.327 value after)) 1 0
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:179:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d + 3*e - f ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + 3*b - c ≥ -4
+  a + 3*b - g ≤ -5
+where
+ a := ↑state.nodes.next
+ b := ↑(nodeBudget body)
+ c := ↑((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+          (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind fun ordinary =>
+            request smart depth ordinary callback).state.nodes.next
+ d := ↑state.edges.next
+ e := ↑(edgeBudget body)
+ f := ↑((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+          (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind fun ordinary =>
+            request smart depth ordinary callback).state.edges.next
+ g := ↑((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+          (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind
+            fun ordinary afterOrdinary => request smart depth ordinary callback afterOrdinary).state.nodes.next
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:179:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d + 3*e - f ≥ 0
+  d + 3*e - g ≤ -1
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + 3*b - c ≥ -4
+where
+ a := ↑state.nodes.next
+ b := ↑(nodeBudget body)
+ c := ↑((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+          (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind fun ordinary =>
+            request smart depth ordinary callback).state.nodes.next
+ d := ↑state.edges.next
+ e := ↑(edgeBudget body)
+ f := ↑((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+          (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind fun ordinary =>
+            request smart depth ordinary callback).state.edges.next
+ g := ↑((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+          (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind
+            fun ordinary afterOrdinary => request smart depth ordinary callback afterOrdinary).state.edges.next
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:188:11: error: Type mismatch
+  bound_refl ?m.526
+has type
+  Bound ?m.526 ?m.526 0 0
+but is expected to have type
+  (buildMany [] environment state).state.nodes.next ≤ state.nodes.next + manyNodes [] ∧
+    (buildMany [] environment state).state.edges.next ≤ state.edges.next + manyEdges []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:201:11: error: Type mismatch
+  bound_refl ?m.597
+has type
+  Bound ?m.597 ?m.597 0 0
+but is expected to have type
+  (buildEdges [] environment state).state.nodes.next ≤ state.nodes.next + rowNodes [] ∧
+    (buildEdges [] environment state).state.edges.next ≤ state.edges.next + rowEdges []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:211:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e + f + g - h ≥ -1
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + b + c - d ≥ 0
+  a + b + c - i ≤ -1
+where
+ a := ↑state.nodes.next
+ b := ↑(manyNodes children)
+ c := ↑(rowNodes rest)
+ d := ↑((buildMany children environment state).bind fun values after =>
+          (work (makeEdge symbol guard values) after).bind fun edge => buildEdges rest environment).state.nodes.next
+ e := ↑state.edges.next
+ f := ↑(manyEdges children)
+ g := ↑(rowEdges rest)
+ h := ↑((buildMany children environment state).bind fun values after =>
+          (work (makeEdge symbol guard values) after).bind fun edge => buildEdges rest environment).state.edges.next
+ i := ↑((buildMany children environment state).bind fun values next =>
+          (work (makeEdge symbol guard values) next).bind fun edge afterEdge =>
+            (buildEdges rest environment afterEdge).bind fun edges final =>
+              Outcome.done (edge :: edges) final).state.nodes.next
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:211:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e + f + g - h ≥ -1
+  e + f + g - i ≤ -2
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + b + c - d ≥ 0
+where
+ a := ↑state.nodes.next
+ b := ↑(manyNodes children)
+ c := ↑(rowNodes rest)
+ d := ↑((buildMany children environment state).bind fun values after =>
+          (work (makeEdge symbol guard values) after).bind fun edge => buildEdges rest environment).state.nodes.next
+ e := ↑state.edges.next
+ f := ↑(manyEdges children)
+ g := ↑(rowEdges rest)
+ h := ↑((buildMany children environment state).bind fun values after =>
+          (work (makeEdge symbol guard values) after).bind fun edge => buildEdges rest environment).state.edges.next
+ i := ↑((buildMany children environment state).bind fun values next =>
+          (work (makeEdge symbol guard values) next).bind fun edge afterEdge =>
+            (buildEdges rest environment afterEdge).bind fun edges final =>
+              Outcome.done (edge :: edges) final).state.edges.next
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:212:0: warning: unused `termination_by`, function is not recursive

@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.constructionSyntax
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.constructionSyntax
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.nodeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.edgeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.unused
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.unused
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.checked_state
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.checked_state
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.checked_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.checked_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.checked_yielded
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.checked_yielded

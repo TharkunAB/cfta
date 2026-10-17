@@ -1,0 +1,154 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:103:37: error: don't know how to synthesize placeholder for argument `identify`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+x✝³ : List (Value Symbol Guard)
+x✝² : distinctNodes (List.flatMap unionMembers values) = [] → False
+x✝¹ : ∀ (value : Value Symbol Guard), distinctNodes (List.flatMap unionMembers values) = [value] → False
+x✝ : Option (List (EdgeValue Symbol Guard))
+heq✝ : ordinaryEdges (distinctNodes (List.flatMap unionMembers values)) = none
+⊢ Interned InternedBinderProtocol.NodeKey → Value Symbol Guard
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:103:35: error: don't know how to synthesize placeholder for argument `key`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+x✝³ : List (Value Symbol Guard)
+x✝² : distinctNodes (List.flatMap unionMembers values) = [] → False
+x✝¹ : ∀ (value : Value Symbol Guard), distinctNodes (List.flatMap unionMembers values) = [value] → False
+x✝ : Option (List (EdgeValue Symbol Guard))
+heq✝ : ordinaryEdges (distinctNodes (List.flatMap unionMembers values)) = none
+⊢ InternedBinderProtocol.NodeKey
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:103:11: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:122:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+smart : Bool
+depth ordinary : Value Symbol Guard
+callback :
+  InternedBinderProtocol.Reference →
+    InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+nodes edges : Nat
+callbacks :
+  ∀ (name : InternedBinderProtocol.Reference) (current : InternedConstructorTemplates.State Symbol Guard),
+    Bound current (callback name current).state nodes edges
+⊢ Bound state
+    (have key := muKey depth ordinary;
+      match state.nodes.table key with
+      | some val =>
+        match state.nodeRecords key with
+        | some value => Outcome.done (finish smart value) state
+        | none => Outcome.pending key state
+      | none =>
+        have entry := intern state.nodes key;
+        have allocated :=
+          { edges := state.edges, nodes := entry.snd, edgeRecords := state.edgeRecords,
+            nodeRecords := state.nodeRecords };
+        (callback (InternedBinderProtocol.Reference.interned entry.fst.identity) allocated).bind
+          fun bodyValue afterBody =>
+          have candidate := Value.mu entry.fst bodyValue depth ordinary;
+          have records := keepFirst afterBody.nodeRecords key candidate;
+          Outcome.done (finish smart ((records key).getD candidate))
+            { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+              nodeRecords := records }).state
+    (nodes + 1) edges
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:141:5: error: Ambiguous term
+  build
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.build expression environment state : Outcome Symbol Guard (Value Symbol Guard)
+  
+  InternedNestedConstruction.build expression environment state : Outcome Symbol Guard (Value Symbol Guard)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:142:7: error: Ambiguous term
+  build
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.build expression environment state : Outcome Symbol Guard (Value Symbol Guard)
+  
+  InternedNestedConstruction.build expression environment state : Outcome Symbol Guard (Value Symbol Guard)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:175:5: error: Ambiguous term
+  buildMany
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.buildMany expressions environment
+    state : Outcome Symbol Guard (List (Value Symbol Guard))
+  
+  InternedNestedConstruction.buildMany expressions environment state : Outcome Symbol Guard (List (Value Symbol Guard))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:176:7: error: Ambiguous term
+  buildMany
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.buildMany expressions environment
+    state : Outcome Symbol Guard (List (Value Symbol Guard))
+  
+  InternedNestedConstruction.buildMany expressions environment state : Outcome Symbol Guard (List (Value Symbol Guard))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:188:5: error: Ambiguous term
+  buildEdges
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.buildEdges expressions environment
+    state : Outcome Symbol Guard (List (EdgeValue Symbol Guard))
+  
+  InternedNestedConstruction.buildEdges expressions environment
+    state : Outcome Symbol Guard (List (EdgeValue Symbol Guard))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:189:7: error: Ambiguous term
+  buildEdges
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.buildEdges expressions environment
+    state : Outcome Symbol Guard (List (EdgeValue Symbol Guard))
+  
+  InternedNestedConstruction.buildEdges expressions environment
+    state : Outcome Symbol Guard (List (EdgeValue Symbol Guard))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:146:10: error: Ambiguous term
+  build
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.build : Syntax ?m.157 ?m.158 →
+    List (Value ?m.157 ?m.158) →
+      InternedConstructorTemplates.State ?m.157 ?m.158 → Outcome ?m.157 ?m.158 (Value ?m.157 ?m.158)
+  
+  InternedNestedConstruction.build : Syntax ?m.157 ?m.158 →
+    List (Value ?m.157 ?m.158) →
+      InternedConstructorTemplates.State ?m.157 ?m.158 → Outcome ?m.157 ?m.158 (Value ?m.157 ?m.158)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:149:10: error: Ambiguous term
+  build
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.build : Syntax ?m.171 ?m.172 →
+    List (Value ?m.171 ?m.172) →
+      InternedConstructorTemplates.State ?m.171 ?m.172 → Outcome ?m.171 ?m.172 (Value ?m.171 ?m.172)
+  
+  InternedNestedConstruction.build : Syntax ?m.171 ?m.172 →
+    List (Value ?m.171 ?m.172) →
+      InternedConstructorTemplates.State ?m.171 ?m.172 → Outcome ?m.171 ?m.172 (Value ?m.171 ?m.172)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:152:43: error: Ambiguous term
+  build
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.build body (Value.reference name :: environment)
+    current : Outcome Symbol Guard (Value Symbol Guard)
+  
+  InternedNestedConstruction.build body (Value.reference name :: environment)
+    current : Outcome Symbol Guard (Value Symbol Guard)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:180:10: error: Ambiguous term
+  buildMany
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.buildMany : List (Syntax ?m.235 ?m.236) →
+    List (Value ?m.235 ?m.236) →
+      InternedConstructorTemplates.State ?m.235 ?m.236 → Outcome ?m.235 ?m.236 (List (Value ?m.235 ?m.236))
+  
+  InternedNestedConstruction.buildMany : List (Syntax ?m.235 ?m.236) →
+    List (Value ?m.235 ?m.236) →
+      InternedConstructorTemplates.State ?m.235 ?m.236 → Outcome ?m.235 ?m.236 (List (Value ?m.235 ?m.236))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:195:14: error: Ambiguous term
+  buildEdges
+Possible interpretations:
+  InternedFreshOrdinaryConstruction.buildEdges : List (EdgeSyntax ?m.293 ?m.294) →
+    List (Value ?m.293 ?m.294) →
+      InternedConstructorTemplates.State ?m.293 ?m.294 → Outcome ?m.293 ?m.294 (List (EdgeValue ?m.293 ?m.294))
+  
+  InternedNestedConstruction.buildEdges : List (EdgeSyntax ?m.293 ?m.294) →
+    List (Value ?m.293 ?m.294) →
+      InternedConstructorTemplates.State ?m.293 ?m.294 → Outcome ?m.293 ?m.294 (List (EdgeValue ?m.293 ?m.294))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:170:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:183:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:202:0: warning: unused `termination_by`, function is not recursive

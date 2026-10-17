@@ -1,0 +1,28 @@
+import MicroCFTA.InternedFreshOrdinaryAllocationBudget
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowNodes
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowNodes
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowEdges
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowEdges
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.build_bound
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.build_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildMany_bound
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildMany_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildEdges_bound
+#check @MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildEdges_bound

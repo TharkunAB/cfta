@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.stepCharges
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.stepCharges
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.chargesThrough
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.chargesThrough
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.step_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.step_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.prefix_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.prefix_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.charges_append
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace.charges_append

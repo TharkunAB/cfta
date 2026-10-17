@@ -1,0 +1,54 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:20:2: warning: missing doc string for public field Limits.rows
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:21:2: warning: missing doc string for public field Limits.members
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:22:2: warning: missing doc string for public field Limits.arity
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:48:4: error: Failed to find LCNF signature for MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:52:4: error: Failed to find LCNF signature for MicroCFTA.InternedConstructorTemplates.EdgeValue._sizeOf_inst
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:95:3: error: Application type mismatch: The argument
+  member_sum ?m.14 (nodePayloads source) value (node_mem source facts identity value found)
+has type
+  ?m.14 value ≤ (List.map ?m.14 (nodePayloads source)).sum
+but is expected to have type
+  (nodeEdges value).length ≤ (limits source).rows
+in the application
+  And.intro (member_sum ?m.14 (nodePayloads source) value (node_mem source facts identity value found))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:108:2: error: Type mismatch
+  member_sum ?m.12 (edgePayloads source) edge (edge_mem source facts identity edge found)
+has type
+  ?m.12 edge ≤ (List.map ?m.12 (edgePayloads source)).sum
+but is expected to have type
+  Edge (limits source) edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:158:28: error(lean.unknownIdentifier): Unknown identifier `SourceRecursiveIntersectionEnvironment.body_available`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionSourceProfile.lean:219:74: error: unsolved goals
+case reference
+Symbol Guard : Type
+source current : InternedConstructorTemplates.State Symbol Guard
+facts : Facts source
+currentFacts : Facts current
+growth : Grows source current
+history : Extends source.nodes.issued current.nodes.issued
+domain : IntersectionFlatMemoKeyDomain.DomainKey
+bindings : OriginalBindings source domain
+name : Nat
+member : name ∈ SourceRecursiveIntersectionDomain.names domain
+name✝ : InternedBinderProtocol.Reference
+found : SourcePreparedSharedRows.read current name = some (Value.reference name✝)
+original : SourceRecursiveIntersectionInputView.Original (Value.reference name✝)
+known : Available source (Value.reference name✝)
+input :
+  (match InternedBinderProtocol.NodeRef.ref name✝ with
+        | InternedBinderProtocol.NodeRef.empty => some IntersectSchedule.Input.empty
+        | InternedBinderProtocol.NodeRef.node identity => some (IntersectSchedule.Input.node identity)
+        | InternedBinderProtocol.NodeRef.mu identity => some (IntersectSchedule.Input.mu identity)
+        | InternedBinderProtocol.NodeRef.union identity => some (IntersectSchedule.Input.union identity)
+        | InternedBinderProtocol.NodeRef.ref (InternedBinderProtocol.Reference.interned identity) =>
+          some (IntersectSchedule.Input.ref identity)
+        | InternedBinderProtocol.NodeRef.ref reference => none).getD
+      IntersectSchedule.Input.empty =
+    IntersectSchedule.Input.mu name
+⊢ False

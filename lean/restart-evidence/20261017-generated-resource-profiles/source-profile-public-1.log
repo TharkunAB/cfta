@@ -1,0 +1,321 @@
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits : Type
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.mk' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.mk : Nat →
+  Nat → Nat → MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.rows' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.rows : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits →
+  Nat
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.members' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.members : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits →
+  Nat
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.arity' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.arity : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits →
+  Nat
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+    Nat → Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodePayloads' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodePayloads : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgePayloads' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgePayloads : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+    List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount' depends on axioms: [propext]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Nat
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits' depends on axioms: [propext]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Nat
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Nat
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node' depends on axioms: [propext]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node : {Symbol Guard : Type} →
+  MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge : {Symbol Guard : Type} →
+  MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits →
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_mem' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_mem : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (identity : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodePayloads Symbol Guard source) value
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_mem' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_mem : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (identity : Nat) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgePayloads Symbol Guard source) edge
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_bound : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (identity : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+        @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) value
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_size' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_size : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (identity : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+        @LE.le.{0} Nat instLENat
+          (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+              (instSizeOfDefault.{1} Guard))
+            value)
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_bound : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (identity : Nat) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+        @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) edge
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_size' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_size : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (identity : Nat) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source identity)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+        @LE.le.{0} Nat instLENat
+          (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+              (instSizeOfDefault.{1} Guard))
+            edge)
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident_read' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident_read : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard source edge →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source
+            (@MicroCFTA.Cache.Interned.identity (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.available' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.available : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value →
+        @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) value
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.available_size' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.available_size : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value →
+        ∀ (identity : Nat),
+          @Eq.{1} MicroCFTA.SourceInternedRows.Ref (@MicroCFTA.SourcePreparedSharedRows.reference Symbol Guard value)
+              (@Option.some.{0} Nat identity) →
+            @LE.le.{0} Nat instLENat
+              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                  (instSizeOfDefault.{1} Guard))
+                value)
+              (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard source edge →
+        And
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) edge)
+          (@LE.le.{0} Nat instLENat
+            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue._sizeOf_inst Symbol Guard
+                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+              edge)
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize Symbol Guard source))
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.child' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.child : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value →
+        ∀ (next : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedProbeProvenance.children Symbol Guard value) next →
+            @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) next
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.body' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.body : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value →
+        @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard value)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_scope' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_scope : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source request →
+        And
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_scope' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_scope : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionCode.EdgeScope Symbol Guard source request →
+        And
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left Symbol Guard request))
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right Symbol Guard request))
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_grows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_grows : ∀ {Symbol Guard : Type}
+  (source current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source current →
+    @MicroCFTA.Cache.Extends Nat (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.Cache.State.issued (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard source))
+        (@MicroCFTA.Cache.State.issued (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard current)) →
+      ∀ (identity : Nat) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source identity)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard current identity)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge)
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_current' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_current : ∀ {Symbol Guard : Type}
+  (source current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source current →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)) →
+        ∀ (identity : Nat) (original value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard source identity)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) original) →
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard current identity)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+              And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value original)
+                (And
+                  (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) value)
+                  (@LE.le.{0} Nat instLENat
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      value)
+                    (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize Symbol Guard source)))
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_current' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_current : ∀ {Symbol Guard : Type}
+  (source current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source current →
+      @MicroCFTA.Cache.Extends Nat (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.Cache.State.issued (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard current)) →
+        ∀ (identity : Nat) (original edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard source identity)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) original) →
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead Symbol Guard current identity)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+              And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge original)
+                (And
+                  (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) edge)
+                  (@LE.le.{0} Nat instLENat
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      edge)
+                    (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize Symbol Guard source)))
+'MicroCFTA.SourceRecursiveIntersectionSourceProfile.binding_read' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionSourceProfile.binding_read : ∀ {Symbol Guard : Type}
+  (source current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.InternedNestedFacts.Facts Symbol Guard current →
+      @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source current →
+        @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)) →
+          ∀ (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+            @MicroCFTA.SourceRecursiveIntersectionCode.OriginalBindings Symbol Guard source domain →
+              ∀ (name : Nat),
+                @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+                    (MicroCFTA.SourceRecursiveIntersectionDomain.names domain) name →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+                    And
+                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard current name)
+                        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value))
+                      (And
+                        (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node Symbol Guard
+                          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source) value)
+                        (And
+                          (@LE.le.{0} Nat instLENat
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              value)
+                            (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize Symbol Guard source))
+                          (And (@MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard value)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value)
+                              (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard value)
+                                (MicroCFTA.IntersectSchedule.Input.mu name))))))

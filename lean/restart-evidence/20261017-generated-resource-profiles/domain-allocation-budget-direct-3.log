@@ -1,0 +1,62 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:176:7: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:154:151: error(lean.unknownIdentifier): Unknown identifier `buildEdges_bound`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:157:153: error(lean.unknownIdentifier): Unknown identifier `buildMany_bound`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:158:22: error: unsolved goals
+case binder
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+smart : Bool
+body : Syntax Symbol Guard
+callback : InternedBinderProtocol.Reference →
+  InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard) :=
+  fun name current =>
+    (build body (Value.reference name :: environment) current).bind fun value after =>
+      work (withoutSelfReference name value) after
+callbackBound :
+  ∀ (name : InternedBinderProtocol.Reference) (current : InternedConstructorTemplates.State Symbol Guard),
+    Bound current (callback name current).state (nodeBudget body + 1) (edgeBudget body)
+actual :
+  Bound state
+    ((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+        (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind fun ordinary =>
+          request smart depth ordinary callback).state
+    (nodeBudget body + 1 + (nodeBudget body + 1 + (nodeBudget body + 1 + 1)))
+    (edgeBudget body + (edgeBudget body + edgeBudget body))
+⊢ Bound state
+    ((callback InternedBinderProtocol.Reference.depth state).bind fun depth afterDepth =>
+        (callback (InternedBinderProtocol.Reference.uninterned (ordinaryLevel depth)) afterDepth).bind
+          fun ordinary afterOrdinary => request smart depth ordinary callback afterOrdinary).state
+    (3 * nodeBudget body + 4) (3 * edgeBudget body)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:215:11: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:203:33: error: unsolved goals
+case cons.mk
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+rest : List (EdgeSyntax Symbol Guard)
+symbol : Symbol
+guard : Guard
+children : List (Syntax Symbol Guard)
+actual :
+  Bound state
+    ((buildMany children environment state).bind fun values after =>
+        (work (makeEdge symbol guard values) after).bind fun edge final =>
+          (buildEdges rest environment final).bind fun edges last => Outcome.done (edge :: edges) last).state
+    (manyNodes children + (0 + rowNodes rest)) (manyEdges children + (1 + rowEdges rest))
+⊢ ((buildMany children environment state).bind fun values next =>
+              (work (makeEdge symbol guard values) next).bind fun edge afterEdge =>
+                (buildEdges rest environment afterEdge).bind fun edges final =>
+                  Outcome.done (edge :: edges) final).state.nodes.next ≤
+      state.nodes.next + (manyNodes children + rowNodes rest) ∧
+    ((buildMany children environment state).bind fun values next =>
+              (work (makeEdge symbol guard values) next).bind fun edge afterEdge =>
+                (buildEdges rest environment afterEdge).bind fun edges final =>
+                  Outcome.done (edge :: edges) final).state.edges.next ≤
+      state.edges.next + (manyEdges children + 1 + rowEdges rest)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryAllocationBudget.lean:217:0: error: Missing name after `end`: Expected the current scope name `Execution`
+
+Hint: To end the current scope `Execution`, specify its name:
+  end ̲E̲x̲e̲c̲u̲t̲i̲o̲n̲

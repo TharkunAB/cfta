@@ -1,0 +1,76 @@
+import MicroCFTA.SourceRecursiveIntersectionSourceProfile
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.mk
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.mk
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.rows
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.rows
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.members
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.members
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.arity
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits.arity
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeRead
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodePayloads
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodePayloads
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgePayloads
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgePayloads
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.nodeSize
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edgeSize
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Node
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.Edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_mem
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_mem
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_bound
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_bound
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_size
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_size
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_bound
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_bound
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_size
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_size
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident_read
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident_read
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.available
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.available
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.available_size
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.available_size
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.resident
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.child
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.child
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.body
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.body
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_scope
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.node_scope
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_scope
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_scope
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_grows
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_grows
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_current
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.read_current
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_current
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.edge_read_current
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceProfile.binding_read
+#check @MicroCFTA.SourceRecursiveIntersectionSourceProfile.binding_read

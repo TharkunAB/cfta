@@ -1,0 +1,18 @@
+import MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.executeCharges
+#check @MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.executeCharges
+#print axioms MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.unfoldCharges
+#check @MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.unfoldCharges
+#print axioms MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.execute_bound
+#check @MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.execute_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.unfold_bound
+#check @MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget.unfold_bound

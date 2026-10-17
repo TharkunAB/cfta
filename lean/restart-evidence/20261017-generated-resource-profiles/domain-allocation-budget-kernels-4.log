@@ -1,0 +1,210 @@
+'MicroCFTA.FreshAllocationBudgetIntegration.nested_callbacks' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.FreshAllocationBudgetIntegration.nested_callbacks : have actual :=
+  @MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+    (fun a b =>
+      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a
+        b)
+    MicroCFTA.FreshAllocationBudgetIntegration.fixture
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+    (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool);
+And
+  (@Eq.{1} Bool
+    (MicroCFTA.FreshAllocationBudgetIntegration.nested_callbacks.match_1.{1} (fun actual => Bool) actual
+      (fun value state => Bool.true) fun key state => Bool.false)
+    Bool.true)
+  (And
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) actual)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 19) (instOfNatNat (nat_lit 19))))
+    (And
+      (@Eq.{1} Nat
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool
+            (@MicroCFTA.InternedNestedConstruction.Outcome.state Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) actual)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))
+      (And
+        (@Eq.{1} Nat
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Nat Bool
+            MicroCFTA.FreshAllocationBudgetIntegration.fixture)
+          (@OfNat.ofNat.{0} Nat (nat_lit 37) (instOfNatNat (nat_lit 37))))
+        (And
+          (@Eq.{1} Nat
+            (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Nat Bool
+              MicroCFTA.FreshAllocationBudgetIntegration.fixture)
+            (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12))))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Nat Bool
+                    (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) actual)))
+              (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Nat Bool
+                MicroCFTA.FreshAllocationBudgetIntegration.fixture))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Nat Bool
+                    (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) actual)))
+              (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Nat Bool
+                MicroCFTA.FreshAllocationBudgetIntegration.fixture)))))))
+'MicroCFTA.FreshAllocationBudgetIntegration.reserved_pending' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.FreshAllocationBudgetIntegration.reserved_pending : And
+  (@Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b =>
+        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a
+          b)
+      (@MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool Bool.false
+        (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap)
+    (@MicroCFTA.InternedNestedConstruction.Outcome.pending Nat Bool
+      (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) MicroCFTA.FreshAllocationBudgetIntegration.reservedKey
+      MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))
+  (And
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool
+          MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (And
+      (@Eq.{1} Nat
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool
+            MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+      (And
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Nat Bool
+                (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+                  (fun a b =>
+                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                      instDecidableEqBool a b)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool Bool.false
+                    (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                  MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool
+                MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))
+            (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Nat Bool
+              (@MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool Bool.false
+                (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Nat Bool
+                (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+                  (fun a b =>
+                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                      instDecidableEqBool a b)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool Bool.false
+                    (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                  MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+              (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool
+                MicroCFTA.FreshAllocationBudgetIntegration.reservedHeap))
+            (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Nat Bool
+              (@MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool Bool.false
+                (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))
+'MicroCFTA.FreshAllocationBudgetIntegration.repeated_nested' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.FreshAllocationBudgetIntegration.repeated_nested : @Exists.{1}
+  (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun value =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+    And
+      (@Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+              instDecidableEqBool a b)
+          MicroCFTA.FreshAllocationBudgetIntegration.fixture
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+          (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value after))
+      (And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                instDecidableEqBool a b)
+            MicroCFTA.FreshAllocationBudgetIntegration.fixture
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)) after)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value after))
+        (And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Nat Bool
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                  instDecidableEqBool a b)
+              (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                MicroCFTA.FreshAllocationBudgetIntegration.fixture
+                (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                  MicroCFTA.FreshAllocationBudgetIntegration.fixture
+                  (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool))))
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))))
+              after))
+          (And
+            (@Eq.{1} Nat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool after))
+              (@OfNat.ofNat.{0} Nat (nat_lit 19) (instOfNatNat (nat_lit 19))))
+            (And
+              (@Eq.{1} Nat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool after))
+                (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))
+              (And
+                (@LE.le.{0} Nat instLENat
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool after))
+                  (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes Nat Bool
+                    (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                      MicroCFTA.FreshAllocationBudgetIntegration.fixture
+                      (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                        MicroCFTA.FreshAllocationBudgetIntegration.fixture
+                        (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool))))))
+                (@LE.le.{0} Nat instLENat
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool after))
+                  (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges Nat Bool
+                    (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                      MicroCFTA.FreshAllocationBudgetIntegration.fixture
+                      (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                        MicroCFTA.FreshAllocationBudgetIntegration.fixture
+                        (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)))))))))))

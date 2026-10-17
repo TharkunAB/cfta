@@ -1,0 +1,96 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:22:3: error: unexpected token 'syntax'; expected identifier
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:29:54: error: unexpected token 'syntax'; expected ')' or term
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:29:69: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:34:54: error: unexpected token 'syntax'; expected ')' or term
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:34:69: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:44:61: error: unexpected token 'syntax'; expected ')' or term
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:44:10: error: typeclass instance problem is stuck
+  DecidableEq (EdgeKey ?m.69 ?m.70)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:40:90: error: unsolved goals
+case neg
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+key : Nat × Nat
+body : Value Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+available : Available state body
+used : ¬Reference.intersection key.fst key.snd ∈ body.free
+⊢ (if Reference.intersection key.fst key.snd ∈ body.free then
+              Fresh
+                (Syntax.binder true
+                  (InternedStoredSubstitution.encode (InternedStoredSubstitution.leaves body)
+                    [Reference.intersection key.fst key.snd] body))
+                (InternedStoredSubstitution.leaves body) state
+            else Outcome.done body state).state.nodes.next ≤
+      state.nodes.next + nodeBudget key body ∧
+    (if Reference.intersection key.fst key.snd ∈ body.free then
+              Fresh
+                (Syntax.binder true
+                  (InternedStoredSubstitution.encode (InternedStoredSubstitution.leaves body)
+                    [Reference.intersection key.fst key.snd] body))
+                (InternedStoredSubstitution.leaves body) state
+            else Outcome.done body state).state.edges.next ≤
+      state.edges.next + edgeBudget key body
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:43:31: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:43:43: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:44:76: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:4: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+key : Nat × Nat
+body : Value Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+absent : ¬Reference.intersection key.fst key.snd ∈ body.free
+⊢ sorry key body = 0
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:50: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+key : Nat × Nat
+body : Value Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+absent : ¬Reference.intersection key.fst key.snd ∈ body.free
+⊢ sorry key body = 0
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:18: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:64: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:30: warning: This simp argument is unused:
+  absent
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [nodeBudget, ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:38: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [nodeBudget, absent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:76: warning: This simp argument is unused:
+  absent
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [edgeBudget, ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:53:84: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [edgeBudget, absent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:109:0: error: Missing name after `end`: Expected the current scope name `Checked`
+
+Hint: To end the current scope `Checked`, specify its name:
+  end ̲«̲C̲h̲e̲c̲k̲e̲d̲»̲
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:109:4: error: unexpected token 'Checked'; expected command
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRecursiveOptionalBudget.lean:110:0: error: Invalid name after `end`: Expected `SourceCurrentAllocatedRecursiveOptionalBudget.Checked`, but found `MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget`
+
+Hint: If you meant to end the outer scope(s) `MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget`, you must end all the intervening scopes `MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.Checked`:
+  end MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget.̲C̲h̲e̲c̲k̲e̲d̲

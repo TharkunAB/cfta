@@ -1,5 +1,49 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current recursive allocation and initial source profiles
+
+Updated: 2026-10-17 06:17 CEST. This checkpoint starts at published `8883b39a`.
+The proof commits are `c4d0108b`, `2771817b`, and `9461e672`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-generated-resource-profiles.md` for the top-level
+proof target, current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-generated-resource-profiles/`.
+
+Five additive modules bound full repaired constructor allocation, stored
+substitution, and optional binders. Literal initial syntax pays for both
+probes, the fresh body, normalization, and Mu reservation. All outcomes,
+including pending readback, retain the bounds. Open nested Mu and unions
+remain supported. Checked prefixes accumulate actual Work and body charges.
+Successful original payload reads retain finite branching and logical size
+profiles through record and issued-key growth. Size helpers use the caller's
+SizeOf instances. An absent earlier identity has no readback guarantee.
+
+The prefix charges still depend on reached instructions and bodies. They
+are not an initial root resource bound for generated-query sequences.
+Derive causal result-size bounds and then bound every reached charge from
+the original inputs. Fixed-original-source serial resources remain proved.
+General first Target and Force misses, editor/class completion, outer active
+and stored producers, arbitrary constrained Mu bodies, convergence,
+remaining recursive callers, current frontend/runtime adapters, concrete
+capacity, and complete public Haskell correspondence remain open.
+
+The pinned Audit passes 2854 jobs and 63392 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All five strict checks are clean.
+All 70 imported axiom/signature pairs pass in ten groups. Five component
+manifests verify 174 entries. Preservation retains
+12226 starting files, 2848 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, and 73 frozen manifests with 611 entries.
+Stashes and three other worktrees retain their initial state.
+
+No Haskell source change or new Haskell defect occurs. Root FINDINGS keeps
+the external repair handoff first. Field-pool repair `b9219b9e` is merged and
+validated; the Chain example returns `FieldAtomOnDatatype "Next" 0`.
+Reuse unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier work and the optimized interned core.
+The full library goal stays active. Read next-causal-generated-resources.md
+in the evidence directory. Do not infer whole-library completion from the
+component validation or the measured prefix charges.
+
 ## Current mixed editor depths and original-source serial resources
 
 Updated: 2026-10-17 06:00 CEST. This checkpoint starts at published `bf306940`.

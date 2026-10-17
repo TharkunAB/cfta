@@ -1,0 +1,105 @@
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget : {Symbol Guard : Type} →
+  MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Nat
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) → Nat
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowNodes' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowNodes : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) → Nat
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget : {Symbol Guard : Type} →
+  MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Nat
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) → Nat
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowEdges' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowEdges : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) → Nat
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.build_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.build_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Symbol Guard expression)))
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Symbol Guard expression)))
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildMany_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildMany_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes Symbol Guard expressions)))
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges Symbol Guard expressions)))
+'MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildEdges_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryAllocationBudget.buildEdges_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowNodes Symbol Guard expressions)))
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowEdges Symbol Guard expressions)))
