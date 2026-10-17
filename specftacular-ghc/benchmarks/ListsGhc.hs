@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 -- \| The signature of Lists, from a GHC session: the functions by their
--- names, at the carrier A.
+-- names, with distinct abstract carriers.
 import Specftacular
 import Specftacular.GHC (withGhcSignature)
 import System.Environment (getArgs)

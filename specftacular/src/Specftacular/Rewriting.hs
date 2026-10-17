@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 {- | Ordered rewriting with the laws that the search found, and the prover
@@ -10,14 +11,19 @@ module Specftacular.Rewriting (
     Rules,
     emptyRules,
     reducible,
+    pruningTemplates,
     joinable,
     kboCompare,
     addLaw,
+    generalizeLaw,
 ) where
 
 import Control.Applicative ((<|>))
+import Control.Monad (foldM, guard)
 import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Template (Template (..))
 import Data.Containers.ListUtils (nubOrd)
+import qualified Data.HashMap.Strict as HashMap
 import Data.List (permutations)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -32,9 +38,8 @@ term with any head.
 -}
 type Index = Map (Maybe (Symbol, Int)) [(Term, Term)]
 
-{- | The rules of the laws. An oriented rule makes each instance smaller, so
-it rewrites without a test of the order. An unoriented rule rewrites an
-instance only if the order says that the instance gets smaller. A rule
+{- | The rules of the laws. Orientation uses the order at fixed types.
+Each rewrite checks the order after type instantiation. A rule
 rewrites only if each template variable of its right side is in its left
 side. The other rules cannot rewrite, because a match of the left side
 does not give the right side, but they show that an equation follows
@@ -42,7 +47,7 @@ does not give the right side, but they show that an equation follows
 -}
 data Rules = Rules
     { oriented :: !Index
-    -- ^ The rules that make each instance smaller.
+    -- ^ The rules oriented at fixed types.
     , unoriented :: !Index
     -- ^ The rules that make some instances smaller.
     , nonRewriting :: !Index
@@ -106,6 +111,7 @@ rewriteStep greater rules t =
          | (l, r) <- candidates (oriented rules) t
          , Just s <- [matchTemplate l t Map.empty]
          , Just r' <- [instantiate s r]
+         , greater t r'
          ]
         ++ [ r'
            | (l, r) <- candidates (unoriented rules) t
@@ -135,6 +141,246 @@ instance only when the instance gets smaller.
 reducible :: (Symbol -> Bool) -> Rules -> Term -> Bool
 reducible isVar rules = isJust . rewriteStep (groundGreater isVar) rules
 
+{- | Templates of uniformly decreasing linear rules up to the given size.
+The enumeration oracle rejects partial terms that contain these patterns.
+A pattern can omit type annotations when the original rule matches its
+principal type. Other patterns keep exact carrier annotations. Repeated
+term variables cannot become independent holes.
+-}
+pruningTemplates :: Sig -> Int -> Rules -> [Template Symbol]
+pruningTemplates sig size rules =
+    nubOrd
+        [ template
+        | (l, r) <- allRules rules
+        , let vs = templateVars l
+        , length vs == length (nubOrd vs)
+        , leaves l <= size
+        , Term "app" [_, _, _] <- [l]
+        , template <- case principalType sig l of
+            Just principal
+                | annotationIndependentGreater l r
+                , rewrites l r principal ->
+                    [rawTemplate (const Hole) l]
+            _ ->
+                [ rawTemplate exactType l'
+                | Just l' <- [specialize l]
+                , rewrites l r l'
+                , Just bindings <- [matchTemplate l l' Map.empty]
+                , Just r' <- [instantiate bindings r]
+                , kboGreater Map.empty l' r'
+                ]
+        ]
+  where
+    rewrites l r target = isJust (matchTemplate l target Map.empty >>= (`instantiate` r))
+    types = Map.fromList [(Symbol ("<t>" <> name), typeSkeletonToTerm ty) | (ty, name) <- carriers]
+    specialize (Term "app" [ty, f, x]) =
+        (\ty' f' x' -> Term "app" [ty', f', x']) <$> instantiateType types ty <*> specialize f <*> specialize x
+    specialize (Term s [ty]) = (\ty' -> Term s [ty']) <$> instantiateType types ty
+    specialize _ = Nothing
+    exactType (Term s ts) = TemplateNode s (map exactType ts)
+    rawTemplate annotation (Term "app" [ty, f, x]) =
+        TemplateNode "app" [annotation ty, TemplateNode "(->)" [], rawTemplate annotation f, rawTemplate annotation x]
+    rawTemplate annotation (Term s [ty])
+        | isTemplateVar s = case annotation ty of
+            Hole -> Hole
+            t -> AnyPrefix [t]
+        | otherwise = TemplateNode s [annotation ty]
+    rawTemplate _ _ = error "pruningTemplates: invalid rule"
+
+{- | Prove a decrease that cannot depend on the type annotations. The
+variable conditions of 'kboGreater' preserve the weight comparison under
+term substitution. Equal weights need a strict function comparison or a
+strict comparison of constant names. Identical functions stay identical
+under one shared term and type substitution.
+-}
+annotationIndependentGreater :: Term -> Term -> Bool
+annotationIndependentGreater a b =
+    kboGreater Map.empty a b && (weight a > weight b || tie a b)
+  where
+    tie (Term "app" [_, f, v]) (Term "app" [_, g, u])
+        | f == g = tie v u
+        | otherwise = annotationIndependentGreater f g
+    tie (Term f [_]) (Term g [_])
+        | not (isTemplateVar f || isTemplateVar g) = f > g
+    tie _ _ = False
+
+{- | Infer the principal annotations of a linear pattern. Each occurrence
+of a signature constant gets fresh type variables. Given values keep their
+declared types. The rule matcher treats the fresh variables as rigid, so a
+match of the rule against this result proves that it covers every instance.
+-}
+principalType :: Sig -> Term -> Maybe Term
+principalType sig term = do
+    -- Custom signatures can use arbitrary type symbols. Keep the inference
+    -- variables separate from every declared type symbol.
+    guard (not (any (reserved . typeSkeletonToTerm . sfTypeRep) (Map.elems sig)))
+    (annotated, equations) <- annotate "" term
+    substitution <- unify Map.empty equations
+    pure (annotations (substitute substitution) annotated)
+  where
+    fresh path name = Term (Symbol ("<p>" <> path <> ":" <> name)) []
+    annotate path (Term "app" [_, f, x]) = do
+        (f', fs) <- annotate (path <> "f") f
+        (x', xs) <- annotate (path <> "x") x
+        let result = fresh path ""
+        pure (Term "app" [result, f', x'], (typeOf f', Term "->" [Term "(->)" [], typeOf x', result]) : fs ++ xs)
+    annotate path (Term s@(Symbol name) [_])
+        | isTemplateVar s = Just (Term s [fresh path ""], [])
+        | otherwise = do
+            fun <- Map.lookup name sig
+            let ty = case fun of
+                    GivenFun{} -> typeSkeletonToTerm (sfTypeRep fun)
+                    _ -> instanceType path (generalizeType (sfTypeRep fun))
+            pure (Term s [ty], [])
+    annotate _ _ = Nothing
+    instanceType path (TVar name) = fresh path name
+    instanceType path (TCons name args) = Term (Symbol name) (map (instanceType path) args)
+    instanceType path (TFun a b) = Term "->" [Term "(->)" [], instanceType path a, instanceType path b]
+    typeOf (Term _ (ty : _)) = ty
+    typeOf _ = error "principalType: missing annotation"
+    annotations f (Term "app" [ty, g, x]) = Term "app" [f ty, annotations f g, annotations f x]
+    annotations f (Term s [ty]) = Term s [f ty]
+    annotations _ t = t
+    meta (Symbol name) = "<p>" `T.isPrefixOf` name
+    reserved (Term h ts) = meta h || any reserved ts
+    substitute s (Term h ts) = case Map.lookup h s of
+        Just u | null ts -> substitute s u
+        _ -> Term h (map (substitute s) ts)
+    occurs h (Term k ts) = h == k || any (occurs h) ts
+    unify s [] = Just s
+    unify s ((a, b) : rest) = case (substitute s a, substitute s b) of
+        (a', b') | a' == b' -> unify s rest
+        (Term h [], b') | meta h, not (occurs h b') -> unify (Map.insert h b' s) rest
+        (a', Term h []) | meta h, not (occurs h a') -> unify (Map.insert h a' s) rest
+        (Term h as, Term k bs) | h == k, length as == length bs -> unify s (zip as bs ++ rest)
+        _ -> Nothing
+
+{- | Infer an equation scheme. This function does not test the equation.
+Signature constants must meet the existing parametric carrier contract.
+Given variables retain their concrete type constructors. Each original
+variable has one type skeleton across both sides. Ordinary constants get
+fresh instances of their declared type scheme at each occurrence.
+-}
+regeneraliseEquation :: Sig -> (Term, Term) -> Maybe (Term, Term)
+regeneraliseEquation sig (lhs, rhs) = do
+    guard
+        (not (any reserved (Map.keys sig ++ concatMap typeNames (map sfTypeRep (Map.elems sig)) ++ symbols lhs ++ symbols rhs)))
+    (left, leftConstraints) <- annotate "L" lhs
+    (right, rightConstraints) <- annotate "R" rhs
+    bindings <-
+        foldM
+            (\s (a, b) -> unifyType a b s)
+            Map.empty
+            ((typeOf left, typeOf right) : leftConstraints ++ rightConstraints)
+    let proposal@(a, b) = (substitute bindings left, substitute bindings right)
+    -- One shared match must reconstruct both original annotated terms.
+    matched <- matchTemplate a lhs Map.empty
+    _ <- matchTemplate b rhs matched
+    pure (canonical proposal)
+  where
+    reserved name = "<t>" `T.isPrefixOf` name || "<v>" `T.isPrefixOf` name
+    symbols (Term (Symbol name) children) = name : concatMap symbols children
+    typeNames (TVar name) = [name]
+    typeNames (TCons name children) = name : concatMap typeNames children
+    typeNames (TFun a b) = typeNames a ++ typeNames b
+    variableNames (Term "app" [_, f, x]) = variableNames f ++ variableNames x
+    variableNames (Term symbol@(Symbol name) [_]) = case Map.lookup name sig of
+        Just (GivenFun{given_info = GivenVar{}}) -> [symbol]
+        _ -> []
+    variableNames _ = []
+    variables = Map.fromList (zip (nubOrd (variableNames lhs ++ variableNames rhs)) [0 :: Int ..])
+    fresh name = Term (Symbol ("<t>rg:" <> name)) []
+    arrow a b = Term "->" [Term "(->)" [], a, b]
+    typeOf (Term _ (ty : _)) = ty
+    typeOf _ = error "regeneraliseEquation: missing inferred annotation"
+    -- Each position of one given type can vary. Repeated uses share it.
+    givenType path ty
+        | ty `elem` map fst carriers = fresh path
+    givenType path (TVar _) = fresh path
+    givenType path (TFun a b) = arrow (givenType (path <> ":0") a) (givenType (path <> ":1") b)
+    givenType path (TCons name children) =
+        Term (Symbol name) [givenType (path <> ":" <> T.pack (show index)) child | (index, child) <- zip [0 :: Int ..] children]
+    -- Equal declaration binders stay equal within this constant occurrence.
+    declaredType path (TVar name) = fresh ("c:" <> path <> ":" <> name)
+    declaredType path (TFun a b) = arrow (declaredType path a) (declaredType path b)
+    declaredType path (TCons name children) = Term (Symbol name) (map (declaredType path) children)
+    annotate path (Term "app" [_, f, x]) = do
+        (f', fs) <- annotate (path <> "f") f
+        (x', xs) <- annotate (path <> "x") x
+        let result = fresh ("r:" <> path)
+        pure (Term "app" [result, f', x'], (typeOf f', arrow (typeOf x') result) : fs ++ xs)
+    annotate path (Term symbol@(Symbol name) [oldType]) = do
+        fun <- Map.lookup name sig
+        case fun of
+            GivenFun{given_info = GivenVar{}} -> do
+                guard (oldType == typeSkeletonToTerm (sfTypeRep fun))
+                index <- Map.lookup symbol variables
+                let ty = givenType ("v:" <> T.pack (show index)) (sfTypeRep fun)
+                pure (Term (Symbol ("<v>rg:" <> T.pack (show index))) [ty], [])
+            GivenFun{} -> do
+                guard (oldType == typeSkeletonToTerm (sfTypeRep fun))
+                pure (Term symbol [oldType], [])
+            _ -> pure (Term symbol [declaredType path (generalizeType (sfTypeRep fun))], [])
+    annotate _ _ = Nothing
+
+{- | Validate a more general type scheme before adding its rewrite rules.
+Each independent type binder gets a distinct abstract carrier. Each term
+variable gets its own generator at the inferred type. Missing instances,
+failed inference, and rejected or untestable equations keep the original law.
+The result type and the original equality function must remain the same.
+The signature constants must meet the parametric carrier contract.
+-}
+generalizeLaw ::
+    (TypeSkeleton -> Maybe Instance) -> [TestCase] -> Sig -> (TypeSkeleton, Value) -> Term -> IO (Sig, Term)
+generalizeLaw resolve cases sig (equalityType, equalityValue) original@(Term "(==)" [equality, lhs, rhs]) =
+    case prepare of
+        Nothing -> pure (sig, original)
+        Just (newSig, law, required, eq, left, right) -> do
+            valid <- foldM (check required eq left right) True cases
+            pure (if valid then (newSig, law) else (sig, original))
+  where
+    check _ _ _ _ False _ = pure False
+    check required eq left right True testcase = do
+        let values = testCaseValues required testcase
+        result <- valuesEqual eq (left values) (right values)
+        pure (result == Just True)
+    prepare = do
+        proposal@(a, b) <- regeneraliseEquation sig (lhs, rhs)
+        guard (proposal /= canonical (toTemplate sig lhs, toTemplate sig rhs))
+        let typeVars = nubOrd (foldMap variable a ++ foldMap variable b)
+            variable symbol = [symbol | isTypeVar symbol]
+        guard (length typeVars <= length carriers)
+        let types = Map.fromList (zip typeVars (map (typeSkeletonToTerm . fst) carriers))
+            vars = templateVarLeaves (substitute types a) ++ templateVarLeaves (substitute types b)
+        (required, bindings, _) <- foldM allocate (Map.empty, types, Map.empty) (nubOrd vars)
+        let newSig = required `Map.union` sig
+            leftTerm = substitute bindings a
+            rightTerm = substitute bindings b
+        resultType <- either (const Nothing) Just (termType newSig leftTerm)
+        rightType <- either (const Nothing) Just (termType newSig rightTerm)
+        guard (resultType == rightType)
+        guard (resultType == equalityType)
+        left <- either (const Nothing) Just (compileTerm newSig leftTerm)
+        right <- either (const Nothing) Just (compileTerm newSig rightTerm)
+        pure (newSig, Term "(==)" [equality, leftTerm, rightTerm], required, equalityValue, left, right)
+    allocate (required, bindings, counts) (Term name [annotation]) = do
+        ty <- either (const Nothing) Just (annotationType annotation)
+        inst <- resolve ty
+        let start = Map.findWithDefault 0 ty counts
+            select index =
+                let info = GivenVar (inst_prefix inst) (inst_text inst) index (inst_gen inst)
+                    label = gvToName info
+                    occupied = Map.member label required || Map.member label sig
+                 in if occupied then select (index + 1) else (index, label, GivenFun info ty)
+            (index, label, fun) = select start
+        pure
+            ( Map.insert label fun required
+            , Map.insert name (Term (Symbol label) [annotation]) bindings
+            , Map.insert ty (index + 1) counts
+            )
+    allocate _ _ = Nothing
+generalizeLaw _ _ sig _ law = pure (sig, law)
+
 {- | Whether the known laws prove a law: the two sides of the law have the
 same normal form, or their normal forms are an instance of a rule (see
 'subsumed'). The variables of the law are constants here. Each step is an
@@ -151,38 +397,83 @@ joinable isVar rules a b = a' == b' || subsumed rules (a', b') || subsumed rules
 groundGreater :: (Symbol -> Bool) -> Term -> Term -> Bool
 groundGreater isVar a b = kboCompare isVar a b == GT
 
-{- | Replace the template variables of a template by their terms. The types
-of a template have no template variables, so the function does not look
-into them.
+{- | Replace term and type variables with their matched instances.
+An unmatched variable cannot supply a rewrite result.
 -}
 instantiate :: Map Symbol Term -> Term -> Maybe Term
 instantiate s (Term "app" [ty, f, v]) =
-    (\f' v' -> Term "app" [ty, f', v']) <$> instantiate s f <*> instantiate s v
-instantiate s t@(Term h _)
+    (\ty' f' v' -> Term "app" [ty', f', v']) <$> instantiateType s ty <*> instantiate s f <*> instantiate s v
+instantiate s (Term h [ty])
     | isTemplateVar h = Map.lookup h s
-    | otherwise = Just t
+    | otherwise = (\ty' -> Term h [ty']) <$> instantiateType s ty
+instantiate _ _ = Nothing
 
-{- | Match a template against a term, and extend the substitution of the
-template variables. A template variable matches a term of its type. A
-template variable that occurs again must match an equal term.
+-- | Whether a symbol is a type variable in a rule.
+isTypeVar :: Symbol -> Bool
+isTypeVar (Symbol name) = "<t>" `T.isPrefixOf` name
+
+-- | Apply the type substitution once. Its results belong to the target term.
+instantiateType :: Map Symbol Term -> Term -> Maybe Term
+instantiateType _ t | not (hasTypeVars t) = Just t
+instantiateType s (Term h []) | isTypeVar h = Map.lookup h s
+instantiateType s (Term h ts) = Term h <$> traverse (instantiateType s) ts
+
+-- | Match a type with one consistent substitution for all its variables.
+matchTypeTerm :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+matchTypeTerm p t s | p == t && not (hasTypeVars p) = Just s
+matchTypeTerm (Term h []) t s
+    | isTypeVar h = bindMatch h t s
+matchTypeTerm (Term h ts) (Term k us) s
+    | h == k = matchChildren ts us s
+  where
+    matchChildren [] [] m = Just m
+    matchChildren (a : as) (b : bs) m = matchTypeTerm a b m >>= matchChildren as bs
+    matchChildren _ _ _ = Nothing
+matchTypeTerm _ _ _ = Nothing
+
+{- | Whether a type contains a rule type variable. Matching treats the
+variables of its target as rigid. Its substitution applies only once.
+-}
+hasTypeVars :: Term -> Bool
+hasTypeVars = any isTypeVar
+
+-- | Bind one pattern variable, or check its previous occurrence.
+bindMatch :: Symbol -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+bindMatch h t s = case Map.lookup h s of
+    Nothing -> Just (Map.insert h t s)
+    Just u | u == t -> Just s
+    _ -> Nothing
+
+{- | Match term and type variables together. A repeated variable must
+have the same term or type at each occurrence.
 -}
 matchTemplate :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
-matchTemplate (Term h [ty]) t s
-    | isTemplateVar h =
-        case t of
-            Term _ (ty' : _) | ty' == ty ->
-                case Map.lookup h s of
-                    Nothing -> Just (Map.insert h t s)
-                    Just u | u == t -> Just s
-                    _ -> Nothing
-            _ -> Nothing
--- The type of an application follows from the types of its leaves, so an
--- application needs no check of its type.
-matchTemplate (Term "app" [_, f, v]) (Term "app" [_, f', v']) s =
-    matchTemplate f f' s >>= matchTemplate v v'
-matchTemplate (Term a [ty]) (Term b [ty']) s
-    | a == b && ty == ty' = Just s
-matchTemplate _ _ _ = Nothing
+matchTemplate pat target bindings = do
+    guard (matchesShape pat target)
+    matchTyped pat target bindings
+
+{- | Check the program symbols and application structure before its types.
+Template variables accept any annotated subtree. This check does not bind
+variables or inspect annotations. A successful typed match passes it.
+-}
+matchesShape :: Term -> Term -> Bool
+matchesShape (Term h [_]) (Term _ (_ : _)) | isTemplateVar h = True
+matchesShape (Term "app" [_, f, v]) (Term "app" [_, f', v']) =
+    matchesShape f f' && matchesShape v v'
+matchesShape (Term a [_]) (Term b [_]) = a == b
+matchesShape _ _ = False
+
+-- | Match all annotations and repeated bindings after the shape check.
+matchTyped :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+matchTyped (Term h [ty]) t s
+    | isTemplateVar h = case t of
+        Term _ (ty' : _) -> matchTypeTerm ty ty' s >>= bindMatch h t
+        _ -> Nothing
+matchTyped (Term "app" [ty, f, v]) (Term "app" [ty', f', v']) s =
+    matchTypeTerm ty ty' s >>= matchTyped f f' >>= matchTyped v v'
+matchTyped (Term a [ty]) (Term b [ty']) s
+    | a == b = matchTypeTerm ty ty' s
+matchTyped _ _ _ = Nothing
 
 {- | The weight of a term in the Knuth-Bendix order: each symbol has the
 weight 1, and an application is the binary symbol app.
@@ -203,7 +494,8 @@ An application is the binary symbol app, which is above the other
 symbols. Of the other symbols, the generated variables are below the
 constants, so that the more general terms come first, and symbols of one
 kind compare by their names, then by their types. The generated
-variables of a term are constants here. The order is total,
+variables of a term are constants here. Smaller type instances come first.
+The order is total,
 well-founded, and closed under contexts, so rewriting with it ends.
 -}
 kboCompare :: (Symbol -> Bool) -> Term -> Term -> Ordering
@@ -214,7 +506,18 @@ kboCompare isVar s t = compare (weight s) (weight t) <> sameWeight s t
     sameWeight (Term "app" _) _ = GT
     sameWeight _ (Term "app" _) = LT
     sameWeight (Term a tys) (Term b tys') =
-        compare (not (isVar a)) (not (isVar b)) <> compare a b <> compare tys tys'
+        compare (not (isVar a)) (not (isVar b)) <> compare a b <> typeOrder tys tys'
+
+-- | Prefer smaller type instances before comparing their names.
+typeOrder :: [Term] -> [Term] -> Ordering
+typeOrder as bs = compare (rank as) (rank bs)
+  where
+    rank ts = (sum (map nodes ts), sum (map concrete ts), ts)
+    nodes (Term _ ts) = 1 + sum (map nodes ts) :: Int
+    concrete t@(Term h [])
+        | isTypeVar h || h == "(->)" || t `elem` map (typeSkeletonToTerm . fst) carriers = 0
+        | otherwise = 1 :: Int
+    concrete (Term _ ts) = sum (map concrete ts)
 
 {- | The Knuth-Bendix order on templates: whether s > t for each instance in
 which the template variables compare as the ranking says. A template
@@ -265,7 +568,7 @@ kboGreater rank s t =
             case (Map.lookup a rank, Map.lookup b rank) of
                 (Just i, Just j) -> i > j
                 _ -> False
-        | otherwise = (compare a b <> compare tys tys') == GT
+        | otherwise = (compare a b <> typeOrder tys tys') == GT
     sameWeight _ _ = False
 
 {- | The template variables of a template, from left to right, with each
@@ -284,23 +587,37 @@ templateVarLeaves t = nubOrd (go t)
     go (Term "app" [_, f, v]) = go f ++ go v
     go u@(Term x _) = [u | isTemplateVar x]
 
--- | Give new names to the template variables of a template.
-rename :: (Symbol -> Symbol) -> Term -> Term
-rename f (Term "app" [ty, g, v]) = Term "app" [ty, rename f g, rename f v]
-rename f (Term x tys) | isTemplateVar x = Term (f x) tys
-rename _ t = t
+-- | Give separate names to the term and type variables of a template.
+rename :: (Symbol -> Symbol) -> (Symbol -> Symbol) -> Term -> Term
+rename termName typeName = go
+  where
+    go (Term "app" [ty, f, v]) = Term "app" [types ty, go f, go v]
+    go (Term h tys) = Term (if isTemplateVar h then termName h else h) (map types tys)
+    types (Term h ts) = Term (if null ts && isTypeVar h then typeName h else h) (map types ts)
 
-{- | Replace the template variables of a template by their terms, and the
-template variables in these terms too.
+{- | Apply a unification substitution through term and type variables.
+Unlike matching, unification can bind a variable to another flexible
+variable. Follow these bindings transitively. Both occurs checks prevent
+cycles. Ground-order variable merges contain no type bindings.
 -}
 substitute :: Map Symbol Term -> Term -> Term
-substitute s (Term "app" [ty, f, v]) = Term "app" [ty, substitute s f, substitute s v]
-substitute s t@(Term x _)
-    | isTemplateVar x, Just u <- Map.lookup x s = substitute s u
-    | otherwise = t
+substitute s (Term "app" [ty, f, v]) =
+    Term "app" [substituteType s ty, substitute s f, substitute s v]
+substitute s (Term h [ty])
+    | isTemplateVar h, Just u <- Map.lookup h s = substitute s u
+    | otherwise = Term h [substituteType s ty]
+substitute _ t = t
 
-{- | The most general unifier of two templates. A template variable unifies
-with a term of its type that does not contain the variable.
+-- | Apply the type part of a unification substitution transitively.
+substituteType :: Map Symbol Term -> Term -> Term
+substituteType s (Term h [])
+    | isTypeVar h, Just ty <- Map.lookup h s = substituteType s ty
+substituteType s (Term h ts) = Term h (map (substituteType s) ts)
+
+{- | Unify two templates and their annotations. Term variables bind only
+to terms. Type variables bind only to types. The two namespaces have
+distinct prefixes. Each binding preserves the annotation constraints and
+passes the occurs check of its namespace.
 -}
 unify :: Term -> Term -> Maybe (Map Symbol Term)
 unify a0 b0 = go a0 b0 Map.empty
@@ -308,20 +625,41 @@ unify a0 b0 = go a0 b0 Map.empty
     go a b s = case (walk s a, walk s b) of
         (Term x [ty], t) | isTemplateVar x -> bind s x ty t
         (t, Term x [ty]) | isTemplateVar x -> bind s x ty t
-        (Term "app" [ty, f, v], Term "app" [ty', g, u]) | ty == ty' -> go f g s >>= go v u
-        (Term c [ty], Term d [ty']) | c == d && ty == ty' -> Just s
+        (Term "app" [ty, f, v], Term "app" [ty', g, u]) ->
+            unifyType ty ty' s >>= go f g >>= go v u
+        (Term c [ty], Term d [ty']) | c == d -> unifyType ty ty' s
         _ -> Nothing
     walk s t@(Term x [_])
         | isTemplateVar x, Just u <- Map.lookup x s = walk s u
         | otherwise = t
     walk _ t = t
     bind s x ty t = case t of
-        Term y [_] | y == x -> Just s
-        Term _ (ty' : _) | ty' == ty, not (occurs s x t) -> Just (Map.insert x t s)
+        Term y [ty'] | y == x -> unifyType ty ty' s
+        Term _ (ty' : _) -> do
+            s' <- unifyType ty ty' s
+            guard (not (occurs s' x t))
+            Just (Map.insert x t s')
         _ -> Nothing
     occurs s x u = case walk s u of
         Term "app" [_, f, v] -> occurs s x f || occurs s x v
         Term y _ -> y == x
+
+-- | Unify types structurally. Reject infinite types and different constructors.
+unifyType :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+unifyType a b s = case (substituteType s a, substituteType s b) of
+    (a', b') | a' == b' -> Just s
+    (Term x [], b') | isTypeVar x -> bind x b'
+    (a', Term x []) | isTypeVar x -> bind x a'
+    (Term c as, Term d bs)
+        | c == d
+        , length as == length bs ->
+            foldM (\m (x, y) -> unifyType x y m) s (zip as bs)
+    _ -> Nothing
+  where
+    bind x ty = do
+        guard (not (occurs x ty))
+        Just (Map.insert x ty s)
+    occurs x (Term y ts) = (null ts && x == y) || any (occurs x) ts
 
 {- | The subterms of a template that are not template variables, each with
 the function that puts a term in its place.
@@ -342,14 +680,18 @@ two ways, and the two results are equal.
 -}
 criticalPairs :: (Term, Term) -> (Term, Term) -> [(Term, Term)]
 criticalPairs (l1, r1) (l2, r2) =
-    [ (substitute s r1, substitute s (put r2'))
-    | (u, put) <- contexts l1
+    [ (substitute s r1', substitute s (put r2'))
+    | (u, put) <- contexts l1'
     , Just s <- [unify u l2']
     ]
   where
-    apart (Symbol x) = Symbol ("<v>'" <> T.drop 3 x)
-    l2' = rename apart l2
-    r2' = rename apart r2
+    apart prefix (Symbol x) = Symbol (prefix <> T.drop 3 x)
+    left = rename (apart "<v>L:") (apart "<t>L:")
+    right = rename (apart "<v>R:") (apart "<t>R:")
+    l1' = left l1
+    r1' = left r1
+    l2' = right l2
+    r2' = right r2
 
 {- | The critical pairs of a rule with each rule of the index, in the two
 orders.
@@ -428,42 +770,87 @@ orderings vs =
     sameType (Term _ ty) (Term _ ty' : _) = ty == ty'
     sameType _ [] = False
 
+-- | Count all nodes, including annotations, up to a fixed cache limit.
+cacheable :: Term -> Bool
+cacheable = isJust . within (256 :: Int)
+  where
+    within 0 _ = Nothing
+    within budget (Term symbol children) = symbol `seq` foldM within (budget - 1) children
+
+{- | Reuse a normal form only when both terms have at most 256 nodes.
+Check input size before hashing. Clear a full cache on the next insertion.
+Keep the normalization function fixed while reusing the cache.
+-}
+cachedNormalForm :: (Term -> Term) -> HashMap.HashMap Term Term -> Term -> (Term, HashMap.HashMap Term Term)
+cachedNormalForm nf cache term
+    | not (cacheable term) = (nf term, cache)
+    | otherwise = case HashMap.lookup term cache of
+        Just result -> (result, cache)
+        Nothing ->
+            let result = nf term
+                next
+                    | cacheable result = HashMap.insert term result (if HashMap.size cache >= 256 then HashMap.empty else cache)
+                    | otherwise = cache
+             in (result, next)
+
 {- | Add a law to the rules, and complete the rules. This is ordered
 (unfailing) completion, as Twee does it: each critical pair of a new
 rule with a rule of the index becomes an equation, unless its two sides
 are ground joinable. The new equation then gives new rules, and its
 critical pairs follow. A critical pair whose normal form has a side with
-more leaves than the given size is dropped, as in QuickSpec. The rules of
+more leaves than the given size is dropped, as in QuickSpec. A separate
+annotation-depth budget bounds polymorphic completion. It can omit valid
+critical pairs. It is not a coverage bound for the search grammar. The rules of
 the critical pairs make the rewriting stronger, so that a law that
 follows from the earlier laws is not found again.
 -}
 addLaw :: Int -> Sig -> Term -> Rules -> Rules
 addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
-    complete rules1 (concatMap (criticalPairsWith rules1) new)
+    complete HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new)
   where
     (new, rules1) = addEquation (toTemplate gsig l, toTemplate gsig r) rules0
-    complete rules [] = rules
-    complete rules ((s, t) : queue)
+    -- Program size does not bound type depth. This explicit budget depends
+    -- on the requested size and the declared types. Together with canonical
+    -- binders, it gives a finite universe of bounded critical pairs.
+    maxAnnotationDepth = (2 * max 0 maxSize + 1) * (1 + maximum (0 : map (typeSize . sfTypeRep) (Map.elems gsig)))
+    -- \| Check each annotation after critical-pair normalization.
+    withinDepth :: Term -> Bool
+    withinDepth (Term "app" [ty, f, v]) = depth ty <= maxAnnotationDepth && withinDepth f && withinDepth v
+    withinDepth (Term _ tys) = all ((<= maxAnnotationDepth) . depth) tys
+    -- \| The maximum constructor depth of an annotation.
+    depth :: Term -> Int
+    depth (Term _ ts) = 1 + maximum (0 : map depth ts)
+    complete _ rules [] = rules
+    complete !cache rules ((s, t) : queue)
+        -- The right normal form cannot change this rejection. Keep cache1
+        -- because cache2 would force the right normal form.
+        | leaves s' > maxSize = complete cache1 rules queue
         | s' == t'
-            || leaves s' > maxSize
             || leaves t' > maxSize
+            || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
             || groundJoinable rules (s', t') =
-            complete rules queue
-        | otherwise = complete rules' (queue ++ concatMap (criticalPairsWith rules') new')
+            complete cache2 rules queue
+        | otherwise = complete HashMap.empty rules' (queue ++ concatMap (criticalPairsWith rules') new')
       where
         nf = normalForm (kboGreater Map.empty) rules
-        s' = nf s
-        t' = nf t
+        (s', cache1) = cachedNormalForm nf cache s
+        (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
 addLaw _ _ _ rules = rules
 
-{- | Give the template variables of an equation the names @<v>0@, @<v>1@,
-and so on, in the order of their first occurrence, so that equal
-equations have equal names.
+{- | Give term and type binders stable names in their first-occurrence
+order. Alpha-equivalent critical pairs then have the same names. Keep the
+first type names compatible with the carrier specializations of templates.
 -}
 canonical :: (Term, Term) -> (Term, Term)
-canonical (s, t) = (rename name s, rename name t)
+canonical (s, t) = (rename name typeName s, rename name typeName t)
   where
     names = Map.fromList (zip [x | Term x _ <- nubOrd (templateVarLeaves s ++ templateVarLeaves t)] [0 :: Int ..])
     name x = Symbol ("<v>" <> T.pack (show (names Map.! x)))
+    typeNames = Map.fromList (zip (nubOrd (types s ++ types t)) [0 :: Int ..])
+    typeName x = Symbol ("<t>" <> labels !! (typeNames Map.! x))
+    labels = map snd carriers ++ ["p" <> T.pack (show n) | n <- [length carriers ..]]
+    types (Term "app" [ty, f, v]) = typeVars ty ++ types f ++ types v
+    types (Term _ tys) = concatMap typeVars tys
+    typeVars (Term h ts) = [h | null ts, isTypeVar h] ++ concatMap typeVars ts

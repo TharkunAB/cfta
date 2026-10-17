@@ -16,10 +16,12 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
 import qualified Specftacular.DecisionTree as DT
+import Specftacular.Pruning (prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
 
+import Control.Exception (evaluate, mask, onException)
 import Control.Monad (when)
 import Data.CFTA.Equality (
     Edge (Edge),
@@ -27,7 +29,6 @@ import Data.CFTA.Equality (
     fixWithin,
     reducePartially,
     refold,
-    runsInterned,
     union,
     withoutRedundantEdges,
  )
@@ -36,11 +37,13 @@ import Data.Char (isAlphaNum)
 import Data.List hiding (union)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import GHC.Clock (getMonotonicTimeNSec)
+import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRTSStatsEnabled)
+import System.CPUTime (getCPUTime)
 import qualified System.Environment as Env
 import qualified Text.Read as TR
 
 import Data.Containers.ListUtils (nubOrd)
-import Data.Function (on)
 import qualified Data.HashSet as HS
 import System.IO (hFlush, hPutStr, hPutStrLn, stderr)
 
@@ -59,7 +62,7 @@ data StEcta = StEcta
     {- ^ The variables of each type, from the variable with
     the index 0 of the type.
     -}
-    , test_cases :: [VarVals]
+    , test_cases :: [TestCase]
     -- ^ The test cases that all terms of the phase share.
     }
     deriving (Show)
@@ -117,28 +120,23 @@ schemaInstances isVar vars t =
   where
     generality ivs = (negate (length (nubOrd (map snd ivs))), map fst ivs)
 
-{- | A law with canonical names, as QuickSpec prints a law: the variables of
-each type get the indexes 0, 1, and so on, in the order of their first
-occurrence from left to right. The second argument gives the variables of
-each type, from the variable with the index 0.
+{- | Give the variables of each type indexes in first-occurrence order.
+Only the printed names change. Evaluation uses the original signature.
 -}
-canonicalLaw :: Map Symbol [Symbol] -> Term -> Term
-canonicalLaw vars law = rename law
+canonicalLaw :: Sig -> Term -> Term
+canonicalLaw sig law = rename law
   where
-    family = Map.fromList [(v, x) | (x, vs) <- Map.assocs vars, v <- vs]
-    occurrences (Term s ts) = [s | s `Map.member` family] ++ concatMap occurrences ts
+    variables =
+        Map.fromList
+            [(Symbol name, (ty, info)) | (name, GivenFun info@GivenVar{} ty) <- Map.assocs sig]
+    occurrences (Term symbol children) = [symbol | symbol `Map.member` variables] ++ concatMap occurrences children
     names = Map.fromList (snd (mapAccumL next Map.empty (nubOrd (occurrences law))))
-    next counts v =
-        let f = family Map.! v
-            n = Map.findWithDefault 0 f counts
-         in (Map.insert f (n + 1) counts, (v, (vars Map.! f) !! n))
-    rename (Term s ts) = Term (Map.findWithDefault s s names) (map rename ts)
-
-typeSkeletonToTerm :: TypeSkeleton -> Term
-typeSkeletonToTerm (TCons s args) =
-    Term (Symbol s) $ map typeSkeletonToTerm args
-typeSkeletonToTerm (TFun f v) =
-    Term "->" [Term "(->)" [], typeSkeletonToTerm f, typeSkeletonToTerm v]
+    next counts symbol =
+        let (ty, GivenVar prefix label _ gen) = variables Map.! symbol
+            index = Map.findWithDefault 0 ty counts
+            name = Symbol (gvToName (GivenVar prefix label index gen))
+         in (Map.insert ty (index + 1) counts, (symbol, name))
+    rename (Term symbol children) = Term (Map.findWithDefault symbol symbol names) (map rename children)
 
 termSize :: Term -> Int
 termSize (Term s []) = 1
@@ -184,7 +182,57 @@ data Settings = Settings
     -- ^ The number of test cases that the terms of a phase share.
     , maxSize :: Int
     -- ^ The largest size of the terms of the search.
+    , diagnostics :: Bool
+    -- ^ Whether to emit flushed timing events on stderr.
+    , detailedDiagnostics :: Bool
+    -- ^ Whether to include stages inside each bucket.
+    , resolveInstance :: TypeSkeleton -> Maybe Instance
+    -- ^ Resolve exact generators and equality for law generalization.
+    , diagnosticPhase :: Int
+    -- ^ The phase that is running, rather than the requested last phase.
     }
+
+{- | Emit one versioned TSV event. Allocation and GC counters are RTS
+samples. This function does not force a collection or inspect test values.
+-}
+diagnosticEvent :: Settings -> String -> Int -> String -> String -> Search -> IO ()
+diagnosticEvent Settings{diagnostics = False} _ _ _ _ _ = return ()
+diagnosticEvent Settings{..} event level ty stage s = do
+    wall <- getMonotonicTimeNSec
+    cpu <- getCPUTime
+    enabled <- getRTSStatsEnabled
+    stats <- if enabled then Just <$> getRTSStats else return Nothing
+    hPutStrLn stderr $
+        intercalate
+            "\t"
+            [ "specftacular-diagnostic"
+            , "1"
+            , event
+            , show diagnosticPhase
+            , show level
+            , stage
+            , ty
+            , show wall
+            , show cpu
+            , if event == "begin" || event == "checkpoint" then show (so_far s) else ""
+            , if event == "begin" || event == "checkpoint" then show (law_count s) else ""
+            , maybe "" (show . allocated_bytes) stats
+            , maybe "" (show . gc_cpu_ns) stats
+            , maybe "" (show . gcs) stats
+            ]
+    hFlush stderr
+
+{- | Measure demanded IO work. An abort event preserves the active stage
+when cancellation propagates. Nested intervals include their children.
+-}
+diagnose :: Settings -> Int -> String -> String -> Search -> IO a -> IO a
+diagnose env@Settings{..} level ty stage s action
+    | not diagnostics || not detailedDiagnostics && stage `notElem` ["phase", "bucket"] = action
+    | otherwise = mask $ \restore -> do
+        diagnosticEvent env "begin" level ty stage s
+        result <- restore action `onException` diagnosticEvent env "abort" level ty stage s
+        diagnosticEvent env "end" level ty stage s
+        return result
 
 {- | Print the laws of a signature, with terms up to the size that the first
 program argument gives (6 by default). The types are monomorphic, as in
@@ -209,9 +257,8 @@ discoverMonomorphic size = experimentalPhases size 1
 
 {- | The laws of a signature, with the phases from 1 to the given phase.
 Phases 2 to 4 are experimental. Phase 2 keeps A, B, C, D, and Acc apart.
-Phases 3 and 4 generalize the types of the functions, so a term can apply
-a value to an argument of another type. The search does not test such a
-term (see 'termType').
+Phases 3 and 4 instantiate the abstract carrier types of each constant.
+The search checks every instance before evaluation (see 'termType').
 -}
 experimentalPhases :: Int -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
 experimentalPhases size phase extraReps sigs = searchPhases size phase (frontInstances extraReps) (mconcat sigs)
@@ -225,6 +272,9 @@ searchPhases size phase givenInstances givenSig =
     do
         -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
         progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
+        diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
+        let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
+            detailedDiagnostics = diagnosticSetting == Just "1"
         -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
         -- as in QuickSpec).
         numTests <- fromMaybe 1000 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_TESTS"
@@ -257,7 +307,16 @@ searchPhases size phase givenInstances givenSig =
 
         putStrLn "Laws according to Haskell's (==):"
         putStrLn "---------------------------------"
-        let env = Settings{progress = progress, numTests = numTests, maxSize = size}
+        let env =
+                Settings
+                    { progress = progress
+                    , numTests = numTests
+                    , maxSize = size
+                    , diagnostics = diagnostics
+                    , detailedDiagnostics = detailedDiagnostics
+                    , diagnosticPhase = 0
+                    , resolveInstance = instances
+                    }
         runPhases env size (max 1 (min 4 phase)) instances sig
 
 -- 1. The runtime signature and the search space.
@@ -284,7 +343,7 @@ mkStecta size numTests instances sig givenTrans skelTrans =
         , schema_vars = Map.fromList [(Symbol x, map (Symbol . fst) vs) | (x, vs) <- moreVars]
         , sig_ty_cons = Map.keys eq_insts
         , eq_insts = eq_insts
-        , test_cases = testCases numTests inst_sig
+        , test_cases = testSchedule numTests
         , arb_insts = arbs
         }
   where
@@ -350,7 +409,11 @@ runPhases env size lastPhase instances sig =
     go ((pn, (finished, starting, givenTrans, skelTrans)) : rest) s
         | pn <= lastPhase = do
             when (pn > 1) $ putStrLn starting
-            (laws, s') <- runPhase env size (mkStecta size (numTests env) instances sig givenTrans skelTrans) s
+            let phaseEnv = env{diagnosticPhase = pn}
+            (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
+                result@(_, finishedState) <- runPhase phaseEnv size (mkStecta size (numTests env) instances sig givenTrans skelTrans) s
+                diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
+                return result
             putStrLn $ finished ++ show (so_far s') ++ " terms examined."
             putStrLn $ show (sum $ map DT.size $ Map.elems (trees s')) ++ " unique terms discovered."
             (laws ++) <$> go rest s'
@@ -360,36 +423,58 @@ runPhases env size lastPhase instances sig =
 each type to test.
 -}
 runPhase :: Settings -> Int -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sig_ty_cons]
+runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
   where
+    -- Only program applications have this shape. Do not exclude matching
+    -- type constructors in a custom signature.
+    canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
     go [] s = return ([], s)
     go ((lvl, tc) : rest) s = do
+        (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
+            result@(_, finishedState) <- bucket lvl tc s
+            diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
+            return result
+        (more, s'') <- go rest s'
+        return (laws ++ more, s'')
+    bucket lvl tc s = do
         refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
-        let !reduced = searchSpace stecta lvl tc
+        reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
+        let templates
+                | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
+                | otherwise = []
         refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
-        !folded <- return $ refold reduced
-        -- Each accepting run gives one term. The terms come in the order
-        -- of kboCompare, so that the laws do not depend on the order in
-        -- which cfta interned the nodes and the edges. So the runs need no
-        -- canonical order (runsInterned).
+        folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
+        -- The oracle rejects partial branches before their remaining type
+        -- choices expand. The bucket has one program size. KBO orders its
+        -- ties before testing; smaller sizes have already supplied rules.
         let terms =
-                map snd $
-                    sortBy
-                        (kboCompare (isGivenVar compl_sig) `on` fst)
-                        [(npTerm' t, t) | (t, _) <- runsInterned "Mu" folded]
+                sortBy
+                    (kboCompare (isGivenVar compl_sig))
+                    [ candidate
+                    | t <- prunedTerms templates folded
+                    , let candidate = canonicalTypes (npTerm' t)
+                    , eligible candidate
+                    ]
+            -- Apply the checks that are already known before retaining the
+            -- sort bucket. The search checks new rules again as it runs.
+            eligible t =
+                not (t `HS.member` seen s)
+                    && either (const False) (sameUpToCarriers tc) (termType inst_sig t)
+                    && not (reducible (isGivenVar inst_sig) (rewrite_rules s) (mostGeneral (isGivenVar inst_sig) schema_vars t))
         -- We want to display a message once the first term is found.
         -- in particular, it hangs after this messages for HugeLists 6
         refreshCount progress "Finding first term " (" for " ++ show tc) "" lvl (so_far s)
-        case terms of
+        first <- diagnose env lvl (show tc) "candidate_list_demand" s $ evaluate terms
+        case first of
             (_ : _) -> refreshCount progress "Folded, exploring " (" for " ++ show tc) "" lvl (so_far s)
             _ -> return ()
-        (laws, s') <- considerAll lvl terms s
-        (more, s'') <- go rest s'
-        return (laws ++ more, s'')
-    considerAll _ [] s = return ([], s)
-    considerAll lvl (t : ts) s = do
-        (laws, s') <- consider env stecta lvl t s
-        (more, s'') <- considerAll lvl ts s'
+        considerAll lvl tc first s
+    considerAll _ _ [] s = return ([], s)
+    considerAll lvl tc (t : ts) s = do
+        (laws, s') <-
+            diagnose env lvl (show tc) "schema" s $ consider env stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
+        next <- diagnose env lvl (show tc) "candidate_list_demand" s' $ evaluate ts
+        (more, s'') <- considerAll lvl tc next s'
         return (laws ++ more, s'')
 
 -- 2. The candidate terms.
@@ -426,22 +511,19 @@ two schemas. A new representative schema is also instantiated if it is
 small. Give the laws that the tests find.
 -}
 consider :: Settings -> StEcta -> Int -> Term -> Search -> IO ([String], Search)
-consider Settings{..} StEcta{..} lvl full_term s0
+consider env@Settings{..} StEcta{..} lvl full_term s0
     -- A known law rewrites the most general instance to a smaller term. The
     -- law rewrites each instance in the same way, so the schema is
     -- redundant.
     | reducible isVar (rewrite_rules s0) most_general = return ([], s0)
     -- if we've seen it before, we can immediately skip.
     | np_term `HS.member` seen s0 = return ([], s0{so_far = so_far s0 + 1})
-    -- We don't want terms that are all variables.
-    | termSize np_term > 1
-    , allFromSig given_sig np_term =
-        return ([], s0{so_far = so_far s0 + 1, seen = HS.insert np_term (seen s0)})
     -- An application of the schema does not fit its argument, or its
     -- equality does not fit its values, so the search does not test it.
     | not (testable np_term) = return ([], s0{so_far = so_far s0 + 1})
     | otherwise = do
         let tree = Map.findWithDefault DT.empty current_ty (trees s0)
+            known a b = a == b || joinable isVar (rewrite_rules s0) a b
         refreshCount
             progress
             ("exploring " ++ show current_ty)
@@ -451,7 +533,9 @@ consider Settings{..} StEcta{..} lvl full_term s0
             (so_far s0)
         -- The schema goes into the decision tree of its type. It is
         -- evaluated on the test cases of its path only.
-        inserted <- DT.insert (valuesEqual eq_inst) np_term (values np_term) tree
+        inserted <-
+            diagnose env lvl (show current_ty) "schema_tests" s0 $
+                DT.insertWith known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
         let s = s0{so_far = so_far s0 + 1}
             -- A later phase enumerates the schema again, so it goes into
             -- seen.
@@ -469,7 +553,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
                             { instance_trees =
                                 Map.insert
                                     np_term
-                                    (DT.leaf most_general (values most_general))
+                                    (DT.leafWith most_general (values most_general))
                                     (instance_trees s0)
                             }
                         )
@@ -492,12 +576,19 @@ consider Settings{..} StEcta{..} lvl full_term s0
     -- does (see 'termType').
     testable t = either (const False) (sameUpToCarriers eq_type) (termType inst_sig t)
     -- The values of a term on the test cases, evaluated when needed.
-    values u = map (\tc -> evalTerm inst_sig tc u) test_cases
+    values u = case compileTerm inst_sig u of
+        Left message -> error message
+        Right evaluateTerm ->
+            let required = Map.fromList [(v, inst_sig Map.! v) | Symbol v <- holes isVar u]
+                evaluateValues
+                    | Map.null required = const (evaluateTerm Map.empty)
+                    | otherwise = evaluateTerm
+             in DT.Evaluator required evaluateValues
 
     -- The schema equals the representative schema rep. Test the most
     -- general instance of the schema against the instances of rep.
     exploreIn rep s = do
-        (explored, s') <- exploreInstance rep most_general s
+        (explored, s') <- diagnose env lvl (show current_ty) "instance" s $ exploreInstance rep most_general s
         case explored of
             Discovered law -> return ([law], s')
             Knew -> return ([], s')
@@ -513,11 +604,11 @@ consider Settings{..} StEcta{..} lvl full_term s0
 
     -- Test the instances of a schema against the instances of the
     -- representative schema rep, the most general instances first.
-    instantiate rep schema = go (schemaInstances isVar schema_vars schema)
+    instantiate rep schema initial = diagnose env lvl (show current_ty) "instances" initial $ go (schemaInstances isVar schema_vars schema) initial
       where
         go [] s = return ([], s)
         go (i : is) s = do
-            (explored, s') <- exploreInstance rep i s
+            (explored, s') <- diagnose env lvl (show current_ty) "instance" s $ exploreInstance rep i s
             (laws, s'') <- go is s'
             return
                 ( case explored of
@@ -533,7 +624,10 @@ consider Settings{..} StEcta{..} lvl full_term s0
         | not (testable i) = return (Knew, s)
         | otherwise = do
             let table = Map.findWithDefault DT.empty rep (instance_trees s)
-            inserted <- DT.insert (valuesEqual eq_inst) i (values i) table
+                known a b = a == b || joinable isVar (rewrite_rules s) a b
+            inserted <-
+                diagnose env lvl (show current_ty) "instance_tests" s $
+                    DT.insertWith known (valuesEqual eq_inst) test_cases i (values i) table
             case inserted of
                 DT.Untested -> return (Knew, s)
                 DT.Distinct table' ->
@@ -546,16 +640,20 @@ consider Settings{..} StEcta{..} lvl full_term s0
                             hPutStrLn stderr ("\r\ESC[Kfollows from the laws: " ++ ppNpTerm (lawOf w))
                         return (Knew, s)
                     | otherwise -> do
+                        (lawSig, law) <- generalizeLaw resolveInstance test_cases inst_sig (eq_type, eq_inst) (lawOf w)
                         let n = law_count s + 1
-                            law = lawOf w
-                            law_str = show n <> ". " <> ppNpTerm (canonicalLaw schema_vars law)
+                            law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
                         when progress $ hPutStr stderr "\r\ESC[K"
                         putStrLn law_str
+                        rules <-
+                            if detailedDiagnostics
+                                then diagnose env lvl (show current_ty) "completion" s $ evaluate (addLaw maxSize lawSig law (rewrite_rules s))
+                                else return (addLaw maxSize lawSig law (rewrite_rules s))
                         return
                             ( Discovered law_str
                             , s
                                 { law_count = n
-                                , rewrite_rules = addLaw maxSize inst_sig law (rewrite_rules s)
+                                , rewrite_rules = rules
                                 }
                             )
       where
@@ -579,9 +677,6 @@ ppNpTerm t
     ppTerm' _ (Term (Symbol t) _) = T.unpack t
     parIfReq s@(c : _) | c /= '(', c /= '[', not (isAlphaNum c) = "(" <> s <> ")"
     parIfReq s = s
-
-allFromSig sig (Term "app" [_, f, v]) = allFromSig sig f && allFromSig sig v
-allFromSig sig (Term (Symbol t) _) = t `Map.member` sig
 
 {- | Show the progress of the search on one line of stderr, if the first
 argument is True.
@@ -611,9 +706,6 @@ refreshCount True pre mid post size i = hPutStr stderr (o ++ fill ++ "\r") >> hF
 --    resolve critical pairs: if a term can be rewritten with two different rules
 --    might not be stable, but we *don't need confluence*. Term indexing:
 --    have a hashtable of the root node. Makes it a lot faster.
--- 4. Look at DbOpt file for examples of how we can apply rewrites directly.
--- 8. We should be able to do the "rewrites" by cleverly constructing the ECTAs
---
 -- 11. make term a pattern synonym and compute the hash when we construct
 --     the term.
 --

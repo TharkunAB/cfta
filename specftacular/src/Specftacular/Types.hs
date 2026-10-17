@@ -14,13 +14,15 @@
 
 module Specftacular.Types where
 
+import Control.Applicative ((<|>))
+import Control.Monad (foldM)
 import Data.Dynamic
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
-import Control.Exception (Exception, SomeException, evaluate, fromException, throw, throwIO, try)
+import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
 import Data.Maybe (fromMaybe, mapMaybe)
@@ -30,9 +32,11 @@ import Data.Typeable
 import Debug.Trace (trace)
 
 import GHC.Exts (Any)
+import Specftacular.Polymorphic (applyType, functionType, specialiseDynamic)
 import Test.QuickCheck (Arbitrary (..), Gen (..))
 import qualified Test.QuickCheck as QC
 import Test.QuickCheck.Gen (unGen)
+import Test.QuickCheck.Gen.Unsafe (promote)
 import Test.QuickCheck.Random (mkQCGen)
 import qualified Type.Reflection as TR
 import Unsafe.Coerce
@@ -52,6 +56,20 @@ data TypeSkeleton
     deriving (Eq, Ord, Show, Read, Generic)
 
 instance Hashable TypeSkeleton
+
+-- | The number of constructors and variables in a type.
+typeSize :: TypeSkeleton -> Int
+typeSize (TCons _ args) = 1 + sum (map typeSize args)
+typeSize (TFun a b) = 1 + typeSize a + typeSize b
+typeSize (TVar _) = 1
+
+-- | Count concrete leaves to put abstract carrier instances first.
+concreteTypeLeaves :: TypeSkeleton -> Int
+concreteTypeLeaves t | t `elem` map fst carriers = 0
+concreteTypeLeaves (TCons _ []) = 1
+concreteTypeLeaves (TCons _ args) = sum (map concreteTypeLeaves args)
+concreteTypeLeaves (TFun a b) = concreteTypeLeaves a + concreteTypeLeaves b
+concreteTypeLeaves (TVar _) = 0
 
 -- | A term of the automata. The symbols are interned texts.
 type Term = CT.Term Symbol
@@ -121,23 +139,71 @@ toInstance rep =
 these, and of the types that the function gives.
 -}
 frontInstances :: (TypeSkeleton -> Maybe GeneratedInstance) -> TypeSkeleton -> Maybe Instance
-frontInstances extraReps = fmap toInstance . genRep
+frontInstances extraReps t = case genRep t of
+    Just rep -> Just (toInstance rep)
+    Nothing -> trace ("*** Warning: Could not generate instances for '" ++ show t ++ "', ignoring...") Nothing
   where
     genRep :: TypeSkeleton -> Maybe GeneratedInstance
     genRep (TVar a) | Just t <- lookup a [(v, t) | (t, v) <- carriers] = genRep t
+    genRep t | Just g <- extraReps t = Just g
     genRep t | Just g <- lookup t builtinReps = Just g
     genRep (TCons "[]" [ts]) = g_li_i <$> genRep ts
-    genRep (TFun _ _) = Nothing
-    --- To allow for types not considered here
-    --- Not sure if this is the best way to go about it
-    genRep x =
-        case extraReps x of
-            Just t -> Just t
-            Nothing -> trace ("*** Warning: Could not generate instances for '" ++ (show x) ++ "', ignoring...") Nothing
+    genRep (TFun a b) = do
+        CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
+        result <- genRep b
+        case g_arb result of
+            DynGen g -> Just $ generatedNoEq $ DynGen $ promote (\(x :: x) -> QC.coarbitrary x g)
+    genRep _ = Nothing
 
-{- | The types of a signature that the search needs instances of: the
-types of the functions, their parts, and the lists of these types, after
-the function changes them.
+-- | A type with the evidence needed to generate functions from it.
+data CoarbitraryType where
+    CoarbitraryType :: (Typeable a, QC.CoArbitrary a) => Proxy a -> CoarbitraryType
+
+-- | Resolve function domains from the built-in types, lists, and pairs.
+coarbitraryType :: TypeSkeleton -> Maybe CoarbitraryType
+coarbitraryType (TVar a) = lookup a [(v, t) | (t, v) <- carriers] >>= coarbitraryType
+coarbitraryType (TCons "[]" [a]) = do
+    CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
+    return (CoarbitraryType (Proxy :: Proxy [x]))
+coarbitraryType (TCons "(,)" [a, b]) = do
+    CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
+    CoarbitraryType (Proxy :: Proxy y) <- coarbitraryType b
+    return (CoarbitraryType (Proxy :: Proxy (x, y)))
+coarbitraryType t = lookup t types
+  where
+    types =
+        [ entry (Proxy :: Proxy A)
+        , entry (Proxy :: Proxy B)
+        , entry (Proxy :: Proxy C)
+        , entry (Proxy :: Proxy D)
+        , entry (Proxy :: Proxy Acc)
+        , entry (Proxy :: Proxy ())
+        , entry (Proxy :: Proxy Int)
+        , entry (Proxy :: Proxy Integer)
+        , entry (Proxy :: Proxy Bool)
+        , entry (Proxy :: Proxy Char)
+        , entry (Proxy :: Proxy Word)
+        , entry (Proxy :: Proxy Double)
+        , entry (Proxy :: Proxy Float)
+        , entry (Proxy :: Proxy Ordering)
+        ]
+    entry :: (Typeable a, QC.CoArbitrary a) => Proxy a -> (TypeSkeleton, CoarbitraryType)
+    entry p = (typeSkeletonOf p, CoarbitraryType p)
+
+-- | A generator with its type and list generator, without function equality.
+generatedNoEq :: DynGen -> GeneratedInstance
+generatedNoEq dg@(DynGen (g :: Gen a)) =
+    Gend
+        { g_tr = typeRep (Proxy :: Proxy a)
+        , g_arb = dg
+        , g_eq = Nothing
+        , g_li_i = generatedNoEq (DynGen (QC.listOf g))
+        }
+
+{- | The argument and result types that need generators, and their list
+types. A function type needs a generator when it is an argument, as in
+map or bind. The full type of each signature function does not need a
+generated variable.
 -}
 instanceTypes :: (TypeSkeleton -> TypeSkeleton) -> Sig -> [TypeSkeleton]
 instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions $ map cons trs
@@ -145,8 +211,8 @@ instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions 
     trs = map (typeMod . sfTypeRep) $ Map.elems sigs
     -- we specialcase lists
     cons :: TypeSkeleton -> Set TypeSkeleton
-    cons t@(TCons _ r) = Set.unions $ (Set.singleton t) : (map cons r)
-    cons t@(TFun arg ret) = Set.singleton t <> cons arg <> cons ret
+    cons t@(TCons _ r) = Set.insert t $ Set.unions [Set.insert a (cons a) | a <- r]
+    cons (TFun arg ret) = Set.insert arg (cons arg <> cons ret)
     cons (TVar _) = Set.empty
     addLi :: TypeSkeleton -> [TypeSkeleton]
     addLi t = t : (addLi' 1 t) -- bump this to get more [A], [[A]],
@@ -528,10 +594,20 @@ monomorphiseType tsk = tsk
 the same type. Equal variables give equal template variables.
 -}
 toTemplate :: Sig -> Term -> Term
-toTemplate sig (Term (Symbol s) ty)
-    | Just (GivenFun{given_info = GivenVar{}}) <- sig Map.!? s =
-        Term (Symbol $ "<v>" <> s) ty
-toTemplate sig (Term s args) = Term s $ map (toTemplate sig) args
+toTemplate sig (Term "app" [ty, f, x]) = Term "app" [templateType ty, toTemplate sig f, toTemplate sig x]
+toTemplate sig (Term (Symbol s) [ty]) =
+    Term (Symbol name) [templateType ty]
+  where
+    name = case sig Map.!? s of
+        Just (GivenFun{given_info = GivenVar{}}) -> "<v>" <> s
+        _ -> s
+toTemplate _ t = t
+
+-- | Abstract carrier types in a rule share one type substitution.
+templateType :: Term -> Term
+templateType t
+    | Just v <- lookup t [(typeSkeletonToTerm ty, name) | (ty, name) <- carriers] = Term (Symbol ("<t>" <> v)) []
+templateType (Term s ts) = Term s (map templateType ts)
 
 -- | Whether two types are equal when A, B, C, D, and Acc are one type.
 sameUpToCarriers :: TypeSkeleton -> TypeSkeleton -> Bool
@@ -543,35 +619,140 @@ sameUpToCarriers (TCons ca as) (TCons cb bs) =
 sameUpToCarriers (TFun a r) (TFun b s) = sameUpToCarriers a b && sameUpToCarriers r s
 sameUpToCarriers a b = a == b
 
--- | The value of a term on a test case.
-evalTerm :: Sig -> VarVals -> Term -> Value
-evalTerm sig tc (Term "app" [_, f, v]) = apply (evalTerm sig tc f) (evalTerm sig tc v)
-evalTerm sig tc (Term (Symbol sym) _) =
-    case sig Map.!? sym of
-        Just (GivenFun{given_info = GivenVar{}}) ->
-            fromMaybe (error "evalTerm: variable not found") (tc Map.!? sym)
-        Just (GivenFun{given_info = GivenInst _ inst}) -> inst
-        Just f@(SigFunc{}) -> sfFunc f
-        Just f@(GenFunc{}) -> sfFunc f
-        _ -> error ("evalTerm: symbol not found: " ++ T.unpack sym)
+-- | The type annotation of a term. Resolve enumeration holes at carrier A.
+annotationType :: Term -> Either String TypeSkeleton
+annotationType (Term "->" [Term "(->)" [], a, b]) = TFun <$> annotationType a <*> annotationType b
+annotationType (Term "Mu" []) = Right (typeSkeletonOf (Proxy :: Proxy A))
+annotationType (Term s [])
+    | Just t <- lookup s (zip ["var1", "var2", "var3", "var4", "acc"] (map fst carriers)) = Right t
+annotationType (Term (Symbol s) ts) = TCons s <$> traverse annotationType ts
 
-{- | The type of the value of a term, from the types of its functions and of
-its variables. An application takes an argument of the type of its
-function, or of another of A to Acc, which have the representation of
-Int, as 'apply' tests it for two typed values. Left: an application
-whose argument does not fit, so the search cannot run the term on untyped
-values. The types are the type skeletons of the functions and the
-variables, which every front end gives, so the test needs no 'TypeRep'.
+-- | The canonical annotation of a type.
+typeSkeletonToTerm :: TypeSkeleton -> Term
+typeSkeletonToTerm (TCons s args) = Term (Symbol s) (map typeSkeletonToTerm args)
+typeSkeletonToTerm (TFun a b) = Term "->" [Term "(->)" [], typeSkeletonToTerm a, typeSkeletonToTerm b]
+typeSkeletonToTerm (TVar v) = Term (Symbol v) []
+
+-- | Canonical type annotations, before comparison across search phases.
+canonicalTypes :: Term -> Term
+canonicalTypes (Term "app" [ty, f, x]) = Term "app" [canonicalType ty, canonicalTypes f, canonicalTypes x]
+canonicalTypes (Term s [ty]) = Term s [canonicalType ty]
+canonicalTypes t = t
+
+-- | Resolve an annotation without changing the program symbols.
+canonicalType :: Term -> Term
+canonicalType = either (error . ("invalid type annotation: " ++)) typeSkeletonToTerm . annotationType
+
+{- | Match a signature type against one occurrence. Each carrier has one
+consistent instance in that occurrence. Concrete type constructors stay fixed.
+-}
+matchType :: TypeSkeleton -> TypeSkeleton -> Either String (Map Text TypeSkeleton)
+matchType patternType actualType = go (generalizeType patternType) actualType Map.empty
+  where
+    go (TVar v) t s = case Map.lookup v s of
+        Nothing -> Right (Map.insert v t s)
+        Just t' | t == t' -> Right s
+        _ -> Left "inconsistent type instance"
+    go (TFun a b) (TFun c d) s = go a c s >>= go b d
+    go (TCons c as) (TCons d bs) s
+        | c == d && length as == length bs = foldM (\m (a, b) -> go a b m) s (zip as bs)
+    go _ _ _ = Left "signature does not match its type annotation"
+
+{- | Check every leaf and application against its annotation. Signature
+constants are parametric at A to Acc. Generated variables and equalities
+keep their declared types.
 -}
 termType :: Sig -> Term -> Either String TypeSkeleton
-termType sig (Term "app" [_, f, v]) = do
+termType sig (Term "app" [ty, f, x]) = do
     tf <- termType sig f
-    tv <- termType sig v
+    tx <- termType sig x
+    tr <- annotationType ty
     case tf of
-        TFun ta tr | sameUpToCarriers ta tv -> Right tr
-        _ -> Left ("cannot apply " ++ show tf ++ " to " ++ show tv)
-termType sig (Term (Symbol sym) _) =
-    maybe (Left ("no symbol " ++ T.unpack sym)) (Right . sfTypeRep) (sig Map.!? sym)
+        TFun ta tb | ta == tx && tb == tr -> Right tr
+        _ -> Left ("cannot apply " ++ show tf ++ " to " ++ show tx ++ " at " ++ show tr)
+termType sig (Term (Symbol sym) annotations) = do
+    fun <- maybe (Left ("no symbol " ++ T.unpack sym)) Right (Map.lookup sym sig)
+    ty <- case annotations of
+        [annotation] -> annotationType annotation
+        [] -> Right (sfTypeRep fun)
+        _ -> Left "invalid leaf annotation"
+    case fun of
+        GivenFun{} | ty /= sfTypeRep fun -> Left "a generated value cannot change its type"
+        GivenFun{} -> Right ty
+        _ -> ty <$ matchType (sfTypeRep fun) ty
+
+{- | Compile an evaluator once per term. A specialised constant keeps its
+verified type in checked mode. Each application still uses 'apply'.
+-}
+compileTerm :: Sig -> Term -> Either String (VarVals -> Value)
+compileTerm sig term = termType sig term >> go term
+  where
+    go (Term "app" [_, f, x]) = do
+        fun <- go f
+        arg <- go x
+        Right (\tc -> apply (fun tc) (arg tc))
+    go (Term (Symbol sym) annotations) = case sig Map.!? sym of
+        Just (GivenFun{given_info = GivenVar{}}) -> Right (Map.! sym)
+        Just (GivenFun{given_info = GivenInst _ inst}) -> Right (const inst)
+        Just fun -> do
+            ty <- case annotations of
+                [annotation] -> annotationType annotation
+                _ -> Right (sfTypeRep fun)
+            val <- specialiseValue sig fun ty
+            Right (const val)
+        Nothing -> Left ("no symbol " ++ T.unpack sym)
+
+-- | The value of a checked term on one test case.
+evalTerm :: Sig -> VarVals -> Term -> Value
+evalTerm sig tc term = either (throw . IllTyped) ($ tc) (compileTerm sig term)
+
+{- | Instantiate a parametric signature constant. A to Acc must denote
+abstract type variables. A constant must not inspect their representation
+or capture class dictionaries for them. This contract permits the payload
+cast after the structural type and kind checks. Generated values do not
+pass through this function.
+-}
+specialiseValue :: Sig -> Func -> TypeSkeleton -> Either String Value
+specialiseValue sig fun target
+    | target == sfTypeRep fun = Right (sfFunc fun)
+    | otherwise = case sfFunc fun of
+        Untyped value -> Right (Untyped value)
+        Typed dynamic -> do
+            bindings <- matchType (sfTypeRep fun) target
+            substitution <-
+                Map.fromList
+                    <$> traverse
+                        (\(t, v) -> (,) <$> representation t <*> representation (bindings Map.! v))
+                        [(t, v) | (t, v) <- carriers, Map.member v bindings]
+            specialized <- specialiseDynamic substitution dynamic
+            if typeRepToTypeSkeleton (dynTypeRep specialized) == target
+                then Right (Typed specialized)
+                else Left "specialised constant has the wrong type"
+  where
+    representation (TFun a b) = do
+        a' <- representation a
+        b' <- representation b
+        functionType a' b'
+    representation (TCons name args) = do
+        constructor <-
+            maybe
+                (Left ("no type representation for " ++ T.unpack name))
+                Right
+                (Map.lookup name constructors <|> Map.lookup name generatedConstructors)
+        foldM (\f a -> representation a >>= applyType f) constructor args
+    representation (TVar _) = Left "unresolved type variable"
+    constructors =
+        Map.fromList
+            (concatMap collect (map (g_tr . snd) builtinReps ++ [dynTypeRep d | f <- Map.elems sig, Typed d <- [sfFunc f]]))
+    -- A native generator stores its TypeRep without forcing the generated
+    -- payload. Consult these types only when the signature lacks a type.
+    generatedConstructors =
+        Map.fromList
+            (concatMap collect [dynTypeRep d | GivenFun (GivenVar _ _ _ (Generator g)) _ <- Map.elems sig, Typed d <- [g 0 0]])
+    collect (TR.SomeTypeRep rep) = case rep of
+        TR.Fun a b -> collect (TR.SomeTypeRep a) ++ collect (TR.SomeTypeRep b)
+        TR.App f x -> collect (TR.SomeTypeRep f) ++ collect (TR.SomeTypeRep x)
+        _ -> [(T.pack (typeConName (TR.typeRepTyCon rep)), TR.SomeTypeRep rep)]
 
 {- | A signature with untyped values (see 'Value'): its functions, its
 equalities, and the values of its generators.
@@ -592,17 +773,64 @@ untypedInstance inst = inst{inst_gen = untypedGenerator (inst_gen inst), inst_eq
 untypedGenerator :: Generator -> Generator
 untypedGenerator (Generator g) = Generator (\seed size -> untyped (g seed size))
 
-{- | The test cases of a signature: a value for each generated variable.
-Test case k has the size k of 'testSizes'. Each variable takes its value
-from a seed of its own, so a variable has the same values in each phase.
+{- | A reproducible test case. Store seeds and directed-case indexes,
+so validation does not retain all generated inputs.
 -}
-testCases :: Int -> Sig -> [VarVals]
-testCases n sig =
-    [ Map.fromList [(v, value g k size v) | (v, GivenFun{given_info = GivenVar _ _ _ g}) <- Map.assocs sig]
-    | (k, size) <- zip [0 :: Int ..] (testSizes n)
-    ]
+data TestCase
+    = RandomCase Int Int
+    | ValidationCase Int Int
+    | BoundaryCase Int Int Int
+    deriving (Show)
+
+-- | Keep the random schedule and add independent and boundary cases.
+testSchedule :: Int -> [TestCase]
+testSchedule n =
+    zipWith RandomCase [0 ..] (testSizes n)
+        ++ zipWith ValidationCase [0 ..] (testSizes 8)
+        ++ [ BoundaryCase k boundary active
+           | (k, boundary) <- zip [0 ..] [minBound, minBound + 1, -1, 0, 1, 2, maxBound - 1, maxBound]
+           , active <- [0 .. 3]
+           ]
+
+-- | Generate one valuation from its descriptor. Repeated calls agree.
+testCaseValues :: Sig -> TestCase -> VarVals
+testCaseValues sig testcase =
+    Map.fromList
+        [(v, value v i g t) | (v, GivenFun (GivenVar _ _ i g) t) <- Map.assocs sig]
   where
-    value (Generator g) k size v = g (hash (k, v)) size
+    value v _ (Generator g) _ | RandomCase k size <- testcase = g (hash (k, v)) size
+    value v _ (Generator g) _ | ValidationCase k size <- testcase = g (hash ("validation" :: String, k, v)) size
+    value v i (Generator g) t
+        | BoundaryCase k boundary active <- testcase =
+            fromMaybe
+                (g (hash ("boundary" :: String, k, active, v)) 100)
+                (lookup t (boundaryValues boundary (i `mod` 4 == active)))
+
+-- | The valuations of the complete test schedule.
+testCases :: Int -> Sig -> [VarVals]
+testCases n sig = map (testCaseValues sig) (testSchedule n)
+
+{- | Values for Int and the carrier types, and their first three list
+types. A selected list contains one zero value. Every other list is empty.
+Each value keeps its exact Haskell type. Other types use their generators.
+-}
+boundaryValues :: Int -> Bool -> [(TypeSkeleton, Value)]
+boundaryValues boundary nonempty =
+    [ entry boundary
+    , entry (A boundary)
+    , entry (B boundary)
+    , entry (C boundary)
+    , entry (D boundary)
+    , entry (Acc boundary)
+    ]
+        ++ concat [lists (0 :: Int), lists (A 0), lists (B 0), lists (C 0), lists (D 0), lists (Acc 0)]
+  where
+    entry :: (Typeable a) => a -> (TypeSkeleton, Value)
+    entry value = (typeRepToTypeSkeleton (typeOf value), toValue value)
+    lists :: (Typeable a) => a -> [(TypeSkeleton, Value)]
+    lists value = [entry (pick value), entry (pick (pick value)), entry (pick (pick (pick value)))]
+    pick :: a -> [a]
+    pick value = [value | nonempty]
 
 {- | The sizes of n test cases, as QuickSpec chooses them (run in
 QuickSpec.Internal.Testing.QuickCheck of quickspec-2.2.2). 1% of the test
@@ -631,13 +859,15 @@ equalBy (Untyped eq) (Untyped a) (Untyped b) = (unsafeCoerce eq :: Any -> Any ->
 equalBy eq a b = fromValue (apply (apply eq a) b)
 
 {- | Whether two values are equal, by the equality of their type. Nothing
-means that the comparison threw an exception.
+means that the tested function threw an exception. Cancellation and type
+errors propagate to the caller.
 -}
 valuesEqual :: Value -> Value -> Value -> IO (Maybe Bool)
 valuesEqual eq a b = do
     r <- try (evaluate (equalBy eq a b))
     case r of
         Left (e :: SomeException)
+            | Just (_ :: SomeAsyncException) <- fromException e -> throwIO e
             | Just (illTyped :: IllTyped) <- fromException e -> throwIO illTyped
             | otherwise -> return Nothing
         Right x -> return (Just x)

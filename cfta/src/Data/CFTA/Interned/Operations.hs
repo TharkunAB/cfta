@@ -653,10 +653,39 @@ edge of the first node must have the symbol of an edge of the second, no
 constraint, and children that accept the children of that edge. A pair that
 the test meets again below itself counts as accepted, as for the greatest
 fixed point of the recursive nodes.
+
+For finite, total, closed graphs, a worklist shares mandatory child pairs.
+Each required symbol and arity must have at most one unconstrained wide edge.
+On ambiguity, discard the worklist and restart the original search at the
+original roots. Thus assumptions from one alternative cannot enter another.
+The visited relation includes the empty-node and equal-node cases below.
 -}
 subsumes :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol -> Bool
-subsumes = go Set.empty
+subsumes big small = fromMaybe (go Set.empty big small) (visit Set.empty [(big, small)])
   where
+    -- Check each mandatory pair once. Keep its children in the worklist.
+    visit :: Set (NodeId, NodeId) -> [(Node symbol, Node symbol)] -> Maybe Bool
+    visit _ [] = Just True
+    visit seen ((_, EmptyNode) : pending) = visit seen pending
+    visit _ ((EmptyNode, _) : _) = Just False
+    visit seen ((b, s) : pending)
+        | b == s || Set.member pair seen = visit seen pending
+        | otherwise = checkEdges (nodeEdges s) []
+      where
+        pair = (nodeIdentity b, nodeIdentity s)
+        nextSeen = Set.insert pair seen
+        -- Queue children only when every edge has one compatible alternative.
+        checkEdges [] batches = visit nextSeen (concat (reverse batches) ++ pending)
+        checkEdges (narrow : rest) batches =
+            case [ wide
+                 | wide <- nodeEdges b
+                 , edgeSymbol wide == edgeSymbol narrow
+                 , length (edgeChildren wide) == length (edgeChildren narrow)
+                 , edgeConstraint wide == noConstraint
+                 ] of
+                [] -> Just False
+                [wide] -> checkEdges rest (zip (edgeChildren wide) (edgeChildren narrow) : batches)
+                _ -> Nothing
     go :: Set (NodeId, NodeId) -> Node symbol -> Node symbol -> Bool
     go _ _ EmptyNode = True
     go _ EmptyNode _ = False
