@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 10000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.run
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.run
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.massAfter
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.massAfter
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.credit
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.credit
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.massAfter_ge
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.massAfter_ge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.massAfter_add
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.massAfter_add
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.credit_add
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.credit_add
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.run_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.run_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.finish
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.finish
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.complete
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassSeries.complete

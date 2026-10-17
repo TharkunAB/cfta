@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.charge
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.charge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.growthSteps
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.growthSteps
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.ceiling
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.ceiling
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.ceiling_ge
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.ceiling_ge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.body_charges
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.body_charges
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.syntax_transform
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.syntax_transform
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.stored_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.stored_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.allocation_bound
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.allocation_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.initial
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassBudget.initial

@@ -1,0 +1,63 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:42:51: error: unexpected token '|'; expected 'end'
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:41:64: error: unsolved goals
+case node
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+edges✝ : List (EdgeSyntax Symbol Guard)
+known : edges✝.length ≤ first ∧ Rows first edges✝
+⊢ edges✝.length ≤ last ∧ Rows last edges✝
+
+case union
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+members✝ : List (Syntax Symbol Guard)
+known : members✝.length ≤ first ∧ Many first members✝
+⊢ members✝.length ≤ last ∧ Many last members✝
+
+case binder
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+smart✝ : Bool
+body✝ : Syntax Symbol Guard
+known : Width first body✝
+⊢ Width last body✝
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:51:64: error: unsolved goals
+case cons
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+head✝ : Syntax Symbol Guard
+tail✝ : List (Syntax Symbol Guard)
+known : Width first head✝ ∧ Many first tail✝
+⊢ Width last head✝ ∧ Many last tail✝
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:53:2: error: unexpected token '|'; expected command
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:69:0: error: Missing name after `end`: Expected the current scope name `InternedStoredEncodingWidth`
+
+Hint: To end the current scope `InternedStoredEncodingWidth`, specify its name:
+  end ̲I̲n̲t̲e̲r̲n̲e̲d̲S̲t̲o̲r̲e̲d̲E̲n̲c̲o̲d̲i̲n̲g̲W̲i̲d̲t̲h̲
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:98:30: error(lean.unknownIdentifier): Unknown identifier `encodeEdges_length`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:98:18: error: Type mismatch: After simplification, term
+  Nat.le_trans (edges_length rows) measured
+ has type
+  rows.length ≤ bound
+but is expected to have type
+  (encodeEdges context locals rows).length ≤ bound
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:104:30: error(lean.unknownIdentifier): Unknown identifier `encodeMany_length`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:104:18: error: Type mismatch: After simplification, term
+  Nat.le_trans (values_length members) measured
+ has type
+  members.length ≤ bound
+but is expected to have type
+  (encodeMany context locals members).length ≤ bound
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:137:32: error(lean.unknownIdentifier): Unknown identifier `encodeMany_length`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:137:20: error: Type mismatch: After simplification, term
+  Nat.le_trans (values_length children)
+    (have this := Decidable.byContradiction fun a => encodeEdges_width._proof_3 bound rest children small a;
+    this)
+ has type
+  children.length ≤ bound
+but is expected to have type
+  (encodeMany context locals children).length ≤ bound

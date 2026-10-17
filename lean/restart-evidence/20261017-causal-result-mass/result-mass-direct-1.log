@@ -1,0 +1,46 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryResultMass.lean:204:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.InternedFreshOrdinaryResultMass.0.MicroCFTA.InternedFreshOrdinaryResultMass.finish_le`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryResultMass.lean:204:0: warning: `finish_le` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryResultMass.lean:256:57: error: Type mismatch: After simplification, term
+  found
+ has type
+  some candidate = some payload
+but is expected to have type
+  candidate = payload
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryResultMass.lean:266:8: error: Type mismatch: After simplification, term
+  Nat.le_trans (finish_le smart old)
+    (Decidable.byContradiction fun a =>
+      request_checked._proof_1_10 depth ordinary state bound returned value old oldBound a)
+ has type
+  mass (finish smart old) ≤ 1 + 3 * returned
+but is expected to have type
+  mass
+      (finish smart
+        (((match after.nodeRecords (muKey depth ordinary) with
+              | some val => after.nodeRecords
+              | none => put after.nodeRecords (muKey depth ordinary) (Value.mu selected.fst value depth ordinary))
+              (muKey depth ordinary)).getD
+          (Value.mu selected.fst value depth ordinary))) ≤
+    1 + 3 * returned
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedFreshOrdinaryResultMass.lean:268:8: error: Type mismatch: After simplification, term
+  Nat.le_trans (finish_le smart candidate) candidateBound
+ has type
+  mass (finish smart candidate) ≤ 1 + 3 * returned
+but is expected to have type
+  mass
+      (finish smart
+        (((match after.nodeRecords (muKey depth ordinary) with
+              | some val => after.nodeRecords
+              | none => put after.nodeRecords (muKey depth ordinary) (Value.mu selected.fst value depth ordinary))
+              (muKey depth ordinary)).getD
+          (Value.mu selected.fst value depth ordinary))) ≤
+    1 + 3 * returned

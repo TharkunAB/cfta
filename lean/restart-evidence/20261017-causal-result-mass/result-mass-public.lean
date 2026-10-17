@@ -1,0 +1,41 @@
+import MicroCFTA.InternedFreshOrdinaryResultMass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 2000000
+
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.inflate
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.inflate
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.inflate_ge
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.inflate_ge
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.inflate_mono
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.inflate_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.transform
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.transform
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.transform_ge
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.transform_ge
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_ge
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_ge
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_ge
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_ge
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.transform_mono
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.transform_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_mono
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_mono
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.build_bound
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.build_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.buildMany_bound
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.buildMany_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryResultMass.buildEdges_bound
+#check @MicroCFTA.InternedFreshOrdinaryResultMass.buildEdges_bound

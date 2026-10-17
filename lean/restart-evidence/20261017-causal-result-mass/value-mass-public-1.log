@@ -1,0 +1,186 @@
+'MicroCFTA.InternedValueMass.value' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.value : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Nat
+'MicroCFTA.InternedValueMass.edge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edge : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Nat
+'MicroCFTA.InternedValueMass.values' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.values : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Nat
+'MicroCFTA.InternedValueMass.edges' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edges : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Nat
+'MicroCFTA.InternedValueMass.value_pos' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.value_pos : ∀ {Symbol Guard : Type}
+  (node : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (@MicroCFTA.InternedValueMass.value Symbol Guard node)
+'MicroCFTA.InternedValueMass.edge_pos' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edge_pos : ∀ {Symbol Guard : Type}
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (@MicroCFTA.InternedValueMass.edge Symbol Guard row)
+'MicroCFTA.InternedValueMass.edge_children' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edge_children : ∀ {Symbol Guard : Type}
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @Eq.{1} Nat (@MicroCFTA.InternedValueMass.edge Symbol Guard row)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      (@MicroCFTA.InternedValueMass.values Symbol Guard
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)))
+'MicroCFTA.InternedValueMass.values_append' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.values_append : ∀ {Symbol Guard : Type}
+  (first last : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @Eq.{1} Nat
+    (@MicroCFTA.InternedValueMass.values Symbol Guard
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        first last))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@MicroCFTA.InternedValueMass.values Symbol Guard first) (@MicroCFTA.InternedValueMass.values Symbol Guard last))
+'MicroCFTA.InternedValueMass.edges_append' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edges_append : ∀ {Symbol Guard : Type}
+  (first last : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @Eq.{1} Nat
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+        first last))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@MicroCFTA.InternedValueMass.edges Symbol Guard first) (@MicroCFTA.InternedValueMass.edges Symbol Guard last))
+'MicroCFTA.InternedValueMass.values_eq_length_sum' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.values_eq_length_sum : ∀ {Symbol Guard : Type}
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @Eq.{1} Nat (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) nodes)
+      (@List.sum.{0} Nat instAddNat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0)))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Nat
+          (@MicroCFTA.InternedValueMass.value Symbol Guard) nodes)))
+'MicroCFTA.InternedValueMass.edges_eq_length_sum' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edges_eq_length_sum : ∀ {Symbol Guard : Type}
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @Eq.{1} Nat (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+      (@List.sum.{0} Nat instAddNat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0)))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) Nat
+          (@MicroCFTA.InternedValueMass.edge Symbol Guard) rows)))
+'MicroCFTA.InternedValueMass.values_filter' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.values_filter : ∀ {Symbol Guard : Type}
+  (predicate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.values Symbol Guard
+      (@List.filter.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) predicate nodes))
+    (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+'MicroCFTA.InternedValueMass.edges_filter' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edges_filter : ∀ {Symbol Guard : Type}
+  (predicate : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Bool)
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard
+      (@List.filter.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) predicate rows))
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedValueMass.value_mem_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.value_mem_lt : ∀ {Symbol Guard : Type}
+  (node : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) nodes node →
+    @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard node)
+      (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+'MicroCFTA.InternedValueMass.edge_mem_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edge_mem_lt : ∀ {Symbol Guard : Type}
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows row →
+    @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.edge Symbol Guard row)
+      (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedValueMass.node_child_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.node_child_lt : ∀ {Symbol Guard : Type}
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (level : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows row →
+    ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) child →
+        @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard child)
+          (@MicroCFTA.InternedValueMass.value Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows level free))
+'MicroCFTA.InternedValueMass.union_member_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.union_member_lt : ∀ {Symbol Guard : Type}
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (level : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) members child →
+    @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard child)
+      (@MicroCFTA.InternedValueMass.value Symbol Guard
+        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members level free))
+'MicroCFTA.InternedValueMass.mu_body_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.mu_body_lt : ∀ {Symbol Guard : Type}
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard body)
+    (@MicroCFTA.InternedValueMass.value Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+'MicroCFTA.InternedValueMass.mu_depth_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.mu_depth_lt : ∀ {Symbol Guard : Type}
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard depth)
+    (@MicroCFTA.InternedValueMass.value Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+'MicroCFTA.InternedValueMass.mu_ordinary_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.mu_ordinary_lt : ∀ {Symbol Guard : Type}
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedValueMass.value Symbol Guard ordinary)
+    (@MicroCFTA.InternedValueMass.value Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+'MicroCFTA.InternedValueMass.value_le_sizeOf' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.value_le_sizeOf : ∀ {Symbol Guard : Type} [inst : SizeOf.{1} Symbol]
+  [inst_1 : SizeOf.{1} Guard] (node : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard node)
+    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst Symbol Guard inst inst_1) node)
+'MicroCFTA.InternedValueMass.edge_le_sizeOf' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edge_le_sizeOf : ∀ {Symbol Guard : Type} [inst : SizeOf.{1} Symbol]
+  [inst_1 : SizeOf.{1} Guard] (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard row)
+    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue._sizeOf_inst Symbol Guard inst inst_1) row)
+'MicroCFTA.InternedValueMass.values_le_sizeOf' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.values_le_sizeOf : ∀ {Symbol Guard : Type} [inst : SizeOf.{1} Symbol]
+  [inst_1 : SizeOf.{1} Guard] (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+    (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@List._sizeOf_inst.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value._sizeOf_inst Symbol Guard inst inst_1))
+      nodes)
+'MicroCFTA.InternedValueMass.edges_le_sizeOf' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMass.edges_le_sizeOf : ∀ {Symbol Guard : Type} [inst : SizeOf.{1} Symbol]
+  [inst_1 : SizeOf.{1} Guard] (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+    (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@List._sizeOf_inst.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue._sizeOf_inst Symbol Guard inst inst_1))
+      rows)

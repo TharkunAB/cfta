@@ -1,0 +1,126 @@
+'MicroCFTA.InternedStoredEncodingWidth.Width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.Width : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Prop
+'MicroCFTA.InternedStoredEncodingWidth.Many' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.Many : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) → Prop
+'MicroCFTA.InternedStoredEncodingWidth.Rows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.Rows : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) → Prop
+'MicroCFTA.InternedStoredEncodingWidth.width_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.width_mono : ∀ {Symbol Guard : Type} (first last : Nat),
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+      @MicroCFTA.InternedStoredEncodingWidth.Width Symbol Guard first expression →
+        @MicroCFTA.InternedStoredEncodingWidth.Width Symbol Guard last expression
+'MicroCFTA.InternedStoredEncodingWidth.many_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.many_mono : ∀ {Symbol Guard : Type} (first last : Nat),
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)),
+      @MicroCFTA.InternedStoredEncodingWidth.Many Symbol Guard first expressions →
+        @MicroCFTA.InternedStoredEncodingWidth.Many Symbol Guard last expressions
+'MicroCFTA.InternedStoredEncodingWidth.rows_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.rows_mono : ∀ {Symbol Guard : Type} (first last : Nat),
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)),
+      @MicroCFTA.InternedStoredEncodingWidth.Rows Symbol Guard first expressions →
+        @MicroCFTA.InternedStoredEncodingWidth.Rows Symbol Guard last expressions
+'MicroCFTA.InternedStoredEncodingWidth.values_length' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.values_length : ∀ {Symbol Guard : Type}
+  (members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) members)
+    (@MicroCFTA.InternedValueMass.values Symbol Guard members)
+'MicroCFTA.InternedStoredEncodingWidth.edges_length' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.edges_length : ∀ {Symbol Guard : Type}
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedStoredEncodingWidth.encode_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.encode_width : ∀ {Symbol Guard : Type}
+  (context : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (locals : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (bound : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound →
+    @MicroCFTA.InternedStoredEncodingWidth.Width Symbol Guard bound
+      (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard context locals value)
+'MicroCFTA.InternedStoredEncodingWidth.encodeMany_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.encodeMany_width : ∀ {Symbol Guard : Type}
+  (context : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (locals : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (bound : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.values Symbol Guard members) bound →
+    @MicroCFTA.InternedStoredEncodingWidth.Many Symbol Guard bound
+      (@MicroCFTA.InternedStoredSubstitution.encodeMany Symbol Guard context locals members)
+'MicroCFTA.InternedStoredEncodingWidth.encodeEdges_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedStoredEncodingWidth.encodeEdges_width : ∀ {Symbol Guard : Type}
+  (context : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (locals : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (bound : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edges Symbol Guard rows) bound →
+    @MicroCFTA.InternedStoredEncodingWidth.Rows Symbol Guard bound
+      (@MicroCFTA.InternedStoredSubstitution.encodeEdges Symbol Guard context locals rows)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.grow' does not depend on any axioms
+MicroCFTA.InternedFreshOrdinaryUniformMass.grow : Nat → Nat → Nat
+'MicroCFTA.InternedFreshOrdinaryUniformMass.evolve' does not depend on any axioms
+MicroCFTA.InternedFreshOrdinaryUniformMass.evolve : Nat → Nat → Nat → Nat
+'MicroCFTA.InternedFreshOrdinaryUniformMass.grow_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.InternedFreshOrdinaryUniformMass.grow_ge : ∀ (width bound : Nat),
+  @LE.le.{0} Nat instLENat bound (MicroCFTA.InternedFreshOrdinaryUniformMass.grow width bound)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.grow_mono' does not depend on any axioms
+MicroCFTA.InternedFreshOrdinaryUniformMass.grow_mono : ∀ (width : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.InternedFreshOrdinaryUniformMass.grow width first)
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.grow width last)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.inflate_bound' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.InternedFreshOrdinaryUniformMass.inflate_bound : ∀ (width length bound : Nat),
+  @LE.le.{0} Nat instLENat length width →
+    @LE.le.{0} Nat instLENat (MicroCFTA.InternedFreshOrdinaryResultMass.inflate length bound)
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.grow width bound)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_mono' does not depend on any axioms
+MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_mono : ∀ (width count : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width count first)
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width count last)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_count_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_count_mono : ∀ (width : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (bound : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width first bound)
+        (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width last bound)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_add' depends on axioms: [propext]
+MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_add : ∀ (width first last bound : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last) bound)
+    (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width last
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width first bound))
+'MicroCFTA.InternedFreshOrdinaryUniformMass.transform_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryUniformMass.transform_bound : ∀ {Symbol Guard : Type} (width : Nat)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedStoredEncodingWidth.Width Symbol Guard width expression →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedFreshOrdinaryResultMass.transform Symbol Guard expression bound)
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Symbol Guard expression)
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Symbol Guard expression))
+        bound)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.many_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryUniformMass.many_bound : ∀ {Symbol Guard : Type} (width : Nat)
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) (bound : Nat),
+  @MicroCFTA.InternedStoredEncodingWidth.Many Symbol Guard width expressions →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform Symbol Guard expressions bound)
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyNodes Symbol Guard expressions)
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.manyEdges Symbol Guard expressions))
+        bound)
+'MicroCFTA.InternedFreshOrdinaryUniformMass.rows_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryUniformMass.rows_bound : ∀ {Symbol Guard : Type} (width : Nat)
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) (bound : Nat),
+  @MicroCFTA.InternedStoredEncodingWidth.Rows Symbol Guard width expressions →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform Symbol Guard expressions bound)
+      (MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowNodes Symbol Guard expressions)
+          (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.rowEdges Symbol Guard expressions))
+        bound)

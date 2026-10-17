@@ -1,0 +1,157 @@
+'MicroCFTA.InternedFreshOrdinaryResultMass.inflate' does not depend on any axioms
+MicroCFTA.InternedFreshOrdinaryResultMass.inflate : Nat → Nat → Nat
+'MicroCFTA.InternedFreshOrdinaryResultMass.inflate_ge' depends on axioms: [propext]
+MicroCFTA.InternedFreshOrdinaryResultMass.inflate_ge : ∀ (length bound : Nat),
+  @LE.le.{0} Nat instLENat bound (MicroCFTA.InternedFreshOrdinaryResultMass.inflate length bound)
+'MicroCFTA.InternedFreshOrdinaryResultMass.inflate_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.InternedFreshOrdinaryResultMass.inflate_mono : ∀ (length : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.InternedFreshOrdinaryResultMass.inflate length first)
+      (MicroCFTA.InternedFreshOrdinaryResultMass.inflate length last)
+'MicroCFTA.InternedFreshOrdinaryResultMass.transform' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.transform : {Symbol Guard : Type} →
+  MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Nat → Nat
+'MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) → Nat → Nat
+'MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) → Nat → Nat
+'MicroCFTA.InternedFreshOrdinaryResultMass.transform_ge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.transform_ge : ∀ {Symbol Guard : Type}
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) (bound : Nat),
+  @LE.le.{0} Nat instLENat bound (@MicroCFTA.InternedFreshOrdinaryResultMass.transform Symbol Guard expression bound)
+'MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_ge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_ge : ∀ {Symbol Guard : Type}
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) (bound : Nat),
+  @LE.le.{0} Nat instLENat bound
+    (@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform Symbol Guard expressions bound)
+'MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_ge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_ge : ∀ {Symbol Guard : Type}
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) (bound : Nat),
+  @LE.le.{0} Nat instLENat bound
+    (@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform Symbol Guard expressions bound)
+'MicroCFTA.InternedFreshOrdinaryResultMass.transform_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.transform_mono : ∀ {Symbol Guard : Type}
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedFreshOrdinaryResultMass.transform Symbol Guard expression first)
+      (@MicroCFTA.InternedFreshOrdinaryResultMass.transform Symbol Guard expression last)
+'MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform_mono : ∀ {Symbol Guard : Type}
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform Symbol Guard expressions first)
+      (@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform Symbol Guard expressions last)
+'MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform_mono : ∀ {Symbol Guard : Type}
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform Symbol Guard expressions first)
+      (@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform Symbol Guard expressions last)
+'MicroCFTA.InternedFreshOrdinaryResultMass.build_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.build_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) environment value →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound) →
+      And
+        (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+          (@MicroCFTA.InternedFreshOrdinaryResultMass.transform Symbol Guard expression bound)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)))
+        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+            @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+              (@MicroCFTA.InternedFreshOrdinaryResultMass.transform Symbol Guard expression bound))
+'MicroCFTA.InternedFreshOrdinaryResultMass.buildMany_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.buildMany_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) environment value →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound) →
+      And
+        (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+          (@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform Symbol Guard expressions bound)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state)))
+        (∀ (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values after) →
+            And
+              (@Eq.{1} Nat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values)
+                (@List.length.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expressions))
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                    value →
+                  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+                    (@MicroCFTA.InternedFreshOrdinaryResultMass.manyTransform Symbol Guard expressions bound)))
+'MicroCFTA.InternedFreshOrdinaryResultMass.buildEdges_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryResultMass.buildEdges_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) environment value →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound) →
+      And
+        (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+          (@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform Symbol Guard expressions bound)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state)))
+        (∀ (values : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) values after) →
+            And
+              (@Eq.{1} Nat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) values)
+                (@List.length.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) expressions))
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) values
+                    value →
+                  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard value)
+                    (@MicroCFTA.InternedFreshOrdinaryResultMass.rowsTransform Symbol Guard expressions bound)))

@@ -1,0 +1,55 @@
+import MicroCFTA.InternedStoredEncodingWidth
+import MicroCFTA.InternedFreshOrdinaryUniformMass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.InternedStoredEncodingWidth.Width
+#check @MicroCFTA.InternedStoredEncodingWidth.Width
+#print axioms MicroCFTA.InternedStoredEncodingWidth.Many
+#check @MicroCFTA.InternedStoredEncodingWidth.Many
+#print axioms MicroCFTA.InternedStoredEncodingWidth.Rows
+#check @MicroCFTA.InternedStoredEncodingWidth.Rows
+#print axioms MicroCFTA.InternedStoredEncodingWidth.width_mono
+#check @MicroCFTA.InternedStoredEncodingWidth.width_mono
+#print axioms MicroCFTA.InternedStoredEncodingWidth.many_mono
+#check @MicroCFTA.InternedStoredEncodingWidth.many_mono
+#print axioms MicroCFTA.InternedStoredEncodingWidth.rows_mono
+#check @MicroCFTA.InternedStoredEncodingWidth.rows_mono
+#print axioms MicroCFTA.InternedStoredEncodingWidth.values_length
+#check @MicroCFTA.InternedStoredEncodingWidth.values_length
+#print axioms MicroCFTA.InternedStoredEncodingWidth.edges_length
+#check @MicroCFTA.InternedStoredEncodingWidth.edges_length
+#print axioms MicroCFTA.InternedStoredEncodingWidth.encode_width
+#check @MicroCFTA.InternedStoredEncodingWidth.encode_width
+#print axioms MicroCFTA.InternedStoredEncodingWidth.encodeMany_width
+#check @MicroCFTA.InternedStoredEncodingWidth.encodeMany_width
+#print axioms MicroCFTA.InternedStoredEncodingWidth.encodeEdges_width
+#check @MicroCFTA.InternedStoredEncodingWidth.encodeEdges_width
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.grow
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.grow
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.evolve
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.evolve
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.grow_ge
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.grow_ge
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.grow_mono
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.grow_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.inflate_bound
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.inflate_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_mono
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_count_mono
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_count_mono
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_add
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.evolve_add
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.transform_bound
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.transform_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.many_bound
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.many_bound
+#print axioms MicroCFTA.InternedFreshOrdinaryUniformMass.rows_bound
+#check @MicroCFTA.InternedFreshOrdinaryUniformMass.rows_bound

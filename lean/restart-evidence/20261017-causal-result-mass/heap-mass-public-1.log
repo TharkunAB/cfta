@@ -1,0 +1,332 @@
+'MicroCFTA.InternedValueMassHeap.Stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.InternedValueMassHeap.Stored.mk' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.mk : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) bound →
+    (∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+        (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound) →
+      (∀ (key : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.edgeRecords Symbol Guard state key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+            @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge) bound) →
+        @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state
+'MicroCFTA.InternedValueMassHeap.Stored.positive' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.positive : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) bound
+'MicroCFTA.InternedValueMassHeap.Stored.nodes' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.nodes : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+      (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound
+'MicroCFTA.InternedValueMassHeap.Stored.edges' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.edges : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (key : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+      (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.edgeRecords Symbol Guard state key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge) →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge) bound
+'MicroCFTA.InternedValueMassHeap.Stored.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.mono : ∀ {Symbol Guard : Type} {bound larger : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    @LE.le.{0} Nat instLENat bound larger → @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard larger state
+'MicroCFTA.InternedValueMassHeap.empty_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.empty_stored : ∀ {Symbol Guard : Type} {bound : Nat},
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) bound →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+'MicroCFTA.InternedValueMassHeap.initialBound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.initialBound : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Nat
+'MicroCFTA.InternedValueMassHeap.initial' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.initial : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+      (@MicroCFTA.InternedValueMassHeap.initialBound Symbol Guard source) source
+'MicroCFTA.InternedValueMassHeap.available' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.available : ∀ {Symbol Guard : Type} {bound : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound
+'MicroCFTA.InternedValueMassHeap.resident' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.resident : ∀ {Symbol Guard : Type} {bound : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard source edge →
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard edge) bound
+'MicroCFTA.InternedValueMassHeap.Stored.node_cache' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.node_cache : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (cache : MicroCFTA.Cache.State MicroCFTA.InternedBinderProtocol.NodeKey),
+      @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.InternedConstructorTemplates.State.mk Symbol Guard
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state) cache
+          (@MicroCFTA.InternedConstructorTemplates.State.edgeRecords Symbol Guard state)
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state))
+'MicroCFTA.InternedValueMassHeap.Stored.edge_cache' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.edge_cache : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (cache : MicroCFTA.Cache.State (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)),
+      @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.InternedConstructorTemplates.State.mk Symbol Guard cache
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)
+          (@MicroCFTA.InternedConstructorTemplates.State.edgeRecords Symbol Guard state)
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state))
+'MicroCFTA.InternedValueMassHeap.Stored.put_node' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.put_node : ∀ {Symbol Guard : Type} {bound : Nat}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+      (candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard candidate) bound →
+        @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+          (@MicroCFTA.InternedConstructorTemplates.State.mk Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state)
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)
+            (@MicroCFTA.InternedConstructorTemplates.State.edgeRecords Symbol Guard state)
+            (@MicroCFTA.Cache.keepFirst MicroCFTA.InternedBinderProtocol.NodeKey
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state) key candidate))
+'MicroCFTA.InternedValueMassHeap.Stored.put_edge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.Stored.put_edge : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (key : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+      (candidate : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard candidate) bound →
+        @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+          (@MicroCFTA.InternedConstructorTemplates.State.mk Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state)
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)
+            (@MicroCFTA.Cache.keepFirst (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.State.edgeRecords Symbol Guard state) key candidate)
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state))
+'MicroCFTA.InternedValueMassHeap.node_step' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.node_step : ∀ {Symbol Guard : Type} {bound : Nat}
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (identify :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (candidateBound : Nat),
+      (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey),
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard (identify entry)) candidateBound) →
+        And
+          (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard (@Max.max.{0} Nat Nat.instMax bound candidateBound)
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.nodeStep Symbol Guard key identify state)))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.value Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.nodeStep Symbol Guard key identify state)))
+            (@Max.max.{0} Nat Nat.instMax bound candidateBound))
+'MicroCFTA.InternedValueMassHeap.edge_step' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassHeap.edge_step : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (key : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+  (identify :
+    MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (candidateBound : Nat),
+      (∀ (entry : MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)),
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edge Symbol Guard (identify entry)) candidateBound) →
+        And
+          (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard (@Max.max.{0} Nat Nat.instMax bound candidateBound)
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.edgeStep Symbol Guard inst key identify state)))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.InternedValueMass.edge Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.edgeStep Symbol Guard inst key identify state)))
+            (@Max.max.{0} Nat Nat.instMax bound candidateBound))
+'MicroCFTA.InternedValueMassConstructors.canonical_edges_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.canonical_edges_le : ∀ {Symbol Guard : Type}
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.canonicalEdges Symbol Guard rows))
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedValueMassConstructors.normalized_edges_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.normalized_edges_le : ∀ {Symbol Guard : Type}
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.canonicalEdges Symbol Guard
+        (@MicroCFTA.InternedConstructorTemplates.surviving Symbol Guard rows)))
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedValueMassConstructors.flattened_values_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.flattened_values_le : ∀ {Symbol Guard : Type}
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.values Symbol Guard
+      (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.unionMembers Symbol Guard) nodes))
+    (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+'MicroCFTA.InternedValueMassConstructors.distinct_values_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.distinct_values_le : ∀ {Symbol Guard : Type}
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.values Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard nodes))
+    (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+'MicroCFTA.InternedValueMassConstructors.ordinary_edges_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.ordinary_edges_le : ∀ {Symbol Guard : Type}
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @Eq.{1} (Option.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+      (@MicroCFTA.InternedConstructorTemplates.ordinaryEdges Symbol Guard nodes)
+      (@Option.some.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows) →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+      (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)
+'MicroCFTA.InternedValueMassConstructors.edge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.edge : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (children : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    And
+      (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+        (@Max.max.{0} Nat Nat.instMax bound
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.values Symbol Guard children)))
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard children) state)))
+      (@LE.le.{0} Nat instLENat
+        (@MicroCFTA.InternedValueMass.edge Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard children) state)))
+        (@Max.max.{0} Nat Nat.instMax bound
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.values Symbol Guard children))))
+'MicroCFTA.InternedValueMassConstructors.node' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.node : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    And
+      (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+        (@Max.max.{0} Nat Nat.instMax bound
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)))
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) state)))
+      (@LE.le.{0} Nat instLENat
+        (@MicroCFTA.InternedValueMass.value Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) state)))
+        (@Max.max.{0} Nat Nat.instMax bound
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.edges Symbol Guard rows))))
+'MicroCFTA.InternedValueMassConstructors.union' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.union : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (nodes : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    And
+      (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+        (@Max.max.{0} Nat Nat.instMax bound
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.values Symbol Guard nodes)))
+        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard nodes) state)))
+      (@LE.le.{0} Nat instLENat
+        (@MicroCFTA.InternedValueMass.value Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard nodes) state)))
+        (@Max.max.{0} Nat Nat.instMax bound
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedValueMass.values Symbol Guard nodes))))
+'MicroCFTA.InternedValueMassConstructors.cleanup_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.cleanup_le : ∀ {Symbol Guard : Type}
+  (node : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.InternedValueMass.value Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.cleanup Symbol Guard node))
+    (@MicroCFTA.InternedValueMass.value Symbol Guard node)
+'MicroCFTA.InternedValueMassConstructors.filter' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassConstructors.filter : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (name : MicroCFTA.InternedBinderProtocol.Reference) (node : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard node) bound →
+      And
+        (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard name node) state)))
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.InternedValueMass.value Symbol Guard
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard name node) state)))
+          bound)

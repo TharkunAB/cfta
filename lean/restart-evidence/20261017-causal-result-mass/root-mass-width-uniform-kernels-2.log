@@ -1,0 +1,113 @@
+'MicroCFTA.RootMassWidthUniformKernels.constructed_uniform' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.RootMassWidthUniformKernels.constructed_uniform : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard source environment →
+    @MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard source →
+      @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+          source →
+        ∀ (width : Nat),
+          @MicroCFTA.InternedStoredEncodingWidth.Width Symbol Guard width expression →
+            have bound :=
+              MicroCFTA.InternedFreshOrdinaryUniformMass.evolve width
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Symbol Guard expression)
+                  (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Symbol Guard expression))
+                (@MicroCFTA.InternedValueMassHeap.initialBound Symbol Guard source);
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment source)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+                  (And (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard after environment)
+                    (And (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after)
+                      (And
+                        (@MicroCFTA.InternedRecordCoherence.Covered Symbol Guard
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey) after)
+                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                          (And (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound after)
+                            (And
+                              (@LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard value) bound)
+                              (@MicroCFTA.InternedStoredEncodingWidth.Width Symbol Guard bound
+                                (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)
+                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) value))))))))
+'MicroCFTA.RootMassWidthUniformKernels.nested_result_fed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.RootMassWidthUniformKernels.nested_result_fed : have firstBound :=
+  MicroCFTA.InternedFreshOrdinaryUniformMass.evolve (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.nodeBudget Nat Bool
+        MicroCFTA.RootMassWidthUniformKernels.expression)
+      (@MicroCFTA.InternedFreshOrdinaryAllocationBudget.edgeBudget Nat Bool
+        MicroCFTA.RootMassWidthUniformKernels.expression))
+    (@MicroCFTA.InternedValueMassHeap.initialBound Nat Bool (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool));
+have finalBound :=
+  MicroCFTA.InternedFreshOrdinaryUniformMass.evolve firstBound
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) firstBound))
+    firstBound;
+@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun value =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun middle =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun result =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                  instDecidableEqBool a b)
+              MicroCFTA.RootMassWidthUniformKernels.expression
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Nat Bool
+                  (MicroCFTA.InternedBinderProtocol.Reference.intersection
+                    (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))))
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)))
+              (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value middle))
+          (And
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Nat Bool value)
+              (MicroCFTA.InternedBinderProtocol.Reference.intersection
+                (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))))
+            (And (Not (@MicroCFTA.InternedStoredClosedMuCompletion.PreparedWithoutMu Nat Bool value))
+              (And (@MicroCFTA.InternedValueMassHeap.Stored Nat Bool firstBound middle)
+                (And
+                  (@MicroCFTA.InternedStoredEncodingWidth.Width Nat Bool firstBound
+                    (@MicroCFTA.InternedStoredSubstitution.encode Nat Bool
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Nat Bool value)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) value))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Nat Bool
+                        (fun a b =>
+                          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                            instDecidableEqBool a b)
+                        value (fun x => @Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                        middle)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) result after))
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Nat Bool after result)
+                      (And (@MicroCFTA.InternedValueMassHeap.Stored Nat Bool finalBound after)
+                        (@LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Nat Bool result)
+                          finalBound))))))))

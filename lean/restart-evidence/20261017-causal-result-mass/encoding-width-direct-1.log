@@ -1,0 +1,192 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:14:22: error: Unknown identifier `InternedValueMass` at quotation precheck
+
+Note: You can use `set_option quotPrecheck false` to disable this check.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:44:19: error: Tactic `assumption` failed
+
+case empty
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+known : Width first Syntax.empty
+⊢ Width last Syntax.empty
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:44:19: error: Tactic `assumption` failed
+
+case var
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+index✝ : Nat
+known : Width first (Syntax.var index✝)
+⊢ Width last (Syntax.var index✝)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:45:23: error: Invalid `⟨...⟩` notation: The expected type `Width last (Syntax.node rows)` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:46:27: error: Invalid `⟨...⟩` notation: The expected type
+  Width last (Syntax.union members)
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:47:62: error: Application type mismatch: The argument
+  known
+has type
+  Width first (Syntax.binder smart✝ body)
+but is expected to have type
+  Width first body
+in the application
+  width_mono first last bounded body known
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:54:11: error: Tactic `assumption` failed
+
+case nil
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+known : Many first []
+⊢ Many last []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:55:28: error: Invalid `⟨...⟩` notation: The expected type `Many last (head :: tail)` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:62:11: error: Tactic `assumption` failed
+
+case nil
+Symbol Guard : Type
+first last : Nat
+bounded : first ≤ last
+known : Rows first []
+⊢ Rows last []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:66:16: error: Invalid `⟨...⟩` notation: The expected type
+  Rows last (EdgeSyntax.mk symbol✝ constraint✝ children :: tail)
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:48:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:56:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:68:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:72:79: error(lean.unknownIdentifier): Unknown identifier `«M».values`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:73:6: error(lean.unknownIdentifier): Unknown identifier `«M».values_eq_length_sum`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:72:99: error: unsolved goals
+Symbol Guard : Type
+members : List (Value Symbol Guard)
+⊢ members.length ≤ sorry
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:77:76: error(lean.unknownIdentifier): Unknown identifier `«M».edges`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:78:6: error(lean.unknownIdentifier): Unknown identifier `«M».edges_eq_length_sum`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:77:92: error: unsolved goals
+Symbol Guard : Type
+rows : List (EdgeValue Symbol Guard)
+⊢ rows.length ≤ sorry
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:84:56: error(lean.unknownIdentifier): Unknown identifier `«M».value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:109:65: error(lean.unknownIdentifier): Unknown identifier `«M».values`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:120:66: error(lean.unknownIdentifier): Unknown identifier `«M».edges`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:88:4: error: Tactic `assumption` failed
+
+case isTrue
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+locals : List InternedBinderProtocol.Reference
+value : Value Symbol Guard
+bound : Nat
+small : sorry ≤ bound
+h✝ : value.free.isEmpty = true
+⊢ Width bound (Syntax.var (locals.length + slot context value))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:92:46: error: Tactic `assumption` failed
+
+case isFalse.reference.none
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+locals : List InternedBinderProtocol.Reference
+bound : Nat
+small : sorry ≤ bound
+name : InternedBinderProtocol.Reference
+h✝ : ¬(Value.reference name).free.isEmpty = true
+⊢ Width bound
+    (match Value.reference name with
+    | Value.empty => Syntax.empty
+    | Value.reference name_1 =>
+      match List.findIdx? (fun x => x == name_1) locals with
+      | some index => Syntax.var index
+      | none => Syntax.var (locals.length + slot context (Value.reference name))
+    | Value.node entry edges depth free => Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free => Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      Syntax.binder true (encode context (InternedBinderProtocol.Reference.interned entry.identity :: locals) body))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:92:46: error: Tactic `assumption` failed
+
+case isFalse.reference.some
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+locals : List InternedBinderProtocol.Reference
+bound : Nat
+small : sorry ≤ bound
+name : InternedBinderProtocol.Reference
+h✝ : ¬(Value.reference name).free.isEmpty = true
+val✝ : Nat
+⊢ Width bound
+    (match Value.reference name with
+    | Value.empty => Syntax.empty
+    | Value.reference name_1 =>
+      match List.findIdx? (fun x => x == name_1) locals with
+      | some index => Syntax.var index
+      | none => Syntax.var (locals.length + slot context (Value.reference name))
+    | Value.node entry edges depth free => Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free => Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      Syntax.binder true (encode context (InternedBinderProtocol.Reference.interned entry.identity :: locals) body))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:94:24: error(lean.unknownIdentifier): Unknown identifier `«M».edges`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:94:62: error(lean.unknownIdentifier): Unknown identifier `«M».value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:95:14: error: Invalid `⟨...⟩` notation: The expected type
+  Width bound
+    (match Value.node entry rows depth free with
+    | Value.empty => Syntax.empty
+    | Value.reference name =>
+      match List.findIdx? (fun x => x == name) locals with
+      | some index => Syntax.var index
+      | none => Syntax.var (locals.length + slot context (Value.node entry rows depth free))
+    | Value.node entry edges depth free => Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free => Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      Syntax.binder true (encode context (InternedBinderProtocol.Reference.interned entry.identity :: locals) body))
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:98:24: error(lean.unknownIdentifier): Unknown identifier `«M».values`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:98:66: error(lean.unknownIdentifier): Unknown identifier `«M».value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:99:14: error: Invalid `⟨...⟩` notation: The expected type
+  Width bound
+    (match Value.union entry members depth free with
+    | Value.empty => Syntax.empty
+    | Value.reference name =>
+      match List.findIdx? (fun x => x == name) locals with
+      | some index => Syntax.var index
+      | none => Syntax.var (locals.length + slot context (Value.union entry members depth free))
+    | Value.node entry edges depth free => Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free => Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      Syntax.binder true (encode context (InternedBinderProtocol.Reference.interned entry.identity :: locals) body))
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:112:11: error: Tactic `assumption` failed
+
+case nil
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+locals : List InternedBinderProtocol.Reference
+bound : Nat
+small : sorry ≤ bound
+⊢ Many bound (encodeMany context locals [])
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:114:17: error(lean.unknownIdentifier): Unknown identifier `«M».values`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:114:6: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:123:11: error: Tactic `assumption` failed
+
+case nil
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+locals : List InternedBinderProtocol.Reference
+bound : Nat
+small : sorry ≤ bound
+⊢ Rows bound (encodeEdges context locals [])
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:127:21: error(lean.unknownIdentifier): Unknown identifier `«M».edges`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:127:30: error(lean.unknownIdentifier): Unknown identifier `«M».edge`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:127:10: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:105:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:116:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedStoredEncodingWidth.lean:130:0: warning: unused `termination_by`, function is not recursive

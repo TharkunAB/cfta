@@ -1,0 +1,84 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:48:12: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:48:33: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:53:2: error: Tactic `rfl` failed: The left-hand side
+  edge (EdgeValue.mk entry✝ children✝)
+is not definitionally equal to the right-hand side
+  1 + values (EdgeValue.mk entry✝ children✝).children
+
+case mk
+Symbol Guard : Type
+entry✝ : Cache.Interned (EdgeKey Symbol Guard)
+children✝ : List (Value Symbol Guard)
+⊢ edge (EdgeValue.mk entry✝ children✝) = 1 + values (EdgeValue.mk entry✝ children✝).children
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:71:11: error: Tactic `rfl` failed: The left-hand side
+  values []
+is not definitionally equal to the right-hand side
+  [].length + (List.map value []).sum
+
+case nil
+Symbol Guard : Type
+⊢ values [] = [].length + (List.map value []).sum
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:78:11: error: Tactic `rfl` failed: The left-hand side
+  edges []
+is not definitionally equal to the right-hand side
+  [].length + (List.map edge []).sum
+
+case nil
+Symbol Guard : Type
+⊢ edges [] = [].length + (List.map edge []).sum
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:87:94: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c + d ≤ -2
+where
+ a := ↑(values rest)
+ b := ↑(values (List.filter predicate rest))
+ c := ↑(values (if false = true then first :: List.filter predicate rest else List.filter predicate rest))
+ d := ↑(value first)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:87:94: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c + d ≤ -2
+where
+ a := ↑(values rest)
+ b := ↑(values (List.filter predicate rest))
+ c := ↑(values (if True then first :: List.filter predicate rest else List.filter predicate rest))
+ d := ↑(value first)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:95:93: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c + d ≤ -2
+where
+ a := ↑(edges rest)
+ b := ↑(edges (List.filter predicate rest))
+ c := ↑(edges (if false = true then first :: List.filter predicate rest else List.filter predicate rest))
+ d := ↑(edge first)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedValueMass.lean:95:93: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c + d ≤ -2
+where
+ a := ↑(edges rest)
+ b := ↑(edges (List.filter predicate rest))
+ c := ↑(edges (if True then first :: List.filter predicate rest else List.filter predicate rest))
+ d := ↑(edge first)
