@@ -453,7 +453,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
             (so_far s0)
         -- The schema goes into the decision tree of its type. It is
         -- evaluated on the test cases of its path only.
-        inserted <- DT.insert (valuesEqual eq_inst) test_cases np_term (values np_term) tree
+        inserted <- DT.insertWith (const (const False)) (valuesEqual eq_inst) test_cases np_term (values np_term) tree
         let s = s0{so_far = so_far s0 + 1}
             -- A later phase enumerates the schema again, so it goes into
             -- seen.
@@ -471,7 +471,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
                             { instance_trees =
                                 Map.insert
                                     np_term
-                                    (DT.leaf most_general (values most_general))
+                                    (DT.leafWith most_general (values most_general))
                                     (instance_trees s0)
                             }
                         )
@@ -498,7 +498,10 @@ consider Settings{..} StEcta{..} lvl full_term s0
         Left message -> error message
         Right evaluateTerm ->
             let required = Map.fromList [(v, inst_sig Map.! v) | Symbol v <- holes isVar u]
-             in \tc -> evaluateTerm (testCaseValues required tc)
+                evaluateValues
+                    | Map.null required = const (evaluateTerm Map.empty)
+                    | otherwise = evaluateTerm
+             in DT.Evaluator required evaluateValues
 
     -- The schema equals the representative schema rep. Test the most
     -- general instance of the schema against the instances of rep.
