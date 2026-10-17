@@ -1,0 +1,16 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-2.source.lean:126:8: error: Dependent elimination failed: Failed to solve equation
+  List.map Value.referenceOf values = List.map Value.referenceOf values✝
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-2.source.lean:134:10: error: Type mismatch: After simplification, term
+  checked.right.right.right.right.right
+ has type
+  @Fields (EdgeValue Symbol Guard) width
+    (Control.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined)) current
+but is expected to have type
+  @Fields (EdgeValue Symbol Guard) width
+    ((Control.code
+          (SourceRecursiveIntersectionCode.walk (fun pair => requestNode request.domain pair.fst pair.snd)
+            (request.left.children.zip request.right.children))).bind
+      fun values =>
+      Code.work (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+        Code.pure)
+    current

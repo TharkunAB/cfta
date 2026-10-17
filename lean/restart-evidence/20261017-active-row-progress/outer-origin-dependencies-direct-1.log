@@ -1,0 +1,78 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:25:13: error: unsolved goals
+case succ.none
+output : Constraints
+fuel : Nat
+ih : ∀ (classes : Constraints), fixMaybe fuel classes = RunResult.normalized output → Covers classes output
+classes : Constraints
+stepped : congruenceStep classes = none
+actual : RunResult.contradiction = RunResult.normalized output
+⊢ Covers classes output
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:29:79: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:29:48: error: Type mismatch: After simplification, term
+  actual
+ has type
+  (if True then RunResult.normalized classes else fixMaybe fuel classes) = RunResult.normalized output
+but is expected to have type
+  classes = output
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:33:45: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:45:30: error: unsolved goals
+case timeout
+classes output : Constraints
+active : Active classes
+result : mkEqConstraints (EqualityTermination.normalizationBound classes) classes = RunResult.timeout
+actual : none = some output
+⊢ RunResult.timeout = RunResult.normalized output
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:45:30: error: unsolved goals
+case contradiction
+classes output : Constraints
+active : Active classes
+result : mkEqConstraints (EqualityTermination.normalizationBound classes) classes = RunResult.contradiction
+actual : none = some output
+⊢ RunResult.contradiction = RunResult.normalized output
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:47:55: error: Application type mismatch: The argument
+  actual
+has type
+  SymbolicEqualityBridge.resultClasses (mkEqConstraints (EqualityTermination.normalizationBound classes) classes) =
+    some output
+but is expected to have type
+  some found = some output
+in the application
+  Option.some.inj actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:48:22: error: Type mismatch
+  result
+has type
+  mkEqConstraints (EqualityTermination.normalizationBound classes) classes = RunResult.normalized found
+but is expected to have type
+  RunResult.normalized found = RunResult.normalized found
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:133:57: error: unexpected token 'prefix'; expected rcasesPat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:133:4: error: Unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:127:84: error: unsolved goals
+inputs : Constraints
+outputs : List Record
+covered : Covers inputs (List.map Record.paths outputs)
+consistent : isContradicting (List.map Record.paths outputs) = false
+first second : Class
+firstMember : first ∈ inputs
+secondMember : second ∈ inputs
+dependent : Subsumes first second
+leftRecord : Record
+leftKnown : leftRecord ∈ outputs
+leftMember : leftRecord.paths ∈ List.map Record.paths outputs
+firstIncluded : ∀ (path : Path), path ∈ first → path ∈ leftRecord.paths
+rightRecord : Record
+rightKnown : rightRecord ∈ outputs
+rightMember : rightRecord.paths ∈ List.map Record.paths outputs
+secondIncluded : ∀ (path : Path), path ∈ second → path ∈ rightRecord.paths
+relation : Subsumes leftRecord.paths rightRecord.paths
+⊢ ∃ firstOutput,
+    firstOutput ∈ outputs ∧
+      ∃ secondOutput,
+        secondOutput ∈ outputs ∧
+          (∀ (path : Path), path ∈ first → path ∈ firstOutput.paths) ∧
+            (∀ (path : Path), path ∈ second → path ∈ secondOutput.paths) ∧
+              firstOutput ≠ secondOutput ∧ Subsumes firstOutput.paths secondOutput.paths
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:133:64: error: unexpected token ','; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:134:96: error: unexpected token ','; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:178:56: error(lean.unknownIdentifier): Unknown identifier `invariants`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/outer-origin-dependencies-direct-1.source.lean:195:7: error(lean.unknownIdentifier): Unknown identifier `invariants`

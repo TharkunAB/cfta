@@ -1,0 +1,852 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-kernels-2.source.lean:138:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  afterMu.native.machine.heap
+in the target expression
+  SourceCurrentAllocatedNativePhysicalExecution.Inputs
+    (Control.code (Code.work (makeEdge row.entry.key.symbol top [first, mu]) Code.pure)) afterMu
+
+case refine_1
+one :
+  step (Control.code (requestEdge domain row row)) before =
+    Outcome.yielded ((Control.edgeBody request Code.pure).bind fun value => Code.finishEdge 0 value (Code.pure value))
+      edgeStarted
+bodyStep :
+  step (Control.edgeBody request Code.pure) edgeStarted =
+    Outcome.yielded (Control.code (SourceEqualityNativeCheckedCode.children domain row row allocated)) checkedEdge
+walked :
+  SourceCurrentAllocatedNativeSemanticTraceReadback.Walk (fun pair => requestNode domain pair.fst pair.snd)
+    [(first, first), (mu, mu)] checkedEdge [first, mu] afterMu 4
+⊢ SourceCurrentAllocatedNativePhysicalExecution.Inputs
+    (Control.code (Code.work (makeEdge row.entry.key.symbol top [first, mu]) Code.pure)) afterMu
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-kernels-2.source.lean:152:114: error: unsolved goals
+one :
+  step (Control.code (requestEdge domain row row)) before =
+    Outcome.yielded ((Control.edgeBody request Code.pure).bind fun value => Code.finishEdge 0 value (Code.pure value))
+      edgeStarted
+bodyStep :
+  step (Control.edgeBody request Code.pure) edgeStarted =
+    Outcome.yielded (Control.code (SourceEqualityNativeCheckedCode.children domain row row allocated)) checkedEdge
+walked :
+  SourceCurrentAllocatedNativeSemanticTraceReadback.Walk (fun pair => requestNode domain pair.fst pair.snd)
+    [(first, first), (mu, mu)] checkedEdge [first, mu] afterMu 4
+made :
+  Trace 1 (Control.code (Code.work (makeEdge row.entry.key.symbol top [first, mu]) Code.pure)) afterMu
+    (Control.code (Code.pure row)) madeEdge
+joined :
+  Trace (4 + 1)
+    ((Control.code
+          (SourceRecursiveIntersectionCode.walk (fun pair => requestNode domain pair.fst pair.snd)
+            [(first, first), (mu, mu)])).bind
+      fun values => Code.work (makeEdge row.entry.key.symbol top values) Code.pure)
+    checkedEdge (Control.code (Code.pure row)) madeEdge
+⊢ (Code.node
+      { domain := { identity := 0, key := { free := [], seen := [] } },
+        left :=
+          Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+            [EdgeValue.mk
+                { identity := 0,
+                  key :=
+                    { symbol := ("same", FullSyntax.Formula.top), children := [],
+                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                []]
+            0 [],
+        right :=
+          Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+            [EdgeValue.mk
+                { identity := 0,
+                  key :=
+                    { symbol := ("same", FullSyntax.Formula.top), children := [],
+                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                []]
+            0 [] }
+      fun value =>
+      ((Code.pure value).bind fun value =>
+            (SourceRecursiveIntersectionCode.walk
+                  (fun pair => requestNode { identity := 0, key := { free := [], seen := [] } } pair.fst pair.snd)
+                  [(Value.mu
+                        { identity := 3,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 2 } }
+                        (Value.node { identity := 4, key := InternedBinderProtocol.NodeKey.node [0, 3] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 3,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.interned 3)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.interned 3)]]
+                          0 [InternedBinderProtocol.Reference.interned 3])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0, 1] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 1,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference InternedBinderProtocol.Reference.depth]]
+                          0 [InternedBinderProtocol.Reference.depth])
+                        (Value.node { identity := 2, key := InternedBinderProtocol.NodeKey.node [0, 2] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 2,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.uninterned 0)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                          0 [InternedBinderProtocol.Reference.uninterned 0]),
+                      Value.mu
+                        { identity := 3,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 2 } }
+                        (Value.node { identity := 4, key := InternedBinderProtocol.NodeKey.node [0, 3] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 3,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.interned 3)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.interned 3)]]
+                          0 [InternedBinderProtocol.Reference.interned 3])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0, 1] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 1,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference InternedBinderProtocol.Reference.depth]]
+                          0 [InternedBinderProtocol.Reference.depth])
+                        (Value.node { identity := 2, key := InternedBinderProtocol.NodeKey.node [0, 2] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 2,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.uninterned 0)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                          0 [InternedBinderProtocol.Reference.uninterned 0]))]).bind
+              fun values => Code.pure (value :: values)).bind
+        fun values =>
+        Code.work
+          (makeEdge
+            (EdgeValue.mk
+                    { identity := 4,
+                      key :=
+                        { symbol := ("same", FullSyntax.Formula.top),
+                          children := [InternedBinderProtocol.NodeRef.node 0, InternedBinderProtocol.NodeRef.mu 3],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                    [Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+                        [EdgeValue.mk
+                            { identity := 0,
+                              key :=
+                                { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                  constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                            []]
+                        0 [],
+                      Value.mu
+                        { identity := 3,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 2 } }
+                        (Value.node { identity := 4, key := InternedBinderProtocol.NodeKey.node [0, 3] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 3,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.interned 3)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.interned 3)]]
+                          0 [InternedBinderProtocol.Reference.interned 3])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0, 1] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 1,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference InternedBinderProtocol.Reference.depth]]
+                          0 [InternedBinderProtocol.Reference.depth])
+                        (Value.node { identity := 2, key := InternedBinderProtocol.NodeKey.node [0, 2] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 2,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.uninterned 0)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                          0 [InternedBinderProtocol.Reference.uninterned 0])]).entry.key.symbol
+            (SourceEqualityConjoinAllocation.readback
+              { stored := SourceEqualityConstraintAllocation.Value.live 0 [], guard := SourceGuards.Guard.top })
+            values)
+          Code.pure) =
+    Code.node
+      { domain := { identity := 0, key := { free := [], seen := [] } },
+        left :=
+          Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+            [EdgeValue.mk
+                { identity := 0,
+                  key :=
+                    { symbol := ("same", FullSyntax.Formula.top), children := [],
+                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                []]
+            0 [],
+        right :=
+          Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+            [EdgeValue.mk
+                { identity := 0,
+                  key :=
+                    { symbol := ("same", FullSyntax.Formula.top), children := [],
+                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                []]
+            0 [] }
+      fun value =>
+      ((Code.pure value).bind fun value =>
+            (SourceRecursiveIntersectionCode.walk (fun pair => requestNode domain pair.fst pair.snd)
+                  [(Value.mu
+                        { identity := 3,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 2 } }
+                        (Value.node { identity := 4, key := InternedBinderProtocol.NodeKey.node [0, 3] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 3,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.interned 3)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.interned 3)]]
+                          0 [InternedBinderProtocol.Reference.interned 3])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0, 1] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 1,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference InternedBinderProtocol.Reference.depth]]
+                          0 [InternedBinderProtocol.Reference.depth])
+                        (Value.node { identity := 2, key := InternedBinderProtocol.NodeKey.node [0, 2] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 2,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.uninterned 0)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                          0 [InternedBinderProtocol.Reference.uninterned 0]),
+                      Value.mu
+                        { identity := 3,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 2 } }
+                        (Value.node { identity := 4, key := InternedBinderProtocol.NodeKey.node [0, 3] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 3,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.interned 3)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.interned 3)]]
+                          0 [InternedBinderProtocol.Reference.interned 3])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0, 1] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 1,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference InternedBinderProtocol.Reference.depth]]
+                          0 [InternedBinderProtocol.Reference.depth])
+                        (Value.node { identity := 2, key := InternedBinderProtocol.NodeKey.node [0, 2] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [],
+                            EdgeValue.mk
+                              { identity := 2,
+                                key :=
+                                  { symbol := ("same", FullSyntax.Formula.top),
+                                    children :=
+                                      [InternedBinderProtocol.NodeRef.ref
+                                          (InternedBinderProtocol.Reference.uninterned 0)],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                          0 [InternedBinderProtocol.Reference.uninterned 0]))]).bind
+              fun values => Code.pure (value :: values)).bind
+        fun values => Code.work (makeEdge row.entry.key.symbol top values) Code.pure
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-kernels-2.source.lean:220:60: error: Dependent elimination failed: Failed to solve equation
+  Value.empty =
+    match (InternedProbeProvenance.children root)[0]? with
+    | some x => x
+    | none => Value.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-kernels-2.source.lean:223:59: error: Dependent elimination failed: Failed to solve equation
+  Value.empty =
+    match (InternedProbeProvenance.children root)[1]? with
+    | some x => x
+    | none => Value.empty
+MicroCFTA.NativeWriterChildKernels.captured_children : And
+  (@Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+    MicroCFTA.NativeWriterChildKernels.built
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.NativeWriterChildKernels.root MicroCFTA.NativeWriterChildKernels.heap))
+  (And
+    (@Eq.{1}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) MicroCFTA.NativeWriterChildKernels.row)
+      (@List.cons.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.NativeWriterChildKernels.first
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.NativeWriterChildKernels.mu
+          (@List.nil.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))))
+    (And
+      (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+        (fun a b =>
+          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+            MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+        (fun a b =>
+          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+            MicroCFTA.NativeWriterChildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+        (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.NativeWriterChildKernels.domain MicroCFTA.NativeWriterChildKernels.row
+            MicroCFTA.NativeWriterChildKernels.row))
+        MicroCFTA.NativeWriterChildKernels.before
+        (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.NativeWriterChildKernels.row))
+        MicroCFTA.NativeWriterChildKernels.edgeAfter)
+      (And
+        (@LT.lt.{0} Nat instLTNat
+          (@MicroCFTA.Cache.State.next
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.State.edges
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                    (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                    MicroCFTA.NativeWriterChildKernels.edgeAfter)))))
+          (@MicroCFTA.Cache.State.next
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.State.edges
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                    (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                    MicroCFTA.NativeWriterChildKernels.advanced))))))
+        (And
+          (@MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History
+            (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun a b =>
+                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                    instDecidableEqString MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a
+                    b)
+                MicroCFTA.NativeWriterChildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+            MicroCFTA.NativeWriterChildKernels.advanced)
+          (And
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.FlatMemoThunk.Cell
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+              (@MicroCFTA.FlatMemoThunk.State.cells
+                (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))))
+                (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                    (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                    MicroCFTA.NativeWriterChildKernels.advanced))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (@Option.some.{0}
+                (MicroCFTA.FlatMemoThunk.Cell
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.FlatMemoThunk.Cell.mk
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.NativeWriterChildKernels.request
+                  (@MicroCFTA.FlatMemoThunk.Status.returned
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.NativeWriterChildKernels.row))))
+            (And
+              (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                (fun a b =>
+                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                    instDecidableEqString MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a
+                    b)
+                (fun a b =>
+                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                        instDecidableEqString
+                        MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+                    MicroCFTA.NativeWriterChildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.NativeWriterChildKernels.domain MicroCFTA.NativeWriterChildKernels.row
+                    MicroCFTA.NativeWriterChildKernels.row))
+                MicroCFTA.NativeWriterChildKernels.advanced
+                (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.NativeWriterChildKernels.row))
+                MicroCFTA.NativeWriterChildKernels.advanced)
+              (And
+                (MicroCFTA.NativeWriterChildKernels.Indexed
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  MicroCFTA.NativeWriterChildKernels.first)
+                (MicroCFTA.NativeWriterChildKernels.Indexed
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  MicroCFTA.NativeWriterChildKernels.mu))))))))
+theorem MicroCFTA.NativeWriterChildKernels.captured_children : And
+  (@Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+    MicroCFTA.NativeWriterChildKernels.built
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.NativeWriterChildKernels.root MicroCFTA.NativeWriterChildKernels.heap))
+  (And
+    (@Eq.{1}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) MicroCFTA.NativeWriterChildKernels.row)
+      (@List.cons.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.NativeWriterChildKernels.first
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.NativeWriterChildKernels.mu
+          (@List.nil.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))))
+    (And
+      (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+        (fun a b =>
+          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+            MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+        (fun a b =>
+          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+            MicroCFTA.NativeWriterChildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+        (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.NativeWriterChildKernels.domain MicroCFTA.NativeWriterChildKernels.row
+            MicroCFTA.NativeWriterChildKernels.row))
+        MicroCFTA.NativeWriterChildKernels.before
+        (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.NativeWriterChildKernels.row))
+        MicroCFTA.NativeWriterChildKernels.edgeAfter)
+      (And
+        (@LT.lt.{0} Nat instLTNat
+          (@MicroCFTA.Cache.State.next
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.State.edges
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                    (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                    MicroCFTA.NativeWriterChildKernels.edgeAfter)))))
+          (@MicroCFTA.Cache.State.next
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.State.edges
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                    (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                    MicroCFTA.NativeWriterChildKernels.advanced))))))
+        (And
+          (@MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History
+            (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun a b =>
+                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                    instDecidableEqString MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a
+                    b)
+                MicroCFTA.NativeWriterChildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+            MicroCFTA.NativeWriterChildKernels.advanced)
+          (And
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.FlatMemoThunk.Cell
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+              (@MicroCFTA.FlatMemoThunk.State.cells
+                (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))))
+                (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges
+                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                    (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                    MicroCFTA.NativeWriterChildKernels.advanced))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (@Option.some.{0}
+                (MicroCFTA.FlatMemoThunk.Cell
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.FlatMemoThunk.Cell.mk
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.NativeWriterChildKernels.request
+                  (@MicroCFTA.FlatMemoThunk.Status.returned
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.NativeWriterChildKernels.row))))
+            (And
+              (@MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                (fun a b =>
+                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                    instDecidableEqString MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a
+                    b)
+                (fun a b =>
+                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                        instDecidableEqString
+                        MicroCFTA.NativeWriterChildKernels.«instDecidableEqFormula_restart-evidence» a b)
+                    MicroCFTA.NativeWriterChildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.NativeWriterChildKernels.domain MicroCFTA.NativeWriterChildKernels.row
+                    MicroCFTA.NativeWriterChildKernels.row))
+                MicroCFTA.NativeWriterChildKernels.advanced
+                (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.NativeWriterChildKernels.row))
+                MicroCFTA.NativeWriterChildKernels.advanced)
+              (And
+                (MicroCFTA.NativeWriterChildKernels.Indexed
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  MicroCFTA.NativeWriterChildKernels.first)
+                (MicroCFTA.NativeWriterChildKernels.Indexed
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  MicroCFTA.NativeWriterChildKernels.mu)))))))) :=
+MicroCFTA.NativeWriterChildKernels.captured_children_proof
+'MicroCFTA.NativeWriterChildKernels.captured_children' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]

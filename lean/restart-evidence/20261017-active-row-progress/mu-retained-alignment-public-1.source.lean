@@ -1,0 +1,99 @@
+import MicroCFTA.SourceCurrentStoredMuRetainedAlignment
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.mk
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.mk
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.mk
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.next
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.next
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.next
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.source
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.source
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.source
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.selected
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.selected
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.selected
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.earlier
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.earlier
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.earlier
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.called
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.called
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.called
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.made
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.made
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.made
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.suffix
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.suffix
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.suffix
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.context
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.context
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.context
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.symbol_eq
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.symbol_eq
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.symbol_eq
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.guard_eq
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.guard_eq
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.guard_eq
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.children_eq
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.children_eq
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.children_eq
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current_growth
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current_growth
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current_growth
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle_growth
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle_growth
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle_growth
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.next_growth
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.next_growth
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.next_growth
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.paired_rows
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.paired_rows
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.paired_rows
+
+#check @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.publication_rows
+#print MicroCFTA.SourceCurrentStoredMuRetainedAlignment.publication_rows
+#print axioms MicroCFTA.SourceCurrentStoredMuRetainedAlignment.publication_rows
+

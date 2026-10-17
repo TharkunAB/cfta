@@ -1,0 +1,90 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-5.source.lean:81:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261017-active-row-progress».«writer-child-direct-5.source».0.MicroCFTA.SourceCurrentNativeWriterChildOrigins.edge_arguments_checked`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-5.source.lean:81:0: warning: `edge_arguments_checked` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-5.source.lean:304:51: error(lean.unknownIdentifier): Unknown identifier `values`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-5.source.lean:304:67: error(lean.unknownIdentifier): Unknown identifier `middle`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-active-row-progress/writer-child-direct-5.source.lean:285:118: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before after : Checked width
+history : History before
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : List (EdgeValue Symbol Guard)
+fuel : Nat
+result : Value Symbol Guard
+good : Good before
+actual : Trace fuel (Control.code (compileRows domain left right)) before (Control.code (Code.pure result)) after
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+rowSelected : (nodeEdges result)[rowIndex]? = some row
+childIndex : Nat
+value : Value Symbol Guard
+childSelected : row.children[childIndex]? = some value
+count inner outer : Nat
+rawValues : List (EdgeValue Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+first :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd) (pairs left right)))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+made :
+  Trace outer (Control.code (Code.work (makeNode rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+normalized : nodeEdges result = canonicalEdges (surviving rawValues)
+walked : Walk (fun pair => requestEdge domain pair.fst pair.snd) (pairs left right) before rawValues rawMiddle count
+indexed :
+  ∀ (outputIndex : Nat) (output : EdgeValue Symbol Guard),
+    (nodeEdges result)[outputIndex]? = some output →
+      ∃ scheduleIndex leftIndex rightIndex originalLeft originalRight current next prefixFuel childFuel suffixFuel,
+        rawValues[scheduleIndex]? = some output ∧
+          (pairs left right)[scheduleIndex]? = some (originalLeft, originalRight) ∧
+            left[leftIndex]? = some originalLeft ∧
+              right[rightIndex]? = some originalRight ∧
+                originalLeft.entry.key.symbol = originalRight.entry.key.symbol ∧
+                  prefixFuel + childFuel + suffixFuel = count ∧
+                    Walk (fun pair => requestEdge domain pair.fst pair.snd) (List.take scheduleIndex (pairs left right))
+                        before (List.take scheduleIndex rawValues) current prefixFuel ∧
+                      Trace childFuel (Control.code (requestEdge domain originalLeft originalRight)) current
+                          (Control.code (Code.pure output)) next ∧
+                        Walk (fun pair => requestEdge domain pair.fst pair.snd)
+                          (List.drop (scheduleIndex + 1) (pairs left right)) next
+                          (List.drop (scheduleIndex + 1) rawValues) rawMiddle suffixFuel
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd) (pairs left right))
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          Fields (Control.code (Code.pure rawValues)) rawMiddle
+⊢ ∃ leftIndex rightIndex leftRow rightRow handle leftChild rightChild callBefore callAfter childFuel,
+    left[leftIndex]? = some leftRow ∧
+      right[rightIndex]? = some rightRow ∧
+        leftRow.entry.key.symbol = rightRow.entry.key.symbol ∧
+          Written handle { domain := domain, left := leftRow, right := rightRow } row after.native.machine.heap ∧
+            row.entry.key.symbol = leftRow.entry.key.symbol ∧
+              row.entry.key.constraint =
+                  SourceEqualityPCSNativeEdge.conjoin leftRow.entry.key.constraint rightRow.entry.key.constraint ∧
+                leftRow.children[childIndex]? = some leftChild ∧
+                  rightRow.children[childIndex]? = some rightChild ∧
+                    Good callBefore ∧
+                      Good callAfter ∧
+                        Grows callBefore.native.machine.heap after.native.machine.heap ∧
+                          Grows callAfter.native.machine.heap after.native.machine.heap ∧
+                            Trace childFuel (Control.code (requestNode domain leftChild rightChild)) callBefore
+                              (Control.code (Code.pure value)) callAfter
