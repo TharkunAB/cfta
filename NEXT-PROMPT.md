@@ -1,5 +1,47 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current paired ordinary induction and retained native readers
+
+Updated: 2026-10-18 00:36 CEST. Starting checkpoint is `0a5fe3b7`.
+Proof commit is `2d59402e`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-paired-source-induction.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Ordinary-node source induction now accepts arbitrary paired lexical lists.
+Bare references can differ at any slot, including captured tails. Actual raw
+row-empty tests follow from one derived symbolic input presentation. Strict
+source-child induction retains full guards and ordered reconstructed children.
+Initial Ready data constructs both stored calls, their exact sequential states,
+common-reader replays, and local publication histories. The nested binder,
+union-source, root-filter, and chronological winner cases remain open.
+
+Actual ordinary probe names are fresh on live source support. Unused captures
+can still contain those names. A separate live-alias condition controls Depth
+extension. These lexical laws do not yet produce arbitrary binder-result
+alignment or a general execution law from support compatibility alone.
+
+Actual target, force, leaf, edit, and class reads retain completed native cells.
+The selected leaf's exact cell and captured writer now persist to the full
+class reader. The actual child and class suffixes also derive its reader
+history. Historical target slots remain at the leaf return. Swap and reset
+recover their exact forwarded query; self returns its literal input unchanged.
+Unresolved direct requests remain explicit.
+
+Full pinned Audit passes 3162 jobs and 69585 dependency checks. Only the
+unchanged old unused-variable warning remains. New strict source logs are
+empty. Full public signatures, proofs, and axiom reports use only the three
+standard axioms. Effective caps are 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-paired-source-induction/`.
+Preserve all earlier proofs, counterexamples, repairs, drafts, and raw attempts.
+
+General recursive outer progress, compatibility with every active physical
+memo key, repeated-pass convergence, and full public Haskell correspondence
+remain open. Keep the full-library goal active. No Haskell patch or new
+production defect is added. FINDINGS retains the external repair registry
+first. Field-pool repair `b9219b9e` remains merged and validated. Record every
+later Haskell fix there with its reproducer, paths, commit, checks, and status.
+Keep the optimized interned core.
+
 ## Current class-to-native lineage and paired binder inputs
 
 Updated: 2026-10-18 00:20 CEST. Starting checkpoint is `05610fde`.
