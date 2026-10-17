@@ -1,0 +1,61 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/stripped-filter-direct-1.source.lean:21:8: error: unsolved goals
+case nil
+Symbol Guard : Type
+values : List (Value Symbol Guard)
+⊢ values = List.filter (fun value => true) values
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/stripped-filter-direct-1.source.lean:22:23: error: unsolved goals
+case cons
+Symbol Guard : Type
+name : Reference
+names : List Reference
+ih :
+  ∀ (values : List (Value Symbol Guard)),
+    stripMany names values =
+      List.filter (fun value => names.all fun name => value.referenceOf != InternedBinderProtocol.NodeRef.ref name)
+        values
+values : List (Value Symbol Guard)
+⊢ List.filter
+      (fun a =>
+        (names.all fun name => a.referenceOf != InternedBinderProtocol.NodeRef.ref name) &&
+          a.referenceOf != InternedBinderProtocol.NodeRef.ref name)
+      values =
+    List.filter
+      (fun value =>
+        value.referenceOf != InternedBinderProtocol.NodeRef.ref name &&
+          names.all fun name => value.referenceOf != InternedBinderProtocol.NodeRef.ref name)
+      values
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/stripped-filter-direct-1.source.lean:32:2: error: unsolved goals
+case pos
+Symbol Guard : Type
+names : List Reference
+own : Reference
+selected : own ∈ names
+values : List (Value Symbol Guard)
+value : Value Symbol Guard
+all : (names.all fun name => value.referenceOf != InternedBinderProtocol.NodeRef.ref name) = true
+kept : (value.referenceOf != InternedBinderProtocol.NodeRef.ref own) = true
+⊢ value ∈ values → True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/stripped-filter-direct-1.source.lean:34:2: error: unsolved goals
+case neg
+Symbol Guard : Type
+names : List Reference
+own : Reference
+selected : own ∈ names
+values : List (Value Symbol Guard)
+value : Value Symbol Guard
+all : ¬(names.all fun name => value.referenceOf != InternedBinderProtocol.NodeRef.ref name) = true
+failed : (names.all fun name => value.referenceOf != InternedBinderProtocol.NodeRef.ref name) = false
+⊢ value ∈ values → (false && value.referenceOf != InternedBinderProtocol.NodeRef.ref own) = false
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/stripped-filter-direct-1.source.lean:35:23: warning: This simp argument is unused:
+  Bool.and_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [failed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/stripped-filter-direct-1.source.lean:51:30: error: Type mismatch: After simplification, term
+  different
+ has type
+  name ≠ own
+but is expected to have type
+  InternedBinderProtocol.NodeRef.ref name ≠ InternedBinderProtocol.NodeRef.ref own

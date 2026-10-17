@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.history_unused
+#print MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.history_unused
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.history_unused
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.closed_unused
+#print MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.closed_unused
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.closed_unused
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.closed_compared
+#print MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.closed_compared
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparisonExecution.closed_compared

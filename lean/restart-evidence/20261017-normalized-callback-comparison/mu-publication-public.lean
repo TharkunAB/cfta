@@ -1,0 +1,181 @@
+import MicroCFTA.SourceCurrentNativeMuPublication
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.key
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.key
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.key
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.after
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.after
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.after
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.result
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.result
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.result
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.origin
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.origin
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.origin
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History
+#print MicroCFTA.SourceCurrentNativeMuPublication.History
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.build_history
+#print MicroCFTA.SourceCurrentNativeMuPublication.build_history
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.build_history
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.buildMany_history
+#print MicroCFTA.SourceCurrentNativeMuPublication.buildMany_history
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.buildMany_history
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.buildEdges_history
+#print MicroCFTA.SourceCurrentNativeMuPublication.buildEdges_history
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.buildEdges_history
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.closed_history
+#print MicroCFTA.SourceCurrentNativeMuPublication.closed_history
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.closed_history
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.build_done
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.build_done
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.build_done
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.winner
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.winner
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.winner
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Written
+#print MicroCFTA.SourceCurrentNativeMuPublication.Written
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Written
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Written.prepend
+#print MicroCFTA.SourceCurrentNativeMuPublication.Written.prepend
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Written.prepend
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History.writers
+#print MicroCFTA.SourceCurrentNativeMuPublication.History.writers
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History.writers
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History.from_empty
+#print MicroCFTA.SourceCurrentNativeMuPublication.History.from_empty
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History.from_empty
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.closed_writer
+#print MicroCFTA.SourceCurrentNativeMuPublication.closed_writer
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.closed_writer
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.warm
+#print MicroCFTA.SourceCurrentNativeMuPublication.warm
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.warm
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.closed_warm
+#print MicroCFTA.SourceCurrentNativeMuPublication.closed_warm
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.closed_warm
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.smart
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.smart
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.smart
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.expression
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.expression
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.expression
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.environment
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.environment
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.environment
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.before
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.before
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.before
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.body
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.body
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.body
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.context
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.context
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.context
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.depthDone
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.depthDone
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.depthDone
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinaryDone
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinaryDone
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinaryDone
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.missing
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.missing
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.missing
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.bodyDone
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.bodyDone
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.bodyDone
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.Publication.mk
+#print MicroCFTA.SourceCurrentNativeMuPublication.Publication.mk
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.Publication.mk
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History.refl
+#print MicroCFTA.SourceCurrentNativeMuPublication.History.refl
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History.refl
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History.retain
+#print MicroCFTA.SourceCurrentNativeMuPublication.History.retain
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History.retain
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History.trans
+#print MicroCFTA.SourceCurrentNativeMuPublication.History.trans
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History.trans
+
+#check @MicroCFTA.SourceCurrentNativeMuPublication.History.publication
+#print MicroCFTA.SourceCurrentNativeMuPublication.History.publication
+#print axioms MicroCFTA.SourceCurrentNativeMuPublication.History.publication
+

@@ -1,5 +1,41 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current normalized source comparison and causal Mu readback
+
+Updated: 2026-10-17 19:31 CEST. Starting checkpoint is `87a430e2`.
+Proof commit is `179b5a09`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-normalized-callback-comparison.md` for the exact
+results and `lean/notes-proof-status-20261017.md` for the whole-library map.
+
+The general normalized source comparison and stored unused-Mu law are now
+proved. Actual source publication histories derive the law before each
+keep-first update. Warm reads use the exact earlier winner and its complete
+current probe pair. No desired stored comparison law is a public input.
+`closed_compared` compares actual completed raw calls in a common heap from
+closed source construction. It retains finite input coverage, both live
+fixed-support freshness conditions, actual growth and issued history, and
+first-result noDeep. Varying assignments can alias. Equality concerns the
+ordered alternatives after stripping; it need not be raw value equality.
+
+UnionNormal also passes through every bounded mutual outer worker from the
+initial invariant alone. This covers every stopping outcome. It does not
+prove general outer completion. Compose the new source comparison with the
+actual recursive native callback and row histories next. General recursive
+outer progress, convergence, current frontend/runtime adapters, and complete
+public Haskell correspondence remain open. The whole-library goal stays active.
+
+The full pinned Audit passes 3080 jobs and 67877 dependency checks. Its actual
+limits are 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 399 MiB peak.
+All 17 final strict source logs are empty. All canonical targets pass.
+Evidence is in `lean/restart-evidence/20261017-normalized-callback-comparison/`.
+All earlier proofs, artifacts, repairs, counterexamples, marked drafts,
+optimized interned code, stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` is merged
+and validated. Record every later repair there with its failure, reproducer,
+affected paths, commit, checks, and upstream status.
+
 ## Current callback normalization and causal native histories
 
 Updated: 2026-10-17 18:33 CEST. Starting checkpoint is 430332f6.

@@ -1,0 +1,50 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-11.source.lean:251:15: error: unsolved goals
+case true
+Atom Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+names : Atom → Reference
+before after : InternedConstructorTemplates.State Symbol Guard
+context : Context before (List.map (input names) inputs)
+heap : InternedFreshOrdinaryDepthHeap.Heap before
+value : Value Symbol Guard
+atom : Atom
+shallow : ¬names atom ∈ deepNames value
+actual : build (Syntax.binder true body) (List.map (input names) inputs) before = Outcome.done value after
+live : Sum.inr atom ∈ SourceCurrentNativeNormalizationInputs.support (Syntax.binder true body) inputs
+used :
+  hasLocal
+      (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr) (List.map inputShape inputs))).deep =
+    true
+root :
+  Sum.inr atom ∈
+    (if
+          hasLocal
+              (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).deep =
+            true then
+        {
+          deep :=
+            lower (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).free,
+          hasOpaque := true,
+          depth :=
+            (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).depth + 1 }
+      else
+        {
+          roots :=
+            lower (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).roots,
+          deep :=
+            lower (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).deep,
+          hasOpaque :=
+            (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).hasOpaque,
+          depth :=
+            (evaluate body
+                ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr ∘ inputShape) inputs)).depth }).roots
+⊢ true = false
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-11.source.lean:251:52: warning: This simp argument is unused:
+  used
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [symbolic, evaluate, binder] at root
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

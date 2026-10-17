@@ -1,0 +1,22 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/request-winner-direct-2.source.lean:37:28: error: unsolved goals
+case none.done
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+smart : Bool
+depth ordinary : Value Symbol Guard
+callback : Reference → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+installed : before.nodes.table (muKey depth ordinary) = none
+entry : Interned InternedBinderProtocol.NodeKey × Cache.State InternedBinderProtocol.NodeKey :=
+  intern before.nodes (muKey depth ordinary)
+allocated : InternedConstructorTemplates.State Symbol Guard :=
+  { edges := before.edges, nodes := entry.snd, edgeRecords := before.edgeRecords, nodeRecords := before.nodeRecords }
+body : Value Symbol Guard
+afterBody : InternedConstructorTemplates.State Symbol Guard
+bodyDone : callback (Reference.interned entry.fst.identity) allocated = Outcome.done body afterBody
+selected : Value Symbol Guard
+present :
+  keepFirst afterBody.nodeRecords (muKey depth ordinary) (Value.mu entry.fst body depth ordinary)
+      (muKey depth ordinary) =
+    some selected
+⊢ finish smart ((some selected).getD (Value.mu entry.fst body depth ordinary)) = finish smart selected

@@ -1,0 +1,38 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-1.source.lean:33:16: error: Tactic `rfl` failed: The left-hand side
+  shape (input names (Sum.inr atom))
+is not definitionally equal to the right-hand side
+  Shape.map (Sum.elim id names) (inputShape (Sum.inr atom))
+
+case inr
+Atom Symbol Guard : Type
+names : Atom → Reference
+atom : Atom
+⊢ shape (input names (Sum.inr atom)) = Shape.map (Sum.elim id names) (inputShape (Sum.inr atom))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-1.source.lean:72:47: error: Application type mismatch: The argument
+  names
+has type
+  List (Unit ⊕ First)
+but is expected to have type
+  List (Unit ⊕ Reference)
+in the application
+  InternedProfileCallbackForm.usesArgument names
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-1.source.lean:71:68: error: Application type mismatch: The argument
+  function
+has type
+  First → Second
+but is expected to have type
+  First → Reference
+in the application
+  Sum.map id function
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-1.source.lean:81:77: error(lean.unknownIdentifier): Unknown identifier `uses_mapped`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-1.source.lean:80:80: error: unsolved goals
+Atom Symbol Guard : Type
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+⊢ InternedProfileCallbackForm.usesArgument
+      (List.map (Sum.map id (Sum.elim id firstNames))
+        (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr) (List.map inputShape inputs))).deep) =
+    InternedProfileCallbackForm.usesArgument
+      (List.map (Sum.map id (Sum.elim id secondNames))
+        (evaluate body ({ roots := [Sum.inl ()] } :: List.map (Shape.map Sum.inr) (List.map inputShape inputs))).deep)

@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentNativeNormalizedErasure
+
+set_option linter.all true
+set_option pp.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedErasure.strip_eraseSelf
+#print MicroCFTA.SourceCurrentNativeNormalizedErasure.strip_eraseSelf
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedErasure.strip_eraseSelf
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedErasure.finish_true_eq_erase
+#print MicroCFTA.SourceCurrentNativeNormalizedErasure.finish_true_eq_erase
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedErasure.finish_true_eq_erase
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedErasure.eraseSelf_deep
+#print MicroCFTA.SourceCurrentNativeNormalizedErasure.eraseSelf_deep
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedErasure.eraseSelf_deep
+

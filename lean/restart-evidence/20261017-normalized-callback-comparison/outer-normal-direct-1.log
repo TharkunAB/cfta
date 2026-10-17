@@ -1,0 +1,77 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/outer-normal-direct-1.source.lean:102:4: error: Type mismatch: After simplification, term
+  normal
+ has type
+  Normal before
+but is expected to have type
+  Normal after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/outer-normal-direct-1.source.lean:154:12: error: Type mismatch
+  walkAt g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) 0 values before
+    normal
+has type
+  Safe
+    (walk fuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) 0 values
+      before)
+but is expected to have type
+  Safe
+    (children fuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) values
+      before)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/outer-normal-direct-1.source.lean:162:10: error: Tactic `apply` failed: could not unify the conclusion of `bind
+  (children fuel g s r e p h m c n budget combined edge.children before) ?m.365
+  (childrenAt g s r e p h m c n budget combined edge.children before normal)`
+  Safe ((children fuel g s r e p h m c n budget combined edge.children before).bind ?m.365)
+with the goal
+  Safe
+    ((children fuel g s r e p h m c n budget combined edge.children
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := before.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+                      before.checked.operations).snd })
+            before.fourth before.merge)).bind
+      fun results after =>
+      Outcome.done (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).fst
+        (advance after (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).snd after.fourth after.merge))
+
+Note: The full type of `bind (children fuel g s r e p h m c n budget combined edge.children before) ?m.365
+  (childrenAt g s r e p h m c n budget combined edge.children before normal)` is
+  (∀ (value : List Node) (after : Caller width), Normal after → Safe (?m.365 value after)) →
+    Safe ((children fuel g s r e p h m c n budget combined edge.children before).bind ?m.365)
+
+case h_3
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel → NodeCallAt m ∧ NodeBodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt fuel
+childrenAt : ChildrenAt fuel
+g s r e p h m c n budget : Nat
+inherited : EqValue
+edge : Edge
+before : Caller width
+normal : Normal before
+x✝ : Except String (Option EqValue)
+combined : EqValue
+heq✝ :
+  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+    Except.ok (some combined)
+⊢ Safe
+    ((children fuel g s r e p h m c n budget combined edge.children
+          (advance before
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+              { heap := before.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+                      before.checked.operations).snd })
+            before.fourth before.merge)).bind
+      fun results after =>
+      Outcome.done (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).fst
+        (advance after (SourceCurrentAllocatedRawRebuild.edge edge results after.checked).snd after.fourth after.merge))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/outer-normal-direct-1.source.lean:204:10: error: Type mismatch: After simplification, term
+  normal
+ has type
+  Normal before
+but is expected to have type
+  Normal after

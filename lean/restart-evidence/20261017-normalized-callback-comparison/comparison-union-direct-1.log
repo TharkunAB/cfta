@@ -1,0 +1,74 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:56:30: error: Type mismatch: After simplification, term
+  ih
+ has type
+  (∀ (expression : Syntax Symbol Guard),
+      expression ∈ [] → Compared expression inputs atoms firstNames secondNames common) →
+    (∀ (atom : Atom),
+        atom ∈ atoms →
+          ¬Sum.inl (firstNames atom) ∈ SourceCurrentNativeNormalizationInputs.support (Syntax.union []) inputs) →
+      (∀ (atom : Atom),
+          atom ∈ atoms →
+            ¬Sum.inl (secondNames atom) ∈ SourceCurrentNativeNormalizationInputs.support (Syntax.union []) inputs) →
+        (∀ (atom : Atom),
+            atom ∈ atoms → ∀ (value : Value Symbol Guard), value ∈ [] → ¬firstNames atom ∈ deepNames value) →
+          stripMany (List.map firstNames atoms) (List.flatMap unionMembers []) =
+            stripMany (List.map secondNames atoms) (List.flatMap unionMembers [])
+but is expected to have type
+  stripMany (List.map firstNames atoms)
+      (List.filter (fun value => value.referenceOf != InternedBinderProtocol.NodeRef.ref (firstNames atom))
+        (List.flatMap unionMembers [])) =
+    stripMany (List.map secondNames atoms)
+      (List.filter (fun value => value.referenceOf != InternedBinderProtocol.NodeRef.ref (secondNames atom))
+        (List.flatMap unionMembers []))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:74:27: error: Ambiguous term
+  buildMany_verified
+Possible interpretations:
+  InternedNestedProvenance.buildMany_verified members (List.map (input firstNames) inputs) middleLeft
+    lcHead.normal.facts
+    lcHead.inputs : InternedNestedFacts.Verified middleLeft
+    (InternedNestedConstruction.buildMany members (List.map (input firstNames) inputs) middleLeft) Values
+  
+  InternedFreshOrdinaryFacts.buildMany_verified members (List.map (input firstNames) inputs) middleLeft
+    lcHead.normal.facts
+    lcHead.inputs : InternedNestedFacts.Verified middleLeft
+    (buildMany members (List.map (input firstNames) inputs) middleLeft) Values
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:75:28: error: Ambiguous term
+  buildMany_verified
+Possible interpretations:
+  InternedNestedProvenance.buildMany_verified members (List.map (input secondNames) inputs) middleRight
+    rcHead.normal.facts
+    rcHead.inputs : InternedNestedFacts.Verified middleRight
+    (InternedNestedConstruction.buildMany members (List.map (input secondNames) inputs) middleRight) Values
+  
+  InternedFreshOrdinaryFacts.buildMany_verified members (List.map (input secondNames) inputs) middleRight
+    rcHead.normal.facts
+    rcHead.inputs : InternedNestedFacts.Verified middleRight
+    (buildMany members (List.map (input secondNames) inputs) middleRight) Values
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:85:8: error: 'change' tactic failed, pattern
+  ?m.681 ∈
+    SourceCurrentNativeNormalizationInputs.support expression inputs ++
+      SourceCurrentNativeNormalizationInputs.support (Syntax.union members) inputs
+is not definitionally equal to target
+  Sum.inl (firstNames atom) ∈
+    SourceCurrentNativeNormalizationInputs.support (Syntax.union (expression :: members)) inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:91:8: error: 'change' tactic failed, pattern
+  ?m.721 ∈
+    SourceCurrentNativeNormalizationInputs.support expression inputs ++
+      SourceCurrentNativeNormalizationInputs.support (Syntax.union members) inputs
+is not definitionally equal to target
+  Sum.inl (secondNames atom) ∈
+    SourceCurrentNativeNormalizationInputs.support (Syntax.union (expression :: members)) inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:97:8: error: 'change' tactic failed, pattern
+  ?m.763 ∈
+    SourceCurrentNativeNormalizationInputs.support expression inputs ++
+      SourceCurrentNativeNormalizationInputs.support (Syntax.union members) inputs
+is not definitionally equal to target
+  Sum.inl (firstNames atom) ∈
+    SourceCurrentNativeNormalizationInputs.support (Syntax.union (expression :: members)) inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/comparison-union-direct-1.source.lean:103:8: error: 'change' tactic failed, pattern
+  ?m.805 ∈
+    SourceCurrentNativeNormalizationInputs.support expression inputs ++
+      SourceCurrentNativeNormalizationInputs.support (Syntax.union members) inputs
+is not definitionally equal to target
+  Sum.inl (secondNames atom) ∈
+    SourceCurrentNativeNormalizationInputs.support (Syntax.union (expression :: members)) inputs

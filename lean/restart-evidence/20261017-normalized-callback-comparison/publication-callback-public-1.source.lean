@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentNativeMuPublicationCallbacks
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.callback_raw
+#print MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.callback_raw
+#print axioms MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.callback_raw
+
+#check @MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.contexts
+#print MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.contexts
+#print axioms MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.contexts
+
+#check @MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.raw_callbacks
+#print MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.raw_callbacks
+#print axioms MicroCFTA.SourceCurrentNativeMuPublicationCallbacks.raw_callbacks
+

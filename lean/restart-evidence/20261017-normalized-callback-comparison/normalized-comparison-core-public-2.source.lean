@@ -1,0 +1,96 @@
+import MicroCFTA.SourceCurrentNativeNormalizedComparison
+import MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive
+
+set_option linter.all true
+set_option pp.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.inputShape
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.inputShape
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.inputShape
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.symbolic
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.symbolic
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.symbolic
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.instantiated
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.instantiated
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.instantiated
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.actual_deep
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.actual_deep
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.actual_deep
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.symbolic_free_support
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.symbolic_free_support
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.symbolic_free_support
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.deep_transport
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.deep_transport
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.deep_transport
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.free_root
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.free_root
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.free_root
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.live_root
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.live_root
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.live_root
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.varying_origin
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.varying_origin
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.varying_origin
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.active_roots
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.active_roots
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.active_roots
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.uses_same
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.uses_same
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.uses_same
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.binder_unused
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.binder_unused
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.binder_unused
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.probes_use
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.probes_use
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.probes_use
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.probes_same
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.probes_same
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.probes_same
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.retained_of_used
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.retained_of_used
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.retained_of_used
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.capture_support
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.capture_support
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.capture_support
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.extend_fresh
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.extend_fresh
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.extend_fresh
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparison.Compared
+#print MicroCFTA.SourceCurrentNativeNormalizedComparison.Compared
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparison.Compared
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.live_support
+#print MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.live_support
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.live_support
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.strip_absent
+#print MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.strip_absent
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.strip_absent
+
+#check @MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.inactive_compared
+#print MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.inactive_compared
+#print axioms MicroCFTA.SourceCurrentNativeNormalizedComparisonInactive.inactive_compared

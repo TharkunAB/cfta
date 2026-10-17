@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at proof checkpoint `c86f75c0`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `179b5a09`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -41,6 +41,7 @@ interned core remains the construction and transformation path. Read
 | --- | --- | --- |
 | Exact Sized queries | Exact accepted size classes, finite class evaluation, counts, size-major enumeration, retained row order, and both distinct-term rank/unrank inverses. The finite carrier comes from validated raw graph keys. | Concrete host and solver adapters and complete public pipeline composition. See [Sized contracts](notes-sized-finite-keys.md). |
 | Interned construction | Repaired closed syntax has a finite constructor execution. Syntax includes binders and unions. Actual construction and field histories derive physical and semantic entry facts. | Concrete lazy Haskell publication, interning, and runtime correspondence. The word Ordinary in older module names does not by itself exclude binders. |
+| Normalized source callbacks | Actual source publication histories derive the unused stored-Mu body-to-ordinary law, including earlier warm winners. Nested raw source calls have equal ordered stripped alternatives under the stated finite coverage, freshness, noDeep, and actual cache-history premises. | Native trace composition and concrete runtime correspondence. The common heap of closed_compared comes from actual closed source construction. This is not raw record equality or a termination theorem. |
 | Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
 | General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
@@ -80,19 +81,18 @@ origins. It assumes no future Required result. Read
 
 ## Remaining work
 
-1. Complete native row provenance through recursive callbacks and earlier
-   warm winners. Erasing an unused local from a returned callback record
-   removes later substitution dependence. It does not yet exchange the
-   original callback inputs or identify a warm body with its ordinary probe.
-   Original-input exchange is now constructed when the raw returned value
-   has no free changed name. Ordinary native rows retain indexed source
-   pairs, literal accepted conjunction guards, and ordered child requests.
-   Earlier native edge bodies and protected finishes now follow from actual
-   completed traces from empty tables. Warm edge demands recover that writer
-   without an Original-child restriction. Root erasure covers bare self and
-   ordinary merging. Actual probes derive freshness for live fixed captures.
-   The general nested source comparison and stored-Mu body-to-ordinary law
-   remain open. Read [callback normalization](notes-current-callback-normalization.md).
+1. Compose the new source comparison and stored-Mu law with actual recursive
+   native callback and row histories. Actual publication histories now prove
+   unused smart readback before keep-first selection. Earlier warm winners
+   retain the same law. General nested source comparison now identifies
+   ordered stripped alternatives under both actual raw calls and their
+   explicit initial and cache-history premises. No desired stored law is a
+   public input. closed_compared derives its common heap from actual closed
+   source construction. It does not supply a law for an arbitrary
+   SemanticHeap. Native rows already retain indexed source pairs, complete
+   accepted conjunction guards, ordered child requests, and actual earlier
+   edge writers. Compose those results on the same actual recursive trace.
+   Read [normalized source comparison](notes-current-normalized-callback-comparison.md).
 2. Derive progress for actual outer-node children after parent returns and
    inherited combine/descent. The measure must respect physical memo keys,
    or prove that a fresh request differs from every active owner. Ordinary
@@ -132,7 +132,7 @@ the failure, reproducer, affected paths, commit, validation, and merge status.
 It also records the earlier negative-bound and named-measure repairs.
 The historical failure reports retain their original bytes and source dates.
 
-The last completed full pinned Audit passes 3063 jobs and 67649 dependency
+The last completed full pinned Audit passes 3080 jobs and 67877 dependency
 checks. Only propext, Classical.choice, and Quot.sound occur. The unchanged
 Haskell source has a strict Nix all-component build, 798 examples plus golden,
 Fourmolu, and Cabal-gild validation. These checks are component evidence.
@@ -141,11 +141,11 @@ The Lean Audit and imported status theorem checks were run for this
 checkpoint. The unchanged Haskell source reuses its earlier validation.
 
 The latest completed audit evidence is in
-`restart-evidence/20261017-callback-normalization/`. It includes strict source,
+`restart-evidence/20261017-normalized-callback-comparison/`. It includes strict source,
 public signature, kernel axiom, constructed integration, and preservation
 checks. Earlier evidence retains selected recursive endpoints,
 unequal-depth paths, failed height bounds, and inherited path-depth growth.
-Actual union-normality transport now reaches Local.reduce and Parent.edge
+Actual union-normality transport now reaches all eight bounded mutual outer workers
 on every stopping outcome from the initial invariant alone. It does not
 construct successful outer completion. Finite observations do not prove
 general progress. No new Haskell defect

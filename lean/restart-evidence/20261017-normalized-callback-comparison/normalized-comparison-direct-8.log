@@ -1,0 +1,61 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:293:14: error: unsolved goals
+case inl.inr
+Atom : Type
+bound : Unit
+val✝ : Reference ⊕ Atom
+same :
+  Sum.inr (Sum.inl bound) =
+    match Sum.inr val✝ with
+    | Sum.inl bound => Sum.inr (Sum.inl bound)
+    | Sum.inr (Sum.inl name) => Sum.inl name
+    | Sum.inr (Sum.inr atom) => Sum.inr (Sum.inr atom)
+⊢ False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:296:64: warning: This simp argument is unused:
+  liftName
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:318:18: error: don't know how to synthesize implicit argument `α`
+  @Sum.elim (?m.56 body inputs names argument outer localFresh) Atom Reference (fun x => argument) names atom
+context:
+Atom Symbol Guard : Type
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+names : Atom → Reference
+argument : Reference
+outer :
+  ∀ (atom : Atom),
+    ¬Sum.inl (names atom) ∈ SourceCurrentNativeNormalizationInputs.support (Syntax.binder true body) inputs
+localFresh : ¬Sum.inl argument ∈ SourceCurrentNativeNormalizationInputs.support (Syntax.binder true body) inputs
+atom : ?m.56 body inputs names argument outer localFresh ⊕ Atom
+⊢ Type ?u.42
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:318:32: error(lean.inferBinderTypeFailed): Failed to infer binder type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:318:6: error(lean.inferBinderTypeFailed): Failed to infer type of binder `atom`
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:323:73: error: Application type mismatch: The argument
+  member
+has type
+  ?m.60 body inputs names argument outer localFresh (Sum.inl token) ∈
+    SourceCurrentNativeNormalizationInputs.support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+but is expected to have type
+  liftName (Sum.inr (Sum.inl argument)) ∈
+    SourceCurrentNativeNormalizationInputs.support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+in the application
+  (capture_support body inputs (Sum.inl argument)).mp member
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/normalized-comparison-direct-8.source.lean:325:77: error: Application type mismatch: The argument
+  member
+has type
+  ?m.60 body inputs names argument outer localFresh (Sum.inr atom) ∈
+    SourceCurrentNativeNormalizationInputs.support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+but is expected to have type
+  liftName (Sum.inr (Sum.inl (names atom))) ∈
+    SourceCurrentNativeNormalizationInputs.support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+in the application
+  (capture_support body inputs (Sum.inl (names atom))).mp member

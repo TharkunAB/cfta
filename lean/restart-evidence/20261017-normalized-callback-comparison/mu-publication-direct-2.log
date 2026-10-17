@@ -1,0 +1,488 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-normalized-callback-comparison/mu-publication-direct-2.source.lean:165:0: error: Cannot derive unfold equation MicroCFTA.SourceCurrentNativeMuPublication.build_history._mutual.eq_def
+  failed to finish proof for equational theorem for `build_history._mutual`
+    Tactic `rfl` failed: equality lhs
+      PSum.rec
+        (fun val =>
+          PSigma.rec
+            (fun fst snd =>
+              PSigma.rec
+                (fun fst_1 snd =>
+                  PSigma.rec
+                    (fun fst_2 snd =>
+                      Syntax.rec (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                        (fun index h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                        (fun edges edges_ih h =>
+                          ⋯ ▸
+                            ⋯.mpr
+                              (bind_history fst_2 (buildEdges edges fst_1 fst_2)
+                                (fun values next => work (makeNode values) next)
+                                (build_history._mutual (PSum.inr (PSum.inr ⟨edges, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                fun values after x => History.retain after (work (makeNode values) after).state ⋯))
+                        (fun members members_ih h =>
+                          ⋯ ▸
+                            ⋯.mpr
+                              (bind_history fst_2 (buildMany members fst_1 fst_2)
+                                (fun values next => work (makeUnion values) next)
+                                (build_history._mutual (PSum.inr (PSum.inl ⟨members, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                fun values after x => History.retain after (work (makeUnion values) after).state ⋯))
+                        (fun smart body body_ih h =>
+                          ⋯ ▸
+                            ⋯.mpr
+                              (binder_history smart body fst_1 fst_2 snd fun name current currentContext argument =>
+                                bind_history current (build body (Value.reference name :: fst_1) current)
+                                  (fun value after => work (withoutSelfReference name value) after)
+                                  (build_history._mutual
+                                    (PSum.inl ⟨body, ⟨Value.reference name :: fst_1, ⟨current, ⋯⟩⟩⟩))
+                                  fun value after x =>
+                                  History.retain after (work (withoutSelfReference name value) after).state ⋯))
+                        (fun symbol constraint children children_ih => PUnit.unit) PUnit.unit
+                        (fun head tail head_ih tail_ih => PUnit.unit) PUnit.unit
+                        (fun head tail head_ih tail_ih => PUnit.unit) fst ⋯)
+                    snd)
+                snd)
+            val)
+        (fun val =>
+          PSum.rec
+            (fun val =>
+              PSigma.rec
+                (fun fst snd =>
+                  PSigma.rec
+                    (fun fst_1 snd =>
+                      PSigma.rec
+                        (fun fst_2 snd =>
+                          List.rec (motive := fun t => fst = t → History fst_2 (buildMany fst fst_1 fst_2).state)
+                            (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                            (fun head tail tail_ih h =>
+                              ⋯ ▸
+                                ⋯.mpr
+                                  (bind_history fst_2 (build head fst_1 fst_2)
+                                    (fun value next =>
+                                      (buildMany tail fst_1 next).bind fun values final =>
+                                        Outcome.done (value :: values) final)
+                                    (build_history._mutual (PSum.inl ⟨head, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩))
+                                    fun value after returned =>
+                                    bind_history after (buildMany tail fst_1 after)
+                                      (fun values final => Outcome.done (value :: values) final)
+                                      (build_history._mutual (PSum.inr (PSum.inl ⟨tail, ⟨fst_1, ⟨after, ⋯⟩⟩⟩)))
+                                      fun x final x_1 => History.refl final))
+                            fst ⋯)
+                        snd)
+                    snd)
+                val)
+            (fun val =>
+              PSigma.rec
+                (fun fst snd =>
+                  PSigma.rec
+                    (fun fst_1 snd =>
+                      PSigma.rec
+                        (fun fst_2 snd =>
+                          List.rec (motive := fun t => fst = t → History fst_2 (buildEdges fst fst_1 fst_2).state)
+                            (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                            (fun head tail tail_ih h =>
+                              ⋯ ▸
+                                EdgeSyntax.rec PUnit.unit (fun index => PUnit.unit) (fun edges edges_ih => PUnit.unit)
+                                  (fun members members_ih => PUnit.unit) (fun smart body body_ih => PUnit.unit)
+                                  (fun symbol constraint children children_ih x h =>
+                                    ⋯ ▸
+                                      ⋯.mpr
+                                        (bind_history fst_2 (buildMany children fst_1 fst_2)
+                                          (fun values next =>
+                                            (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+                                              (buildEdges tail fst_1 afterEdge).bind fun edges final =>
+                                                Outcome.done (edge :: edges) final)
+                                          (x (PSum.inr (PSum.inl ⟨children, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)) ⋯)
+                                          fun values after returned =>
+                                          id
+                                            ((History.retain after (run (makeEdge symbol constraint values) after).snd
+                                                  ⋯).trans
+                                              (bind_history (run (makeEdge symbol constraint values) after).snd
+                                                (buildEdges tail fst_1
+                                                  (run (makeEdge symbol constraint values) after).snd)
+                                                (fun edges final =>
+                                                  Outcome.done
+                                                    ((run (makeEdge symbol constraint values) after).fst :: edges)
+                                                    final)
+                                                (x
+                                                  (PSum.inr
+                                                    (PSum.inr
+                                                      ⟨tail,
+                                                        ⟨fst_1,
+                                                          ⟨(run (makeEdge symbol constraint values) after).snd, ⋯⟩⟩⟩))
+                                                  ⋯)
+                                                fun x final x_1 => History.refl final))))
+                                  PUnit.unit (fun head_1 tail_1 head_ih tail_ih => PUnit.unit) PUnit.unit
+                                  (fun head tail head_ih tail_ih => PUnit.unit) head
+                                  (fun y h => build_history._mutual y) ⋯)
+                            fst ⋯)
+                        snd)
+                    snd)
+                val)
+            val)
+        x✝
+    is not definitionally equal to rhs
+      PSum.rec
+        (fun val =>
+          PSigma.rec
+            (fun fst snd =>
+              PSigma.rec
+                (fun fst_1 snd =>
+                  PSigma.rec
+                    (fun fst_2 snd =>
+                      Syntax.rec (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                        (fun index h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                        (fun edges edges_ih h =>
+                          ⋯ ▸
+                            ⋯.mpr
+                              (bind_history fst_2 (buildEdges edges fst_1 fst_2)
+                                (fun values next => work (makeNode values) next)
+                                (build_history._mutual (PSum.inr (PSum.inr ⟨edges, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                fun values after x => History.retain after (work (makeNode values) after).state ⋯))
+                        (fun members members_ih h =>
+                          ⋯ ▸
+                            ⋯.mpr
+                              (bind_history fst_2 (buildMany members fst_1 fst_2)
+                                (fun values next => work (makeUnion values) next)
+                                (build_history._mutual (PSum.inr (PSum.inl ⟨members, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                fun values after x => History.retain after (work (makeUnion values) after).state ⋯))
+                        (fun smart body body_ih h =>
+                          ⋯ ▸
+                            ⋯.mpr
+                              (binder_history smart body fst_1 fst_2 snd fun name current currentContext argument =>
+                                bind_history current (build body (Value.reference name :: fst_1) current)
+                                  (fun value after => work (withoutSelfReference name value) after)
+                                  (build_history._mutual
+                                    (PSum.inl ⟨body, ⟨Value.reference name :: fst_1, ⟨current, ⋯⟩⟩⟩))
+                                  fun value after x =>
+                                  History.retain after (work (withoutSelfReference name value) after).state ⋯))
+                        (fun symbol constraint children children_ih => PUnit.unit) PUnit.unit
+                        (fun head tail head_ih tail_ih => PUnit.unit) PUnit.unit
+                        (fun head tail head_ih tail_ih => PUnit.unit) fst ⋯)
+                    snd)
+                snd)
+            val)
+        (fun val =>
+          PSum.rec
+            (fun val =>
+              PSigma.rec
+                (fun fst snd =>
+                  PSigma.rec
+                    (fun fst_1 snd =>
+                      PSigma.rec
+                        (fun fst_2 snd =>
+                          List.rec (motive := fun t => fst = t → History fst_2 (buildMany fst fst_1 fst_2).state)
+                            (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                            (fun head tail tail_ih h =>
+                              ⋯ ▸
+                                ⋯.mpr
+                                  (bind_history fst_2 (build head fst_1 fst_2)
+                                    (fun value next =>
+                                      (buildMany tail fst_1 next).bind fun values final =>
+                                        Outcome.done (value :: values) final)
+                                    (build_history._mutual (PSum.inl ⟨head, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩))
+                                    fun value after returned =>
+                                    bind_history after (buildMany tail fst_1 after)
+                                      (fun values final => Outcome.done (value :: values) final)
+                                      (build_history._mutual (PSum.inr (PSum.inl ⟨tail, ⟨fst_1, ⟨after, ⋯⟩⟩⟩)))
+                                      fun x final x_1 => History.refl final))
+                            fst ⋯)
+                        snd)
+                    snd)
+                val)
+            (fun val =>
+              PSigma.rec
+                (fun fst snd =>
+                  PSigma.rec
+                    (fun fst_1 snd =>
+                      PSigma.rec
+                        (fun fst_2 snd =>
+                          List.rec (motive := fun t => fst = t → History fst_2 (buildEdges fst fst_1 fst_2).state)
+                            (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                            (fun head tail tail_ih h =>
+                              ⋯ ▸
+                                EdgeSyntax.rec PUnit.unit (fun index => PUnit.unit) (fun edges edges_ih => PUnit.unit)
+                                  (fun members members_ih => PUnit.unit) (fun smart body body_ih => PUnit.unit)
+                                  (fun symbol constraint children children_ih h =>
+                                    ⋯ ▸
+                                      ⋯.mpr
+                                        (bind_history fst_2 (buildMany children fst_1 fst_2)
+                                          (fun values next =>
+                                            (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+                                              (buildEdges tail fst_1 afterEdge).bind fun edges final =>
+                                                Outcome.done (edge :: edges) final)
+                                          (build_history._mutual
+                                            (PSum.inr (PSum.inl ⟨children, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                          fun values after returned =>
+                                          id
+                                            ((History.retain after (run (makeEdge symbol constraint values) after).snd
+                                                  ⋯).trans
+                                              (bind_history (run (makeEdge symbol constraint values) after).snd
+                                                (buildEdges tail fst_1
+                                                  (run (makeEdge symbol constraint values) after).snd)
+                                                (fun edges final =>
+                                                  Outcome.done
+                                                    ((run (makeEdge symbol constraint values) after).fst :: edges)
+                                                    final)
+                                                (build_history._mutual
+                                                  (PSum.inr
+                                                    (PSum.inr
+                                                      ⟨tail,
+                                                        ⟨fst_1,
+                                                          ⟨(run (makeEdge symbol constraint values) after).snd, ⋯⟩⟩⟩)))
+                                                fun x final x_1 => History.refl final))))
+                                  PUnit.unit (fun head_1 tail_1 head_ih tail_ih => PUnit.unit) PUnit.unit
+                                  (fun head tail head_ih tail_ih => PUnit.unit) head ⋯)
+                            fst ⋯)
+                        snd)
+                    snd)
+                val)
+            val)
+        x✝
+    
+    Symbol Guard : Type
+    inst✝ : DecidableEq (EdgeKey Symbol Guard)
+    x✝ :
+      (_ : Syntax Symbol Guard) ×'
+          (environment : List (Value Symbol Guard)) ×'
+            (state : InternedConstructorTemplates.State Symbol Guard) ×' Context state environment ⊕'
+        (_ : List (Syntax Symbol Guard)) ×'
+            (environment : List (Value Symbol Guard)) ×'
+              (state : InternedConstructorTemplates.State Symbol Guard) ×' Context state environment ⊕'
+          (_ : List (EdgeSyntax Symbol Guard)) ×'
+            (environment : List (Value Symbol Guard)) ×'
+              (state : InternedConstructorTemplates.State Symbol Guard) ×' Context state environment
+    ⊢ PSum.rec
+          (fun val =>
+            PSigma.rec
+              (fun fst snd =>
+                PSigma.rec
+                  (fun fst_1 snd =>
+                    PSigma.rec
+                      (fun fst_2 snd =>
+                        Syntax.rec (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                          (fun index h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                          (fun edges edges_ih h =>
+                            ⋯ ▸
+                              ⋯.mpr
+                                (bind_history fst_2 (buildEdges edges fst_1 fst_2)
+                                  (fun values next => work (makeNode values) next)
+                                  (build_history._mutual (PSum.inr (PSum.inr ⟨edges, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                  fun values after x => History.retain after (work (makeNode values) after).state ⋯))
+                          (fun members members_ih h =>
+                            ⋯ ▸
+                              ⋯.mpr
+                                (bind_history fst_2 (buildMany members fst_1 fst_2)
+                                  (fun values next => work (makeUnion values) next)
+                                  (build_history._mutual (PSum.inr (PSum.inl ⟨members, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                  fun values after x => History.retain after (work (makeUnion values) after).state ⋯))
+                          (fun smart body body_ih h =>
+                            ⋯ ▸
+                              ⋯.mpr
+                                (binder_history smart body fst_1 fst_2 snd fun name current currentContext argument =>
+                                  bind_history current (build body (Value.reference name :: fst_1) current)
+                                    (fun value after => work (withoutSelfReference name value) after)
+                                    (build_history._mutual
+                                      (PSum.inl ⟨body, ⟨Value.reference name :: fst_1, ⟨current, ⋯⟩⟩⟩))
+                                    fun value after x =>
+                                    History.retain after (work (withoutSelfReference name value) after).state ⋯))
+                          (fun symbol constraint children children_ih => PUnit.unit) PUnit.unit
+                          (fun head tail head_ih tail_ih => PUnit.unit) PUnit.unit
+                          (fun head tail head_ih tail_ih => PUnit.unit) fst ⋯)
+                      snd)
+                  snd)
+              val)
+          (fun val =>
+            PSum.rec
+              (fun val =>
+                PSigma.rec
+                  (fun fst snd =>
+                    PSigma.rec
+                      (fun fst_1 snd =>
+                        PSigma.rec
+                          (fun fst_2 snd =>
+                            List.rec (motive := fun t => fst = t → History fst_2 (buildMany fst fst_1 fst_2).state)
+                              (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                              (fun head tail tail_ih h =>
+                                ⋯ ▸
+                                  ⋯.mpr
+                                    (bind_history fst_2 (build head fst_1 fst_2)
+                                      (fun value next =>
+                                        (buildMany tail fst_1 next).bind fun values final =>
+                                          Outcome.done (value :: values) final)
+                                      (build_history._mutual (PSum.inl ⟨head, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩))
+                                      fun value after returned =>
+                                      bind_history after (buildMany tail fst_1 after)
+                                        (fun values final => Outcome.done (value :: values) final)
+                                        (build_history._mutual (PSum.inr (PSum.inl ⟨tail, ⟨fst_1, ⟨after, ⋯⟩⟩⟩)))
+                                        fun x final x_1 => History.refl final))
+                              fst ⋯)
+                          snd)
+                      snd)
+                  val)
+              (fun val =>
+                PSigma.rec
+                  (fun fst snd =>
+                    PSigma.rec
+                      (fun fst_1 snd =>
+                        PSigma.rec
+                          (fun fst_2 snd =>
+                            List.rec (motive := fun t => fst = t → History fst_2 (buildEdges fst fst_1 fst_2).state)
+                              (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                              (fun head tail tail_ih h =>
+                                ⋯ ▸
+                                  EdgeSyntax.rec PUnit.unit (fun index => PUnit.unit) (fun edges edges_ih => PUnit.unit)
+                                    (fun members members_ih => PUnit.unit) (fun smart body body_ih => PUnit.unit)
+                                    (fun symbol constraint children children_ih x h =>
+                                      ⋯ ▸
+                                        ⋯.mpr
+                                          (bind_history fst_2 (buildMany children fst_1 fst_2)
+                                            (fun values next =>
+                                              (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+                                                (buildEdges tail fst_1 afterEdge).bind fun edges final =>
+                                                  Outcome.done (edge :: edges) final)
+                                            (x (PSum.inr (PSum.inl ⟨children, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)) ⋯)
+                                            fun values after returned =>
+                                            id
+                                              ((History.retain after (run (makeEdge symbol constraint values) after).snd
+                                                    ⋯).trans
+                                                (bind_history (run (makeEdge symbol constraint values) after).snd
+                                                  (buildEdges tail fst_1
+                                                    (run (makeEdge symbol constraint values) after).snd)
+                                                  (fun edges final =>
+                                                    Outcome.done
+                                                      ((run (makeEdge symbol constraint values) after).fst :: edges)
+                                                      final)
+                                                  (x
+                                                    (PSum.inr
+                                                      (PSum.inr
+                                                        ⟨tail,
+                                                          ⟨fst_1,
+                                                            ⟨(run (makeEdge symbol constraint values) after).snd, ⋯⟩⟩⟩))
+                                                    ⋯)
+                                                  fun x final x_1 => History.refl final))))
+                                    PUnit.unit (fun head_1 tail_1 head_ih tail_ih => PUnit.unit) PUnit.unit
+                                    (fun head tail head_ih tail_ih => PUnit.unit) head
+                                    (fun y h => build_history._mutual y) ⋯)
+                              fst ⋯)
+                          snd)
+                      snd)
+                  val)
+              val)
+          x✝ =
+        PSum.rec
+          (fun val =>
+            PSigma.rec
+              (fun fst snd =>
+                PSigma.rec
+                  (fun fst_1 snd =>
+                    PSigma.rec
+                      (fun fst_2 snd =>
+                        Syntax.rec (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                          (fun index h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                          (fun edges edges_ih h =>
+                            ⋯ ▸
+                              ⋯.mpr
+                                (bind_history fst_2 (buildEdges edges fst_1 fst_2)
+                                  (fun values next => work (makeNode values) next)
+                                  (build_history._mutual (PSum.inr (PSum.inr ⟨edges, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                  fun values after x => History.retain after (work (makeNode values) after).state ⋯))
+                          (fun members members_ih h =>
+                            ⋯ ▸
+                              ⋯.mpr
+                                (bind_history fst_2 (buildMany members fst_1 fst_2)
+                                  (fun values next => work (makeUnion values) next)
+                                  (build_history._mutual (PSum.inr (PSum.inl ⟨members, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                  fun values after x => History.retain after (work (makeUnion values) after).state ⋯))
+                          (fun smart body body_ih h =>
+                            ⋯ ▸
+                              ⋯.mpr
+                                (binder_history smart body fst_1 fst_2 snd fun name current currentContext argument =>
+                                  bind_history current (build body (Value.reference name :: fst_1) current)
+                                    (fun value after => work (withoutSelfReference name value) after)
+                                    (build_history._mutual
+                                      (PSum.inl ⟨body, ⟨Value.reference name :: fst_1, ⟨current, ⋯⟩⟩⟩))
+                                    fun value after x =>
+                                    History.retain after (work (withoutSelfReference name value) after).state ⋯))
+                          (fun symbol constraint children children_ih => PUnit.unit) PUnit.unit
+                          (fun head tail head_ih tail_ih => PUnit.unit) PUnit.unit
+                          (fun head tail head_ih tail_ih => PUnit.unit) fst ⋯)
+                      snd)
+                  snd)
+              val)
+          (fun val =>
+            PSum.rec
+              (fun val =>
+                PSigma.rec
+                  (fun fst snd =>
+                    PSigma.rec
+                      (fun fst_1 snd =>
+                        PSigma.rec
+                          (fun fst_2 snd =>
+                            List.rec (motive := fun t => fst = t → History fst_2 (buildMany fst fst_1 fst_2).state)
+                              (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                              (fun head tail tail_ih h =>
+                                ⋯ ▸
+                                  ⋯.mpr
+                                    (bind_history fst_2 (build head fst_1 fst_2)
+                                      (fun value next =>
+                                        (buildMany tail fst_1 next).bind fun values final =>
+                                          Outcome.done (value :: values) final)
+                                      (build_history._mutual (PSum.inl ⟨head, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩))
+                                      fun value after returned =>
+                                      bind_history after (buildMany tail fst_1 after)
+                                        (fun values final => Outcome.done (value :: values) final)
+                                        (build_history._mutual (PSum.inr (PSum.inl ⟨tail, ⟨fst_1, ⟨after, ⋯⟩⟩⟩)))
+                                        fun x final x_1 => History.refl final))
+                              fst ⋯)
+                          snd)
+                      snd)
+                  val)
+              (fun val =>
+                PSigma.rec
+                  (fun fst snd =>
+                    PSigma.rec
+                      (fun fst_1 snd =>
+                        PSigma.rec
+                          (fun fst_2 snd =>
+                            List.rec (motive := fun t => fst = t → History fst_2 (buildEdges fst fst_1 fst_2).state)
+                              (fun h => ⋯ ▸ ⋯.mpr (History.refl fst_2))
+                              (fun head tail tail_ih h =>
+                                ⋯ ▸
+                                  EdgeSyntax.rec PUnit.unit (fun index => PUnit.unit) (fun edges edges_ih => PUnit.unit)
+                                    (fun members members_ih => PUnit.unit) (fun smart body body_ih => PUnit.unit)
+                                    (fun symbol constraint children children_ih h =>
+                                      ⋯ ▸
+                                        ⋯.mpr
+                                          (bind_history fst_2 (buildMany children fst_1 fst_2)
+                                            (fun values next =>
+                                              (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+                                                (buildEdges tail fst_1 afterEdge).bind fun edges final =>
+                                                  Outcome.done (edge :: edges) final)
+                                            (build_history._mutual
+                                              (PSum.inr (PSum.inl ⟨children, ⟨fst_1, ⟨fst_2, snd⟩⟩⟩)))
+                                            fun values after returned =>
+                                            id
+                                              ((History.retain after (run (makeEdge symbol constraint values) after).snd
+                                                    ⋯).trans
+                                                (bind_history (run (makeEdge symbol constraint values) after).snd
+                                                  (buildEdges tail fst_1
+                                                    (run (makeEdge symbol constraint values) after).snd)
+                                                  (fun edges final =>
+                                                    Outcome.done
+                                                      ((run (makeEdge symbol constraint values) after).fst :: edges)
+                                                      final)
+                                                  (build_history._mutual
+                                                    (PSum.inr
+                                                      (PSum.inr
+                                                        ⟨tail,
+                                                          ⟨fst_1,
+                                                            ⟨(run (makeEdge symbol constraint values) after).snd,
+                                                              ⋯⟩⟩⟩)))
+                                                  fun x final x_1 => History.refl final))))
+                                    PUnit.unit (fun head_1 tail_1 head_ih tail_ih => PUnit.unit) PUnit.unit
+                                    (fun head tail head_ih tail_ih => PUnit.unit) head ⋯)
+                              fst ⋯)
+                          snd)
+                      snd)
+                  val)
+              val)
+          x✝

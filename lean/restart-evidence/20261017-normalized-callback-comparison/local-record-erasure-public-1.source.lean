@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentNativeLocalRecordErasure
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeLocalRecordErasure.root_reference
+#print MicroCFTA.SourceCurrentNativeLocalRecordErasure.root_reference
+#print axioms MicroCFTA.SourceCurrentNativeLocalRecordErasure.root_reference
+
+#check @MicroCFTA.SourceCurrentNativeLocalRecordErasure.singleton
+#print MicroCFTA.SourceCurrentNativeLocalRecordErasure.singleton
+#print axioms MicroCFTA.SourceCurrentNativeLocalRecordErasure.singleton
+
+#check @MicroCFTA.SourceCurrentNativeLocalRecordErasure.request
+#print MicroCFTA.SourceCurrentNativeLocalRecordErasure.request
+#print axioms MicroCFTA.SourceCurrentNativeLocalRecordErasure.request
+
+#check @MicroCFTA.SourceCurrentNativeLocalRecordErasure.same
+#print MicroCFTA.SourceCurrentNativeLocalRecordErasure.same
+#print axioms MicroCFTA.SourceCurrentNativeLocalRecordErasure.same
+

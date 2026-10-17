@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentNativeStrippedAlternatives
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeStrippedAlternatives.stripMany
+#print MicroCFTA.SourceCurrentNativeStrippedAlternatives.stripMany
+#print axioms MicroCFTA.SourceCurrentNativeStrippedAlternatives.stripMany
+
+#check @MicroCFTA.SourceCurrentNativeStrippedAlternatives.strip_distinct
+#print MicroCFTA.SourceCurrentNativeStrippedAlternatives.strip_distinct
+#print axioms MicroCFTA.SourceCurrentNativeStrippedAlternatives.strip_distinct
+
+#check @MicroCFTA.SourceCurrentNativeStrippedAlternatives.union_members
+#print MicroCFTA.SourceCurrentNativeStrippedAlternatives.union_members
+#print axioms MicroCFTA.SourceCurrentNativeStrippedAlternatives.union_members
+
+#check @MicroCFTA.SourceCurrentNativeStrippedAlternatives.union_stripped
+#print MicroCFTA.SourceCurrentNativeStrippedAlternatives.union_stripped
+#print axioms MicroCFTA.SourceCurrentNativeStrippedAlternatives.union_stripped
+

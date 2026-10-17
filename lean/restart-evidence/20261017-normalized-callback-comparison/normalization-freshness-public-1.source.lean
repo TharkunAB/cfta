@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentNativeNormalizationFreshness
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationFreshness.support_origin
+#print MicroCFTA.SourceCurrentNativeNormalizationFreshness.support_origin
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationFreshness.support_origin
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationFreshness.callback_name
+#print MicroCFTA.SourceCurrentNativeNormalizationFreshness.callback_name
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationFreshness.callback_name
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationFreshness.ordinary
+#print MicroCFTA.SourceCurrentNativeNormalizationFreshness.ordinary
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationFreshness.ordinary
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationFreshness.reserved
+#print MicroCFTA.SourceCurrentNativeNormalizationFreshness.reserved
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationFreshness.reserved
+
