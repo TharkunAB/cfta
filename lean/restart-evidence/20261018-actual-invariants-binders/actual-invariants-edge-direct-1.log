@@ -1,0 +1,38 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-edge-direct-1.source.lean:322:26: error: Application type mismatch: The argument
+  one
+has type
+  SourceEqualityNativeDemand.body request Code.pure state =
+    Outcome.yielded (Control.code code) { native := state.native, operations := operations }
+but is expected to have type
+  step ?m.95 ?m.97 = Outcome.yielded ?m.96 ?m.98
+in the application
+  step_after one
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-edge-direct-1.source.lean:318:127: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+count : Nat
+ih : ∀ (smaller : Nat), smaller < count + 1 → CodeAt smaller
+request : EdgeRequest Symbol Guard
+state after : Checked width
+value : EdgeValue Symbol Guard
+actual :
+  SourceEqualityNativeDemand.Steps (count + 1) (Control.edgeBody request Code.pure) state
+    (Control.code (Code.pure value)) after
+good : Good state
+ready : EdgeReady state.native.machine request
+code : Code Symbol Guard (EdgeValue Symbol Guard)
+operations : Operations
+one :
+  SourceEqualityNativeDemand.body request Code.pure state =
+    Outcome.yielded (Control.code code) { native := state.native, operations := operations }
+valid : SourceEqualityConstraintMemoAllocation.Valid operations
+growth : SourceEqualityConstraintMemoAllocation.Grows state.operations operations
+retained : Fields operations state.native.machine.heap
+fields :
+  SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code code)
+    { native := state.native, operations := operations }
+⊢ Good after ∧
+    Extension state.native.machine after.native.machine ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap after.native.machine.heap ∧
+        EdgeResident after.native.machine.heap value

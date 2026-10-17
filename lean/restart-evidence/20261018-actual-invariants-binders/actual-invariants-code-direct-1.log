@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-code-direct-1.source.lean:322:26: error: Application type mismatch: The argument
+  one
+has type
+  SourceEqualityNativeDemand.body request Code.pure state =
+    Outcome.yielded (Control.code code) { native := state.native, operations := operations }
+but is expected to have type
+  step ?m.95 ?m.97 = Outcome.yielded ?m.96 ?m.98
+in the application
+  step_after one
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-code-direct-1.source.lean:318:127: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+count : Nat
+ih : ∀ (smaller : Nat), smaller < count + 1 → CodeAt smaller
+request : EdgeRequest Symbol Guard
+state after : Checked width
+value : EdgeValue Symbol Guard
+actual :
+  SourceEqualityNativeDemand.Steps (count + 1) (Control.edgeBody request Code.pure) state
+    (Control.code (Code.pure value)) after
+good : Good state
+ready : EdgeReady state.native.machine request
+code : Code Symbol Guard (EdgeValue Symbol Guard)
+operations : Operations
+one :
+  SourceEqualityNativeDemand.body request Code.pure state =
+    Outcome.yielded (Control.code code) { native := state.native, operations := operations }
+valid : SourceEqualityConstraintMemoAllocation.Valid operations
+growth : SourceEqualityConstraintMemoAllocation.Grows state.operations operations
+retained : Fields operations state.native.machine.heap
+fields :
+  SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code code)
+    { native := state.native, operations := operations }
+⊢ Good after ∧
+    Extension state.native.machine after.native.machine ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap after.native.machine.heap ∧
+        EdgeResident after.native.machine.heap value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-code-direct-1.source.lean:456:113: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+count : Nat
+ih : ∀ (smaller : Nat), smaller < count + 1 → CodeAt smaller
+bodyIH : ∀ (smaller : Nat), smaller < count + 1 → BodyAt smaller
+A : Type
+state after : Checked width
+value : A
+post : Machine Symbol Guard → A → Prop
+good : Good state
+pair : Nat × Nat
+input : Value Symbol Guard
+next : Value Symbol Guard → Code Symbol Guard A
+actual :
+  SourceEqualityNativeDemand.Steps (count + 1) (Control.code (Code.optionalBinder pair input next)) state
+    (Control.code (Code.pure value)) after
+safe : Safe (Code.optionalBinder pair input next) state.native.machine post
+operands : Operands (Code.optionalBinder pair input next) state.native.machine
+fields : CodeFields state.operations (Code.optionalBinder pair input next)
+retained :
+  Fields state.operations (SourceRecursiveIntersectionMaybeMu.maybeMu pair input state.native.machine.heap).state
+kept :
+  SourceEqualityRequiredCache.Keeps state.native.machine.heap
+    (SourceRecursiveIntersectionMaybeMu.maybeMu pair input state.native.machine.heap).state
+result : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  SourceRecursiveIntersectionMaybeMu.maybeMu pair input state.native.machine.heap =
+    InternedNestedConstruction.Outcome.done result heap
+machine : Machine Symbol Guard :=
+  let __src := state.native.machine;
+  { heap := heap, domains := __src.domains }
+middle : Checked width := { native := advance state.native machine, operations := state.operations }
+done :
+  construction (SourceRecursiveIntersectionMaybeMu.maybeMu pair input state.native.machine.heap) state.native.machine =
+    Result.done result machine
+⊢ Outcome.yielded (Control.code (next result))
+      { native := advance state.native { heap := heap, domains := state.native.machine.domains },
+        operations := state.operations } =
+    Outcome.yielded (Control.code (next result)) middle

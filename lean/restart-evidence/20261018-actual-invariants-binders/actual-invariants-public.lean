@@ -1,0 +1,78 @@
+import MicroCFTA.SourceCurrentNativeOperationInvariants
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 10000
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Cells
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Cells
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Cells
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.mk
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.mk
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.mk
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.machine
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.machine
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.machine
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.nodes
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.nodes
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.nodes
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.edges
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.edges
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Cells.edges
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good.mk
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good.mk
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good.mk
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good.native
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good.native
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good.native
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good.heap
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good.heap
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good.heap
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good.operations
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good.operations
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good.operations
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good.fields
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good.fields
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good.fields
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.Good.of_checked
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.Good.of_checked
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.Good.of_checked
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.code
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.code
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.code
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.initial
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.initial
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.initial
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.node
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.node
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.node
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.edge
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.edge
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.edge
+
+#check @MicroCFTA.SourceCurrentNativeOperationInvariants.node_dispatch
+#print MicroCFTA.SourceCurrentNativeOperationInvariants.node_dispatch
+#print axioms MicroCFTA.SourceCurrentNativeOperationInvariants.node_dispatch

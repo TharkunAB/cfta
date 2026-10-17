@@ -1,0 +1,113 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-kernels-1.source.lean:141:86: error: unsolved goals
+fuel : Nat
+actual : Trace fuel control before (Control.code (Code.pure answer)) reached
+initialHistory : SourceCurrentNativeEdgeWriterGrowth.History before
+origin :
+  SourceCurrentNativeEdgeWriterGrowth.History reached ∧
+    Good reached ∧
+      Grows before.native.machine.heap reached.native.machine.heap ∧
+        SourceCurrentNativeQueryRowOrigins.RowOrigin reached request answer 0 row
+key : BitVec 10 × BitVec 10 × BitVec 10
+keyEq : SourceRecursiveIntersectionMemo.requestKey 10 request.domain left right = some key
+right✝ :
+  SourceEqualityNativeDemand.execute 2 (Control.code (requestNode request.domain request.left request.right)) reached =
+    Outcome.done answer reached
+handle : Nat
+published : reached.native.nodes.table key = some handle
+present :
+  reached.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned answer }
+ready : NodeReady reached.native.machine request
+⊢ ∃ first second,
+    IntersectionFlatMemoKey.input
+          (Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0, 1] }
+              [EdgeValue.mk
+                  { identity := 0,
+                    key :=
+                      { symbol := ("a", FullSyntax.Formula.top), children := [],
+                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                  [],
+                EdgeValue.mk
+                  { identity := 1,
+                    key :=
+                      { symbol := ("b", FullSyntax.Formula.top), children := [],
+                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                  []]
+              0 []).referenceOf =
+        some first ∧
+      IntersectionFlatMemoKey.input
+            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0, 2] }
+                [EdgeValue.mk
+                    { identity := 0,
+                      key :=
+                        { symbol := ("a", FullSyntax.Formula.top), children := [],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                    [],
+                  EdgeValue.mk
+                    { identity := 2,
+                      key :=
+                        { symbol := ("c", FullSyntax.Formula.top), children := [],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                    []]
+                0 []).referenceOf =
+          some second ∧
+        IntersectionFlatMemoKey.Safe 10 first ∧ IntersectionFlatMemoKey.Safe 10 second
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-kernels-1.source.lean:142:94: error: unsolved goals
+fuel : Nat
+actual : Trace fuel control before (Control.code (Code.pure answer)) reached
+initialHistory : SourceCurrentNativeEdgeWriterGrowth.History before
+origin :
+  SourceCurrentNativeEdgeWriterGrowth.History reached ∧
+    Good reached ∧
+      Grows before.native.machine.heap reached.native.machine.heap ∧
+        SourceCurrentNativeQueryRowOrigins.RowOrigin reached request answer 0 row
+key : IntersectionFlatMemoKeyDomain.Triple 10
+keyEq : SourceRecursiveIntersectionMemo.requestKey 10 request.domain left right = some key
+right✝ :
+  SourceEqualityNativeDemand.execute 2 (Control.code (requestNode request.domain request.left request.right)) reached =
+    Outcome.done answer reached
+handle : Nat
+published : reached.native.nodes.table key = some handle
+present :
+  reached.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned answer }
+ready : NodeReady reached.native.machine request
+safe : SourceRecursiveIntersectionMemo.KeySafe 10 request.domain left right
+⊢ (match SourceRecursiveIntersectionMemo.requestKey 10 request.domain request.left request.right with
+    | none => (NodeSelection.direct request, reached.native)
+    | some key =>
+      (NodeSelection.memoized
+          (match reached.native.nodes.table key with
+            | some handle => (handle, reached.native.nodes)
+            | none =>
+              (reached.native.nodes.next,
+                { table := put reached.native.nodes.table key reached.native.nodes.next,
+                  cells :=
+                    put reached.native.nodes.cells reached.native.nodes.next
+                      { request := request, status := FlatMemoThunk.Status.suspended },
+                  next := reached.native.nodes.next + 1 })).fst,
+        { machine := reached.native.machine,
+          nodes :=
+            (match reached.native.nodes.table key with
+              | some handle => (handle, reached.native.nodes)
+              | none =>
+                (reached.native.nodes.next,
+                  { table := put reached.native.nodes.table key reached.native.nodes.next,
+                    cells :=
+                      put reached.native.nodes.cells reached.native.nodes.next
+                        { request := request, status := FlatMemoThunk.Status.suspended },
+                    next := reached.native.nodes.next + 1 })).snd,
+          edges := reached.native.edges })) =
+    (NodeSelection.memoized handle, reached.native)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-kernels-1.source.lean:143:26: warning: This simp argument is unused:
+  keyEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [lookupNode, FlatMemoThunk.lookupOrInsert, published]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-kernels-1.source.lean:143:61: warning: This simp argument is unused:
+  published
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [lookupNode, keyEq, FlatMemoThunk.lookupOrInsert]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

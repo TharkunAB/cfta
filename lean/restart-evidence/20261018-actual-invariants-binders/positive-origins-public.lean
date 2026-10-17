@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentPositiveClassOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.combine_covers
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.combine_covers
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.combine_covers
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.normalized_guard
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.normalized_guard
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.normalized_guard
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.normalized_list
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.normalized_list
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.normalized_list
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.source_guard
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.source_guard
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.source_guard
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.demand
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.demand
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.demand
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.field_split
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.field_split
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.field_split
+#check @MicroCFTA.SourceCurrentPositiveClassOrigins.key_ne_top
+#print MicroCFTA.SourceCurrentPositiveClassOrigins.key_ne_top
+#print axioms MicroCFTA.SourceCurrentPositiveClassOrigins.key_ne_top

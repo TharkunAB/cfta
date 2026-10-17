@@ -1,0 +1,817 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:122:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:128:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:150:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:174:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:179:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:193:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:268:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:291:107: error: unsolved goals
+case empty.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+left : request.left = Value.empty
+right : request.right = Value.empty
+payload : SourceRecursiveIntersectionControl.Branch.unsupported = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ (match decision request.domain.key Value.empty Value.empty with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode request.domain Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu request.domain Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu request.domain Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu request.domain Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty Value.empty
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty Value.empty) =
+    compileRows request.domain [] []
+
+case empty.reference
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+left : request.left = Value.empty
+name✝ : InternedBinderProtocol.Reference
+right : request.right = Value.reference name✝
+payload : SourceRecursiveIntersectionControl.Branch.rightReference = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request = compileRows request.domain (nodeEdges Value.empty) (nodeEdges (Value.reference name✝))
+
+case empty.node
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+left : request.left = Value.empty
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.node entry✝ edges✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.unsupported = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges Value.empty) (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝))
+
+case empty.union
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+left : request.left = Value.empty
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.union entry✝ members✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges Value.empty) (nodeEdges (Value.union entry✝ members✝ depth✝ free✝))
+
+case empty.mu
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+left : request.left = Value.empty
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+right : request.right = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+payload : SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges Value.empty) (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+
+case reference.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+name✝ : InternedBinderProtocol.Reference
+left : request.left = Value.reference name✝
+right : request.right = Value.empty
+payload : SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request = compileRows request.domain (nodeEdges (Value.reference name✝)) (nodeEdges Value.empty)
+
+case reference.reference
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+name✝¹ : InternedBinderProtocol.Reference
+left : request.left = Value.reference name✝¹
+name✝ : InternedBinderProtocol.Reference
+right : request.right = Value.reference name✝
+payload : SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.reference name✝¹)) (nodeEdges (Value.reference name✝))
+
+case reference.node
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+name✝ : InternedBinderProtocol.Reference
+left : request.left = Value.reference name✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.node entry✝ edges✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.reference name✝)) (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝))
+
+case reference.union
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+name✝ : InternedBinderProtocol.Reference
+left : request.left = Value.reference name✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.union entry✝ members✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.reference name✝))
+      (nodeEdges (Value.union entry✝ members✝ depth✝ free✝))
+
+case reference.mu
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+name✝ : InternedBinderProtocol.Reference
+left : request.left = Value.reference name✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+right : request.right = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+payload : SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.reference name✝))
+      (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+
+case node.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+left : request.left = Value.node entry✝ edges✝ depth✝ free✝
+right : request.right = Value.empty
+payload : SourceRecursiveIntersectionControl.Branch.unsupported = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝)) (nodeEdges Value.empty)
+
+case node.reference
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+left : request.left = Value.node entry✝ edges✝ depth✝ free✝
+name✝ : InternedBinderProtocol.Reference
+right : request.right = Value.reference name✝
+payload : SourceRecursiveIntersectionControl.Branch.rightReference = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝)) (nodeEdges (Value.reference name✝))
+
+case node.node
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+edges✝¹ : List (EdgeValue Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List InternedBinderProtocol.Reference
+left : request.left = Value.node entry✝¹ edges✝¹ depth✝¹ free✝¹
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.node entry✝ edges✝ depth✝ free✝
+payload : True
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.node entry✝¹ edges✝¹ depth✝¹ free✝¹))
+      (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝))
+
+case node.union
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List InternedBinderProtocol.Reference
+left : request.left = Value.node entry✝¹ edges✝ depth✝¹ free✝¹
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.union entry✝ members✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.node entry✝¹ edges✝ depth✝¹ free✝¹))
+      (nodeEdges (Value.union entry✝ members✝ depth✝ free✝))
+
+case node.mu
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+left : request.left = Value.node entry✝¹ edges✝ depth✝ free✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+right : request.right = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+payload : SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.node entry✝¹ edges✝ depth✝ free✝))
+      (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+
+case union.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+left : request.left = Value.union entry✝ members✝ depth✝ free✝
+right : request.right = Value.empty
+payload : SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.union entry✝ members✝ depth✝ free✝)) (nodeEdges Value.empty)
+
+case union.reference
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+left : request.left = Value.union entry✝ members✝ depth✝ free✝
+name✝ : InternedBinderProtocol.Reference
+right : request.right = Value.reference name✝
+payload : SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.union entry✝ members✝ depth✝ free✝))
+      (nodeEdges (Value.reference name✝))
+
+case union.node
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List InternedBinderProtocol.Reference
+left : request.left = Value.union entry✝¹ members✝ depth✝¹ free✝¹
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.node entry✝ edges✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.union entry✝¹ members✝ depth✝¹ free✝¹))
+      (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝))
+
+case union.union
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+members✝¹ : List (Value Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List InternedBinderProtocol.Reference
+left : request.left = Value.union entry✝¹ members✝¹ depth✝¹ free✝¹
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.union entry✝ members✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.union entry✝¹ members✝¹ depth✝¹ free✝¹))
+      (nodeEdges (Value.union entry✝ members✝ depth✝ free✝))
+
+case union.mu
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+left : request.left = Value.union entry✝¹ members✝ depth✝ free✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+right : request.right = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+payload : SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.union entry✝¹ members✝ depth✝ free✝))
+      (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+
+case mu.empty
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+left : request.left = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+right : request.right = Value.empty
+payload : SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)) (nodeEdges Value.empty)
+
+case mu.reference
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+left : request.left = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+name✝ : InternedBinderProtocol.Reference
+right : request.right = Value.reference name✝
+payload : SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+      (nodeEdges (Value.reference name✝))
+
+case mu.node
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+left : request.left = Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.node entry✝ edges✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝))
+      (nodeEdges (Value.node entry✝ edges✝ depth✝ free✝))
+
+case mu.union
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+left : request.left = Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+right : request.right = Value.union entry✝ members✝ depth✝ free✝
+payload : SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.mu entry✝¹ body✝ depthShape✝ ordinaryShape✝))
+      (nodeEdges (Value.union entry✝ members✝ depth✝ free✝))
+
+case mu.mu
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+selected : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+body✝¹ depthShape✝¹ ordinaryShape✝¹ : Value Symbol Guard
+left : request.left = Value.mu entry✝¹ body✝¹ depthShape✝¹ ordinaryShape✝¹
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+right : request.right = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+payload : SourceRecursiveIntersectionControl.Branch.bothMu = SourceRecursiveIntersectionControl.Branch.ordinary
+⊢ compileNode request =
+    compileRows request.domain (nodeEdges (Value.mu entry✝¹ body✝¹ depthShape✝¹ ordinaryShape✝¹))
+      (nodeEdges (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:296:13: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [left, right, nodeEdges]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:57: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:317:18: error: Application type mismatch: The argument
+  branch
+has type
+  decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.self
+but is expected to have type
+  SourceRecursiveIntersectionControl.Branch.self = SourceRecursiveIntersectionControl.Branch.self
+in the application
+  And.intro branch
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:322:24: error: Application type mismatch: The argument
+  branch
+has type
+  decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.ordinary
+but is expected to have type
+  SourceRecursiveIntersectionControl.Branch.ordinary = SourceRecursiveIntersectionControl.Branch.ordinary
+in the application
+  And.intro branch
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:342:51: error: Application type mismatch: The argument
+  Failure.unsupported
+has type
+  InternedBinderProtocol.NodeRef → InternedBinderProtocol.NodeRef → Failure
+but is expected to have type
+  Failure
+in the application
+  Code.fail Failure.unsupported
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:342:67: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch :
+  decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.unsupported
+⊢ SourceRecursiveIntersectionCode.unsupported terminal.left terminal.right = Code.fail sorry
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch : decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.bothMu
+⊢ True ∨
+    SourceRecursiveIntersectionControl.Branch.bothMu = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.Branch.bothMu = SourceRecursiveIntersectionControl.Branch.rightMu ∨
+        SourceRecursiveIntersectionControl.Branch.bothMu = SourceRecursiveIntersectionControl.Branch.leftUnion ∨
+          SourceRecursiveIntersectionControl.Branch.bothMu = SourceRecursiveIntersectionControl.Branch.rightUnion ∨
+            SourceRecursiveIntersectionControl.Branch.bothMu = SourceRecursiveIntersectionControl.Branch.leftReference ∨
+              SourceRecursiveIntersectionControl.Branch.bothMu =
+                SourceRecursiveIntersectionControl.Branch.rightReference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch : decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.leftMu
+⊢ SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    True ∨
+      SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.rightMu ∨
+        SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.leftUnion ∨
+          SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.rightUnion ∨
+            SourceRecursiveIntersectionControl.Branch.leftMu = SourceRecursiveIntersectionControl.Branch.leftReference ∨
+              SourceRecursiveIntersectionControl.Branch.leftMu =
+                SourceRecursiveIntersectionControl.Branch.rightReference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch : decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.rightMu
+⊢ SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      True ∨
+        SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.leftUnion ∨
+          SourceRecursiveIntersectionControl.Branch.rightMu = SourceRecursiveIntersectionControl.Branch.rightUnion ∨
+            SourceRecursiveIntersectionControl.Branch.rightMu =
+                SourceRecursiveIntersectionControl.Branch.leftReference ∨
+              SourceRecursiveIntersectionControl.Branch.rightMu =
+                SourceRecursiveIntersectionControl.Branch.rightReference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch : decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.leftUnion
+⊢ SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.rightMu ∨
+        True ∨
+          SourceRecursiveIntersectionControl.Branch.leftUnion = SourceRecursiveIntersectionControl.Branch.rightUnion ∨
+            SourceRecursiveIntersectionControl.Branch.leftUnion =
+                SourceRecursiveIntersectionControl.Branch.leftReference ∨
+              SourceRecursiveIntersectionControl.Branch.leftUnion =
+                SourceRecursiveIntersectionControl.Branch.rightReference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch :
+  decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.rightUnion
+⊢ SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.rightMu ∨
+        SourceRecursiveIntersectionControl.Branch.rightUnion = SourceRecursiveIntersectionControl.Branch.leftUnion ∨
+          True ∨
+            SourceRecursiveIntersectionControl.Branch.rightUnion =
+                SourceRecursiveIntersectionControl.Branch.leftReference ∨
+              SourceRecursiveIntersectionControl.Branch.rightUnion =
+                SourceRecursiveIntersectionControl.Branch.rightReference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch :
+  decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.leftReference
+⊢ SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.rightMu ∨
+        SourceRecursiveIntersectionControl.Branch.leftReference = SourceRecursiveIntersectionControl.Branch.leftUnion ∨
+          SourceRecursiveIntersectionControl.Branch.leftReference =
+              SourceRecursiveIntersectionControl.Branch.rightUnion ∨
+            True ∨
+              SourceRecursiveIntersectionControl.Branch.leftReference =
+                SourceRecursiveIntersectionControl.Branch.rightReference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/class-origin-direct-3.source.lean:346:24: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+left : request.left.free = []
+right : request.right.free = []
+handle : Nat
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges result)[rowIndex]? = some row
+terminal : NodeRequest Symbol Guard
+final : Nat
+route : Route reader result request terminal
+cell : reader.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.returned result }
+notSwap : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.swap
+notReset : decision terminal.domain.key terminal.left terminal.right ≠ SourceRecursiveIntersectionControl.Branch.reset
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁵ : NodeReady before.native.machine terminal
+left✝⁴ : before.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode terminal)) before (Control.code (Code.pure result)) after
+left✝³ : after.native.nodes.cells final = some { request := terminal, status := FlatMemoThunk.Status.evaluating }
+left✝² :
+  Trace 1 (Control.code (Code.finishNode final result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode final result after.native, operations := after.operations }
+left✝¹ : Grows before.native.machine.heap reader.native.machine.heap
+left✝ : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+branch :
+  decision terminal.domain.key terminal.left terminal.right = SourceRecursiveIntersectionControl.Branch.rightReference
+⊢ SourceRecursiveIntersectionControl.Branch.rightReference = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.Branch.rightReference = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.Branch.rightReference = SourceRecursiveIntersectionControl.Branch.rightMu ∨
+        SourceRecursiveIntersectionControl.Branch.rightReference = SourceRecursiveIntersectionControl.Branch.leftUnion ∨
+          SourceRecursiveIntersectionControl.Branch.rightReference =
+              SourceRecursiveIntersectionControl.Branch.rightUnion ∨
+            SourceRecursiveIntersectionControl.Branch.rightReference =
+                SourceRecursiveIntersectionControl.Branch.leftReference ∨
+              True

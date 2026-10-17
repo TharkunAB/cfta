@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:237:36: error(lean.unknownIdentifier): Unknown identifier `request`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:237:89: error(lean.unknownIdentifier): Unknown identifier `request`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:237:119: error: unsolved goals
+width : Nat
+A : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+count : Nat
+ih : ∀ (smaller : Nat), smaller < count + 1 → CodeAt smaller
+next : Value Symbol Guard → Code Symbol Guard A
+state after : Checked width
+value : A
+post : Machine Symbol Guard → A → Prop
+good : Good state
+captured : NodeRequest Symbol Guard
+actual :
+  SourceEqualityNativeDemand.Steps (count + 1) (Control.code (Code.node captured next)) state
+    (Control.code (Code.pure value)) after
+safe : Safe (Code.node captured next) state.native.machine post
+operands : Operands (Code.node captured next) state.native.machine
+fields : CodeFields state.operations (Code.node captured next)
+chosenGood : Cells state.native
+selected : lookupNode width captured state.native = (NodeSelection.direct captured, state.native)
+⊢ (match
+      match (lookupNode width sorry state.native).fst with
+      | NodeSelection.direct actual =>
+        SourceRecursiveIntersectionNative.Outcome.yielded ((compileNode actual).bind next)
+          (lookupNode width sorry state.native).snd
+      | NodeSelection.memoized handle =>
+        match (demandNode handle (lookupNode width sorry state.native).snd).fst with
+        | FlatMemoThunk.Observation.absent =>
+          SourceRecursiveIntersectionNative.Outcome.blocked
+            (SourceRecursiveIntersectionNative.Blocked.absentNode handle) (Code.node sorry next)
+            (demandNode handle (lookupNode width sorry state.native).snd).snd
+        | FlatMemoThunk.Observation.busy =>
+          SourceRecursiveIntersectionNative.Outcome.blocked (SourceRecursiveIntersectionNative.Blocked.nodeBusy handle)
+            (Code.node sorry next) (demandNode handle (lookupNode width sorry state.native).snd).snd
+        | FlatMemoThunk.Observation.ready value =>
+          SourceRecursiveIntersectionNative.Outcome.yielded (next value)
+            (demandNode handle (lookupNode width sorry state.native).snd).snd
+        | FlatMemoThunk.Observation.evaluate actual =>
+          SourceRecursiveIntersectionNative.Outcome.yielded
+            ((compileNode actual).bind fun value => Code.finishNode handle value (next value))
+            (demandNode handle (lookupNode width sorry state.native).snd).snd with
+    | SourceRecursiveIntersectionNative.Outcome.yielded code state_1 =>
+      Outcome.yielded (Control.code code) { native := state_1, operations := state.operations }
+    | SourceRecursiveIntersectionNative.Outcome.done value state_1 =>
+      Outcome.done value { native := state_1, operations := state.operations }
+    | SourceRecursiveIntersectionNative.Outcome.failed failure state_1 =>
+      Outcome.failed failure { native := state_1, operations := state.operations }
+    | SourceRecursiveIntersectionNative.Outcome.blocked reason code state_1 =>
+      Outcome.blocked (Blocked.native reason) (Control.code code)
+        { native := state_1, operations := state.operations }) =
+    Outcome.yielded (Control.code ((compileNode sorry).bind next)) state
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:280:12: error: Type mismatch
+  SourceEqualityRequiredCache.Keeps.trans
+    (Eq.symm currentMachine ▸ SourceEqualityRequiredCache.pure_keeps state.native.machine.heap good.heap)
+    completed.right.right.left
+has type
+  SourceEqualityRequiredCache.Keeps current.machine.heap after.native.machine.heap
+but is expected to have type
+  SourceEqualityRequiredCache.Keeps state.native.machine.heap after.native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:298:10: error: Alternative `refl` is not needed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:310:14: error: Type mismatch
+  SourceEqualityRequiredCache.Keeps.trans
+    (SourceEqualityRequiredCache.Keeps.trans
+      (Eq.symm currentMachine ▸ SourceEqualityRequiredCache.pure_keeps state.native.machine.heap good.heap)
+      built.right.right.left)
+    completed.right.right.left
+has type
+  SourceEqualityRequiredCache.Keeps current.machine.heap after.native.machine.heap
+but is expected to have type
+  SourceEqualityRequiredCache.Keeps state.native.machine.heap after.native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-invariants-binders/actual-invariants-node-direct-1.source.lean:238:63: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

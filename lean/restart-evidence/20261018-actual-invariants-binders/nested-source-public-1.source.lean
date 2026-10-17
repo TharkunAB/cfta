@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentNestedSourceInertBinder
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNestedSourceInertBinder.Inert
+#print MicroCFTA.SourceCurrentNestedSourceInertBinder.Inert
+#print axioms MicroCFTA.SourceCurrentNestedSourceInertBinder.Inert
+
+#check @MicroCFTA.SourceCurrentNestedSourceInertBinder.raw_ordinary_absent
+#print MicroCFTA.SourceCurrentNestedSourceInertBinder.raw_ordinary_absent
+#print axioms MicroCFTA.SourceCurrentNestedSourceInertBinder.raw_ordinary_absent
+
+#check @MicroCFTA.SourceCurrentNestedSourceInertBinder.complete
+#print MicroCFTA.SourceCurrentNestedSourceInertBinder.complete
+#print axioms MicroCFTA.SourceCurrentNestedSourceInertBinder.complete
+
+#check @MicroCFTA.SourceCurrentNestedSourceInertBinder.publication_eq
+#print MicroCFTA.SourceCurrentNestedSourceInertBinder.publication_eq
+#print axioms MicroCFTA.SourceCurrentNestedSourceInertBinder.publication_eq
+
+#check @MicroCFTA.SourceCurrentNestedSourceInertBinder.publication_inert
+#print MicroCFTA.SourceCurrentNestedSourceInertBinder.publication_inert
+#print axioms MicroCFTA.SourceCurrentNestedSourceInertBinder.publication_inert
