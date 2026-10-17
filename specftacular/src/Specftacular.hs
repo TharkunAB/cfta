@@ -444,6 +444,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
     | not (testable np_term) = return ([], s0{so_far = so_far s0 + 1})
     | otherwise = do
         let tree = Map.findWithDefault DT.empty current_ty (trees s0)
+            known a b = a == b || joinable isVar (rewrite_rules s0) a b
         refreshCount
             progress
             ("exploring " ++ show current_ty)
@@ -453,7 +454,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
             (so_far s0)
         -- The schema goes into the decision tree of its type. It is
         -- evaluated on the test cases of its path only.
-        inserted <- DT.insertWith (const (const False)) (valuesEqual eq_inst) test_cases np_term (values np_term) tree
+        inserted <- DT.insertWith known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
         let s = s0{so_far = so_far s0 + 1}
             -- A later phase enumerates the schema again, so it goes into
             -- seen.
