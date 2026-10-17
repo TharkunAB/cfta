@@ -93,6 +93,8 @@ refinement generator counts without a pool, and
 See [`docs/automata-syntax.md`](docs/automata-syntax.md) for the side-by-side
 FTA, ECTA, and LTA construction forms and the rationale for the guard-lambda
 syntax.
+See [the language-tower plan](docs/language-tower.md) for persistence, editing,
+inspection, and resumption, including the current API boundaries.
 
 ## Three flagship languages
 
