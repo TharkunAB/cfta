@@ -1,5 +1,39 @@
 # cfta formal model
 
+## Current causal source guard production and finite optional binders
+
+Updated: 2026-10-17 04:31 CEST. This checkpoint starts at published `5ce2c90f`.
+The proof commits are `69f576ae`, `df35e4cd`, and `b72ecdc9`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-causal-guard-producer.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-causal-guard-profile/`.
+
+Eight additive modules derive exact guard profiles through full actual source
+syntax. Fresh writes establish body/probe equality before publication.
+Warm hits retain the actual earlier writer's certificate. Stored substitution
+and optional binders retain that guard heap. Positive ranked optional binders
+construct finite capped and classified returns, including earlier winners.
+Their initial probe-freshness and ranked conditions remain explicit.
+
+The pinned Audit passes 2805 jobs and 62806 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight strict source checks are
+clean. All 134 imported pairs pass in 14 groups. Seven component manifests
+verify 181 entries. Failed attempts and timeout scopes remain recorded.
+Preservation retains 11200 starting files, 2796 older non-Audit proofs,
+all 239 Haskell files, and 67 frozen manifests with 562 production entries.
+
+Next complete the joint recursive native producer from initial inputs.
+General warm callers, constrained descent, repeated convergence, remaining
+recursive callers, frontend/runtime adapters, capacity, serial public
+pipelines, and complete public composition remain open. The full library
+goal stays active. Read next-joint-native-producer.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
 ## Current guard profiles and ranked native local laws
 
 Updated: 2026-10-17 04:07 CEST. This checkpoint starts at published `58262ba5`.
