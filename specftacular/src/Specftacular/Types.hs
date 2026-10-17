@@ -792,7 +792,9 @@ testSchedule n =
            , active <- [0 .. 3]
            ]
 
--- | Generate one valuation from its descriptor. Repeated calls agree.
+{- | Generate one valuation from its descriptor. Repeated calls agree.
+Other list generators use size zero in inactive boundary slots.
+-}
 testCaseValues :: Sig -> TestCase -> VarVals
 testCaseValues sig testcase =
     Map.fromList
@@ -802,16 +804,22 @@ testCaseValues sig testcase =
     value v _ (Generator g) _ | ValidationCase k size <- testcase = g (hash ("validation" :: String, k, v)) size
     value v i (Generator g) t
         | BoundaryCase k boundary active <- testcase =
-            fromMaybe
-                (g (hash ("boundary" :: String, k, active, v)) 100)
-                (lookup t (boundaryValues boundary (i `mod` 4 == active)))
+            let selected = i `mod` 4 == active
+                size = case t of
+                    TCons "[]" [_] | not selected -> 0
+                    _ -> 100
+             in fromMaybe
+                    (g (hash ("boundary" :: String, k, active, v)) size)
+                    (lookup t (boundaryValues boundary selected))
 
 -- | The valuations of the complete test schedule.
 testCases :: Int -> Sig -> [VarVals]
 testCases n sig = map (testCaseValues sig) (testSchedule n)
 
 {- | Values for Int and the carrier types, and their first three list
-types. A selected list contains one zero value. Every other list is empty.
+types. At minBound and maxBound, selected Int lists contain zero and the boundary,
+including the innermost lists of the two nested Int list types.
+Other selected lists contain one zero value. Every other list is empty.
 Each value keeps its exact Haskell type. Other types use their generators.
 -}
 boundaryValues :: Int -> Bool -> [(TypeSkeleton, Value)]
@@ -823,8 +831,15 @@ boundaryValues boundary nonempty =
     , entry (D boundary)
     , entry (Acc boundary)
     ]
-        ++ concat [lists (0 :: Int), lists (A 0), lists (B 0), lists (C 0), lists (D 0), lists (Acc 0)]
+        ++ [ entry intList
+           , entry (pick intList)
+           , entry (pick (pick intList))
+           ]
+        ++ concat [lists (A 0), lists (B 0), lists (C 0), lists (D 0), lists (Acc 0)]
   where
+    intList
+        | nonempty && (boundary == minBound || boundary == maxBound) = [0, boundary]
+        | otherwise = pick (0 :: Int)
     entry :: (Typeable a) => a -> (TypeSkeleton, Value)
     entry value = (typeRepToTypeSkeleton (typeOf value), toValue value)
     lists :: (Typeable a) => a -> [(TypeSkeleton, Value)]
