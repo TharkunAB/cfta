@@ -1,5 +1,62 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current full class caller and selected Required
+
+Updated: 2026-10-17 12:02 CEST. This checkpoint starts at published b3651b49.
+Proof commits are fc6a3d4b and 4a01d59c. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-caller-required.md for the
+complete library contract, proof map, support, and next numeric obligations.
+Evidence is in lean/restart-evidence/20261017-initial-caller-required/.
+
+The initial numeric class pass now returns the full caller Post at the
+same inventory as its query Frame. Its own actual reads derive probes.
+Both outer result tables and the fourth memo remain exact. The same
+return retains Fits, caps, semantic Merge laws, forest length, exact
+common-six-fuel execution, and replay at independently enlarged fuels.
+The concrete caller starts with a legitimate evaluating node cell,
+returned edge cell, actual warm fourth entry, and valid equality descent.
+Two constructed class calls retain those cells and their laws.
+
+Successful open row exposure now retains causal stores and local caps
+without a closed-input premise. Selected Required verifies its actual
+node, child, and row graphs without whole-forest closure. It retains
+unselected open children, raw guards, output caps, guard heaps, and length.
+A separate initial producer constructs its own Required call from original
+false primary certificates, proper selected paths, Frame, availability,
+and finite root caps. Its same return retains the full old receipt,
+actual global reads, query Frame, output caps, and complete caller Post.
+No future Required graph, successful worker, output bound, cap, or domain
+law is an input to that producer.
+
+Required completion returns existential sufficient worker and read fuel.
+It does not give an initial numeric Required forecast or forecasted Fits.
+Next construct that forecast for the same selected-open support. Then
+construct initial gate, seeded-query, and Scan resources. Reached Scan
+and SeededRanges remain open. Compose the full source gate and callers
+before active/stored outer descent, arbitrary constrained Mu, convergence,
+current adapters, and full public Haskell correspondence. Finite all-root
+caps remain stronger than the live source gate. The goal stays active.
+
+The pinned Audit passes 2952 jobs and 65208 dependency checks. All four
+final production strict logs are empty. Their canonical builds pass.
+All 16 complete signature and axiom pairs pass in eight groups. They
+check 10 distinct public declarations, one repeated public declaration,
+and five constructed integrations. Four component manifests retain
+126 entries and 128 hash references. Read checkpoint-validation.json
+for hashes and exact successful logs. Only propext, Classical.choice,
+and Quot.sound occur. Preservation retains 14784 starting files, 2947
+older non-Audit proofs, all 239 Haskell files, all 206 active-package files,
+both stashes, and three other worktrees. All 91 frozen module manifests
+retain 709 entries. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
 ## Current complete initial class pass
 
 Updated: 2026-10-17 11:46 CEST. This checkpoint starts at published 9c614fe4.
