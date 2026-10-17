@@ -1,0 +1,67 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:26:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.0.MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.selected`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:26:0: warning: `selected` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:45:58: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → List (Value x_0 x_1) → Work x_0 x_1 (Value x_0 x_1)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:45:2: error: Type mismatch: After simplification, term
+  deleted
+ has type
+  run
+      (withoutSelfReference name
+        (run (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state).fst)
+      (run (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state).snd =
+    run (InternedConstructorTemplates.makeUnion [Value.node node edges level []])
+      (run (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state).snd
+but is expected to have type
+  run
+      (withoutSelfReference name
+        (run (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state).fst)
+      (run (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state).snd =
+    (Value.node node edges level [],
+      (run (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state).snd)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:63:77: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+old name : Reference
+entry node : Interned NodeKey
+edges : List (EdgeValue Symbol Guard)
+level outerLevel : Nat
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+available : Available state (body old entry node edges level outerLevel)
+reference : Available state (Value.reference name)
+ordinary : Available state (Value.node node edges level [])
+⊢ (match
+      work
+        (InternedConstructorTemplates.makeUnion
+          [Value.reference name,
+            [Value.reference name, Value.reference old,
+                    Value.node node edges level []][1 +
+                    List.findIdx
+                      (fun candidate =>
+                        (match candidate with
+                          | Value.empty => InternedBinderProtocol.NodeRef.empty
+                          | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+                          | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+                          | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+                          | Value.mu entry body depthShape ordinaryShape =>
+                            InternedBinderProtocol.NodeRef.mu entry.identity) ==
+                          InternedBinderProtocol.NodeRef.node node.identity)
+                      [Value.reference old, Value.node node edges level []]]?.getD
+              Value.empty])
+        state with
+    | Outcome.done value state => work (withoutSelfReference name value) state
+    | Outcome.pending key state => Outcome.pending key state) =
+    match
+      work (InternedConstructorTemplates.makeUnion [Value.reference name, Value.node node edges level []]) state with
+    | Outcome.done value state => work (withoutSelfReference name value) state
+    | Outcome.pending key state => Outcome.pending key state

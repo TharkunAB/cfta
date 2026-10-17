@@ -1,0 +1,85 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:182:100: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+bound : Nat
+pair : Nat × Nat
+entry node : Interned NodeKey
+edges : List (EdgeValue Symbol Guard)
+level outerLevel : Nat
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+available : Available state (body (Reference.intersection pair.fst pair.snd) entry node edges level outerLevel)
+bounded : SourceCurrentConstrainedCap.Cap annotation bound (Value.node node edges level [])
+fresh : state.nodes.table (muKey (Value.node node edges level []) (Value.node node edges level [])) = none
+old : Reference := Reference.intersection pair.fst pair.snd
+value : Value Symbol Guard := Value.node node edges level []
+source : Value Symbol Guard := body old entry node edges level outerLevel
+key : NodeKey := muKey value value
+afterDepth : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference Reference.depth, value]) state).snd
+depthDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) Reference.depth state =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference Reference.depth, Value.node node edges level []]) state).snd
+depthChecked :
+  Verified state
+    (SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) Reference.depth state)
+    Available
+depthFacts : Facts afterDepth
+depthAvailable : Available afterDepth source
+name : Reference := Reference.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel value)
+afterOrdinary : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference name, value]) afterDepth).snd
+ordinaryDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) name afterDepth =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd
+ordinaryChecked :
+  Verified afterDepth
+    (SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) name afterDepth)
+    Available
+ordinaryFacts : Facts afterOrdinary
+ordinaryAvailable : Available afterOrdinary source
+depthKeys : afterDepth.nodes.table key = state.nodes.table key ∧ afterDepth.nodeRecords key = state.nodeRecords key
+ordinaryKeys :
+  afterOrdinary.nodes.table key = afterDepth.nodes.table key ∧
+    afterOrdinary.nodeRecords key = afterDepth.nodeRecords key
+initialMissing : state.nodeRecords key = none
+missingRecord : afterOrdinary.nodeRecords key = none
+reserved : Interned NodeKey × Cache.State NodeKey := intern afterOrdinary.nodes key
+allocated : InternedConstructorTemplates.State Symbol Guard :=
+  { edges := afterOrdinary.edges, nodes := reserved.snd, edgeRecords := afterOrdinary.edgeRecords,
+    nodeRecords := afterOrdinary.nodeRecords }
+allocatedFacts : Facts allocated
+allocatedAvailable : Available allocated source
+localAvailable : Available allocated (Value.reference (Reference.interned reserved.fst.identity))
+bodyDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel)
+      (Reference.interned reserved.fst.identity) allocated =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference (Reference.interned reserved.fst.identity), Value.node node edges level []])
+          allocated).snd
+afterBody : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference (Reference.interned reserved.fst.identity), value]) allocated).snd
+bodyKeys : afterBody.nodes.table key = allocated.nodes.table key ∧ afterBody.nodeRecords key = allocated.nodeRecords key
+bodyMissing : afterBody.nodeRecords key = none
+candidate : Value Symbol Guard := Value.mu reserved.fst value value value
+final : InternedConstructorTemplates.State Symbol Guard :=
+  { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+    nodeRecords := keepFirst afterBody.nodeRecords key candidate }
+used : Reference.intersection pair.fst pair.snd ∈ source.free
+missing : afterOrdinary.nodes.table (muKey value value) = none
+⊢ Outcome.done
+      (if ¬False then Value.node node edges level []
+      else
+        if
+            (Value.node node edges level []).referenceOf =
+              InternedBinderProtocol.NodeRef.ref (Reference.interned reserved.fst.identity) then
+          Value.empty
+        else
+          Value.mu reserved.fst (Value.node node edges level []) (Value.node node edges level [])
+            (Value.node node edges level []))
+      final =
+    Outcome.done (Value.node node edges level []) final
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:227:72: error: unexpected token 'extends'; expected '↦', '=>'

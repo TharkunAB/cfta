@@ -1,0 +1,95 @@
+'MicroCFTA.NativeCapCacheKernels.warm_constrained_row' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.NativeCapCacheKernels.warm_constrained_row : ∀ {Symbol Guard : Type} {width : Nat}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) (level : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference),
+  @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) →
+    Not
+        (annotation
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))) →
+      ∀ (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+        (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+          @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source before →
+            @MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard before)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                  MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level free)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level free)) →
+              @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width
+                  MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level free)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level free) →
+                @Eq.{1}
+                    (Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                          level free)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                          level free))
+                      before)
+                    (@Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard handle)
+                      chosen) →
+                  @Eq.{1}
+                      (Prod.{0, 0}
+                        (MicroCFTA.FlatMemoThunk.Observation
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard handle chosen)
+                      (@Prod.mk.{0, 0}
+                        (MicroCFTA.FlatMemoThunk.Observation
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                        (@MicroCFTA.FlatMemoThunk.Observation.ready
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result)
+                        after) →
+                    And
+                      (Not
+                        (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                            level free)))
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) result)
+                        (And
+                          (@MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+                            after)
+                          (And
+                            (@Eq.{1} (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) after
+                              chosen)
+                            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after))
+                              result))))

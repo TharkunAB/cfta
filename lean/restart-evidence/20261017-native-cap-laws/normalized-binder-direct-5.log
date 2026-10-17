@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:76:0: error: cannot omit referenced section variable `inst✝`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:74:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:139:7: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:119:86: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+bound : Nat
+pair : Nat × Nat
+entry node : Interned NodeKey
+edges : List (EdgeValue Symbol Guard)
+level outerLevel : Nat
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+available : Available state (body (Reference.intersection pair.fst pair.snd) entry node edges level outerLevel)
+bounded : SourceCurrentConstrainedCap.Cap annotation bound (Value.node node edges level [])
+fresh : state.nodes.table (muKey (Value.node node edges level []) (Value.node node edges level [])) = none
+old : Reference := Reference.intersection pair.fst pair.snd
+value : Value Symbol Guard := Value.node node edges level []
+source : Value Symbol Guard := body old entry node edges level outerLevel
+key : NodeKey := muKey value value
+afterDepth : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference Reference.depth, value]) state).snd
+depthDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) Reference.depth state =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference Reference.depth, Value.node node edges level []]) state).snd
+depthChecked :
+  Verified state
+    (SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) Reference.depth state)
+    Available
+depthFacts : Facts afterDepth
+depthAvailable : Available afterDepth source
+name : Reference := Reference.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel value)
+afterOrdinary : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference name, value]) afterDepth).snd
+ordinaryDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) name afterDepth =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd
+ordinaryChecked :
+  Verified afterDepth
+    (SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) name afterDepth)
+    Available
+ordinaryFacts : Facts afterOrdinary
+ordinaryAvailable : Available afterOrdinary source
+⊢ ∃ final,
+    SourceRecursiveIntersectionMaybeMu.maybeMu pair
+          (body (Reference.intersection pair.fst pair.snd) entry node edges level outerLevel) state =
+        Outcome.done (Value.node node edges level []) final ∧
+      Facts final ∧
+        Grows state final ∧
+          Extends state.nodes.issued final.nodes.issued ∧
+            Available final (Value.node node edges level []) ∧
+              SourceCurrentConstrainedCap.Cap annotation bound (Value.node node edges level [])

@@ -1,0 +1,57 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativeScope
+import MicroCFTA.SourceCurrentConstrainedCapNativeCode
+import MicroCFTA.SourceCurrentConstrainedCapNativeCompile
+import MicroCFTA.SourceCurrentConstrainedCapNativeEdge
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.mu_annotated
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.mu_annotated
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.bindings_annotated
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.bindings_annotated
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.extend
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.extend
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.enter
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.enter
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.read
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.read
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.body_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.body_cap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.node_edge
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.node_edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeScope.edge_child
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeScope.edge_child
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.Certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.Certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.certified_bind
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.certified_bind
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.certified_walk
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.certified_walk
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.request_node
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.request_node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.request_edge
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.request_edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.edge_work
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.edge_work
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.node_work
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.node_work
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCode.union_work
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCode.union_work
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCompile.rows_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCompile.rows_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCompile.left_union_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCompile.left_union_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCompile.right_union_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCompile.right_union_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeEdge.children_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeEdge.children_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeEdge.sentinel_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeEdge.sentinel_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeEdge.body_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeEdge.body_certified

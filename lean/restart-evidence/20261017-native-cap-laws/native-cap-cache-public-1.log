@@ -1,0 +1,333 @@
+'MicroCFTA.SourceCurrentConstrainedCapNativeLaws.NodeLaw' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeLaws.NodeLaw : {Symbol Guard : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapNativeLaws.EdgeLaw' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeLaws.EdgeLaw : {Symbol Guard : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored : {width : Nat} →
+  {Symbol Guard : Type} →
+    (Guard → Prop) →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.initial_stored' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.initial_stored : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (width : Nat)
+  (machine : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width machine)
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.advance_stored' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.advance_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.advance width Symbol Guard state after)
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupNode_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+        (@Prod.snd.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+          (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request state))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupEdge_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+        (@Prod.snd.{0, 0} Nat (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge Symbol Guard width request state))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandNode_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+        (@Prod.snd.{0, 0}
+          (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard handle state))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandEdge_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+        (@Prod.snd.{0, 0}
+          (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge width Symbol Guard handle state))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishNode_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishNode_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+      @Eq.{1}
+          (Option.{0}
+            (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+            (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard state) handle)
+          (@Option.some.{0}
+            (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.FlatMemoThunk.Cell.mk (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+              (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))) →
+        @MicroCFTA.SourceCurrentConstrainedCapNativeLaws.NodeLaw Symbol Guard annotation source request result →
+          @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.finishNode Symbol Guard width handle result state)
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishEdge_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishEdge_stored : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard state →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+      @Eq.{1}
+          (Option.{0}
+            (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+          (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+            (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges width Symbol Guard state) handle)
+          (@Option.some.{0}
+            (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.FlatMemoThunk.Cell.mk (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) request
+              (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))) →
+        @MicroCFTA.SourceCurrentConstrainedCapNativeLaws.EdgeLaw Symbol Guard annotation source request result →
+          @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.finishEdge Symbol Guard width handle result state)
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_observed_ready' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_observed_ready : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source before →
+      @MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard before) request →
+        @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request) →
+          @Eq.{1}
+              (Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+                (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request before)
+              (@Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+                (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard handle) chosen) →
+            @Eq.{1}
+                (Prod.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard handle chosen)
+                (@Prod.mk.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                  (@MicroCFTA.FlatMemoThunk.Observation.ready
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result)
+                  after) →
+              And
+                (@MicroCFTA.SourceCurrentConstrainedCapNativeLaws.NodeLaw Symbol Guard annotation source request result)
+                (And
+                  (@MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source after)
+                  (And (@Eq.{1} (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) after chosen)
+                    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after))
+                      result)))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_observed_ready' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_observed_ready : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (before chosen after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source before →
+      @MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard before) request →
+        @MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe Symbol Guard width
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right Symbol Guard request) →
+          @Eq.{1} (Prod.{0, 0} Nat (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge Symbol Guard width request before)
+              (@Prod.mk.{0, 0} Nat (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) handle
+                chosen) →
+            @Eq.{1}
+                (Prod.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge width Symbol Guard handle chosen)
+                (@Prod.mk.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                  (@MicroCFTA.FlatMemoThunk.Observation.ready
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) result)
+                  after) →
+              And
+                (@MicroCFTA.SourceCurrentConstrainedCapNativeLaws.EdgeLaw Symbol Guard annotation source request result)
+                (And
+                  (@MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source after)
+                  (And (@Eq.{1} (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) after chosen)
+                    (@MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after))
+                      result)))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_started' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_started : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (request actual : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (before chosen running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source before →
+      @MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard before) request →
+        @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request) →
+          @Eq.{1}
+              (Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+                (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request before)
+              (@Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+                (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard handle) chosen) →
+            @Eq.{1}
+                (Prod.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard handle chosen)
+                (@Prod.mk.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                  (@MicroCFTA.FlatMemoThunk.Observation.evaluate
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actual)
+                  running) →
+              And (@Eq.{1} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard) actual request)
+                (And (@MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard running)
+                  (And
+                    (@MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+                      running)
+                    (@Eq.{1}
+                      (Option.{0}
+                        (MicroCFTA.FlatMemoThunk.Cell
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard running) handle)
+                      (@Option.some.{0}
+                        (MicroCFTA.FlatMemoThunk.Cell
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.FlatMemoThunk.Cell.mk
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+                          (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))))))
+'MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_started' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_started : ∀ {width : Nat} {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (request actual : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+  (before chosen running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard before →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source before →
+      @MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard before) request →
+        @MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe Symbol Guard width
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right Symbol Guard request) →
+          @Eq.{1} (Prod.{0, 0} Nat (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge Symbol Guard width request before)
+              (@Prod.mk.{0, 0} Nat (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard) handle
+                chosen) →
+            @Eq.{1}
+                (Prod.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge width Symbol Guard handle chosen)
+                (@Prod.mk.{0, 0}
+                  (MicroCFTA.FlatMemoThunk.Observation
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                  (@MicroCFTA.FlatMemoThunk.Observation.evaluate
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) actual)
+                  running) →
+              And (@Eq.{1} (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard) actual request)
+                (And (@MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard running)
+                  (And
+                    (@MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source
+                      running)
+                    (@Eq.{1}
+                      (Option.{0}
+                        (MicroCFTA.FlatMemoThunk.Cell
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                      (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges width Symbol Guard running) handle)
+                      (@Option.some.{0}
+                        (MicroCFTA.FlatMemoThunk.Cell
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@MicroCFTA.FlatMemoThunk.Cell.mk
+                          (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) request
+                          (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))))))

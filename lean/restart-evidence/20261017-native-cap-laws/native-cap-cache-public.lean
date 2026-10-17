@@ -1,0 +1,54 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativeLaws
+import MicroCFTA.SourceCurrentConstrainedCapNativeCache
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeLaws.NodeLaw
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeLaws.NodeLaw
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeLaws.EdgeLaw
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeLaws.EdgeLaw
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.Stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.initial_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.initial_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.advance_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.advance_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.lookupEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.demandEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishNode_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishNode_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishEdge_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.finishEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_observed_ready
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_observed_ready
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_observed_ready
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_observed_ready
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_started
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.node_started
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_started
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCache.edge_started

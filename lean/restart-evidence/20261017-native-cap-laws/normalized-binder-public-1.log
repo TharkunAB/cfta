@@ -1,0 +1,178 @@
+'MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body : {Symbol Guard : Type} →
+  MicroCFTA.InternedBinderProtocol.Reference →
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+        List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) →
+          Nat → Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard
+'MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.callback' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.callback : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (old name : MicroCFTA.InternedBinderProtocol.Reference)
+  (entry node : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (level outerLevel : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+        (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard old entry node edges level
+          outerLevel) →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) →
+        @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst old
+            (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard old entry node edges level
+              outerLevel)
+            name state)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))))
+                state)))
+'MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (bound : Nat) (pair : Prod.{0, 0} Nat Nat)
+  (entry node : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (level outerLevel : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+        (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard
+          (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+            (@Prod.snd.{0, 0} Nat Nat pair))
+          entry node edges level outerLevel) →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation bound
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)) →
+        @Eq.{1} (Option.{0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey))
+            (@MicroCFTA.Cache.State.table MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+            (@none.{0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)) →
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun final =>
+            And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair
+                  (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                      (@Prod.snd.{0, 0} Nat Nat pair))
+                    entry node edges level outerLevel)
+                  state)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  final))
+              (And (@MicroCFTA.InternedNestedFacts.Facts Symbol Guard final)
+                (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard state final)
+                  (And
+                    (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard final)))
+                    (And
+                      (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard final
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation bound
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))))))
+'MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete_replay' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (bound : Nat) (pair : Prod.{0, 0} Nat Nat)
+  (entry node : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (level outerLevel : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+        (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard
+          (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+            (@Prod.snd.{0, 0} Nat Nat pair))
+          entry node edges level outerLevel) →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation bound
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)) →
+        @Eq.{1} (Option.{0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey))
+            (@MicroCFTA.Cache.State.table MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+            (@none.{0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)) →
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun final =>
+            And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair
+                  (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                      (@Prod.snd.{0, 0} Nat Nat pair))
+                    entry node edges level outerLevel)
+                  state)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  final))
+              (And (@MicroCFTA.InternedNestedFacts.Facts Symbol Guard final)
+                (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard state final)
+                  (And
+                    (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard final)))
+                    (And
+                      (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard final
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation bound
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (∀ (later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                          @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final later →
+                            @Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair
+                                (@MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body Symbol Guard
+                                  (MicroCFTA.InternedBinderProtocol.Reference.intersection
+                                    (@Prod.fst.{0, 0} Nat Nat pair) (@Prod.snd.{0, 0} Nat Nat pair))
+                                  entry node edges level outerLevel)
+                                later)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard node edges level
+                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                later)))))))

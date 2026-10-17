@@ -1,0 +1,158 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:146:78: error: Application type mismatch: The argument
+  Eq.trans depthKeys.left fresh
+has type
+  (run (makeUnion [Value.reference Reference.depth, Value.node node edges level []]) state).snd.nodes.table
+      (muKey value value) =
+    none
+but is expected to have type
+  afterDepth.nodes.table (muKey value value) = ?m.267
+in the application
+  Eq.trans ordinaryKeys.left (Eq.trans depthKeys.left fresh)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:154:84: error: Application type mismatch: The argument
+  Eq.trans depthKeys.right initialMissing
+has type
+  (run (makeUnion [Value.reference Reference.depth, Value.node node edges level []]) state).snd.nodeRecords
+      (muKey value value) =
+    none
+but is expected to have type
+  afterDepth.nodeRecords (muKey value value) = ?m.374
+in the application
+  Eq.trans ordinaryKeys.right (Eq.trans depthKeys.right initialMissing)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:168:57: error: Type mismatch
+  Eq.trans bodyKeys.right missingRecord
+has type
+  (run (makeUnion [Value.reference (Reference.interned reserved.fst.identity), Value.node node edges level []])
+            allocated).snd.nodeRecords
+      (muKey value value) =
+    none
+but is expected to have type
+  afterBody.nodeRecords key = none
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:182:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  afterOrdinary.nodes.table key
+in the target expression
+  (have key := muKey value value;
+    match afterOrdinary.nodes.table key with
+    | some val =>
+      match afterOrdinary.nodeRecords key with
+      | some value => Outcome.done (finish true value) afterOrdinary
+      | none => Outcome.pending key afterOrdinary
+    | none =>
+      have entry := intern afterOrdinary.nodes key;
+      have allocated :=
+        { edges := afterOrdinary.edges, nodes := entry.snd, edgeRecords := afterOrdinary.edgeRecords,
+          nodeRecords := afterOrdinary.nodeRecords };
+      (SourceRecursiveIntersectionMaybeMu.callback old source (Reference.interned entry.fst.identity) allocated).bind
+        fun bodyValue afterBody =>
+        have candidate := Value.mu entry.fst bodyValue value value;
+        have records := keepFirst afterBody.nodeRecords key candidate;
+        Outcome.done (finish true ((records key).getD candidate))
+          { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+            nodeRecords := records }) =
+    Outcome.done value final
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+bound : Nat
+pair : Nat × Nat
+entry node : Interned NodeKey
+edges : List (EdgeValue Symbol Guard)
+level outerLevel : Nat
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+available : Available state (body (Reference.intersection pair.fst pair.snd) entry node edges level outerLevel)
+bounded : SourceCurrentConstrainedCap.Cap annotation bound (Value.node node edges level [])
+fresh : state.nodes.table (muKey (Value.node node edges level []) (Value.node node edges level [])) = none
+old : Reference := Reference.intersection pair.fst pair.snd
+value : Value Symbol Guard := Value.node node edges level []
+source : Value Symbol Guard := body old entry node edges level outerLevel
+key : NodeKey := muKey value value
+afterDepth : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference Reference.depth, value]) state).snd
+depthDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) Reference.depth state =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference Reference.depth, Value.node node edges level []]) state).snd
+depthChecked :
+  Verified state
+    (SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) Reference.depth state)
+    Available
+depthFacts : Facts afterDepth
+depthAvailable : Available afterDepth source
+name : Reference := Reference.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel value)
+afterOrdinary : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference name, value]) afterDepth).snd
+ordinaryDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) name afterDepth =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd
+ordinaryChecked :
+  Verified afterDepth
+    (SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel) name afterDepth)
+    Available
+ordinaryFacts : Facts afterOrdinary
+ordinaryAvailable : Available afterOrdinary source
+depthKeys :
+  have after := (run (makeUnion [Value.reference Reference.depth, Value.node node edges level []]) state).snd;
+  after.nodes.table (muKey value value) = state.nodes.table (muKey value value) ∧
+    after.nodeRecords (muKey value value) = state.nodeRecords (muKey value value)
+ordinaryKeys :
+  have after := (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd;
+  after.nodes.table (muKey value value) = afterDepth.nodes.table (muKey value value) ∧
+    after.nodeRecords (muKey value value) = afterDepth.nodeRecords (muKey value value)
+missing : afterOrdinary.nodes.table key = none
+initialMissing : state.nodeRecords key = none
+missingRecord : afterOrdinary.nodeRecords key = none
+reserved : Interned NodeKey × Cache.State NodeKey := intern afterOrdinary.nodes key
+allocated : InternedConstructorTemplates.State Symbol Guard :=
+  { edges := afterOrdinary.edges, nodes := reserved.snd, edgeRecords := afterOrdinary.edgeRecords,
+    nodeRecords := afterOrdinary.nodeRecords }
+allocatedFacts : Facts allocated
+allocatedAvailable : Available allocated source
+localAvailable : Available allocated (Value.reference (Reference.interned reserved.fst.identity))
+bodyDone :
+  SourceRecursiveIntersectionMaybeMu.callback old (body old entry node edges level outerLevel)
+      (Reference.interned reserved.fst.identity) allocated =
+    Outcome.done (Value.node node edges level [])
+      (run (makeUnion [Value.reference (Reference.interned reserved.fst.identity), Value.node node edges level []])
+          allocated).snd
+afterBody : InternedConstructorTemplates.State Symbol Guard :=
+  (run (makeUnion [Value.reference (Reference.interned reserved.fst.identity), value]) allocated).snd
+bodyKeys :
+  have after :=
+    (run (makeUnion [Value.reference (Reference.interned reserved.fst.identity), Value.node node edges level []])
+        allocated).snd;
+  after.nodes.table (muKey value value) = allocated.nodes.table (muKey value value) ∧
+    after.nodeRecords (muKey value value) = allocated.nodeRecords (muKey value value)
+bodyMissing : afterBody.nodeRecords key = none
+candidate : Value Symbol Guard := Value.mu reserved.fst value value value
+final : InternedConstructorTemplates.State Symbol Guard :=
+  { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+    nodeRecords := keepFirst afterBody.nodeRecords key candidate }
+used : Reference.intersection pair.fst pair.snd ∈ source.free
+⊢ (have key := muKey value value;
+    match afterOrdinary.nodes.table key with
+    | some val =>
+      match afterOrdinary.nodeRecords key with
+      | some value => Outcome.done (finish true value) afterOrdinary
+      | none => Outcome.pending key afterOrdinary
+    | none =>
+      have entry := intern afterOrdinary.nodes key;
+      have allocated :=
+        { edges := afterOrdinary.edges, nodes := entry.snd, edgeRecords := afterOrdinary.edgeRecords,
+          nodeRecords := afterOrdinary.nodeRecords };
+      (SourceRecursiveIntersectionMaybeMu.callback old source (Reference.interned entry.fst.identity) allocated).bind
+        fun bodyValue afterBody =>
+        have candidate := Value.mu entry.fst bodyValue value value;
+        have records := keepFirst afterBody.nodeRecords key candidate;
+        Outcome.done (finish true ((records key).getD candidate))
+          { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+            nodeRecords := records }) =
+    Outcome.done value final
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:179:15: warning: This simp argument is unused:
+  Outcome.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

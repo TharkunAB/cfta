@@ -1,0 +1,37 @@
+'MicroCFTA.NormalizedBinderKernels.constructed_nonplain_then_replay' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+constructed_nonplain_then_replay : @Exists.{1} (InternedConstructorTemplates.State Nat Bool) fun final =>
+  And
+    (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+      (@SourceRecursiveIntersectionMaybeMu.maybeMu Nat Bool
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+        (@Prod.mk.{0, 0} Nat Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct)
+        (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+      (@Outcome.done Nat Bool (Value Nat Bool)
+        (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary) final))
+    (And (@Facts Nat Bool final)
+      (And
+        (@Available Nat Bool final
+          (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary))
+        (And
+          (@SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary))
+          (And
+            (Not
+              (@SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard true) Nat
+                (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary)))
+            (∀ (later : InternedConstructorTemplates.State Nat Bool),
+              @Grows Nat Bool final later →
+                @Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+                  (@SourceRecursiveIntersectionMaybeMu.maybeMu Nat Bool
+                    (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+                    (@Prod.mk.{0, 0} Nat Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct) later)
+                  (@Outcome.done Nat Bool (Value Nat Bool)
+                    (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary)
+                    later))))))

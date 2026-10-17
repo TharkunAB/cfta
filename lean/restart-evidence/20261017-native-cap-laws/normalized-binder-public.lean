@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body
+#check @MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.body
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.callback
+#check @MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.callback
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete_replay
+#check @MicroCFTA.SourceCurrentConstrainedCapNormalizedBinder.complete_replay

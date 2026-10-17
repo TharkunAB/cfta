@@ -1,0 +1,69 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:74:0: warning: `union_keeps_mu` does not use the following hypothesis in its type outside of proofs:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3) (used in type, but only in a proof)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:166:52: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:173:4: error: 'change' tactic failed, pattern
+  (SourceRecursiveIntersectionMaybeMu.callback old source (Reference.interned reserved.fst.identity) allocated).bind
+      ?m.583 =
+    ?m.585
+is not definitionally equal to target
+  (match
+      (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodes.table
+        (muKey (Value.node node edges level []) (Value.node node edges level [])) with
+    | some val =>
+      match
+        (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodeRecords
+          (muKey (Value.node node edges level []) (Value.node node edges level [])) with
+      | some value =>
+        Outcome.done (finish true value)
+          (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd
+      | none =>
+        Outcome.pending (muKey (Value.node node edges level []) (Value.node node edges level []))
+          (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd
+    | none =>
+      match
+        SourceRecursiveIntersectionMaybeMu.callback old source
+          (Reference.interned
+            (intern (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodes
+                  (muKey (Value.node node edges level []) (Value.node node edges level []))).fst.identity)
+          { edges := (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.edges,
+            nodes :=
+              (intern (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodes
+                  (muKey (Value.node node edges level []) (Value.node node edges level []))).snd,
+            edgeRecords :=
+              (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.edgeRecords,
+            nodeRecords :=
+              (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodeRecords } with
+      | Outcome.done value state =>
+        Outcome.done
+          (finish true
+            ((keepFirst state.nodeRecords (muKey (Value.node node edges level []) (Value.node node edges level []))
+                  (Value.mu
+                    (intern
+                        (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodes
+                        (muKey (Value.node node edges level []) (Value.node node edges level []))).fst
+                    value (Value.node node edges level []) (Value.node node edges level []))
+                  (muKey (Value.node node edges level []) (Value.node node edges level []))).getD
+              (Value.mu
+                (intern (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodes
+                    (muKey (Value.node node edges level []) (Value.node node edges level []))).fst
+                value (Value.node node edges level []) (Value.node node edges level []))))
+          { edges := state.edges, nodes := state.nodes, edgeRecords := state.edgeRecords,
+            nodeRecords :=
+              keepFirst state.nodeRecords (muKey (Value.node node edges level []) (Value.node node edges level []))
+                (Value.mu
+                  (intern (run (makeUnion [Value.reference name, Value.node node edges level []]) afterDepth).snd.nodes
+                      (muKey (Value.node node edges level []) (Value.node node edges level []))).fst
+                  value (Value.node node edges level []) (Value.node node edges level [])) }
+      | Outcome.pending key state => Outcome.pending key state) =
+    Outcome.done value final
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapNormalizedBinder.lean:172:38: warning: This simp argument is unused:
+  missing
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Outcome.bind, request]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

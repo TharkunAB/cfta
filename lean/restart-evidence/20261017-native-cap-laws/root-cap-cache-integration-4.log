@@ -1,0 +1,137 @@
+'MicroCFTA.CapCacheIntegration.node_hereditary' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@node_hereditary : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard) (request : NodeRequest Symbol Guard)
+  (result : Value Symbol Guard),
+  @SourceCurrentConstrainedCapNativeLaws.NodeLaw Symbol Guard annotation source request result →
+    @SourceCurrentHereditaryNativeCode.NodeLaw Symbol Guard annotation source request result
+'MicroCFTA.CapCacheIntegration.edge_hereditary' does not depend on any axioms
+@edge_hereditary : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard) (request : EdgeRequest Symbol Guard)
+  (result : EdgeValue Symbol Guard),
+  @SourceCurrentConstrainedCapNativeLaws.EdgeLaw Symbol Guard annotation source request result →
+    @SourceCurrentHereditaryNativeCode.EdgeLaw Symbol Guard annotation source request result
+'MicroCFTA.CapCacheIntegration.store_hereditary' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@store_hereditary : ∀ {Symbol Guard : Type} {width : Nat} (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source state →
+    @SourceCurrentHereditaryNativeCache.Stored width Symbol Guard annotation source state
+'MicroCFTA.CapCacheIntegration.self_query' depends on axioms: [propext, Quot.sound.{u}]
+@self_query : ∀ {Symbol Guard : Type} {width : Nat} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard) (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+  (machine : Machine Symbol Guard),
+  @SourceRecursiveIntersectionKernel.Valid Symbol Guard machine →
+    ∀ (request : NodeRequest Symbol Guard),
+      @NodeReady Symbol Guard machine request →
+        @SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width (@NodeRequest.domain Symbol Guard request)
+            (@NodeRequest.left Symbol Guard request) (@NodeRequest.right Symbol Guard request) →
+          ∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+            @Eq.{1} (Option.{0} (IntersectionFlatMemoKeyDomain.Triple width))
+                (@SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+                  (@NodeRequest.domain Symbol Guard request) (@NodeRequest.left Symbol Guard request)
+                  (@NodeRequest.right Symbol Guard request))
+                (@some.{0} (IntersectionFlatMemoKeyDomain.Triple width) key) →
+              @Eq.{1} SourceRecursiveIntersectionControl.Branch
+                  (@SourceRecursiveIntersectionControl.decision Symbol Guard
+                    (@Cache.Interned.key IntersectionFlatMemoKeyDomain.DomainKey
+                      (@NodeRequest.domain Symbol Guard request))
+                    (@NodeRequest.left Symbol Guard request) (@NodeRequest.right Symbol Guard request))
+                  SourceRecursiveIntersectionControl.Branch.self →
+                @Exists.{1} (SourceRecursiveIntersectionThunks.State width Symbol Guard) fun after =>
+                  And
+                    (@Eq.{2} (SourceRecursiveIntersectionNative.Outcome width Symbol Guard (Value Symbol Guard))
+                      (@SourceRecursiveIntersectionNative.execute Symbol Guard (Value Symbol Guard) width inst inst_1
+                        emptyGuard conjoin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                        (@requestNode Symbol Guard (@NodeRequest.domain Symbol Guard request)
+                          (@NodeRequest.left Symbol Guard request) (@NodeRequest.right Symbol Guard request))
+                        (@initial Symbol Guard width machine))
+                      (@SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard (Value Symbol Guard)
+                        (@NodeRequest.left Symbol Guard request) after))
+                    (And (@SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard after)
+                      (And (@SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source after)
+                        (And
+                          (@Eq.{1}
+                            (Prod.{0, 0} (NodeSelection Symbol Guard)
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                            (@lookupNode Symbol Guard width request after)
+                            (@Prod.mk.{0, 0} (NodeSelection Symbol Guard)
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                              (@NodeSelection.memoized Symbol Guard
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                              after))
+                          (@Eq.{1}
+                            (Prod.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard))
+                            (@demandNode width Symbol Guard
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) after)
+                            (@Prod.mk.{0, 0} (FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard))
+                              (SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                              (@FlatMemoThunk.Observation.ready (NodeRequest Symbol Guard) (Value Symbol Guard)
+                                (@NodeRequest.left Symbol Guard request))
+                              after)))))
+'MicroCFTA.CapCacheIntegration.constrained_self_query' depends on axioms: [propext, Quot.sound.{u}]
+@constrained_self_query : ∀ {Symbol Guard : Type} {width : Nat} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard) (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+  (machine : Machine Symbol Guard),
+  @SourceRecursiveIntersectionKernel.Valid Symbol Guard machine →
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (edge : EdgeValue Symbol Guard) (level : Nat),
+      @Eq.{1} (List.{0} (Value Symbol Guard)) (@EdgeValue.children Symbol Guard edge)
+          (@List.nil.{0} (Value Symbol Guard)) →
+        Not
+            (annotation
+              (@EdgeKey.constraint Symbol Guard
+                (@Cache.Interned.key (EdgeKey Symbol Guard) (@EdgeValue.entry Symbol Guard edge)))) →
+          @NodeReady Symbol Guard machine
+              (@NodeRequest.mk Symbol Guard IntersectionEmptyDomain.emptyDomain
+                (@Value.node Symbol Guard entry
+                  (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                  (@List.nil.{0} InternedBinderProtocol.Reference))
+                (@Value.node Symbol Guard entry
+                  (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                  (@List.nil.{0} InternedBinderProtocol.Reference))) →
+            @SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width IntersectionEmptyDomain.emptyDomain
+                (@Value.node Symbol Guard entry
+                  (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                  (@List.nil.{0} InternedBinderProtocol.Reference))
+                (@Value.node Symbol Guard entry
+                  (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                  (@List.nil.{0} InternedBinderProtocol.Reference)) →
+              ∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+                @Eq.{1} (Option.{0} (IntersectionFlatMemoKeyDomain.Triple width))
+                    (@SourceRecursiveIntersectionMemo.requestKey Symbol Guard width IntersectionEmptyDomain.emptyDomain
+                      (@Value.node Symbol Guard entry
+                        (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                        (@List.nil.{0} InternedBinderProtocol.Reference))
+                      (@Value.node Symbol Guard entry
+                        (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                        (@List.nil.{0} InternedBinderProtocol.Reference)))
+                    (@some.{0} (IntersectionFlatMemoKeyDomain.Triple width) key) →
+                  have value :=
+                    @Value.node Symbol Guard entry
+                      (@List.cons.{0} (EdgeValue Symbol Guard) edge (@List.nil.{0} (EdgeValue Symbol Guard))) level
+                      (@List.nil.{0} InternedBinderProtocol.Reference);
+                  @Exists.{1} (SourceRecursiveIntersectionThunks.State width Symbol Guard) fun after =>
+                    And
+                      (@Eq.{2} (SourceRecursiveIntersectionNative.Outcome width Symbol Guard (Value Symbol Guard))
+                        (@SourceRecursiveIntersectionNative.execute Symbol Guard (Value Symbol Guard) width inst inst_1
+                          emptyGuard conjoin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                          (@requestNode Symbol Guard IntersectionEmptyDomain.emptyDomain value value)
+                          (@initial Symbol Guard width machine))
+                        (@SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard (Value Symbol Guard) value
+                          after))
+                      (And
+                        (@Eq.{2} (SourceRecursiveIntersectionNative.Outcome width Symbol Guard (Value Symbol Guard))
+                          (@SourceRecursiveIntersectionNative.execute Symbol Guard (Value Symbol Guard) width inst
+                            inst_1 emptyGuard conjoin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (@requestNode Symbol Guard IntersectionEmptyDomain.emptyDomain value value) after)
+                          (@SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard (Value Symbol Guard) value
+                            after))
+                        (And (@SourceCurrentAllocatedNativePhysicalCache.Valid width Symbol Guard after)
+                          (And
+                            (@SourceCurrentConstrainedCapNativeCache.Stored width Symbol Guard annotation source after)
+                            (And
+                              (@Cap Symbol Guard annotation
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)
+                              (Not (@SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol value))))))
