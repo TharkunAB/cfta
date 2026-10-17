@@ -1,0 +1,59 @@
+import MicroCFTA.SourceCurrentInitialSelectionForecast
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.selections
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.selections
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.selection_sublist
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.selection_sublist
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.sublist_selection
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.sublist_selection
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.cover
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.cover
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.cover_ge
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.cover_ge
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.cover_member
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.cover_member
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.required_ge
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.required_ge
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.required_selected
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.required_selected
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.maximum
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.maximum
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.maximum_member
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.maximum_member
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.requiredWorker
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.requiredWorker
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.required_worker_selected
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.required_worker_selected
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.requiredReader
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.requiredReader
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.required_reader_selected
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.required_reader_selected
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.class_profile_selected
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.class_profile_selected
+
+#check @MicroCFTA.SourceCurrentInitialSelectionForecast.class_fuel_selected
+#print axioms MicroCFTA.SourceCurrentInitialSelectionForecast.class_fuel_selected

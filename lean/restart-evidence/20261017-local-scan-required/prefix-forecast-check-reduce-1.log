@@ -1,0 +1,235 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/prefix-forecast-check-reduce-1.source.lean:40:82: error: unsolved goals
+width : Nat
+⊢ Eq.{2}
+    (match
+      match
+        match
+          List.foldr.{0, 0} SourceEqualityNeeded.insert SourceEqualityNeeded.empty
+            (List.map.{0, 0} (List.map.{0, 0} Int.ofNat)
+              (List.mergeSort.{0} (List.eraseDups.{0} (List.flatten.{0} (List.map.{0, 0} Record.paths List.nil.{0})))
+                fun left right => decide (LE.le.{0} left right))) with
+        | SourceEqualityNeeded.Needed.node entries =>
+          match SourceEqualityNeededMap.lookup.{0} 0 entries with
+          | none.{0} =>
+            match
+              match SourceEqualityNeededMap.lookup.{0} 1 entries with
+              | none.{0} =>
+                SourceEqualityRequiredWorker.Result.done (List.cons.{0} Value.empty List.nil.{0})
+                  (SourceRecursiveIntersectionThunks.initial width
+                        { heap := empty, domains := Cache.emptyState }).machine.heap
+              | some.{0} needed =>
+                match
+                  SourceEqualityRequiredWorker.require 0 0 needed Value.empty
+                    (SourceRecursiveIntersectionThunks.initial width
+                          { heap := empty, domains := Cache.emptyState }).machine.heap with
+                | SourceEqualityRequiredWorker.Result.done value state =>
+                  SourceEqualityRequiredWorker.Result.done (List.cons.{0} value List.nil.{0}) state
+                | SourceEqualityRequiredWorker.Result.pending key state =>
+                  SourceEqualityRequiredWorker.Result.pending key state
+                | SourceEqualityRequiredWorker.Result.unresolved name state =>
+                  SourceEqualityRequiredWorker.Result.unresolved name state
+                | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+                  SourceEqualityRequiredWorker.Result.exhausted limit state with
+            | SourceEqualityRequiredWorker.Result.done value state =>
+              SourceEqualityRequiredWorker.Result.done
+                (List.cons.{0} (Value.reference InternedBinderProtocol.Reference.depth) value) state
+            | SourceEqualityRequiredWorker.Result.pending key state =>
+              SourceEqualityRequiredWorker.Result.pending key state
+            | SourceEqualityRequiredWorker.Result.unresolved name state =>
+              SourceEqualityRequiredWorker.Result.unresolved name state
+            | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+              SourceEqualityRequiredWorker.Result.exhausted limit state
+          | some.{0} needed =>
+            match
+              SourceEqualityRequiredWorker.require 0 0 needed (Value.reference InternedBinderProtocol.Reference.depth)
+                (SourceRecursiveIntersectionThunks.initial width
+                      { heap := empty, domains := Cache.emptyState }).machine.heap with
+            | SourceEqualityRequiredWorker.Result.done value state =>
+              match
+                match SourceEqualityNeededMap.lookup.{0} 1 entries with
+                | none.{0} => SourceEqualityRequiredWorker.Result.done (List.cons.{0} Value.empty List.nil.{0}) state
+                | some.{0} needed =>
+                  match SourceEqualityRequiredWorker.require 0 0 needed Value.empty state with
+                  | SourceEqualityRequiredWorker.Result.done value state =>
+                    SourceEqualityRequiredWorker.Result.done (List.cons.{0} value List.nil.{0}) state
+                  | SourceEqualityRequiredWorker.Result.pending key state =>
+                    SourceEqualityRequiredWorker.Result.pending key state
+                  | SourceEqualityRequiredWorker.Result.unresolved name state =>
+                    SourceEqualityRequiredWorker.Result.unresolved name state
+                  | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+                    SourceEqualityRequiredWorker.Result.exhausted limit state with
+              | SourceEqualityRequiredWorker.Result.done value_1 state =>
+                SourceEqualityRequiredWorker.Result.done (List.cons.{0} value value_1) state
+              | SourceEqualityRequiredWorker.Result.pending key state =>
+                SourceEqualityRequiredWorker.Result.pending key state
+              | SourceEqualityRequiredWorker.Result.unresolved name state =>
+                SourceEqualityRequiredWorker.Result.unresolved name state
+              | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+                SourceEqualityRequiredWorker.Result.exhausted limit state
+            | SourceEqualityRequiredWorker.Result.pending key state =>
+              SourceEqualityRequiredWorker.Result.pending key state
+            | SourceEqualityRequiredWorker.Result.unresolved name state =>
+              SourceEqualityRequiredWorker.Result.unresolved name state
+            | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+              SourceEqualityRequiredWorker.Result.exhausted limit state with
+      | SourceEqualityRequiredWorker.Result.done results heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.done results
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo
+      | SourceEqualityRequiredWorker.Result.pending key heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.pending key heap))
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo
+      | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.unresolved name heap))
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo
+      | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.exhausted limit heap))
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo with
+    | SourceCurrentAllocatedLocalWorker.Outcome.done value checked fourth memo =>
+      SourceCurrentAllocatedLocalWorker.Outcome.done (Prod.mk.{0, 0} none.{0} (Prod.mk.{0, 0} List.nil.{0} value))
+        checked fourth memo
+    | SourceCurrentAllocatedLocalWorker.Outcome.failed fault checked fourth memo =>
+      SourceCurrentAllocatedLocalWorker.Outcome.failed fault checked fourth memo)
+    (SourceCurrentAllocatedLocalWorker.Outcome.done
+      (Prod.mk.{0, 0} none.{0}
+        (Prod.mk.{0, 0} List.nil.{0}
+          (List.cons.{0} (Value.reference InternedBinderProtocol.Reference.depth)
+            (List.cons.{0} Value.empty List.nil.{0}))))
+      { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+        operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+      fourth memo)
+width : Nat
+⊢ Eq.{2}
+    (match
+      match
+        match
+          List.foldr.{0, 0} SourceEqualityNeeded.insert SourceEqualityNeeded.empty
+            (List.map.{0, 0} (List.map.{0, 0} Int.ofNat)
+              (List.mergeSort.{0} (List.eraseDups.{0} (List.flatten.{0} (List.map.{0, 0} Record.paths List.nil.{0})))
+                fun left right => decide (LE.le.{0} left right))) with
+        | SourceEqualityNeeded.Needed.node entries =>
+          match SourceEqualityNeededMap.lookup.{0} 0 entries with
+          | none.{0} =>
+            match
+              match SourceEqualityNeededMap.lookup.{0} 1 entries with
+              | none.{0} =>
+                SourceEqualityRequiredWorker.Result.done (List.cons.{0} Value.empty List.nil.{0})
+                  (SourceRecursiveIntersectionThunks.initial width
+                        { heap := empty, domains := Cache.emptyState }).machine.heap
+              | some.{0} needed =>
+                match
+                  SourceEqualityRequiredWorker.require 0 0 needed Value.empty
+                    (SourceRecursiveIntersectionThunks.initial width
+                          { heap := empty, domains := Cache.emptyState }).machine.heap with
+                | SourceEqualityRequiredWorker.Result.done value state =>
+                  SourceEqualityRequiredWorker.Result.done (List.cons.{0} value List.nil.{0}) state
+                | SourceEqualityRequiredWorker.Result.pending key state =>
+                  SourceEqualityRequiredWorker.Result.pending key state
+                | SourceEqualityRequiredWorker.Result.unresolved name state =>
+                  SourceEqualityRequiredWorker.Result.unresolved name state
+                | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+                  SourceEqualityRequiredWorker.Result.exhausted limit state with
+            | SourceEqualityRequiredWorker.Result.done value state =>
+              SourceEqualityRequiredWorker.Result.done
+                (List.cons.{0} (Value.reference InternedBinderProtocol.Reference.depth) value) state
+            | SourceEqualityRequiredWorker.Result.pending key state =>
+              SourceEqualityRequiredWorker.Result.pending key state
+            | SourceEqualityRequiredWorker.Result.unresolved name state =>
+              SourceEqualityRequiredWorker.Result.unresolved name state
+            | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+              SourceEqualityRequiredWorker.Result.exhausted limit state
+          | some.{0} needed =>
+            match
+              SourceEqualityRequiredWorker.require 0 0 needed (Value.reference InternedBinderProtocol.Reference.depth)
+                (SourceRecursiveIntersectionThunks.initial width
+                      { heap := empty, domains := Cache.emptyState }).machine.heap with
+            | SourceEqualityRequiredWorker.Result.done value state =>
+              match
+                match SourceEqualityNeededMap.lookup.{0} 1 entries with
+                | none.{0} => SourceEqualityRequiredWorker.Result.done (List.cons.{0} Value.empty List.nil.{0}) state
+                | some.{0} needed =>
+                  match SourceEqualityRequiredWorker.require 0 0 needed Value.empty state with
+                  | SourceEqualityRequiredWorker.Result.done value state =>
+                    SourceEqualityRequiredWorker.Result.done (List.cons.{0} value List.nil.{0}) state
+                  | SourceEqualityRequiredWorker.Result.pending key state =>
+                    SourceEqualityRequiredWorker.Result.pending key state
+                  | SourceEqualityRequiredWorker.Result.unresolved name state =>
+                    SourceEqualityRequiredWorker.Result.unresolved name state
+                  | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+                    SourceEqualityRequiredWorker.Result.exhausted limit state with
+              | SourceEqualityRequiredWorker.Result.done value_1 state =>
+                SourceEqualityRequiredWorker.Result.done (List.cons.{0} value value_1) state
+              | SourceEqualityRequiredWorker.Result.pending key state =>
+                SourceEqualityRequiredWorker.Result.pending key state
+              | SourceEqualityRequiredWorker.Result.unresolved name state =>
+                SourceEqualityRequiredWorker.Result.unresolved name state
+              | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+                SourceEqualityRequiredWorker.Result.exhausted limit state
+            | SourceEqualityRequiredWorker.Result.pending key state =>
+              SourceEqualityRequiredWorker.Result.pending key state
+            | SourceEqualityRequiredWorker.Result.unresolved name state =>
+              SourceEqualityRequiredWorker.Result.unresolved name state
+            | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+              SourceEqualityRequiredWorker.Result.exhausted limit state with
+      | SourceEqualityRequiredWorker.Result.done results heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.done results
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo
+      | SourceEqualityRequiredWorker.Result.pending key heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.pending key heap))
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo
+      | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.unresolved name heap))
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo
+      | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.exhausted limit heap))
+          (SourceCurrentAllocatedQueryMemo.advancePhysical
+            { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+              operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+            { heap := heap, equality := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState })
+          fourth memo with
+    | SourceCurrentAllocatedLocalWorker.Outcome.done value checked fourth memo =>
+      SourceCurrentAllocatedLocalWorker.Outcome.done (Prod.mk.{0, 0} none.{0} (Prod.mk.{0, 0} List.nil.{0} value))
+        checked fourth memo
+    | SourceCurrentAllocatedLocalWorker.Outcome.failed fault checked fourth memo =>
+      SourceCurrentAllocatedLocalWorker.Outcome.failed fault checked fourth memo)
+    (SourceCurrentAllocatedLocalWorker.Outcome.done
+      (Prod.mk.{0, 0} none.{0}
+        (Prod.mk.{0, 0} List.nil.{0}
+          (List.cons.{0} (Value.reference InternedBinderProtocol.Reference.depth)
+            (List.cons.{0} Value.empty List.nil.{0}))))
+      { native := SourceRecursiveIntersectionThunks.initial width { heap := empty, domains := Cache.emptyState },
+        operations := SourceEqualityConstraintMemoAllocation.initial Cache.emptyState }
+      fourth memo)

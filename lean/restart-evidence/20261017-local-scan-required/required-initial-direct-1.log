@@ -1,0 +1,149 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:38:2: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapRequiredInitialNumeric.forecast`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:42:2: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapRequiredInitialNumeric.forecast_ge`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:46:2: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapRequiredInitialNumeric.workerFuel`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:50:2: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapRequiredInitialNumeric.readerFuel`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:162:18: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapRequiredInitialNumeric.at_requireAll`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:156:69: error: unsolved goals
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+unconstrained reaches : Value Symbol Guard → Bool
+selected : EqualityNormalize.Constraints
+values : List (Value Symbol Guard)
+before : Checked width
+frame : Frame formulas solver inventory before
+profile : Profile
+fits : Fits profile before
+available : Values before.native.machine.heap values
+proper : ∀ (path : EqualityNormalize.Path), path ∈ List.flatten selected → path ≠ []
+primary :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ selected →
+      EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap false
+        before.native.machine.heap
+memos : Memos
+valid : Valid before.native.machine.heap memos
+results : List (Value Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+final : Memos
+fuel readFuel : Nat
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected values results before
+    (advanceHeap before heap)
+reads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values results
+    before.native.machine.heap heap memos final
+returned : Frame formulas solver inventory (advanceHeap before heap)
+globals : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap heap memos final
+length : results.length = values.length
+done :
+  SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected) values
+      before.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done results heap
+support :
+  SourceCurrentRequiredSupport.ForestSupport unconstrained before.native.machine.heap
+    (SourceEqualityNeeded.build (SourceEqualitySelectedRequired.paths selected)) values
+⊢ ∃ results heap final,
+    SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected values results before
+        (advanceHeap before heap) ∧
+      SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values results
+          before.native.machine.heap heap memos final ∧
+        Frame formulas solver inventory (advanceHeap before heap) ∧
+          SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap heap memos final ∧
+            results.length = values.length ∧
+              Fits (forecast (SourceEqualitySelectedRequired.paths selected) values.length profile)
+                  (advanceHeap before heap) ∧
+                SourceEqualityRequiredExecution.requireAll (workerFuel (SourceEqualitySelectedRequired.paths selected))
+                      (readerFuel (SourceEqualitySelectedRequired.paths selected) values.length profile)
+                      (SourceEqualitySelectedRequired.paths selected) values before.native.machine.heap =
+                    SourceEqualityRequiredWorker.Result.done results heap ∧
+                  ∀ (worker reader : Nat),
+                    workerFuel (SourceEqualitySelectedRequired.paths selected) ≤ worker →
+                      readerFuel (SourceEqualitySelectedRequired.paths selected) values.length profile ≤ reader →
+                        SourceEqualityRequiredExecution.requireAll worker reader
+                            (SourceEqualitySelectedRequired.paths selected) values before.native.machine.heap =
+                          SourceEqualityRequiredWorker.Result.done results heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:207:18: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapRequiredInitialNumeric.at_requireAll`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/required-initial-direct-1.source.lean:200:77: error: unsolved goals
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+unconstrained reaches : Value Symbol Guard → Bool
+selected : EqualityNormalize.Constraints
+values : List (Value Symbol Guard)
+before : Caller width
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+available : Values before.checked.native.machine.heap values
+proper : ∀ (path : EqualityNormalize.Path), path ∈ List.flatten selected → path ≠ []
+primary :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ selected →
+      EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.checked.native.machine.heap false
+        before.checked.native.machine.heap
+results : List (Value Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+final : Memos
+fuel readFuel : Nat
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected values results before.checked
+    (advanceHeap before.checked heap)
+reads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values results
+    before.checked.native.machine.heap heap memos final
+returned : Frame formulas solver inventory (advanceHeap before.checked heap)
+post :
+  Post formulas solver inventory before (advance before (advanceHeap before.checked heap) before.fourth before.merge)
+    final
+length : results.length = values.length
+nodes : (advance before (advanceHeap before.checked heap) before.fourth before.merge).nodeResults = before.nodeResults
+edges : (advance before (advanceHeap before.checked heap) before.fourth before.merge).edgeResults = before.edgeResults
+fourth : (advance before (advanceHeap before.checked heap) before.fourth before.merge).fourth = before.fourth
+merged : (advance before (advanceHeap before.checked heap) before.fourth before.merge).merge = before.merge
+done :
+  SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected) values
+      before.checked.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done results heap
+support :
+  SourceCurrentRequiredSupport.ForestSupport unconstrained before.checked.native.machine.heap
+    (SourceEqualityNeeded.build (SourceEqualitySelectedRequired.paths selected)) values
+⊢ ∃ results heap final,
+    SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected values results before.checked
+        (advanceHeap before.checked heap) ∧
+      SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values results
+          before.checked.native.machine.heap heap memos final ∧
+        Frame formulas solver inventory (advanceHeap before.checked heap) ∧
+          Post formulas solver inventory before
+              (advance before (advanceHeap before.checked heap) before.fourth before.merge) final ∧
+            results.length = values.length ∧
+              Fits (forecast (SourceEqualitySelectedRequired.paths selected) values.length profile)
+                  (advanceHeap before.checked heap) ∧
+                (advance before (advanceHeap before.checked heap) before.fourth before.merge).nodeResults =
+                    before.nodeResults ∧
+                  (advance before (advanceHeap before.checked heap) before.fourth before.merge).edgeResults =
+                      before.edgeResults ∧
+                    (advance before (advanceHeap before.checked heap) before.fourth before.merge).fourth =
+                        before.fourth ∧
+                      (advance before (advanceHeap before.checked heap) before.fourth before.merge).merge =
+                          before.merge ∧
+                        SourceEqualityRequiredExecution.requireAll
+                              (workerFuel (SourceEqualitySelectedRequired.paths selected))
+                              (readerFuel (SourceEqualitySelectedRequired.paths selected) values.length profile)
+                              (SourceEqualitySelectedRequired.paths selected) values
+                              before.checked.native.machine.heap =
+                            SourceEqualityRequiredWorker.Result.done results heap ∧
+                          ∀ (worker reader : Nat),
+                            workerFuel (SourceEqualitySelectedRequired.paths selected) ≤ worker →
+                              readerFuel (SourceEqualitySelectedRequired.paths selected) values.length profile ≤
+                                  reader →
+                                SourceEqualityRequiredExecution.requireAll worker reader
+                                    (SourceEqualitySelectedRequired.paths selected) values
+                                    before.checked.native.machine.heap =
+                                  SourceEqualityRequiredWorker.Result.done results heap

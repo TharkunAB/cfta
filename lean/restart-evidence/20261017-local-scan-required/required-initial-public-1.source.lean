@@ -1,0 +1,36 @@
+import MicroCFTA.SourceCurrentRequiredInitialNumeric
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+
+#print axioms MicroCFTA.SourceCurrentRequiredInitialNumeric.forecast
+#check @MicroCFTA.SourceCurrentRequiredInitialNumeric.forecast
+#print MicroCFTA.SourceCurrentRequiredInitialNumeric.forecast
+
+#print axioms MicroCFTA.SourceCurrentRequiredInitialNumeric.forecast_ge
+#check @MicroCFTA.SourceCurrentRequiredInitialNumeric.forecast_ge
+#print MicroCFTA.SourceCurrentRequiredInitialNumeric.forecast_ge
+
+#print axioms MicroCFTA.SourceCurrentRequiredInitialNumeric.workerFuel
+#check @MicroCFTA.SourceCurrentRequiredInitialNumeric.workerFuel
+#print MicroCFTA.SourceCurrentRequiredInitialNumeric.workerFuel
+
+#print axioms MicroCFTA.SourceCurrentRequiredInitialNumeric.readerFuel
+#check @MicroCFTA.SourceCurrentRequiredInitialNumeric.readerFuel
+#print MicroCFTA.SourceCurrentRequiredInitialNumeric.readerFuel
+
+#print axioms MicroCFTA.SourceCurrentRequiredInitialNumeric.complete
+#check @MicroCFTA.SourceCurrentRequiredInitialNumeric.complete
+#print MicroCFTA.SourceCurrentRequiredInitialNumeric.complete
+
+#print axioms MicroCFTA.SourceCurrentRequiredInitialNumeric.caller
+#check @MicroCFTA.SourceCurrentRequiredInitialNumeric.caller
+#print MicroCFTA.SourceCurrentRequiredInitialNumeric.caller

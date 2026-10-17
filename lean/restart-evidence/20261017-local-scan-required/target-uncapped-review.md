@@ -1,0 +1,19 @@
+# Uncapped initial Target numeric completion
+
+The production source is `SourceCurrentTargetNumeric.lean`, SHA256 `54cb749f2c1a4df8512538c70d5bb01ffc82a42cccc7caff5ee7a8765bad780c`. It adds two theorems and changes no old source.
+
+`fold_complete` executes each head Operand before the remaining tail and its checked native intersection. The seed remains fixed. The lower Operand theorem constructs both projection and allocated Merge from initial facts. Its full receipt supplies the exact physical Merge memo, semantic coverage, available originals, and valid global memos for the tail. The tail receipt transports the previously returned head to the query heap. The cap-free generated-query theorem constructs that query from available closed operands, the actual Frame and Fits, and initial query-entry Room. Receipt composition retains the full old language contract. It does not replace that contract with a shape-only law.
+
+The returned inventory is the actual query inventory. The same Frame contains causal GuardHeap, current native joint laws and request origins. No input Cap or semantic Cap-Merge table is needed. Physical Merge Stored and CacheCovers remain explicit initial requirements for arbitrary warm winners. The supplied selected ForestClosed domains cover each operand path. They allow unrelated open ordinary roots. They still require closed recursive heads when those heads are selected. This theorem does not admit every open recursive projection.
+
+The public `complete` handles an empty Target without query room and a nonempty Target with the existing initial-only TargetReserved schedule. The five literal worker parameters use the existing targetFuel. Existing worker stability gives every independently larger choice at the same full physical state and saved Merge memo. The theorem does not supply Force, Leaf, editor, class-pass, outer-recursive, convergence, or runtime completion.
+
+## Validation
+
+The immutable first direct snapshot passes Lean 4.34.1 with all linters and an empty log. The single canonical target passes 1524 jobs. Its only warning comes from the existing ClosedCompletion dependency. The imported public probe checks both full signatures, complete proof terms, and axioms. Only propext, Classical.choice, and Quot.sound occur.
+
+Two constructed integration pairs pass in immutable `target-uncapped-kernels-3.source.lean`. The first builds a closed raw Mu from source syntax with nonempty equality metadata. Its body guard is nonplain, so the exact value is outside every finite Cap. Actual equality-field construction supplies the initial Ready state. Source construction supplies the causal GuardHeap and initial payload-mass bound. An unrelated depth reference makes the captured forest open. Two identical proper operand paths select only the closed Mu. The new endpoint constructs its own Target, reads, complete language receipt, returned Frame/Fits, and exact independently larger five-fuel replay. Its only resource assumption is the pure initial TargetReserved expression. The majorants remain symbolic. This fixture does not assert a productive/nonempty language or a runtime allocation count.
+
+The second integration constructs the empty Target on the same source and forest. It needs no Room and returns the exact initial full checked state and Merge memo at zero worker fuels. Kernel checks print full signatures and axioms. They omit computed proof-term printing to keep logs finite.
+
+Both failed integration attempts remain as immutable numbered sources and raw logs. The first exposed missing simplification of duplicate path membership and the signed selected-domain match. The second exposed explicit NodeClosed reduction and open-sibling membership. The successful third attempt has no diagnostic. There were no failed production attempts.

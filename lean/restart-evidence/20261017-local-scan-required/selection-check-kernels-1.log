@@ -1,0 +1,72 @@
+MicroCFTA.SelectionForecastCheck.positional_duplicates : And
+  (@Eq.{1} (List.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+    (@MicroCFTA.SourceCurrentInitialSelectionForecast.selections.{0} MicroCFTA.SourceEqualityClassOrder.Record
+      MicroCFTA.SelectionForecastCheck.original)
+    (@List.cons.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+      (@List.cons.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.SelectionForecastCheck.record
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+        (@List.cons.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.SelectionForecastCheck.record
+            (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+          (@List.cons.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) MicroCFTA.SelectionForecastCheck.original
+            (@List.nil.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+  (And
+    (@Eq.{1} Nat
+      (@List.length.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@MicroCFTA.SourceCurrentInitialSelectionForecast.selections.{0} MicroCFTA.SourceEqualityClassOrder.Record
+          MicroCFTA.SelectionForecastCheck.original))
+      (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+    (And
+      (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.SelectionForecastCheck.record
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+        MicroCFTA.SelectionForecastCheck.original)
+      (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.SelectionForecastCheck.original
+        MicroCFTA.SelectionForecastCheck.original)))
+'MicroCFTA.SelectionForecastCheck.positional_duplicates' does not depend on any axioms
+MicroCFTA.SelectionForecastCheck.all_initial_choices : ∀ (count : Nat)
+  (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @Membership.mem.{0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+      (List.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+      (@List.instMembership.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+      (@MicroCFTA.SourceCurrentInitialSelectionForecast.selections.{0} MicroCFTA.SourceEqualityClassOrder.Record
+        MicroCFTA.SelectionForecastCheck.original)
+      kept →
+    And (@List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept MicroCFTA.SelectionForecastCheck.original)
+      (And
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+          (MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast
+            (MicroCFTA.SourceEqualitySelectedRequired.paths
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths kept))
+            count entry)
+          (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile MicroCFTA.SelectionForecastCheck.original
+            count entry))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.workerFuel
+              (MicroCFTA.SourceEqualitySelectedRequired.paths
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths kept)))
+            (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredWorker MicroCFTA.SelectionForecastCheck.original))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.readerFuel
+                (MicroCFTA.SourceEqualitySelectedRequired.paths
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths kept))
+                count entry)
+              (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredReader MicroCFTA.SelectionForecastCheck.original
+                count entry))
+            (And
+              (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile kept count entry)
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile
+                  MicroCFTA.SelectionForecastCheck.original count entry))
+              (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel kept count entry)
+                (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel MicroCFTA.SelectionForecastCheck.original
+                  count entry))))))
+'MicroCFTA.SelectionForecastCheck.all_initial_choices' depends on axioms: [propext, Quot.sound.{u}]

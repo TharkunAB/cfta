@@ -1,0 +1,396 @@
+'MicroCFTA.SourceCurrentRequiredGuard.node' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredGuard.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after
+theorem MicroCFTA.SourceCurrentRequiredGuard.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] valid {needed}
+    {value result} {before after} actual semantic costs available stored =>
+  @And.left
+    (∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed)
+      (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+        @MicroCFTA.SourceCurrentRequiredGuard.NodeResult✝ Symbol Guard valid value before after)
+    (And
+      (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (index : Nat)
+        (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+        (results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results
+            after →
+          @MicroCFTA.SourceCurrentRequiredGuard.ChildrenResult✝ Symbol Guard valid values before after)
+      (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+        (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+        (results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+          @MicroCFTA.SourceCurrentRequiredGuard.RowsResult✝ Symbol Guard valid edges before after))
+    (@MicroCFTA.SourceCurrentRequiredGuard.all_required✝ Symbol Guard inst valid) needed value before result after
+    actual semantic costs available stored
+'MicroCFTA.SourceCurrentRequiredGuard.children' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredGuard.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after
+theorem MicroCFTA.SourceCurrentRequiredGuard.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] valid
+    {entries} {index} {values results} {before after} actual semantic costs available stored =>
+  @And.left
+    (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (index : Nat)
+      (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results
+          after →
+        @MicroCFTA.SourceCurrentRequiredGuard.ChildrenResult✝ Symbol Guard valid values before after)
+    (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+      (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+        @MicroCFTA.SourceCurrentRequiredGuard.RowsResult✝ Symbol Guard valid edges before after)
+    (@And.right
+      (∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed)
+        (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+        (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+          @MicroCFTA.SourceCurrentRequiredGuard.NodeResult✝ Symbol Guard valid value before after)
+      (And
+        (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (index : Nat)
+          (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results
+              after →
+            @MicroCFTA.SourceCurrentRequiredGuard.ChildrenResult✝ Symbol Guard valid values before after)
+        (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+          (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+            @MicroCFTA.SourceCurrentRequiredGuard.RowsResult✝ Symbol Guard valid edges before after))
+      (@MicroCFTA.SourceCurrentRequiredGuard.all_required✝ Symbol Guard inst valid))
+    entries index values before results after actual semantic costs available stored
+'MicroCFTA.SourceCurrentRequiredGuard.rows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredGuard.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after
+theorem MicroCFTA.SourceCurrentRequiredGuard.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid before →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard valid after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] valid
+    {entries} {edges results} {before after} actual semantic costs resident stored =>
+  @And.right
+    (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (index : Nat)
+      (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results
+          after →
+        @MicroCFTA.SourceCurrentRequiredGuard.ChildrenResult✝ Symbol Guard valid values before after)
+    (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+      (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+        @MicroCFTA.SourceCurrentRequiredGuard.RowsResult✝ Symbol Guard valid edges before after)
+    (@And.right
+      (∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed)
+        (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+        (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+          @MicroCFTA.SourceCurrentRequiredGuard.NodeResult✝ Symbol Guard valid value before after)
+      (And
+        (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)) (index : Nat)
+          (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results
+              after →
+            @MicroCFTA.SourceCurrentRequiredGuard.ChildrenResult✝ Symbol Guard valid values before after)
+        (∀ (entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed))
+          (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+            @MicroCFTA.SourceCurrentRequiredGuard.RowsResult✝ Symbol Guard valid edges before after))
+      (@MicroCFTA.SourceCurrentRequiredGuard.all_required✝ Symbol Guard inst valid))
+    entries edges before results after actual semantic costs resident stored
+'MicroCFTA.SourceCurrentRequiredGuard.requireAll' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredGuard.requireAll : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  {paths : List.{0} (List.{0} Int)}
+  {values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads inst paths values results before after memos saved →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+        @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before values →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid before →
+            And
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid after)
+              (@Eq.{1} Nat
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  results)
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  values))
+theorem MicroCFTA.SourceCurrentRequiredGuard.requireAll : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  {paths : List.{0} (List.{0} Int)}
+  {values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads inst paths values results before after memos saved →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+        @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before values →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid before →
+            And
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid after)
+              (@Eq.{1} Nat
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  results)
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  values)) :=
+fun
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    valid {paths} {values results} {before after} {memos saved} reads semantic costs available stored =>
+  @MicroCFTA.SourceEqualityNeeded.Needed.casesOn.{0}
+    (fun t =>
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths) t →
+        And
+          (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid after)
+          (@Eq.{1} Nat
+            (@List.length.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              results)
+            (@List.length.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              values)))
+    (MicroCFTA.SourceEqualityNeeded.build paths)
+    (fun entries h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+        (fun x =>
+          @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths) x →
+            And
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid after)
+              (@Eq.{1} Nat
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  results)
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  values)))
+        (fun compiled =>
+          @Exists.casesOn.{0}
+            (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst entries
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after)
+            (fun trace =>
+              @MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads inst entries
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after trace memos
+                saved)
+            (fun x =>
+              And
+                (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid after)
+                (@Eq.{1} Nat
+                  (@List.length.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    results)
+                  (@List.length.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    values)))
+            (@Eq.mp.{0}
+              (@MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads inst paths values results before after memos
+                saved)
+              (@Exists.{0}
+                (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst entries
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after)
+                fun trace =>
+                @MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads inst entries
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after trace memos
+                  saved)
+              (@congrArg.{1, 1} MicroCFTA.SourceEqualityNeeded.Needed Prop (MicroCFTA.SourceEqualityNeeded.build paths)
+                (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+                (fun x =>
+                  MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads.match_1.{1} (fun x => Prop) x fun entries =>
+                    @Exists.{0}
+                      (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst entries
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after)
+                      fun trace =>
+                      @MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads inst entries
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after trace
+                        memos saved)
+                compiled)
+              reads)
+            fun actual _reads =>
+            @And.intro
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid after)
+              (@Eq.{1} Nat
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  results)
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  values))
+              (@MicroCFTA.SourceCurrentRequiredGuard.children
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst valid entries
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values results before after actual
+                semantic costs available stored)
+              (@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren.length
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst entries
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values results before after actual))
+        (MicroCFTA.SourceEqualityNeeded.build paths)
+        (@Eq.symm.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths)
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) h)
+        (@Eq.refl.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths)))
+    (@Eq.refl.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths))

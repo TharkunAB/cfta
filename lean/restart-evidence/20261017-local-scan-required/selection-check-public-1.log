@@ -1,0 +1,108 @@
+@MicroCFTA.SourceCurrentInitialSelectionForecast.selections.{u_1} : {α : Type u_1} →
+  List.{u_1} α → List.{u_1} (List.{u_1} α)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.selections' does not depend on any axioms
+@MicroCFTA.SourceCurrentInitialSelectionForecast.selection_sublist.{u_1} : ∀ {α : Type u_1}
+  {kept records : List.{u_1} α},
+  @Membership.mem.{u_1, u_1} (List.{u_1} α) (List.{u_1} (List.{u_1} α)) (@List.instMembership.{u_1} (List.{u_1} α))
+      (@MicroCFTA.SourceCurrentInitialSelectionForecast.selections.{u_1} α records) kept →
+    @List.Sublist.{u_1} α kept records
+'MicroCFTA.SourceCurrentInitialSelectionForecast.selection_sublist' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.sublist_selection.{u_1} : ∀ {α : Type u_1}
+  {kept records : List.{u_1} α},
+  @List.Sublist.{u_1} α kept records →
+    @Membership.mem.{u_1, u_1} (List.{u_1} α) (List.{u_1} (List.{u_1} α)) (@List.instMembership.{u_1} (List.{u_1} α))
+      (@MicroCFTA.SourceCurrentInitialSelectionForecast.selections.{u_1} α records) kept
+'MicroCFTA.SourceCurrentInitialSelectionForecast.sublist_selection' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentInitialSelectionForecast.cover : List.{0}
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentInitialSelectionForecast.cover' does not depend on any axioms
+MicroCFTA.SourceCurrentInitialSelectionForecast.cover_ge : ∀
+  (profiles : List.{0} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le entry
+    (MicroCFTA.SourceCurrentInitialSelectionForecast.cover profiles entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.cover_ge' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.cover_member : ∀
+  {profiles : List.{0} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+  (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Membership.mem.{0, 0} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+      (List.{0} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (@List.instMembership.{0} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) profiles profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+      (MicroCFTA.SourceCurrentInitialSelectionForecast.cover profiles entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.cover_member' depends on axioms: [propext]
+MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentInitialSelectionForecast.required_ge : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le entry
+    (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile records count entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.required_ge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.required_selected : ∀
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records →
+    ∀ (count : Nat) (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.forecast
+          (MicroCFTA.SourceEqualitySelectedRequired.paths
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths kept))
+          count entry)
+        (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredProfile records count entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.required_selected' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentInitialSelectionForecast.maximum : List.{0} Nat → Nat
+'MicroCFTA.SourceCurrentInitialSelectionForecast.maximum' does not depend on any axioms
+@MicroCFTA.SourceCurrentInitialSelectionForecast.maximum_member : ∀ {values : List.{0} Nat} {value : Nat},
+  @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) values value →
+    @LE.le.{0} Nat instLENat value (MicroCFTA.SourceCurrentInitialSelectionForecast.maximum values)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.maximum_member' depends on axioms: [propext]
+MicroCFTA.SourceCurrentInitialSelectionForecast.requiredWorker : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat
+'MicroCFTA.SourceCurrentInitialSelectionForecast.requiredWorker' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.required_worker_selected : ∀
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.workerFuel
+        (MicroCFTA.SourceEqualitySelectedRequired.paths
+          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+            MicroCFTA.SourceEqualityClassOrder.Record.paths kept)))
+      (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredWorker records)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.required_worker_selected' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentInitialSelectionForecast.requiredReader : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+'MicroCFTA.SourceCurrentInitialSelectionForecast.requiredReader' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.required_reader_selected : ∀
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records →
+    ∀ (count : Nat) (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentConstrainedCapRequiredInitialNumeric.readerFuel
+          (MicroCFTA.SourceEqualitySelectedRequired.paths
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths kept))
+          count entry)
+        (MicroCFTA.SourceCurrentInitialSelectionForecast.requiredReader records count entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.required_reader_selected' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.class_profile_selected : ∀
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records →
+    ∀ (count : Nat) (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile kept count entry)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldProfile records count entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.class_profile_selected' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentInitialSelectionForecast.class_fuel_selected : ∀
+  {records kept : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @List.Sublist.{0} MicroCFTA.SourceEqualityClassOrder.Record kept records →
+    ∀ (count : Nat) (entry : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel kept count entry)
+        (MicroCFTA.SourceCurrentConstrainedCapClassForecast.foldFuel records count entry)
+'MicroCFTA.SourceCurrentInitialSelectionForecast.class_fuel_selected' depends on axioms: [propext, Quot.sound.{u}]

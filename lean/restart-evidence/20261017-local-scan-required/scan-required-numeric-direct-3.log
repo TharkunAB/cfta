@@ -1,0 +1,197 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/scan-required-numeric-direct-3.source.lean:216:6: error: unsolved goals
+case none.refine_3
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+values : List (Value Symbol Guard)
+records : List Record
+before : Caller (bits + 2)
+memos : Memos
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+profile : Profile
+fits : Fits profile before.checked
+available : Values before.checked.native.machine.heap values
+proper : ∀ (record : Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+coherent : ∀ (record : Record), record ∈ records → Coherent record
+active : ∀ (record : Record), record ∈ records → Nontrivial record.paths
+reserved :
+  SourceCurrentScanNumericForecast.Reserved bits budget values.length (List.map Record.paths records)
+    (guards before.checked.native.machine.heap) profile
+kept : List Record
+middle : Checked (bits + 2)
+saved : Fourth
+next : Inventory
+scanMemos : Memos
+scanPost : Post formulas solver next before (advance before middle saved before.merge) scanMemos
+sublist : kept.Sublist records
+fields : ∀ (record : Record), record ∈ kept → Coherent record ∧ Nontrivial record.paths
+_nodes✝ : (advance before middle saved before.merge).nodeResults = before.nodeResults
+_edges✝ : (advance before middle saved before.merge).edgeResults = before.edgeResults
+_merge✝ : (advance before middle saved before.merge).merge = before.merge
+_fourth✝ : (advance before middle saved before.merge).fourth = saved
+pathsProper : ∀ (paths : Class), paths ∈ List.map Record.paths records → ∀ (path : Path), path ∈ paths → path ≠ []
+pathsActive : ∀ (paths : Class), paths ∈ List.map Record.paths records → Nontrivial paths
+scanLimit :
+  SourceCurrentScanNumericForecast.fuel budget values.length (List.map Record.paths records)
+      (guards before.checked.native.machine.heap) profile ≤
+    fuel budget values.length records (guards before.checked.native.machine.heap) profile
+scanned :
+  SourceCurrentScanNumeric.Receipt formulas solver (guards before.checked.native.machine.heap) profile budget values
+    (List.map Record.paths records) before.checked before.fourth none (List.map Record.paths kept) middle saved next
+retained : Retained ⋯ records kept
+scanReads : ScanReads ⋯ memos scanMemos
+sound : SourceCurrentAllocatedScanCaller.StoppedSound formulas solver values (List.map Record.paths records) none
+scanDone :
+  ∀ (g s p h n : Nat),
+    SourceCurrentScanNumericForecast.fuel budget values.length (List.map Record.paths records)
+          (guards before.checked.native.machine.heap) profile ≤
+        g →
+      SourceCurrentScanNumericForecast.fuel budget values.length (List.map Record.paths records)
+            (guards before.checked.native.machine.heap) profile ≤
+          s →
+        SourceCurrentScanNumericForecast.fuel budget values.length (List.map Record.paths records)
+              (guards before.checked.native.machine.heap) profile ≤
+            p →
+          SourceCurrentScanNumericForecast.fuel budget values.length (List.map Record.paths records)
+                (guards before.checked.native.machine.heap) profile ≤
+              h →
+            SourceCurrentScanNumericForecast.fuel budget values.length (List.map Record.paths records)
+                  (guards before.checked.native.machine.heap) profile ≤
+                n →
+              SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records before.checked before.fourth =
+                SourceCurrentAllocatedScanWorker.Outcome.done (none, kept) middle saved
+primary :
+  ∀ (paths : Class),
+    paths ∈ List.map Record.paths kept →
+      EndpointStatefulGateTrace.ClassTrace source reaches values paths middle.native.machine.heap false
+        middle.native.machine.heap
+selectedProper : ∀ (path : Path), path ∈ (List.map Record.paths kept).flatten → path ≠ []
+results : List (Value Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+final : Memos
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver next (List.map Record.paths kept) values results
+    (advance before middle saved before.merge).checked
+    (advanceHeap (advance before middle saved before.merge).checked heap)
+requiredReads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths (List.map Record.paths kept))
+    values results (advance before middle saved before.merge).checked.native.machine.heap heap scanMemos final
+returned : Frame formulas solver next (advanceHeap (advance before middle saved before.merge).checked heap)
+requiredPost :
+  Post formulas solver next (advance before middle saved before.merge)
+    (advance (advance before middle saved before.merge)
+      (advanceHeap (advance before middle saved before.merge).checked heap)
+      (advance before middle saved before.merge).fourth (advance before middle saved before.merge).merge)
+    final
+length : results.length = values.length
+requiredFits :
+  Fits
+    (SourceCurrentRequiredInitialNumeric.forecast (SourceEqualitySelectedRequired.paths (List.map Record.paths kept))
+      values.length
+      (SourceCurrentScanRequiredForecast.scanProfile budget values.length records
+        (guards before.checked.native.machine.heap) profile))
+    (advanceHeap (advance before middle saved before.merge).checked heap)
+_nodes :
+  (advance (advance before middle saved before.merge)
+        (advanceHeap (advance before middle saved before.merge).checked heap)
+        (advance before middle saved before.merge).fourth
+        (advance before middle saved before.merge).merge).nodeResults =
+    (advance before middle saved before.merge).nodeResults
+_edges :
+  (advance (advance before middle saved before.merge)
+        (advanceHeap (advance before middle saved before.merge).checked heap)
+        (advance before middle saved before.merge).fourth
+        (advance before middle saved before.merge).merge).edgeResults =
+    (advance before middle saved before.merge).edgeResults
+_fourth :
+  (advance (advance before middle saved before.merge)
+        (advanceHeap (advance before middle saved before.merge).checked heap)
+        (advance before middle saved before.merge).fourth (advance before middle saved before.merge).merge).fourth =
+    (advance before middle saved before.merge).fourth
+_merge :
+  (advance (advance before middle saved before.merge)
+        (advanceHeap (advance before middle saved before.merge).checked heap)
+        (advance before middle saved before.merge).fourth (advance before middle saved before.merge).merge).merge =
+    (advance before middle saved before.merge).merge
+requiredDone :
+  SourceEqualityRequiredExecution.requireAll
+      (SourceCurrentRequiredInitialNumeric.workerFuel
+        (SourceEqualitySelectedRequired.paths (List.map Record.paths kept)))
+      (SourceCurrentRequiredInitialNumeric.readerFuel
+        (SourceEqualitySelectedRequired.paths (List.map Record.paths kept)) values.length
+        (SourceCurrentScanRequiredForecast.scanProfile budget values.length records
+          (guards before.checked.native.machine.heap) profile))
+      (SourceEqualitySelectedRequired.paths (List.map Record.paths kept)) values
+      (advance before middle saved before.merge).checked.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done results heap
+stable :
+  ∀ (worker reader : Nat),
+    SourceCurrentRequiredInitialNumeric.workerFuel (SourceEqualitySelectedRequired.paths (List.map Record.paths kept)) ≤
+        worker →
+      SourceCurrentRequiredInitialNumeric.readerFuel (SourceEqualitySelectedRequired.paths (List.map Record.paths kept))
+            values.length
+            (SourceCurrentScanRequiredForecast.scanProfile budget values.length records
+              (guards before.checked.native.machine.heap) profile) ≤
+          reader →
+        SourceEqualityRequiredExecution.requireAll worker reader
+            (SourceEqualitySelectedRequired.paths (List.map Record.paths kept)) values
+            (advance before middle saved before.merge).checked.native.machine.heap =
+          SourceEqualityRequiredWorker.Result.done results heap
+afterFits :
+  Fits
+    (SourceCurrentInitialSelectionForecast.requiredProfile records values.length
+      (SourceCurrentScanRequiredForecast.scanProfile budget values.length records
+        (guards before.checked.native.machine.heap) profile))
+    (advanceHeap (advance before middle saved before.merge).checked heap)
+post : Post formulas solver next before (advance before (advanceHeap middle heap) saved before.merge) final
+g s r p h n : Nat
+enoughG : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ g
+enoughS : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ s
+enoughR : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ r
+enoughP : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ p
+enoughH : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ h
+enoughN : fuel budget values.length records (guards before.checked.native.machine.heap) profile ≤ n
+done :
+  SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records before.checked before.fourth =
+    SourceCurrentAllocatedScanWorker.Outcome.done (none, kept) middle saved
+prepared :
+  SourceEqualityRequiredExecution.requireAll r h (SourceEqualitySelectedRequired.paths (List.map Record.paths kept))
+      values (advance before middle saved before.merge).checked.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done results heap
+⊢ (match
+      match
+        SourceEqualityRequiredExecution.requireAll r h
+          (SourceEqualitySelectedRequired.paths (List.map Record.paths kept)) values middle.native.machine.heap with
+      | SourceEqualityRequiredWorker.Result.done results heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.done results (advanceHeap middle heap) saved before.merge
+      | SourceEqualityRequiredWorker.Result.pending key heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.pending key heap))
+          (advanceHeap middle heap) saved before.merge
+      | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.unresolved name heap))
+          (advanceHeap middle heap) saved before.merge
+      | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+        SourceCurrentAllocatedLocalWorker.Outcome.failed
+          (SourceCurrentAllocatedLocalWorker.Fault.required (SourceEqualityRequiredWorker.Result.exhausted limit heap))
+          (advanceHeap middle heap) saved before.merge with
+    | SourceCurrentAllocatedLocalWorker.Outcome.done value checked fourth memo =>
+      SourceCurrentAllocatedLocalWorker.Outcome.done (none, kept, value) checked fourth memo
+    | SourceCurrentAllocatedLocalWorker.Outcome.failed fault checked fourth memo =>
+      SourceCurrentAllocatedLocalWorker.Outcome.failed fault checked fourth memo) =
+    SourceCurrentAllocatedLocalWorker.Outcome.done (none, kept, results) (advanceHeap middle heap) saved before.merge
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-local-scan-required/scan-required-numeric-direct-3.source.lean:223:102: warning: This simp argument is unused:
+  prepared
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentScanRequiredWorker.prepare, SourceCurrentAllocatedLocalWorker.scan, done,
+    SourceCurrentAllocatedLocalWorker.Outcome.bind, SourceCurrentAllocatedLocalWorker.required]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
