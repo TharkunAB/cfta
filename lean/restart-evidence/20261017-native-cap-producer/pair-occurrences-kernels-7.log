@@ -1,0 +1,499 @@
+'MicroCFTA.PairOccurrencesKernels.actual_ordinary_from_smaller' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@actual_ordinary_from_smaller : ∀ {Symbol Guard : Type} (weight : Reference → Nat) (smaller bound : Nat),
+  @LT.lt.{0} Nat instLTNat smaller bound →
+    ∀ (edges : List.{0} (EdgeValue Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard),
+      @Facts Symbol Guard state →
+        (∀ (edge : EdgeValue Symbol Guard),
+            @Membership.mem.{0, 0} (EdgeValue Symbol Guard) (List.{0} (EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (EdgeValue Symbol Guard)) edges edge →
+              @InternedEdgeResidency.EdgeResident Symbol Guard state edge) →
+          (∀ (edge : EdgeValue Symbol Guard),
+              @Membership.mem.{0, 0} (EdgeValue Symbol Guard) (List.{0} (EdgeValue Symbol Guard))
+                  (@List.instMembership.{0} (EdgeValue Symbol Guard)) edges edge →
+                ∀ (child : Value Symbol Guard),
+                  @Membership.mem.{0, 0} (Value Symbol Guard) (List.{0} (Value Symbol Guard))
+                      (@List.instMembership.{0} (Value Symbol Guard)) (@EdgeValue.children Symbol Guard edge) child →
+                    @FreeLE Symbol Guard weight smaller child) →
+            ∀ (owner : Reference),
+              @LE.le.{0} Nat instLENat bound (weight owner) →
+                have actual :=
+                  @run Symbol Guard (Value Symbol Guard)
+                    (fun a b =>
+                      @instDecidableEqEdgeKey Symbol Guard (fun a b => Classical.propDecidable (@Eq.{1} Symbol a b))
+                        (fun a b => Classical.propDecidable (@Eq.{1} Guard a b)) a b)
+                    (@makeNode Symbol Guard edges) state;
+                And
+                  (@Classified Symbol Guard weight bound
+                    (@Prod.fst.{0, 0} (Value Symbol Guard) (InternedConstructorTemplates.State Symbol Guard) actual))
+                  (Not
+                    (@Membership.mem.{0, 0} Reference (List.{0} Reference) (@List.instMembership.{0} Reference)
+                      (@InternedDeepFreeDepth.deepNames Symbol Guard
+                        (@Prod.fst.{0, 0} (Value Symbol Guard) (InternedConstructorTemplates.State Symbol Guard)
+                          actual))
+                      owner))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-cap-producer/pair-occurrences-kernels.lean:142:4: error: Type mismatch: After simplification, term
+  @And.left
+    (@Classified Nat Bool
+      (mark
+        (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+          (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+        (Reference.interned (@Interned.identity NodeKey owner)) ownerBound)
+      ownerBound
+      (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+        (@run Nat Bool (Value Nat Bool)
+          (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+          (@makeUnion Nat Bool
+            (@List.cons.{0} (Value Nat Bool)
+              (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+              (@List.cons.{0} (Value Nat Bool)
+                (@Value.node Nat Bool
+                  (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (NodeKey.node
+                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@List.nil.{0} Nat))))
+                  (@List.cons.{0} (EdgeValue Nat Bool)
+                    (@EdgeValue.mk Nat Bool
+                      (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                          (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                      (@List.nil.{0} (Value Nat Bool)))
+                    (@List.nil.{0} (EdgeValue Nat Bool)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+                (@List.nil.{0} (Value Nat Bool)))))
+          allocated)))
+    (And
+      (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+        (@SourceRecursiveIntersectionMaybeMu.callback Nat Bool
+          (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) old
+          (@SourceCurrentConstrainedCapNormalizedBinder.body Nat Bool old entry
+            (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (NodeKey.node
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))))
+            (@List.cons.{0} (EdgeValue Nat Bool)
+              (@EdgeValue.mk Nat Bool
+                (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                    (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                (@List.nil.{0} (Value Nat Bool)))
+              (@List.nil.{0} (EdgeValue Nat Bool)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (Reference.interned (@Interned.identity NodeKey owner)) allocated)
+        (@Outcome.done Nat Bool (Value Nat Bool)
+          (@Value.node Nat Bool
+            (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (NodeKey.node
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))))
+            (@List.cons.{0} (EdgeValue Nat Bool)
+              (@EdgeValue.mk Nat Bool
+                (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                    (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                (@List.nil.{0} (Value Nat Bool)))
+              (@List.nil.{0} (EdgeValue Nat Bool)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+          (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+            (@run Nat Bool (Value Nat Bool)
+              (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+              (@makeUnion Nat Bool
+                (@List.cons.{0} (Value Nat Bool)
+                  (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+                  (@List.cons.{0} (Value Nat Bool)
+                    (@Value.node Nat Bool
+                      (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (NodeKey.node
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))))
+                      (@List.cons.{0} (EdgeValue Nat Bool)
+                        (@EdgeValue.mk Nat Bool
+                          (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                              (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                          (@List.nil.{0} (Value Nat Bool)))
+                        (@List.nil.{0} (EdgeValue Nat Bool)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+                    (@List.nil.{0} (Value Nat Bool)))))
+              allocated))))
+      (And
+        (@Classified Nat Bool
+          (mark
+            (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+              (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+            (Reference.interned (@Interned.identity NodeKey owner)) ownerBound)
+          ownerBound
+          (@Value.node Nat Bool
+            (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (NodeKey.node
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))))
+            (@List.cons.{0} (EdgeValue Nat Bool)
+              (@EdgeValue.mk Nat Bool
+                (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                    (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                (@List.nil.{0} (Value Nat Bool)))
+              (@List.nil.{0} (EdgeValue Nat Bool)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference)))
+        (And
+          (@SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Value.node Nat Bool
+              (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (NodeKey.node
+                  (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (@List.nil.{0} Nat))))
+              (@List.cons.{0} (EdgeValue Nat Bool)
+                (@EdgeValue.mk Nat Bool
+                  (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                      (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                  (@List.nil.{0} (Value Nat Bool)))
+                (@List.nil.{0} (EdgeValue Nat Bool)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference)))
+          (Not
+            (@Membership.mem.{0, 0} Reference (List.{0} Reference) (@List.instMembership.{0} Reference)
+              (@Value.free Nat Bool
+                (@Value.node Nat Bool
+                  (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (NodeKey.node
+                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@List.nil.{0} Nat))))
+                  (@List.cons.{0} (EdgeValue Nat Bool)
+                    (@EdgeValue.mk Nat Bool
+                      (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                          (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                      (@List.nil.{0} (Value Nat Bool)))
+                    (@List.nil.{0} (EdgeValue Nat Bool)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference)))
+              (Reference.interned (@Interned.identity NodeKey owner)))))))
+    (@And.right
+      (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+        (@InternedFreshOrdinaryStoredSubstitution.execute Nat Bool
+          (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+          (@SourceCurrentConstrainedCapNormalizedBinder.body Nat Bool old entry
+            (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (NodeKey.node
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))))
+            (@List.cons.{0} (EdgeValue Nat Bool)
+              (@EdgeValue.mk Nat Bool
+                (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                    (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                (@List.nil.{0} (Value Nat Bool)))
+              (@List.nil.{0} (EdgeValue Nat Bool)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (@InternedStoredSubstitutionRebind.replacement Nat Bool old
+            (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner))))
+          allocated)
+        (@Outcome.done Nat Bool (Value Nat Bool)
+          (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+            (@run Nat Bool (Value Nat Bool)
+              (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+              (@makeUnion Nat Bool
+                (@List.cons.{0} (Value Nat Bool)
+                  (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+                  (@List.cons.{0} (Value Nat Bool)
+                    (@Value.node Nat Bool
+                      (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (NodeKey.node
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))))
+                      (@List.cons.{0} (EdgeValue Nat Bool)
+                        (@EdgeValue.mk Nat Bool
+                          (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                              (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                          (@List.nil.{0} (Value Nat Bool)))
+                        (@List.nil.{0} (EdgeValue Nat Bool)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+                    (@List.nil.{0} (Value Nat Bool)))))
+              allocated))
+          (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+            (@run Nat Bool (Value Nat Bool)
+              (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+              (@makeUnion Nat Bool
+                (@List.cons.{0} (Value Nat Bool)
+                  (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+                  (@List.cons.{0} (Value Nat Bool)
+                    (@Value.node Nat Bool
+                      (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (NodeKey.node
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))))
+                      (@List.cons.{0} (EdgeValue Nat Bool)
+                        (@EdgeValue.mk Nat Bool
+                          (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                              (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                          (@List.nil.{0} (Value Nat Bool)))
+                        (@List.nil.{0} (EdgeValue Nat Bool)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+                    (@List.nil.{0} (Value Nat Bool)))))
+              allocated))))
+      (And
+        (@Classified Nat Bool
+          (mark
+            (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+              (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+            (Reference.interned (@Interned.identity NodeKey owner)) ownerBound)
+          ownerBound
+          (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+            (@run Nat Bool (Value Nat Bool)
+              (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+              (@makeUnion Nat Bool
+                (@List.cons.{0} (Value Nat Bool)
+                  (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+                  (@List.cons.{0} (Value Nat Bool)
+                    (@Value.node Nat Bool
+                      (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (NodeKey.node
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))))
+                      (@List.cons.{0} (EdgeValue Nat Bool)
+                        (@EdgeValue.mk Nat Bool
+                          (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                              (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                          (@List.nil.{0} (Value Nat Bool)))
+                        (@List.nil.{0} (EdgeValue Nat Bool)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+                    (@List.nil.{0} (Value Nat Bool)))))
+              allocated)))
+        (And
+          (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+            (@SourceRecursiveIntersectionMaybeMu.callback Nat Bool
+              (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) old
+              (@SourceCurrentConstrainedCapNormalizedBinder.body Nat Bool old entry
+                (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (NodeKey.node
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.nil.{0} Nat))))
+                (@List.cons.{0} (EdgeValue Nat Bool)
+                  (@EdgeValue.mk Nat Bool
+                    (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                        (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                    (@List.nil.{0} (Value Nat Bool)))
+                  (@List.nil.{0} (EdgeValue Nat Bool)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (Reference.interned (@Interned.identity NodeKey owner)) allocated)
+            (@Outcome.done Nat Bool (Value Nat Bool)
+              (@Value.node Nat Bool
+                (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (NodeKey.node
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.nil.{0} Nat))))
+                (@List.cons.{0} (EdgeValue Nat Bool)
+                  (@EdgeValue.mk Nat Bool
+                    (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                        (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                    (@List.nil.{0} (Value Nat Bool)))
+                  (@List.nil.{0} (EdgeValue Nat Bool)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+              (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+                (@run Nat Bool (Value Nat Bool)
+                  (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+                  (@makeUnion Nat Bool
+                    (@List.cons.{0} (Value Nat Bool)
+                      (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+                      (@List.cons.{0} (Value Nat Bool)
+                        (@Value.node Nat Bool
+                          (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (NodeKey.node
+                              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@List.nil.{0} Nat))))
+                          (@List.cons.{0} (EdgeValue Nat Bool)
+                            (@EdgeValue.mk Nat Bool
+                              (@Interned.mk (EdgeKey Nat Bool)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                                  (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                              (@List.nil.{0} (Value Nat Bool)))
+                            (@List.nil.{0} (EdgeValue Nat Bool)))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+                        (@List.nil.{0} (Value Nat Bool)))))
+                  allocated))))
+          (And
+            (@Classified Nat Bool
+              (mark
+                (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+                  (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+                (Reference.interned (@Interned.identity NodeKey owner)) ownerBound)
+              ownerBound
+              (@Value.node Nat Bool
+                (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (NodeKey.node
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.nil.{0} Nat))))
+                (@List.cons.{0} (EdgeValue Nat Bool)
+                  (@EdgeValue.mk Nat Bool
+                    (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                        (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                    (@List.nil.{0} (Value Nat Bool)))
+                  (@List.nil.{0} (EdgeValue Nat Bool)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference)))
+            (And
+              (@SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Value.node Nat Bool
+                  (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (NodeKey.node
+                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@List.nil.{0} Nat))))
+                  (@List.cons.{0} (EdgeValue Nat Bool)
+                    (@EdgeValue.mk Nat Bool
+                      (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                          (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                      (@List.nil.{0} (Value Nat Bool)))
+                    (@List.nil.{0} (EdgeValue Nat Bool)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference)))
+              (Not
+                (@Membership.mem.{0, 0} Reference (List.{0} Reference) (@List.instMembership.{0} Reference)
+                  (@Value.free Nat Bool
+                    (@Value.node Nat Bool
+                      (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (NodeKey.node
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))))
+                      (@List.cons.{0} (EdgeValue Nat Bool)
+                        (@EdgeValue.mk Nat Bool
+                          (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                              (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                          (@List.nil.{0} (Value Nat Bool)))
+                        (@List.nil.{0} (EdgeValue Nat Bool)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference)))
+                  (Reference.interned (@Interned.identity NodeKey owner))))))))
+      produced)
+ has type
+  @Classified Nat Bool
+    (mark
+      (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+        (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+      (Reference.interned (@Interned.identity NodeKey owner)) ownerBound)
+    ownerBound
+    (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+      (@run Nat Bool (Value Nat Bool)
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+        (@makeUnion Nat Bool
+          (@List.cons.{0} (Value Nat Bool)
+            (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+            (@List.cons.{0} (Value Nat Bool)
+              (@Value.node Nat Bool
+                (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (NodeKey.node
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.nil.{0} Nat))))
+                (@List.cons.{0} (EdgeValue Nat Bool)
+                  (@EdgeValue.mk Nat Bool
+                    (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                        (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                    (@List.nil.{0} (Value Nat Bool)))
+                  (@List.nil.{0} (EdgeValue Nat Bool)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+              (@List.nil.{0} (Value Nat Bool)))))
+        allocated))
+but is expected to have type
+  @Classified Nat Bool
+    (mark
+      (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+        (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+      (Reference.interned (@Interned.identity NodeKey owner))
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+    ownerBound
+    (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+      (@run Nat Bool (Value Nat Bool)
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+        (@makeUnion Nat Bool
+          (@List.cons.{0} (Value Nat Bool)
+            (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner)))
+            (@List.cons.{0} (Value Nat Bool)
+              (@Value.node Nat Bool
+                (@Interned.mk NodeKey (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (NodeKey.node
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.nil.{0} Nat))))
+                (@List.cons.{0} (EdgeValue Nat Bool)
+                  (@EdgeValue.mk Nat Bool
+                    (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                        (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+                    (@List.nil.{0} (Value Nat Bool)))
+                  (@List.nil.{0} (EdgeValue Nat Bool)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Reference))
+              (@List.nil.{0} (Value Nat Bool)))))
+        allocated))
+'MicroCFTA.PairOccurrencesKernels.constructed_nonplain_marked_callback' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+constructed_nonplain_marked_callback : And
+  (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ownerBound)
+  (@Exists.{1} (InternedConstructorTemplates.State Nat Bool) fun state =>
+    @Exists.{1} (Interned NodeKey) fun owner =>
+      @Exists.{1} (Value Nat Bool) fun raw =>
+        @Exists.{1} (InternedConstructorTemplates.State Nat Bool) fun after =>
+          And
+            (@Eq.{1} Nat
+              (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+                (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct)
+                (Reference.interned (@Interned.identity NodeKey owner)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+            (And
+              (@Eq.{1} Nat
+                (mark
+                  (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+                    (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+                  (Reference.interned (@Interned.identity NodeKey owner)) ownerBound
+                  (Reference.interned (@Interned.identity NodeKey owner)))
+                ownerBound)
+              (And
+                (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+                  (@InternedFreshOrdinaryStoredSubstitution.execute Nat Bool
+                    (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b)
+                    (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct)
+                    (@InternedStoredSubstitutionRebind.replacement Nat Bool old
+                      (@Value.reference Nat Bool (Reference.interned (@Interned.identity NodeKey owner))))
+                    state)
+                  (@Outcome.done Nat Bool (Value Nat Bool) raw after))
+                (And
+                  (@Classified Nat Bool
+                    (mark
+                      (@sourceWeight Nat Bool (fun guard => @Eq.{1} Bool guard true)
+                        (@Prod.snd.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct))
+                      (Reference.interned (@Interned.identity NodeKey owner))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                    ownerBound raw)
+                  (And
+                    (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+                      (@SourceRecursiveIntersectionMaybeMu.callback Nat Bool
+                        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) old
+                        (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) direct)
+                        (Reference.interned (@Interned.identity NodeKey owner)) state)
+                      (@Outcome.done Nat Bool (Value Nat Bool)
+                        (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary)
+                        after))
+                    (And
+                      (@Eq.{1} (Value Nat Bool)
+                        (@InternedNestedConstruction.finish Nat Bool true
+                          (@Value.mu Nat Bool owner
+                            (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary)
+                            (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary)
+                            (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary)))
+                        (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary))
+                      (And
+                        (@SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                          (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool) ordinary))
+                        (Not
+                          (@SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard true) Nat
+                            (@Prod.fst.{0, 0} (Value Nat Bool) (InternedConstructorTemplates.State Nat Bool)
+                              ordinary))))))))))

@@ -1,0 +1,93 @@
+'MicroCFTA.NativeScopeKernels.entered_reads' depends on axioms: [propext, Quot.sound.{u}]
+@entered_reads : ∀ {Symbol Guard : Type} (annotation : Guard → Prop) (depth : Nat)
+  (source current : InternedConstructorTemplates.State Symbol Guard),
+  @Facts Symbol Guard current →
+    @Grows Symbol Guard source current →
+      @Extends Nat InternedBinderProtocol.NodeKey
+          (@State.issued InternedBinderProtocol.NodeKey (@InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@State.issued InternedBinderProtocol.NodeKey
+            (@InternedConstructorTemplates.State.nodes Symbol Guard current)) →
+        ∀ (left right : Value Symbol Guard),
+          @Available Symbol Guard source left →
+            @Available Symbol Guard source right →
+              @Cap Symbol Guard annotation depth left →
+                @Cap Symbol Guard annotation depth right →
+                  @Eq.{1} (List.{0} Reference) (@Value.free Symbol Guard left) (@List.nil.{0} Reference) →
+                    @Eq.{1} (List.{0} Reference) (@Value.free Symbol Guard right) (@List.nil.{0} Reference) →
+                      ∀ (cache : Cache.State DomainKey),
+                        @Cache.Valid DomainKey cache →
+                          ∀ (first second : Nat),
+                            have actual :=
+                              @SourceRecursiveIntersectionEnvironment.enter Symbol Guard cache
+                                (@Interned.key DomainKey IntersectionEmptyDomain.emptyDomain) left right first second;
+                            And
+                              (@SourceCurrentConstrainedCapNativeCoverage.Bindings Symbol Guard annotation source
+                                (@Interned.key DomainKey
+                                  (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) actual)))
+                              (And
+                                (@Covered Symbol Guard
+                                  (@Interned.key DomainKey
+                                    (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) actual))
+                                  (@body Symbol Guard left))
+                                (And
+                                  (@Covered Symbol Guard
+                                    (@Interned.key DomainKey
+                                      (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) actual))
+                                    (@body Symbol Guard right))
+                                  (∀ (name : Nat),
+                                    @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+                                        (SourceRecursiveIntersectionDomain.names
+                                          (@Interned.key DomainKey
+                                            (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) actual)))
+                                        name →
+                                      @Exists.{1} (Value Symbol Guard) fun value =>
+                                        And
+                                          (@Eq.{1} (Option.{0} (Value Symbol Guard))
+                                            (@SourcePreparedSharedRows.read Symbol Guard current name)
+                                            (@some.{0} (Value Symbol Guard) value))
+                                          (And (@Available Symbol Guard source value)
+                                            (And (@Available Symbol Guard current value)
+                                              (And
+                                                (@Eq.{1} NodeRef (@Value.referenceOf Symbol Guard value)
+                                                  (NodeRef.mu name))
+                                                (And
+                                                  (@SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol
+                                                    value)
+                                                  (@Covered Symbol Guard
+                                                    (@Interned.key DomainKey
+                                                      (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey)
+                                                        actual))
+                                                    value))))))))
+'MicroCFTA.NativeScopeKernels.repeated_producer' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@repeated_producer : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol] (annotation : Guard → Prop)
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  @Facts Symbol Guard source →
+    ∀ (request : NodeRequest Symbol Guard),
+      @SourceCurrentHereditaryNativeScope.Bindings Symbol Guard annotation source
+          (@Interned.key DomainKey (@NodeRequest.domain Symbol Guard request)) →
+        @Available Symbol Guard source (@NodeRequest.left Symbol Guard request) →
+          @Available Symbol Guard source (@NodeRequest.right Symbol Guard request) →
+            @Covered Symbol Guard (@Interned.key DomainKey (@NodeRequest.domain Symbol Guard request))
+                (@NodeRequest.left Symbol Guard request) →
+              @Covered Symbol Guard (@Interned.key DomainKey (@NodeRequest.domain Symbol Guard request))
+                  (@NodeRequest.right Symbol Guard request) →
+                ∀ (first second : Nat),
+                  @Eq.{1} (Option.{0} Nat) (@identity Symbol Guard (@NodeRequest.left Symbol Guard request))
+                      (@some.{0} Nat first) →
+                    @Eq.{1} (Option.{0} Nat) (@identity Symbol Guard (@NodeRequest.right Symbol Guard request))
+                        (@some.{0} Nat second) →
+                      @Eq.{1} Branch
+                          (@decision Symbol Guard (@Interned.key DomainKey (@NodeRequest.domain Symbol Guard request))
+                            (@NodeRequest.left Symbol Guard request) (@NodeRequest.right Symbol Guard request))
+                          (Branch.repeated (pair first second)) →
+                        And
+                          (@Eq.{2} (Code Symbol Guard (Value Symbol Guard)) (@compileNode Symbol Guard inst request)
+                            (@Code.pure Symbol Guard (Value Symbol Guard)
+                              (@repeatedValue Symbol Guard (pair first second))))
+                          (And
+                            (@Classified Symbol Guard (@sourceWeight Symbol Guard annotation source)
+                              (@pairRank Symbol Guard annotation (@NodeRequest.left Symbol Guard request)
+                                (@NodeRequest.right Symbol Guard request))
+                              (@repeatedValue Symbol Guard (pair first second)))
+                            (∀ (depth : Nat),
+                              @Cap Symbol Guard annotation depth (@repeatedValue Symbol Guard (pair first second))))

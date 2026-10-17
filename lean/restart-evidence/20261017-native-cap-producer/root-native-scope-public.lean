@@ -1,0 +1,45 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativeIdentity
+import MicroCFTA.SourceCurrentConstrainedCapNativeCoverage
+import MicroCFTA.SourceCurrentConstrainedCapNativePairWeight
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.closed
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.closed
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.extend
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.extend
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.node_child
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.node_child
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.union_member
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.union_member
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.mu_body
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.Covered.mu_body
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.same_identity
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeIdentity.same_identity
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.empty
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.empty
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings.annotated
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings.annotated
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings.extend
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings.extend
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.left_body_covered
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.left_body_covered
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.right_body_covered
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.right_body_covered
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.enter
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.enter
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings.read
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCoverage.Bindings.read
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativePairWeight.identity_weight
+#check @MicroCFTA.SourceCurrentConstrainedCapNativePairWeight.identity_weight
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativePairWeight.pair_weight
+#check @MicroCFTA.SourceCurrentConstrainedCapNativePairWeight.pair_weight

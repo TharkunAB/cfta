@@ -1,0 +1,87 @@
+'MicroCFTA.NonplainRankChecks.mixed_shell' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.NonplainRankChecks.mixed_shell : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (nodeEntry unionEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (rowEntry : MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+  (muEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body probe ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (level : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference),
+  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry body probe ordinary) →
+    Not
+        (annotation
+          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) rowEntry))) →
+      have atom := @MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry body probe ordinary;
+      have row :=
+        @MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard rowEntry
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) atom
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)));
+      have shell :=
+        @MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+          level free;
+      have alternatives :=
+        @MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard unionEntry
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) shell
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) atom
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+          level free;
+      And
+        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) shell)
+        (And
+          (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) alternatives)
+          (And
+            (@Eq.{1} Nat (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.rank Symbol Guard annotation atom)
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+            (And
+              (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.rank Symbol Guard annotation shell))
+              (And
+                (@LT.lt.{0} Nat instLTNat
+                  (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation atom atom)
+                  (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation shell shell))
+                (@LT.lt.{0} Nat instLTNat
+                  (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation shell atom)
+                  (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation alternatives
+                    atom))))))
+'MicroCFTA.NonplainRankChecks.source_reference' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.NonplainRankChecks.source_reference : ∀ {Symbol Guard : Type} (annotation : Guard → Prop)
+  (source current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard current →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source current →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)) →
+        ∀ (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+          @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard annotation source domain →
+            ∀ (name : Nat),
+              @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.names domain) name →
+                ∀ (other : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+                    And
+                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard current name)
+                        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value))
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value)
+                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard current value)
+                          (And
+                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.mu name))
+                            (And
+                              (@Eq.{1} Nat
+                                (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.rank Symbol Guard annotation value)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                              (@Eq.{1} Nat
+                                (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                                    (MicroCFTA.InternedBinderProtocol.Reference.interned name))
+                                  other)
+                                (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation
+                                  value other))))))

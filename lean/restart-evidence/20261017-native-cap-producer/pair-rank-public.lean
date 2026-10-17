@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativePairRank
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativePairRank.sorted_pair_eq
+#check @MicroCFTA.SourceCurrentConstrainedCapNativePairRank.sorted_pair_eq
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativePairRank.same_identity_rank
+#check @MicroCFTA.SourceCurrentConstrainedCapNativePairRank.same_identity_rank
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativePairRank.same_pair_rank
+#check @MicroCFTA.SourceCurrentConstrainedCapNativePairRank.same_pair_rank
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativePairRank.strict_pair_ne
+#check @MicroCFTA.SourceCurrentConstrainedCapNativePairRank.strict_pair_ne

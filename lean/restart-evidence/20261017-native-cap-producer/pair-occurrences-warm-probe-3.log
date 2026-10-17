@@ -1,0 +1,17 @@
+'MicroCFTA.PairOccurrenceWarmProbe.actual_warm_no_wrapper' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@actual_warm_no_wrapper : ∀ {Symbol Guard : Type} (state : InternedConstructorTemplates.State Symbol Guard),
+  @SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard state →
+    ∀ (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard),
+      @Eq.{1} (Option.{0} (Value Symbol Guard)) (@State.nodeRecords Symbol Guard state key)
+          (@some.{0} (Value Symbol Guard) (@Value.mu Symbol Guard entry body depth ordinary)) →
+        Not
+            (@Membership.mem.{0, 0} Reference (List.{0} Reference) (@List.instMembership.{0} Reference)
+              (@InternedDeepFreeDepth.deepNames Symbol Guard ordinary)
+              (Reference.uninterned (@ordinaryLevel Symbol Guard depth))) →
+          Or
+            (@Eq.{1} (Value Symbol Guard) (@finish Symbol Guard true (@Value.mu Symbol Guard entry body depth ordinary))
+              body)
+            (@Eq.{1} (Value Symbol Guard) (@finish Symbol Guard true (@Value.mu Symbol Guard entry body depth ordinary))
+              (@Value.empty Symbol Guard))

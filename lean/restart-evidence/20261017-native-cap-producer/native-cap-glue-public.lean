@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.Stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.initial_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.initial_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.work_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.work_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.enter_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.enter_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.body_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.body_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.Receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.Receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.join
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.join
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.finish_node
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.finish_node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.finish_edge
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.finish_edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.next_node
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.next_node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.next_edge
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeTraceGlue.next_edge
