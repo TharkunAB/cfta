@@ -2,19 +2,17 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 22:01 CEST. Proof checkpoint is `85fd098d`.
-The full pinned Audit passes 3133 jobs and 68560 dependency checks.
-Actual normalization and combination produce an exact ordered fixed point.
-Actual trie descent preserves it. The full accessor/prefix/descent sequence
-derives this invariant from initial Ready data and field availability.
-An actual empty-own prefix retains normalized inherited values, which lets
-nonempty descent strictly lower path height and change the memo identity.
-Nonempty local classes and all-active-ancestor exclusion still need the
-general outer progress proof. Repeated-pass convergence remains open.
+Current proof update: 2026-10-17 22:26 CEST. Proof checkpoint is `d16b63a3`.
+The full pinned Audit passes 3137 jobs and 68963 dependency checks.
+Actual descent now preserves exact class dependencies within one normalized
+payload. Persistent native histories derive earlier edge writers and full
+guard origins across completed queries and exact physical advances.
+A copied constrained child can still need fresh work while ancestor owners
+are active. General outer progress and repeated-pass convergence remain open.
 
 These proof results establish no new Haskell defect. No Haskell change is
 added. Field-pool repair `b9219b9e` remains merged and validated in source
-`c0cc8a05`. Read `lean/notes-current-inherited-normalization.md`.
+`c0cc8a05`. Read `lean/notes-current-outer-causal-progress.md`.
 Keep this repair registry before historical failure reports. Record each
 later repair with its failure, reproducer, paths, commit, checks, and upstream
 status so external work can use it.
@@ -192,6 +190,50 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current causal progress and persistent writer histories
+
+Updated: 2026-10-17 22:26 CEST. Starting checkpoint is `dd193cce`.
+Proof commit is `d16b63a3`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-outer-causal-progress.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Actual child descent preserves strict dependencies between retained classes
+of one normalized payload. Retention of a source class produces the actual
+retained dependent class. A checked unsaturated payload loses the dependency,
+so well-formedness alone is insufficient.
+
+A source-built copied child can require fresh work before its original
+sibling is visited. The exact reached prefix has two active ancestor owners
+and no copied-key entry. Both the copied call and full root call complete.
+The final returned entry supports a warm hit at every fuel. This rejects
+the universal ready-copy and tau-only-origin shortcuts, not termination.
+
+Persistent native histories now retain actual earlier edge writers across
+completed queries and exact physical advances. Each surviving compileRows
+row has indexed input origins and the exact full joined guard. Actual ready
+lookup identifies the complete captured request. These results concern past
+execution; they do not produce future completion or chronological heap growth.
+A separate accepted guard example shows why effective own equalities alone
+cannot represent every raw guard origin. It establishes no Haskell defect.
+
+General outer progress still needs an order for fresh calls and exclusion
+of all active ancestor keys. Repeated-pass convergence, retained-Mu writers,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+Keep the complete goal active.
+
+Full pinned Audit passes 3137 jobs and 68963 dependency checks. All four
+new strict logs are empty. Twelve public and four constructed checks pass.
+Checks use verified 4 GiB maximum/high and zero swap. Audit peak is 381 MiB.
+Evidence is in `lean/restart-evidence/20261017-outer-causal-progress/`.
+The output checker now rejects proof-printer failures. The corrected copied
+proof retains its exact statement and proof body through a private witness.
+All failed attempts and all earlier evidence remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record later fixes with the reproducer, paths, commit,
+checks, and upstream status. Preserve all previous work and optimized code.
 
 ## Current inherited normalization and actual prefix progress
 

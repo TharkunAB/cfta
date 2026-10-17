@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at proof checkpoint `85fd098d`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `d16b63a3`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -45,10 +45,10 @@ interned core remains the construction and transformation path. Read
 | Interned construction | Repaired closed syntax has a finite constructor execution. Syntax includes binders and unions. Actual construction and field histories derive physical and semantic entry facts. | Concrete lazy Haskell publication, interning, and runtime correspondence. The word Ordinary in older module names does not by itself exclude binders. |
 | Normalized source callbacks | Actual source publication histories derive the unused stored-Mu body-to-ordinary law, including earlier warm winners. Nested raw source calls have equal ordered stripped alternatives under the stated finite coverage, freshness, noDeep, and actual cache-history premises. Actual native steps and traces now produce the causal publication history. Unused native returns preserve the current raw ordinary callback rows. | Recursive row occurrence transport through retained Mu and concrete runtime correspondence. The common heap of closed_compared comes from actual closed source construction. This is not raw record equality or general termination. |
 | Stored substitution | Recursive node-row matching constructs both plans with one exact Value. Initial Ready and available data construct both union-normalization/substitution orders with physical empty agreement, equal observations at every depth and fixed view, and exact literal root parts. Actual self filtering preserves those parts from the derived final heap. Actual parent construction preserves this relation, including row survival, full guards, and ordered children. Closed and open roots and nested Mu values remain included. | Derive the literal relation for the actual retained-Mu body and ordinary-probe writers, then compose smart cleanup and warm winners. General root self-filter congruence is proved for normal available roots with the same literal atoms and exact rows. See [literal provenance](notes-current-literal-union-provenance.md). |
-| Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
+| Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. Persistent native histories now derive actual earlier edge writers and indexed full guard origins across completed queries and exact physical advances. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
 | General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. Initial Ready data and field availability derive exact normalization fixedness through the actual inherited prefix and indexed descent. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
-| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. An actual empty-own prefix retains normalized inherited values. Actual normalization and combination produce fixed payloads, and indexed descent preserves fixedness. | General node-busy exclusion still needs a causal progress or owner-disjointness argument for nonempty local classes and all active ancestors. The constructed prefix and descent cases do not prove a general outer parent-and-child execution. See [inherited normalization](notes-current-inherited-normalization.md). |
+| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. An actual empty-own prefix retains normalized inherited values. Actual normalization and combination produce fixed payloads, and indexed descent preserves fixedness. Strict class dependencies remain exact among retained classes of one normalized payload. A mirrored copied-child case reaches a fresh demand before its original sibling, then completes. | General node-busy exclusion still needs a causal progress or owner-disjointness argument for nonempty local classes and all active ancestors. The constructed prefix and descent cases do not prove a general outer parent-and-child execution. See [causal progress](notes-current-outer-causal-progress.md). |
 | Other library components | Checked language, equality, enumeration, arithmetic, union-find, memo, ranking, generation, and sampling results exist. Some source drivers and restricted adapters are complete. | Their remaining adapters and recursive callers do not yet form a complete current-library implementation theorem. See [API coverage](API-COVERAGE.md). |
 
 The finite ordinary result is in
@@ -110,12 +110,16 @@ origins. It assumes no future Required result. Read
    derives it from initial Ready data and field availability. Empty-own
    prefixes retain normalized inherited values; nonempty descent then
    strictly lowers path height and changes its canonical identity. The
-   remaining argument must control nonempty local classes and all active
-   ancestors. Ordinary height and maximum constrained depth do not suffice.
+   retained class dependencies now remain exact within each normalized
+   payload. A copied child can still require fresh work before its original
+   sibling is visited. The remaining argument must control nonempty local
+   classes and all active ancestors. Persistent native histories supply
+   actual earlier full guard writers, but not a global occurrence rank.
+   Ordinary height and maximum constrained depth do not suffice.
    Then complete nonempty live child walks, ordered rows, ordinary node
    bodies, and the full mutual outer pass. Mu and union roots can be terminal
    while selected paths still enter their contents. Read
-   [inherited normalization](notes-current-inherited-normalization.md).
+   [causal progress](notes-current-outer-causal-progress.md).
 3. Prove convergence for repeated reduction passes and complete the remaining
    recursive pruning and compilation callers. One exact completed pass does
    not establish a fixed point. Semantic narrowing alone does not bound
@@ -148,21 +152,17 @@ the failure, reproducer, affected paths, commit, validation, and merge status.
 It also records the earlier negative-bound and named-measure repairs.
 The historical failure reports retain their original bytes and source dates.
 
-The last completed full pinned Audit passes 3119 jobs and 68380 dependency
-checks. Only propext, Classical.choice, and Quot.sound occur. The unchanged
-Haskell source has a strict Nix all-component build, 798 examples plus golden,
-Fourmolu, and Cabal-gild validation. These checks are component evidence.
-They do not provide a meaningful percentage of whole-library completion.
-The Lean Audit and new public theorem checks were run for this
-checkpoint. The unchanged Haskell source reuses its earlier validation.
+The last completed full pinned Audit passes 3137 jobs and 68963 dependency
+checks. Only propext, Classical.choice, and Quot.sound occur. All four new
+strict logs are empty. Twelve public and four constructed checks pass.
+The unchanged Haskell source retains its strict Nix all-component build,
+798 examples plus golden, Fourmolu, and Cabal-gild validation. These checks
+are component evidence. They do not measure whole-library completion.
 
-The latest completed audit evidence is in
-`restart-evidence/20261017-constructor-observations/`. It includes strict source,
-public signature, kernel axiom, constructed integration, and preservation
-checks. Earlier evidence retains selected recursive endpoints,
-unequal-depth paths, failed height bounds, and inherited path-depth growth.
-Actual union-normality transport now reaches all eight bounded mutual outer workers
-on every stopping outcome from the initial invariant alone. It does not
-construct successful outer completion. Finite observations do not prove
-general progress. No new Haskell defect
-was established. Failed attempts and raw logs remain preserved.
+The latest completed evidence is in
+`restart-evidence/20261017-outer-causal-progress/`. It includes strict source,
+public signatures, complete proof output, kernel axiom, constructed, and
+preservation checks. The output checker now rejects proof-printer failures.
+The corrected copied-case proof retains the same statement and proof body.
+Earlier failed attempts and raw logs remain preserved. No new Haskell defect
+was established. General recursive progress and full correspondence remain open.

@@ -1,0 +1,38 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-outer-causal-progress/copied-cold-direct-1.source.lean:195:71: error: Tactic `rfl` failed: The left-hand side
+  (row :: rest)[?m.163]?
+is not definitionally equal to the right-hand side
+  some row
+
+available : Available heap tau
+coherent : InternedRecordCoherence.Coherent (InternedFreshOrdinaryConstruction.build expression [] empty).state
+annotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => SourceMemoGate.plain guard = true) tau
+rows : nodeEdges copied ≠ []
+row : Edge
+rest : List Edge
+selected : nodeEdges copied = row :: rest
+nonplain : SourceMemoGate.plain row.entry.key.constraint = false
+origin : SourceCurrentRequiredRowOrigins.Origin tau copied
+⊢ (row :: rest)[?m.163]? = some row
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-outer-causal-progress/copied-cold-direct-1.source.lean:198:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  row.entry.key.symbol
+in the target expression
+  SourceMemoGate.plain sourceRow.entry.key.constraint = true
+
+case cons
+available : Available heap tau
+coherent : InternedRecordCoherence.Coherent (InternedFreshOrdinaryConstruction.build expression [] empty).state
+annotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => SourceMemoGate.plain guard = true) tau
+rows : nodeEdges copied ≠ []
+row : Edge
+rest : List Edge
+selected : nodeEdges copied = row :: rest
+nonplain : SourceMemoGate.plain row.entry.key.constraint = false
+origin : SourceCurrentRequiredRowOrigins.Origin tau copied
+path : List SourceCurrentRequiredRowOrigins.Position
+index : Nat
+sourceRow : Edge
+occurrence : SourceCurrentRequiredRowOrigins.RowAt tau path index sourceRow
+fields : SourceCurrentRequiredGuardOrigins.RowOrigin sourceRow row
+plain : SourceMemoGate.plain sourceRow.entry.key.constraint = true
+guard : row.entry.key.symbol = sourceRow.entry.key.symbol
+⊢ False

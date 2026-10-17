@@ -1,0 +1,1244 @@
+MicroCFTA.SourceCurrentEqualityDependencyDescent.retained : ∀
+  (originals : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityDescend.WellFormed
+      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals) →
+    MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+          MicroCFTA.SourceEqualityClassOrder.Record.paths originals) →
+      ∀ (index : Nat) (first second : MicroCFTA.SourceEqualityClassOrder.Record),
+        @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals first →
+          @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals second →
+            MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths →
+              ∀ (firstOutput : MicroCFTA.SourceEqualityClassOrder.Record),
+                @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index first)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record firstOutput) →
+                  @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+                    And
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.record index second)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+                      (And
+                        (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                        (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths))
+theorem MicroCFTA.SourceCurrentEqualityDependencyDescent.retained : ∀
+  (originals : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityDescend.WellFormed
+      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals) →
+    MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+          MicroCFTA.SourceEqualityClassOrder.Record.paths originals) →
+      ∀ (index : Nat) (first second : MicroCFTA.SourceEqualityClassOrder.Record),
+        @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals first →
+          @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals second →
+            MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths →
+              ∀ (firstOutput : MicroCFTA.SourceEqualityClassOrder.Record),
+                @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index first)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record firstOutput) →
+                  @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+                    And
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.record index second)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+                      (And
+                        (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                        (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)) :=
+fun originals wellFormed fixed index first second firstMember secondMember dependent firstOutput firstRead =>
+  have firstKnown :=
+    wellFormed originals
+      (@rfl.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals))
+      first firstMember;
+  have secondKnown :=
+    wellFormed originals
+      (@rfl.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals))
+      second secondMember;
+  @Exists.casesOn.{1} (List.{0} Nat)
+    (fun suffix =>
+      And (@Ne.{1} (List.{0} Nat) suffix (@List.nil.{0} Nat))
+        (∀ (path : MicroCFTA.EqualityNormalize.Path),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths path →
+            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                MicroCFTA.EqualityNormalize.Path
+                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) path suffix)))
+    (fun x =>
+      @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+        And
+          (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (MicroCFTA.SourceEqualityDescend.record index second)
+            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+          (And
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+            (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+    (MicroCFTA.SourceCurrentEqualityDependencyDescent.uniform_suffix✝
+      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+        MicroCFTA.SourceEqualityClassOrder.Record.paths originals)
+      (@And.right
+        (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+          (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false)
+          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+            MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+        (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+          (MicroCFTA.EqualityNormalize.congruenceStep
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths originals)))
+        (@And.right
+          (@Eq.{1} Bool
+            (MicroCFTA.EqualityNormalize.isContradicting
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+            Bool.false)
+          (And
+            (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+              (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false)
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+            (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+              (MicroCFTA.EqualityNormalize.congruenceStep
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths originals))))
+          (@And.right
+            (MicroCFTA.EqualityNormalize.Active
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+            (And
+              (@Eq.{1} Bool
+                (MicroCFTA.EqualityNormalize.isContradicting
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+                Bool.false)
+              (And
+                (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+                  (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false)
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+                (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+                  (MicroCFTA.EqualityNormalize.congruenceStep
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths originals))
+                  (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths originals)))))
+            (MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths originals)
+              fixed))))
+      first.paths second.paths
+      (@Iff.mpr
+        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+            MicroCFTA.SourceEqualityClassOrder.Record.paths originals)
+          first.paths)
+        (@Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun a =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals a)
+            (@Eq.{1} MicroCFTA.EqualityNormalize.Class a.paths first.paths))
+        (@List.mem_map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class first.paths
+          MicroCFTA.SourceEqualityClassOrder.Record.paths originals)
+        (@Exists.intro.{1} MicroCFTA.SourceEqualityClassOrder.Record
+          (fun a =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals a)
+              (@Eq.{1} MicroCFTA.EqualityNormalize.Class a.paths first.paths))
+          first
+          (@And.intro
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals first)
+            (@Eq.{1} MicroCFTA.EqualityNormalize.Class first.paths first.paths) firstMember
+            (@rfl.{1} MicroCFTA.EqualityNormalize.Class first.paths))))
+      (@Iff.mpr
+        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class (List.{0} MicroCFTA.EqualityNormalize.Class)
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class)
+          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+            MicroCFTA.SourceEqualityClassOrder.Record.paths originals)
+          second.paths)
+        (@Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun a =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals a)
+            (@Eq.{1} MicroCFTA.EqualityNormalize.Class a.paths second.paths))
+        (@List.mem_map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class second.paths
+          MicroCFTA.SourceEqualityClassOrder.Record.paths originals)
+        (@Exists.intro.{1} MicroCFTA.SourceEqualityClassOrder.Record
+          (fun a =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals a)
+              (@Eq.{1} MicroCFTA.EqualityNormalize.Class a.paths second.paths))
+          second
+          (@And.intro
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals second)
+            (@Eq.{1} MicroCFTA.EqualityNormalize.Class second.paths second.paths) secondMember
+            (@rfl.{1} MicroCFTA.EqualityNormalize.Class second.paths))))
+      dependent)
+    fun suffix h =>
+    @And.casesOn.{0} (@Ne.{1} (List.{0} Nat) suffix (@List.nil.{0} Nat))
+      (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths path →
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+            (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat) MicroCFTA.EqualityNormalize.Path
+              (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) path suffix))
+      (fun x =>
+        @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+          And
+            (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (MicroCFTA.SourceEqualityDescend.record index second)
+              (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+            (And
+              (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+              (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+      h fun nonempty includes =>
+      have firstPairs :=
+        MicroCFTA.SourceEqualityDescend.record_pairs index first
+          (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent first)
+            (And (MicroCFTA.EqualityTrie.Ascending first.trie) (MicroCFTA.EqualityNormalize.Nontrivial first.paths))
+            firstKnown)
+          firstOutput firstRead;
+      @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+        (fun left =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+            (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths right)
+                (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+        (fun x =>
+          @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+            And
+              (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (MicroCFTA.SourceEqualityDescend.record index second)
+                (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+              (And
+                (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                  (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+        (@And.right (MicroCFTA.EqualityTrie.Ascending firstOutput.trie)
+          (MicroCFTA.EqualityNormalize.Nontrivial firstOutput.paths)
+          (@And.right (MicroCFTA.SourceEqualityClassOrder.Coherent firstOutput)
+            (And (MicroCFTA.EqualityTrie.Ascending firstOutput.trie)
+              (MicroCFTA.EqualityNormalize.Nontrivial firstOutput.paths))
+            (MicroCFTA.SourceEqualityDescend.record_wellFormed index first
+              (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent first)
+                (And (MicroCFTA.EqualityTrie.Ascending first.trie) (MicroCFTA.EqualityNormalize.Nontrivial first.paths))
+                firstKnown)
+              (@And.left (MicroCFTA.EqualityTrie.Ascending first.trie)
+                (MicroCFTA.EqualityNormalize.Nontrivial first.paths)
+                (@And.right (MicroCFTA.SourceEqualityClassOrder.Coherent first)
+                  (And (MicroCFTA.EqualityTrie.Ascending first.trie)
+                    (MicroCFTA.EqualityNormalize.Nontrivial first.paths))
+                  firstKnown))
+              firstOutput firstRead)))
+        fun left h =>
+        @And.casesOn.{0}
+          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+          (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths right)
+              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))
+          (fun x =>
+            @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+              And
+                (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.record index second)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+                (And
+                  (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                  (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+          h fun leftMember right =>
+          @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+            (fun right =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths right)
+                (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))
+            (fun x =>
+              @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+                And
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index second)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+                  (And
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                    (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+            right fun right h =>
+            @And.casesOn.{0}
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths right)
+              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)
+              (fun x =>
+                @Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun secondOutput =>
+                  And
+                    (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.record index second)
+                      (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+                    (And
+                      (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                      (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+              h fun rightMember different =>
+              have firstExtended :=
+                includes (@List.cons.{0} Nat index left)
+                  (@Iff.mp
+                    (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+                    (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths
+                      (@List.cons.{0} Nat index left))
+                    (firstPairs left) leftMember);
+              have secondExtended :=
+                includes (@List.cons.{0} Nat index right)
+                  (@Iff.mp
+                    (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths right)
+                    (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths
+                      (@List.cons.{0} Nat index right))
+                    (firstPairs right) rightMember);
+              have valid :=
+                MicroCFTA.EqualityTrie.descend_valid second.trie
+                  (@And.left (MicroCFTA.EqualityTrie.Valid second.trie)
+                    (And
+                      (@Eq.{1} MicroCFTA.EqualityNormalize.Class
+                        (MicroCFTA.EqualityNormalize.canonicalClass second.paths) second.paths)
+                      (∀ (path : MicroCFTA.EqualityTrie.Path),
+                        Iff
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path (List.{0} MicroCFTA.EqualityTrie.Path)
+                            (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                            (MicroCFTA.EqualityTrie.fromPathTrie second.trie) path)
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths path)))
+                    (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent second)
+                      (And (MicroCFTA.EqualityTrie.Ascending second.trie)
+                        (MicroCFTA.EqualityNormalize.Nontrivial second.paths))
+                      secondKnown))
+                  index;
+              have pairs :=
+                MicroCFTA.EqualityTrie.descend_exact second.trie
+                  (@And.left (MicroCFTA.EqualityTrie.Valid second.trie)
+                    (And
+                      (@Eq.{1} MicroCFTA.EqualityNormalize.Class
+                        (MicroCFTA.EqualityNormalize.canonicalClass second.paths) second.paths)
+                      (∀ (path : MicroCFTA.EqualityTrie.Path),
+                        Iff
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path (List.{0} MicroCFTA.EqualityTrie.Path)
+                            (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                            (MicroCFTA.EqualityTrie.fromPathTrie second.trie) path)
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths path)))
+                    (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent second)
+                      (And (MicroCFTA.EqualityTrie.Ascending second.trie)
+                        (MicroCFTA.EqualityNormalize.Nontrivial second.paths))
+                      secondKnown))
+                  index;
+              have kept :=
+                @Iff.mpr
+                  (@Eq.{1} Bool
+                    (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                      (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                    Bool.true)
+                  (MicroCFTA.EqualityNormalize.Nontrivial
+                    (MicroCFTA.EqualityTrie.fromPathTrie (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                  (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths_nontrivial
+                    (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index) valid)
+                  (@Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+                    (fun left =>
+                      And
+                        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path)
+                          (MicroCFTA.EqualityTrie.fromPathTrie
+                            (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                          left)
+                        (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path)
+                              (MicroCFTA.EqualityTrie.fromPathTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              right)
+                            (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+                    (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                      MicroCFTA.EqualityNormalize.Path
+                      (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) left
+                      suffix)
+                    (@And.intro
+                      (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path)
+                        (MicroCFTA.EqualityTrie.fromPathTrie (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                        (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                          MicroCFTA.EqualityNormalize.Path
+                          (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) left
+                          suffix))
+                      (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+                        And
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path)
+                            (MicroCFTA.EqualityTrie.fromPathTrie
+                              (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                            right)
+                          (@Ne.{1} MicroCFTA.EqualityNormalize.Path
+                            (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                              MicroCFTA.EqualityNormalize.Path
+                              (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                              left suffix)
+                            right))
+                      (@Iff.mpr
+                        (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path (List.{0} MicroCFTA.EqualityTrie.Path)
+                          (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                          (MicroCFTA.EqualityTrie.fromPathTrie
+                            (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                          (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                            MicroCFTA.EqualityNormalize.Path
+                            (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) left
+                            suffix))
+                        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} MicroCFTA.EqualityTrie.Path)
+                          (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                          (MicroCFTA.EqualityTrie.fromPathTrie second.trie)
+                          (@List.cons.{0} Nat index
+                            (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                              MicroCFTA.EqualityNormalize.Path
+                              (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                              left suffix)))
+                        (pairs
+                          (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                            MicroCFTA.EqualityNormalize.Path
+                            (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) left
+                            suffix))
+                        (@Iff.mpr
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path (List.{0} MicroCFTA.EqualityTrie.Path)
+                            (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                            (MicroCFTA.EqualityTrie.fromPathTrie second.trie)
+                            (@List.cons.{0} Nat index
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                left suffix)))
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+                            (@List.cons.{0} Nat index
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                left suffix)))
+                          (@And.right
+                            (@Eq.{1} MicroCFTA.EqualityNormalize.Class
+                              (MicroCFTA.EqualityNormalize.canonicalClass second.paths) second.paths)
+                            (∀ (path : MicroCFTA.EqualityTrie.Path),
+                              Iff
+                                (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                  (List.{0} MicroCFTA.EqualityTrie.Path)
+                                  (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                                  (MicroCFTA.EqualityTrie.fromPathTrie second.trie) path)
+                                (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path MicroCFTA.EqualityNormalize.Class
+                                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths path))
+                            (@And.right (MicroCFTA.EqualityTrie.Valid second.trie)
+                              (And
+                                (@Eq.{1} MicroCFTA.EqualityNormalize.Class
+                                  (MicroCFTA.EqualityNormalize.canonicalClass second.paths) second.paths)
+                                (∀ (path : MicroCFTA.EqualityTrie.Path),
+                                  Iff
+                                    (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                      (List.{0} MicroCFTA.EqualityTrie.Path)
+                                      (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                                      (MicroCFTA.EqualityTrie.fromPathTrie second.trie) path)
+                                    (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                      MicroCFTA.EqualityNormalize.Class
+                                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths path)))
+                              (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent second)
+                                (And (MicroCFTA.EqualityTrie.Ascending second.trie)
+                                  (MicroCFTA.EqualityNormalize.Nontrivial second.paths))
+                                secondKnown))
+                            (@List.cons.{0} Nat index
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                left suffix)))
+                          firstExtended))
+                      (@Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+                        (fun right =>
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path)
+                              (MicroCFTA.EqualityTrie.fromPathTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              right)
+                            (@Ne.{1} MicroCFTA.EqualityNormalize.Path
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                left suffix)
+                              right))
+                        (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                          MicroCFTA.EqualityNormalize.Path
+                          (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) right
+                          suffix)
+                        (@And.intro
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path)
+                            (MicroCFTA.EqualityTrie.fromPathTrie
+                              (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                            (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                              MicroCFTA.EqualityNormalize.Path
+                              (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                              right suffix))
+                          (@Ne.{1} MicroCFTA.EqualityNormalize.Path
+                            (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                              MicroCFTA.EqualityNormalize.Path
+                              (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                              left suffix)
+                            (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                              MicroCFTA.EqualityNormalize.Path
+                              (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                              right suffix))
+                          (@Iff.mpr
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path (List.{0} MicroCFTA.EqualityTrie.Path)
+                              (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                              (MicroCFTA.EqualityTrie.fromPathTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                right suffix))
+                            (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} MicroCFTA.EqualityTrie.Path)
+                              (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                              (MicroCFTA.EqualityTrie.fromPathTrie second.trie)
+                              (@List.cons.{0} Nat index
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  right suffix)))
+                            (pairs
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                right suffix))
+                            (@Iff.mpr
+                              (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path (List.{0} MicroCFTA.EqualityTrie.Path)
+                                (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                                (MicroCFTA.EqualityTrie.fromPathTrie second.trie)
+                                (@List.cons.{0} Nat index
+                                  (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                    MicroCFTA.EqualityNormalize.Path
+                                    (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                      (@List.instAppend.{0} Nat))
+                                    right suffix)))
+                              (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path MicroCFTA.EqualityNormalize.Class
+                                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+                                (@List.cons.{0} Nat index
+                                  (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                    MicroCFTA.EqualityNormalize.Path
+                                    (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                      (@List.instAppend.{0} Nat))
+                                    right suffix)))
+                              (@And.right
+                                (@Eq.{1} MicroCFTA.EqualityNormalize.Class
+                                  (MicroCFTA.EqualityNormalize.canonicalClass second.paths) second.paths)
+                                (∀ (path : MicroCFTA.EqualityTrie.Path),
+                                  Iff
+                                    (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                      (List.{0} MicroCFTA.EqualityTrie.Path)
+                                      (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                                      (MicroCFTA.EqualityTrie.fromPathTrie second.trie) path)
+                                    (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                      MicroCFTA.EqualityNormalize.Class
+                                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths path))
+                                (@And.right (MicroCFTA.EqualityTrie.Valid second.trie)
+                                  (And
+                                    (@Eq.{1} MicroCFTA.EqualityNormalize.Class
+                                      (MicroCFTA.EqualityNormalize.canonicalClass second.paths) second.paths)
+                                    (∀ (path : MicroCFTA.EqualityTrie.Path),
+                                      Iff
+                                        (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                          (List.{0} MicroCFTA.EqualityTrie.Path)
+                                          (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                                          (MicroCFTA.EqualityTrie.fromPathTrie second.trie) path)
+                                        (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                          MicroCFTA.EqualityNormalize.Class
+                                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+                                          path)))
+                                  (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent second)
+                                    (And (MicroCFTA.EqualityTrie.Ascending second.trie)
+                                      (MicroCFTA.EqualityNormalize.Nontrivial second.paths))
+                                    secondKnown))
+                                (@List.cons.{0} Nat index
+                                  (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                    MicroCFTA.EqualityNormalize.Path
+                                    (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                      (@List.instAppend.{0} Nat))
+                                    right suffix)))
+                              secondExtended))
+                          fun same => different (@List.append_cancel_right.{0} Nat left suffix right same)))));
+              let output :=
+                MicroCFTA.SourceEqualityDescend.fromTrie (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index);
+              have built :=
+                @Eq.mpr.{0}
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index second)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output))
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (MicroCFTA.SourceEqualityDescend.fromTrie
+                        (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output))
+                  (@id.{0}
+                    (@Eq.{1} Prop
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.record index second)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output))
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (MicroCFTA.SourceEqualityDescend.fromTrie
+                            (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output)))
+                    (@congrFun'.{1, 1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record) Prop
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.record index second))
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (MicroCFTA.SourceEqualityDescend.fromTrie
+                            (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))))
+                      (@congrArg.{1, 1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record → Prop)
+                        (MicroCFTA.SourceEqualityDescend.record index second)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (MicroCFTA.SourceEqualityDescend.fromTrie
+                            (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                        (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                        (@Eq.trans.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@ite.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@Eq.{1} Bool
+                              (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              Bool.true)
+                            (instDecidableEqBool
+                              (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              Bool.true)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (MicroCFTA.SourceEqualityDescend.fromTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                            (@Option.none.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          (@ite.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record) True instDecidableTrue
+                            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (MicroCFTA.SourceEqualityDescend.fromTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                            (@Option.none.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                            (MicroCFTA.SourceEqualityDescend.fromTrie
+                              (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                          (@ite_congr.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@Eq.{1} Bool
+                              (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              Bool.true)
+                            True
+                            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (MicroCFTA.SourceEqualityDescend.fromTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                            (@Option.none.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (MicroCFTA.SourceEqualityDescend.fromTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                            (@Option.none.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (instDecidableEqBool
+                              (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                              Bool.true)
+                            instDecidableTrue
+                            (@Eq.trans.{1} Prop
+                              (@Eq.{1} Bool
+                                (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                  (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                                Bool.true)
+                              (@Eq.{1} Bool Bool.true Bool.true) True
+                              (@congrFun'.{1, 1} Bool Prop
+                                (@Eq.{1} Bool
+                                  (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                    (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                                (@Eq.{1} Bool Bool.true)
+                                (@congrArg.{1, 1} Bool (Bool → Prop)
+                                  (MicroCFTA.EqualitySaturation.pathTrieHasAtLeastTwoPaths
+                                    (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))
+                                  Bool.true (@Eq.{1} Bool) kept)
+                                Bool.true)
+                              (@eq_self.{1} Bool Bool.true))
+                            (fun a =>
+                              @Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  (MicroCFTA.SourceEqualityDescend.fromTrie
+                                    (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))))
+                            fun a =>
+                            @Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                              (@Option.none.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                          (@ite_true.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record) instDecidableTrue
+                            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (MicroCFTA.SourceEqualityDescend.fromTrie
+                                (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index)))
+                            (@Option.none.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+                      (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output)))
+                  (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (MicroCFTA.SourceEqualityDescend.fromTrie
+                        (MicroCFTA.EqualityTrie.pathTrieDescend second.trie index))));
+              have outputPairs :=
+                MicroCFTA.SourceEqualityDescend.record_pairs index second
+                  (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent second)
+                    (And (MicroCFTA.EqualityTrie.Ascending second.trie)
+                      (MicroCFTA.EqualityNormalize.Nontrivial second.paths))
+                    secondKnown)
+                  output built;
+              @Exists.intro.{1} MicroCFTA.SourceEqualityClassOrder.Record
+                (fun secondOutput =>
+                  And
+                    (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.record index second)
+                      (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+                    (And
+                      (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+                      (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+                output
+                (@And.intro
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index second)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output))
+                  (And
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.records index originals) output)
+                    (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths output.paths))
+                  built
+                  (@And.intro
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.records index originals) output)
+                    (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths output.paths)
+                    (@Iff.mpr
+                      (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.records index originals) output)
+                      (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index)
+                          originals)
+                        output)
+                      (@List.Perm.mem_iff.{0} MicroCFTA.SourceEqualityClassOrder.Record output
+                        (MicroCFTA.SourceEqualityDescend.records index originals)
+                        (@List.filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index)
+                          originals)
+                        (MicroCFTA.SourceEqualityDescend.records_perm index originals))
+                      (@Iff.mpr
+                        (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                            MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index)
+                            originals)
+                          output)
+                        (@Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun a =>
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals a)
+                            (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                              (MicroCFTA.SourceEqualityDescend.record index a)
+                              (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output)))
+                        (@List.mem_filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index)
+                          originals output)
+                        (@Exists.intro.{1} MicroCFTA.SourceEqualityClassOrder.Record
+                          (fun a =>
+                            And
+                              (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals a)
+                              (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                (MicroCFTA.SourceEqualityDescend.record index a)
+                                (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output)))
+                          second
+                          (@And.intro
+                            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals second)
+                            (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                              (MicroCFTA.SourceEqualityDescend.record index second)
+                              (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output))
+                            secondMember built))))
+                    (@Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+                      (fun left =>
+                        And
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+                          (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+                            And
+                              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) output.paths right)
+                              (And (@List.IsPrefix.{0} Nat left right)
+                                (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))))
+                      left
+                      (@And.intro
+                        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+                        (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) output.paths right)
+                            (And (@List.IsPrefix.{0} Nat left right)
+                              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+                        leftMember
+                        (@Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+                          (fun right =>
+                            And
+                              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) output.paths right)
+                              (And (@List.IsPrefix.{0} Nat left right)
+                                (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+                          (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                            MicroCFTA.EqualityNormalize.Path
+                            (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat)) left
+                            suffix)
+                          (@And.intro
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) output.paths
+                              (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                MicroCFTA.EqualityNormalize.Path
+                                (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                left suffix))
+                            (And
+                              (@List.IsPrefix.{0} Nat left
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  left suffix))
+                              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  left suffix)))
+                            (@Iff.mpr
+                              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) output.paths
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  left suffix))
+                              (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+                                (@List.cons.{0} Nat index
+                                  (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                    MicroCFTA.EqualityNormalize.Path
+                                    (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                      (@List.instAppend.{0} Nat))
+                                    left suffix)))
+                              (outputPairs
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  left suffix))
+                              firstExtended)
+                            (@And.intro
+                              (@List.IsPrefix.{0} Nat left
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  left suffix))
+                              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left
+                                (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                  MicroCFTA.EqualityNormalize.Path
+                                  (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path (@List.instAppend.{0} Nat))
+                                  left suffix))
+                              (@Exists.intro.{1} (List.{0} Nat)
+                                (fun t =>
+                                  @Eq.{1} (List.{0} Nat)
+                                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Nat) (List.{0} Nat) (List.{0} Nat)
+                                      (@instHAppendOfAppend.{0} (List.{0} Nat) (@List.instAppend.{0} Nat)) left t)
+                                    (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                      MicroCFTA.EqualityNormalize.Path
+                                      (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                        (@List.instAppend.{0} Nat))
+                                      left suffix))
+                                suffix
+                                (@rfl.{1} (List.{0} Nat)
+                                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Nat) (List.{0} Nat) (List.{0} Nat)
+                                    (@instHAppendOfAppend.{0} (List.{0} Nat) (@List.instAppend.{0} Nat)) left suffix)))
+                              fun same =>
+                              have lengths :=
+                                @congrArg.{1, 1} (List.{0} Nat) Nat left
+                                  (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                    MicroCFTA.EqualityNormalize.Path
+                                    (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                      (@List.instAppend.{0} Nat))
+                                    left suffix)
+                                  (@List.length.{0} Nat) same;
+                              have positive :=
+                                @Iff.mpr
+                                  (@LT.lt.{0} Nat instLTNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                    (@List.length.{0} Nat suffix))
+                                  (@Ne.{1} (List.{0} Nat) suffix (@List.nil.{0} Nat))
+                                  (@List.length_pos_iff.{0} Nat suffix) nonempty;
+                              MicroCFTA.SourceCurrentEqualityDependencyDescent.retained._proof_1_1 suffix left positive
+                                (@Eq.mp.{0}
+                                  (@Eq.{1} Nat (@List.length.{0} Nat left)
+                                    (@List.length.{0} Nat
+                                      (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                        MicroCFTA.EqualityNormalize.Path
+                                        (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                          (@List.instAppend.{0} Nat))
+                                        left suffix)))
+                                  (@Eq.{1} Nat (@List.length.{0} Nat left)
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (@List.length.{0} Nat left) (@List.length.{0} Nat suffix)))
+                                  (@congrArg.{1, 1} Nat Prop
+                                    (@List.length.{0} Nat
+                                      (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} Nat)
+                                        MicroCFTA.EqualityNormalize.Path
+                                        (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Path
+                                          (@List.instAppend.{0} Nat))
+                                        left suffix))
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (@List.length.{0} Nat left) (@List.length.{0} Nat suffix))
+                                    (@Eq.{1} Nat (@List.length.{0} Nat left)) (@List.length_append.{0} Nat left suffix))
+                                  lengths))))))))
+'MicroCFTA.SourceCurrentEqualityDependencyDescent.retained' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityDependencyDescent.subsumes_iff : ∀
+  (originals : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityDescend.WellFormed
+      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals) →
+    MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+          MicroCFTA.SourceEqualityClassOrder.Record.paths originals) →
+      ∀ (index : Nat) (first second : MicroCFTA.SourceEqualityClassOrder.Record),
+        @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals first →
+          @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals second →
+            ∀ (firstOutput secondOutput : MicroCFTA.SourceEqualityClassOrder.Record),
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.record index first)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record firstOutput) →
+                @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index second)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput) →
+                  Iff (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)
+                    (MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths)
+theorem MicroCFTA.SourceCurrentEqualityDependencyDescent.subsumes_iff : ∀
+  (originals : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityDescend.WellFormed
+      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals) →
+    MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+          MicroCFTA.SourceEqualityClassOrder.Record.paths originals) →
+      ∀ (index : Nat) (first second : MicroCFTA.SourceEqualityClassOrder.Record),
+        @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals first →
+          @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals second →
+            ∀ (firstOutput secondOutput : MicroCFTA.SourceEqualityClassOrder.Record),
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.record index first)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record firstOutput) →
+                @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index second)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput) →
+                  Iff (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)
+                    (MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) :=
+fun originals wellFormed fixed index first second firstMember secondMember firstOutput secondOutput firstRead
+    secondRead =>
+  @Iff.intro (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)
+    (MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths)
+    (fun a =>
+      @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+        (fun left =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+            (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) secondOutput.paths right)
+                (And (@List.IsPrefix.{0} Nat left right) (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))))
+        (fun x => MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) a fun left h =>
+        @And.casesOn.{0}
+          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+          (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) secondOutput.paths right)
+              (And (@List.IsPrefix.{0} Nat left right) (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+          (fun x => MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) h fun leftMember right =>
+          @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+            (fun right =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) secondOutput.paths right)
+                (And (@List.IsPrefix.{0} Nat left right) (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+            (fun x => MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) right fun right h =>
+            @And.casesOn.{0}
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) secondOutput.paths right)
+              (And (@List.IsPrefix.{0} Nat left right) (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))
+              (fun x => MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) h fun rightMember right_1 =>
+              @And.casesOn.{0} (@List.IsPrefix.{0} Nat left right) (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)
+                (fun x => MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) right_1 fun left_1 different =>
+                @Exists.casesOn.{1} (List.{0} Nat)
+                  (fun t =>
+                    @Eq.{1} (List.{0} Nat)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Nat) (List.{0} Nat) (List.{0} Nat)
+                        (@instHAppendOfAppend.{0} (List.{0} Nat) (@List.instAppend.{0} Nat)) left t)
+                      right)
+                  (fun x => MicroCFTA.EqualityNormalize.Subsumes first.paths second.paths) left_1 fun suffix equal =>
+                  have firstPairs :=
+                    MicroCFTA.SourceEqualityDescend.record_pairs index first
+                      (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent first)
+                        (And (MicroCFTA.EqualityTrie.Ascending first.trie)
+                          (MicroCFTA.EqualityNormalize.Nontrivial first.paths))
+                        (wellFormed originals
+                          (@rfl.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals))
+                          first firstMember))
+                      firstOutput firstRead;
+                  have secondPairs :=
+                    MicroCFTA.SourceEqualityDescend.record_pairs index second
+                      (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent second)
+                        (And (MicroCFTA.EqualityTrie.Ascending second.trie)
+                          (MicroCFTA.EqualityNormalize.Nontrivial second.paths))
+                        (wellFormed originals
+                          (@rfl.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) originals))
+                          second secondMember))
+                      secondOutput secondRead;
+                  @Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+                    (fun left =>
+                      And
+                        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths left)
+                        (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths right)
+                            (And (@List.IsPrefix.{0} Nat left right)
+                              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))))
+                    (@List.cons.{0} Nat index left)
+                    (@And.intro
+                      (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths
+                        (@List.cons.{0} Nat index left))
+                      (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+                        And
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths right)
+                          (And (@List.IsPrefix.{0} Nat (@List.cons.{0} Nat index left) right)
+                            (@Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left) right)))
+                      (@Iff.mp
+                        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) firstOutput.paths left)
+                        (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) first.paths
+                          (@List.cons.{0} Nat index left))
+                        (firstPairs left) leftMember)
+                      (@Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+                        (fun right =>
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths right)
+                            (And (@List.IsPrefix.{0} Nat (@List.cons.{0} Nat index left) right)
+                              (@Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left) right)))
+                        (@List.cons.{0} Nat index right)
+                        (@And.intro
+                          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+                            (@List.cons.{0} Nat index right))
+                          (And (@List.IsPrefix.{0} Nat (@List.cons.{0} Nat index left) (@List.cons.{0} Nat index right))
+                            (@Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left)
+                              (@List.cons.{0} Nat index right)))
+                          (@Iff.mp
+                            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) secondOutput.paths right)
+                            (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) second.paths
+                              (@List.cons.{0} Nat index right))
+                            (secondPairs right) rightMember)
+                          (@And.intro
+                            (@List.IsPrefix.{0} Nat (@List.cons.{0} Nat index left) (@List.cons.{0} Nat index right))
+                            (@Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left)
+                              (@List.cons.{0} Nat index right))
+                            (@Exists.intro.{1} (List.{0} Nat)
+                              (fun t =>
+                                @Eq.{1} (List.{0} Nat)
+                                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Nat) (List.{0} Nat) (List.{0} Nat)
+                                    (@instHAppendOfAppend.{0} (List.{0} Nat) (@List.instAppend.{0} Nat))
+                                    (@List.cons.{0} Nat index left) t)
+                                  (@List.cons.{0} Nat index right))
+                              suffix
+                              (@id.{0}
+                                (@Eq.{1} (List.{0} Nat)
+                                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Nat) (List.{0} Nat) (List.{0} Nat)
+                                    (@instHAppendOfAppend.{0} (List.{0} Nat) (@List.instAppend.{0} Nat))
+                                    (@List.cons.{0} Nat index left) suffix)
+                                  (@List.cons.{0} Nat index right))
+                                (@congrArg.{1, 1} (List.{0} Nat) (List.{0} Nat)
+                                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Nat) (List.{0} Nat) (List.{0} Nat)
+                                    (@instHAppendOfAppend.{0} (List.{0} Nat) (@List.instAppend.{0} Nat)) left suffix)
+                                  right (fun x => @List.cons.{0} Nat index x) equal)))
+                            (@Eq.mpr.{0}
+                              (@Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left)
+                                (@List.cons.{0} Nat index right))
+                              (Not (@Eq.{1} (List.{0} Nat) left right))
+                              (@id.{0}
+                                (@Eq.{1} Prop
+                                  (@Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left)
+                                    (@List.cons.{0} Nat index right))
+                                  (Not (@Eq.{1} (List.{0} Nat) left right)))
+                                (@congrArg.{1, 1} Prop Prop
+                                  (@Eq.{1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index left)
+                                    (@List.cons.{0} Nat index right))
+                                  (@Eq.{1} (List.{0} Nat) left right) Not
+                                  (@Eq.trans.{1} Prop
+                                    (@Eq.{1} (List.{0} Nat) (@List.cons.{0} Nat index left)
+                                      (@List.cons.{0} Nat index right))
+                                    (And (@Eq.{1} Nat index index) (@Eq.{1} (List.{0} Nat) left right))
+                                    (@Eq.{1} (List.{0} Nat) left right)
+                                    (@List.cons.injEq.{0} Nat index left index right)
+                                    (@Eq.trans.{1} Prop
+                                      (And (@Eq.{1} Nat index index) (@Eq.{1} (List.{0} Nat) left right))
+                                      (And True (@Eq.{1} (List.{0} Nat) left right)) (@Eq.{1} (List.{0} Nat) left right)
+                                      (@congrFun'.{1, 1} Prop Prop (And (@Eq.{1} Nat index index)) (And True)
+                                        (@congrArg.{1, 1} Prop (Prop → Prop) (@Eq.{1} Nat index index) True And
+                                          (@eq_self.{1} Nat index))
+                                        (@Eq.{1} (List.{0} Nat) left right))
+                                      (true_and (@Eq.{1} (List.{0} Nat) left right))))))
+                              different))))))
+    fun dependent =>
+    @Exists.casesOn.{1} MicroCFTA.SourceEqualityClassOrder.Record
+      (fun secondOutput =>
+        And
+          (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (MicroCFTA.SourceEqualityDescend.record index second)
+            (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput))
+          (And
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (MicroCFTA.SourceEqualityDescend.records index originals) secondOutput)
+            (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)))
+      (fun x => MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)
+      (MicroCFTA.SourceCurrentEqualityDependencyDescent.retained originals wellFormed fixed index first second
+        firstMember secondMember dependent firstOutput firstRead)
+      fun actual h =>
+      @And.casesOn.{0}
+        (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (MicroCFTA.SourceEqualityDescend.record index second)
+          (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record actual))
+        (And
+          (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (MicroCFTA.SourceEqualityDescend.records index originals) actual)
+          (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths actual.paths))
+        (fun x => MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths) h fun built right =>
+        @And.casesOn.{0}
+          (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (MicroCFTA.SourceEqualityDescend.records index originals) actual)
+          (MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths actual.paths)
+          (fun x => MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths) right
+          fun left dependency =>
+          have same :=
+            @Option.some.inj.{0} MicroCFTA.SourceEqualityClassOrder.Record actual secondOutput
+              (@Eq.trans.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record actual)
+                (MicroCFTA.SourceEqualityDescend.record index second)
+                (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record secondOutput)
+                (@Eq.symm.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.record index second)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record actual) built)
+                secondRead);
+          @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityClassOrder.Record secondOutput
+            (fun actual =>
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.record index second)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record actual) →
+                @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.records index originals) actual →
+                  MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths actual.paths →
+                    MicroCFTA.EqualityNormalize.Subsumes firstOutput.paths secondOutput.paths)
+            (fun built left dependency => dependency) actual
+            (@Eq.symm.{1} MicroCFTA.SourceEqualityClassOrder.Record actual secondOutput same) built left dependency
+'MicroCFTA.SourceCurrentEqualityDependencyDescent.subsumes_iff' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

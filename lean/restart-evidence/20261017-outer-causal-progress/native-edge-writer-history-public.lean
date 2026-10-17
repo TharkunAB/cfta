@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentNativeEdgeWriterHistory
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.initial
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.initial
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.initial
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.advance
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.advance
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.advance
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.trace
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.trace
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.trace
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.writers
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.writers
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.writers
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.query
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.query
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.query
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.request
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.request
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.request
+#check @MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.rows
+#print MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.rows
+#print axioms MicroCFTA.SourceCurrentNativeEdgeWriterHistory.History.rows
