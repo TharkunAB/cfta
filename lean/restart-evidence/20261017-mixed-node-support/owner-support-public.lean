@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.NodeResult
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.NodeResult
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.Below
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.Below
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.node_push
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.node_push
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.descent
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.descent
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.inherited_prefix
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.inherited_prefix
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.terminal
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainSupport.terminal

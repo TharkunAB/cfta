@@ -1,0 +1,36 @@
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:356:57: error: don't know how to synthesize implicit argument `actual`
+  @NodeLeaf.leaf inst✝¹ inst✝ width record originals path value before result after ?m.202
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+annotation : Guard → Prop
+next : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+value : Value Symbol Guard
+before : SourceCurrentAllocatedSharedTargetState.State width
+result : Value Symbol Guard
+after : SourceCurrentAllocatedSharedTargetState.State width
+memos saved : Memos
+receipt :
+  SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path value before result
+    after memos saved
+leaves : NodeLeaves annotation ⋯
+inventory : Inventory
+depth : Nat
+a✝⁷ : Populated (Edits.editAt path)
+a✝⁶ : HasLeaf (Edits.editAt path)
+a✝⁵ : Allowed record (Edits.editAt path)
+a✝⁴ : Ready formulas solver inventory record originals base before
+a✝³ : Available before.checked.native.machine.heap value
+a✝² : Safe (Edits.editAt path) value
+a✝¹ : Valid before.checked.native.machine.heap memos
+stored : MuStored annotation before.checked.native.machine.heap
+a✝ : Cap annotation depth value
+placed : AtLeaves annotation (Edits.editAt path) value
+⊢ SourceCurrentAllocatedSharedTargetLeaf.Leaf record originals path value before result after

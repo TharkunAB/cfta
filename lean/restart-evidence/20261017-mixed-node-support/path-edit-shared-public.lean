@@ -1,0 +1,42 @@
+import MicroCFTA.SourceCurrentConstrainedCapSharedSupport
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.operand_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.operand_receipt
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.fold
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.fold
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.target_reads
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.target_reads
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.Certificate
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.Certificate
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.Stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.initial_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.initial_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.advance_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.advance_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.advance_heap_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.advance_heap_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.store_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.store_stored
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.force_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.force_receipt
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSharedSupport.leaf_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapSharedSupport.leaf_receipt

@@ -1,0 +1,86 @@
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:257:55: error: Type mismatch
+  offset + 1
+has type
+  Int
+but is expected to have type
+  Nat
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:258:97: error: Application type mismatch: The argument
+  offset
+has type
+  Int
+but is expected to have type
+  Nat
+in the application
+  EditChildren.unselected offset
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:282:2: error(lean.unknownIdentifier): Unknown identifier `NodeLeaves`
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:290:2: error(lean.unknownIdentifier): Unknown identifier `ChildrenLeaves`
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:299:2: error(lean.unknownIdentifier): Unknown identifier `RowsLeaves`
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:320:148: error: Tactic `assumption` failed
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+annotation : Guard → Prop
+next : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+value : Value Symbol Guard
+before : SourceCurrentAllocatedSharedTargetState.State ?m.121
+result : Value Symbol Guard
+after : SourceCurrentAllocatedSharedTargetState.State ?m.121
+memos saved : Memos
+⊢ SourceCurrentAllocatedSharedTargetLeaf.Leaf record originals path value before result after
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:316:152: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+annotation : Guard → Prop
+⊢ (∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+      {edits : Edits EqualityNormalize.Path} {value : Value Symbol Guard} {before : SharedState width}
+      {result : Value Symbol Guard} {after : SharedState width} {memos final : Memos}
+      {actual : EditNode record originals edits value before result after},
+      NodeReads formulas solver base actual memos final → NodeGoal annotation actual memos) ∧
+    (∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+        {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {values : List (Value Symbol Guard)}
+        {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width}
+        {memos final : Memos} {actual : EditChildren record originals entries offset values before results after},
+        ChildrenReads formulas solver base actual memos final → ChildrenGoal annotation actual memos) ∧
+      ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+        {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+        {before : SharedState width} {results : List (EdgeValue Symbol Guard)} {after : SharedState width}
+        {memos final : Memos} {actual : EditRows record originals entries edges before results after},
+        RowsReads formulas solver base actual memos final → RowsGoal annotation actual memos
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:506:74: error: Function expected at
+  NodeLeaves
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  annotation
+
+Hint: The identifier `NodeLeaves` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:518:78: error: Function expected at
+  ChildrenLeaves
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  annotation
+
+Hint: The identifier `ChildrenLeaves` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:530:74: error: Function expected at
+  RowsLeaves
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  annotation
+
+Hint: The identifier `RowsLeaves` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.

@@ -1,0 +1,128 @@
+'MicroCFTA.MixedNodeSupportKernels.serial' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.MixedNodeSupportKernels.serial : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (firstBudget secondBudget : Nat) (first second : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1 width formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+        first.inherited →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready
+          (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+          second.inherited →
+        @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+            first.value →
+          @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+              second.value →
+            MicroCFTA.SourceEqualityPartialPlainRegion.Region first.value →
+              MicroCFTA.SourceEqualityPartialPlainRegion.Region second.value →
+                @MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored width before →
+                  @MicroCFTA.SourceCurrentAllocatedPartialConditionalActive.ActiveAbove width
+                      (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank first)
+                        (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank second))
+                      before →
+                    @Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun firstResult =>
+                      @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun middle =>
+                        @Exists.{1}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          fun secondResult =>
+                          @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun after =>
+                            @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+                              @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun firstMemos =>
+                                @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun final =>
+                                  And
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      width
+                                      (fun f g s r e p h m c n =>
+                                        @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall inst inst_1 inst_2 width
+                                          f g s r e p h m c n firstBudget first before)
+                                      firstResult middle)
+                                    (And
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                        width
+                                        (fun f g s r e p h m c n =>
+                                          @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall inst inst_1 inst_2
+                                            width f g s r e p h m c n secondBudget second middle)
+                                        secondResult after)
+                                      (@Exists.{0}
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall inst inst_1 inst_2 width
+                                          firstBudget first before firstResult middle)
+                                        fun firstCall =>
+                                        @Exists.{0}
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall inst inst_1 inst_2
+                                            width secondBudget second middle secondResult after)
+                                          fun secondCall =>
+                                          And
+                                            (@MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads inst
+                                              inst_1 inst_2 width formulas solver firstBudget first before firstResult
+                                              middle firstCall memos firstMemos)
+                                            (And
+                                              (@MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads inst
+                                                inst_1 inst_2 width formulas solver secondBudget second middle
+                                                secondResult after secondCall firstMemos final)
+                                              (And
+                                                (@MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks inst inst_1
+                                                  inst_2 width firstBudget
+                                                  (@MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace inst
+                                                    inst_1 inst_2 width firstBudget first firstResult before middle
+                                                    firstCall))
+                                                (And
+                                                  (@MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks inst inst_1
+                                                    inst_2 width secondBudget
+                                                    (@MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace inst
+                                                      inst_1 inst_2 width secondBudget second secondResult middle after
+                                                      secondCall))
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1 width
+                                                      formulas solver next before after final)
+                                                    (And
+                                                      (@MicroCFTA.SourceCurrentAllocatedPartialConditionalDomain.Stored
+                                                        width after)
+                                                      (And
+                                                        (MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw
+                                                          formulas solver first firstResult)
+                                                        (MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw
+                                                          formulas solver second secondResult)))))))))

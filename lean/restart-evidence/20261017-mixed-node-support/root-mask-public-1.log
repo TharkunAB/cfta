@@ -1,0 +1,42 @@
+'MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.of_uniform' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.of_uniform : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  (∀ (path : List.{0} Int),
+      @Eq.{1} Nat (@List.length.{0} Int path) depth →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value) →
+    @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value
+'MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.cap_iff_uniform' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.cap_iff_uniform : ∀ {Symbol Guard : Type}
+  (valid : Guard → Prop) (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Iff (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value)
+    (∀ (path : List.{0} Int),
+      @Eq.{1} Nat (@List.length.{0} Int path) depth →
+        @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value)
+'MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.preserves_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.preserves_cap : ∀ {Symbol Guard : Type}
+  {valid : Guard → Prop} {depth : Nat} {original result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.Preserves Symbol Guard valid original result →
+    @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth original →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth result
+'MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.children_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.children_cap : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {depth : Nat} {originals results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentConstrainedCapRequiredSupport.Preserves Symbol Guard valid) originals results →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value →
+          @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+      ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value →
+          @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value

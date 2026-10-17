@@ -1,0 +1,17 @@
+import MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode.finite
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode.hereditary_finite
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode.hereditary_finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode.descendants_finite
+#check @MicroCFTA.SourceCurrentAllocatedPartialConditionalPlainNode.descendants_finite

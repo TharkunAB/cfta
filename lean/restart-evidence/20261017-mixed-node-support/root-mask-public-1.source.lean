@@ -1,0 +1,17 @@
+import MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.of_uniform
+#check @MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.of_uniform
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.cap_iff_uniform
+#check @MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.cap_iff_uniform
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.preserves_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.preserves_cap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.children_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapMaskCharacterization.children_cap

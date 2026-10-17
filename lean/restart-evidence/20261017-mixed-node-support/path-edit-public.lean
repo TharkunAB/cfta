@@ -1,0 +1,114 @@
+import MicroCFTA.SourceCurrentConstrainedCapEditSupport
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.AtLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.AtLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ChildrenAtLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ChildrenAtLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowsAtLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowsAtLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ListAtLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ListAtLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.at_root
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.at_root
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.of_annotated
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.of_annotated
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ordinary_rows
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ordinary_rows
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.children_tail
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.children_tail
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.children_head
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.children_head
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.compiled_list
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.compiled_list
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.class_placement
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.class_placement
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.preserves_refl
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.preserves_refl
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.forest_refl
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.forest_refl
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.preserves_trans
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.preserves_trans
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.preserves_of_annotated
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.preserves_of_annotated
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.selected
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.selected
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowPreserves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowPreserves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.makeEdge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.makeEdge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.makeNode
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.makeNode
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.head
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.head
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.placement_preserved
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.placement_preserved
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.LeafEvent
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.LeafEvent
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.NodeLeaf
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.NodeLeaf
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ChildrenLeaf
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ChildrenLeaf
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowsLeaf
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowsLeaf
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.LeafCertificate
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.LeafCertificate
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.NodeLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.NodeLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ChildrenLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ChildrenLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowsLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.RowsLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.node_with_leaf_certificates
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.node_with_leaf_certificates
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.children_with_leaf_certificates
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.children_with_leaf_certificates
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.rows_with_leaf_certificates
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.rows_with_leaf_certificates
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ListLeaf
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ListLeaf
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.ListLeaves
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.ListLeaves
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditSupport.list_with_leaf_certificates
+#check @MicroCFTA.SourceCurrentConstrainedCapEditSupport.list_with_leaf_certificates

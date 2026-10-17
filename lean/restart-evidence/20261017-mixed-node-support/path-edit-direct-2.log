@@ -1,0 +1,34 @@
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:107:29: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  (List.map Int.ofNat original, target original) = (path, action)
+
+Symbol Guard Action : Type
+valid : Guard → Prop
+record : SourceEqualityClassOrder.Record
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+target : EqualityNormalize.Path → Action
+values : List (Value Symbol Guard)
+supported :
+  ∀ (path : EqualityNormalize.Path), path ∈ record.paths → ForestSupported valid (List.map Int.ofNat path) values
+path : Path
+action : Action
+member : (path, action) ∈ SourceEqualityClassEdits.edits record.paths target
+original : EqualityNormalize.Path
+present : original ∈ record.paths
+right✝ : (List.map Int.ofNat original, target original) = (path, action)
+⊢ ForestSupported valid path values
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:140:66: error(lean.unknownIdentifier): Unknown identifier `InternedNestedFacts.Cached`
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:145:37: error: Application type mismatch: The argument
+  key
+has type
+  (run (InternedConstructorTemplates.makeEdge original.entry.key.symbol original.entry.key.constraint values)
+            state).fst.entry.key =
+    { symbol := original.entry.key.symbol, children := List.map Value.referenceOf values,
+      constraint := original.entry.key.constraint }
+but is expected to have type
+  (run (InternedConstructorTemplates.makeEdge original.entry.key.symbol original.entry.key.constraint values)
+            state).fst.entry.key =
+    original.entry.key
+in the application
+  congrArg EdgeKey.constraint key
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:176:66: error(lean.unknownIdentifier): Unknown identifier `InternedNestedFacts.Linked`

@@ -1,0 +1,32 @@
+'MicroCFTA.MixedNodeSupportMaskKernels.required_then_projection' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.MixedNodeSupportMaskKernels.required_then_projection : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (needed : MicroCFTA.SourceEqualityNeeded.Needed)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (path : List.{0} Int),
+  @Eq.{1} Nat (@List.length.{0} Int path) depth →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              (∀ (path : List.{0} Int),
+                  @Eq.{1} Nat (@List.length.{0} Int path) depth →
+                    @MicroCFTA.SourceCurrentConstrainedCapPaths.Supported Symbol Guard valid path value) →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun required =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                        And
+                          (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before
+                            required middle)
+                          (And
+                            (@MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path required middle
+                              result after)
+                            (And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth required)
+                              (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result))))

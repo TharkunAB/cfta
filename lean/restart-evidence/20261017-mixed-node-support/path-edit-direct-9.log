@@ -1,0 +1,57 @@
+MicroCFTA/SourceCurrentConstrainedCapEditSupport.lean:372:83: error: don't know how to synthesize implicit argument `built`
+  @NodeLeaf.ordinary inst✝¹ inst✝ width record originals entries edges before rebuilt middle value heap event entry
+    depth free actual (?m.469 event reached) reached
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+annotation : Guard → Prop
+leafCase :
+  ∀ {next : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {path : EqualityNormalize.Path} {value : Value Symbol Guard}
+    {before : SourceCurrentAllocatedSharedTargetState.State width} {result : Value Symbol Guard}
+    {after : SourceCurrentAllocatedSharedTargetState.State width} {memos saved : Memos}
+    (receipt :
+      SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path value before result
+        after memos saved),
+    NodeGoal annotation ⋯ memos
+emptyCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos},
+    NodeGoal annotation ⋯ memos
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+memos saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+edges : List (EdgeValue Symbol Guard)
+before : SharedState width
+rebuilt : List (EdgeValue Symbol Guard)
+middle : SharedState width
+value : Value Symbol Guard
+heap : HeapState
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+actual : EditRows record originals entries edges before rebuilt middle
+built : run (InternedConstructorTemplates.makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)
+reads : RowsReads formulas solver base actual memos saved
+ih : RowsGoal annotation actual memos
+leaves : NodeLeaves annotation ⋯
+inventory : Inventory
+capDepth : Nat
+populated : Populated (Edits.editBelow entries)
+a✝ : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : Ready formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+valid : Valid before.checked.native.machine.heap memos
+stored : MuStored annotation before.checked.native.machine.heap
+bounded : Cap annotation capDepth (Value.node entry edges depth free)
+placed : AtLeaves annotation (Edits.editBelow entries) (Value.node entry edges depth free)
+event : LeafEvent width
+reached : RowsLeaf event actual
+⊢ run (InternedConstructorTemplates.makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)
