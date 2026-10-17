@@ -695,8 +695,10 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
     depth (Term _ ts) = 1 + maximum (0 : map depth ts)
     complete _ rules [] = rules
     complete !cache rules ((s, t) : queue)
+        -- The right normal form cannot change this rejection. Keep cache1
+        -- because cache2 would force the right normal form.
+        | leaves s' > maxSize = complete cache1 rules queue
         | s' == t'
-            || leaves s' > maxSize
             || leaves t' > maxSize
             || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
