@@ -1,0 +1,30 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-empty-direct-2.source.lean:135:57: error(lean.unknownIdentifier): Unknown identifier `IsEmpty.forall_iff`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-empty-direct-2.source.lean:131:10: error: unsolved goals
+case empty.nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+result : Value Symbol Guard
+environment : Environment Symbol Guard
+common : InternedConstructorTemplates.State Symbol Guard
+ready : Ready common
+replacements : Replacements common environment
+available : Available common Value.empty
+called : execute Value.empty environment common = Outcome.done result common
+same : result = Value.empty
+⊢ True ↔
+    ∀ (output : Value Symbol Guard),
+      False →
+        (match output with
+          | Value.empty => InternedBinderProtocol.NodeRef.empty
+          | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+          | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+          | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+          | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) =
+          InternedBinderProtocol.NodeRef.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-empty-direct-2.source.lean:135:76: warning: This simp argument is unused:
+  implies_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [same, Value.referenceOf, List.not_mem_nil, IsEmpty.forall_iff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

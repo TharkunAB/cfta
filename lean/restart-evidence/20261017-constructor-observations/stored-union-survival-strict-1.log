@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-survival-strict-1.source.lean:46:8: error: unsolved goals
+case nil.nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+environment : Environment Symbol Guard
+common : State Symbol Guard
+originalInputs : List (Value Symbol Guard)
+ready : Ready common
+originalAvailable : Values common originalInputs
+replacements : Replacements common environment
+selection : distinctNodes (List.flatMap unionMembers originalInputs) = []
+available : Values common []
+made : run (makeUnion originalInputs) common = (Value.empty, common)
+called : execute Value.empty environment common = Outcome.done Value.empty common
+⊢ True ↔
+    ∀ (output : Value Symbol Guard),
+      output ∈ [] →
+        (match output with
+          | Value.empty => InternedBinderProtocol.NodeRef.empty
+          | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+          | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+          | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+          | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) =
+          InternedBinderProtocol.NodeRef.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-survival-strict-1.source.lean:98:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (normalized, common).fst
+in the target expression
+  Available common normalized
+
+case cons.cons.none
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+environment : Environment Symbol Guard
+common : State Symbol Guard
+originalInputs outputs : List (Value Symbol Guard)
+normalized result : Value Symbol Guard
+ready : Ready common
+originalAvailable : Values common originalInputs
+replacements : Replacements common environment
+made : run (makeUnion originalInputs) common = (normalized, common)
+called : execute normalized environment common = Outcome.done result common
+first second : Value Symbol Guard
+tail : List (Value Symbol Guard)
+selection : distinctNodes (List.flatMap unionMembers originalInputs) = first :: second :: tail
+paired :
+  All₂ (fun original output => execute original environment common = Outcome.done output common)
+    (first :: second :: tail) outputs
+available : Values common (first :: second :: tail)
+ordinary : ordinaryEdges (first :: second :: tail) = none
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+shape :
+  (normalized, common).fst =
+    Value.union entry (first :: second :: tail) (maximumDepth (first :: second :: tail))
+      (childFree (first :: second :: tail))
+normalizedAvailable : Available common normalized
+⊢ result.referenceOf = InternedBinderProtocol.NodeRef.empty ↔
+    ∀ (output : Value Symbol Guard), output ∈ outputs → output.referenceOf = InternedBinderProtocol.NodeRef.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-survival-strict-1.source.lean:55:36: warning: This simp argument is unused:
+  List.forall_mem_nil
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.referenceOf]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-constructor-observations/stored-union-survival-strict-1.source.lean:144:74: error(lean.unknownIdentifier): Unknown identifier `output`

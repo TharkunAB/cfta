@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentOpenObservationSurvival
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentOpenObservationSurvival.Related
+#print MicroCFTA.SourceCurrentOpenObservationSurvival.Related
+#print axioms MicroCFTA.SourceCurrentOpenObservationSurvival.Related
+#check @MicroCFTA.SourceCurrentOpenObservationSurvival.makeNode
+#print MicroCFTA.SourceCurrentOpenObservationSurvival.makeNode
+#print axioms MicroCFTA.SourceCurrentOpenObservationSurvival.makeNode
+#check @MicroCFTA.SourceCurrentOpenObservationSurvival.makeUnion
+#print MicroCFTA.SourceCurrentOpenObservationSurvival.makeUnion
+#print axioms MicroCFTA.SourceCurrentOpenObservationSurvival.makeUnion
