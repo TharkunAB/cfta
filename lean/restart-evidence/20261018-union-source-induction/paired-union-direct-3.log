@@ -1,0 +1,122 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:34:14: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type `ManyBinderFree (child :: rest)` which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:35:17: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type
+  ManyBinderFree (expression :: rest)
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:47:18: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type
+  EdgesBinderFree (EdgeSyntax.mk symbol guard children :: rest)
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:48:21: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type
+  EdgesBinderFree (EdgeSyntax.mk ownSymbol ownGuard originals :: rest)
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:301:25: error: Tactic `cases` failed: major premise type is not an inductive type
+  BinderFree (Syntax.binder smart body)
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case binder
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+smart : Bool
+body : Syntax Symbol Guard
+free : BinderFree (Syntax.binder smart body)
+⊢ Aligned (Syntax.binder smart body)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:306:66: error: Application type mismatch: The argument
+  free
+has type
+  BinderFree (Syntax.node rows)
+but is expected to have type
+  EdgesBinderFree rows
+in the application
+  edge_free rows free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:311:53: error: Application type mismatch: The argument
+  free
+has type
+  BinderFree (Syntax.union expressions)
+but is expected to have type
+  ManyBinderFree expressions
+in the application
+  many_free expressions free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:306:12: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+_x : (expression : Syntax Symbol Guard) ×' BinderFree expression
+a✝¹ :
+  ∀ (y : (expression : Syntax Symbol Guard) ×' BinderFree expression),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => PSigma.casesOn x fun expression free => sizeOf expression) y _x →
+      Aligned y.1
+rows : List (EdgeSyntax Symbol Guard)
+free✝ : BinderFree (Syntax.node rows)
+child : Syntax Symbol Guard
+selected : SourceCurrentStoredPairedOrdinaryLineage.StrictChild rows child
+symbol : Symbol
+h✝² :
+  ∃ guard originals,
+    EdgeSyntax.mk symbol guard originals ∈ rows ∧ child ∈ originals ∧ sizeOf child < sizeOf (Syntax.node rows)
+guard : Guard
+h✝¹ :
+  ∃ originals,
+    EdgeSyntax.mk symbol guard originals ∈ rows ∧ child ∈ originals ∧ sizeOf child < sizeOf (Syntax.node rows)
+children : List (Syntax Symbol Guard)
+h✝ : EdgeSyntax.mk symbol guard children ∈ rows ∧ child ∈ children ∧ sizeOf child < sizeOf (Syntax.node rows)
+member : EdgeSyntax.mk symbol guard children ∈ rows
+right✝ : child ∈ children ∧ sizeOf child < sizeOf (Syntax.node rows)
+present : child ∈ children
+smaller : sizeOf child < sizeOf (Syntax.node rows)
+free : BinderFree (Syntax.node rows)
+a✝ :
+  ∀ (y : (expression : Syntax Symbol Guard) ×' BinderFree expression),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => PSigma.casesOn x fun expression free => sizeOf expression) y
+        ⟨Syntax.node rows, free⟩ →
+      Aligned y.1
+⊢ sizeOf children ≤ sizeOf rows + 1
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:345:95: error: Application type mismatch: The argument
+  firstRaw
+has type
+  InternedNestedConstruction.build expression leftInputs before = Outcome.done rawFirst after
+but is expected to have type
+  build expression leftInputs before = Outcome.done rawFirst after
+in the application
+  source_keeps expression leftInputs before after ready firstInputs rawFirst firstRaw
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:348:111: error: Application type mismatch: The argument
+  secondRaw
+has type
+  InternedNestedConstruction.build expression rightInputs after = Outcome.done rawSecond common
+but is expected to have type
+  build expression rightInputs after = Outcome.done rawSecond common
+in the application
+  source_keeps expression rightInputs after common firstKept.ready rightAvailable rawSecond secondRaw
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:355:25: error: Application type mismatch: The argument
+  firstRaw
+has type
+  InternedNestedConstruction.build expression leftInputs before = Outcome.done rawFirst after
+but is expected to have type
+  build expression leftInputs before = Outcome.done rawFirst after
+in the application
+  complete expression (binder_free expression free) leftInputs rightInputs first second paired before after after common
+    common (SourceRecursiveIntersectionSemanticHeap.context before ready.semantic leftInputs firstInputs)
+    (SourceRecursiveIntersectionSemanticHeap.context after firstKept.ready.semantic rightInputs rightAvailable) rawFirst
+    rawSecond firstRaw
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:360:66: error: Application type mismatch: The argument
+  firstRaw
+has type
+  InternedNestedConstruction.build expression leftInputs before = Outcome.done rawFirst after
+but is expected to have type
+  build expression leftInputs before = Outcome.done rawFirst after
+in the application
+  And.intro firstRaw
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-3.source.lean:360:75: error: Application type mismatch: The argument
+  secondRaw
+has type
+  InternedNestedConstruction.build expression rightInputs after = Outcome.done rawSecond common
+but is expected to have type
+  build expression rightInputs after = Outcome.done rawSecond common
+in the application
+  And.intro secondRaw

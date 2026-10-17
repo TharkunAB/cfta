@@ -1,0 +1,263 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:84:63: error: Type mismatch: After simplification, term
+  firstRaw
+ has type
+  Value.empty = rawFirst
+but is expected to have type
+  Value.empty = rawFirst ∧ ?m.97 = ?m.99
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:85:65: error: Type mismatch: After simplification, term
+  secondRaw
+ has type
+  Value.empty = rawSecond
+but is expected to have type
+  Value.empty = rawSecond ∧ ?m.127 = ?m.129
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:92:111: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  firstRaw
+has type
+  build (Syntax.var index) (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) common =
+    Outcome.done rawFirst common
+which has no fields.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:94:111: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  secondRaw
+has type
+  build (Syntax.var index) (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) common =
+    Outcome.done rawSecond common
+which has no fields.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:107:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  execute (Value.reference ?name) ?environment ?state
+in the target expression
+  execute (InternedFreshOrdinaryLiveInputs.input firstNames (Sum.inr atom)) first common =
+    execute (InternedFreshOrdinaryLiveInputs.input secondNames (Sum.inr atom)) second common
+
+case some.inr
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+index : Nat
+Atom : Type
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+first second : Environment Symbol Guard
+compatible : Compatible (Syntax.var index) inputs firstNames secondNames first second
+common : InternedConstructorTemplates.State Symbol Guard
+ready : Ready common
+firstInputs : Values common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondInputs : Values common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+firstReplacements : Replacements common first
+secondReplacements : Replacements common second
+result other : Value Symbol Guard
+atom : Atom
+found : inputs[index]? = some (Sum.inr atom)
+firstRaw :
+  build (Syntax.var index) (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) common =
+    Outcome.done (InternedFreshOrdinaryLiveInputs.input firstNames (Sum.inr atom)) common
+firstDone :
+  execute (InternedFreshOrdinaryLiveInputs.input firstNames (Sum.inr atom)) first common = Outcome.done result common
+secondRaw :
+  build (Syntax.var index) (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) common =
+    Outcome.done (InternedFreshOrdinaryLiveInputs.input secondNames (Sum.inr atom)) common
+secondDone :
+  execute (InternedFreshOrdinaryLiveInputs.input secondNames (Sum.inr atom)) second common = Outcome.done other common
+⊢ execute (InternedFreshOrdinaryLiveInputs.input firstNames (Sum.inr atom)) first common =
+    execute (InternedFreshOrdinaryLiveInputs.input secondNames (Sum.inr atom)) second common
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:266:30: error: don't know how to synthesize placeholder for argument `environment`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type ?u.9
+expression : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+first second : Value Symbol Guard
+called :
+  build expression (?m.51 expression inputs firstNames secondNames common firstContext secondContext first second)
+      common =
+    Outcome.done first common
+⊢ List (Value Symbol Guard)
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:265:31: error: don't know how to synthesize placeholder for argument `environment`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type ?u.9
+expression : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+first second : Value Symbol Guard
+⊢ List (Value Symbol Guard)
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:270:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  InternedDepthSemantics.evaluate ?expression
+    (List.map InternedRecordDepthShape.shape (List.map (InternedFreshOrdinaryLiveInputs.input ?names) ?inputs))
+in the target expression
+  (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape
+          (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs))).isEmpty =
+    (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape
+          (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs))).isEmpty
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type u_1
+expression : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+first second : Value Symbol Guard
+called :
+  build expression (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) common =
+    Outcome.done first common
+other :
+  build expression (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) common =
+    Outcome.done second common
+⊢ (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape
+          (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs))).isEmpty =
+    (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape
+          (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs))).isEmpty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:280:35: error: don't know how to synthesize placeholder for argument `environment`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type ?u.10
+expressions : List (Syntax Symbol Guard)
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+first second : List (Value Symbol Guard)
+called :
+  buildMany expressions (?m.55 expressions inputs firstNames secondNames common firstContext secondContext first second)
+      common =
+    Outcome.done first common
+⊢ List (Value Symbol Guard)
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:279:36: error: don't know how to synthesize placeholder for argument `environment`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type ?u.10
+expressions : List (Syntax Symbol Guard)
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+first second : List (Value Symbol Guard)
+⊢ List (Value Symbol Guard)
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:284:2: error: Tactic `clear` failed: variable 'right' depends on 'called'
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type u_1
+expressions : List (Syntax Symbol Guard)
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+secondContext : Context common (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs)
+first second : List (Value Symbol Guard)
+called :
+  buildMany expressions (?m.55 expressions inputs firstNames secondNames common firstContext secondContext first second)
+      common =
+    Outcome.done first common
+left :
+  All₂
+    (fun expression output =>
+      build expression (?m.55 expressions inputs firstNames secondNames common firstContext secondContext first second)
+          common =
+        Outcome.done output common)
+    expressions first
+right :
+  All₂
+    (fun expression output =>
+      build expression
+          (?m.56 expressions inputs firstNames secondNames common firstContext secondContext first second called)
+          common =
+        Outcome.done output common)
+    expressions second
+⊢ (first.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    second.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:297:73: error: don't know how to synthesize placeholder for argument `environment`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type
+expressions : List (Syntax Symbol Guard)
+inputs : List (Value Symbol Guard ⊕ Atom)
+names : Atom → Reference
+common : InternedConstructorTemplates.State Symbol Guard
+context : Context common (List.map (InternedFreshOrdinaryLiveInputs.input names) inputs)
+values : List (Value Symbol Guard)
+⊢ List (Value Symbol Guard)
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:310:4: error: Type mismatch: After simplification, term
+  Bool.eq_false_iff.mpr absent
+ has type
+  (value.referenceOf == InternedBinderProtocol.NodeRef.empty) = false
+but is expected to have type
+  (!value.referenceOf == InternedBinderProtocol.NodeRef.empty) = true
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:326:4: error: Type mismatch
+  (InternedFreeNameSemantics.evaluateEdges_member rows (List.map inputProfile inputs)
+        (List.map SourceCurrentNativeNormalizationInputs.inputNames inputs) label).mpr
+    (Exists.intro symbol
+      (Exists.intro guard (Exists.intro children ⟨row, ⟨live, Exists.intro child ⟨member, present⟩⟩⟩)))
+has type
+  label ∈
+    InternedFreeNameSemantics.evaluateEdges rows (List.map inputProfile inputs)
+      (List.map SourceCurrentNativeNormalizationInputs.inputNames inputs)
+but is expected to have type
+  label ∈ SourceCurrentNativeNormalizationInputs.support (Syntax.node rows) inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:469:15: error: Invalid `⟨...⟩` notation: The expected type
+  ((left.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+        right.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) ∧
+      (left.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) = false →
+    ∀ (a b : EdgeValue Symbol Guard),
+      RowCalls first common left a → RowCalls second common right b → RowMatch Related a b
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:470:14: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:492:41: error: Invalid projection: Projections cannot be used on functions, and
+  aligned
+has function type
+  ((row.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+        next.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) ∧
+      (row.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) = false →
+    ∀ (a b : EdgeValue Symbol Guard), RowCalls first common row a → RowCalls second common next b → RowMatch Related a b
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:494:10: error: Invalid projection: Projections cannot be used on functions, and
+  aligned
+has function type
+  ((row.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+        next.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) ∧
+      (row.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) = false →
+    ∀ (a b : EdgeValue Symbol Guard), RowCalls first common row a → RowCalls second common next b → RowMatch Related a b
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:502:41: error: Invalid projection: Projections cannot be used on functions, and
+  aligned
+has function type
+  ((next.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+        row.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) ∧
+      (next.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) = false →
+    ∀ (a b : EdgeValue Symbol Guard), RowCalls first common next a → RowCalls second common row b → RowMatch Related a b
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/live-source-direct-2.source.lean:506:8: error: Invalid projection: Projections cannot be used on functions, and
+  aligned
+has function type
+  ((next.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+        row.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) ∧
+      (next.children.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) = false →
+    ∀ (a b : EdgeValue Symbol Guard), RowCalls first common next a → RowCalls second common row b → RowMatch Related a b

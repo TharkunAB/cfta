@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentStoredPairedUnionLineage
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredPairedUnionLineage.StrictMember
+#print MicroCFTA.SourceCurrentStoredPairedUnionLineage.StrictMember
+#print axioms MicroCFTA.SourceCurrentStoredPairedUnionLineage.StrictMember
+
+#check @MicroCFTA.SourceCurrentStoredPairedUnionLineage.empty
+#print MicroCFTA.SourceCurrentStoredPairedUnionLineage.empty
+#print axioms MicroCFTA.SourceCurrentStoredPairedUnionLineage.empty
+
+#check @MicroCFTA.SourceCurrentStoredPairedUnionLineage.union
+#print MicroCFTA.SourceCurrentStoredPairedUnionLineage.union
+#print axioms MicroCFTA.SourceCurrentStoredPairedUnionLineage.union
+
+#check @MicroCFTA.SourceCurrentStoredPairedUnionLineage.complete
+#print MicroCFTA.SourceCurrentStoredPairedUnionLineage.complete
+#print axioms MicroCFTA.SourceCurrentStoredPairedUnionLineage.complete
+
+#check @MicroCFTA.SourceCurrentStoredPairedUnionLineage.binder_free
+#print MicroCFTA.SourceCurrentStoredPairedUnionLineage.binder_free
+#print axioms MicroCFTA.SourceCurrentStoredPairedUnionLineage.binder_free
+
+#check @MicroCFTA.SourceCurrentStoredPairedUnionLineage.initial
+#print MicroCFTA.SourceCurrentStoredPairedUnionLineage.initial
+#print axioms MicroCFTA.SourceCurrentStoredPairedUnionLineage.initial

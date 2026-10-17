@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 00:55 CEST. Proof checkpoint is `a2b9b924`.
+Full pinned Audit passes 3167 jobs and 69679 dependency checks. BinderFree
+source induction now covers nodes, references, and unions with recursive
+captured values. Initial inputs construct both raw and stored schedules.
+Live support agreement permits incompatible unused captures. Actual node-root
+binder publications derive filtered body/probe reconstruction agreement.
+Literal outer prefixes derive exact active owner ancestry. This does not
+exclude physical-key collisions or prove general outer progress.
+Nested source binders, general root filtering, earlier winners, convergence,
+and complete public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Repair `b9219b9e` remains
+merged and validated in source `c0cc8a05`. Read
+`lean/notes-current-union-source-induction.md`. Keep this repair registry
+first. Record every later repair with its failure, executable reproducer,
+affected paths, commit, validation, and upstream status.
+
 Current proof update: 2026-10-18 00:36 CEST. Proof checkpoint is `2d59402e`.
 Full pinned Audit passes 3162 jobs and 69585 dependency checks. Paired ordinary
 source induction now supports unequal reference tails. Actual selected native

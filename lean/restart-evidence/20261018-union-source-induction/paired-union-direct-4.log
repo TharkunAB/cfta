@@ -1,0 +1,33 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/paired-union-direct-4.source.lean:309:12: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+_x : (expression : Syntax Symbol Guard) ×' BinderFree expression
+a✝¹ :
+  ∀ (y : (expression : Syntax Symbol Guard) ×' BinderFree expression),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => PSigma.casesOn x fun expression free => sizeOf expression) y _x →
+      Aligned y.1
+rows : List (EdgeSyntax Symbol Guard)
+free✝ : BinderFree (Syntax.node rows)
+child : Syntax Symbol Guard
+selected : SourceCurrentStoredPairedOrdinaryLineage.StrictChild rows child
+symbol : Symbol
+h✝² :
+  ∃ guard originals,
+    EdgeSyntax.mk symbol guard originals ∈ rows ∧ child ∈ originals ∧ sizeOf child < sizeOf (Syntax.node rows)
+guard : Guard
+h✝¹ :
+  ∃ originals,
+    EdgeSyntax.mk symbol guard originals ∈ rows ∧ child ∈ originals ∧ sizeOf child < sizeOf (Syntax.node rows)
+children : List (Syntax Symbol Guard)
+h✝ : EdgeSyntax.mk symbol guard children ∈ rows ∧ child ∈ children ∧ sizeOf child < sizeOf (Syntax.node rows)
+member : EdgeSyntax.mk symbol guard children ∈ rows
+right✝ : child ∈ children ∧ sizeOf child < sizeOf (Syntax.node rows)
+present : child ∈ children
+smaller : sizeOf child < sizeOf (Syntax.node rows)
+free : BinderFree (Syntax.node rows)
+a✝ :
+  ∀ (y : (expression : Syntax Symbol Guard) ×' BinderFree expression),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => PSigma.casesOn x fun expression free => sizeOf expression) y
+        ⟨Syntax.node rows, free⟩ →
+      Aligned y.1
+⊢ sizeOf children ≤ sizeOf rows + 1

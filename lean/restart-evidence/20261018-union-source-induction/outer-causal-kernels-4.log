@@ -1,0 +1,103 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/outer-causal-kernels-4.source.lean:79:21: error: Application type mismatch: The argument
+  Step.descendants_children prefixDone
+has type
+  SourceCurrentOuterActiveAncestry.Step ?m.301 ?m.302 ?m.303 ?m.304 ?m.305 ?m.306 ?m.307 ?m.308 ?m.309 ?m.310
+    (Phase.descendants ?m.313 inherited sentinel parentReturn)
+    (Phase.children ?m.313 combined sentinel.children
+      (SourceCurrentAllocatedPartialGraph.prefixState parentReturn sentinel inherited))
+but is expected to have type
+  SourceCurrentOuterActiveAncestry.Step 0 0 0 0 0 0 0 0 0 0 (Phase.descendants 3 inherited sentinel parentReturn)
+    (Phase.children 3 combined [Value.empty] prefixed)
+in the application
+  Reached.snoc edge (Step.descendants_children prefixDone)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/outer-causal-kernels-4.source.lean:81:36: error: unsolved goals
+first : Reached 0 0 0 0 0 0 0 0 0 0 start (Phase.body 5 request running)
+rows : Reached 0 0 0 0 0 0 0 0 0 0 start (Phase.rows 4 inherited [sourceRow] running)
+edge : Reached 0 0 0 0 0 0 0 0 0 0 start (Phase.descendants 3 inherited sentinel parentReturn)
+children : Reached 0 0 0 0 0 0 0 0 0 0 start (Phase.children 3 combined [Value.empty] prefixed)
+⊢ SourceEqualityConstraintAllocation.Value.live 0 [] = SourceEqualityConstraintAllocation.Value.contradiction → False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/outer-causal-kernels-4.source.lean:86:106: error: unsolved goals
+⊢ (match (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.fst with
+    | FlatMemoThunk.Observation.ready result =>
+      Outcome.done result (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+    | FlatMemoThunk.Observation.evaluate original =>
+      match
+        match original.value with
+        | Value.empty =>
+          Outcome.done Value.empty
+            (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+        | value@h:(Value.union entry members depth free) =>
+          Outcome.done value (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+        | Value.reference name =>
+          Outcome.failed (Fault.unexpectedReference name)
+            (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+        | Value.mu entry body depth ordinary =>
+          match
+            SourceEqualityMuReconstruction.rebuild entry body depth ordinary
+              (beginNode { inherited := descended.fst, value := Value.empty }
+                            descended.snd).snd.snd.checked.native.machine.heap with
+          | InternedNestedConstruction.Outcome.done result heap =>
+            Outcome.done result
+              (advance (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd.checked
+                  { heap := heap,
+                    equality :=
+                      (beginNode { inherited := descended.fst, value := Value.empty }
+                                descended.snd).snd.snd.checked.operations })
+                (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd.fourth
+                (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd.merge)
+          | observation@h:(InternedNestedConstruction.Outcome.pending key heap) =>
+            Outcome.failed (Fault.binder observation)
+              (advance (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd.checked
+                  { heap := heap,
+                    equality :=
+                      (beginNode { inherited := descended.fst, value := Value.empty }
+                                descended.snd).snd.snd.checked.operations })
+                (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd.fourth
+                (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd.merge)
+        | value@h:(Value.node entry original_1 depth free) =>
+          match
+            rows 1 0 0 0 0 0 0 0 0 0 0 original.inherited original_1
+              (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd with
+          | Outcome.done value_1 state =>
+            Outcome.done (SourceCurrentAllocatedRawRebuild.modify value original_1 value_1 state.checked).fst
+              (advance state (SourceCurrentAllocatedRawRebuild.modify value original_1 value_1 state.checked).snd
+                state.fourth state.merge)
+          | Outcome.failed fault state => Outcome.failed fault state with
+      | Outcome.done value state =>
+        Outcome.done value
+          (finishNode (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).fst value state)
+      | Outcome.failed fault state => Outcome.failed fault state
+    | FlatMemoThunk.Observation.busy =>
+      Outcome.failed
+        (Fault.nodeMemo (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).fst
+          FlatMemoThunk.Observation.busy)
+        (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd
+    | FlatMemoThunk.Observation.absent =>
+      Outcome.failed
+        (Fault.nodeMemo (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).fst
+          FlatMemoThunk.Observation.absent)
+        (beginNode { inherited := descended.fst, value := Value.empty } descended.snd).snd.snd) =
+    Outcome.done Value.empty (finishNode 1 Value.empty childRunning)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/outer-causal-kernels-4.source.lean:87:22: warning: This simp argument is unused:
+  childStarted
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [nodeCall, nodeBody, child, Outcome.bind, childAfter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/outer-causal-kernels-4.source.lean:96:15: error: Application type mismatch: The argument
+  Step.descendants_children prefixDone
+has type
+  SourceCurrentOuterActiveAncestry.Step ?m.298 ?m.299 ?m.300 ?m.301 ?m.302 ?m.303 ?m.304 ?m.305 ?m.306 ?m.307
+    (Phase.descendants ?m.310 inherited sentinel parentReturn)
+    (Phase.children ?m.310 combined sentinel.children
+      (SourceCurrentAllocatedPartialGraph.prefixState parentReturn sentinel inherited))
+but is expected to have type
+  SourceCurrentOuterActiveAncestry.Step 0 0 0 0 0 0 0 0 0 0 (Phase.descendants 3 inherited sentinel parentReturn)
+    (Phase.children 3 combined [Value.empty] prefixed)
+in the application
+  Reached.snoc edge (Step.descendants_children prefixDone)

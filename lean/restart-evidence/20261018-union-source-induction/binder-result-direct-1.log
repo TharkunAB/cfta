@@ -1,0 +1,52 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:84:7: error: unexpected token 'local'; expected '(', ':=', '|' or term
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:84:7: error: Missing cases:
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:72:65: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+event : Publication
+rows : List (EdgeSyntax Symbol Guard)
+node : event.expression = Syntax.node rows
+children : ∀ (child : Syntax Symbol Guard), StrictChild rows child → Aligned child
+common : InternedConstructorTemplates.State Symbol Guard
+ready : Ready common
+growth : Grows event.afterBody common
+replacement : Value Symbol Guard
+available : Available common replacement
+inputs : List (Value Symbol Guard ⊕ Unit) := List.map Sum.inl event.environment
+names : Unit → Reference := fun x => Reference.depth
+bodyInputs : List (Value Symbol Guard ⊕ Unit ⊕ Unit) := Sum.inr (Sum.inl ()) :: List.map liftInput inputs
+ordinaryName : Reference := Reference.uninterned (ordinaryLevel event.depth)
+bodyName : Reference := Reference.interned event.entry.identity
+ordinaryNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => ordinaryName) names
+bodyNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => bodyName) names
+ordinaryMap : Environment Symbol Guard := fun name => if name = ordinaryName then some replacement else none
+bodyMap : Environment Symbol Guard := fun name => if name = bodyName then some replacement else none
+fixed : List.map (input names) inputs = event.environment
+⊢ ∃ left middle right reader,
+    execute event.body (fun name => if name = Reference.interned event.entry.identity then some replacement else none)
+          common =
+        Outcome.done left middle ∧
+      execute event.ordinary
+            (fun name => if name = Reference.uninterned (ordinaryLevel event.depth) then some replacement else none)
+            middle =
+          Outcome.done right reader ∧
+        execute event.body
+              (fun name => if name = Reference.interned event.entry.identity then some replacement else none) reader =
+            Outcome.done left reader ∧
+          execute event.ordinary
+                (fun name => if name = Reference.uninterned (ordinaryLevel event.depth) then some replacement else none)
+                reader =
+              Outcome.done right reader ∧
+            Keeps common middle ∧
+              Keeps middle reader ∧
+                Available reader left ∧
+                  Available reader right ∧
+                    Nonempty (History common middle) ∧
+                      Nonempty (History middle reader) ∧ SourceCurrentOpenObservationSurvival.Related left right
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:84:12: error: unexpected token '('; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:128:13: error: unexpected token ']'; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:133:13: error: unexpected token ']'; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:152:35: error: unexpected token ']'; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:152:91: error: unexpected token ']'; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:153:55: error: unexpected token ']'; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-union-source-induction/binder-result-direct-1.source.lean:154:39: error: unexpected token ']'; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
