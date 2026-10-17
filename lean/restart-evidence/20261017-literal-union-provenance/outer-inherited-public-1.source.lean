@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentOuterInheritedDescent
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+#print MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+#print axioms MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+#check @MicroCFTA.SourceCurrentOuterInheritedDescent.positive
+#print MicroCFTA.SourceCurrentOuterInheritedDescent.positive
+#print axioms MicroCFTA.SourceCurrentOuterInheritedDescent.positive
+#check @MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt
+#print MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt
+#print axioms MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt
+#check @MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt
+#print MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt
+#print axioms MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt
+#check @MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne
+#print MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne
+#print axioms MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne
+#check @MicroCFTA.SourceCurrentOuterInheritedDescent.node_key_ne
+#print MicroCFTA.SourceCurrentOuterInheritedDescent.node_key_ne
+#print axioms MicroCFTA.SourceCurrentOuterInheritedDescent.node_key_ne

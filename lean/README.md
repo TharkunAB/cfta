@@ -1,5 +1,40 @@
 # cfta formal model
 
+## Current literal union provenance and inherited descent
+
+Updated: 2026-10-17 21:38 CEST. Starting checkpoint is `82823d78`.
+Proof commit is `c8272004`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-literal-union-provenance.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, original availability, and replacement availability now
+construct both union-normalization/substitution orders with exact literal
+reference and Mu atoms and complete ordinary rows. Physical empty agreement
+and all finite observations remain. For every name, actual self filtering
+preserves equal literal parts. Both filters start independently in the
+derived final heap. No future output relation or completed call is assumed.
+
+Actual descent of a Ready live nonempty inherited payload strictly lowers
+its maximum class-path length and changes its canonical identity. This law
+covers cold and warm operations and separates immediate requests for the
+same node. New local combination and all active ancestors remain outside
+this local result. General outer progress and repeated-pass convergence
+remain the largest mathematical gap. The actual retained-Mu writer relation,
+smart cleanup, frontend/runtime adapters, and whole Haskell correspondence
+also remain open. Keep the full goal active.
+
+Full pinned Audit passes 3126 jobs and 68475 dependency checks under verified
+4 GiB maximum, 4 GiB high, zero swap, and 374 MiB peak. All seven new strict
+source logs are empty. Public checks and constructed cases are retained in
+`lean/restart-evidence/20261017-literal-union-provenance/`.
+All earlier proofs, counterexamples, repairs, drafts, evidence, stashes,
+other worktrees, and optimized code remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair with its reproducer, paths,
+commit, checks, and upstream status.
+
 ## Current physical empty agreement and parent construction
 
 Updated: 2026-10-17 21:15 CEST. Starting checkpoint is `dc9504dc`.

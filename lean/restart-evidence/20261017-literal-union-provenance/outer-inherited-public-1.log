@@ -1,0 +1,977 @@
+MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight : MicroCFTA.SourceEqualityConstraintAllocation.Value → Nat
+def MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight : MicroCFTA.SourceEqualityConstraintAllocation.Value →
+  Nat :=
+fun x =>
+  MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight.match_1.{1} (fun x => Nat) x
+    (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun identity records =>
+    MicroCFTA.EqualityModel.depth
+      (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+        MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+'MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight' does not depend on any axioms
+MicroCFTA.SourceCurrentOuterInheritedDescent.positive : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+    MicroCFTA.SourceEqualityDescend.WellFormed
+        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records) →
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records))
+theorem MicroCFTA.SourceCurrentOuterInheritedDescent.positive : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+    MicroCFTA.SourceEqualityDescend.WellFormed
+        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records) →
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)) :=
+fun identity records nonempty wellFormed =>
+  @Exists.casesOn.{1} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun x =>
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records x)
+    (fun x =>
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+    (@List.exists_mem_of_ne_nil.{0} MicroCFTA.SourceEqualityClassOrder.Record records nonempty) fun record member =>
+    @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+      (fun left =>
+        And
+          (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths left)
+          (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths right)
+              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)))
+      (fun x =>
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+      (@And.right (MicroCFTA.EqualityTrie.Ascending record.trie) (MicroCFTA.EqualityNormalize.Nontrivial record.paths)
+        (@And.right (MicroCFTA.SourceEqualityClassOrder.Coherent record)
+          (And (MicroCFTA.EqualityTrie.Ascending record.trie) (MicroCFTA.EqualityNormalize.Nontrivial record.paths))
+          (wellFormed records
+            (@rfl.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+              (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records))
+            record member)))
+      fun left h =>
+      @And.casesOn.{0}
+        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths left)
+        (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun right =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths right)
+            (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))
+        (fun x =>
+          @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+        h fun leftMember right =>
+        @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+          (fun right =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths right)
+              (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right))
+          (fun x =>
+            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+          right fun right h =>
+          @And.casesOn.{0}
+            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths right)
+            (@Ne.{1} MicroCFTA.EqualityNormalize.Path left right)
+            (fun x =>
+              @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+            h fun rightMember different =>
+            have leftBound :=
+              MicroCFTA.SourceCurrentOuterInheritedDescent.path_le✝ records record member left leftMember;
+            have rightBound :=
+              MicroCFTA.SourceCurrentOuterInheritedDescent.path_le✝ records record member right rightMember;
+            @id.{0}
+              (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+              (@List.casesOn.{0, 0} Nat
+                (fun t =>
+                  @Eq.{1} MicroCFTA.EqualityNormalize.Path left t →
+                    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (MicroCFTA.EqualityModel.depth
+                        (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+                left
+                (fun h =>
+                  @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path (@List.nil.{0} Nat)
+                    (fun left =>
+                      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths left →
+                        @Ne.{1} MicroCFTA.EqualityNormalize.Path left right →
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Nat left)
+                              (MicroCFTA.EqualityModel.depth
+                                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)) →
+                            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              (MicroCFTA.EqualityModel.depth
+                                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)))
+                    (fun leftMember different leftBound =>
+                      @List.casesOn.{0, 0} Nat
+                        (fun t =>
+                          @Eq.{1} MicroCFTA.EqualityNormalize.Path right t →
+                            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              (MicroCFTA.EqualityModel.depth
+                                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)))
+                        right
+                        (fun h =>
+                          @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path (@List.nil.{0} Nat)
+                            (fun right =>
+                              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths right →
+                                @LE.le.{0} Nat instLENat (@List.length.{0} Nat right)
+                                    (MicroCFTA.EqualityModel.depth
+                                      (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                        MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                        records)) →
+                                  @Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.nil.{0} Nat) right →
+                                    @LT.lt.{0} Nat instLTNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                      (MicroCFTA.EqualityModel.depth
+                                        (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                          MicroCFTA.EqualityNormalize.Path
+                                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+                            (fun rightMember rightBound different =>
+                              @False.elim.{0}
+                                (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  (MicroCFTA.EqualityModel.depth
+                                    (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                      MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                      records)))
+                                (different (@rfl.{1} MicroCFTA.EqualityNormalize.Path (@List.nil.{0} Nat))))
+                            right (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Path right (@List.nil.{0} Nat) h)
+                            rightMember rightBound different)
+                        (fun index rest h =>
+                          @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index rest)
+                            (fun right =>
+                              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths right →
+                                @LE.le.{0} Nat instLENat (@List.length.{0} Nat right)
+                                    (MicroCFTA.EqualityModel.depth
+                                      (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                        MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                        records)) →
+                                  @Ne.{1} MicroCFTA.EqualityNormalize.Path (@List.nil.{0} Nat) right →
+                                    @LT.lt.{0} Nat instLTNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                      (MicroCFTA.EqualityModel.depth
+                                        (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                          MicroCFTA.EqualityNormalize.Path
+                                          MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+                            (fun rightMember rightBound different =>
+                              @Decidable.byContradiction
+                                (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  (MicroCFTA.EqualityModel.depth
+                                    (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                      MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                      records)))
+                                (Nat.decLt (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  (MicroCFTA.EqualityModel.depth
+                                    (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                      MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                      records)))
+                                fun a =>
+                                MicroCFTA.SourceCurrentOuterInheritedDescent.positive._proof_1_1 records rest rightBound
+                                  a)
+                            right
+                            (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Path right (@List.cons.{0} Nat index rest) h)
+                            rightMember rightBound different)
+                        (@Eq.refl.{1} MicroCFTA.EqualityNormalize.Path right))
+                    left (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Path left (@List.nil.{0} Nat) h) leftMember different
+                    leftBound)
+                (fun index rest h =>
+                  @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path (@List.cons.{0} Nat index rest)
+                    (fun left =>
+                      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths left →
+                        @Ne.{1} MicroCFTA.EqualityNormalize.Path left right →
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Nat left)
+                              (MicroCFTA.EqualityModel.depth
+                                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)) →
+                            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              (MicroCFTA.EqualityModel.depth
+                                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                  MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                  records)))
+                    (fun leftMember different leftBound =>
+                      @Decidable.byContradiction
+                        (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          (MicroCFTA.EqualityModel.depth
+                            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                              MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                              records)))
+                        (Nat.decLt (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          (MicroCFTA.EqualityModel.depth
+                            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                              MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths
+                              records)))
+                        fun a =>
+                        MicroCFTA.SourceCurrentOuterInheritedDescent.positive._proof_1_2 records right rest leftBound a)
+                    left (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Path left (@List.cons.{0} Nat index rest) h)
+                    leftMember different leftBound)
+                (@Eq.refl.{1} MicroCFTA.EqualityNormalize.Path left))
+'MicroCFTA.SourceCurrentOuterInheritedDescent.positive' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+    MicroCFTA.SourceEqualityDescend.WellFormed
+        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records) →
+      ∀ (index : Nat),
+        @LT.lt.{0} Nat instLTNat
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths (MicroCFTA.SourceEqualityDescend.records index records)))
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+theorem MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+    MicroCFTA.SourceEqualityDescend.WellFormed
+        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records) →
+      ∀ (index : Nat),
+        @LT.lt.{0} Nat instLTNat
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths (MicroCFTA.SourceEqualityDescend.records index records)))
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths records)) :=
+fun records nonempty wellFormed index =>
+  have grows :=
+    MicroCFTA.SourceCurrentOuterInheritedDescent.positive (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      records nonempty wellFormed;
+  @id.{0}
+    (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) records)) →
+      @LT.lt.{0} Nat instLTNat
+        (MicroCFTA.EqualityModel.depth
+          (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+            MicroCFTA.SourceEqualityClassOrder.Record.paths (MicroCFTA.SourceEqualityDescend.records index records)))
+        (MicroCFTA.EqualityModel.depth
+          (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+            MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+    (fun grows =>
+      have bounded :=
+        @Iff.mpr
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.EqualityModel.maxOn.{0} (List.{0} Nat) (@List.length.{0} Nat)
+              (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                MicroCFTA.SourceEqualityClassOrder.Record.paths
+                (MicroCFTA.SourceEqualityDescend.records index records)))
+            (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+              (MicroCFTA.EqualityModel.depth
+                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (∀ (value : List.{0} Nat),
+            @Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths
+                  (MicroCFTA.SourceEqualityDescend.records index records))
+                value →
+              @LE.le.{0} Nat instLENat (@List.length.{0} Nat value)
+                (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                  (MicroCFTA.EqualityModel.depth
+                    (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@MicroCFTA.EqualityModel.maxOn_le.{0} (List.{0} Nat) (@List.length.{0} Nat)
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths (MicroCFTA.SourceEqualityDescend.records index records))
+            (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+              (MicroCFTA.EqualityModel.depth
+                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          fun suffix member =>
+          @Exists.casesOn.{1} MicroCFTA.SourceEqualityClassOrder.Record
+            (fun a =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                  (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (MicroCFTA.SourceEqualityDescend.records index records) a)
+                (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                  (@List.instMembership.{0} (List.{0} Nat)) a.paths suffix))
+            (fun x =>
+              @LE.le.{0} Nat instLENat (@List.length.{0} Nat suffix)
+                (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                  (MicroCFTA.EqualityModel.depth
+                    (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@Iff.mp
+              (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record (List.{0} Nat)
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths
+                  (MicroCFTA.SourceEqualityDescend.records index records))
+                suffix)
+              (@Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun a =>
+                And
+                  (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.records index records) a)
+                  (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                    (@List.instMembership.{0} (List.{0} Nat)) a.paths suffix))
+              (@List.mem_flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record (List.{0} Nat)
+                MicroCFTA.SourceEqualityClassOrder.Record.paths suffix
+                (MicroCFTA.SourceEqualityDescend.records index records))
+              member)
+            fun output h =>
+            @And.casesOn.{0}
+              (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                (MicroCFTA.SourceEqualityDescend.records index records) output)
+              (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+                output.paths suffix)
+              (fun x =>
+                @LE.le.{0} Nat instLENat (@List.length.{0} Nat suffix)
+                  (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                    (MicroCFTA.EqualityModel.depth
+                      (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              h fun outputMember suffixMember =>
+              @Exists.casesOn.{1} MicroCFTA.SourceEqualityClassOrder.Record
+                (fun a =>
+                  And
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records a)
+                    (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.record index a)
+                      (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output)))
+                (fun x =>
+                  @LE.le.{0} Nat instLENat (@List.length.{0} Nat suffix)
+                    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                      (MicroCFTA.EqualityModel.depth
+                        (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@Iff.mp
+                  (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index) records)
+                    output)
+                  (@Exists.{1} MicroCFTA.SourceEqualityClassOrder.Record fun a =>
+                    And
+                      (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records a)
+                      (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (MicroCFTA.SourceEqualityDescend.record index a)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output)))
+                  (@List.mem_filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index) records
+                    output)
+                  (@Iff.mp
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (MicroCFTA.SourceEqualityDescend.records index records) output)
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                      (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index)
+                        records)
+                      output)
+                    (@List.Perm.mem_iff.{0} MicroCFTA.SourceEqualityClassOrder.Record output
+                      (MicroCFTA.SourceEqualityDescend.records index records)
+                      (@List.filterMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                        MicroCFTA.SourceEqualityClassOrder.Record (MicroCFTA.SourceEqualityDescend.record index)
+                        records)
+                      (MicroCFTA.SourceEqualityDescend.records_perm index records))
+                    outputMember))
+                fun original h =>
+                @And.casesOn.{0}
+                  (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records original)
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (MicroCFTA.SourceEqualityDescend.record index original)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityClassOrder.Record output))
+                  (fun x =>
+                    @LE.le.{0} Nat instLENat (@List.length.{0} Nat suffix)
+                      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                        (MicroCFTA.EqualityModel.depth
+                          (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                            MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  h fun originalMember actual =>
+                  have parentMember :=
+                    @Iff.mp
+                      (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) output.paths suffix)
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) original.paths
+                        (@List.cons.{0} Nat index suffix))
+                      (MicroCFTA.SourceEqualityDescend.record_pairs index original
+                        (@And.left (MicroCFTA.SourceEqualityClassOrder.Coherent original)
+                          (And (MicroCFTA.EqualityTrie.Ascending original.trie)
+                            (MicroCFTA.EqualityNormalize.Nontrivial original.paths))
+                          (wellFormed records
+                            (@rfl.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                              (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records))
+                            original originalMember))
+                        output actual suffix)
+                      suffixMember;
+                  have parentBound :=
+                    MicroCFTA.SourceCurrentOuterInheritedDescent.path_le✝ records original originalMember
+                      (@List.cons.{0} Nat index suffix) parentMember;
+                  @Decidable.byContradiction
+                    (@LE.le.{0} Nat instLENat (@List.length.{0} Nat suffix)
+                      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                        (MicroCFTA.EqualityModel.depth
+                          (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                            MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                    ((@List.length.{0} Nat suffix).decLe
+                      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+                        (MicroCFTA.EqualityModel.depth
+                          (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                            MicroCFTA.EqualityNormalize.Path MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                    fun a =>
+                    MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt._proof_1_1 records grows suffix parentBound
+                      a;
+      @Decidable.byContradiction
+        (@LT.lt.{0} Nat instLTNat
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths (MicroCFTA.SourceEqualityDescend.records index records)))
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+        ((MicroCFTA.EqualityModel.depth
+              (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                MicroCFTA.SourceEqualityClassOrder.Record.paths
+                (MicroCFTA.SourceEqualityDescend.records index records))).decLt
+          (MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+        fun a => MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt._proof_1_2 records index grows bounded a)
+    grows
+'MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (index : Nat)
+  (state : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+      @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        @LT.lt.{0} Nat instLTNat
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records))
+theorem MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (index : Nat)
+  (state : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+      @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        @LT.lt.{0} Nat instLTNat
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)) :=
+fun identity records index state valid ready nonempty =>
+  @Eq.mpr.{0}
+    (@LT.lt.{0} Nat instLTNat
+      (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+      (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+    (@LT.lt.{0} Nat instLTNat
+      (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+        (MicroCFTA.SourceEqualityDescend.descend
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index)
+        (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+        MicroCFTA.EqualityModel.depth
+          (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+            MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+      (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@LT.lt.{0} Nat instLTNat
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+        (@LT.lt.{0} Nat instLTNat
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+            (MicroCFTA.SourceEqualityDescend.descend
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index)
+            (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+            MicroCFTA.EqualityModel.depth
+              (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+          (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records))))
+      (@congrArg.{1, 1} Nat Prop
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+          (MicroCFTA.SourceEqualityDescend.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index)
+          (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+          MicroCFTA.EqualityModel.depth
+            (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+              MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+        (fun _a =>
+          @LT.lt.{0} Nat instLTNat _a
+            (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height✝
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state valid ready)))
+    (@List.casesOn.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+      (fun t =>
+        @Eq.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records t →
+          @LT.lt.{0} Nat instLTNat
+            (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+              (MicroCFTA.SourceEqualityDescend.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index)
+              (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+              MicroCFTA.EqualityModel.depth
+                (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+            (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+      records
+      (fun h =>
+        @Eq.ndrec.{0, 1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (fun records =>
+            MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+              @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+                @LT.lt.{0} Nat instLTNat
+                  (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+                    (MicroCFTA.SourceEqualityDescend.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index)
+                    (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+                    MicroCFTA.EqualityModel.depth
+                      (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                  (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+          (fun ready nonempty =>
+            @False.elim.{0}
+              (@LT.lt.{0} Nat instLTNat
+                (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+                  (MicroCFTA.SourceEqualityDescend.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                        (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)).payload
+                    index)
+                  (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+                  MicroCFTA.EqualityModel.depth
+                    (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                    (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+              (nonempty
+                (@rfl.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+          records
+          (@Eq.symm.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+            (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) h)
+          ready nonempty)
+      (fun first rest h =>
+        @Eq.ndrec.{0, 1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first rest)
+          (fun records =>
+            MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+              @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+                @LT.lt.{0} Nat instLTNat
+                  (MicroCFTA.SourceCurrentOuterInheritedDescent.descend_payload_height.match_1✝.{1} (fun x => Nat)
+                    (MicroCFTA.SourceEqualityDescend.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index)
+                    (fun _ => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) fun records =>
+                    MicroCFTA.EqualityModel.depth
+                      (@List.flatMap.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Path
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                  (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+          (fun ready nonempty =>
+            MicroCFTA.SourceCurrentOuterInheritedDescent.records_lt
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first rest) nonempty
+              (@And.right
+                (MicroCFTA.SourceEqualityConstraintAllocation.Stored state.constraints
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                    (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first rest)))
+                (MicroCFTA.SourceEqualityDescend.WellFormed
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first rest)).payload)
+                ready)
+              index)
+          records
+          (@Eq.symm.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record first rest) h)
+          ready nonempty)
+      (@Eq.refl.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records))
+'MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (index : Nat)
+  (state : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+      @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        @Ne.{1} (Option.{0} Nat)
+          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).identity
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).identity
+theorem MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (index : Nat)
+  (state : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+      @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        @Ne.{1} (Option.{0} Nat)
+          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).identity
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).identity :=
+fun identity records index state valid ready nonempty same =>
+  have checked :=
+    MicroCFTA.SourceEqualityConstraintMemoAllocation.descend_correct
+      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state valid ready;
+  have inputReady :=
+    @MicroCFTA.SourceEqualityConstraintAllocation.Ready.grows state.constraints
+      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)
+      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).constraints
+      ready
+      (@MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows.constraint_growth state
+        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state))
+        (@And.right
+          (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).payload
+            (MicroCFTA.SourceEqualityDescend.descend
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index))
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows state
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+          (@And.right
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).constraints
+              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+            (And
+              (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).payload
+                (MicroCFTA.SourceEqualityDescend.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index))
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows state
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state))))
+            (@And.right
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index
+                        state)).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+                (And
+                  (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index
+                          state)).payload
+                    (MicroCFTA.SourceEqualityDescend.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index))
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows state
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))))
+              checked))));
+  have values :=
+    MicroCFTA.SourceEqualityConstraintMemoAllocation.ready_eq_of_identity
+      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).constraints
+      (@MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid.constraints
+        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state))
+        (@And.left
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+          (And
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).constraints
+              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+            (And
+              (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).payload
+                (MicroCFTA.SourceEqualityDescend.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index))
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows state
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))))
+          checked))
+      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state))
+      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)
+      (@And.left
+        (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).constraints
+          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+        (And
+          (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).payload
+            (MicroCFTA.SourceEqualityDescend.descend
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index))
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows state
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state))))
+        (@And.right
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+          (And
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).constraints
+              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+            (And
+              (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)).payload
+                (MicroCFTA.SourceEqualityDescend.descend
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records).payload index))
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows state
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))))
+          checked))
+      inputReady same;
+  have strict :=
+    MicroCFTA.SourceCurrentOuterInheritedDescent.descend_lt identity records index state valid ready nonempty;
+  MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne._proof_1_1 identity records
+    (@Eq.mp.{0}
+      (@LT.lt.{0} Nat instLTNat
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state)))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+      (@LT.lt.{0} Nat instLTNat
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records))
+        (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+          (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+      (@congrArg.{1, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value Prop
+        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+            (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state))
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)
+        (fun _a =>
+          @LT.lt.{0} Nat instLTNat (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight _a)
+            (MicroCFTA.SourceCurrentOuterInheritedDescent.pathHeight
+              (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records)))
+        values)
+      strict)
+'MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInheritedDescent.node_key_ne : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (index : Nat)
+  (state : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+      @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        ∀
+          (value :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+            {
+                inherited :=
+                  @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state),
+                value := value }.key
+            { inherited := MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records,
+                value := value }.key
+theorem MicroCFTA.SourceCurrentOuterInheritedDescent.node_key_ne : ∀ (identity : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (index : Nat)
+  (state : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready state.constraints
+        (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) →
+      @Ne.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) →
+        ∀
+          (value :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+            {
+                inherited :=
+                  @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state),
+                value := value }.key
+            { inherited := MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records,
+                value := value }.key :=
+fun identity records index state valid ready nonempty value same =>
+  MicroCFTA.SourceCurrentOuterInheritedDescent.descend_identity_ne identity records index state valid ready nonempty
+    (@congrArg.{1, 1} (Prod.{0, 0} (Option.{0} Nat) MicroCFTA.InternedBinderProtocol.NodeRef) (Option.{0} Nat)
+      {
+          inherited :=
+            @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records) index state),
+          value := value }.key
+      { inherited := MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity records, value := value }.key
+      (@Prod.fst.{0, 0} (Option.{0} Nat) MicroCFTA.InternedBinderProtocol.NodeRef) same)
+'MicroCFTA.SourceCurrentOuterInheritedDescent.node_key_ne' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

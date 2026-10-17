@@ -1,0 +1,115 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:20:50: error: unsolved goals
+case empty
+Symbol Guard : Type
+atom : Value Symbol Guard
+atomic : Atomic Value.empty
+part : Literal Value.empty atom
+⊢ Value.empty = atom
+
+case node
+Symbol Guard : Type
+atom : Value Symbol Guard
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+atomic : Atomic (Value.node entry✝ edges✝ depth✝ free✝)
+part : Literal (Value.node entry✝ edges✝ depth✝ free✝) atom
+⊢ Value.node entry✝ edges✝ depth✝ free✝ = atom
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:100:73: error: Application type mismatch: The argument
+  trivial
+has type
+  True
+but is expected to have type
+  Atomic ?m.62
+in the application
+  unchanged name ?m.62 atom trivial
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:100:73: error: Application type mismatch: The argument
+  trivial
+has type
+  True
+but is expected to have type
+  Atomic ?m.83
+in the application
+  unchanged name ?m.83 atom trivial
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:100:73: error: Application type mismatch: The argument
+  trivial
+has type
+  True
+but is expected to have type
+  Atomic ?m.104
+in the application
+  unchanged name ?m.104 atom trivial
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:100:73: error: Application type mismatch: The argument
+  trivial
+has type
+  True
+but is expected to have type
+  Atomic ?m.125
+in the application
+  unchanged name ?m.125 atom trivial
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:105:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Literal (run (makeUnion (List.filter ?m.194 (children (Value.union entry members level free)))) state).fst atom
+in the target expression
+  Literal
+      (run
+          (makeUnion
+            (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref name) members))
+          state).fst
+      atom ↔
+    Literal (Value.union entry members level free) atom ∧
+      (Value.union entry members level free = Value.reference name ∨ atom ≠ Value.reference name)
+
+case pos
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : State Symbol Guard
+normal : Normal state
+name : Reference
+atom : Value Symbol Guard
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+level : Nat
+free : List Reference
+available : Available state (Value.union entry members level free)
+flat : InternedUnionNormalForm.FlatValue (Value.union entry members level free)
+selected : (members.any fun member => member.referenceOf == InternedBinderProtocol.NodeRef.ref name) = true
+⊢ Literal
+      (run
+          (makeUnion
+            (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref name) members))
+          state).fst
+      atom ↔
+    Literal (Value.union entry members level free) atom ∧
+      (Value.union entry members level free = Value.reference name ∨ atom ≠ Value.reference name)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-literal-union-provenance/literal-filter-direct-1.source.lean:147:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Row (run (makeUnion (List.filter ?m.142 (children (Value.union entry members level free)))) state).fst output
+in the target expression
+  Row
+      (run
+          (makeUnion
+            (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref name) members))
+          state).fst
+      output ↔
+    Row (Value.union entry members level free) output
+
+case pos
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : State Symbol Guard
+normal : Normal state
+name : Reference
+output : EdgeValue Symbol Guard
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+level : Nat
+free : List Reference
+available : Available state (Value.union entry members level free)
+selected : (members.any fun member => member.referenceOf == InternedBinderProtocol.NodeRef.ref name) = true
+⊢ Row
+      (run
+          (makeUnion
+            (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref name) members))
+          state).fst
+      output ↔
+    Row (Value.union entry members level free) output
