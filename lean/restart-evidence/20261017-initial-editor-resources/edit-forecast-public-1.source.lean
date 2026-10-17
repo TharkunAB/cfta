@@ -1,0 +1,185 @@
+import MicroCFTA.SourceCurrentConstrainedCapEditForecast
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.join
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.join
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_left
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_left
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_right
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_right
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_le
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_le
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_member
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_member
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_member
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_member
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_profile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_fuel
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_fuel
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_constructor_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_constructor_profile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_profile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_fuel
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_fuel
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_reserved
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_reserved
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_zero
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_zero
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_add
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_add
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_count_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_count_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_compare
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_compare
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_joint
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_joint
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_child
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_child
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_prefix
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_prefix
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_zero
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_zero
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_succ
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_stage
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_stage
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ_right
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ_right
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_entry
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_entry
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_return
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_return
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_entry
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_entry
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_return
+#check @MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_return
+

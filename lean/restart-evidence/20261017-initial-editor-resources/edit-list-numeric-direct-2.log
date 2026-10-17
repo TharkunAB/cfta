@@ -1,0 +1,961 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:21: error: don't know how to synthesize implicit argument `largerN`
+  @SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable (bits + 2) inst✝¹ inst✝
+    (SourceCurrentConstrainedCapEditScans.editFuel level)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (max (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (max ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)) record originals
+    values results entries 0 before after done
+    (Nat.le_max_left (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (Nat.le_max_right ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:21: error: don't know how to synthesize implicit argument `largerS`
+  @SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable (bits + 2) inst✝¹ inst✝
+    (SourceCurrentConstrainedCapEditScans.editFuel level)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (max (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (max ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)) record originals
+    values results entries 0 before after done
+    (Nat.le_max_left (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (Nat.le_max_right ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:21: error: don't know how to synthesize implicit argument `largerM`
+  @SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable (bits + 2) inst✝¹ inst✝
+    (SourceCurrentConstrainedCapEditScans.editFuel level)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (max (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (max ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)) record originals
+    values results entries 0 before after done
+    (Nat.le_max_left (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (Nat.le_max_right ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:21: error: don't know how to synthesize implicit argument `largerH`
+  @SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable (bits + 2) inst✝¹ inst✝
+    (SourceCurrentConstrainedCapEditScans.editFuel level)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (max (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (max ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)) record originals
+    values results entries 0 before after done
+    (Nat.le_max_left (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (Nat.le_max_right ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:21: error: don't know how to synthesize implicit argument `largerP`
+  @SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable (bits + 2) inst✝¹ inst✝
+    (SourceCurrentConstrainedCapEditScans.editFuel level)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (max (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (max ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)) record originals
+    values results entries 0 before after done
+    (Nat.le_max_left (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (Nat.le_max_right ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:21: error: don't know how to synthesize implicit argument `largerE`
+  @SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable (bits + 2) inst✝¹ inst✝
+    (SourceCurrentConstrainedCapEditScans.editFuel level)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+    (max (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (max ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (max ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)) record originals
+    values results entries 0 before after done
+    (Nat.le_max_left (SourceCurrentConstrainedCapEditScans.editFuel level) ?m.495)
+    (Nat.le_max_right ?m.496 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.498 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.500 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.502 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+    (Nat.le_max_right ?m.504 (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:118:49: error: don't know how to synthesize placeholder for argument `a`
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:118:26: error: don't know how to synthesize placeholder for argument `a`
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:117:94: error: don't know how to synthesize placeholder for argument `a`
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:117:71: error: don't know how to synthesize placeholder for argument `a`
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:117:48: error: don't know how to synthesize placeholder for argument `a`
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:117:27: error: don't know how to synthesize placeholder for argument `b`
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+node : SourceCurrentConstrainedCapEditScans.NodeComplete formulas solver record originals base inputDepth level
+results : List (Value Symbol Guard)
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+children : EditChildren record originals entries 0 values before results after
+reads : ChildrenReads formulas solver base children memos final
+receipt : ChildrenReceipt formulas solver next record originals base values before results after memos final
+returned : Frame formulas solver next after.checked
+finalFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length level) values.length profile)
+    after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals
+        (SourceCurrentConstrainedCapEditScans.editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries 0 values before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done results after
+allReads : ListReads formulas solver base ⋯ memos final
+bounded :
+  Stored record originals after ∧
+    ∀ (value : Value Symbol Guard),
+      value ∈ results → Cap (outputDepth capturedDepth inputDepth (Edits.editBelow entries)) value
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:116:11: error: failed to infer `have` declaration type

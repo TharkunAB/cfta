@@ -1,0 +1,506 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:44:8: warning: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourceCurrentConstrainedCapEditNumeric.0.MicroCFTA.SourceCurrentConstrainedCapEditNumeric.child_size`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:44:0: warning: `child_size` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:95:4: error: 'change' tactic failed, pattern
+  1 + InternedValueMass.edges edges ≤ start.mass
+is not definitionally equal to target
+  InternedValueMass.value (Value.node entry edges depth free) ≤
+    (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile).mass
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:104:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e + f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - e ≤ -1
+  c - g ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - e - f ≥ 1
+where
+ a := ↑(SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile).mass
+ b := ↑(InternedValueMass.value (Value.node entry edges depth free))
+ c := ↑(SourceCurrentConstrainedCapEditForecast.scalar start)
+ d := ↑edges.length
+ e := ↑edge.children.length
+ f := ↑(List.map InternedValueMass.value edge.children).sum
+ g := ↑start.mass
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:106:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceCurrentConstrainedCapEditForecast.planProfile ?record ?count (?level + 1) ?profile
+in the target expression
+  Le
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.rowStep record originals.length level width) edges.length start)
+    ceiling
+
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+inputDepth level : Nat
+node : NodeComplete formulas solver record originals base inputDepth level
+entries : List (Int × Edits EqualityNormalize.Path)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+entry : Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+cap : Cap inputDepth (Value.node entry edges depth free)
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+start : Profile := SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile
+width : Nat := SourceCurrentConstrainedCapEditForecast.scalar start
+ceiling : Profile := SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile
+allRows : Profile :=
+  SourceCurrentConstrainedCapEditForecast.scan
+    (SourceCurrentConstrainedCapEditForecast.rowStep record originals.length level width) width start
+resident :
+  ∀ (edge : EdgeValue Symbol Guard),
+    edge ∈ InternedEdgeResidency.nodeEdges (Value.node entry edges depth free) →
+      InternedEdgeResidency.EdgeResident before.checked.native.machine.heap edge
+mass :
+  InternedValueMass.value (Value.node entry edges depth free) ≤
+    (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile).mass
+scalar : start.mass ≤ SourceCurrentConstrainedCapTargetForecast.scalar start
+length : edges.length ≤ width
+widths : ∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → edge.children.length ≤ width
+⊢ Le
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.rowStep record originals.length level width) edges.length start)
+    ceiling
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:84:91: error: unsolved goals
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+inputDepth level : Nat
+node : NodeComplete formulas solver record originals base inputDepth level
+entries : List (Int × Edits EqualityNormalize.Path)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+entry : Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+cap : Cap inputDepth (Value.node entry edges depth free)
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+start : Profile := SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile
+width : Nat := SourceCurrentConstrainedCapEditForecast.scalar start
+ceiling : Profile := SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile
+allRows : Profile :=
+  SourceCurrentConstrainedCapEditForecast.scan
+    (SourceCurrentConstrainedCapEditForecast.rowStep record originals.length level width) width start
+resident :
+  ∀ (edge : EdgeValue Symbol Guard),
+    edge ∈ InternedEdgeResidency.nodeEdges (Value.node entry edges depth free) →
+      InternedEdgeResidency.EdgeResident before.checked.native.machine.heap edge
+mass :
+  InternedValueMass.value (Value.node entry edges depth free) ≤
+    (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile).mass
+scalar : start.mass ≤ SourceCurrentConstrainedCapTargetForecast.scalar start
+length : edges.length ≤ width
+widths : ∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → edge.children.length ≤ width
+bounded :
+  Le
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.rowStep record originals.length level width) edges.length start)
+    ceiling
+rebuilt : List (EdgeValue Symbol Guard)
+middle : SharedState (bits + 2)
+finalInventory : Inventory
+current : Memos
+rowsActual : EditRows record originals entries edges before rebuilt middle
+rowsReads : RowsReads formulas solver base rowsActual memos current
+rowsReceipt :
+  SourceCurrentAllocatedSharedEditEffects.RowsReceipt formulas solver finalInventory record originals base edges before
+    rebuilt middle memos current
+returned : Frame formulas solver finalInventory middle.checked
+rowsFits :
+  Fits
+    (SourceCurrentConstrainedCapEditForecast.scan
+      (SourceCurrentConstrainedCapEditForecast.rowStep record originals.length level width) edges.length start)
+    middle.checked
+rowsStored : Stored record originals middle
+rowsDone :
+  SourceCurrentAllocatedSharedEditWorker.rows
+      (SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling)
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling))
+      entries edges before =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done rebuilt middle
+paddedFits : Fits allRows middle.checked
+resultLength : rebuilt.length ≤ width
+made :
+  have actual := run (makeNode rebuilt) middle.checked.native.machine.heap;
+  Frame formulas solver finalInventory (advanceHeap middle actual.snd).checked ∧
+    Fits (SourceCurrentConstrainedCapEditFrame.constructorProfile width allRows)
+        (advanceHeap middle actual.snd).checked ∧
+      Stored record originals (advanceHeap middle actual.snd) ∧
+        Ready formulas solver finalInventory record originals base (advanceHeap middle actual.snd) ∧
+          SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical middle.checked)
+              (SourceCurrentAllocatedNativeEffects.physical (advanceHeap middle actual.snd).checked) ∧
+            Available actual.snd actual.fst
+result : Value Symbol Guard × Heap := run (makeNode rebuilt) middle.checked.native.machine.heap
+nextFrame : Frame formulas solver finalInventory (advanceHeap middle result.snd).checked
+nextStored : Stored record originals (advanceHeap middle result.snd)
+numeric : Fits ceiling (advanceHeap middle result.snd).checked
+⊢ ∃ result after next final actual,
+    NodeReads formulas solver base actual memos final ∧
+      NodeReceipt formulas solver next record originals base (Value.node entry edges depth free) before result after
+          memos final ∧
+        Frame formulas solver next after.checked ∧
+          Fits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+              after.checked ∧
+            Stored record originals after ∧
+              SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level + 1)
+                  (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                    (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+                  (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                    (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+                  (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                    (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+                  (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                    (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+                  (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                    (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+                  (Edits.editBelow entries) (Value.node entry edges depth free) before =
+                SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:179:10: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:204:31: error: don't know how to synthesize implicit argument `Guard`
+  @SourceEqualityRequiredGraph.Recursive ?m.946 ?m.947 ?m.948
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+level : Nat
+ih : NodeComplete formulas solver record originals base inputDepth level
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+ceiling : Profile := ⋯
+fuel : Nat := ⋯
+entries : List (Int × Edits EqualityNormalize.Path)
+small : sizeOf (Edits.editBelow entries) ≤ level + 1
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+ordinaryCase :
+  ∀ (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (before : SharedState (bits + 2)) (inventory : Inventory)
+    (profile : Profile),
+    Populated (Edits.editBelow entries) →
+      HasLeaf (Edits.editBelow entries) →
+        Allowed record (Edits.editBelow entries) →
+          Ready formulas solver inventory record originals base before →
+            Frame formulas solver inventory before.checked →
+              Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+                  before.checked →
+                Available before.checked.native.machine.heap (Value.node entry edges depth free) →
+                  Safe (Edits.editBelow entries) (Value.node entry edges depth free) →
+                    Cap inputDepth (Value.node entry edges depth free) →
+                      Stored record originals before →
+                        ∀ (memos : Memos),
+                          Valid before.checked.native.machine.heap memos →
+                            Room bits
+                                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1)
+                                  profile) →
+                              ∃ result after next final actual,
+                                NodeReads formulas solver base actual memos final ∧
+                                  NodeReceipt formulas solver next record originals base
+                                      (Value.node entry edges depth free) before result after memos final ∧
+                                    Frame formulas solver next after.checked ∧
+                                      Fits
+                                          (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length
+                                            (level + 1) profile)
+                                          after.checked ∧
+                                        Stored record originals after ∧
+                                          SourceCurrentAllocatedSharedEditWorker.edit record originals
+                                              (editFuel level + 1)
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (Edits.editBelow entries) (Value.node entry edges depth free) before =
+                                            SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+startFits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinaryProbe : Value Symbol Guard
+available : Available before.checked.native.machine.heap (Value.mu entry body depth ordinaryProbe)
+inputCap : Cap inputDepth (Value.mu entry body depth ordinaryProbe)
+safe : Safe (Edits.editBelow entries) (Value.mu entry body depth ordinaryProbe)
+⊢ Type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:204:31: error: don't know how to synthesize implicit argument `Symbol`
+  @SourceEqualityRequiredGraph.Recursive ?m.946 ?m.947 ?m.948
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+level : Nat
+ih : NodeComplete formulas solver record originals base inputDepth level
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+ceiling : Profile := ⋯
+fuel : Nat := ⋯
+entries : List (Int × Edits EqualityNormalize.Path)
+small : sizeOf (Edits.editBelow entries) ≤ level + 1
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+ordinaryCase :
+  ∀ (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (before : SharedState (bits + 2)) (inventory : Inventory)
+    (profile : Profile),
+    Populated (Edits.editBelow entries) →
+      HasLeaf (Edits.editBelow entries) →
+        Allowed record (Edits.editBelow entries) →
+          Ready formulas solver inventory record originals base before →
+            Frame formulas solver inventory before.checked →
+              Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+                  before.checked →
+                Available before.checked.native.machine.heap (Value.node entry edges depth free) →
+                  Safe (Edits.editBelow entries) (Value.node entry edges depth free) →
+                    Cap inputDepth (Value.node entry edges depth free) →
+                      Stored record originals before →
+                        ∀ (memos : Memos),
+                          Valid before.checked.native.machine.heap memos →
+                            Room bits
+                                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1)
+                                  profile) →
+                              ∃ result after next final actual,
+                                NodeReads formulas solver base actual memos final ∧
+                                  NodeReceipt formulas solver next record originals base
+                                      (Value.node entry edges depth free) before result after memos final ∧
+                                    Frame formulas solver next after.checked ∧
+                                      Fits
+                                          (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length
+                                            (level + 1) profile)
+                                          after.checked ∧
+                                        Stored record originals after ∧
+                                          SourceCurrentAllocatedSharedEditWorker.edit record originals
+                                              (editFuel level + 1)
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (Edits.editBelow entries) (Value.node entry edges depth free) before =
+                                            SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+startFits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinaryProbe : Value Symbol Guard
+available : Available before.checked.native.machine.heap (Value.mu entry body depth ordinaryProbe)
+inputCap : Cap inputDepth (Value.mu entry body depth ordinaryProbe)
+safe : Safe (Edits.editBelow entries) (Value.mu entry body depth ordinaryProbe)
+⊢ Type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:204:69: error: don't know how to synthesize placeholder
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+level : Nat
+ih : NodeComplete formulas solver record originals base inputDepth level
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+ceiling : Profile := ⋯
+fuel : Nat := ⋯
+entries : List (Int × Edits EqualityNormalize.Path)
+small : sizeOf (Edits.editBelow entries) ≤ level + 1
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+ordinaryCase :
+  ∀ (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (before : SharedState (bits + 2)) (inventory : Inventory)
+    (profile : Profile),
+    Populated (Edits.editBelow entries) →
+      HasLeaf (Edits.editBelow entries) →
+        Allowed record (Edits.editBelow entries) →
+          Ready formulas solver inventory record originals base before →
+            Frame formulas solver inventory before.checked →
+              Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+                  before.checked →
+                Available before.checked.native.machine.heap (Value.node entry edges depth free) →
+                  Safe (Edits.editBelow entries) (Value.node entry edges depth free) →
+                    Cap inputDepth (Value.node entry edges depth free) →
+                      Stored record originals before →
+                        ∀ (memos : Memos),
+                          Valid before.checked.native.machine.heap memos →
+                            Room bits
+                                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1)
+                                  profile) →
+                              ∃ result after next final actual,
+                                NodeReads formulas solver base actual memos final ∧
+                                  NodeReceipt formulas solver next record originals base
+                                      (Value.node entry edges depth free) before result after memos final ∧
+                                    Frame formulas solver next after.checked ∧
+                                      Fits
+                                          (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length
+                                            (level + 1) profile)
+                                          after.checked ∧
+                                        Stored record originals after ∧
+                                          SourceCurrentAllocatedSharedEditWorker.edit record originals
+                                              (editFuel level + 1)
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (Edits.editBelow entries) (Value.node entry edges depth free) before =
+                                            SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+startFits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinaryProbe : Value Symbol Guard
+available : Available before.checked.native.machine.heap (Value.mu entry body depth ordinaryProbe)
+inputCap : Cap inputDepth (Value.mu entry body depth ordinaryProbe)
+safe : Safe (Edits.editBelow entries) (Value.mu entry body depth ordinaryProbe)
+⊢ Value ?m.946 ?m.947

@@ -1,0 +1,175 @@
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.mergeBound_height_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.mergeBound_height_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (value : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeNumericControl.bound first value)
+        (MicroCFTA.SourceCurrentMemoMergeNumericControl.bound last value)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.mergeWorkFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.mergeWorkFuel_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel first)
+      (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.mergeSelectionFuel_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.mergeSelectionFuel_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel first)
+      (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.operand_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.operand_mono : ∀ (path : List.{0} Int) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.foldProfile_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.foldProfile_mono : ∀ (count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.targetProfile_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.targetProfile_mono : ∀ (count : Nat)
+  (paths : List.{0} (List.{0} Int)) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile count paths first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile count paths last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.reserved_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.reserved_mono : ∀ (bits count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed paths last →
+      MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed paths first
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.targetReserved_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.targetReserved_mono : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits count paths last →
+      MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits count paths first
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.operandFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.operandFuel_mono : ∀ (path : List.{0} Int) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.queryFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.queryFuel_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.foldFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.foldFuel_mono : ∀ (count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.targetFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetMonotone.targetFuel_mono : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceProfile_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceProfile_mono : ∀ (count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafProfile_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafProfile_mono : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (found : Bool) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count paths found last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceProfile_le_miss' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceProfile_le_miss : ∀ (count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths Bool.false last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafProfile_le_miss' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafProfile_le_miss : ∀ (count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count paths Bool.false last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceReserved_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceReserved_mono : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentConstrainedCapSharedForecast.ForceReserved bits count paths found last →
+      MicroCFTA.SourceCurrentConstrainedCapSharedForecast.ForceReserved bits count paths found first
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafReserved_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafReserved_mono : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count paths found last →
+      MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count paths found first
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceReserved_of_miss' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceReserved_of_miss : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentConstrainedCapSharedForecast.ForceReserved bits count paths Bool.false last →
+      MicroCFTA.SourceCurrentConstrainedCapSharedForecast.ForceReserved bits count paths found first
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafReserved_of_miss' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafReserved_of_miss : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count paths Bool.false last →
+      MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count paths found first
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceFuel_mono : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (found : Bool) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafFuel_mono : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (found : Bool) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceFuel_le_miss' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceFuel_le_miss : ∀ (count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths Bool.false last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafFuel_le_miss' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafFuel_le_miss : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (found : Bool) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found first)
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths Bool.false last)
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceReserved_of_final_room' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.forceReserved_of_final_room : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths Bool.false profile) →
+    MicroCFTA.SourceCurrentConstrainedCapSharedForecast.ForceReserved bits count paths found profile
+'MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafReserved_of_final_room' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapSharedMonotone.leafReserved_of_final_room : ∀ (bits count : Nat)
+  (paths : List.{0} (List.{0} Int)) (found : Bool)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count paths Bool.false profile) →
+    MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count paths found profile

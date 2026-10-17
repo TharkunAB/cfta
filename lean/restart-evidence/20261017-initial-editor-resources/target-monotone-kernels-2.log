@@ -1,0 +1,73 @@
+'MicroCFTA.TargetMonotoneIntegration.three_leaf_schedule' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.TargetMonotoneIntegration.three_leaf_schedule : ∀ (bits : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (first second third : Bool),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.TargetMonotoneIntegration.schedule profile first second third)
+      (MicroCFTA.TargetMonotoneIntegration.missThree profile))
+    (And
+      (@LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel
+          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths first
+          profile)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel
+          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+          Bool.false profile))
+      (And
+        (@LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel
+            (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+            second (MicroCFTA.TargetMonotoneIntegration.stage profile first))
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel
+            (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+            Bool.false (MicroCFTA.TargetMonotoneIntegration.missOne profile)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel
+              (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+              third
+              (MicroCFTA.TargetMonotoneIntegration.stage (MicroCFTA.TargetMonotoneIntegration.stage profile first)
+                second))
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel
+              (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+              Bool.false (MicroCFTA.TargetMonotoneIntegration.missTwo profile)))
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+              (MicroCFTA.TargetMonotoneIntegration.missThree profile) →
+            And
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits
+                (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+                first profile)
+              (And
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                  MicroCFTA.TargetMonotoneIntegration.paths second
+                  (MicroCFTA.TargetMonotoneIntegration.stage profile first))
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                  MicroCFTA.TargetMonotoneIntegration.paths third
+                  (MicroCFTA.TargetMonotoneIntegration.stage (MicroCFTA.TargetMonotoneIntegration.stage profile first)
+                    second)))))))
+'MicroCFTA.TargetMonotoneIntegration.rotated_target' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.TargetMonotoneIntegration.rotated_target : ∀ (bits : Nat),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile
+        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+        MicroCFTA.TargetMonotoneIntegration.lower)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile
+        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+        MicroCFTA.TargetMonotoneIntegration.upper))
+    (And
+      (@LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel
+          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+          MicroCFTA.TargetMonotoneIntegration.lower)
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel
+          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+          MicroCFTA.TargetMonotoneIntegration.upper))
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+          MicroCFTA.TargetMonotoneIntegration.upper →
+        MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) MicroCFTA.TargetMonotoneIntegration.paths
+          MicroCFTA.TargetMonotoneIntegration.lower))

@@ -1,0 +1,42 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:107:19: error: don't know how to synthesize implicit argument `bits`
+  @SourceCurrentConstrainedCapEditNumeric.node_complete ?m.330 inst✝¹ inst✝ capturedDepth inputDepth level formulas
+    solver record originals base known domains coherent active capturedCaps
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+before : SharedState (bits + 2)
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+values : List (Value Symbol Guard)
+available : Values before.checked.native.machine.heap values
+inputCaps : ∀ (value : Value Symbol Guard), value ∈ values → Cap inputDepth value
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+stored : Stored record originals before
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+entries : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+safe : ListSafe (Edits.editBelow entries) values
+reserved : Reserved bits record originals.length (Edits.editBelow entries) values.length profile
+level : Nat := ⋯
+ceiling : Profile := ⋯
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditListNumeric.lean:107:11: error: failed to infer `have` declaration type

@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentConstrainedCapEditReceipt
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.node_children
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.node_children
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.ready
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.ready
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.node_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.node_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.children_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.children_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.rows_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.rows_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.node
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.children
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.children
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.rows
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditReceipt.rows_length
+#check @MicroCFTA.SourceCurrentConstrainedCapEditReceipt.rows_length

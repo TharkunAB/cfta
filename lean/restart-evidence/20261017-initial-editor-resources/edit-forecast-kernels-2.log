@@ -1,0 +1,67 @@
+'MicroCFTA.EditForecastKernels.all_tokens_initial' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.EditForecastKernels.all_tokens_initial : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Exists.{1} Nat fun bits =>
+    And
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level profile))
+      (∀ (path : MicroCFTA.EqualityNormalize.Path),
+        @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+          ∀ (found : Bool),
+            And
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count
+                (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+              (And
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+                    (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level profile))
+                (@LE.le.{0} Nat instLENat
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+                    (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count
+                    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level profile)))))
+'MicroCFTA.EditForecastKernels.child_tokens_initial' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.EditForecastKernels.child_tokens_initial : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (row child : Nat),
+  @LT.lt.{0} Nat instLTNat row
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+    @LT.lt.{0} Nat instLTNat child
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+      have entry :=
+        MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level) child
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+            row (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile));
+      have final :=
+        MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          profile;
+      @Exists.{1} Nat fun bits =>
+        And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits final)
+          (And
+            (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count entry) final)
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+                ∀ (found : Bool),
+                  And
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count
+                      (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found entry)
+                    (And
+                      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+                          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found entry)
+                        final)
+                      (@LE.le.{0} Nat instLENat
+                        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+                          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found entry)
+                        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count final)))))

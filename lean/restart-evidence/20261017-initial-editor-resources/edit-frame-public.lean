@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentConstrainedCapEditFrame
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.headProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.headProfile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.headFuel
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.headFuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile_ge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile_mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile_count_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.constructorProfile_count_mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.headProfile_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.headProfile_ge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.headProfile_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.headProfile_mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.headFuel_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.headFuel_mono
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.node
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.edge
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.edge
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditFrame.head
+#check @MicroCFTA.SourceCurrentConstrainedCapEditFrame.head

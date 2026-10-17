@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentConstrainedCapEditListNumeric
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.finalProfile
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved
+#check @MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.Reserved
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.fuel
+#check @MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.fuel
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.compiled
+#check @MicroCFTA.SourceCurrentConstrainedCapEditListNumeric.compiled

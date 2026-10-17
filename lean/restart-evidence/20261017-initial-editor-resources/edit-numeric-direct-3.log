@@ -1,0 +1,456 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:252:100: error: Application type mismatch: The argument
+  enough
+has type
+  SourceCurrentConstrainedCapEditFrame.headFuel profile ≤ fuel
+of sort `Prop` but is expected to have type
+  Nat
+of sort `Type` in the application
+  SourceCurrentProjectionNumericReplay.head_replay first.right.right.right.right.right.right.right enough
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:251:108: error: unsolved goals
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+level : Nat
+ih : NodeComplete formulas solver record originals base inputDepth level
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+ceiling : Profile := SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile
+fuel : Nat := SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling
+entries : List (Int × Edits EqualityNormalize.Path)
+small : sizeOf (Edits.editBelow entries) ≤ level + 1
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+ordinaryCase :
+  ∀ (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (before : SharedState (bits + 2)) (inventory : Inventory)
+    (profile : Profile),
+    Populated (Edits.editBelow entries) →
+      HasLeaf (Edits.editBelow entries) →
+        Allowed record (Edits.editBelow entries) →
+          Ready formulas solver inventory record originals base before →
+            Frame formulas solver inventory before.checked →
+              Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+                  before.checked →
+                Available before.checked.native.machine.heap (Value.node entry edges depth free) →
+                  Safe (Edits.editBelow entries) (Value.node entry edges depth free) →
+                    Cap inputDepth (Value.node entry edges depth free) →
+                      Stored record originals before →
+                        ∀ (memos : Memos),
+                          Valid before.checked.native.machine.heap memos →
+                            Room bits
+                                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1)
+                                  profile) →
+                              ∃ result after next final actual,
+                                NodeReads formulas solver base actual memos final ∧
+                                  NodeReceipt formulas solver next record originals base
+                                      (Value.node entry edges depth free) before result after memos final ∧
+                                    Frame formulas solver next after.checked ∧
+                                      Fits
+                                          (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length
+                                            (level + 1) profile)
+                                          after.checked ∧
+                                        Stored record originals after ∧
+                                          SourceCurrentAllocatedSharedEditWorker.edit record originals
+                                              (editFuel level + 1)
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (Edits.editBelow entries) (Value.node entry edges depth free) before =
+                                            SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+startFits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinaryProbe : Value Symbol Guard
+available : Available before.checked.native.machine.heap (Value.mu entry body depth ordinaryProbe)
+inputCap : Cap inputDepth (Value.mu entry body depth ordinaryProbe)
+safe : Safe (Edits.editBelow entries) (Value.mu entry body depth ordinaryProbe)
+original : Value Symbol Guard := Value.mu entry body depth ordinaryProbe
+recursive : SourceEqualityRequiredGraph.Recursive original
+closed : original.free = []
+exposed : Value Symbol Guard
+heap : Heap
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+_kept : SourceEqualityRequiredCache.Keeps before.checked.native.machine.heap heap
+exposedAvailable : Available heap exposed
+exposedClosed : exposed.free = []
+exposedOrdinary : SourceEqualityRequiredCache.Ordinary exposed
+first :
+  Frame formulas solver inventory (advanceHeap before heap).checked ∧
+    Fits (SourceCurrentConstrainedCapEditFrame.headProfile profile) (advanceHeap before heap).checked ∧
+      Stored record originals (advanceHeap before heap) ∧
+        Ready formulas solver inventory record originals base (advanceHeap before heap) ∧
+          SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+              (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap).checked) ∧
+            Available heap exposed ∧
+              exposed.free = [] ∧
+                SourceCurrentProjectionNumericReplay.HeadReady (SourceCurrentConstrainedCapEditFrame.headFuel profile)
+                  head
+exposedCap : Cap inputDepth exposed
+current : Memos
+headReads : SourceCurrentRequiredQueryMemos.HeadReads head memos current
+headValid : Valid heap current
+retained : Extends memos.unfolding current.unfolding
+query : current.query = memos.query
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current
+exposedFits :
+  Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+    (advanceHeap before heap).checked
+exposedReady : Ready formulas solver inventory record originals base (advanceHeap before heap)
+exposedSafe : Safe (Edits.editBelow entries) exposed
+result : Value Symbol Guard
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+actual : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) result after
+reads : NodeReads formulas solver base actual current final
+_receipt :
+  NodeReceipt formulas solver next record originals base exposed (advanceHeap before heap) result after current final
+returned : Frame formulas solver next after.checked
+numeric : Fits ceiling after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level + 1) fuel fuel fuel fuel fuel
+      (Edits.editBelow entries) exposed (advanceHeap before heap) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+allReads : NodeReads formulas solver base ⋯ memos final
+enough : SourceCurrentConstrainedCapEditFrame.headFuel profile ≤ fuel
+replay :
+  SourceCurrentConstrainedCapEditFrame.headFuel profile ≤ sorry →
+    SourceEqualityRequiredWorker.head sorry original before.checked.native.machine.heap =
+      SourceEqualityRequiredWorker.Result.done exposed heap
+⊢ (match SourceEqualityRequiredWorker.head fuel original before.checked.native.machine.heap with
+    | SourceEqualityRequiredWorker.Result.done result heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.done result (advanceHeap before heap)
+    | SourceEqualityRequiredWorker.Result.pending key heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed (SourceCurrentAllocatedSharedEditWorker.Fault.pending key)
+        (advanceHeap before heap)
+    | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed
+        (SourceCurrentAllocatedSharedEditWorker.Fault.unresolved name) (advanceHeap before heap)
+    | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed
+        (SourceCurrentAllocatedSharedEditWorker.Fault.exhausted limit) (advanceHeap before heap)) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done exposed (advanceHeap before heap)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:259:14: error: Type mismatch: After simplification, term
+  done
+ has type
+  (match exposed with
+    | Value.empty => SourceCurrentAllocatedSharedEditWorker.Outcome.done Value.empty (advanceHeap before heap)
+    | Value.reference name =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed
+        (SourceCurrentAllocatedSharedEditWorker.Fault.unresolved name) (advanceHeap before heap)
+    | Value.node entry edges depth free =>
+      match
+        SourceCurrentAllocatedSharedEditWorker.rows
+          (SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level) fuel fuel fuel fuel fuel)
+          entries edges (advanceHeap before heap) with
+      | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+        SourceCurrentAllocatedSharedEditWorker.work (makeNode value) state
+      | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+        SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state
+    | Value.mu entry body depthShape ordinaryShape =>
+      match SourceCurrentAllocatedSharedEditWorker.head fuel exposed (advanceHeap before heap) with
+      | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+        SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level) fuel fuel fuel fuel fuel
+          (Edits.editBelow entries) value state
+      | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+        SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state
+    | Value.union entry members depth free =>
+      match SourceCurrentAllocatedSharedEditWorker.head fuel exposed (advanceHeap before heap) with
+      | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+        SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level) fuel fuel fuel fuel fuel
+          (Edits.editBelow entries) value state
+      | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+        SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+but is expected to have type
+  (match
+      SourceCurrentAllocatedSharedEditWorker.head
+        (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+          (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+        (Value.mu entry body depth ordinaryProbe) before with
+    | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+      match value with
+      | Value.empty => SourceCurrentAllocatedSharedEditWorker.Outcome.done Value.empty state
+      | Value.reference name =>
+        SourceCurrentAllocatedSharedEditWorker.Outcome.failed
+          (SourceCurrentAllocatedSharedEditWorker.Fault.unresolved name) state
+      | Value.node entry edges depth free =>
+        match
+          SourceCurrentAllocatedSharedEditWorker.rows
+            (SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level)
+              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)))
+            entries edges state with
+        | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+          SourceCurrentAllocatedSharedEditWorker.work (makeNode value) state
+        | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+          SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state
+      | Value.mu entry body depthShape ordinaryShape =>
+        match
+          SourceCurrentAllocatedSharedEditWorker.head
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            value state with
+        | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+          SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level)
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (Edits.editBelow entries) value state
+        | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+          SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state
+      | Value.union entry members depth free =>
+        match
+          SourceCurrentAllocatedSharedEditWorker.head
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            value state with
+        | SourceCurrentAllocatedSharedEditWorker.Outcome.done value state =>
+          SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level)
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+              (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile))
+            (Edits.editBelow entries) value state
+        | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+          SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state
+    | SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed fault state) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:252:100: error: Application type mismatch: The argument
+  enough
+has type
+  SourceCurrentConstrainedCapEditFrame.headFuel profile ≤ fuel
+of sort `Prop` but is expected to have type
+  Nat
+of sort `Type` in the application
+  SourceCurrentProjectionNumericReplay.head_replay first.right.right.right.right.right.right.right enough
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:251:108: error: unsolved goals
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+capturedDepth inputDepth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+known : Values base originals
+domains :
+  ∀ (path : EqualityNormalize.Path),
+    path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) originals
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+capturedCaps : ∀ (original : Value Symbol Guard), original ∈ originals → Cap capturedDepth original
+level : Nat
+ih : NodeComplete formulas solver record originals base inputDepth level
+before : SharedState (bits + 2)
+inventory : Inventory
+profile : Profile
+ready : Ready formulas solver inventory record originals base before
+frame : Frame formulas solver inventory before.checked
+fits : Fits profile before.checked
+stored : Stored record originals before
+memos : Memos
+valid : Valid before.checked.native.machine.heap memos
+room : Room bits (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile)
+ceiling : Profile := SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1) profile
+fuel : Nat := SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length ceiling
+entries : List (Int × Edits EqualityNormalize.Path)
+small : sizeOf (Edits.editBelow entries) ≤ level + 1
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+sizes : ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → sizeOf child ≤ level
+ordinaryCase :
+  ∀ (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (before : SharedState (bits + 2)) (inventory : Inventory)
+    (profile : Profile),
+    Populated (Edits.editBelow entries) →
+      HasLeaf (Edits.editBelow entries) →
+        Allowed record (Edits.editBelow entries) →
+          Ready formulas solver inventory record originals base before →
+            Frame formulas solver inventory before.checked →
+              Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+                  before.checked →
+                Available before.checked.native.machine.heap (Value.node entry edges depth free) →
+                  Safe (Edits.editBelow entries) (Value.node entry edges depth free) →
+                    Cap inputDepth (Value.node entry edges depth free) →
+                      Stored record originals before →
+                        ∀ (memos : Memos),
+                          Valid before.checked.native.machine.heap memos →
+                            Room bits
+                                (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length (level + 1)
+                                  profile) →
+                              ∃ result after next final actual,
+                                NodeReads formulas solver base actual memos final ∧
+                                  NodeReceipt formulas solver next record originals base
+                                      (Value.node entry edges depth free) before result after memos final ∧
+                                    Frame formulas solver next after.checked ∧
+                                      Fits
+                                          (SourceCurrentConstrainedCapEditForecast.planProfile record originals.length
+                                            (level + 1) profile)
+                                          after.checked ∧
+                                        Stored record originals after ∧
+                                          SourceCurrentAllocatedSharedEditWorker.edit record originals
+                                              (editFuel level + 1)
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (SourceCurrentConstrainedCapEditForecast.stageFuel record originals.length
+                                                (SourceCurrentConstrainedCapEditForecast.planProfile record
+                                                  originals.length (level + 1) profile))
+                                              (Edits.editBelow entries) (Value.node entry edges depth free) before =
+                                            SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+startFits : Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile) before.checked
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+available : Available before.checked.native.machine.heap (Value.union entry members depth free)
+inputCap : Cap inputDepth (Value.union entry members depth free)
+safe : Safe (Edits.editBelow entries) (Value.union entry members depth free)
+original : Value Symbol Guard := Value.union entry members depth free
+recursive : SourceEqualityRequiredGraph.Recursive original
+closed : original.free = []
+exposed : Value Symbol Guard
+heap : Heap
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+_kept : SourceEqualityRequiredCache.Keeps before.checked.native.machine.heap heap
+exposedAvailable : Available heap exposed
+exposedClosed : exposed.free = []
+exposedOrdinary : SourceEqualityRequiredCache.Ordinary exposed
+first :
+  Frame formulas solver inventory (advanceHeap before heap).checked ∧
+    Fits (SourceCurrentConstrainedCapEditFrame.headProfile profile) (advanceHeap before heap).checked ∧
+      Stored record originals (advanceHeap before heap) ∧
+        Ready formulas solver inventory record originals base (advanceHeap before heap) ∧
+          SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+              (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap).checked) ∧
+            Available heap exposed ∧
+              exposed.free = [] ∧
+                SourceCurrentProjectionNumericReplay.HeadReady (SourceCurrentConstrainedCapEditFrame.headFuel profile)
+                  head
+exposedCap : Cap inputDepth exposed
+current : Memos
+headReads : SourceCurrentRequiredQueryMemos.HeadReads head memos current
+headValid : Valid heap current
+retained : Extends memos.unfolding current.unfolding
+query : current.query = memos.query
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current
+exposedFits :
+  Fits (SourceCurrentConstrainedCapEditForecast.stageProfile record originals.length profile)
+    (advanceHeap before heap).checked
+exposedReady : Ready formulas solver inventory record originals base (advanceHeap before heap)
+exposedSafe : Safe (Edits.editBelow entries) exposed
+result : Value Symbol Guard
+after : SharedState (bits + 2)
+next : Inventory
+final : Memos
+actual : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) result after
+reads : NodeReads formulas solver base actual current final
+_receipt :
+  NodeReceipt formulas solver next record originals base exposed (advanceHeap before heap) result after current final
+returned : Frame formulas solver next after.checked
+numeric : Fits ceiling after.checked
+finalStored : Stored record originals after
+done :
+  SourceCurrentAllocatedSharedEditWorker.edit record originals (editFuel level + 1) fuel fuel fuel fuel fuel
+      (Edits.editBelow entries) exposed (advanceHeap before heap) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result after
+allReads : NodeReads formulas solver base ⋯ memos final
+enough : SourceCurrentConstrainedCapEditFrame.headFuel profile ≤ fuel
+replay :
+  SourceCurrentConstrainedCapEditFrame.headFuel profile ≤ sorry →
+    SourceEqualityRequiredWorker.head sorry original before.checked.native.machine.heap =
+      SourceEqualityRequiredWorker.Result.done exposed heap
+⊢ (match SourceEqualityRequiredWorker.head fuel original before.checked.native.machine.heap with
+    | SourceEqualityRequiredWorker.Result.done result heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.done result (advanceHeap before heap)
+    | SourceEqualityRequiredWorker.Result.pending key heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed (SourceCurrentAllocatedSharedEditWorker.Fault.pending key)
+        (advanceHeap before heap)
+    | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed
+        (SourceCurrentAllocatedSharedEditWorker.Fault.unresolved name) (advanceHeap before heap)
+    | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+      SourceCurrentAllocatedSharedEditWorker.Outcome.failed
+        (SourceCurrentAllocatedSharedEditWorker.Fault.exhausted limit) (advanceHeap before heap)) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done exposed (advanceHeap before heap)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:259:14: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapEditNumeric.lean:253:40: warning: This simp argument is unused:
+  replay
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Worker.head]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

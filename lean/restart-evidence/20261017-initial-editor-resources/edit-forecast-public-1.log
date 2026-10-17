@@ -1,0 +1,507 @@
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.join' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.join : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_left' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_left : ∀
+  (first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.join first last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_right' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_right : ∀
+  (first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le last
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.join first last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_le' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_le : ∀
+  {first last bound : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first bound →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le last bound →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.join first last) bound
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_mono' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapEditForecast.join_mono : ∀
+  {first last otherFirst otherLast : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le otherFirst otherLast →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.join first otherFirst)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.join last otherLast)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_ge : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile : Nat →
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_ge : ∀ (length : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile length profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile_mono : ∀ {firstLength lastLength : Nat},
+  @LE.le.{0} Nat instLENat firstLength lastLength →
+    ∀ {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile firstLength first)
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile lastLength last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    List.{0} MicroCFTA.EqualityNormalize.Path →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → List.{0} MicroCFTA.EqualityNormalize.Path → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_ge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_ge : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) (paths : List.{0} MicroCFTA.EqualityNormalize.Path)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles record count paths profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) (paths : List.{0} MicroCFTA.EqualityNormalize.Path)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles record count paths first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles record count paths last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) (paths : List.{0} MicroCFTA.EqualityNormalize.Path)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels record count paths first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels record count paths last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_member' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles_member : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) {paths : List.{0} MicroCFTA.EqualityNormalize.Path}
+  {path : MicroCFTA.EqualityNormalize.Path},
+  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} MicroCFTA.EqualityNormalize.Path)
+      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+    ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) Bool.false profile)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafProfiles record count paths profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_member' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels_member : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) {paths : List.{0} MicroCFTA.EqualityNormalize.Path}
+  {path : MicroCFTA.EqualityNormalize.Path},
+  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path (List.{0} MicroCFTA.EqualityNormalize.Path)
+      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+    ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) Bool.false profile)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.leafFuels record count paths profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_ge : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_mono : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel_mono : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_profile' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_profile : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headProfile profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_fuel' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_head_fuel : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapEditForecast.headFuel profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_constructor_profile' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_constructor_profile : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {length : Nat},
+  @LE.le.{0} Nat instLENat length (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile length profile)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_profile' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_profile : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) (path : MicroCFTA.EqualityNormalize.Path)
+  (found : Bool) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafProfile count
+        (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_fuel' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_fuel : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat) (path : MicroCFTA.EqualityNormalize.Path)
+  (found : Bool) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+        (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_reserved' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_reserved : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count bits : Nat) (path : MicroCFTA.EqualityNormalize.Path)
+  (found : Bool) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count last) →
+        MicroCFTA.SourceCurrentConstrainedCapSharedForecast.LeafReserved bits count
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found first
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan : (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_zero' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_zero : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) profile)
+    profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count (next profile))
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_ge' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_ge : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile (next profile)) →
+    ∀ (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_mono' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_mono : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le (next first) (next last)) →
+    ∀ (count : Nat) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count first)
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_add' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_add : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (first last : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) first last) profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next last
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next first profile))
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_count_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_count_mono : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile (next profile)) →
+    ∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last →
+        ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next first profile)
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next last profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_compare' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_compare : ∀
+  (firstStep lastStep :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le (lastStep first) (lastStep last)) →
+    (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le (firstStep profile) (lastStep profile)) →
+      ∀ (count : Nat) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan firstStep count first)
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan lastStep count last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_joint' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_joint : ∀
+  (firstStep lastStep :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile (lastStep profile)) →
+    (∀ {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le (lastStep first) (lastStep last)) →
+      (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le (firstStep profile) (lastStep profile)) →
+        ∀ {firstCount lastCount : Nat},
+          @LE.le.{0} Nat instLENat firstCount lastCount →
+            ∀ {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan firstStep firstCount first)
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan lastStep lastCount last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_child' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_child : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile (next profile)) →
+    ∀ {count : Nat},
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) count →
+        ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le (next profile)
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_prefix' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_prefix : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  (∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile (next profile)) →
+    ∀ {index count : Nat},
+      @LE.le.{0} Nat instLENat index count →
+        ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next index profile)
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    Nat →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat →
+    Nat →
+      Nat →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_zero' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_zero : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_succ' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_succ : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile))
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_ge : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_ge : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level width : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level width profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_mono : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level first)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_mono' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep_mono : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) {firstWidth lastWidth : Nat},
+  @LE.le.{0} Nat instLENat firstWidth lastWidth →
+    ∀ {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level firstWidth first)
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level lastWidth last)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_stage' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_stage : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count level : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ_right' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan_succ_right : ∀
+  (next :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (count : Nat) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      profile)
+    (next (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan next count profile))
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_entry' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_entry : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count level : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {index : Nat},
+  @LE.le.{0} Nat instLENat index
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+        index (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile))
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_return' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_row_return : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count level : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {index : Nat},
+  @LT.lt.{0} Nat instLTNat index
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile))
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+          index (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_entry' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_entry : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count level : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {row child : Nat},
+  @LT.lt.{0} Nat instLTNat row
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+    @LE.le.{0} Nat instLENat child
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level) child
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+            row (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          profile)
+'MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_return' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapEditForecast.plan_child_return : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (count level : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {row child : Nat},
+  @LT.lt.{0} Nat instLTNat row
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+    @LT.lt.{0} Nat instLTNat child
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)) →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count level) child
+            (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.rowStep record count level
+                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile)))
+              row (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageProfile record count profile))))
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.planProfile record count
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          profile)

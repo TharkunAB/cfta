@@ -1,0 +1,31 @@
+# Initial mixed node edit completion
+
+Date: 2026-10-17 11:24 CEST.
+
+The additive `SourceCurrentConstrainedCapEditNumeric.node_complete` constructs the actual node edit, its exact `NodeReads`, the full old `NodeReceipt`, the returned inventory `Frame`, the computed profile `Fits`, the causal `MixedShared.Stored`, and the literal six-fuel worker return. It has no supplied edit graph, completed worker, future range, recursive callback law, or result cap premise.
+
+The initial facts fix the captured forest, its base availability, every original class-path selected closed domain, the coherent active record, and a common captured cap. The current input has availability, `Safe`, and its own cap. The trie is populated, has a leaf, and is allowed by the record. A natural level bounds its `sizeOf`. The input has `Ready`, `Frame`, `Fits`, the rich store, valid global memos, and one `Room` test on the final computed plan. The selected domains permit unrelated open ordinary siblings. The all-root cap assumption remains separate. In particular, arbitrary nonhereditary Mu roots are not admitted by that cap.
+
+The proof inducts on the static trie size bound. Each selected child has a strictly smaller size bound. The ordinary phase fixes the original row count and each original child width before execution. Those widths follow from the initial causal mass store. Ordered child and row scans carry each actual returned heap, target slots, Merge memo, native tables, and global memo bundle into the suffix. The final node constructor uses the exact rebuilt rows. Ordinary input does not execute an artificial Head.
+
+A recursive Mu or union input constructs its own closed Head. The Head producer returns an ordinary value. The cap exposure theorem derives its cap at the exact Head heap. The same ordinary phase then runs at that heap. The proof composes the literal Head worker bind with the ordinary worker return. Two recursion phases per trie level cover these operations. The reference case is impossible from `Safe` and the required reached leaf.
+
+Each leaf uses the actual current target-slot flag. The pure all-miss stage profile dominates either flag. The single initial final-plan Room test supplies its reservation. `LeafNumeric.complete` constructs the leaf. Its literal full-state worker return is widened to the common stage fuel. The proof does not infer a warm slot law from an unrelated cache or rebase a fixed-source law.
+
+The imported integration starts with only the initial hypotheses above. It invokes `node_complete`, feeds the produced actual reads to `MixedEdit.node`, and derives the output cap at the same result. It also derives exact result and full-state equality for six independently enlarged worker fuels. It does not assume an actual edit graph. The separate guard-owned concrete fixture targets a nonplain open ordinary parent with an unrelated open sibling. Its validation belongs to that component. This component does not claim that its parametric integration is a concrete source fixture.
+
+The cap `outputDepth` uses a static logical `sizeOf` bound. It is not a byte estimate or an allocation charge. The numeric forecast is a conservative mathematical initial reservation. This component is a node producer. The root-owned list and compiled editAll producers are separate. General selected reduction termination, the whole-library correspondence, and host forcing remain outside this theorem.
+
+Validation: final direct attempt 4 exited 0 with a zero-byte strict log. Canonical build passed 1549 jobs. Imported public 1 and integration 1 pairs passed with full explicit signatures and standard Lean axioms only. Direct attempts 1 through 3 retain their exact source snapshots and raw diagnostics. The canonical log includes inherited diagnostics; the owned source strict log is empty.
+
+## Evidence collision
+
+At 11:24 CEST, the node producer owner wrote its generic integration to three files in the concrete kernel owner's prefix: `edit-numeric-kernels.lean`, `edit-numeric-kernels-1.source.lean`, and `edit-numeric-kernels-1.log`. This replaced the concrete owner's live draft and first attempt source and raw log. Production proofs, direct attempts, public probes, and concrete attempts 2 through 8 were not changed. The concrete owner subsequently copied the collided generic file into attempts 9 and 10. Those attempts do not verify the concrete fixture.
+
+At 11:25 CEST, the node producer owner copied its three collided versions to the unique `node-owner-integration` prefix. It made no later changes to the concrete kernel prefix. The concrete owner owns recovery from its intact attempt 8 and the provenance report. It reported that the original attempt 1 raw log is not recoverable from its files. A reconstructed source or transcript excerpt must not be called the original raw artifact.
+
+The node producer owner reran its generic integration at its unique path. Final evidence uses `node-owner-integration-final.log`, from a strict check of the immutable `node-owner-integration-2.source.lean` snapshot. Its manifest excludes every `edit-numeric-kernels*` path. `node-owner-manifest-before-collision.json` preserves the exact provisional, invalid pre-collision manifest bytes for audit. That file is a historical artifact. It is not a live validation manifest. The independent concrete kernel review and recovery are separate.
+
+The concrete owner records the loss and recovery in `edit-numeric-evidence-recovery.md` in this directory. That note is the provenance authority for the concrete artifacts. It was still under validation when this component was frozen. This component refers to its filename and does not hash its mutable bytes. This component claims preservation of its own production failures only. It does not claim preservation of every new artifact from this checkpoint. No prior-baseline artifact was affected.
+
+The provisional manifest verifier rejected stale hashes after the integration was moved to the unique prefix and the review was updated. Its raw diagnostic is retained in `node-owner-verify-stale-manifest.log`. The final manifest was then regenerated and the verifier passed. This was an evidence packaging failure. The strict production and imported proof checks did not fail in this step.

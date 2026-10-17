@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `4f815db0`.
+Status rechecked on 2026-10-17 at proof checkpoint `65cf78ee`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-initial-force-leaf.md` for the current proof boundaries.
+Read `lean/notes-current-initial-editor.md` for the current proof boundaries.
 
-The current complete initial Force and Leaf proofs add no Haskell change.
+The current complete initial mixed editor proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2939 jobs and 65012 dependency checks.
+The last completed pinned Lean Audit passes: 2947 jobs and 65152 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -174,6 +174,73 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current complete initial mixed editor
+
+Updated: 2026-10-17 11:33 CEST. This checkpoint starts at published 0c76ba40.
+Proof commits are c7c3b4e8 and 65cf78ee. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-initial-editor.md for the
+complete library contract, proof map, exact support, and next ClassPass
+obligations. Evidence is in
+lean/restart-evidence/20261017-initial-editor-resources/.
+
+Eight additive modules construct complete supported mixed node, forest,
+and compiled signed edits from initial class facts and numeric reservations.
+Fixed original row and child limits determine the ordered profile scans.
+Actual selected returns feed the remaining children and rows. Recursive
+inputs expose Head before the same trie resumes. Raw reconstruction keeps
+the original full guard and derives equal arity from the actual child graph.
+The complete return retains actual graphs and reads, full receipts, Frame,
+inventory, forecast Fits, cap, Merge table, target-slot histories, and
+all global memos. The forest endpoint proves one common-six-fuel worker
+return. No future completed graph, successful worker, reached bound,
+NodeRanges, ChildrenRanges, RowsRanges, ListRanges, or callback resource
+law is an input. Size-based levels and fuels are logical definitions;
+they do not establish an executable Haskell budget or host instruction count.
+
+The concrete integrations derive their own finite width from the initial
+forecast. They build a parent with a nonempty equality guard, prove it open
+and outside Cap 0, and retain an unselected open recursion reference.
+They construct an actual node edit and compiled forest edit at signed pair
+[([0,0],[0])]. Both retain a valid stored equality descent record.
+Selected Safe domains, initial input and all-captured-root caps, valid warm
+slots, and semantic Merge laws remain explicit. Target language inclusion
+is still one-way for nonempty proper paths. Existing editor narrowing and
+conditional preservation remain separate from an unconditional language
+equality claim. Equality-table size, concrete capacity, lazy demand,
+and memo publication remain separate obligations.
+
+Next construct one complete class from the compiled editor and its initial
+Frame, captured forest, caps, selected domains, and reservation. Then
+forecast ClassPass in literal source order. A later class must capture its
+actual input and retain the preceding full return. Initial complete
+ClassPass, outer descent, arbitrary constrained Mu, convergence, current
+frontend and runtime adapters, and full public Haskell correspondence
+remain open. The complete library goal stays active.
+
+The pinned Lean Audit passes 2947 jobs and 65152 dependency checks.
+All eight final production strict logs are empty. All 127 complete signature
+and axiom pairs pass in 13 groups: 116 public declarations and 11 constructed
+checks. Only propext, Classical.choice, and Quot.sound occur. Eight component
+manifests verify 234 entries. Preservation retains 14484 starting files,
+2936 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 89 frozen module
+manifests retain 702 entries. Read checkpoint-validation.json for hashes.
+
+One new concrete attempt's source and raw log were overwritten by a filename
+collision. Its source reconstruction is marked; its original raw log is
+unavailable. Final concrete attempt 14 executes an immutable snapshot and
+passes independently. Read edit-numeric-evidence-recovery.md. All older
+checkpoint bytes remain preserved. Do not claim that every new failed
+attempt log survived.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
 
 ## Current complete initial shared Force and Leaf
 
