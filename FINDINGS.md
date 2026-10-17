@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `42d08285`.
+Status rechecked on 2026-10-17 at proof checkpoint `0a10b057`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-joint-source-rebase.md` for the current proof boundaries.
+Read `lean/notes-current-mixed-merge-caps.md` for the current proof boundaries.
 
-The current source-rebase and generated-query proofs add no Haskell change.
+The current Merge cap and selected-caller proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2835 jobs and 63081 dependency checks.
+The last completed pinned Lean Audit passes: 2844 jobs and 63176 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,50 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current mixed Merge caps and selected target callers
+
+Updated: 2026-10-17 05:46 CEST. This checkpoint starts at published `5b0c56a8`.
+The proof commits are `0f90ca80`, `8dfef438`, and `0a10b057`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-mixed-merge-caps.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-mixed-merge-caps/`.
+
+Nine additive modules derive universal finite-depth caps through the actual
+mutual memo-aware Merge. Candidate certificates precede publication. Exact
+earlier winners retain their complete captured originals. Actual comparison,
+selection, projection, and Merge retain guard heaps and current joint stores.
+Initial selected-path domains construct finite Operands. Unrelated ordinary
+siblings and captured roots can stay open. Supplied Target reads follow
+literal head, tail, and checked-query order with explicit maximum depths.
+Force misses establish universal slot certificates for the captured forest
+before storage. Leaf retains those stores and uses the maximum input depth.
+A warm-slot kernel constructs its own full Leaf from initial entry counters.
+General first misses and full editor/class completion remain open.
+
+The pinned Audit passes 2844 jobs and 63176 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All nine strict checks are clean.
+All 80 imported pairs pass in 13 groups. Six component manifests verify
+151 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 11952 starting files, 2834 older non-Audit proofs,
+all 239 Haskell files, and 71 frozen production manifests with 601 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next lift explicit depths through Edit and tail-first ClassPass. Construct
+general Target, Force miss, and class execution from initial resources.
+Derive cumulative serial allocation bounds. The ordinary source gate admits
+closed no-Mu endpoints independently of their own guard. General constrained
+descent, arbitrary constrained Mu bodies, convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, and complete public composition
+remain open. Completed graph proofs do not establish Haskell lazy publication
+or runtime forcing. The full library goal stays active. Read
+next-editor-class-and-serial-resources.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
 
 ## Current source rebase and finite generated checked queries
 
