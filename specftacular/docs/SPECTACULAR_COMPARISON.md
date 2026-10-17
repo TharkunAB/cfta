@@ -21,6 +21,7 @@ The runs took place on 2026-10-17.
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
 | [Current Specftacular](https://github.com/TharkunAB/cfta/tree/e27d61a9b686e3e29255b065f586df7bb7cb14dc/specftacular) | `e27d61a9` |
+| [Additional diagnostic instrumentation][diagnostic-source] | `c47a1d8b` |
 | [Published QuickSpec 2 benchmark artifact](https://zenodo.org/records/7565011) | Version 2.1.5, commit `967151eae493fa08a414386cdfb5ce7072477972` |
 | [Extended ICST paper](https://mpg.is/papers/gissurarson2023spectacular-extended.pdf) | PDF SHA-256 `44fcc9a6c67a5ddefccb29c37ce721a354b427bc99d6a01dadbb5b9355535882` |
 
@@ -35,7 +36,8 @@ The matrix executables were built from
 `ce9327fbe055a5e91d17c1074173b5ce89356e17`.
 A final lint cleanup uses `zipWithM` in two matcher expressions.
 Rebuilding all five native benchmark executables produces identical
-SHA-256 hashes. The matrix therefore measures the current optimized programs.
+SHA-256 hashes. The matrix therefore measures that runtime. The diagnostic
+hooks below are measured separately.
 The frontend and memory controls also pass after that cleanup.
 
 The host runs Ubuntu 24.04 under WSL2 on an AMD Ryzen 9 7950X. It exposes
@@ -388,6 +390,203 @@ A separate current Regex7P2 diagnostic with 100 random cases plus the same 40
 validation cases also reaches the 60-second limit. It does not replace the
 default-budget matrix cell.
 
+## Timeout diagnostics
+
+Additional all-`-O2` traces identify the actual phases of all ten current
+timeout configurations. These runs keep the search and validation settings
+of the matrix. The [diagnostic build][diagnostic-source] adds optional
+instrumentation. The local
+drivers use an internal 60-second timeout. Cancellation closes the active
+intervals and permits a normal exit with RTS statistics. The process has the
+same 16 GiB cap, zero swap, one capability, and a 6 GiB RTS heap limit.
+
+The traces use `SPECFTACULAR_DIAGNOSTICS=phases`. This mode records phase
+and size/type bucket boundaries. Process CPU includes GC. Allocation and GC
+differences use sampled RTS counters. No collection is forced. A dash means
+that the run does not reach the phase. T marks the interrupted phase.
+
+| Configuration | Phase 1 CPU s | Phase 2 CPU s | Phase 3 CPU s | Phase 4 CPU s |
+| --- | ---: | ---: | ---: | ---: |
+| HugeLists-5-p3 | 5.50 | 1.03 | 53.60 T | — |
+| HugeLists-5-p4 | 5.41 | 0.99 | 53.71 T | — |
+| HugeLists-6-p3 | 9.66 | 2.59 | 47.84 T | — |
+| HugeLists-6-p4 | 9.69 | 2.56 | 47.89 T | — |
+| HugeLists-7-p2 | 60.09 T | — | — | — |
+| HugeLists-7-p3 | 60.14 T | — | — | — |
+| HugeLists-7-p4 | 60.13 T | — | — | — |
+| Regex-7-p2 | 60.12 T | — | — | — |
+| Regex-7-p3 | 60.09 T | — | — | — |
+| Regex-7-p4 | 60.13 T | — | — | — |
+
+Six configurations stop in phase 1. Four stop in phase 3. None reaches
+phase 4. A through-phase label does not identify the phase that consumes
+the time budget.
+
+The through-phase-4 runs provide these per-phase counter samples:
+
+| Signature and size | Actual phase | Allocated GiB | GC CPU s |
+| --- | ---: | ---: | ---: |
+| HugeLists-5 | 1 | 28.42 | 1.18 |
+| HugeLists-5 | 2 | 4.72 | 0.06 |
+| HugeLists-5 | 3 | 220.88 | 0.64 |
+| HugeLists-6 | 1 | 54.21 | 1.37 |
+| HugeLists-6 | 2 | 14.18 | 0.22 |
+| HugeLists-6 | 3 | 90.20 | 6.57 |
+| HugeLists-7 | 1 | 384.74 | 3.68 |
+| Regex-7 | 1 | 487.18 | 1.87 |
+
+Regex spends 56.54 CPU seconds in its phase-1 size-5 Regex bucket.
+HugeLists5 spends 51.64 CPU seconds in its phase-3 size-5 `Int` bucket.
+HugeLists6 spends 47.16 CPU seconds in its phase-3 size-4 `Int` bucket.
+HugeLists7 spreads phase-1 work across buckets. Its size-6 `[A]` bucket takes
+19.05 CPU seconds and its size-7 `Int` bucket takes 17.90. The final active
+size-7 `[A]` bucket takes only 0.34 seconds before interruption. The final
+active bucket is therefore not always the largest cost.
+
+Peak RSS is 19.3, 210.6, 448.7, and 379.3 MiB for those four runs,
+respectively. Allocation traffic is large, but these runs do not approach
+the memory cap. GC is not the main cost of the stalled phases.
+
+A completed Lists7P4 control checks the instrumentation. All four variants
+print the same 48 numbered laws in the same order.
+
+| Current Lists7P4 variant | CPU s | Allocated GiB | Peak RSS MiB |
+| --- | ---: | ---: | ---: |
+| Before diagnostic hooks | 28.06 | 121.3917 | 192.1 |
+| Diagnostics off | 28.64 | 121.3938 | 198.0 |
+| Phase and bucket tracing | 28.29 | 121.4557 | 190.5 |
+| Detailed tracing | 36.74 | 124.7925 | 195.1 |
+
+Diagnostics off adds 0.0017% allocation. Phase tracing adds 0.0510% over
+that. Detailed tracing adds 2.80% allocation and 28.3% observed CPU time on
+this control. These are single runs. The CPU differences are observations,
+not precise overhead estimates on a shared host.
+
+A smaller Lists4P1 Cachegrind control checks default-off instructions.
+The count changes from 445,872,006 to 446,092,506, an increase of 0.0495%.
+Allocation changes from 178,429,528 to 178,561,608 bytes, an increase of
+0.0740%. Both runs print the same ten laws. The existing golden suite also
+passes in checked and unchecked modes with phase tracing enabled.
+
+Detailed tracing is unsuitable for identifying production timeout phases.
+In HugeLists5 it emits about 195,000 events and remains in phase 1 at the
+limit. The phase-only run finishes that phase in 5.4 CPU seconds. Detailed
+mode also moves rule completion to an explicit WHNF boundary. Its stage
+intervals include demanded lazy work and logging. Decision-tree insertion
+includes proofs, compilation, generation, evaluation, and equality. It is
+not a measurement of QuickCheck generation alone.
+
+The published artifact's [exact rewrite update][original-rewrites] stores
+the larger term's hash with the smaller term. It lists critical-pair
+completion as a [TODO][original-completion-todo]. The current engine performs ordered
+completion. Its cost is additional work relative to that artifact. It must
+be separated from enumeration and template application when interpreting
+performance differences.
+
+Two cost-centre builds check the stalled phases. The development build uses
+`-O0` for local CFTA, Specftacular, and the benchmark drivers. A separate
+validation build uses `-O2` for those packages. Both builds use the same five
+external Cabal dependencies with `-O2` and profiling libraries.
+Compiler-distributed libraries retain their toolchain settings. An audit
+checks the effective compiler commands. The local profiling copies omit
+the unused LiquidFixpoint module and dependency from the CFTA manifest.
+All CFTA library source files remain unchanged. The Specftacular copies add
+SCC annotations and a phase-timer wrapper. They preserve the search, seeds,
+validation schedule, and forcing points.
+
+Each profile runs the prefix phases with sampling disabled. It starts the
+time sampler only in the selected actual phase. Initial windows have a
+180-second limit. An extended HugeLists7 window has a 420-second limit.
+The whole driver has a 600-second guard. Internal cancellation permits
+normal exit and profile output. The profile keeps the prefix state.
+[GHC stores a thunk's cost-centre stack when it creates the thunk][ghc-costs].
+That ancestry can therefore name an earlier phase during later evaluation.
+[Timer control][ghc-profile-timer] identifies the actual sampling window.
+Allocation and entry counts still include the prefix. They are not
+phase-local counts. SCC annotations and profiling can change optimization
+and execution costs. Neither profile build measures production `-O2` speed.
+
+The analysis counts each self tick once. It does not add inherited totals.
+It checks function names and captured dictionary contexts against the source.
+For example, Regex NFA execution remains equality work when its stored
+dictionary restores a signature-construction stack. Semantic groups are
+source interpretations. They are not exact dynamic stage boundaries.
+Profiling infrastructure and GC remain separate from application costs.
+
+The following table uses the optimized profiles. Each percentage divides
+exclusive self ticks by the ticks left after removing GC and PROFILING.
+Other includes schema and instance assignment, tree navigation, SYSTEM,
+and unclassified work. Complete means that the selected phase finishes
+in the profiling run. It does not replace a native matrix result.
+
+| Signature and size | Actual phase | Window result | Completion | Grammar and pruning | Types and proofs | Input generation | Evaluation and equality | Other |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Regex-7 | 1 | 180 s limit | 84.1% | 0.1% | 0.2% | 0.1% | 14.6% | 0.9% |
+| HugeLists-5 | 1 | Complete | 1.3% | 3.3% | 18.9% | 58.3% | 6.7% | 11.5% |
+| HugeLists-5 | 2 | Complete | 6.5% | 13.2% | 25.7% | 32.8% | 3.3% | 18.5% |
+| HugeLists-5 | 3 | 180 s limit | 0.7% | 95.2% | 1.5% | 1.3% | 0.4% | 0.8% |
+| HugeLists-6 | 1 | Complete | 10.0% | 16.2% | 24.7% | 35.9% | 4.6% | 8.6% |
+| HugeLists-6 | 2 | Complete | 25.8% | 24.7% | 21.4% | 16.4% | 1.9% | 9.8% |
+| HugeLists-6 | 3 | 180 s limit | 97.9% | 0.9% | 0.3% | 0.1% | 0.0% | 0.7% |
+| HugeLists-7 | 1 | 420 s limit | 40.4% | 23.0% | 25.0% | 7.1% | 1.1% | 3.4% |
+
+The initial HugeLists7 window reaches size-7 `A` but does not reach
+size-7 `Int`. The extended window includes both large native buckets.
+It explores beyond the native 60-second budget. It matches all 146 native
+prefix laws and then reaches 164 laws. Its percentages describe that wider
+profiling window. All nine optimized profile runs pass the common-prefix
+check. PROFILING accounts for 11.5% to 24.4% of all self ticks in the eight
+table rows. GC accounts for 0.7% to 6.7%. These costs are excluded from the
+table denominator.
+
+The four completed earlier-phase profiles match the native checkpoints
+exactly: HugeLists5 has 91 laws after phase 1 and 106 after phase 2.
+HugeLists6 has 130 and 149. The earlier phases spend a larger share on
+input generation than the stalled phases. This difference would be lost
+in a whole-process time profile.
+
+The optimized Regex phase-1 profile assigns 84.1% of the remaining ticks to
+completion and 14.5% to observation equality. Normalization accounts for
+94.0% of completion ticks. Its hot paths match templates and types, check
+type variables, compare terms and symbols, and check KBO decreases.
+The equality paths compile and run NFAs. They do not construct the search
+grammar. The profile reaches the same 26-law prefix as the native run.
+
+HugeLists5 phase 3 has a different cost. Grammar reduction accounts for
+94.0% of remaining ticks. Template pruning accounts for 1.1%.
+[`subsumes`][cfta-subsumption] alone accounts for 50.8% in self ticks.
+The observed path starts in `searchSpace` and `reducePartially`.
+[Equality-class narrowing][cfta-narrowing] calls `mergeAlternatives`.
+That operation uses structural subsumption to filter recursive alternatives.
+It compares node pairs, scans alternatives, and checks their children.
+This is not the template matcher. The profile reaches the same 149-law
+prefix as the native run.
+
+HugeLists6 phase 3 assigns 97.9% of remaining ticks to completion.
+Normalization accounts for 91.7% of completion ticks. Structural term
+equality contributes 38.8% of remaining ticks in normalization alone.
+The largest equality paths pass through `matchTypeTerm` and `bindMatch`.
+The profile reaches the same 164-law prefix as the native run.
+
+HugeLists7 phase 1 has a mixed cost in the extended window. Completion
+accounts for 40.4%, type and proof checks for 25.0%, and grammar and pruning
+for 23.0%. Typed rewriting checks account for 23.7%. These include known-law
+proofs and reducibility checks. Candidate type checking and compilation
+account for 1.3%. Enumeration with suspended pruning accounts for 22.7%.
+Grammar reduction itself accounts for only 0.09% in this window.
+`matchPartial` contributes 5.5% in self ticks. Enumeration's `pure`, `state`,
+and `(>>=)` contribute another 10.4%. The profile stops in size-7 `[A]`.
+Input generation accounts for 7.1%.
+
+Input generation accounts for 0.08%, 1.28%, and 0.08% of remaining ticks
+in these Regex, HugeLists5, and HugeLists6 windows. These profiles do not
+support input generation as their main optimization target.
+They do not measure how much generation stronger templates could avoid.
+The development Regex profile spends substantial time interning symbols.
+That cost largely disappears in the optimized profile: `internSymbol` has
+97 of 180,005 total self ticks. An `-O0` hotspot alone would give the wrong
+priority for that change.
+
 ## Memory and allocation
 
 QuickSpec 2's sparse [decision tree][qs-tree] retains counterexamples that
@@ -593,3 +792,11 @@ source references needed to interpret them.
 [qs-observe]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/src/QuickSpec/Internal/Haskell.hs#L181
 
 [qs-terms]: https://github.com/Tritlo/quickspec/blob/967151eae493fa08a414386cdfb5ce7072477972/src/QuickSpec/Internal/Explore/Terms.hs#L70
+
+[original-rewrites]: https://github.com/Tritlo/spectacular/blob/00621f4f0f03e5d0afea3c730434a8842e473546/spectacular/src/Spectacular.hs#L269
+[original-completion-todo]: https://github.com/Tritlo/spectacular/blob/00621f4f0f03e5d0afea3c730434a8842e473546/spectacular/src/Spectacular.hs#L771
+[ghc-costs]: https://downloads.haskell.org/ghc/9.14.1/docs/users_guide/profiling.html#rules-for-attributing-costs
+[ghc-profile-timer]: https://downloads.haskell.org/ghc/9.14.1/docs/users_guide/profiling.html#rts-flag---no-automatic-time-samples
+[diagnostic-source]: https://github.com/TharkunAB/cfta/tree/c47a1d8b1cd0799d4c3e3c6839dc82c3fd80444e/specftacular
+[cfta-subsumption]: https://github.com/TharkunAB/cfta/blob/c47a1d8b1cd0799d4c3e3c6839dc82c3fd80444e/cfta/src/Data/CFTA/Interned/Operations.hs#L658
+[cfta-narrowing]: https://github.com/TharkunAB/cfta/blob/c47a1d8b1cd0799d4c3e3c6839dc82c3fd80444e/cfta/src/Data/CFTA/Equality/Operations.hs#L238
