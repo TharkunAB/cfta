@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 {- | Ordered rewriting with the laws that the search found, and the prover
@@ -21,6 +22,7 @@ import Control.Monad (foldM, guard)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Containers.ListUtils (nubOrd)
+import qualified Data.HashMap.Strict as HashMap
 import Data.List (permutations)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -319,15 +321,32 @@ bindMatch h t s = case Map.lookup h s of
 have the same term or type at each occurrence.
 -}
 matchTemplate :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
-matchTemplate (Term h [ty]) t s
+matchTemplate pat target bindings = do
+    guard (matchesShape pat target)
+    matchTyped pat target bindings
+
+{- | Check the program symbols and application structure before its types.
+Template variables accept any annotated subtree. This check does not bind
+variables or inspect annotations. A successful typed match passes it.
+-}
+matchesShape :: Term -> Term -> Bool
+matchesShape (Term h [_]) (Term _ (_ : _)) | isTemplateVar h = True
+matchesShape (Term "app" [_, f, v]) (Term "app" [_, f', v']) =
+    matchesShape f f' && matchesShape v v'
+matchesShape (Term a [_]) (Term b [_]) = a == b
+matchesShape _ _ = False
+
+-- | Match all annotations and repeated bindings after the shape check.
+matchTyped :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+matchTyped (Term h [ty]) t s
     | isTemplateVar h = case t of
         Term _ (ty' : _) -> matchTypeTerm ty ty' s >>= bindMatch h t
         _ -> Nothing
-matchTemplate (Term "app" [ty, f, v]) (Term "app" [ty', f', v']) s =
-    matchTypeTerm ty ty' s >>= matchTemplate f f' >>= matchTemplate v v'
-matchTemplate (Term a [ty]) (Term b [ty']) s
+matchTyped (Term "app" [ty, f, v]) (Term "app" [ty', f', v']) s =
+    matchTypeTerm ty ty' s >>= matchTyped f f' >>= matchTyped v v'
+matchTyped (Term a [ty]) (Term b [ty']) s
     | a == b = matchTypeTerm ty ty' s
-matchTemplate _ _ _ = Nothing
+matchTyped _ _ _ = Nothing
 
 {- | The weight of a term in the Knuth-Bendix order: each symbol has the
 weight 1, and an application is the binary symbol app.
@@ -624,6 +643,29 @@ orderings vs =
     sameType (Term _ ty) (Term _ ty' : _) = ty == ty'
     sameType _ [] = False
 
+-- | Count all nodes, including annotations, up to a fixed cache limit.
+cacheable :: Term -> Bool
+cacheable = isJust . within (256 :: Int)
+  where
+    within 0 _ = Nothing
+    within budget (Term symbol children) = symbol `seq` foldM within (budget - 1) children
+
+{- | Reuse a normal form only when both terms have at most 256 nodes.
+Check input size before hashing. Clear a full cache on the next insertion.
+Keep the normalization function fixed while reusing the cache.
+-}
+cachedNormalForm :: (Term -> Term) -> HashMap.HashMap Term Term -> Term -> (Term, HashMap.HashMap Term Term)
+cachedNormalForm nf cache term
+    | not (cacheable term) = (nf term, cache)
+    | otherwise = case HashMap.lookup term cache of
+        Just result -> (result, cache)
+        Nothing ->
+            let result = nf term
+                next
+                    | cacheable result = HashMap.insert term result (if HashMap.size cache >= 256 then HashMap.empty else cache)
+                    | otherwise = cache
+             in (result, next)
+
 {- | Add a law to the rules, and complete the rules. This is ordered
 (unfailing) completion, as Twee does it: each critical pair of a new
 rule with a rule of the index becomes an equation, unless its two sides
@@ -637,7 +679,7 @@ follows from the earlier laws is not found again.
 -}
 addLaw :: Int -> Sig -> Term -> Rules -> Rules
 addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
-    complete rules1 (concatMap (criticalPairsWith rules1) new)
+    complete HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new)
   where
     (new, rules1) = addEquation (toTemplate gsig l, toTemplate gsig r) rules0
     -- Program size does not bound type depth. This explicit budget depends
@@ -651,20 +693,20 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
     -- \| The maximum constructor depth of an annotation.
     depth :: Term -> Int
     depth (Term _ ts) = 1 + maximum (0 : map depth ts)
-    complete rules [] = rules
-    complete rules ((s, t) : queue)
+    complete _ rules [] = rules
+    complete !cache rules ((s, t) : queue)
         | s' == t'
             || leaves s' > maxSize
             || leaves t' > maxSize
             || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
             || groundJoinable rules (s', t') =
-            complete rules queue
-        | otherwise = complete rules' (queue ++ concatMap (criticalPairsWith rules') new')
+            complete cache2 rules queue
+        | otherwise = complete HashMap.empty rules' (queue ++ concatMap (criticalPairsWith rules') new')
       where
         nf = normalForm (kboGreater Map.empty) rules
-        s' = nf s
-        t' = nf t
+        (s', cache1) = cachedNormalForm nf cache s
+        (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
 addLaw _ _ _ rules = rules
 
