@@ -277,9 +277,7 @@ instantiateType s (Term h ts) = Term h <$> traverse (instantiateType s) ts
 matchTypeTerm :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
 matchTypeTerm p t s | p == t && not (hasTypeVars p) = Just s
 matchTypeTerm (Term h []) t s
-    | isTypeVar h
-    , not (hasTypeVars t) || t == Term h [] =
-        bindMatch h t s
+    | isTypeVar h = bindMatch h t s
 matchTypeTerm (Term h ts) (Term k us) s
     | h == k = matchChildren ts us s
   where
@@ -288,8 +286,8 @@ matchTypeTerm (Term h ts) (Term k us) s
     matchChildren _ _ _ = Nothing
 matchTypeTerm _ _ _ = Nothing
 
-{- | Completion keeps unresolved type patterns apart. Ground matches can
-instantiate a carrier with any checked type.
+{- | Whether a type contains a rule type variable. Matching treats the
+variables of its target as rigid. Its substitution applies only once.
 -}
 hasTypeVars :: Term -> Bool
 hasTypeVars = any isTypeVar
@@ -427,23 +425,37 @@ templateVarLeaves t = nubOrd (go t)
     go (Term "app" [_, f, v]) = go f ++ go v
     go u@(Term x _) = [u | isTemplateVar x]
 
--- | Give new names to the template variables of a template.
-rename :: (Symbol -> Symbol) -> Term -> Term
-rename f (Term "app" [ty, g, v]) = Term "app" [ty, rename f g, rename f v]
-rename f (Term x tys) | isTemplateVar x = Term (f x) tys
-rename _ t = t
+-- | Give separate names to the term and type variables of a template.
+rename :: (Symbol -> Symbol) -> (Symbol -> Symbol) -> Term -> Term
+rename termName typeName = go
+  where
+    go (Term "app" [ty, f, v]) = Term "app" [types ty, go f, go v]
+    go (Term h tys) = Term (if isTemplateVar h then termName h else h) (map types tys)
+    types (Term h ts) = Term (if null ts && isTypeVar h then typeName h else h) (map types ts)
 
-{- | Replace the template variables of a template by their terms, and the
-template variables in these terms too.
+{- | Apply a unification substitution through term and type variables.
+Unlike matching, unification can bind a variable to another flexible
+variable. Follow these bindings transitively. Both occurs checks prevent
+cycles. Ground-order variable merges contain no type bindings.
 -}
 substitute :: Map Symbol Term -> Term -> Term
-substitute s (Term "app" [ty, f, v]) = Term "app" [ty, substitute s f, substitute s v]
-substitute s t@(Term x _)
-    | isTemplateVar x, Just u <- Map.lookup x s = substitute s u
-    | otherwise = t
+substitute s (Term "app" [ty, f, v]) =
+    Term "app" [substituteType s ty, substitute s f, substitute s v]
+substitute s (Term h [ty])
+    | isTemplateVar h, Just u <- Map.lookup h s = substitute s u
+    | otherwise = Term h [substituteType s ty]
+substitute _ t = t
 
-{- | The most general unifier of two templates. A template variable unifies
-with a term of its type that does not contain the variable.
+-- | Apply the type part of a unification substitution transitively.
+substituteType :: Map Symbol Term -> Term -> Term
+substituteType s (Term h [])
+    | isTypeVar h, Just ty <- Map.lookup h s = substituteType s ty
+substituteType s (Term h ts) = Term h (map (substituteType s) ts)
+
+{- | Unify two templates and their annotations. Term variables bind only
+to terms. Type variables bind only to types. The two namespaces have
+distinct prefixes. Each binding preserves the annotation constraints and
+passes the occurs check of its namespace.
 -}
 unify :: Term -> Term -> Maybe (Map Symbol Term)
 unify a0 b0 = go a0 b0 Map.empty
@@ -451,20 +463,41 @@ unify a0 b0 = go a0 b0 Map.empty
     go a b s = case (walk s a, walk s b) of
         (Term x [ty], t) | isTemplateVar x -> bind s x ty t
         (t, Term x [ty]) | isTemplateVar x -> bind s x ty t
-        (Term "app" [ty, f, v], Term "app" [ty', g, u]) | ty == ty' -> go f g s >>= go v u
-        (Term c [ty], Term d [ty']) | c == d && ty == ty' -> Just s
+        (Term "app" [ty, f, v], Term "app" [ty', g, u]) ->
+            unifyType ty ty' s >>= go f g >>= go v u
+        (Term c [ty], Term d [ty']) | c == d -> unifyType ty ty' s
         _ -> Nothing
     walk s t@(Term x [_])
         | isTemplateVar x, Just u <- Map.lookup x s = walk s u
         | otherwise = t
     walk _ t = t
     bind s x ty t = case t of
-        Term y [_] | y == x -> Just s
-        Term _ (ty' : _) | ty' == ty, not (occurs s x t) -> Just (Map.insert x t s)
+        Term y [ty'] | y == x -> unifyType ty ty' s
+        Term _ (ty' : _) -> do
+            s' <- unifyType ty ty' s
+            guard (not (occurs s' x t))
+            Just (Map.insert x t s')
         _ -> Nothing
     occurs s x u = case walk s u of
         Term "app" [_, f, v] -> occurs s x f || occurs s x v
         Term y _ -> y == x
+
+-- | Unify types structurally. Reject infinite types and different constructors.
+unifyType :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+unifyType a b s = case (substituteType s a, substituteType s b) of
+    (a', b') | a' == b' -> Just s
+    (Term x [], b') | isTypeVar x -> bind x b'
+    (a', Term x []) | isTypeVar x -> bind x a'
+    (Term c as, Term d bs)
+        | c == d
+        , length as == length bs ->
+            foldM (\m (x, y) -> unifyType x y m) s (zip as bs)
+    _ -> Nothing
+  where
+    bind x ty = do
+        guard (not (occurs x ty))
+        Just (Map.insert x ty s)
+    occurs x (Term y ts) = (null ts && x == y) || any (occurs x) ts
 
 {- | The subterms of a template that are not template variables, each with
 the function that puts a term in its place.
@@ -485,14 +518,18 @@ two ways, and the two results are equal.
 -}
 criticalPairs :: (Term, Term) -> (Term, Term) -> [(Term, Term)]
 criticalPairs (l1, r1) (l2, r2) =
-    [ (substitute s r1, substitute s (put r2'))
-    | (u, put) <- contexts l1
+    [ (substitute s r1', substitute s (put r2'))
+    | (u, put) <- contexts l1'
     , Just s <- [unify u l2']
     ]
   where
-    apart (Symbol x) = Symbol ("<v>'" <> T.drop 3 x)
-    l2' = rename apart l2
-    r2' = rename apart r2
+    apart prefix (Symbol x) = Symbol (prefix <> T.drop 3 x)
+    left = rename (apart "<v>L:") (apart "<t>L:")
+    right = rename (apart "<v>R:") (apart "<t>R:")
+    l1' = left l1
+    r1' = left r1
+    l2' = right l2
+    r2' = right r2
 
 {- | The critical pairs of a rule with each rule of the index, in the two
 orders.
@@ -576,7 +613,9 @@ orderings vs =
 rule with a rule of the index becomes an equation, unless its two sides
 are ground joinable. The new equation then gives new rules, and its
 critical pairs follow. A critical pair whose normal form has a side with
-more leaves than the given size is dropped, as in QuickSpec. The rules of
+more leaves than the given size is dropped, as in QuickSpec. A separate
+annotation-depth budget bounds polymorphic completion. It can omit valid
+critical pairs. It is not a coverage bound for the search grammar. The rules of
 the critical pairs make the rewriting stronger, so that a law that
 follows from the earlier laws is not found again.
 -}
@@ -585,11 +624,23 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
     complete rules1 (concatMap (criticalPairsWith rules1) new)
   where
     (new, rules1) = addEquation (toTemplate gsig l, toTemplate gsig r) rules0
+    -- Program size does not bound type depth. This explicit budget depends
+    -- on the requested size and the declared types. Together with canonical
+    -- binders, it gives a finite universe of bounded critical pairs.
+    maxAnnotationDepth = (2 * max 0 maxSize + 1) * (1 + maximum (0 : map (typeSize . sfTypeRep) (Map.elems gsig)))
+    -- \| Check each annotation after critical-pair normalization.
+    withinDepth :: Term -> Bool
+    withinDepth (Term "app" [ty, f, v]) = depth ty <= maxAnnotationDepth && withinDepth f && withinDepth v
+    withinDepth (Term _ tys) = all ((<= maxAnnotationDepth) . depth) tys
+    -- \| The maximum constructor depth of an annotation.
+    depth :: Term -> Int
+    depth (Term _ ts) = 1 + maximum (0 : map depth ts)
     complete rules [] = rules
     complete rules ((s, t) : queue)
         | s' == t'
             || leaves s' > maxSize
             || leaves t' > maxSize
+            || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
             || groundJoinable rules (s', t') =
             complete rules queue
@@ -601,12 +652,18 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
         (new', rules') = addEquation (canonical (s', t')) rules
 addLaw _ _ _ rules = rules
 
-{- | Give the template variables of an equation the names @<v>0@, @<v>1@,
-and so on, in the order of their first occurrence, so that equal
-equations have equal names.
+{- | Give term and type binders stable names in their first-occurrence
+order. Alpha-equivalent critical pairs then have the same names. Keep the
+first type names compatible with the carrier specializations of templates.
 -}
 canonical :: (Term, Term) -> (Term, Term)
-canonical (s, t) = (rename name s, rename name t)
+canonical (s, t) = (rename name typeName s, rename name typeName t)
   where
     names = Map.fromList (zip [x | Term x _ <- nubOrd (templateVarLeaves s ++ templateVarLeaves t)] [0 :: Int ..])
     name x = Symbol ("<v>" <> T.pack (show (names Map.! x)))
+    typeNames = Map.fromList (zip (nubOrd (types s ++ types t)) [0 :: Int ..])
+    typeName x = Symbol ("<t>" <> labels !! (typeNames Map.! x))
+    labels = map snd carriers ++ ["p" <> T.pack (show n) | n <- [length carriers ..]]
+    types (Term "app" [ty, f, v]) = typeVars ty ++ types f ++ types v
+    types (Term _ tys) = concatMap typeVars tys
+    typeVars (Term h ts) = [h | null ts, isTypeVar h] ++ concatMap typeVars ts
