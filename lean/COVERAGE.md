@@ -1,5 +1,56 @@
 # Full formalization coverage
 
+## Current complete initial Target execution
+
+Updated: 2026-10-17 10:40 CEST. This checkpoint starts at published c0cccd79.
+Proof commit is adf8c036. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-initial-target-fuel.md for the complete library
+contract, proof map, exact support, and next Force/Leaf obligations.
+Evidence is in lean/restart-evidence/20261017-initial-target-complete/.
+
+Two additive modules construct the actual complete interleaved Target
+from initial resources and pure reservations. The full Operand worker
+retains its allocated equality state. The Fold executes head Operand,
+recursive tail, then checked query. The same return retains the complete
+receipt, Frame, inventory, Merge memo, global memos, forecast Profile,
+cap, and common five-fuel worker result. Empty Target retains the exact
+initial state and memo at zero fuel. Existing stability gives larger-fuel
+replay. No future completion, returned heap bound, successful fuel,
+FoldRanges, TargetRanges, or callback resource law is an input.
+
+Selected ForestClosed paths still permit unselected open ordinary roots
+and siblings. The separate all-root cap premise remains explicit.
+Target language inclusion still requires nonempty proper selected paths.
+Do not claim exact Target intersection language or arbitrary constrained
+Mu support. Equality-state instruction counts, concrete capacity,
+Haskell lazy demand, and memo publication remain separate boundaries.
+
+Next replace SharedTargetForce's callback range premise with the initial
+Target reservation. Preserve warm slot receipts, caps, full Frames,
+resources, actual Merge tables, global memos, and computed inventories.
+Then compose Leaf in Force-then-query order. General mixed Edit/ClassPass,
+outer descent, arbitrary constrained Mu, convergence, current adapters,
+capacity, and full public Haskell correspondence remain open.
+The complete library goal stays active.
+
+The pinned Audit passes 2936 jobs and 64988 dependency checks. Both final
+production strict logs are empty. All eight full signature and axiom pairs
+pass in four groups: four public declarations and four constructed checks.
+Only propext, Classical.choice, and Quot.sound occur. Four component
+manifests verify 92 entries. Read checkpoint-validation.json for exact
+hashes and successful logs. Preservation retains 14320 starting files, 2931
+older non-Audit proofs, all 239 Haskell files, all 206 active-package files,
+both stashes, and three other worktrees. All 87 frozen module manifests
+retain 691 entries.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
 ## Current initial Target prerequisites
 
 Updated: 2026-10-17 10:28 CEST. This checkpoint starts at published f7494679.
