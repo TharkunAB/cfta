@@ -1,5 +1,63 @@
 # Public API and source correspondence
 
+## Current initial parent and outer edge calls
+
+Updated: 2026-10-17 15:20 CEST. Starting checkpoint is 6adf1878.
+Proof commit is 5899990d. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-parent-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-initial-parent/.
+
+Initial Context, full Frame, Fits, live cached fields and availability,
+and pure initial reservations now construct the actual checked parent,
+outer edge body, and first-writer edge result call. The parent runs its
+complete local producer and the constructor at the actual returned state.
+Raw rejection skips fields, inherited readiness, children, and query Room.
+The resident endpoint derives the live field and availability facts.
+
+The initial outer demand selects the actual stored owner and post-demand
+caller. Only evaluation reserves parent work. Ready hits retain the whole
+caller without a parent reservation. Busy cells retain their exact fault
+for every fuel choice. Successful completion excludes only the queried
+initial busy observation. It does not require every table cell to be idle.
+The finish publishes the exact returned result in the selected owner cell.
+
+The same execution retains actual source graphs, strict reads, complete
+old semantic receipts, same-inventory Frame/Post, forecast Fits, guarded
+language, physical stores, and saved memo laws. All nine lower worker fuels
+can increase independently. Edge bodies and edge calls accept any outer
+fuel, including zero, because they do not consume that fuel. No future
+graph, reached range, worker success, returned invariant, finite input Cap,
+or whole-forest closedness is an initial producer premise. No finite
+output Cap is claimed. Pure majorants are partly noncomputable. They do
+not establish extracted Haskell budgets or concrete host capacity.
+
+Next compose node calls, rows, descendants, inherited prefixes, and full
+mutual recursion. Progress, convergence, general constrained Mu and
+supported open inputs, current Haskell adapters, lazy forcing, publication,
+concrete memo events, runtime capacity, and complete public Haskell
+correspondence remain open. Keep exactness, inclusion, and representative
+restriction as distinct contracts. The whole-library goal remains active.
+
+Audit passes 3025 jobs and 66039 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 361 MiB peak memory. All five final strict
+logs are empty. All five canonical targets pass. Read checkpoint-validation.json
+and README for exact signature, axiom, component, and hash counts.
+Failed attempts retain immutable source and raw logs. Only standard kernel
+axioms are permitted. Preservation retains 16349 starting files, 3019 older
+non-Audit sources, 239 Haskell files, 206 active-package files, both stashes,
+three other worktrees, and 99 frozen module manifests with 782 entries.
+Audit adds five imports. Older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
 ## Current complete initial allocated local reduction
 
 Updated: 2026-10-17 14:55 CEST. Starting checkpoint is 8c80f5d5.
