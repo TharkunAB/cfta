@@ -155,8 +155,7 @@ pruningTemplates sig size rules =
         , Term "app" [_, _, _] <- [l]
         , template <- case principalType sig l of
             Just principal
-                | weight l > weight r
-                , kboGreater Map.empty l r
+                | annotationIndependentGreater l r
                 , rewrites l r principal ->
                     [rawTemplate (const Hole) l]
             _ ->
@@ -184,6 +183,23 @@ pruningTemplates sig size rules =
             t -> AnyPrefix [t]
         | otherwise = TemplateNode s [annotation ty]
     rawTemplate _ _ = error "pruningTemplates: invalid rule"
+
+{- | Prove a decrease that cannot depend on the type annotations. The
+variable conditions of 'kboGreater' preserve the weight comparison under
+term substitution. Equal weights need a strict function comparison or a
+strict comparison of constant names. Identical functions stay identical
+under one shared term and type substitution.
+-}
+annotationIndependentGreater :: Term -> Term -> Bool
+annotationIndependentGreater a b =
+    kboGreater Map.empty a b && (weight a > weight b || tie a b)
+  where
+    tie (Term "app" [_, f, v]) (Term "app" [_, g, u])
+        | f == g = tie v u
+        | otherwise = annotationIndependentGreater f g
+    tie (Term f [_]) (Term g [_])
+        | not (isTemplateVar f || isTemplateVar g) = f > g
+    tie _ _ = False
 
 {- | Infer the principal annotations of a linear pattern. Each occurrence
 of a signature constant gets fresh type variables. Given values keep their
