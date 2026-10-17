@@ -103,3 +103,32 @@ solver-backed check also confirms that a redefined constructor retains its
 liquid guard. Missing states and ambiguous production names remain errors.
 The final six existing test executables are byte-identical to the passing runs;
 focused expression checks exercise the new operations separately.
+
+## Cost
+
+All eight standard benchmark checksums match main `c0cc8a05`. The six
+executables are byte-identical. After the final changes, rebuilding them gives
+the same hashes. Instruction differences are below 0.11%, and allocation
+differences are below 0.01%.
+
+The 10,000-state graph JSON round trip remains 1,437,836 bytes. It takes
+6,137,964,819 instructions and 1,719,841,536 allocated bytes, within 0.02% of
+the preceding implementation. The 100-fact edit probe takes 8,489,931,307
+instructions and 1,513,080,688 allocated bytes, within 0.01%.
+
+The new filter probe starts with one recursive state and four transitions:
+`a`, `b`, `f(s)`, and `p(s,s)`. It adds named whole-term exclusions for even
+length unary chains and subtree exclusions for odd length chains under `p`.
+It forces the complete compiled graph. It does not enumerate terms or use a
+solver. The new interface retains its original source in every case.
+
+| Exclusions | Compiled states | Transitions | Instructions | Allocated bytes |
+| ---: | ---: | ---: | ---: | ---: |
+| 0 | 1 | 4 | 799,112 | 129,752 |
+| 4 | 12 | 51 | 2,286,887 | 532,264 |
+| 16 | 36 | 159 | 41,919,017 | 8,079,592 |
+
+These cells show the cost of compilation, including state numbering. General
+overlapping templates can cause exponential growth; these measurements do not
+bound that case. All jobs run serially through heavy-management with 12 GiB
+process caps and 4 GiB RTS caps. Measurements use GHC 9.14.1 at `-O2`.
