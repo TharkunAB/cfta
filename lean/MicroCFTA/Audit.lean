@@ -2312,6 +2312,11 @@ import MicroCFTA.SourceCurrentConstrainedCapMixedEdit
 import MicroCFTA.SourceCurrentConstrainedCapMixedClass
 import MicroCFTA.SourceCurrentConstrainedCapMixedClassPass
 import MicroCFTA.SourceCurrentConstrainedCapStaticQueries
+import MicroCFTA.InternedFreshOrdinaryAllocationBudget
+import MicroCFTA.InternedFreshOrdinaryStoredAllocationBudget
+import MicroCFTA.SourceCurrentAllocatedRecursiveOptionalBudget
+import MicroCFTA.SourceCurrentAllocatedRecursiveAllocationTrace
+import MicroCFTA.SourceRecursiveIntersectionSourceProfile
 /-!
 # Proof dependency audit
 
