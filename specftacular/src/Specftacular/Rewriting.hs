@@ -38,7 +38,7 @@ term with any head.
 -}
 type Index = Map (Maybe (Symbol, Int)) [(Term, Term)]
 
-{- | The rules of the laws. Orientation uses the order at fixed types.
+{- | The rules of the laws. One-way orientation is independent of type annotations.
 Each rewrite checks the order after type instantiation. A rule
 rewrites only if each template variable of its right side is in its left
 side. The other rules cannot rewrite, because a match of the left side
@@ -47,7 +47,7 @@ does not give the right side, but they show that an equation follows
 -}
 data Rules = Rules
     { oriented :: !Index
-    -- ^ The rules oriented at fixed types.
+    -- ^ The rules with a type-independent orientation.
     , unoriented :: !Index
     -- ^ The rules that make some instances smaller.
     , nonRewriting :: !Index
@@ -58,16 +58,15 @@ data Rules = Rules
 emptyRules :: Rules
 emptyRules = Rules Map.empty Map.empty Map.empty
 
-{- | Add the rules of an equation, and give the new rules too. If one side
-is greater than the other for each instance ('kboGreater' without a
-ranking), the equation gives the oriented rule from the greater side,
-because the other direction cannot make a term smaller. Otherwise it
-gives the unoriented rules in both directions, for ordered rewriting.
+{- | Add the rules of an equation, and give the new rules too. Keep one
+orientation only when its decrease is independent of type annotations.
+Other equations retain both directions. Each rewrite still checks its
+instantiated order.
 -}
 addEquation :: (Term, Term) -> Rules -> ([(Term, Term)], Rules)
 addEquation (l, r) rules
-    | kboGreater Map.empty l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
-    | kboGreater Map.empty r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
+    | annotationIndependentGreater l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
+    | annotationIndependentGreater r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
     | otherwise = ([(l, r), (r, l)], foldr addUnoriented rules [(l, r), (r, l)])
   where
     addUnoriented rule@(a, b) rs
