@@ -1,0 +1,167 @@
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored : {Symbol Guard : Type} →
+  (Guard → Prop) → MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_empty' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_empty : ∀ {Symbol Guard : Type} (valid : Guard → Prop),
+  @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard)
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored.hereditary' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored.hereditary : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+    @MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid memo
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_remember' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_remember : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+    ∀ (input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid input candidate →
+        @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember Symbol Guard memo input candidate)
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.hit_certificate' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.hit_certificate : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard heap →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap input →
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard heap memo →
+        @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+          @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+              (memo (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+              (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) →
+            And
+              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original Symbol Guard entry) input)
+              (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid input
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry))
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_certificate' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_certificate : ∀ {Symbol Guard : Type} {valid : Guard → Prop}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard heap →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap input →
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard heap memo →
+        @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+          @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid input candidate →
+            And
+              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original Symbol Guard
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate))
+                input)
+              (And
+                (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid input
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate)))
+                (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.remember Symbol Guard memo input candidate)))
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_existing_certificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_existing_certificate : ∀ {Symbol Guard : Type}
+  {valid : Guard → Prop} {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+    ∀ (input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+          (memo (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+          (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) →
+        And
+          (@Eq.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.remember Symbol Guard memo input candidate) memo)
+          (And
+            (@Eq.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate) entry)
+            (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original Symbol Guard entry)
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)))
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.run' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.run : ∀ {Symbol Guard Output : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top Output code before memo output after
+          saved →
+        ∀ (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+          @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+            @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+              @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard before memo →
+                @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+                  @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certified Symbol Guard Output inst inst_1 valid
+                      clear code before post →
+                    And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                      (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                        (And (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid saved)
+                          (post after output)))
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.call' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.call : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after
+          saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard before memo →
+              @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+                  And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                    (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                      (And (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid saved)
+                        (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Contract Symbol Guard valid input before
+                          output after)))
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.cold' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.cold : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard) output after saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+              And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                  (And (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid saved)
+                    (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Contract Symbol Guard valid input before output
+                      after)))
+'MicroCFTA.SourceCurrentConstrainedCapMemoMerge.retained' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.retained : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after
+          saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard before memo →
+              @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid memo →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+                  ∀ (depth : Nat),
+                    @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth input →
+                      And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                        (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                          (And (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid saved)
+                            (And
+                              (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract Symbol Guard input before output after)
+                              (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth output))))

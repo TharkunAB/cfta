@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentConstrainedCapMixedShared
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.Certificate
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.Certificate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.Stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.initial_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.initial_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.advance_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.advance_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.store_stored
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.store_stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.leafDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.leafDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.force_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.force_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedShared.leaf_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedShared.leaf_receipt

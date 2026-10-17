@@ -1,0 +1,48 @@
+import MicroCFTA.SourceCurrentConstrainedCapCurrentNative
+import MicroCFTA.SourceCurrentConstrainedCapProjectionGuard
+import MicroCFTA.SourceCurrentConstrainedCapMixedTarget
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At
+#check @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCurrentNative.rebase
+#check @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.rebase
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCurrentNative.advance
+#check @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.advance
+#print axioms MicroCFTA.SourceCurrentConstrainedCapCurrentNative.step
+#check @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.step
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.read
+#check @MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.read
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.head
+#check @MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.head
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.readAll
+#check @MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.readAll
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.union
+#check @MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.union
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.node
+#check @MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.forest
+#check @MicroCFTA.SourceCurrentConstrainedCapProjectionGuard.forest
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.operandDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.operandDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.foldDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.foldDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.targetDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.targetDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.operand_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.operand_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.operand_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.operand_complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.fold
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.fold
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedTarget.target_reads
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedTarget.target_reads

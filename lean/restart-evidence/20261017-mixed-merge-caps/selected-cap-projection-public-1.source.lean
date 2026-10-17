@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentConstrainedCapSelectedProjection
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+set_option maxHeartbeats 2000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.node
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.rows
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.forest
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.forest
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.forest_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedProjection.forest_complete

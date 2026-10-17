@@ -1,0 +1,134 @@
+'MicroCFTA.MergeJointEffectsIntegration.recursive_comparison' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.MergeJointEffectsIntegration.recursive_comparison : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (clear : Guard → Bool) (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation before →
+        ∀ (recursiveEntry ordinaryEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (bad : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) (level : Nat),
+          Not
+              (annotation
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                  (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard bad)))) →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard recursiveEntry body depth ordinary) →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard ordinaryEntry
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) bad
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                    level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)) →
+                @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard recursiveEntry body depth
+                        ordinary))
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                  @Exists.{1} Nat fun fuel =>
+                    @Exists.{1} Bool fun answer =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                        And
+                          (@Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                            (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear fuel
+                              (@List.nil.{0} (Prod.{0, 0} Nat Nat))
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard recursiveEntry body depth
+                                ordinary)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard ordinaryEntry
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) bad
+                                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                                level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                              before)
+                            (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after))
+                          (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                            (Not
+                              (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol
+                                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard ordinaryEntry
+                                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) bad
+                                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                                  level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))))
+'MicroCFTA.MergeJointEffectsIntegration.serial_generated_merge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.MergeJointEffectsIntegration.serial_generated_merge : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (annotation : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceCurrentConjunctionClassScan.Ready width before →
+    @MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+      @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width annotation before →
+        ∀
+          (input :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+              input →
+            ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+              @MicroCFTA.EndpointMemoGateTrace.Valid inst_1
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+                  memos →
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun first =>
+                  @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width) fun middle =>
+                    @Exists.{1}
+                      (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun memo =>
+                      @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun firstFinal =>
+                        @Exists.{1}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          fun second =>
+                          @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width) fun after =>
+                            @Exists.{1}
+                              (MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              fun saved =>
+                              @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun final =>
+                                And
+                                  (@MicroCFTA.SourceCurrentAllocatedMerge.Receipt width inst inst_1 formulas solver
+                                    inventory MicroCFTA.SourceCurrentAllocatedMerge.literalClear input before
+                                    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    first middle memo memos firstFinal)
+                                  (And
+                                    (@MicroCFTA.SourceCurrentAllocatedMerge.Receipt width inst inst_1 formulas solver
+                                      inventory MicroCFTA.SourceCurrentAllocatedMerge.literalClear first middle memo
+                                      second after saved firstFinal final)
+                                    (And
+                                      (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width annotation middle)
+                                      (And
+                                        (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width annotation after)
+                                        (@MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At width formulas solver
+                                          inventory after))))

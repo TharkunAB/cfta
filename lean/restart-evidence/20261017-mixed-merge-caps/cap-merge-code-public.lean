@@ -1,0 +1,38 @@
+import MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Contract
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Contract
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.lift_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.lift_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.ValuePost
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.ValuePost
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.EdgePost
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.EdgePost
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.ordinary_union
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.ordinary_union
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.retained_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.retained_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.small_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.small_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.large_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.large_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.group_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.group_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.root_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.root_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.body_depth_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.body_depth_certified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.body_certified
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.body_certified

@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentConstrainedCapMemoMerge
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_empty
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_empty
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored.hereditary
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored.hereditary
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_remember
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.stored_remember
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.hit_certificate
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.hit_certificate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_certificate
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_certificate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_existing_certificate
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.winner_existing_certificate
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.run
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.run
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.call
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.call
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.cold
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.cold
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMemoMerge.retained
+#check @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.retained

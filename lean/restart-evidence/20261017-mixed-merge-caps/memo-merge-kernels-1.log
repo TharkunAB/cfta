@@ -1,0 +1,96 @@
+'MicroCFTA.MixedMergeCapsKernels.constructed_positive_cold_then_warm' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.MixedMergeCapsKernels.constructed_positive_cold_then_warm : @Exists.{1}
+  (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun before =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun result =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+      @Exists.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Memo Nat Bool) fun saved =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                  instDecidableEqBool a b)
+              MicroCFTA.MixedMergeCapsKernels.badPlan
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) MicroCFTA.MixedMergeCapsKernels.badValue before))
+          (And
+            (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) MicroCFTA.MixedMergeCapsKernels.badValue)
+            (And
+              (Not
+                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+                  Nat MicroCFTA.MixedMergeCapsKernels.badValue))
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Call Nat Bool instDecidableEqNat
+                  (fun a b =>
+                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                      instDecidableEqBool a b)
+                  (@id.{1} Bool) Bool.true MicroCFTA.MixedMergeCapsKernels.badValue before
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Nat Bool) result after saved)
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Call Nat Bool instDecidableEqNat
+                    (fun a b =>
+                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                        instDecidableEqBool a b)
+                    (@id.{1} Bool) Bool.true MicroCFTA.MixedMergeCapsKernels.badValue after saved result after saved)
+                  (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Nat Bool after saved)
+                    (And
+                      (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Nat Bool
+                        (fun guard => @Eq.{1} Bool guard Bool.true) saved)
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) result)
+                        (∀ (later : MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                          (final : MicroCFTA.InternedConstructorTemplates.State Nat Bool)
+                          (completed : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Nat Bool),
+                          @MicroCFTA.SourceCurrentMemoMergeGraph.Call Nat Bool instDecidableEqNat
+                              (fun a b =>
+                                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool
+                                  instDecidableEqNat instDecidableEqBool a b)
+                              (@id.{1} Bool) Bool.true MicroCFTA.MixedMergeCapsKernels.badValue after saved later final
+                              completed →
+                            And (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) final after)
+                              (And (@Eq.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Memo Nat Bool) completed saved)
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) later result))))))))))
+'MicroCFTA.MixedMergeCapsKernels.actual_candidate_and_keep_first' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.MixedMergeCapsKernels.actual_candidate_and_keep_first : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {current : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+      {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.body Symbol Guard inst top input) before
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard) candidate after current →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+              @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                  (current (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+                  (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) →
+                And (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid input candidate)
+                  (And
+                    (@Eq.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.remember Symbol Guard current input candidate) current)
+                    (And
+                      (@Eq.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard current input candidate) entry)
+                      (And
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original Symbol Guard entry) input)
+                        (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after current)
+                          (And (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored Symbol Guard valid current)
+                            (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.Certificate Symbol Guard valid input
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)))))))

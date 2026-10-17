@@ -1,0 +1,168 @@
+'MicroCFTA.CapMergeCodeIntegration.five_rows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CapMergeCodeIntegration.five_rows : ∀ {Symbol Guard : Type} (top : Guard)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @Eq.{2}
+    (MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.group Guard Symbol top
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))))))
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.bind Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.large Guard Symbol top edge
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))))))
+      fun result =>
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Code.pure Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) result
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))
+'MicroCFTA.CapMergeCodeIntegration.five_nullary_actual' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.CapMergeCodeIntegration.five_nullary_actual : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (top : Guard),
+  valid top →
+    ∀ (entry : MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+        @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+          @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard before
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))) →
+            have built :=
+              @MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst_1
+                (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                    (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) entry))
+                  top (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                before;
+            And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before
+                (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built))
+              (And
+                (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.EdgePost Symbol Guard valid
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built)
+                  (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built))
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.group Guard Symbol top
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol Guard entry
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))))))
+                  before (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard)
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built)
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built)
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard)))
+'MicroCFTA.CapMergeCodeIntegration.mixed_retained_actual' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.CapMergeCodeIntegration.mixed_retained_actual : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (muEntry nodeEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) (level : Nat)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry body depth ordinary)
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))) →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry body depth ordinary)
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                  level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))) →
+          @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol body →
+            @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) →
+              Not
+                  (valid
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                      (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))) →
+                have inputs :=
+                  @List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard muEntry body depth ordinary)
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                        level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)));
+                have built :=
+                  @MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst_1
+                    (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard inputs) before;
+                And
+                  (Not
+                    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard nodeEntry
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                        level (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before
+                      (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built))
+                    (And
+                      (@MicroCFTA.SourceCurrentConstrainedCapMemoMergeCode.ValuePost Symbol Guard valid
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built)
+                        (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built))
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                          (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.retainedColumn Symbol Guard inputs) before
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard)
+                        (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built)
+                        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) built)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard))))

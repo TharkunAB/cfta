@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.Effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.Effect
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.Effect.original
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.Effect.original
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.pure_effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.pure_effect
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.Effect.trans
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.Effect.trans
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.read_effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.read_effect
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.check_effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.check_effect
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.anyAccepts_effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.anyAccepts_effect
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.retain_effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.retain_effect
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.select_effect
+#check @MicroCFTA.SourceCurrentConstrainedCapMergeGuardEffects.select_effect

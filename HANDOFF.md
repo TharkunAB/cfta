@@ -1,6 +1,50 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-17 05:28 CEST (Europe/Stockholm)**.
+Updated: **2026-10-17 05:46 CEST (Europe/Stockholm)**.
+
+## Current mixed Merge caps and selected target callers
+
+Updated: 2026-10-17 05:46 CEST. This checkpoint starts at published `5b0c56a8`.
+The proof commits are `0f90ca80`, `8dfef438`, and `0a10b057`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-mixed-merge-caps.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-mixed-merge-caps/`.
+
+Nine additive modules derive universal finite-depth caps through the actual
+mutual memo-aware Merge. Candidate certificates precede publication. Exact
+earlier winners retain their complete captured originals. Actual comparison,
+selection, projection, and Merge retain guard heaps and current joint stores.
+Initial selected-path domains construct finite Operands. Unrelated ordinary
+siblings and captured roots can stay open. Supplied Target reads follow
+literal head, tail, and checked-query order with explicit maximum depths.
+Force misses establish universal slot certificates for the captured forest
+before storage. Leaf retains those stores and uses the maximum input depth.
+A warm-slot kernel constructs its own full Leaf from initial entry counters.
+General first misses and full editor/class completion remain open.
+
+The pinned Audit passes 2844 jobs and 63176 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All nine strict checks are clean.
+All 80 imported pairs pass in 13 groups. Six component manifests verify
+151 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 11952 starting files, 2834 older non-Audit proofs,
+all 239 Haskell files, and 71 frozen production manifests with 601 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next lift explicit depths through Edit and tail-first ClassPass. Construct
+general Target, Force miss, and class execution from initial resources.
+Derive cumulative serial allocation bounds. The ordinary source gate admits
+closed no-Mu endpoints independently of their own guard. General constrained
+descent, arbitrary constrained Mu bodies, convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, and complete public composition
+remain open. Completed graph proofs do not establish Haskell lazy publication
+or runtime forcing. The full library goal stays active. Read
+next-editor-class-and-serial-resources.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
 
 ## Current source rebase and finite generated checked queries
 

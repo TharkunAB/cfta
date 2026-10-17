@@ -1,0 +1,205 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:50:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentConstrainedCapMixedTarget.0.MicroCFTA.SourceCurrentConstrainedCapMixedTarget.tail_all`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:50:0: warning: `tail_all` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:76:19: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapMergeJointEffects.Allocated.merge`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:67:86: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+values : List (Value Symbol Guard)
+path : List Int
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo result after saved memos
+    final
+ready : Ready before
+available : Values before.native.machine.heap values
+domain : Domain path values
+physicalStored : PhysicalStored before.native.machine.heap memo
+merged : MergeStored memo
+current : Current before
+bounded : ∀ (value : Value Symbol Guard), value ∈ values → Cap Plain depth value
+projected : Value Symbol Guard
+middle : Checked width
+currentMemos : Memos
+projection :
+  SourceCurrentConjunctionTargetProjection.Receipt formulas solver inventory path values before projected middle memos
+    currentMemos
+mergedReceipt :
+  SourceCurrentAllocatedMerge.Receipt formulas solver inventory SourceCurrentAllocatedMerge.literalClear projected
+    middle memo result after saved currentMemos final
+localProjection :
+  SourceCurrentHereditaryConstruction.MuStored Plain middle.native.machine.heap ∧
+    Cap Plain (depth - (path.length - 1)) projected
+projectedGuards : SourceCurrentConstrainedCapGuardHeap.Heap Plain middle.native.machine.heap
+projectedCurrent : Current middle
+⊢ MergeStored saved ∧ Current after ∧ Cap Plain (operandDepth depth path) result
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:129:24: error: don't know how to synthesize implicit argument `larger`
+  @Cap.mono Symbol Guard Plain (operandDepth depth path✝) value✝ own.right.right (max (operandDepth depth path✝) ?m.403)
+    (Nat.le_max_left (operandDepth depth path✝) ?m.403)
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+actual : Fold values seed paths before memo result after saved
+path✝ : List Int
+values✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  Ready middle✝ →
+    Values middle✝.native.machine.heap values✝ →
+      PhysicalStored middle✝.native.machine.heap current✝ →
+        MergeStored current✝ →
+          Current middle✝ →
+            (∀ (value : Value Symbol Guard), value ∈ values✝ → Cap Plain depth value) →
+              (∀ (path : List Int), path ∈ seed✝ :: paths✝ → Domain path values✝) →
+                Ready later✝ ∧
+                  Effects (physical middle✝) (physical later✝) ∧
+                    PhysicalStored later✝.native.machine.heap saved✝ ∧
+                      MergeStored saved✝ ∧
+                        Current later✝ ∧
+                          Available later✝.native.machine.heap tail✝ ∧
+                            tail✝.free = [] ∧ Cap Plain (foldDepth depth seed✝ paths✝) tail✝
+ready : Ready before✝
+available : Values before✝.native.machine.heap values✝
+physicalStored : PhysicalStored before✝.native.machine.heap memo✝
+merged : MergeStored memo✝
+current : Current before✝
+bounded : ∀ (value : Value Symbol Guard), value ∈ values✝ → Cap Plain depth value
+domains : ∀ (path : List Int), path ∈ seed✝ :: path✝ :: paths✝ → Domain path values✝
+own : MergeStored current✝ ∧ Current middle✝ ∧ Cap Plain (operandDepth depth path✝) value✝
+tailReady : Ready later✝
+tailEffects : Effects (physical middle✝) (physical later✝)
+tailPhysical : PhysicalStored later✝.native.machine.heap saved✝
+tailMerged : MergeStored saved✝
+tailCurrent : Current later✝
+tailAvailable : Available later✝.native.machine.heap tail✝
+tailClosed : tail✝.free = []
+tailBound : Cap Plain (foldDepth depth seed✝ paths✝) tail✝
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:129:56: error: don't know how to synthesize placeholder for argument `b`
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+actual : Fold values seed paths before memo result after saved
+path✝ : List Int
+values✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  Ready middle✝ →
+    Values middle✝.native.machine.heap values✝ →
+      PhysicalStored middle✝.native.machine.heap current✝ →
+        MergeStored current✝ →
+          Current middle✝ →
+            (∀ (value : Value Symbol Guard), value ∈ values✝ → Cap Plain depth value) →
+              (∀ (path : List Int), path ∈ seed✝ :: paths✝ → Domain path values✝) →
+                Ready later✝ ∧
+                  Effects (physical middle✝) (physical later✝) ∧
+                    PhysicalStored later✝.native.machine.heap saved✝ ∧
+                      MergeStored saved✝ ∧
+                        Current later✝ ∧
+                          Available later✝.native.machine.heap tail✝ ∧
+                            tail✝.free = [] ∧ Cap Plain (foldDepth depth seed✝ paths✝) tail✝
+ready : Ready before✝
+available : Values before✝.native.machine.heap values✝
+physicalStored : PhysicalStored before✝.native.machine.heap memo✝
+merged : MergeStored memo✝
+current : Current before✝
+bounded : ∀ (value : Value Symbol Guard), value ∈ values✝ → Cap Plain depth value
+domains : ∀ (path : List Int), path ∈ seed✝ :: path✝ :: paths✝ → Domain path values✝
+own : MergeStored current✝ ∧ Current middle✝ ∧ Cap Plain (operandDepth depth path✝) value✝
+tailReady : Ready later✝
+tailEffects : Effects (physical middle✝) (physical later✝)
+tailPhysical : PhysicalStored later✝.native.machine.heap saved✝
+tailMerged : MergeStored saved✝
+tailCurrent : Current later✝
+tailAvailable : Available later✝.native.machine.heap tail✝
+tailClosed : tail✝.free = []
+tailBound : Cap Plain (foldDepth depth seed✝ paths✝) tail✝
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedTarget.lean:129:11: error: failed to infer `have` declaration type
