@@ -1,5 +1,44 @@
 # cfta formalization restart handoff
 
+## Current stored alpha reconstruction and node congruence
+
+Updated: 2026-10-17 20:29 CEST. Starting checkpoint is `d3486d3b`.
+Proof commit is `df79f802`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-mu-congruence.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+A pure lexical Alpha relation now gives exact complete stored execution
+at a common heap. Actual row calls replay at a common later heap.
+Equivalent node rows can have different orders and duplicate counts.
+Initial Ready and available captures construct both sequential node calls
+with one identical canonical value. A stored-node adapter derives those
+calls from pure RowsAlpha. Nested Mu children are included when their
+ordered Alpha relation holds. Both stored roots must be open nodes.
+
+The main missing producer must derive normalized reconstruction relations
+from actual causal Mu writers. Nested row normalization, union filtering,
+unused raw Mu cleanup, and earlier warm winners remain part of that task.
+The new relation does not permit arbitrary mixed-union permutation.
+Open observations alone do not imply physical empty-child agreement.
+A checked used-local example reconstructs to a bare reference, so retain
+reference and epsilon cases. General retained-used Mu row correspondence,
+outer progress, convergence, frontend/runtime adapters, and full public
+Haskell correspondence remain open. Keep the whole-library goal active.
+
+Full pinned Audit passes 3100 jobs and 68149 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 364 MiB peak. All five final
+strict source logs are empty. Canonical builds, 25 public checks, and ten
+constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-mu-congruence/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. The Chain reproducer returns
+`Left (FieldAtomOnDatatype "Next" 0)`. Record every later repair there with
+its reproducer, paths, commit, checks, and upstream status.
+
 ## Current retained Mu reconstruction and actual writer growth
 
 Updated: 2026-10-17 20:11 CEST. Starting checkpoint is `5ce4cca1`.
