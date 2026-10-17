@@ -1,5 +1,46 @@
 # Constrained languages, indexing, and distributions
 
+## Current native invariants and nested inert binders
+
+Updated: 2026-10-18 01:56 CEST. Starting checkpoint is `69992df2`.
+Proof commit is `381a4115`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-actual-invariants-binders.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual completed native node and edge calls now derive full equality-operation
+validity, heap Ready, allocated fields and result residency from initial facts.
+They need no reached range or future-invariant certificate. Their native cell
+invariant retains physical operands and results without a semantic key law.
+Actual inherited descent then derives new payload Ready. Full Parent and outer
+invariant composition remain open.
+
+Nested source binders now construct full smart execution and exact publication
+reconstructions when their own lexical slot is absent from static live support.
+Bodies and captures can contain arbitrary nested Mu. Actual history handles
+earlier retained writers. General used-local body alignment remains open.
+Positive guards now derive raw-class coverage through actual staged normalization
+and local child-key separation from Top owners. Later class phases remain open.
+Actual checked native query traces also derive swap/reset forwarding and terminal
+self or ordinary joined-row origins. Mu/union/reference Head exposure remains
+explicit. These query traces still include per-step physical Inputs checks.
+
+Full pinned Audit passes 3183 jobs and 70163 dependency checks.
+Only the unchanged old warning remains. Four selected strict production logs
+are empty. All 39 public declaration and 7 constructed signature/proof/axiom
+pairs pass with all eight settings and the three standard axioms. Effective
+caps are 4 GiB maximum/high and zero swap. Evidence is in
+`lean/restart-evidence/20261018-actual-invariants-binders/`.
+
+The complete outer-pass domain remains finite ordinary sources with no Mu,
+references or explicit unions in descendants. General recursive progress,
+all-ancestor key exclusion, fresh-call bounds, convergence and complete public
+Haskell correspondence remain open. Keep the full-library goal active.
+No Haskell patch or new production defect is added. FINDINGS keeps the external
+repair registry first. Field-pool repair `b9219b9e` remains merged and validated.
+Record every later repair there with failure, reproducer, paths, commit, checks
+and upstream status. Preserve every older source, failed attempt, repair and
+draft. Keep the optimized interned core.
+
 ## Current actual ancestor growth and retained writer origins
 
 Updated: 2026-10-18 01:36 CEST. Starting checkpoint is `e1323137`.

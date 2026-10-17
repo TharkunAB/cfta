@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `c517b225`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `381a4115`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -86,6 +86,25 @@ These results do not extend the completed outer-pass domain. General key
 exclusion, fresh recursive-call bounds, nested writer bodies, full smart
 cleanup composition, and complete Haskell correspondence remain open. Read
 [the current growth and lineage results](notes-current-active-growth-lineage.md).
+
+Actual completed native node and edge requests now derive full operation-memo
+validity, allocated fields and result residency from initial physical facts.
+They do not require future reached checks or word ranges. Their native memo
+invariant is physical; semantic key correspondence remains separate. Indexed
+descent after that actual return constructs new payload Ready. Full Parent and
+outer invariant composition still needs a producer.
+
+A separate nested-source branch now constructs full smart binder execution
+when the own lexical argument is absent from static live support. Arbitrary
+nested bodies and recursive captures are included under that condition. Actual
+publication callbacks are literally equal and construct the same stored
+reconstruction schedules. The general branch that uses its own argument stays
+open. Positive guard syntax also supplies raw-class coverage through each
+actual staged normalization and local separation from Top owner keys. Actual
+checked query traces derive terminal forwarding and ordinary joined-row origins.
+Those traces include per-step Inputs checks. Recursive Head exposure and later
+class-phase composition stay open. These results do not enlarge the complete
+outer-pass domain. Read [the current exact boundaries](notes-current-actual-invariants-binders.md).
 
 ## Observable contracts
 

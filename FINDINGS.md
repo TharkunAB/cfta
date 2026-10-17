@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 01:56 CEST. Proof checkpoint is `381a4115`.
+Full pinned Audit passes 3183 jobs and 70163 dependency checks. Completed
+native calls derive full operation validity and new descended Ready from initial
+facts. Nested inert-local binders construct smart execution and exact stored
+reconstructions. Positive guards derive local raw-class origins. Actual checked
+queries derive terminal forwarding and ordinary row origins; recursive Head
+exposure remains explicit. General recursive progress, used-local binder
+alignment, convergence and full public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Repair `b9219b9e` remains
+merged and validated in source `c0cc8a05`. Read
+`lean/notes-current-actual-invariants-binders.md`. Keep this registry first.
+Record every later repair with failure, executable reproducer, affected paths,
+commit, checks and upstream status for external work.
+
 Current proof update: 2026-10-18 01:36 CEST. Proof checkpoint is `c517b225`.
 Full pinned Audit passes 3179 jobs and 70083 dependency checks. Actual lower
 and outer workers derive operation growth. Busy-failure inversion produces
