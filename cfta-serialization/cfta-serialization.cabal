@@ -1,0 +1,68 @@
+cabal-version: 3.0
+name: cfta-serialization
+version: 0.1.0.0
+synopsis: Portable snapshots of constrained tree automata
+description:
+  Read and write complete explicit tree automata as versioned JSON.
+  Preserve refinements, constraints, recursion, and graph structure.
+
+homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-serialization#readme
+bug-reports: https://github.com/TharkunAB/cfta/issues
+category: Data
+author: Matthias Pall Gissurarson
+maintainer: mpg@mpg.is
+copyright: 2026 Tharkun AB
+license: BSD-3-Clause
+license-file: LICENSE
+build-type: Simple
+tested-with: ghc ==9.14.1
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/cfta.git
+  subdir: cfta-serialization
+
+library
+  hs-source-dirs: src
+  exposed-modules: Data.CFTA.Serialization.JSON
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wpartial-fields
+    -Wredundant-constraints
+
+  build-depends:
+    aeson >=2.2 && <2.4,
+    attoparsec >=0.14 && <0.15,
+    attoparsec-aeson >=2.2 && <2.3,
+    base >=4.22 && <4.23,
+    bytestring >=0.12 && <0.13,
+    cfta >=0.1.0.0 && <0.2,
+    containers >=0.8 && <0.9,
+    text >=2.1 && <2.2,
+    vector >=0.13 && <0.14,
+
+executable cfta-graph-snapshot
+  main-is: GraphSnapshot.hs
+  hs-source-dirs: examples
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -rtsopts
+
+  build-depends:
+    base >=4.22 && <4.23,
+    bytestring >=0.12 && <0.13,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-generator >=0.1.0.0 && <0.2,
+    cfta-serialization,
+    containers >=0.8 && <0.9,
+    directory >=1.3 && <1.4,
+    filepath >=1.5 && <1.6,
