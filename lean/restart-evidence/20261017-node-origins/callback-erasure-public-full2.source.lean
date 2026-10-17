@@ -1,0 +1,39 @@
+import MicroCFTA.SourceCurrentNativeCallbackErasure
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.eraseSelf
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.eraseSelf
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.eraseSelf
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.erased_absent
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.erased_absent
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.erased_absent
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.callback_result
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.callback_result
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.callback_result
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.callback_replace
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.callback_replace
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.callback_replace
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.callback_replay
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.callback_replay
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.callback_replay
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.native_callback_result
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.native_callback_result
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.native_callback_result
+
+#check @MicroCFTA.SourceCurrentNativeCallbackErasure.native_callback_replace
+#print MicroCFTA.SourceCurrentNativeCallbackErasure.native_callback_replace
+#print axioms MicroCFTA.SourceCurrentNativeCallbackErasure.native_callback_replace
+

@@ -1,0 +1,45 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-node-origins/union-normal-direct-1.source.lean:67:6: error: Tactic `apply` failed: could not unify the conclusion of `nodeStep ?m.119 ?m.120 state normal`
+  UnionNormal (InternedConstructorTemplates.nodeStep ?m.119 ?m.120 state).snd
+with the goal
+  UnionNormal
+    (run
+        (Work.node (NodeKey.union (List.map Value.referenceOf (distinctNodes (List.flatMap unionMembers values))))
+          (fun entry =>
+            Value.union entry (distinctNodes (List.flatMap unionMembers values))
+              (maximumDepth (distinctNodes (List.flatMap unionMembers values)))
+              (childFree (distinctNodes (List.flatMap unionMembers values))))
+          Work.pure)
+        state).snd
+
+Note: The full type of `nodeStep ?m.119 ?m.120 state normal` is
+  (∀ (entry : Interned NodeKey), ValueNormal (?m.120 entry)) →
+    UnionNormal (InternedConstructorTemplates.nodeStep ?m.119 ?m.120 state).snd
+
+case h_2
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+values : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+normal : UnionNormal state
+x✝³ : List (Value Symbol Guard)
+x✝² : distinctNodes (List.flatMap unionMembers values) = [] → False
+x✝¹ : ∀ (value : Value Symbol Guard), distinctNodes (List.flatMap unionMembers values) = [value] → False
+x✝ : Option (List (EdgeValue Symbol Guard))
+heq✝ : ordinaryEdges (distinctNodes (List.flatMap unionMembers values)) = none
+⊢ UnionNormal
+    (run
+        (Work.node (NodeKey.union (List.map Value.referenceOf (distinctNodes (List.flatMap unionMembers values))))
+          (fun entry =>
+            Value.union entry (distinctNodes (List.flatMap unionMembers values))
+              (maximumDepth (distinctNodes (List.flatMap unionMembers values)))
+              (childFree (distinctNodes (List.flatMap unionMembers values))))
+          Work.pure)
+        state).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-node-origins/union-normal-direct-1.source.lean:181:25: error: Application type mismatch: The argument
+  edge symbol guard values after afterNormal
+has type
+  UnionNormal (run (makeEdge symbol guard values) after).snd
+but is expected to have type
+  UnionNormal (Outcome.state ?m.457)
+in the application
+  bind ?m.457 ?m.458 (edge symbol guard values after afterNormal)

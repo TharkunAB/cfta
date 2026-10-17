@@ -1,0 +1,65 @@
+import MicroCFTA.SourceCurrentRequiredFiniteExposure
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.ValueNormal
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.ValueNormal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.ValueNormal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.empty
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.empty
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.empty
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.nodeStep
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.nodeStep
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.nodeStep
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.edge
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.edge
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.edge
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.node
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.node
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.node
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.union
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.union
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.union
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.filter
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.filter
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.filter
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.complete
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.complete
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.complete
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.request
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.request
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.request
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.build
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.build
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.build
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.buildMany
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.buildMany
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.buildMany
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.buildEdges
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.buildEdges
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.buildEdges
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.source
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.source
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.source
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.execute
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.execute
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.execute
+#check @MicroCFTA.SourceCurrentRequiredUnionNormal.unfold
+#print MicroCFTA.SourceCurrentRequiredUnionNormal.unfold
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormal.unfold
+#check @MicroCFTA.SourceCurrentRequiredFiniteExposure.ordinary_of_zero_closed
+#print MicroCFTA.SourceCurrentRequiredFiniteExposure.ordinary_of_zero_closed
+#print axioms MicroCFTA.SourceCurrentRequiredFiniteExposure.ordinary_of_zero_closed
+#check @MicroCFTA.SourceCurrentRequiredFiniteExposure.finite_exposure
+#print MicroCFTA.SourceCurrentRequiredFiniteExposure.finite_exposure
+#print axioms MicroCFTA.SourceCurrentRequiredFiniteExposure.finite_exposure

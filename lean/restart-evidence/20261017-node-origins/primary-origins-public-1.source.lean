@@ -1,0 +1,45 @@
+import MicroCFTA.SourceCurrentRequiredPrimaryOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_edges_members
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_edges_members
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_edges_members
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_selected
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_selected
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_selected
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_class_paths
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_class_paths
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.false_class_paths
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.node
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.node
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.node
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.of_paths
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.of_paths
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.of_paths
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.selected_domain
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.selected_domain
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.selected_domain
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryExposure.primary_domain
+#print MicroCFTA.SourceCurrentRequiredPrimaryExposure.primary_domain
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryExposure.primary_domain
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryOrigins.complete
+#print MicroCFTA.SourceCurrentRequiredPrimaryOrigins.complete
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryOrigins.complete
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryOrigins.constructed
+#print MicroCFTA.SourceCurrentRequiredPrimaryOrigins.constructed
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryOrigins.constructed

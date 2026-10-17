@@ -1,0 +1,15 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-node-origins/finite-exposure-direct-1.source.lean:37:28: error: unsolved goals
+rest : List (Value Symbol Guard)
+ih :
+  (∀ (value : Value Symbol Guard), value ∈ rest → ∃ entry rows level free, value = Value.node entry rows level free) →
+    ∃ rows, ordinaryEdges rest = some rows
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+rows : List (EdgeValue Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+nodes :
+  ∀ (value : Value Symbol Guard),
+    value ∈ Value.node entry rows level free :: rest → ∃ entry rows level free, value = Value.node entry rows level free
+later : List (EdgeValue Symbol Guard)
+done : ordinaryEdges rest = some later
+⊢ Option.map (fun x => rows ++ x) (some later) = some (rows ++ later)
