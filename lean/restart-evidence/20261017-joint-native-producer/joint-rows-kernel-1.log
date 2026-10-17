@@ -1,0 +1,113 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/joint-rows-kernel.lean:30:20: error: typeclass instance problem is stuck
+  DecidableEq.{1} (EdgeKey ?m.6 Bool)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq.{u}` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/joint-rows-kernel.lean:34:48: error: Function expected at
+  call
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  domain
+
+Hint: The identifier `call` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/joint-rows-kernel.lean:39:26: error: Function expected at
+  call
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  domain
+
+Hint: The identifier `call` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/joint-rows-kernel.lean:48:4: error: Type mismatch: After simplification, term
+  @SourceCurrentConstrainedCapGuardExecution.closed_heap Nat Bool
+    (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) annotation expression
+ has type
+  @SourceCurrentConstrainedCapGuardHeap.Heap Nat Bool annotation
+    (@Outcome.state.match_1.{1} Nat Bool (Value Nat Bool) (fun x => InternedConstructorTemplates.State Nat Bool)
+      (@InternedFreshOrdinaryConstruction.build Nat Bool
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) expression
+        (@List.nil.{0} (Value Nat Bool)) (@empty Nat Bool))
+      (fun value state => state) fun key state => state)
+but is expected to have type
+  @SourceCurrentConstrainedCapGuardHeap.Heap Nat Bool annotation heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/joint-rows-kernel.lean:44:75: error: unsolved goals
+x✝ : Sort u_1
+call : x✝
+semantic : @SourceRecursiveIntersectionSemanticHeap.SemanticHeap Nat Bool heap
+facts : @Facts Nat Bool heap
+guards : @SourceCurrentConstrainedCapGuardHeap.Heap Nat Bool annotation heap
+context : @Context Nat Bool annotation heap state
+leftAvailable : @Available Nat Bool heap left
+rightAvailable : @Available Nat Bool heap right
+inputs :
+  @SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Nat Bool heap
+    (@SourceRecursiveIntersectionThunks.NodeRequest.mk Nat Bool domain left right)
+leftCap :
+  @SourceCurrentConstrainedCap.Cap Nat Bool annotation (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    left
+rightCap :
+  @SourceCurrentConstrainedCap.Cap Nat Bool annotation (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    right
+⊢ And
+    (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+      (@InternedFreshOrdinaryConstruction.build Nat Bool
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) expression
+        (@List.nil.{0} (Value Nat Bool)) (@empty Nat Bool))
+      (@Outcome.done Nat Bool (Value Nat Bool) root heap))
+    (And
+      (@Eq.{1} (Result Nat Bool (Value Nat Bool))
+        (@node Nat Bool instDecidableEqNat
+          (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) true and
+          (sorryAx.{1} (Unit → Value Nat Bool → Value Nat Bool → Machine Nat Bool → Result Nat Bool (Value Nat Bool))
+            true
+            (@Function.const.{1, 1} Unit Lean.Name Unit.unit
+              `lean.restart-evidence.20261017-joint-native-producer.joint-rows-kernel.39.26.39.37.26.37._sorry._@.lean.restart-evidence.20261017-joint-native-producer.joint-rows-kernel.2806320256._hygCtx._hyg.136))
+          (@nodeEdges Nat Bool left) (@nodeEdges Nat Bool right) state)
+        (@Result.done Nat Bool (Value Nat Bool) left state))
+      (And (@Context Nat Bool annotation heap state)
+        (And (@Available Nat Bool (@Machine.heap Nat Bool state) left)
+          (And
+            (@SourceCurrentConstrainedCap.Cap Nat Bool annotation
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) left)
+            (And
+              (@SourceCurrentConstrainedCapPairOccurrences.Classified Nat Bool
+                (@SourceCurrentConstrainedCapPairOccurrences.sourceWeight Nat Bool annotation heap)
+                (@SourceCurrentConstrainedCapNonplainRank.pairRank Nat Bool annotation left right) left)
+              (@SourceRecursiveIntersectionResultScope.Scope Nat Bool
+                (@Interned.key IntersectionFlatMemoKeyDomain.DomainKey domain).seen left))))))
+'MicroCFTA.JointRowsKernel.constructed_nullary_rows' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@constructed_nullary_rows.{u_1} : ∀ {x : Sort u_1} {call : x},
+  And
+    (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+      (@InternedFreshOrdinaryConstruction.build Nat Bool
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) expression
+        (@List.nil.{0} (Value Nat Bool)) (@empty Nat Bool))
+      (@Outcome.done Nat Bool (Value Nat Bool) root heap))
+    (And
+      (@Eq.{1} (Result Nat Bool (Value Nat Bool))
+        (@node Nat Bool instDecidableEqNat
+          (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) true and
+          (sorryAx.{1} (Unit → Value Nat Bool → Value Nat Bool → Machine Nat Bool → Result Nat Bool (Value Nat Bool))
+            true
+            (@Function.const.{1, 1} Unit Lean.Name Unit.unit
+              `lean.restart-evidence.20261017-joint-native-producer.joint-rows-kernel.39.26.39.37.26.37._sorry._@.lean.restart-evidence.20261017-joint-native-producer.joint-rows-kernel.2806320256._hygCtx._hyg.136))
+          (@nodeEdges Nat Bool left) (@nodeEdges Nat Bool right) state)
+        (@Result.done Nat Bool (Value Nat Bool) left state))
+      (And (@Context Nat Bool annotation heap state)
+        (And (@Available Nat Bool (@Machine.heap Nat Bool state) left)
+          (And
+            (@SourceCurrentConstrainedCap.Cap Nat Bool annotation
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) left)
+            (And
+              (@SourceCurrentConstrainedCapPairOccurrences.Classified Nat Bool
+                (@SourceCurrentConstrainedCapPairOccurrences.sourceWeight Nat Bool annotation heap)
+                (@SourceCurrentConstrainedCapNonplainRank.pairRank Nat Bool annotation left right) left)
+              (@SourceRecursiveIntersectionResultScope.Scope Nat Bool
+                (@Interned.key IntersectionFlatMemoKeyDomain.DomainKey domain).seen left))))))

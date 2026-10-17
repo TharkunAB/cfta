@@ -1,0 +1,177 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:110:24: error(lean.unknownIdentifier): Unknown identifier `physical`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:108:7: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+source : InternedConstructorTemplates.State Symbol Guard
+emptyGuard : Guard
+conjoin : Guard → Guard → Guard
+call :
+  Interned DomainKey →
+    Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+left right : EdgeValue Symbol Guard
+state : Machine Symbol Guard
+context : Context annotation source state
+known : Domain state domain
+bindings : OriginalBindings annotation source domain.key
+inputs : EdgeInputs source { domain := domain, left := left, right := right }
+leftResident : EdgeResident state.heap left
+rightResident : EdgeResident state.heap right
+leftCap : Edge annotation depth left
+rightCap : Edge annotation depth right
+h✝ : left.children.length = right.children.length
+input : Machine Symbol Guard → Value Symbol Guard × Value Symbol Guard → Prop :=
+  fun current pair =>
+    Domain current domain ∧
+      Available current.heap pair.fst ∧
+        Available current.heap pair.snd ∧
+          Cap annotation (depth - 1) pair.fst ∧
+            Cap annotation (depth - 1) pair.snd ∧
+              NodeInputs source { domain := domain, left := pair.fst, right := pair.snd }
+output : Machine Symbol Guard → Value Symbol Guard → Prop :=
+  fun after value =>
+    Available after.heap value ∧
+      Cap annotation (depth - 1) value ∧
+        FreeLE (sourceWeight annotation source)
+            (edgeBudget annotation { domain := domain, left := left, right := right }) value ∧
+          Scope domain.key.seen value
+pair : Value Symbol Guard × Value Symbol Guard
+a✝ : pair ∈ left.children.zip right.children
+current : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid current
+currentInputs : input current pair
+⊢ Checked current (call domain pair.fst pair.snd current) fun x x_1 => True
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:115:11: error(lean.unknownIdentifier): Unknown identifier `joint`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:118:15: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `1`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:118:25: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `2`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:118:69: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `2`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:119:106: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `2`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:112:7: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+source : InternedConstructorTemplates.State Symbol Guard
+emptyGuard : Guard
+conjoin : Guard → Guard → Guard
+call :
+  Interned DomainKey →
+    Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+left right : EdgeValue Symbol Guard
+state : Machine Symbol Guard
+context : Context annotation source state
+known : Domain state domain
+bindings : OriginalBindings annotation source domain.key
+inputs : EdgeInputs source { domain := domain, left := left, right := right }
+leftResident : EdgeResident state.heap left
+rightResident : EdgeResident state.heap right
+leftCap : Edge annotation depth left
+rightCap : Edge annotation depth right
+h✝ : left.children.length = right.children.length
+input : Machine Symbol Guard → Value Symbol Guard × Value Symbol Guard → Prop := ⋯
+output : Machine Symbol Guard → Value Symbol Guard → Prop := ⋯
+pair : Value Symbol Guard × Value Symbol Guard
+member : pair ∈ left.children.zip right.children
+current : Machine Symbol Guard
+currentContext : Context annotation source current
+currentInputs : input current pair
+⊢ Machine Symbol Guard → Value Symbol Guard → Prop
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:141:10: error(lean.unknownIdentifier): Unknown identifier `conjoinValid`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:145:21: error(lean.unknownIdentifier): Unknown identifier `emptyValid`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:174:57: error(lean.unknownIdentifier): Unknown identifier `physical`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:181:60: error(lean.unknownIdentifier): Unknown identifier `physical`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:181:69: error(lean.unknownIdentifier): Unknown identifier `joint`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:181:75: error(lean.unknownIdentifier): Unknown identifier `emptyValid`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:181:86: error(lean.unknownIdentifier): Unknown identifier `conjoinValid`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:185:12: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `1`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:185:22: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `2`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:185:38: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `2`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:187:17: error: Invalid projection: Type of
+  result
+is not known; cannot resolve projection `2`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:197:46: error: Function expected at
+  context.growth
+but this term has type
+  Grows source state.heap
+
+Note: Expected a function because this term is being applied to the argument
+  _
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:198:34: error: Function expected at
+  context.growth
+but this term has type
+  Grows source state.heap
+
+Note: Expected a function because this term is being applied to the argument
+  _
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:212:58: error(lean.unknownIdentifier): Unknown identifier `physical`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:212:67: error(lean.unknownIdentifier): Unknown identifier `joint`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:212:73: error(lean.unknownIdentifier): Unknown identifier `emptyValid`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:212:84: error(lean.unknownIdentifier): Unknown identifier `conjoinValid`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:215:25: error: Function expected at
+  results
+but this term has type
+  ?m.60 after edges
+
+Note: Expected a function because this term is being applied to the argument
+  edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:215:70: error: Function expected at
+  results
+but this term has type
+  ?m.60 after edges
+
+Note: Expected a function because this term is being applied to the argument
+  edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:216:25: error: Function expected at
+  results
+but this term has type
+  ?m.60 after edges
+
+Note: Expected a function because this term is being applied to the argument
+  edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:216:74: error: Function expected at
+  results
+but this term has type
+  ?m.60 after edges
+
+Note: Expected a function because this term is being applied to the argument
+  edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:209:125: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+source : InternedConstructorTemplates.State Symbol Guard
+emptyGuard : Guard
+conjoin : Guard → Guard → Guard
+call :
+  Interned DomainKey →
+    Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+inst✝ : DecidableEq Symbol
+depth : Nat
+domain : Interned DomainKey
+left right : Value Symbol Guard
+facts : Facts source
+state : Machine Symbol Guard
+context : Context annotation source state
+known : Domain state domain
+bindings : OriginalBindings annotation source domain.key
+inputs : NodeInputs source { domain := domain, left := left, right := right }
+leftCap : Cap annotation depth left
+rightCap : Cap annotation depth right
+⊢ Machine Symbol Guard → List (EdgeValue Symbol Guard) → Prop

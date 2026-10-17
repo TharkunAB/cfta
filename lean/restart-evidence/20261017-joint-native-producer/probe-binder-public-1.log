@@ -1,0 +1,298 @@
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.empty' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.empty : ∀ {Symbol Guard : Type},
+  @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.interned' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.interned : ∀ {Symbol Guard : Type} (name : Nat),
+  @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+      (MicroCFTA.InternedBinderProtocol.Reference.interned name))
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.intersection' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.intersection : ∀ {Symbol Guard : Type} (first second : Nat),
+  @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+      (MicroCFTA.InternedBinderProtocol.Reference.intersection first second))
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.of_closed' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.of_closed : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.of_original' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.of_original : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard value →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+          @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.of_scope' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.of_scope : ∀ {Symbol Guard : Type}
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionResultScope.Scope Symbol Guard pairs value →
+    @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.node_inputs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.node_inputs : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard source request →
+        And
+          (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+          (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.edge_inputs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.edge_inputs : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.EdgeInputs Symbol Guard source request →
+        And
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left Symbol Guard request))
+                value →
+              @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value)
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right Symbol Guard request))
+                value →
+              @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value)
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.makeEdge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.makeEdge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value) →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value) →
+        ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                    (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard values) state)))
+              value →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.makeNode' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.makeNode : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+          @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard state edge) →
+      (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+            ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) value →
+                @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value) →
+        @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state))
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.makeUnion' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.makeUnion : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedStoredMuOrigins.Normal Symbol Guard state →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value) →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value) →
+        @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values) state))
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.optionalBinder' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.optionalBinder : ∀ {Symbol Guard : Type}
+  {environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (pair : Prod.{0, 0} Nat Nat)
+  (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard state environment →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard body →
+        ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+            @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard value
+'MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (depth : Nat) (pair : Prod.{0, 0} Nat Nat) (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth body →
+        @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation state →
+          ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat),
+            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+              @Eq.{1} Nat
+                  (weight
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                      (@Prod.snd.{0, 0} Nat Nat pair)))
+                  bound →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound body →
+                  @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard body →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body state)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+                          (And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth value)
+                            (And
+                              (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight
+                                bound value)
+                              (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                                (And
+                                  (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol annotation
+                                    after)
+                                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard state after)
+                                      (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+                                        value)))))))
+'MicroCFTA.SourceCurrentConstrainedCapNativeBinderReturn.positive' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeBinderReturn.positive : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (depth : Nat) (pair : Prod.{0, 0} Nat Nat) (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth body →
+        @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation state →
+          ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat),
+            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+              @Eq.{1} Nat
+                  (weight
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat pair)
+                      (@Prod.snd.{0, 0} Nat Nat pair)))
+                  bound →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound body →
+                  @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard body →
+                    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body state)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+                        And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth value)
+                          (And
+                            (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound
+                              value)
+                            (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                              (And
+                                (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol annotation after)
+                                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                                  (And
+                                    (@MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard after)
+                                    (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard state after)
+                                      (And
+                                        (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                                          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))
+                                        (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+                                          value))))))))
+'MicroCFTA.SourceCurrentConstrainedCapNativeBinderReturn.zero' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapNativeBinderReturn.zero : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (depth : Nat) (pair : Prod.{0, 0} Nat Nat) (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol body →
+        @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation state →
+          ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat),
+            @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) body →
+              @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard body →
+                ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst pair body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+                    And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth value)
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) value)
+                        (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                          (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol annotation after)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                              (And (@MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard after)
+                                (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard state after)
+                                  (And
+                                    (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))
+                                    (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard
+                                      value))))))))

@@ -1,0 +1,105 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:222:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:254:13: error: Application type mismatch: The argument
+  checked.valid
+has type
+  SourceRecursiveIntersectionKernel.Valid
+    (if left = true then call domain member other current else call domain other member current).state
+but is expected to have type
+  SourceRecursiveIntersectionKernel.Valid
+    ((if left = true then call domain member other else call domain other member) current).state
+in the application
+  Checked.mk checked.valid
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelJointRows.lean:265:6: error: Tactic `apply` failed: could not unify the conclusion of `SourceCurrentConstrainedCapKernelJoint.map annotation source
+  (if left = true then call domain member other current else call domain other member current)
+  (fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source)
+            (pairRank annotation (if left = true then member else other) (if left = true then other else member))
+            value ∧
+          Scope domain.key.seen value)
+  ?m.391 called`
+  JointChecked annotation source
+    (if left = true then call domain member other current else call domain other member current) ?m.391
+with the goal
+  JointChecked annotation source ((if left = true then call domain member other else call domain other member) current)
+    output
+
+Note: The full type of `SourceCurrentConstrainedCapKernelJoint.map annotation source
+  (if left = true then call domain member other current else call domain other member current)
+  (fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source)
+            (pairRank annotation (if left = true then member else other) (if left = true then other else member))
+            value ∧
+          Scope domain.key.seen value)
+  ?m.391 called` is
+  (∀ (value : Value Symbol Guard) (after : Machine Symbol Guard),
+      Context annotation source after →
+        Available after.heap value ∧
+            Cap annotation depth value ∧
+              Classified (sourceWeight annotation source)
+                  (pairRank annotation (if left = true then member else other) (if left = true then other else member))
+                  value ∧
+                Scope domain.key.seen value →
+          ?m.391 after value) →
+    JointChecked annotation source
+      (if left = true then call domain member other current else call domain other member current) ?m.391
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+source : InternedConstructorTemplates.State Symbol Guard
+call :
+  Interned DomainKey →
+    Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+physical : Calls call
+joint : JointCalls annotation source call
+depth bound : Nat
+domain : Interned DomainKey
+members : List (Value Symbol Guard)
+other : Value Symbol Guard
+left : Bool
+state : Machine Symbol Guard
+context : Context annotation source state
+known : Domain state domain
+bindings : OriginalBindings annotation source domain.key
+available : ∀ (member : Value Symbol Guard), member ∈ members → Available state.heap member
+otherAvailable : Available state.heap other
+memberCap : ∀ (member : Value Symbol Guard), member ∈ members → Cap annotation depth member
+otherCap : Cap annotation depth other
+inputs :
+  ∀ (member : Value Symbol Guard),
+    member ∈ members →
+      NodeInputs source
+        { domain := domain, left := if left = true then member else other,
+          right := if left = true then other else member }
+lower :
+  ∀ (member : Value Symbol Guard),
+    member ∈ members →
+      pairRank annotation (if left = true then member else other) (if left = true then other else member) ≤ bound
+input : Machine Symbol Guard → Value Symbol Guard → Prop :=
+  fun current member => Domain current domain ∧ Available current.heap member ∧ Available current.heap other
+output : Machine Symbol Guard → Value Symbol Guard → Prop :=
+  fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧ Classified (sourceWeight annotation source) bound value ∧ Scope domain.key.seen value
+member : Value Symbol Guard
+included : member ∈ members
+current : Machine Symbol Guard
+currentContext : Context annotation source current
+currentInputs : input current member
+called :
+  JointChecked annotation source
+    (if left = true then call domain member other current else call domain other member current) fun after value =>
+    Available after.heap value ∧
+      Cap annotation depth value ∧
+        Classified (sourceWeight annotation source)
+            (pairRank annotation (if left = true then member else other) (if left = true then other else member))
+            value ∧
+          Scope domain.key.seen value
+⊢ JointChecked annotation source ((if left = true then call domain member other else call domain other member) current)
+    output

@@ -1,0 +1,24 @@
+'MicroCFTA.JointRowsKernel.constructed_nullary_rows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+constructed_nullary_rows : And
+  (@Eq.{1} (Outcome Nat Bool (Value Nat Bool))
+    (@InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) expression
+      (@List.nil.{0} (Value Nat Bool)) (@empty Nat Bool))
+    (@Outcome.done Nat Bool (Value Nat Bool) root heap))
+  (And
+    (@Eq.{1} (Result Nat Bool (Value Nat Bool))
+      (@node Nat Bool instDecidableEqNat
+        (fun a b => @instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a b) true and (call domain)
+        (@nodeEdges Nat Bool left) (@nodeEdges Nat Bool right) state)
+      (@Result.done Nat Bool (Value Nat Bool) left state))
+    (And (@Context Nat Bool annotation heap state)
+      (And (@Available Nat Bool (@Machine.heap Nat Bool state) left)
+        (And
+          (@SourceCurrentConstrainedCap.Cap Nat Bool annotation
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) left)
+          (And
+            (@SourceCurrentConstrainedCapPairOccurrences.Classified Nat Bool
+              (@SourceCurrentConstrainedCapPairOccurrences.sourceWeight Nat Bool annotation heap)
+              (@SourceCurrentConstrainedCapNonplainRank.pairRank Nat Bool annotation left right) left)
+            (@SourceRecursiveIntersectionResultScope.Scope Nat Bool
+              (@Interned.key IntersectionFlatMemoKeyDomain.DomainKey domain).seen left))))))

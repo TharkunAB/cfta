@@ -1,0 +1,45 @@
+'MicroCFTA.KernelGuardIntegration.constructed_queries' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.KernelGuardIntegration.constructed_queries : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+  (first second : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun left =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun right =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst_1 first
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left middle))
+            (And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst_1 second
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) middle)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right after))
+              (And (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation after)
+                (∀ (fuel : Nat),
+                  have machine :=
+                    @MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard after
+                      (@MicroCFTA.Cache.emptyState MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey);
+                  have actual :=
+                    @MicroCFTA.SourceRecursiveIntersectionKernel.execute Symbol Guard inst inst_1 emptyGuard conjoin
+                      fuel MicroCFTA.IntersectionEmptyDomain.emptyDomain left right machine;
+                  And
+                    (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                        (@MicroCFTA.SourceRecursiveIntersectionKernel.Result.state Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actual)))
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.Checked Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) machine actual fun final value =>
+                      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard final) value))))

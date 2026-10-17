@@ -1,0 +1,36 @@
+'MicroCFTA.SourceCurrentConstrainedCapKernelJointDecision.repeated_weight' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapKernelJointDecision.repeated_weight : ∀ {Symbol Guard : Type}
+  (annotation : Guard → Prop) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings Symbol Guard annotation source
+          (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) →
+        @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard source
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard domain left right) →
+          ∀ (key : Prod.{0, 0} Nat Nat),
+            @Eq.{1} MicroCFTA.SourceRecursiveIntersectionControl.Branch
+                (@MicroCFTA.SourceRecursiveIntersectionControl.decision Symbol Guard
+                  (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) left right)
+                (MicroCFTA.SourceRecursiveIntersectionControl.Branch.repeated key) →
+              @Eq.{1} Nat
+                (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation source
+                  (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                    (@Prod.snd.{0, 0} Nat Nat key)))
+                (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation left right)
+'MicroCFTA.SourceCurrentConstrainedCapKernelJointDecision.reset_inputs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapKernelJointDecision.reset_inputs : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard source
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard domain left right) →
+    @Eq.{1} MicroCFTA.SourceRecursiveIntersectionControl.Branch
+        (@MicroCFTA.SourceRecursiveIntersectionControl.decision Symbol Guard
+          (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) left right)
+        MicroCFTA.SourceRecursiveIntersectionControl.Branch.reset →
+      @MicroCFTA.SourceCurrentConstrainedCapNativeOccurrenceCache.NodeInputs Symbol Guard source
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+          MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)

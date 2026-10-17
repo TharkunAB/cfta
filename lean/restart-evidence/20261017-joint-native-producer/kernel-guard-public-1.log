@@ -1,0 +1,26 @@
+'MicroCFTA.SourceCurrentConstrainedCapKernelGuardHeap.execute_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapKernelGuardHeap.execute_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol Guard state →
+    @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state domain →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) left →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) right →
+          @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) →
+              @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Result.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.execute Symbol Guard inst inst_1 emptyGuard conjoin
+                      fuel domain left right state)))

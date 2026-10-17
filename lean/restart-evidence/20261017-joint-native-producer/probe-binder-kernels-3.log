@@ -1,0 +1,71 @@
+'MicroCFTA.ProbeBinderKernels.original_interned_support' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.ProbeBinderKernels.original_interned_support : have name :=
+  @MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+    (@Prod.fst.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (MicroCFTA.Cache.State MicroCFTA.InternedBinderProtocol.NodeKey)
+      (@MicroCFTA.Cache.intern MicroCFTA.InternedBinderProtocol.NodeKey
+        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool
+          (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+        MicroCFTA.ProbeBinderKernels.pendingKey));
+And
+  (@MicroCFTA.InternedProbeProvenance.Available Nat Bool MicroCFTA.ProbeBinderKernels.pending
+    (@MicroCFTA.InternedConstructorTemplates.Value.reference Nat Bool
+      (MicroCFTA.InternedBinderProtocol.Reference.interned name)))
+  (And
+    (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Nat Bool
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Nat Bool
+        (MicroCFTA.InternedBinderProtocol.Reference.interned name)))
+    (Not
+      (∀ (reference : MicroCFTA.InternedBinderProtocol.Reference),
+        @Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Nat Bool
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Nat Bool
+                (MicroCFTA.InternedBinderProtocol.Reference.interned name)))
+            reference →
+          @Exists.{1} Nat fun first =>
+            @Exists.{1} Nat fun second =>
+              @Eq.{1} MicroCFTA.InternedBinderProtocol.Reference reference
+                (MicroCFTA.InternedBinderProtocol.Reference.intersection first second))))
+'MicroCFTA.ProbeBinderKernels.completed_during_reservation' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.ProbeBinderKernels.completed_during_reservation : And
+  (Not
+    (@MicroCFTA.InternedRecordCoherence.Covered Nat Bool (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+      MicroCFTA.ProbeBinderKernels.pending))
+  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+    And
+      (@Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+        (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Nat Bool
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+              instDecidableEqBool a b)
+          (@Prod.mk.{0, 0} Nat Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          MicroCFTA.ProbeBinderKernels.body MicroCFTA.ProbeBinderKernels.pending)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Nat Bool) after))
+      (And
+        (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Nat Bool))
+        (And
+          (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Nat Bool MicroCFTA.ProbeBinderKernels.weight
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Nat Bool))
+          (And
+            (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Nat Bool
+              (fun x => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Nat Bool))
+            (And
+              (@MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+                after)
+              (And (@MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Nat Bool after)
+                (@MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Nat Bool
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Nat Bool))))))))

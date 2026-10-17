@@ -1,0 +1,808 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/native-joint-closed-kernels.lean:75:55: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq.{1} Symbol
+inst✝ : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+width : Nat
+annotation : Guard → Prop
+depth : Nat
+source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard
+semantic : @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard source
+covered :
+  @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+    source
+guards : @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation source
+domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+domainsValid : @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domains
+holds : Guard → MicroCFTA.Language.Term Symbol → Bool
+emptyGuard : Guard
+conjoin : Guard → Guard → Guard
+emptyValid : annotation emptyGuard
+conjoinValid : ∀ (first second : Guard), annotation first → annotation second → annotation (conjoin first second)
+input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard
+available : @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source input
+closed :
+  @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard input)
+    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+bounded : @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth input
+key : MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width
+requested :
+  @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+    (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+      MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+    (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width) key)
+safe :
+  @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width MicroCFTA.IntersectionEmptyDomain.emptyDomain
+    input input
+branch :
+  @Eq.{1} MicroCFTA.SourceRecursiveIntersectionControl.Branch
+    (@MicroCFTA.SourceRecursiveIntersectionControl.decision Symbol Guard
+      (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+      input input)
+    MicroCFTA.SourceRecursiveIntersectionControl.Branch.self
+request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain
+    input input
+machine : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard source domains
+before : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width machine
+chosen : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @Prod.snd.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+    (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request before)
+running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @Prod.snd.{0, 0}
+    (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) chosen)
+after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionThunks.finishNode Symbol Guard width
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) input running
+selected :
+  @Eq.{1}
+    (Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request before)
+    (@Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+      chosen)
+demanded :
+  @Eq.{1}
+    (Prod.{0, 0}
+      (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) chosen)
+    (@Prod.mk.{0, 0}
+      (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+      (@MicroCFTA.FlatMemoThunk.Observation.evaluate
+        (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request)
+      running)
+⊢ @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (MicroCFTA.SourceRecursiveIntersectionCode.compileNode.match_11.{2}
+      (fun x =>
+        MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.SourceRecursiveIntersectionControl.decision Symbol Guard
+        (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request))
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.requestNode Symbol Guard
+          MicroCFTA.IntersectionEmptyDomain.emptyDomain
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.requestNode Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+      (fun key =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue Symbol Guard key))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileMu Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileMu Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileMu Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileNode.match_1.{2} Symbol Guard
+          (fun left =>
+            MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (fun entry members depth free =>
+            @MicroCFTA.SourceRecursiveIntersectionCode.Code.bind Symbol Guard
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionCode.walk.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun member =>
+                  @MicroCFTA.SourceRecursiveIntersectionCode.requestNode Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) member
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+                members)
+              fun values =>
+              @MicroCFTA.SourceRecursiveIntersectionCode.Code.work Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values)
+                (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          fun x =>
+          @MicroCFTA.SourceRecursiveIntersectionCode.unsupported Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileNode.match_1.{2} Symbol Guard
+          (fun right =>
+            MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)
+          (fun entry members depth free =>
+            @MicroCFTA.SourceRecursiveIntersectionCode.Code.bind Symbol Guard
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionCode.walk.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun member =>
+                  @MicroCFTA.SourceRecursiveIntersectionCode.requestNode Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request) member)
+                members)
+              fun values =>
+              @MicroCFTA.SourceRecursiveIntersectionCode.Code.work Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values)
+                (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          fun x =>
+          @MicroCFTA.SourceRecursiveIntersectionCode.unsupported Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileNode.match_4.{2} Symbol Guard
+          (fun left =>
+            MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (fun name =>
+            @MicroCFTA.SourceRecursiveIntersectionCode.compileReference Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) name
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request) Bool.true)
+          fun x =>
+          @MicroCFTA.SourceRecursiveIntersectionCode.unsupported Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileNode.match_4.{2} Symbol Guard
+          (fun right =>
+            MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)
+          (fun name =>
+            @MicroCFTA.SourceRecursiveIntersectionCode.compileReference Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) name
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request) Bool.false)
+          fun x =>
+          @MicroCFTA.SourceRecursiveIntersectionCode.unsupported Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @MicroCFTA.SourceRecursiveIntersectionCode.compileNode.match_8.{2} Symbol Guard
+          (fun left right =>
+            MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)
+          (fun entry first depth free entry_1 second depth_1 free_1 =>
+            @MicroCFTA.SourceRecursiveIntersectionCode.compileRows Symbol Guard inst✝¹
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) first second)
+          fun x x_1 =>
+          @MicroCFTA.SourceRecursiveIntersectionCode.unsupported Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      fun _ =>
+      @MicroCFTA.SourceRecursiveIntersectionCode.unsupported Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+    (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/native-joint-closed-kernels.lean:104:77: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq.{1} Symbol
+inst✝ : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+width : Nat
+annotation : Guard → Prop
+depth : Nat
+source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard
+semantic : @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard source
+covered :
+  @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+    source
+guards : @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation source
+domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+domainsValid : @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domains
+holds : Guard → MicroCFTA.Language.Term Symbol → Bool
+emptyGuard : Guard
+conjoin : Guard → Guard → Guard
+emptyValid : annotation emptyGuard
+conjoinValid : ∀ (first second : Guard), annotation first → annotation second → annotation (conjoin first second)
+input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard
+available : @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source input
+closed :
+  @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard input)
+    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+bounded : @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth input
+key : MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width
+requested :
+  @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+    (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+      MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+    (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width) key)
+safe :
+  @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width MicroCFTA.IntersectionEmptyDomain.emptyDomain
+    input input
+branch :
+  @Eq.{1} MicroCFTA.SourceRecursiveIntersectionControl.Branch
+    (@MicroCFTA.SourceRecursiveIntersectionControl.decision Symbol Guard
+      (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+      input input)
+    MicroCFTA.SourceRecursiveIntersectionControl.Branch.self
+request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain
+    input input
+machine : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard source domains
+before : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width machine
+chosen : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @Prod.snd.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+    (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request before)
+running : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @Prod.snd.{0, 0}
+    (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) chosen)
+after : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard :=
+  @MicroCFTA.SourceRecursiveIntersectionThunks.finishNode Symbol Guard width
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) input running
+selected :
+  @Eq.{1}
+    (Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode Symbol Guard width request before)
+    (@Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+      chosen)
+demanded :
+  @Eq.{1}
+    (Prod.{0, 0}
+      (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.demandNode width Symbol Guard
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) chosen)
+    (@Prod.mk.{0, 0}
+      (MicroCFTA.FlatMemoThunk.Observation (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+      (@MicroCFTA.FlatMemoThunk.Observation.evaluate
+        (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request)
+      running)
+compiled :
+  @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode Symbol Guard inst✝¹ request)
+    (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input)
+first :
+  @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionNative.step Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      before)
+    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.yielded width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) input
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input))
+      running)
+finish :
+  @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionNative.step Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) input
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input))
+      running)
+    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.yielded width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input)
+      after)
+ranges :
+  @MicroCFTA.SourceRecursiveIntersectionNative.WordRanges Symbol Guard
+    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+    (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+    before
+literal :
+  @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      before)
+    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input after)
+fuel : Nat
+repeated :
+  @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      before)
+    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input after)
+resultCap : @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth input
+classified :
+  @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+    (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight Symbol Guard annotation source)
+    (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol Guard annotation input input) input
+_resultClosed :
+  @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard input)
+    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+_original : @MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard input
+_fresh : @MicroCFTA.SourceCurrentConstrainedCapNativeProbeSupport.ProbeFree Symbol Guard input
+_finalSemantic :
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard
+    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after))
+_finalCovered :
+  @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after))
+context :
+  @MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard annotation source
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after)
+done :
+  @Eq.{2}
+    (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin fuel
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+          MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard source domains)))
+    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input after)
+correct :
+  @MicroCFTA.SourceRecursiveIntersectionNative.Correct Symbol Guard
+    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+    (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+    (@MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard source domains))
+    input after fun final value =>
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard final) value
+stable :
+  ∀ (extra : Nat),
+    @Eq.{2}
+      (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst✝¹ inst✝ emptyGuard conjoin
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra)
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+            MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+          (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard source domains)))
+      (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input after)
+cell :
+  @Eq.{1}
+    (Option.{0}
+      (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+    (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after)
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (@Option.some.{0}
+      (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.FlatMemoThunk.Cell.mk (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+        (@MicroCFTA.FlatMemoThunk.Status.returned (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input)))
+published :
+  @Eq.{1} (Option.{0} Nat)
+    (@MicroCFTA.FlatMemoThunk.State.table (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after) key)
+    (@Option.some.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+⊢ @Eq.{1}
+    (Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+    (MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode.match_3.{1} width
+      (fun x =>
+        Prod.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+          (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard))
+      (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (fun _ =>
+        @Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+          (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.direct Symbol Guard request) after)
+      fun key =>
+      @Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+        (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard
+          (@Prod.fst.{0, 0} Nat
+            (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (MicroCFTA.FlatMemoThunk.lookupOrInsert.match_1.{1}
+              (fun x =>
+                Prod.{0, 0} Nat
+                  (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@MicroCFTA.FlatMemoThunk.State.table (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after) key)
+              (fun handle =>
+                @Prod.mk.{0, 0} Nat
+                  (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  handle (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+              fun _ =>
+              @Prod.mk.{0, 0} Nat
+                (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                (@MicroCFTA.FlatMemoThunk.State.mk (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.Cache.put (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width) Nat
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} (BitVec width) (Prod.{0, 0} (BitVec width) (BitVec width))
+                        (@instDecidableEqBitVec width)
+                        (fun a b =>
+                          @instDecidableEqProd.{0, 0} (BitVec width) (BitVec width) (@instDecidableEqBitVec width)
+                            (@instDecidableEqBitVec width) a b)
+                        a b)
+                    (@MicroCFTA.FlatMemoThunk.State.table (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    key
+                    (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after)))
+                  (@MicroCFTA.Cache.put Nat
+                    (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    instDecidableEqNat
+                    (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    (@MicroCFTA.FlatMemoThunk.Cell.mk
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+                      (@MicroCFTA.FlatMemoThunk.Status.suspended
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.mk width Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard after)
+          (@Prod.snd.{0, 0} Nat
+            (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (MicroCFTA.FlatMemoThunk.lookupOrInsert.match_1.{1}
+              (fun x =>
+                Prod.{0, 0} Nat
+                  (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@MicroCFTA.FlatMemoThunk.State.table (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after) key)
+              (fun handle =>
+                @Prod.mk.{0, 0} Nat
+                  (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  handle (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+              fun _ =>
+              @Prod.mk.{0, 0} Nat
+                (MicroCFTA.FlatMemoThunk.State (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                (@MicroCFTA.FlatMemoThunk.State.mk (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.Cache.put (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width) Nat
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} (BitVec width) (Prod.{0, 0} (BitVec width) (BitVec width))
+                        (@instDecidableEqBitVec width)
+                        (fun a b =>
+                          @instDecidableEqProd.{0, 0} (BitVec width) (BitVec width) (@instDecidableEqBitVec width)
+                            (@instDecidableEqBitVec width) a b)
+                        a b)
+                    (@MicroCFTA.FlatMemoThunk.State.table (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    key
+                    (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after)))
+                  (@MicroCFTA.Cache.put Nat
+                    (MicroCFTA.FlatMemoThunk.Cell (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    instDecidableEqNat
+                    (@MicroCFTA.FlatMemoThunk.State.cells (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    (@MicroCFTA.FlatMemoThunk.Cell.mk
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) request
+                      (@MicroCFTA.FlatMemoThunk.Status.suspended
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@MicroCFTA.FlatMemoThunk.State.next (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.nodes width Symbol Guard after))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.edges width Symbol Guard after)))
+    (@Prod.mk.{0, 0} (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection Symbol Guard)
+      (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized Symbol Guard
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+      after)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/native-joint-closed-kernels.lean:113:63: error: Application type mismatch: The argument
+  fun x x_1 => safe
+has type
+  ∀ (x : ?m.631) (x : ?m.633 x),
+    @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width MicroCFTA.IntersectionEmptyDomain.emptyDomain
+      input input
+but is expected to have type
+  @MicroCFTA.SourceRecursiveIntersectionNative.Words ?m.621 Guard ?m.625 ?m.626 ?m.627
+in the application
+  @MicroCFTA.NativeJointClosedIntegration.ranges_prepend ?m.621 Guard ?m.623 ?m.624 ?m.625 ?m.626 emptyGuard conjoin
+    ?m.627 ?m.628 ?m.629 ?m.630 fun x x_1 => safe
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/native-joint-closed-kernels.lean:75:82: warning: This simp argument is unused:
+  branch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/native-joint-closed-kernels.lean:105:27: warning: This simp argument is unused:
+  requested
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [lookupNode, FlatMemoThunk.lookupOrInsert, published]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-joint-native-producer/native-joint-closed-kernels.lean:105:68: warning: This simp argument is unused:
+  published
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [lookupNode, requested, FlatMemoThunk.lookupOrInsert]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'MicroCFTA.NativeJointClosedIntegration.cold_then_warm_self' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.NativeJointClosedIntegration.cold_then_warm_self : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {width : Nat}
+  (annotation : Guard → Prop) (depth : Nat) (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard source →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        source →
+      @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation source →
+        ∀ (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+          @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domains →
+            ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (emptyGuard : Guard)
+              (conjoin : Guard → Guard → Guard),
+              annotation emptyGuard →
+                (∀ (first second : Guard), annotation first → annotation second → annotation (conjoin first second)) →
+                  ∀ (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source input →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard input)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                        @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth input →
+                          ∀ (key : MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width),
+                            @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                                (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+                                (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width) key) →
+                              @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard width
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain input input →
+                                @Eq.{1} MicroCFTA.SourceRecursiveIntersectionControl.Branch
+                                    (@MicroCFTA.SourceRecursiveIntersectionControl.decision Symbol Guard
+                                      (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                        MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+                                      input input)
+                                    MicroCFTA.SourceRecursiveIntersectionControl.Branch.self →
+                                  @Exists.{1} Nat fun fuel =>
+                                    @Exists.{1} (MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+                                      fun after =>
+                                      And
+                                        (@Eq.{2}
+                                          (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst
+                                            inst_1 emptyGuard conjoin fuel
+                                            (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                                                MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+                                              (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                            (@MicroCFTA.SourceRecursiveIntersectionThunks.initial Symbol Guard width
+                                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk Symbol Guard
+                                                source domains)))
+                                          (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input after))
+                                        (And
+                                          (@Eq.{2}
+                                            (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard
+                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                            (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard
+                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) width inst
+                                              inst_1 emptyGuard conjoin
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              (@MicroCFTA.SourceRecursiveIntersectionCode.Code.node Symbol Guard
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol
+                                                  Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain input input)
+                                                (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                              after)
+                                            (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol
+                                              Guard (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input
+                                              after))
+                                          (And
+                                            (@MicroCFTA.SourceCurrentConstrainedCapKernelJoint.Context Symbol Guard
+                                              annotation source
+                                              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol
+                                                Guard after))
+                                            (And
+                                              (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard annotation depth
+                                                input)
+                                              (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol
+                                                Guard
+                                                (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.sourceWeight
+                                                  Symbol Guard annotation source)
+                                                (@MicroCFTA.SourceCurrentConstrainedCapNonplainRank.pairRank Symbol
+                                                  Guard annotation input input)
+                                                input))))

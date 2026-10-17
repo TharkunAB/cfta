@@ -1,0 +1,129 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelGuardHeap.lean:195:79: error: don't know how to synthesize placeholder for argument `pair`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+call :
+  Interned DomainKey →
+    Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+calls : Calls call
+scopes : SourceRecursiveIntersectionScopeCalls.ScopedCalls call
+guards : GuardCalls annotation call
+domain : Interned DomainKey
+left right : Value Symbol Guard
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : Domain state domain
+leftAvailable : Available state.heap left
+rightAvailable : Available state.heap right
+semantic : SemanticHeap state.heap
+heap : Heap annotation state.heap
+firstId : Nat
+first : SourceRecursiveIntersectionControl.identity left = some firstId
+secondId : Nat
+second : SourceRecursiveIntersectionControl.identity right = some secondId
+actual : Interned DomainKey × Cache.State DomainKey := ⋯
+after : Machine Symbol Guard := ⋯
+afterValid :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+left✝ :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+afterDomain :
+  Domain
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst
+leftBody : Available state.heap (body left)
+rightBody : Available state.heap (body right)
+requested : Checked after (call actual.fst (body left) (body right) after) fun after value => Available after.heap value
+observed :
+  SourceRecursiveIntersectionScopeEffects.Observed (call actual.fst (body left) (body right) after)
+    (SourceRecursiveIntersectionResultScope.Scope actual.fst.key.seen)
+value : Value Symbol Guard
+final : Machine Symbol Guard
+done : call actual.fst (body left) (body right) after = Result.done value final
+finalHeap : Heap annotation final.heap
+⊢ Nat × Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelGuardHeap.lean:195:7: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelGuardHeap.lean:181:68: error: unsolved goals
+case some.some
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+call :
+  Interned DomainKey →
+    Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+calls : Calls call
+scopes : SourceRecursiveIntersectionScopeCalls.ScopedCalls call
+guards : GuardCalls annotation call
+domain : Interned DomainKey
+left right : Value Symbol Guard
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : Domain state domain
+leftAvailable : Available state.heap left
+rightAvailable : Available state.heap right
+semantic : SemanticHeap state.heap
+heap : Heap annotation state.heap
+firstId : Nat
+first : SourceRecursiveIntersectionControl.identity left = some firstId
+secondId : Nat
+second : SourceRecursiveIntersectionControl.identity right = some secondId
+actual : Interned DomainKey × Cache.State DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId
+after : Machine Symbol Guard := { heap := state.heap, domains := actual.snd }
+afterValid :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+left✝ :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+afterDomain :
+  Domain
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst
+leftBody : Available state.heap (body left)
+rightBody : Available state.heap (body right)
+requested : Checked after (call actual.fst (body left) (body right) after) fun after value => Available after.heap value
+observed :
+  SourceRecursiveIntersectionScopeEffects.Observed (call actual.fst (body left) (body right) after)
+    (SourceRecursiveIntersectionResultScope.Scope actual.fst.key.seen)
+value : Value Symbol Guard
+final : Machine Symbol Guard
+done : call actual.fst (body left) (body right) after = Result.done value final
+finalHeap : Heap annotation final.heap
+⊢ Heap annotation
+    (construction
+          (SourceRecursiveIntersectionMaybeMu.maybeMu (SourceRecursiveIntersectionControl.pair firstId secondId) value
+            final.heap)
+          final).state.heap
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelGuardHeap.lean:230:103: error: Application type mismatch: The last
+  semantic
+argument has type
+  SemanticHeap state.heap
+but is expected to have type
+  Heap annotation state.heap
+in the application
+  guards IntersectionEmptyDomain.emptyDomain left right state valid (empty_domain state) leftAvailable rightAvailable
+    semantic semantic
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapKernelGuardHeap.lean:236:93: error: Application type mismatch: The last
+  semantic
+argument has type
+  SemanticHeap state.heap
+but is expected to have type
+  Heap annotation state.heap
+in the application
+  guards domain right left state valid known rightAvailable leftAvailable semantic semantic
