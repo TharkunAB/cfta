@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentConjunctionAlphabetBounds
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.decision_carrier
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.decision_carrier
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.decision_bound
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.decision_bound
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.decision_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.decision_complete
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.call_carrier
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.call_carrier
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.call_bound
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.call_bound
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.memo_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.memo_complete
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast_ge
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast_ge
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast_mono
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast_mono
+#check @MicroCFTA.SourceCurrentConjunctionAlphabetBounds.caller_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionAlphabetBounds.caller_complete

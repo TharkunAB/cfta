@@ -1,0 +1,18 @@
+lean/restart-evidence/20261017-scan-guard-resources/seeded-initial-ranges-direct-1.source.lean:106:22: error: Type mismatch
+  fold_ranges formulas solver inventory unconstrained anchor anchorSemantic anchorReady
+has type
+  ∀ (values : List (Value Symbol Guard)) (seed : List Int) (paths : List (List Int)) (before : Checked (?m.87 + 2))
+    (profile : Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved ?m.87 values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      FoldRanges values (paths ++ [seed]) before
+but is expected to have type
+  SeededRanges values (seed :: rest) before
+lean/restart-evidence/20261017-scan-guard-resources/seeded-initial-ranges-direct-1.source.lean:107:6: error: unexpected identifier; expected command

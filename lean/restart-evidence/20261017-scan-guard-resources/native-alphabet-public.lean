@@ -1,0 +1,86 @@
+import MicroCFTA.SourceCurrentNativeGuardAlphabet
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.step
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.step
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.step
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.mem_step_of_mem
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.mem_step_of_mem
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.mem_step_of_mem
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.top_mem_step
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.top_mem_step
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.top_mem_step
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.conjoin_mem_step
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.conjoin_mem_step
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.conjoin_mem_step
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.step_mono
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.step_mono
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.step_mono
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.step_length
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.step_length
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.step_length
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.step_length_ge
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.step_length_ge
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.step_length_ge
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_zero
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_zero
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_zero
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_succ
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_succ
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_succ
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_add
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_add
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_add
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_step
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_step
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_step
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.mem_advance_of_mem
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.mem_advance_of_mem
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.mem_advance_of_mem
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_mono
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_mono
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_mono
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_count_mono
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_count_mono
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_count_mono
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.conjoin_mem_advance
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.conjoin_mem_advance
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.conjoin_mem_advance
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.top_mem_advance
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.top_mem_advance
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.top_mem_advance
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_length_ge
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_length_ge
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_length_ge
+
+#print axioms MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_length_count_mono
+#check @MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_length_count_mono
+#print MicroCFTA.SourceCurrentNativeGuardAlphabet.advance_length_count_mono

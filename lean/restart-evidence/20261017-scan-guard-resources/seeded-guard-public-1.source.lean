@@ -1,0 +1,54 @@
+import MicroCFTA.SourceCurrentSeededGuardNumeric
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.foldAlphabet
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.foldAlphabet
+#print MicroCFTA.SourceCurrentSeededGuardForecast.foldAlphabet
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.finalAlphabet
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.finalAlphabet
+#print MicroCFTA.SourceCurrentSeededGuardForecast.finalAlphabet
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.fold_nil
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.fold_nil
+#print MicroCFTA.SourceCurrentSeededGuardForecast.fold_nil
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.fold_cons
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.fold_cons
+#print MicroCFTA.SourceCurrentSeededGuardForecast.fold_cons
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.fold_ge
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.fold_ge
+#print MicroCFTA.SourceCurrentSeededGuardForecast.fold_ge
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.fold_tail_le
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.fold_tail_le
+#print MicroCFTA.SourceCurrentSeededGuardForecast.fold_tail_le
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.fold_mono
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.fold_mono
+#print MicroCFTA.SourceCurrentSeededGuardForecast.fold_mono
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.final_ge
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.final_ge
+#print MicroCFTA.SourceCurrentSeededGuardForecast.final_ge
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardForecast.final_mono
+#check @MicroCFTA.SourceCurrentSeededGuardForecast.final_mono
+#print MicroCFTA.SourceCurrentSeededGuardForecast.final_mono
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardNumeric.fold_complete
+#check @MicroCFTA.SourceCurrentSeededGuardNumeric.fold_complete
+#print MicroCFTA.SourceCurrentSeededGuardNumeric.fold_complete
+
+#print axioms MicroCFTA.SourceCurrentSeededGuardNumeric.complete
+#check @MicroCFTA.SourceCurrentSeededGuardNumeric.complete
+#print MicroCFTA.SourceCurrentSeededGuardNumeric.complete

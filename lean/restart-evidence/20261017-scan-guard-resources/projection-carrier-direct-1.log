@@ -1,0 +1,119 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:51:22: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+state : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+heap : Heap annotation state
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+semantic✝ : SemanticReady state
+available✝ : Available state (Value.node entry✝ edges✝ depth✝ free✝)
+seen : List Nat
+⊢ MergedSourceExposure.Result.done edges✝ state = MergedSourceExposure.Result.done ?m.85 state
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:61:34: error: Type mismatch: After simplification, term
+  available
+ has type
+  Available state value✝
+but is expected to have type
+  Available state value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:62:34: error: Type mismatch: After simplification, term
+  closed
+ has type
+  value✝.free = []
+but is expected to have type
+  value.free = []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:52:8: warning: This simp argument is unused:
+  InternedEdgeResidency.nodeEdges
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [collect, MergedSourceExposure.Result.prepend, List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:125:55: error: don't know how to synthesize placeholder for argument `val`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : InternedFreshOrdinaryMemoGateTrace.Ready anchor
+path : EqualityNormalize.Path
+index : Nat
+child :
+  ∀ {value result : Value Symbol Guard} {before after : InternedConstructorTemplates.State Symbol Guard},
+    Project (List.map Int.ofNat path) value before result after →
+      SemanticReady before →
+        Available before value →
+          Grows anchor before → Support unconstrained anchor path value → Heap annotation before → Heap annotation after
+edge : EdgeValue Symbol Guard
+edges : List (EdgeValue Symbol Guard)
+ih :
+  ∀ {before after : InternedConstructorTemplates.State Symbol Guard} {values : List (Value Symbol Guard)},
+    ProjectRows (List.map Int.ofNat path) (Int.ofNat index) edges before values after →
+      SemanticReady before →
+        Edges before edges →
+          Grows anchor before →
+            (∀ (edge : EdgeValue Symbol Guard),
+                edge ∈ edges →
+                  ∀ (value : Value Symbol Guard),
+                    edge.children[index]? = some value → Support unconstrained anchor path value) →
+              Heap annotation before → Heap annotation after
+before after : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+resident : Edges before (edge :: edges)
+growth : Grows anchor before
+supported :
+  ∀ (edge_1 : EdgeValue Symbol Guard),
+    edge_1 ∈ edge :: edges →
+      ∀ (value : Value Symbol Guard), edge_1.children[index]? = some value → Support unconstrained anchor path value
+heap : Heap annotation before
+child✝ result✝ : Value Symbol Guard
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+results✝ : List (Value Symbol Guard)
+found : select edge.children (Int.ofNat index) = some child✝
+first : Project (List.map Int.ofNat path) child✝ before result✝ middle✝
+rest : ProjectRows (List.map Int.ofNat path) (Int.ofNat index) edges middle✝ results✝ after
+⊢ Value Symbol Guard
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:176:16: error: unsolved goals
+case cons.inr.empty.recursive
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : InternedFreshOrdinaryMemoGateTrace.Ready anchor
+index : Nat
+path : List Nat
+ih :
+  ∀ {value result : Value Symbol Guard} {before after : InternedConstructorTemplates.State Symbol Guard},
+    Project (List.map Int.ofNat path) value before result after →
+      SemanticReady before →
+        Available before value →
+          Grows anchor before → Support unconstrained anchor path value → Heap annotation before → Heap annotation after
+result : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+growth : Grows anchor before
+heap : Heap annotation before
+available : Available before Value.empty
+anchorAvailable : Available anchor Value.empty
+gate : SourceCurrentSecondaryTrace.NodeTrace unconstrained (index :: path) Value.empty anchor false anchor
+exposed✝ : Value Symbol Guard
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+recursive✝ : SourceEqualityRequiredGraph.Recursive Value.empty
+head✝ : Head Value.empty before exposed✝ middle✝
+body✝ : Project (Int.ofNat index :: List.map Int.ofNat path) exposed✝ middle✝ result after
+⊢ Heap annotation after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:236:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey SourceSymbol SourceGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/projection-carrier-direct-1.source.lean:238:68: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey SourceSymbol SourceGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.

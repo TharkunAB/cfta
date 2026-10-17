@@ -1,0 +1,658 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:204:16: error: don't know how to synthesize implicit argument `N`
+  @SourceCurrentAllocatedSeededWorkerStability.seeded_done_stable (bits + 2) inst✝² inst✝¹
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (?m.2015 p h n) (?m.2016 p h n enoughP) (?m.2017 p h n enoughP enoughH) values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor) middle query queryDone enoughP enoughH enoughN
+context:
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+values : List (Value Symbol Guard)
+paths : Class
+classes : List Class
+ih :
+  ∀ (alphabet : List Guard) (before : Checked (bits + 2)) (memo : Memo) (inventory : Inventory),
+    Frame formulas solver inventory before →
+      ∀ (profile : Profile),
+        Fits profile before →
+          Values before.native.machine.heap values →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo →
+              Heap (fun guard => guard ∈ alphabet) before.native.machine.heap →
+                (∀ (paths : Class), paths ∈ classes → ∀ (path : Path), path ∈ paths → path ≠ []) →
+                  Reserved bits budget values.length classes alphabet profile →
+                    ∀ (memos : Memos),
+                      EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∃ outcome selected after saved next,
+                          Receipt formulas solver alphabet profile budget values classes before memo outcome selected
+                            after saved next
+alphabet : List Guard
+before : Checked (bits + 2)
+memo : Memo
+inventory : Inventory
+frame : Frame formulas solver inventory before
+profile : Profile
+fits : Fits profile before
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo
+known : Heap (fun guard => guard ∈ alphabet) before.native.machine.heap
+proper : ∀ (paths_1 : Class), paths_1 ∈ paths :: classes → ∀ (path : Path), path ∈ paths_1 → path ≠ []
+reserved : Reserved bits budget values.length (paths :: classes) alphabet profile
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+nextPlan : List Guard × Profile := ⋯
+tailProper : ∀ (other : Class), other ∈ classes → ∀ (path : Path), path ∈ other → path ≠ []
+limits :
+  SourceCurrentGateFrameResources.workerFuel paths profile ≤ classFuel budget values.length paths alphabet profile ∧
+    SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤
+        classFuel budget values.length paths alphabet profile ∧
+      SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+            (gateProfile paths (gateProfile paths profile)) ≤
+          classFuel budget values.length paths alphabet profile ∧
+        SourceCurrentConjunctionWorklistResources.workerFuel (classStep budget values.length paths alphabet profile).fst
+              budget
+              (SourceCurrentConstrainedCapTargetForecast.scalar
+                (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                  (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+            classFuel budget values.length paths alphabet profile ∧
+          SourceCurrentConjunctionWorklistResources.readerFuel
+              (classStep budget values.length paths alphabet profile).fst budget
+              (SourceCurrentConstrainedCapTargetForecast.scalar
+                (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                  (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+            classFuel budget values.length paths alphabet profile
+localFuel :
+  classFuel budget values.length paths alphabet profile ≤ fuel budget values.length (paths :: classes) alphabet profile
+tailFuel :
+  fuel budget values.length classes nextPlan.fst nextPlan.snd ≤
+    fuel budget values.length (paths :: classes) alphabet profile
+widen : alphabet ⊆ (classStep budget values.length paths alphabet profile).fst
+heap : InternedConstructorTemplates.State Symbol Guard
+firstFrame : Frame formulas solver inventory (advanceHeap before heap)
+firstFits : Fits (gateProfile paths profile) (advanceHeap before heap)
+firstValues : Values heap values
+firstEffects : Effects (physical before) (physical (advanceHeap before heap))
+firstCorrect : SourceCurrentEmptinessMemo.Correct formulas solver (physical (advanceHeap before heap)).heap memo
+firstKnown : Heap (fun guard => guard ∈ alphabet) heap
+firstValid : EndpointMemoGateTrace.Valid (physical (advanceHeap before heap)).heap memos
+primary : EndpointStatefulGateTrace.ClassTrace source reaches values paths before.native.machine.heap true heap
+firstDone :
+  ∀ (fuel : Nat),
+    SourceCurrentGateFrameResources.workerFuel paths profile ≤ fuel →
+      SourceCurrentMuEndpoint.classMeets true source reaches fuel values paths before.native.machine.heap =
+        InternedNestedConstruction.Outcome.done (some true) heap
+anchor : InternedConstructorTemplates.State Symbol Guard
+secondFrame : Frame formulas solver inventory (advanceHeap (advanceHeap before heap) anchor)
+secondFits : Fits (gateProfile paths (gateProfile paths profile)) (advanceHeap (advanceHeap before heap) anchor)
+secondValues : Values anchor values
+secondEffects : Effects (physical (advanceHeap before heap)) (physical (advanceHeap (advanceHeap before heap) anchor))
+secondCorrect :
+  SourceCurrentEmptinessMemo.Correct formulas solver (physical (advanceHeap (advanceHeap before heap) anchor)).heap memo
+secondKnown : Heap (fun guard => guard ∈ alphabet) anchor
+secondValid : EndpointMemoGateTrace.Valid (physical (advanceHeap (advanceHeap before heap) anchor)).heap memos
+secondary :
+  SourceCurrentSecondaryTrace.ClassTrace source values paths (advanceHeap before heap).native.machine.heap false anchor
+secondDone :
+  ∀ (fuel : Nat),
+    SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤ fuel →
+      SourceCurrentMuEndpoint.classMeets false source reaches fuel values paths
+          (advanceHeap before heap).native.machine.heap =
+        InternedNestedConstruction.Outcome.done (some false) anchor
+support :
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor ∧
+    InternedFreshOrdinaryCostHeap.Heap anchor ∧
+      InternedFreshOrdinaryMemoGateTrace.Ready anchor ∧
+        SourceEqualityRequiredCache.Keeps (advanceHeap before heap).native.machine.heap anchor ∧
+          Values anchor values ∧
+            SourceCurrentSecondaryTrace.ClassTrace source values paths anchor false anchor ∧
+              ∀ (path : List Int),
+                path ∈ List.map (List.map Int.ofNat) paths →
+                  SourceCurrentSecondaryProjectionScoped.PathSupport source anchor path values
+signedProper : ∀ (path : List Int), path ∈ List.map (List.map Int.ofNat) paths → path ≠ []
+seededRanges :
+  SourceCurrentAllocatedSeededQuery.SeededRanges values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor)
+query : Value Symbol Guard
+middle : Checked (bits + 2)
+queryInventory : Inventory
+queryMemos : Memos
+seeded :
+  SourceCurrentAllocatedSeededQuery.Seeded values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor) query middle
+_reads : SourceCurrentAllocatedSeededMemos.SeededReads seeded memos queryMemos
+receipt :
+  SourceCurrentConstrainedCapSeededNumeric.Receipt formulas solver queryInventory
+    (advanceHeap (advanceHeap before heap) anchor) query middle memos queryMemos
+queryFits :
+  Fits
+    (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    middle
+_included :
+  List.map (List.map Int.ofNat) paths ≠ [] →
+    SourceCurrentAllocatedSeededLanguage.Includes formulas solver values (List.map (List.map Int.ofNat) paths) query
+queryDone :
+  SourceCurrentAllocatedSeededWorker.seeded
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      values (List.map (List.map Int.ofNat) paths) (advanceHeap (advanceHeap before heap) anchor) =
+    SourceCurrentAllocatedSeededWorker.Outcome.done query middle
+queryKnown :
+  Heap
+    (fun guard =>
+      guard ∈
+        SourceCurrentSeededGuardForecast.finalAlphabet alphabet values.length (List.map (List.map Int.ofNat) paths)
+          (gateProfile paths (gateProfile paths profile)))
+    middle.native.machine.heap
+queryCorrect : SourceCurrentEmptinessMemo.Correct formulas solver (physical middle).heap memo
+physicalReady : SourceCurrentConjunctionRowsAllocation.Ready (physical middle)
+scalarFits :
+  SourceCurrentMemoMergeResourceControl.Fits
+    (SourceCurrentConstrainedCapEditForecast.scalar
+      (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile))))
+    middle.native.machine.heap
+answer : Bool
+later : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+savedMemo : Memo
+decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) answer later savedMemo
+memoEffects : Effects (physical middle) later
+memoCorrect : SourceCurrentEmptinessMemo.Correct formulas solver later.heap savedMemo
+_sound : SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer
+retained : SourceCurrentEmptinessMemo.Extends memo savedMemo
+_guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain later.heap
+memoKnown : Heap (fun guard => guard ∈ nextPlan.fst) later.heap
+bounded :
+  SourceCurrentMemoMergeResourceControl.Fits
+    (SourceCurrentConjunctionWorklistResources.forecast nextPlan.fst budget
+      (SourceCurrentConstrainedCapTargetForecast.scalar
+        (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+          (gateProfile paths (gateProfile paths profile)))))
+    later.heap
+memoDone :
+  ∀ (work reader : Nat),
+    SourceCurrentConjunctionWorklistResources.workerFuel nextPlan.fst budget
+          (SourceCurrentConstrainedCapTargetForecast.scalar
+            (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+              (gateProfile paths (gateProfile paths profile)))) ≤
+        work →
+      SourceCurrentConjunctionWorklistResources.readerFuel nextPlan.fst budget
+            (SourceCurrentConstrainedCapTargetForecast.scalar
+              (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+          reader →
+        SourceCurrentConjunctionWorker.call work reader budget memo query (physical middle) =
+          SourceCurrentConjunctionWorker.Outcome.done (answer, savedMemo) later
+finalFrame : Frame formulas solver queryInventory (advancePhysical middle later)
+memoFits : Fits nextPlan.snd (advancePhysical middle later)
+memoValues : Values (advancePhysical middle later).native.machine.heap values
+memoValid : EndpointMemoGateTrace.Valid later.heap queryMemos
+p : ?m.1990
+h : ?m.2013 p
+n : ?m.2014 p h
+enoughP :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2015 p h n
+enoughH :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2016 p h n enoughP
+enoughN :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2017 p h n enoughP enoughH
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:204:16: error: don't know how to synthesize implicit argument `H`
+  @SourceCurrentAllocatedSeededWorkerStability.seeded_done_stable (bits + 2) inst✝² inst✝¹
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (?m.2015 p h n) (?m.2016 p h n enoughP) (?m.2017 p h n enoughP enoughH) values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor) middle query queryDone enoughP enoughH enoughN
+context:
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+values : List (Value Symbol Guard)
+paths : Class
+classes : List Class
+ih :
+  ∀ (alphabet : List Guard) (before : Checked (bits + 2)) (memo : Memo) (inventory : Inventory),
+    Frame formulas solver inventory before →
+      ∀ (profile : Profile),
+        Fits profile before →
+          Values before.native.machine.heap values →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo →
+              Heap (fun guard => guard ∈ alphabet) before.native.machine.heap →
+                (∀ (paths : Class), paths ∈ classes → ∀ (path : Path), path ∈ paths → path ≠ []) →
+                  Reserved bits budget values.length classes alphabet profile →
+                    ∀ (memos : Memos),
+                      EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∃ outcome selected after saved next,
+                          Receipt formulas solver alphabet profile budget values classes before memo outcome selected
+                            after saved next
+alphabet : List Guard
+before : Checked (bits + 2)
+memo : Memo
+inventory : Inventory
+frame : Frame formulas solver inventory before
+profile : Profile
+fits : Fits profile before
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo
+known : Heap (fun guard => guard ∈ alphabet) before.native.machine.heap
+proper : ∀ (paths_1 : Class), paths_1 ∈ paths :: classes → ∀ (path : Path), path ∈ paths_1 → path ≠ []
+reserved : Reserved bits budget values.length (paths :: classes) alphabet profile
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+nextPlan : List Guard × Profile := ⋯
+tailProper : ∀ (other : Class), other ∈ classes → ∀ (path : Path), path ∈ other → path ≠ []
+limits :
+  SourceCurrentGateFrameResources.workerFuel paths profile ≤ classFuel budget values.length paths alphabet profile ∧
+    SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤
+        classFuel budget values.length paths alphabet profile ∧
+      SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+            (gateProfile paths (gateProfile paths profile)) ≤
+          classFuel budget values.length paths alphabet profile ∧
+        SourceCurrentConjunctionWorklistResources.workerFuel (classStep budget values.length paths alphabet profile).fst
+              budget
+              (SourceCurrentConstrainedCapTargetForecast.scalar
+                (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                  (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+            classFuel budget values.length paths alphabet profile ∧
+          SourceCurrentConjunctionWorklistResources.readerFuel
+              (classStep budget values.length paths alphabet profile).fst budget
+              (SourceCurrentConstrainedCapTargetForecast.scalar
+                (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                  (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+            classFuel budget values.length paths alphabet profile
+localFuel :
+  classFuel budget values.length paths alphabet profile ≤ fuel budget values.length (paths :: classes) alphabet profile
+tailFuel :
+  fuel budget values.length classes nextPlan.fst nextPlan.snd ≤
+    fuel budget values.length (paths :: classes) alphabet profile
+widen : alphabet ⊆ (classStep budget values.length paths alphabet profile).fst
+heap : InternedConstructorTemplates.State Symbol Guard
+firstFrame : Frame formulas solver inventory (advanceHeap before heap)
+firstFits : Fits (gateProfile paths profile) (advanceHeap before heap)
+firstValues : Values heap values
+firstEffects : Effects (physical before) (physical (advanceHeap before heap))
+firstCorrect : SourceCurrentEmptinessMemo.Correct formulas solver (physical (advanceHeap before heap)).heap memo
+firstKnown : Heap (fun guard => guard ∈ alphabet) heap
+firstValid : EndpointMemoGateTrace.Valid (physical (advanceHeap before heap)).heap memos
+primary : EndpointStatefulGateTrace.ClassTrace source reaches values paths before.native.machine.heap true heap
+firstDone :
+  ∀ (fuel : Nat),
+    SourceCurrentGateFrameResources.workerFuel paths profile ≤ fuel →
+      SourceCurrentMuEndpoint.classMeets true source reaches fuel values paths before.native.machine.heap =
+        InternedNestedConstruction.Outcome.done (some true) heap
+anchor : InternedConstructorTemplates.State Symbol Guard
+secondFrame : Frame formulas solver inventory (advanceHeap (advanceHeap before heap) anchor)
+secondFits : Fits (gateProfile paths (gateProfile paths profile)) (advanceHeap (advanceHeap before heap) anchor)
+secondValues : Values anchor values
+secondEffects : Effects (physical (advanceHeap before heap)) (physical (advanceHeap (advanceHeap before heap) anchor))
+secondCorrect :
+  SourceCurrentEmptinessMemo.Correct formulas solver (physical (advanceHeap (advanceHeap before heap) anchor)).heap memo
+secondKnown : Heap (fun guard => guard ∈ alphabet) anchor
+secondValid : EndpointMemoGateTrace.Valid (physical (advanceHeap (advanceHeap before heap) anchor)).heap memos
+secondary :
+  SourceCurrentSecondaryTrace.ClassTrace source values paths (advanceHeap before heap).native.machine.heap false anchor
+secondDone :
+  ∀ (fuel : Nat),
+    SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤ fuel →
+      SourceCurrentMuEndpoint.classMeets false source reaches fuel values paths
+          (advanceHeap before heap).native.machine.heap =
+        InternedNestedConstruction.Outcome.done (some false) anchor
+support :
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor ∧
+    InternedFreshOrdinaryCostHeap.Heap anchor ∧
+      InternedFreshOrdinaryMemoGateTrace.Ready anchor ∧
+        SourceEqualityRequiredCache.Keeps (advanceHeap before heap).native.machine.heap anchor ∧
+          Values anchor values ∧
+            SourceCurrentSecondaryTrace.ClassTrace source values paths anchor false anchor ∧
+              ∀ (path : List Int),
+                path ∈ List.map (List.map Int.ofNat) paths →
+                  SourceCurrentSecondaryProjectionScoped.PathSupport source anchor path values
+signedProper : ∀ (path : List Int), path ∈ List.map (List.map Int.ofNat) paths → path ≠ []
+seededRanges :
+  SourceCurrentAllocatedSeededQuery.SeededRanges values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor)
+query : Value Symbol Guard
+middle : Checked (bits + 2)
+queryInventory : Inventory
+queryMemos : Memos
+seeded :
+  SourceCurrentAllocatedSeededQuery.Seeded values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor) query middle
+_reads : SourceCurrentAllocatedSeededMemos.SeededReads seeded memos queryMemos
+receipt :
+  SourceCurrentConstrainedCapSeededNumeric.Receipt formulas solver queryInventory
+    (advanceHeap (advanceHeap before heap) anchor) query middle memos queryMemos
+queryFits :
+  Fits
+    (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    middle
+_included :
+  List.map (List.map Int.ofNat) paths ≠ [] →
+    SourceCurrentAllocatedSeededLanguage.Includes formulas solver values (List.map (List.map Int.ofNat) paths) query
+queryDone :
+  SourceCurrentAllocatedSeededWorker.seeded
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      values (List.map (List.map Int.ofNat) paths) (advanceHeap (advanceHeap before heap) anchor) =
+    SourceCurrentAllocatedSeededWorker.Outcome.done query middle
+queryKnown :
+  Heap
+    (fun guard =>
+      guard ∈
+        SourceCurrentSeededGuardForecast.finalAlphabet alphabet values.length (List.map (List.map Int.ofNat) paths)
+          (gateProfile paths (gateProfile paths profile)))
+    middle.native.machine.heap
+queryCorrect : SourceCurrentEmptinessMemo.Correct formulas solver (physical middle).heap memo
+physicalReady : SourceCurrentConjunctionRowsAllocation.Ready (physical middle)
+scalarFits :
+  SourceCurrentMemoMergeResourceControl.Fits
+    (SourceCurrentConstrainedCapEditForecast.scalar
+      (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile))))
+    middle.native.machine.heap
+answer : Bool
+later : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+savedMemo : Memo
+decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) answer later savedMemo
+memoEffects : Effects (physical middle) later
+memoCorrect : SourceCurrentEmptinessMemo.Correct formulas solver later.heap savedMemo
+_sound : SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer
+retained : SourceCurrentEmptinessMemo.Extends memo savedMemo
+_guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain later.heap
+memoKnown : Heap (fun guard => guard ∈ nextPlan.fst) later.heap
+bounded :
+  SourceCurrentMemoMergeResourceControl.Fits
+    (SourceCurrentConjunctionWorklistResources.forecast nextPlan.fst budget
+      (SourceCurrentConstrainedCapTargetForecast.scalar
+        (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+          (gateProfile paths (gateProfile paths profile)))))
+    later.heap
+memoDone :
+  ∀ (work reader : Nat),
+    SourceCurrentConjunctionWorklistResources.workerFuel nextPlan.fst budget
+          (SourceCurrentConstrainedCapTargetForecast.scalar
+            (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+              (gateProfile paths (gateProfile paths profile)))) ≤
+        work →
+      SourceCurrentConjunctionWorklistResources.readerFuel nextPlan.fst budget
+            (SourceCurrentConstrainedCapTargetForecast.scalar
+              (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+          reader →
+        SourceCurrentConjunctionWorker.call work reader budget memo query (physical middle) =
+          SourceCurrentConjunctionWorker.Outcome.done (answer, savedMemo) later
+finalFrame : Frame formulas solver queryInventory (advancePhysical middle later)
+memoFits : Fits nextPlan.snd (advancePhysical middle later)
+memoValues : Values (advancePhysical middle later).native.machine.heap values
+memoValid : EndpointMemoGateTrace.Valid later.heap queryMemos
+p : ?m.1990
+h : ?m.2013 p
+n : ?m.2014 p h
+enoughP :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2015 p h n
+enoughH :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2016 p h n enoughP
+enoughN :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2017 p h n enoughP enoughH
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:204:16: error: don't know how to synthesize implicit argument `P`
+  @SourceCurrentAllocatedSeededWorkerStability.seeded_done_stable (bits + 2) inst✝² inst✝¹
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    (?m.2015 p h n) (?m.2016 p h n enoughP) (?m.2017 p h n enoughP enoughH) values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor) middle query queryDone enoughP enoughH enoughN
+context:
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+values : List (Value Symbol Guard)
+paths : Class
+classes : List Class
+ih :
+  ∀ (alphabet : List Guard) (before : Checked (bits + 2)) (memo : Memo) (inventory : Inventory),
+    Frame formulas solver inventory before →
+      ∀ (profile : Profile),
+        Fits profile before →
+          Values before.native.machine.heap values →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo →
+              Heap (fun guard => guard ∈ alphabet) before.native.machine.heap →
+                (∀ (paths : Class), paths ∈ classes → ∀ (path : Path), path ∈ paths → path ≠ []) →
+                  Reserved bits budget values.length classes alphabet profile →
+                    ∀ (memos : Memos),
+                      EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∃ outcome selected after saved next,
+                          Receipt formulas solver alphabet profile budget values classes before memo outcome selected
+                            after saved next
+alphabet : List Guard
+before : Checked (bits + 2)
+memo : Memo
+inventory : Inventory
+frame : Frame formulas solver inventory before
+profile : Profile
+fits : Fits profile before
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo
+known : Heap (fun guard => guard ∈ alphabet) before.native.machine.heap
+proper : ∀ (paths_1 : Class), paths_1 ∈ paths :: classes → ∀ (path : Path), path ∈ paths_1 → path ≠ []
+reserved : Reserved bits budget values.length (paths :: classes) alphabet profile
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+nextPlan : List Guard × Profile := ⋯
+tailProper : ∀ (other : Class), other ∈ classes → ∀ (path : Path), path ∈ other → path ≠ []
+limits :
+  SourceCurrentGateFrameResources.workerFuel paths profile ≤ classFuel budget values.length paths alphabet profile ∧
+    SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤
+        classFuel budget values.length paths alphabet profile ∧
+      SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+            (gateProfile paths (gateProfile paths profile)) ≤
+          classFuel budget values.length paths alphabet profile ∧
+        SourceCurrentConjunctionWorklistResources.workerFuel (classStep budget values.length paths alphabet profile).fst
+              budget
+              (SourceCurrentConstrainedCapTargetForecast.scalar
+                (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                  (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+            classFuel budget values.length paths alphabet profile ∧
+          SourceCurrentConjunctionWorklistResources.readerFuel
+              (classStep budget values.length paths alphabet profile).fst budget
+              (SourceCurrentConstrainedCapTargetForecast.scalar
+                (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                  (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+            classFuel budget values.length paths alphabet profile
+localFuel :
+  classFuel budget values.length paths alphabet profile ≤ fuel budget values.length (paths :: classes) alphabet profile
+tailFuel :
+  fuel budget values.length classes nextPlan.fst nextPlan.snd ≤
+    fuel budget values.length (paths :: classes) alphabet profile
+widen : alphabet ⊆ (classStep budget values.length paths alphabet profile).fst
+heap : InternedConstructorTemplates.State Symbol Guard
+firstFrame : Frame formulas solver inventory (advanceHeap before heap)
+firstFits : Fits (gateProfile paths profile) (advanceHeap before heap)
+firstValues : Values heap values
+firstEffects : Effects (physical before) (physical (advanceHeap before heap))
+firstCorrect : SourceCurrentEmptinessMemo.Correct formulas solver (physical (advanceHeap before heap)).heap memo
+firstKnown : Heap (fun guard => guard ∈ alphabet) heap
+firstValid : EndpointMemoGateTrace.Valid (physical (advanceHeap before heap)).heap memos
+primary : EndpointStatefulGateTrace.ClassTrace source reaches values paths before.native.machine.heap true heap
+firstDone :
+  ∀ (fuel : Nat),
+    SourceCurrentGateFrameResources.workerFuel paths profile ≤ fuel →
+      SourceCurrentMuEndpoint.classMeets true source reaches fuel values paths before.native.machine.heap =
+        InternedNestedConstruction.Outcome.done (some true) heap
+anchor : InternedConstructorTemplates.State Symbol Guard
+secondFrame : Frame formulas solver inventory (advanceHeap (advanceHeap before heap) anchor)
+secondFits : Fits (gateProfile paths (gateProfile paths profile)) (advanceHeap (advanceHeap before heap) anchor)
+secondValues : Values anchor values
+secondEffects : Effects (physical (advanceHeap before heap)) (physical (advanceHeap (advanceHeap before heap) anchor))
+secondCorrect :
+  SourceCurrentEmptinessMemo.Correct formulas solver (physical (advanceHeap (advanceHeap before heap) anchor)).heap memo
+secondKnown : Heap (fun guard => guard ∈ alphabet) anchor
+secondValid : EndpointMemoGateTrace.Valid (physical (advanceHeap (advanceHeap before heap) anchor)).heap memos
+secondary :
+  SourceCurrentSecondaryTrace.ClassTrace source values paths (advanceHeap before heap).native.machine.heap false anchor
+secondDone :
+  ∀ (fuel : Nat),
+    SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤ fuel →
+      SourceCurrentMuEndpoint.classMeets false source reaches fuel values paths
+          (advanceHeap before heap).native.machine.heap =
+        InternedNestedConstruction.Outcome.done (some false) anchor
+support :
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor ∧
+    InternedFreshOrdinaryCostHeap.Heap anchor ∧
+      InternedFreshOrdinaryMemoGateTrace.Ready anchor ∧
+        SourceEqualityRequiredCache.Keeps (advanceHeap before heap).native.machine.heap anchor ∧
+          Values anchor values ∧
+            SourceCurrentSecondaryTrace.ClassTrace source values paths anchor false anchor ∧
+              ∀ (path : List Int),
+                path ∈ List.map (List.map Int.ofNat) paths →
+                  SourceCurrentSecondaryProjectionScoped.PathSupport source anchor path values
+signedProper : ∀ (path : List Int), path ∈ List.map (List.map Int.ofNat) paths → path ≠ []
+seededRanges :
+  SourceCurrentAllocatedSeededQuery.SeededRanges values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor)
+query : Value Symbol Guard
+middle : Checked (bits + 2)
+queryInventory : Inventory
+queryMemos : Memos
+seeded :
+  SourceCurrentAllocatedSeededQuery.Seeded values (List.map (List.map Int.ofNat) paths)
+    (advanceHeap (advanceHeap before heap) anchor) query middle
+_reads : SourceCurrentAllocatedSeededMemos.SeededReads seeded memos queryMemos
+receipt :
+  SourceCurrentConstrainedCapSeededNumeric.Receipt formulas solver queryInventory
+    (advanceHeap (advanceHeap before heap) anchor) query middle memos queryMemos
+queryFits :
+  Fits
+    (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)))
+    middle
+_included :
+  List.map (List.map Int.ofNat) paths ≠ [] →
+    SourceCurrentAllocatedSeededLanguage.Includes formulas solver values (List.map (List.map Int.ofNat) paths) query
+queryDone :
+  SourceCurrentAllocatedSeededWorker.seeded
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      (SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile)))
+      values (List.map (List.map Int.ofNat) paths) (advanceHeap (advanceHeap before heap) anchor) =
+    SourceCurrentAllocatedSeededWorker.Outcome.done query middle
+queryKnown :
+  Heap
+    (fun guard =>
+      guard ∈
+        SourceCurrentSeededGuardForecast.finalAlphabet alphabet values.length (List.map (List.map Int.ofNat) paths)
+          (gateProfile paths (gateProfile paths profile)))
+    middle.native.machine.heap
+queryCorrect : SourceCurrentEmptinessMemo.Correct formulas solver (physical middle).heap memo
+physicalReady : SourceCurrentConjunctionRowsAllocation.Ready (physical middle)
+scalarFits :
+  SourceCurrentMemoMergeResourceControl.Fits
+    (SourceCurrentConstrainedCapEditForecast.scalar
+      (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+        (gateProfile paths (gateProfile paths profile))))
+    middle.native.machine.heap
+answer : Bool
+later : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+savedMemo : Memo
+decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) answer later savedMemo
+memoEffects : Effects (physical middle) later
+memoCorrect : SourceCurrentEmptinessMemo.Correct formulas solver later.heap savedMemo
+_sound : SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer
+retained : SourceCurrentEmptinessMemo.Extends memo savedMemo
+_guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain later.heap
+memoKnown : Heap (fun guard => guard ∈ nextPlan.fst) later.heap
+bounded :
+  SourceCurrentMemoMergeResourceControl.Fits
+    (SourceCurrentConjunctionWorklistResources.forecast nextPlan.fst budget
+      (SourceCurrentConstrainedCapTargetForecast.scalar
+        (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+          (gateProfile paths (gateProfile paths profile)))))
+    later.heap
+memoDone :
+  ∀ (work reader : Nat),
+    SourceCurrentConjunctionWorklistResources.workerFuel nextPlan.fst budget
+          (SourceCurrentConstrainedCapTargetForecast.scalar
+            (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (List.map (List.map Int.ofNat) paths)
+              (gateProfile paths (gateProfile paths profile)))) ≤
+        work →
+      SourceCurrentConjunctionWorklistResources.readerFuel nextPlan.fst budget
+            (SourceCurrentConstrainedCapTargetForecast.scalar
+              (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length
+                (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))) ≤
+          reader →
+        SourceCurrentConjunctionWorker.call work reader budget memo query (physical middle) =
+          SourceCurrentConjunctionWorker.Outcome.done (answer, savedMemo) later
+finalFrame : Frame formulas solver queryInventory (advancePhysical middle later)
+memoFits : Fits nextPlan.snd (advancePhysical middle later)
+memoValues : Values (advancePhysical middle later).native.machine.heap values
+memoValid : EndpointMemoGateTrace.Valid later.heap queryMemos
+p : ?m.1990
+h : ?m.2013 p
+n : ?m.2014 p h
+enoughP :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2015 p h n
+enoughH :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2016 p h n enoughP
+enoughN :
+  SourceCurrentConstrainedCapSeededForecast.fuel values.length (List.map (List.map Int.ofNat) paths)
+      (gateProfile paths (gateProfile paths profile)) ≤
+    ?m.2017 p h n enoughP enoughH
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:60: error(lean.inferBinderTypeFailed): Failed to infer type of binder `enoughN`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:52: error(lean.inferBinderTypeFailed): Failed to infer type of binder `enoughH`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:44: error(lean.inferBinderTypeFailed): Failed to infer type of binder `enoughP`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:42: error(lean.inferBinderTypeFailed): Failed to infer type of binder `n`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:40: error(lean.inferBinderTypeFailed): Failed to infer type of binder `h`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:38: error(lean.inferBinderTypeFailed): Failed to infer type of binder `p`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/scan-numeric-direct-2.source.lean:203:19: error: failed to infer `have` declaration type

@@ -1,0 +1,30 @@
+{
+  "audit": {
+    "command": [
+      "/home/tritlo/Code/heavy-management/bin/capped",
+      "--mem",
+      "4G",
+      "--time",
+      "10m",
+      "bash",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-scan-guard-resources/run-audit.sh"
+    ],
+    "environment": {
+      "XDG_RUNTIME_DIR": "/run/user/1000",
+      "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+      "HEAVY_PEAKS": "/tmp/mcfta-scan-audit-peaks",
+      "CAPPED_UNIT": "heavy-mcfta-scan-audit-20261017-1409"
+    },
+    "log": "lean-audit-3.log",
+    "exit_code": 0,
+    "effective_memory_max_bytes": 4294967296,
+    "effective_memory_high_bytes": 4294967296,
+    "effective_memory_swap_max_bytes": 0,
+    "peak_mib": 371
+  },
+  "failed_attempts": {
+    "lean-audit-1.log": "Sandbox could not connect to the user bus. No Lean process started.",
+    "lean-audit-2.log": "User bus environment was absent outside the sandbox. No Lean process started."
+  },
+  "focused_checks": "Each source snapshot and raw log is immutable. Final strict sources are byte-identical to production. Focused Lean checks were lightweight direct toolchain calls. The full audit ran under the required systemd memory cap."
+}

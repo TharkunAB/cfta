@@ -1,0 +1,242 @@
+[
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScan.lean",
+    "start": 34,
+    "end": 34,
+    "text": "def advanceHeap (before : Checked width) (heap : State Symbol Guard) : Checked width :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScan.lean",
+    "start": 38,
+    "end": 77,
+    "text": "inductive Scan [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)]\n    (budget : Nat) (unconstrained reaches : Value Symbol Guard \u2192 Bool)\n    (values : List (Value Symbol Guard)) :\n    Constraints \u2192 Checked width \u2192 Memo \u2192 Option Class \u2192 Constraints \u2192 Checked width \u2192 Memo \u2192 Prop where\n  | nil : Scan budget unconstrained reaches values [] state memo none [] state memo\n  | selected\n      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap false heap)\n      (rest : Scan budget unconstrained reaches values classes (advanceHeap before heap)\n        memo outcome selected after saved) :\n      Scan budget unconstrained reaches values (paths :: classes) before memo outcome (paths :: selected) after saved\n  | skipped\n      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap true heap)\n      (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap true anchor)\n      (rest : Scan budget unconstrained reaches values classes\n        (advanceHeap (advanceHeap before heap) anchor) memo outcome selected after saved) :\n      Scan budget unconstrained reaches values (paths :: classes) before memo outcome selected after saved\n  | continued\n      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap true heap)\n      (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)\n      (seeded : SourceCurrentAllocatedSeededQuery.Seeded values\n        (paths.map (List.map Int.ofNat)) (advanceHeap (advanceHeap before heap) anchor) query middle)\n      (decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later savedMemo)\n      (rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)\n        savedMemo outcome selected after saved) :\n      Scan budget unconstrained reaches values (paths :: classes) before memo outcome selected after saved\n  | stopped\n      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap true heap)\n      (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)\n      (seeded : SourceCurrentAllocatedSeededQuery.Seeded values\n        (paths.map (List.map Int.ofNat)) (advanceHeap (advanceHeap before heap) anchor) query middle)\n      (decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true later saved) :\n      Scan budget unconstrained reaches values (paths :: classes) before memo (some paths) []\n        (advancePhysical middle later) saved\n\n/-- Every rejection names an original class in the reached prefix. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScan.lean",
+    "start": 110,
+    "end": 117,
+    "text": "structure Ready (state : Checked width) : Prop where\n  good : Good state\n  semantic : SemanticReady state.native.machine.heap\n  costs : CostHeap state.native.machine.heap\n  scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native\n  idle : SourceRecursiveIntersectionNative.Idle state.native\n\n/-- Constructor-only effects retain every checked invariant at the same native tables. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScanCompletion.lean",
+    "start": 26,
+    "end": 49,
+    "text": "def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)]\n    (budget : Nat) (unconstrained reaches : Value Symbol Guard \u2192 Bool)\n    (values : List (Value Symbol Guard)) : Constraints \u2192 Checked width \u2192 Memo \u2192 Prop\n  | [], _, _ => True\n  | paths :: classes, before, memo =>\n      (\u2200 heap, EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap false heap \u2192\n        Ranges budget unconstrained reaches values classes (advanceHeap before heap) memo) \u2227\n      (\u2200 heap, EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap true heap \u2192\n        \u2200 anchor, SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap true anchor \u2192\n        Ranges budget unconstrained reaches values classes (advanceHeap (advanceHeap before heap) anchor) memo) \u2227\n      (\u2200 heap, EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths\n        before.native.machine.heap true heap \u2192\n        \u2200 anchor, SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor \u2192\n        SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))\n          (advanceHeap (advanceHeap before heap) anchor) \u2227\n        \u2200 query middle, SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))\n          (advanceHeap (advanceHeap before heap) anchor) query middle \u2192\n          \u2200 later saved, SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later saved \u2192\n            Ranges budget unconstrained reaches values classes (advancePhysical middle later) saved)\n\n/-- Initial invariants and reached word bounds derive a finite current scan and its returned states. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScanCompletion.lean",
+    "start": 50,
+    "end": 64,
+    "text": "theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (budget : Nat) (unconstrained reaches : Value Symbol Guard \u2192 Bool)\n    (values : List (Value Symbol Guard)) (classes : Constraints) (before : Checked width) (memo : Memo)\n    (ready : Ready before) (available : Values before.native.machine.heap values)\n    (proper : \u2200 paths \u2208 classes, \u2200 path \u2208 paths, path \u2260 [])\n    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)\n    (ranges : Ranges budget unconstrained reaches values classes before memo) :\n    \u2203 outcome selected after saved,\n      Scan budget unconstrained reaches values classes before memo outcome selected after saved \u2227\n      Ready after \u2227 Effects (physical before) (physical after) \u2227\n      Values after.native.machine.heap values \u2227\n      SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved \u2227\n      SourceCurrentEmptinessMemo.Extends memo saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScanGlobalMemos.lean",
+    "start": 35,
+    "end": 74,
+    "text": "inductive ScanReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)] :\n    {budget : Nat} \u2192 {values : List (Value Symbol Guard)} \u2192 {classes selected : Constraints} \u2192\n    {outcome : Option Class} \u2192 {before after : Checked width} \u2192 {memo saved : Memo} \u2192\n    Scan budget unconstrained reaches values classes before memo outcome selected after saved \u2192 Memos \u2192 Memos \u2192 Prop where\n  | nil : ScanReads .nil memos memos\n  | selected (first : EndpointMemoGateTrace.ClassReads primary memos middle)\n      (tail : ScanReads rest middle final) : ScanReads (.selected primary rest) memos final\n  | skipped (first : EndpointMemoGateTrace.ClassReads primary memos middle)\n      (second : SourceCurrentSecondaryMemos.ClassReads secondary middle later)\n      (tail : ScanReads rest later final) : ScanReads (.skipped primary secondary rest) memos final\n  | continued {budget : Nat} {values : List (Value Symbol Guard)} {paths : Class} {classes selected : Constraints}\n      {before middle after : Checked width} {heap anchor : State Symbol Guard} {later : Physical}\n      {query : Value Symbol Guard} {memo savedMemo saved : Memo} {outcome : Option Class}\n      {primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap true heap}\n      {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}\n      {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))\n        (advanceHeap (advanceHeap before heap) anchor) query middle}\n      {call : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later savedMemo}\n      {rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)\n        savedMemo outcome selected after saved}\n      {memos first second final : Memos}\n      (primaryRead : EndpointMemoGateTrace.ClassReads primary memos first)\n      (queryRead : QueryReads (before := advanceHeap before heap) secondary seeded call first second)\n      (tailRead : ScanReads rest second final) :\n      ScanReads (.continued primary secondary seeded call rest) memos final\n  | stopped {budget : Nat} {values : List (Value Symbol Guard)} {paths : Class} {classes : Constraints}\n      {before middle : Checked width} {heap anchor : State Symbol Guard} {later : Physical}\n      {query : Value Symbol Guard} {memo saved : Memo}\n      {primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap true heap}\n      {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}\n      {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))\n        (advanceHeap (advanceHeap before heap) anchor) query middle}\n      {call : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true later saved}\n      {memos first final : Memos}\n      (primaryRead : EndpointMemoGateTrace.ClassReads primary memos first)\n      (queryRead : QueryReads (before := advanceHeap before heap) secondary seeded call first final) :\n      ScanReads (.stopped (classes := classes) primary secondary seeded call) memos final\n\n/-- Every current checked Scan derives the global tables and all physical and fourth-memo invariants. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScanGlobalMemos.lean",
+    "start": 75,
+    "end": 89,
+    "text": "theorem scan_memos [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)]\n    {budget : Nat} {values : List (Value Symbol Guard)} {classes selected : Constraints} {outcome : Option Class}\n    {before after : Checked width} {memo saved : Memo}\n    (trace : Scan budget unconstrained reaches values classes before memo outcome selected after saved)\n    (ready : Ready before) (available : Values before.native.machine.heap values)\n    (proper : \u2200 paths \u2208 classes, \u2200 path \u2208 paths, path \u2260 [])\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)\n    (ranges : SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before memo)\n    (memos : Memos) (valid : Valid before.native.machine.heap memos) :\n    \u2203 final, ScanReads trace memos final \u2227 Valid after.native.machine.heap final \u2227\n      Ready after \u2227 Effects (physical before) (physical after) \u2227 Values after.native.machine.heap values \u2227\n      SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved \u2227\n      SourceCurrentEmptinessMemo.Extends memo saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScanGlobalMemos.lean",
+    "start": 147,
+    "end": 167,
+    "text": "theorem verified [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory)\n    {budget : Nat} {values : List (Value Symbol Guard)} {classes selected : Constraints} {outcome : Option Class}\n    {before after : Checked width} {memo saved : Memo}\n    (trace : Scan budget unconstrained reaches values classes before memo outcome selected after saved)\n    (ready : Ready before) (admitted : At formulas solver inventory before)\n    (available : Values before.native.machine.heap values)\n    (proper : \u2200 paths \u2208 classes, \u2200 path \u2208 paths, path \u2260 []) (active : \u2200 paths \u2208 classes, Nontrivial paths)\n    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)\n    (ranges : SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before memo)\n    (memos : Memos) (valid : Valid before.native.machine.heap memos) :\n    \u2203 final next, ScanReads trace memos final \u2227 Valid after.native.machine.heap final \u2227 Ready after \u2227\n      At formulas solver next after \u2227 Effects (physical before) (physical after) \u2227\n      Values after.native.machine.heap values \u2227\n      SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved \u2227\n      SourceCurrentEmptinessMemo.Extends memo saved \u2227\n      \u2200 paths, outcome = some paths \u2192 \u2200 ambient symbol terms,\n        All\u2082 (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms \u2192\n        \u00acClassSat (.node symbol terms) paths := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionClassScanSoundness.lean",
+    "start": 30,
+    "end": 49,
+    "text": "theorem verified [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory)\n    {budget : Nat} {unconstrained reaches : Value Symbol Guard \u2192 Bool} {values : List (Value Symbol Guard)}\n    {classes selected : Constraints} {outcome : Option Class} {before after : Checked width} {memo saved : Memo}\n    (actual : Scan budget unconstrained reaches values classes before memo outcome selected after saved)\n    (ready : Ready before) (admitted : At formulas solver inventory before)\n    (available : Values before.native.machine.heap values)\n    (proper : \u2200 paths \u2208 classes, \u2200 path \u2208 paths, path \u2260 [])\n    (active : \u2200 paths \u2208 classes, Nontrivial paths)\n    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)\n    (ranges : Ranges budget unconstrained reaches values classes before memo) :\n    \u2203 next, Ready after \u2227 At formulas solver next after \u2227 Effects (physical before) (physical after) \u2227\n      Values after.native.machine.heap values \u2227\n      SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved \u2227\n      SourceCurrentEmptinessMemo.Extends memo saved \u2227\n      \u2200 paths, outcome = some paths \u2192 \u2200 ambient symbol terms,\n        All\u2082 (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms \u2192\n        \u00acClassSat (.node symbol terms) paths := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanWorker.lean",
+    "start": 78,
+    "end": 92,
+    "text": "noncomputable def scan (g s p h n budget : Nat) (values : List (Value Symbol Guard)) :\n    Constraints \u2192 Checked width \u2192 Memo \u2192 Outcome Result width\n  | [], before, memo => .done (none, []) before memo\n  | paths :: classes, before, memo =>\n      (gate true g values paths before memo).bind fun primary middle current =>\n        if primary then\n          (gate false s values paths middle current).bind fun secondary later saved =>\n            if secondary then scan g s p h n budget values classes later saved\n            else (query p h n values paths later saved).bind fun value checked fourth =>\n              (decision p h budget paths value checked fourth).bind fun answer after final =>\n                if answer then .done (some paths, []) after final\n                else scan g s p h n budget values classes after final\n        else (scan g s p h n budget values classes middle current).select paths\n\n/-- Empty input retains the complete checked state and fourth memo at every bound. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean",
+    "start": 128,
+    "end": 133,
+    "text": "theorem scan_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)] {budget : Nat} {values : List (Value Symbol Guard)}\n    {classes selected : Constraints} {before after : Checked width} {memo saved : Memo} {stopped : Option Class}\n    (actual : Scan budget source reaches values classes before memo stopped selected after saved) :\n    StableRun (fun g s p h n => scan g s p h n budget values classes before memo)\n      (stopped, selected) after saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanWorkerCompletion.lean",
+    "start": 191,
+    "end": 196,
+    "text": "theorem scan_uniform [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)] {budget : Nat} {values : List (Value Symbol Guard)}\n    {classes selected : Constraints} {before after : Checked width} {memo saved : Memo} {stopped : Option Class}\n    (actual : Scan budget source reaches values classes before memo stopped selected after saved) :\n    \u2203 bound, \u2200 fuel, bound \u2264 fuel \u2192\n      scan fuel fuel fuel fuel fuel budget values classes before memo = .done (stopped, selected) after saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanWorkerStability.lean",
+    "start": 106,
+    "end": 110,
+    "text": "theorem scan_done_stable {g s p h n G S P H N budget : Nat} {values : List (Value Symbol Guard)}\n    {classes : Constraints} {before after : Checked width} {memo saved : Memo} {result : Result}\n    (actual : scan g s p h n budget values classes before memo = .done result after saved)\n    (enoughG : g \u2264 G) (enoughS : s \u2264 S) (enoughP : p \u2264 P) (enoughH : h \u2264 H) (enoughN : n \u2264 N) :\n    scan G S P H N budget values classes before memo = .done result after saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanWorkerStability.lean",
+    "start": 136,
+    "end": 140,
+    "text": "theorem scan_done_unique {g s p h n G S P H N budget : Nat} {values : List (Value Symbol Guard)}\n    {classes : Constraints} {before after later : Checked width} {memo saved current : Memo} {first second : Result}\n    (one : scan g s p h n budget values classes before memo = .done first after saved)\n    (two : scan G S P H N budget values classes before memo = .done second later current) :\n    first = second \u2227 after = later \u2227 saved = current := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanCaller.lean",
+    "start": 71,
+    "end": 83,
+    "text": "theorem actual {inventory : Inventory} {budget : Nat} {before : Caller width} {after : Checked width}\n    {values : List (Value Symbol Guard)} {classes selected : Constraints} {outcome : Option Class}\n    {saved : Memo} {memos : Memos}\n    (scan : Scan budget unconstrained reaches values classes before.checked before.fourth outcome selected after saved)\n    (initial : Context formulas solver inventory before memos)\n    (available : Values before.checked.native.machine.heap values)\n    (proper : \u2200 paths \u2208 classes, \u2200 path \u2208 paths, path \u2260 [])\n    (active : \u2200 paths \u2208 classes, Nontrivial paths)\n    (ranges : Ranges budget unconstrained reaches values classes before.checked before.fourth) :\n    \u2203 next final, ScanReads scan memos final \u2227 Post formulas solver next before\n        (SourceCurrentAllocatedPartialState.advance before after saved before.merge) final \u2227\n      Values after.native.machine.heap values \u2227 selected.Sublist classes \u2227\n      StoppedSound formulas solver values classes outcome := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanCaller.lean",
+    "start": 90,
+    "end": 102,
+    "text": "theorem finite {inventory : Inventory} {before : Caller width} {memos : Memos}\n    (budget : Nat) (values : List (Value Symbol Guard)) (classes : Constraints)\n    (initial : Context formulas solver inventory before memos)\n    (available : Values before.checked.native.machine.heap values)\n    (proper : \u2200 paths \u2208 classes, \u2200 path \u2208 paths, path \u2260 [])\n    (active : \u2200 paths \u2208 classes, Nontrivial paths)\n    (ranges : Ranges budget unconstrained reaches values classes before.checked before.fourth) :\n    \u2203 outcome selected after saved next final,\n      \u2203 scan : Scan budget unconstrained reaches values classes before.checked before.fourth outcome selected after saved,\n        ScanReads scan memos final \u2227 Post formulas solver next before\n          (SourceCurrentAllocatedPartialState.advance before after saved before.merge) final \u2227\n        Values after.native.machine.heap values \u2227 selected.Sublist classes \u2227\n        StoppedSound formulas solver values classes outcome := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedScanSourceReads.lean",
+    "start": 28,
+    "end": 67,
+    "text": "inductive ScanReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    [DecidableEq (Value Symbol Guard)] :\n    {budget : Nat} \u2192 {values : List (Value Symbol Guard)} \u2192 {classes selected : Constraints} \u2192\n    {outcome : Option Class} \u2192 {before after : Checked width} \u2192 {memo saved : Memo} \u2192\n    Scan budget unconstrained reaches values classes before memo outcome selected after saved \u2192 Memos \u2192 Memos \u2192 Prop where\n  | nil : ScanReads .nil memos memos\n  | selected (first : SourceCurrentAllocatedPrimaryReads.ClassReads primary memos middle)\n      (tail : ScanReads rest middle final) : ScanReads (.selected primary rest) memos final\n  | skipped (first : SourceCurrentAllocatedPrimaryReads.ClassReads primary memos middle)\n      (second : SourceCurrentSecondaryMemos.ClassReads secondary middle later)\n      (tail : ScanReads rest later final) : ScanReads (.skipped primary secondary rest) memos final\n  | continued {budget : Nat} {values : List (Value Symbol Guard)} {paths : Class} {classes selected : Constraints}\n      {before middle after : Checked width} {heap anchor : State Symbol Guard} {later : Physical}\n      {query : Value Symbol Guard} {memo savedMemo saved : Memo} {outcome : Option Class}\n      {primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap true heap}\n      {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}\n      {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))\n        (advanceHeap (advanceHeap before heap) anchor) query middle}\n      {call : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later savedMemo}\n      {rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)\n        savedMemo outcome selected after saved}\n      {memos first second final : Memos}\n      (primaryRead : SourceCurrentAllocatedPrimaryReads.ClassReads primary memos first)\n      (queryRead : QueryReads (before := advanceHeap before heap) secondary seeded call first second)\n      (tailRead : ScanReads rest second final) :\n      ScanReads (.continued primary secondary seeded call rest) memos final\n  | stopped {budget : Nat} {values : List (Value Symbol Guard)} {paths : Class} {classes : Constraints}\n      {before middle : Checked width} {heap anchor : State Symbol Guard} {later : Physical}\n      {query : Value Symbol Guard} {memo saved : Memo}\n      {primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap true heap}\n      {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}\n      {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))\n        (advanceHeap (advanceHeap before heap) anchor) query middle}\n      {call : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true later saved}\n      {memos first final : Memos}\n      (primaryRead : SourceCurrentAllocatedPrimaryReads.ClassReads primary memos first)\n      (queryRead : QueryReads (before := advanceHeap before heap) secondary seeded call first final) :\n      ScanReads (.stopped (classes := classes) primary secondary seeded call) memos final\n\n/-- Erasure retains the supplied actual Scan, all calls, and both complete memo bundles. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentGateFrameResources.lean",
+    "start": 32,
+    "end": 32,
+    "text": "def forecast (paths : Class) (profile : Profile) : Profile :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentGateFrameResources.lean",
+    "start": 61,
+    "end": 74,
+    "text": "theorem primary (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)\n    (unconstrained reaches : Value Symbol Guard \u2192 Bool) (values : List (Value Symbol Guard))\n    (paths : Class) (before : Checked width) (frame : Frame formulas solver inventory before)\n    (profile : Profile) (fits : Fits profile before) (available : Values before.native.machine.heap values) :\n    \u2203 answer heap,\n      EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap answer heap \u2227\n      Frame formulas solver inventory (advanceHeap before heap) \u2227\n      Fits (forecast paths profile) (advanceHeap before heap) \u2227 Values heap values \u2227\n      SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before)\n        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap)) \u2227\n      \u2200 fuel, workerFuel paths profile \u2264 fuel \u2192\n        SourceCurrentMuEndpoint.classMeets true unconstrained reaches fuel values paths before.native.machine.heap =\n          .done (some answer) heap := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentGateFrameResources.lean",
+    "start": 92,
+    "end": 105,
+    "text": "theorem secondary (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)\n    (unconstrained reaches : Value Symbol Guard \u2192 Bool) (values : List (Value Symbol Guard))\n    (paths : Class) (before : Checked width) (frame : Frame formulas solver inventory before)\n    (profile : Profile) (fits : Fits profile before) (available : Values before.native.machine.heap values) :\n    \u2203 answer heap,\n      SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap answer heap \u2227\n      Frame formulas solver inventory (advanceHeap before heap) \u2227\n      Fits (forecast paths profile) (advanceHeap before heap) \u2227 Values heap values \u2227\n      SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before)\n        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap)) \u2227\n      \u2200 fuel, workerFuel paths profile \u2264 fuel \u2192\n        SourceCurrentMuEndpoint.classMeets false unconstrained reaches fuel values paths before.native.machine.heap =\n          .done (some answer) heap := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedPrimaryCompletion.lean",
+    "start": 177,
+    "end": 183,
+    "text": "theorem lift_class [DecidableEq (EdgeKey Symbol Guard)]\n    (values : List (Value Symbol Guard)) (paths : Class) (state : State Symbol Guard)\n    (answer : Bool) (final : State Symbol Guard)\n    (trace : EndpointStatefulGateTrace.ClassTrace source reaches values paths state answer final)\n    (ready : Ready state) (available : \u2200 value \u2208 values, Available state value)\n    (memos : Memos) (valid : Valid state memos) :\n    \u2203 saved, ClassReads trace memos saved \u2227 Keeps state final saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentSecondaryMemos.lean",
+    "start": 237,
+    "end": 243,
+    "text": "theorem lift_class [DecidableEq (EdgeKey Symbol Guard)]\n    (values : List (Value Symbol Guard)) (paths : Class) (state : State Symbol Guard)\n    (answer : Bool) (final : State Symbol Guard)\n    (trace : SourceCurrentSecondaryTrace.ClassTrace source values paths state answer final)\n    (ready : Ready state) (available : \u2200 value \u2208 values, Available state value)\n    (memos : Memos) (valid : Valid state memos) :\n    \u2203 saved, ClassReads trace memos saved \u2227 Keeps state final saved := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConstrainedCapSeededForecast.lean",
+    "start": 78,
+    "end": 82,
+    "text": "def foldProfile (count : Nat) (seed : List Int) : List (List Int) \u2192 Profile \u2192 Profile\n  | [], profile => projectionProfile seed count profile\n  | path :: rest, profile => step (foldProfile count seed rest (projectionProfile path count profile))\n\n/-- An empty seeded query keeps its original state. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConstrainedCapSeededForecast.lean",
+    "start": 94,
+    "end": 98,
+    "text": "def SeededReserved (bits count : Nat) : List (List Int) \u2192 Profile \u2192 Prop\n  | [], _ => True\n  | seed :: rest, profile => Reserved bits count seed rest profile\n\n/-- Every complete fold retains its original numeric profile. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConstrainedCapSeededForecast.lean",
+    "start": 122,
+    "end": 128,
+    "text": "def foldFuel (count : Nat) (seed : List Int) : List (List Int) \u2192 Profile \u2192 Nat\n  | [], profile => projectionFuel seed count profile\n  | path :: rest, profile => max (projectionFuel path count profile)\n      (max (foldFuel count seed rest (projectionProfile path count profile))\n        (queryFuel (foldProfile count seed rest (projectionProfile path count profile))))\n\n/-- Empty input needs no fuel; nonempty input uses its exact first-seed fold. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentSeededCallerNumeric.lean",
+    "start": 49,
+    "end": 75,
+    "text": "theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)\n    (unconstrained : Value Symbol Guard \u2192 Bool) (anchor : State Symbol Guard)\n    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)\n    (values : List (Value Symbol Guard)) (paths : List (List Int)) (before : Caller (bits + 2))\n    (memos : Memos) (initial : Context formulas solver inventory before memos)\n    (frame : Frame formulas solver inventory before.checked) (profile : Profile) (fits : Fits profile before.checked)\n    (available : Values before.checked.native.machine.heap values) (growth : Grows anchor before.checked.native.machine.heap)\n    (supported : \u2200 path \u2208 paths, PathSupport unconstrained anchor path values)\n    (proper : \u2200 path \u2208 paths, path \u2260 []) (reserved : SeededReserved bits values.length paths profile) :\n    \u2203 result after next final,\n      \u2203 actual : SourceCurrentAllocatedSeededQuery.Seeded values paths before.checked result after,\n      SourceCurrentAllocatedSeededMemos.SeededReads actual memos final \u2227\n      SourceCurrentConstrainedCapSeededNumeric.Receipt formulas solver next before.checked result after memos final \u2227\n      Post formulas solver next before (advance before after before.fourth before.merge) final \u2227\n      Fits (finalProfile values.length paths profile) after \u2227\n      (paths \u2260 [] \u2192 SourceCurrentAllocatedSeededLanguage.Includes formulas solver values paths result) \u2227\n      (advance before after before.fourth before.merge).nodeResults = before.nodeResults \u2227\n      (advance before after before.fourth before.merge).edgeResults = before.edgeResults \u2227\n      (advance before after before.fourth before.merge).fourth = before.fourth \u2227\n      (advance before after before.fourth before.merge).merge = before.merge \u2227\n      SourceCurrentAllocatedSeededWorker.seeded\n        (fuel values.length paths profile) (fuel values.length paths profile) (fuel values.length paths profile)\n        values paths before.checked = .done result after \u2227\n      (\u2200 projection reader native, fuel values.length paths profile \u2264 projection \u2192\n        fuel values.length paths profile \u2264 reader \u2192 fuel values.length paths profile \u2264 native \u2192\n        SourceCurrentAllocatedSeededWorker.seeded projection reader native values paths before.checked = .done result after) := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionAlphabetBounds.lean",
+    "start": 180,
+    "end": 180,
+    "text": "noncomputable def callerForecast (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile) : Profile :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionAlphabetBounds.lean",
+    "start": 200,
+    "end": 223,
+    "text": "theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]\n    [DecidableEq ConcreteValue]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (alphabet : List ConcreteGuard) (inventory : Inventory) (budget : Nat) (query : ConcreteValue)\n    (before : Caller width) (memos : Memos) (initial : Context formulas solver inventory before memos)\n    (frame : Frame formulas solver inventory before.checked) (profile : Profile)\n    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before.checked)\n    (available : Available before.checked.native.machine.heap query)\n    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard \u2208 alphabet) before.checked.native.machine.heap) :\n    \u2203 answer after saved,\n      SourceCurrentConjunctionMemo.Call budget before.fourth query (physical before.checked) answer after saved \u2227\n      Frame formulas solver inventory (advancePhysical before.checked after) \u2227\n      Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos \u2227\n      SourceCurrentConstrainedCapGeneratedQueryResources.Fits (callerForecast alphabet budget profile)\n        (advancePhysical before.checked after) \u2227\n      SourceEqualityAnnotationHeap.Heap (fun guard => guard \u2208 alphabet) after.heap \u2227\n      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer \u2227\n      (advance before (advancePhysical before.checked after) saved before.merge).nodeResults = before.nodeResults \u2227\n      (advance before (advancePhysical before.checked after) saved before.merge).edgeResults = before.edgeResults \u2227\n      (advance before (advancePhysical before.checked after) saved before.merge).merge = before.merge \u2227\n      (advance before (advancePhysical before.checked after) saved before.merge).fourth = saved \u2227\n      (\u2200 work reader, workerFuel alphabet budget (scalar profile) \u2264 work \u2192\n        readerFuel alphabet budget (scalar profile) \u2264 reader \u2192\n        SourceCurrentConjunctionWorker.call work reader budget before.fourth query (physical before.checked) = .done (answer, saved) after) := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentSecondaryProjectionScoped.lean",
+    "start": 26,
+    "end": 28,
+    "text": "def PathSupport [DecidableEq (EdgeKey Symbol Guard)]\n    (unconstrained : Value Symbol Guard \u2192 Bool) (anchor : State Symbol Guard)\n    (path : List Int) (values : List (Value Symbol Guard)) : Prop :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentSecondaryProjectionScoped.lean",
+    "start": 49,
+    "end": 56,
+    "text": "theorem class_support [DecidableEq (EdgeKey Symbol Guard)]\n    (unconstrained : Value Symbol Guard \u2192 Bool)\n    {paths : EqualityNormalize.Class} {values : List (Value Symbol Guard)} {before final : State Symbol Guard}\n    (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before false final)\n    (semantic : SemanticReady before) (ready : InternedFreshOrdinaryMemoGateTrace.Ready before)\n    (available : Values before values) (nonroot : \u2200 path \u2208 paths, path \u2260 []) :\n    SemanticReady final \u2227 InternedFreshOrdinaryMemoGateTrace.Ready final \u2227 Keeps before final \u2227\n      Values final values \u2227 \u2200 path \u2208 paths, PathSupport unconstrained final (path.map Int.ofNat) values := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedPartialInvariant.lean",
+    "start": 25,
+    "end": 37,
+    "text": "structure Context (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)\n    (state : Caller width) (memos : Memos) : Prop where\n  ready : SourceCurrentConjunctionClassScan.Ready state.checked\n  admitted : At formulas solver inventory state.checked\n  sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver state\n  stored : SourceCurrentMemoMergeEffects.Stored state.checked.native.machine.heap state.merge\n  covered : \u2200 ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.merge\n  correct : SourceCurrentEmptinessMemo.Correct formulas solver state.checked.native.machine.heap state.fourth\n  globals : EndpointMemoGateTrace.Valid state.checked.native.machine.heap memos\n  probes : InternedFreshOrdinaryProbeHeap.Heap state.checked.native.machine.heap\n\n/-- A returned caller retains its actual current context and completed table history. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedPartialInvariant.lean",
+    "start": 38,
+    "end": 49,
+    "text": "structure Post (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula) (next : Inventory)\n    (before after : Caller width) (final : Memos) : Prop where\n  context : Context formulas solver next after final\n  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)\n  retained : Cache.Extends before.merge after.merge\n  fourthRetained : SourceCurrentEmptinessMemo.Extends before.fourth after.fourth\n\nvariable {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}\n  {inventory next : Inventory} {before middle after : Caller width} {memos final : Memos}\n\n/-- Caller protocol changes retain the context when all checked and completed tables stay exact. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedPartialInvariant.lean",
+    "start": 72,
+    "end": 73,
+    "text": "theorem Post.trans (first : Post formulas solver inventory before middle memos)\n    (last : Post formulas solver next middle after final) : Post formulas solver next before after final :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedQueryMemo.lean",
+    "start": 103,
+    "end": 103,
+    "text": "def advancePhysical (before : Checked width) (after : Physical) : Checked width :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentAllocatedQueryMemo.lean",
+    "start": 111,
+    "end": 114,
+    "text": "theorem advance_tables (before : Checked width) (after : Physical) :\n    (advancePhysical before after).native.nodes = before.native.nodes \u2227\n      (advancePhysical before after).native.edges = before.native.edges \u2227\n      (advancePhysical before after).native.machine.domains = before.native.machine.domains :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentNativeGuardAlphabet.lean",
+    "start": 16,
+    "end": 16,
+    "text": "noncomputable def step (alphabet : List Guard) : List Guard :=\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentNativeGuardAlphabet.lean",
+    "start": 58,
+    "end": 62,
+    "text": "noncomputable def advance (alphabet : List Guard) : Nat \u2192 List Guard\n  | 0 => alphabet\n  | count + 1 => advance (step alphabet) count\n\n/-- A zero count retains the exact entry list. -/\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentNativeGuardAlphabet.lean",
+    "start": 78,
+    "end": 79,
+    "text": "theorem advance_step (alphabet : List Guard) (count : Nat) :\n    advance alphabet (count + 1) = step (advance alphabet count) := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentNativeGuardAlphabet.lean",
+    "start": 97,
+    "end": 98,
+    "text": "theorem advance_count_mono (alphabet : List Guard) {first last : Nat} (increase : first \u2264 last) :\n    advance alphabet first \u2286 advance alphabet last := by\n"
+  },
+  {
+    "path": "lean/MicroCFTA/SourceCurrentConjunctionRefusedClassQuery.lean",
+    "start": 33,
+    "end": 48,
+    "text": "theorem class_witness [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (unconstrained : Value Symbol Guard \u2192 Bool)\n    (paths : Class) (active : Nontrivial paths) (values : List (Value Symbol Guard))\n    {before after : Checked width} {anchor : State Symbol Guard} {query : Value Symbol Guard}\n    (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)\n    (actual : Seeded values (paths.map (List.map Int.ofNat)) (advanceHeap before anchor) query after)\n    (ranges : SeededRanges values (paths.map (List.map Int.ofNat)) (advanceHeap before anchor))\n    (ready : Ready before) (admitted : At formulas solver inventory before)\n    (available : Values before.native.machine.heap values)\n    (ambient : InternedGuardedLanguage.Env Symbol) (symbol : Symbol) (terms : List (Term Symbol))\n    (accepted : All\u2082 (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms)\n    (satisfied : ClassSat (.node symbol terms) paths) :\n    \u2203 next, Receipt formulas solver next before query after \u2227\n      \u2203 part, meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query part \u2227\n        part.height < (Term.node symbol terms).height := by\n"
+  }
+]

@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentNativeGuardStep
+import MicroCFTA.SourceCurrentNativeGuardTrace
+import MicroCFTA.SourceCurrentGeneratedQueryGuardResources
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentNativeGuardStep.Fields
+#print axioms MicroCFTA.SourceCurrentNativeGuardStep.Fields
+#check @MicroCFTA.SourceCurrentNativeGuardStep.heap_mono
+#print axioms MicroCFTA.SourceCurrentNativeGuardStep.heap_mono
+#check @MicroCFTA.SourceCurrentNativeGuardStep.fields_mono
+#print axioms MicroCFTA.SourceCurrentNativeGuardStep.fields_mono
+#check @MicroCFTA.SourceCurrentNativeGuardStep.step_heap
+#print axioms MicroCFTA.SourceCurrentNativeGuardStep.step_heap
+#check @MicroCFTA.SourceCurrentNativeGuardStep.yielded_fields
+#print axioms MicroCFTA.SourceCurrentNativeGuardStep.yielded_fields
+#check @MicroCFTA.SourceCurrentNativeGuardTrace.retained
+#print axioms MicroCFTA.SourceCurrentNativeGuardTrace.retained
+#check @MicroCFTA.SourceCurrentNativeGuardTrace.bounded
+#print axioms MicroCFTA.SourceCurrentNativeGuardTrace.bounded
+#check @MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast
+#print axioms MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast
+#check @MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast_ge
+#print axioms MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast_ge
+#check @MicroCFTA.SourceCurrentGeneratedQueryGuardResources.of_query
+#print axioms MicroCFTA.SourceCurrentGeneratedQueryGuardResources.of_query
+#check @MicroCFTA.SourceCurrentGeneratedQueryGuardResources.complete
+#print axioms MicroCFTA.SourceCurrentGeneratedQueryGuardResources.complete

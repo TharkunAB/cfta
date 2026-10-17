@@ -1,0 +1,19 @@
+lean/restart-evidence/20261017-scan-guard-resources/scan-forecast-direct-2.source.lean:38:24: error: Type mismatch
+  SourceCurrentConstrainedCapSeededForecast.fold_ge count (List.map Int.ofNat seed)
+has type
+  ∀ (paths : List (List Int)) (profile : Profile),
+    Le profile (SourceCurrentConstrainedCapSeededForecast.foldProfile count (List.map Int.ofNat seed) paths profile)
+but is expected to have type
+  Le (gateProfile (seed :: rest) (gateProfile (seed :: rest) profile))
+    (seedProfile count (List.map (List.map Int.ofNat) (seed :: rest))
+      (gateProfile (seed :: rest) (gateProfile (seed :: rest) profile)))
+lean/restart-evidence/20261017-scan-guard-resources/scan-forecast-direct-2.source.lean:33:68: error: unsolved goals
+budget count : Nat
+paths : Class
+alphabet : List Guard
+profile : Profile
+seeded :
+  Le (gateProfile paths (gateProfile paths profile))
+    (seedProfile count (List.map (List.map Int.ofNat) paths) (gateProfile paths (gateProfile paths profile)))
+⊢ Le profile (classStep budget count paths alphabet profile).snd
+lean/restart-evidence/20261017-scan-guard-resources/scan-forecast-direct-2.source.lean:39:8: error: unexpected token '('; expected command

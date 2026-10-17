@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentSecondarySeededSupport
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentSecondarySeededSupport.mapped_proper
+#print axioms MicroCFTA.SourceCurrentSecondarySeededSupport.mapped_proper
+#print MicroCFTA.SourceCurrentSecondarySeededSupport.mapped_proper
+
+#check @MicroCFTA.SourceCurrentSecondarySeededSupport.class_support
+#print axioms MicroCFTA.SourceCurrentSecondarySeededSupport.class_support
+#print MicroCFTA.SourceCurrentSecondarySeededSupport.class_support

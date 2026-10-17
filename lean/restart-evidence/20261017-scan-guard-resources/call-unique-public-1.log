@@ -1,0 +1,262 @@
+@MicroCFTA.SourceCurrentConjunctionCallUnique.call : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {memo firstSaved secondSaved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before firstAfter secondAfter :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula}
+  {firstAnswer secondAnswer : Bool},
+  @MicroCFTA.SourceCurrentConjunctionMemo.Call inst inst_1 inst_2 budget memo query before firstAnswer firstAfter
+      firstSaved →
+    @MicroCFTA.SourceCurrentConjunctionMemo.Call inst inst_1 inst_2 budget memo query before secondAnswer secondAfter
+        secondSaved →
+      And (@Eq.{1} Bool firstAnswer secondAnswer)
+        (And
+          (@Eq.{1}
+            (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+            firstAfter secondAfter)
+          (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved))
+'MicroCFTA.SourceCurrentConjunctionCallUnique.call' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentConjunctionCallUnique.call : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {memo firstSaved secondSaved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before firstAfter secondAfter :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula}
+  {firstAnswer secondAnswer : Bool},
+  @MicroCFTA.SourceCurrentConjunctionMemo.Call inst inst_1 inst_2 budget memo query before firstAnswer firstAfter
+      firstSaved →
+    @MicroCFTA.SourceCurrentConjunctionMemo.Call inst inst_1 inst_2 budget memo query before secondAnswer secondAfter
+        secondSaved →
+      And (@Eq.{1} Bool firstAnswer secondAnswer)
+        (And
+          (@Eq.{1}
+            (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+            firstAfter secondAfter)
+          (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)) :=
+fun [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [inst_1 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [inst_2 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {budget} {memo firstSaved secondSaved} {query} {before firstAfter secondAfter} {firstAnswer secondAnswer} first
+    second =>
+  @Exists.casesOn.{1} Nat
+    (fun p =>
+      @Exists.{1} Nat fun h =>
+        ∀ (largerP largerH : Nat),
+          @LE.le.{0} Nat instLENat p largerP →
+            @LE.le.{0} Nat instLENat h largerH →
+              @Eq.{2}
+                (MicroCFTA.SourceCurrentConjunctionWorker.Outcome
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo))
+                ((fun p h =>
+                    @MicroCFTA.SourceCurrentConjunctionWorker.call inst inst_1 inst_2 p h budget memo query before)
+                  largerP largerH)
+                (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                  (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved) firstAfter))
+    (fun x =>
+      And (@Eq.{1} Bool firstAnswer secondAnswer)
+        (And
+          (@Eq.{1}
+            (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+            firstAfter secondAfter)
+          (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)))
+    (@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_complete inst inst_1 inst_2 budget memo firstSaved query
+      before firstAfter firstAnswer first)
+    fun firstP h =>
+    @Exists.casesOn.{1} Nat
+      (fun h =>
+        ∀ (largerP largerH : Nat),
+          @LE.le.{0} Nat instLENat firstP largerP →
+            @LE.le.{0} Nat instLENat h largerH →
+              @Eq.{2}
+                (MicroCFTA.SourceCurrentConjunctionWorker.Outcome
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo))
+                ((fun p h =>
+                    @MicroCFTA.SourceCurrentConjunctionWorker.call inst inst_1 inst_2 p h budget memo query before)
+                  largerP largerH)
+                (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                  (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved) firstAfter))
+      (fun x =>
+        And (@Eq.{1} Bool firstAnswer secondAnswer)
+          (And
+            (@Eq.{1}
+              (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+              firstAfter secondAfter)
+            (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)))
+      h fun firstH firstStable =>
+      @Exists.casesOn.{1} Nat
+        (fun p =>
+          @Exists.{1} Nat fun h =>
+            ∀ (largerP largerH : Nat),
+              @LE.le.{0} Nat instLENat p largerP →
+                @LE.le.{0} Nat instLENat h largerH →
+                  @Eq.{2}
+                    (MicroCFTA.SourceCurrentConjunctionWorker.Outcome
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo))
+                    ((fun p h =>
+                        @MicroCFTA.SourceCurrentConjunctionWorker.call inst inst_1 inst_2 p h budget memo query before)
+                      largerP largerH)
+                    (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                      (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo secondAnswer secondSaved)
+                      secondAfter))
+        (fun x =>
+          And (@Eq.{1} Bool firstAnswer secondAnswer)
+            (And
+              (@Eq.{1}
+                (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+                firstAfter secondAfter)
+              (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)))
+        (@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_complete inst inst_1 inst_2 budget memo secondSaved
+          query before secondAfter secondAnswer second)
+        fun secondP h =>
+        @Exists.casesOn.{1} Nat
+          (fun h =>
+            ∀ (largerP largerH : Nat),
+              @LE.le.{0} Nat instLENat secondP largerP →
+                @LE.le.{0} Nat instLENat h largerH →
+                  @Eq.{2}
+                    (MicroCFTA.SourceCurrentConjunctionWorker.Outcome
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo))
+                    ((fun p h =>
+                        @MicroCFTA.SourceCurrentConjunctionWorker.call inst inst_1 inst_2 p h budget memo query before)
+                      largerP largerH)
+                    (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                      (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo secondAnswer secondSaved)
+                      secondAfter))
+          (fun x =>
+            And (@Eq.{1} Bool firstAnswer secondAnswer)
+              (And
+                (@Eq.{1}
+                  (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+                  firstAfter secondAfter)
+                (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)))
+          h fun secondH secondStable =>
+          have firstAt :=
+            firstStable (@Max.max.{0} Nat Nat.instMax firstP secondP) (@Max.max.{0} Nat Nat.instMax firstH secondH)
+              (Nat.le_max_left firstP secondP) (Nat.le_max_left firstH secondH);
+          have secondAt :=
+            secondStable (@Max.max.{0} Nat Nat.instMax firstP secondP) (@Max.max.{0} Nat Nat.instMax firstH secondH)
+              (Nat.le_max_right firstP secondP) (Nat.le_max_right firstH secondH);
+          @And.casesOn.{0}
+            (@Eq.{1} (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+              (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved)
+              (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo secondAnswer secondSaved))
+            (@Eq.{1}
+              (MicroCFTA.SourceCurrentConjunctionWorker.Physical
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+              firstAfter secondAfter)
+            (fun x =>
+              And (@Eq.{1} Bool firstAnswer secondAnswer)
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+                    firstAfter secondAfter)
+                  (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)))
+            (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done.inj
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+              (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+              (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved) firstAfter
+              (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo secondAnswer secondSaved) secondAfter
+              (@Eq.trans.{2}
+                (MicroCFTA.SourceCurrentConjunctionWorker.Outcome
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo))
+                (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                  (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved) firstAfter)
+                ((fun p h =>
+                    @MicroCFTA.SourceCurrentConjunctionWorker.call inst inst_1 inst_2 p h budget memo query before)
+                  (@Max.max.{0} Nat Nat.instMax firstP secondP) (@Max.max.{0} Nat Nat.instMax firstH secondH))
+                (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                  (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                  (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo secondAnswer secondSaved) secondAfter)
+                (@Eq.symm.{2}
+                  (MicroCFTA.SourceCurrentConjunctionWorker.Outcome
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo))
+                  ((fun p h =>
+                      @MicroCFTA.SourceCurrentConjunctionWorker.call inst inst_1 inst_2 p h budget memo query before)
+                    (@Max.max.{0} Nat Nat.instMax firstP secondP) (@Max.max.{0} Nat Nat.instMax firstH secondH))
+                  (@MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    (Prod.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+                    (@Prod.mk.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved) firstAfter)
+                  firstAt)
+                secondAt))
+            fun pair state =>
+            @And.casesOn.{0} (@Eq.{1} Bool firstAnswer secondAnswer)
+              (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)
+              (fun x =>
+                And (@Eq.{1} Bool firstAnswer secondAnswer)
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+                      firstAfter secondAfter)
+                    (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved)))
+              (@Prod.mk.inj.{0, 0} Bool MicroCFTA.SourceCurrentEmptinessMemo.Memo firstAnswer firstSaved secondAnswer
+                secondSaved pair)
+              fun answer saved =>
+              @And.intro (@Eq.{1} Bool firstAnswer secondAnswer)
+                (And
+                  (@Eq.{1}
+                    (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+                    firstAfter secondAfter)
+                  (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved))
+                answer
+                (@And.intro
+                  (@Eq.{1}
+                    (MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula)
+                    firstAfter secondAfter)
+                  (@Eq.{1} MicroCFTA.SourceCurrentEmptinessMemo.Memo firstSaved secondSaved) state saved)

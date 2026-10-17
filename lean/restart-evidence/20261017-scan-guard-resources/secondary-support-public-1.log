@@ -1,0 +1,430 @@
+@MicroCFTA.SourceCurrentSecondarySeededSupport.mapped_proper : ∀ {paths : MicroCFTA.EqualityNormalize.Class},
+  (∀ (path : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+        @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+    ∀ (path : List.{0} Int),
+      @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths) path →
+        @Ne.{1} (List.{0} Int) path (@List.nil.{0} Int)
+'MicroCFTA.SourceCurrentSecondarySeededSupport.mapped_proper' depends on axioms: [propext, Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentSecondarySeededSupport.mapped_proper : ∀ {paths : MicroCFTA.EqualityNormalize.Class},
+  (∀ (path : MicroCFTA.EqualityNormalize.Path),
+      @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+        @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+    ∀ (path : List.{0} Int),
+      @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths) path →
+        @Ne.{1} (List.{0} Int) path (@List.nil.{0} Int) :=
+fun {paths} proper path member =>
+  @Exists.casesOn.{1} (List.{0} Nat)
+    (fun a =>
+      And
+        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat)) paths
+          a)
+        (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat a) path))
+    (fun x => @Ne.{1} (List.{0} Int) path (@List.nil.{0} Int))
+    (@Iff.mp
+      (@Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+        (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths) path)
+      (@Exists.{1} (List.{0} Nat) fun a =>
+        And
+          (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+            paths a)
+          (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat a) path))
+      (@List.mem_map.{0, 0} (List.{0} Nat) (List.{0} Int) path (@List.map.{0, 0} Nat Int Int.ofNat) paths) member)
+    fun original h =>
+    @And.casesOn.{0}
+      (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat)) paths
+        original)
+      (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat original) path)
+      (fun x => @Ne.{1} (List.{0} Int) path (@List.nil.{0} Int)) h fun included right =>
+      @Eq.ndrec.{0, 1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat original)
+        (fun path =>
+          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths) path →
+            @Ne.{1} (List.{0} Int) path (@List.nil.{0} Int))
+        (fun member empty =>
+          proper original included
+            (@Iff.mp (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat original) (@List.nil.{0} Int))
+              (@Eq.{1} (List.{0} Nat) original (@List.nil.{0} Nat))
+              (@List.map_eq_nil_iff.{0, 0} Nat Int Int.ofNat original) empty))
+        path right member
+@MicroCFTA.SourceCurrentSecondarySeededSupport.class_support : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {paths : MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths before Bool.false
+      after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+            And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values))))))
+'MicroCFTA.SourceCurrentSecondarySeededSupport.class_support' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+theorem MicroCFTA.SourceCurrentSecondarySeededSupport.class_support : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {paths : MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths before Bool.false
+      after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @Ne.{1} MicroCFTA.EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+            And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values)))))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] unconstrained
+    {values} {paths} {before after} actual semantic costs available proper =>
+  @And.casesOn.{0} (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+    (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+        (And
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+          (And
+            (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths after
+              Bool.false after)
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path after
+                  Bool.false after)))))
+    (fun x =>
+      And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+        (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+          (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+              (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                (And
+                  (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths after
+                    Bool.false after)
+                  (∀ (path : List.{0} Int),
+                    @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                        (@List.instMembership.{0} (List.{0} Int))
+                        (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                        path →
+                      @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst unconstrained
+                        after path values)))))))
+    (@MicroCFTA.SourceCurrentSecondaryProjectionAnchor.class_anchor Symbol Guard inst unconstrained values paths before
+      after actual semantic (@MicroCFTA.SourceCurrentClassGateCompletion.gate_ready Symbol Guard before semantic costs)
+      available)
+    fun finalSemantic right =>
+    @And.casesOn.{0} (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+        (And
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+          (And
+            (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths after
+              Bool.false after)
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path after
+                  Bool.false after))))
+      (fun x =>
+        And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+          (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+            (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+              (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                  (And
+                    (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                      after Bool.false after)
+                    (∀ (path : List.{0} Int),
+                      @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                          (@List.instMembership.{0} (List.{0} Int))
+                          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                          path →
+                        @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst unconstrained
+                          after path values)))))))
+      right fun ready right =>
+      @And.casesOn.{0} (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+        (And
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+          (And
+            (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths after
+              Bool.false after)
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path after
+                  Bool.false after)))
+        (fun x =>
+          And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+            (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+              (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                  (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                    (And
+                      (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                        after Bool.false after)
+                      (∀ (path : List.{0} Int),
+                        @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                            (@List.instMembership.{0} (List.{0} Int))
+                            (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                            path →
+                          @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst unconstrained
+                            after path values)))))))
+        right fun kept right =>
+        @And.casesOn.{0}
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+          (And
+            (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths after
+              Bool.false after)
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path after
+                  Bool.false after))
+          (fun x =>
+            And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values)))))))
+          right fun finalAvailable right =>
+          @And.casesOn.{0}
+            (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths after
+              Bool.false after)
+            (∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths path →
+                @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path after
+                  Bool.false after)
+            (fun x =>
+              And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                  (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                      (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                        (And
+                          (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values
+                            paths after Bool.false after)
+                          (∀ (path : List.{0} Int),
+                            @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                                (@List.instMembership.{0} (List.{0} Int))
+                                (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                  paths)
+                                path →
+                              @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                                unconstrained after path values)))))))
+            right fun replay pathsFalse =>
+            @And.intro (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values))))))
+              finalSemantic
+              (@And.intro (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values)))))
+                (@And.right
+                  (@MicroCFTA.InternedRecordCoherence.Covered Symbol Guard
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey) after)
+                  (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                  (@And.right (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after)
+                    (And
+                      (@MicroCFTA.InternedRecordCoherence.Covered Symbol Guard
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey) after)
+                      (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after))
+                    (@And.right
+                      (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard after
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (And (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after)
+                        (And
+                          (@MicroCFTA.InternedRecordCoherence.Covered Symbol Guard
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey) after)
+                          (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)))
+                      ready)))
+                (@And.intro (@MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready Symbol Guard after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values))))
+                  ready
+                  (@And.intro (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                    (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values)))
+                    kept
+                    (@And.intro (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                      (And
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values))
+                      finalAvailable
+                      (@And.intro
+                        (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths
+                          after Bool.false after)
+                        (∀ (path : List.{0} Int),
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path →
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values)
+                        replay fun path member =>
+                        @Exists.casesOn.{1} (List.{0} Nat)
+                          (fun a =>
+                            And
+                              (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                                (@List.instMembership.{0} (List.{0} Nat)) paths a)
+                              (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat a) path))
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                              unconstrained after path values)
+                          (@Iff.mp
+                            (@Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                paths)
+                              path)
+                            (@Exists.{1} (List.{0} Nat) fun a =>
+                              And
+                                (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                                  (@List.instMembership.{0} (List.{0} Nat)) paths a)
+                                (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat a) path))
+                            (@List.mem_map.{0, 0} (List.{0} Nat) (List.{0} Int) path
+                              (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                            member)
+                          fun original h =>
+                          @And.casesOn.{0}
+                            (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                              (@List.instMembership.{0} (List.{0} Nat)) paths original)
+                            (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat original) path)
+                            (fun x =>
+                              @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                                unconstrained after path values)
+                            h fun included right =>
+                            @Eq.ndrec.{0, 1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat original)
+                              (fun path =>
+                                @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                                    (@List.instMembership.{0} (List.{0} Int))
+                                    (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+                                      paths)
+                                    path →
+                                  @MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport Symbol Guard inst
+                                    unconstrained after path values)
+                              (fun member =>
+                                @MicroCFTA.SourceCurrentSecondaryProjectionScoped.path_support_of_false Symbol Guard
+                                  inst unconstrained after original values (pathsFalse original included)
+                                  (proper original included) finalAvailable)
+                              path right member)))))

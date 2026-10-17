@@ -1,0 +1,19 @@
+# Exact conjunction memo Call uniqueness
+
+The production source is SourceCurrentConjunctionCallUnique.lean, SHA256 b5cfcfd4ec111e94f2eb331f58c47db8d9e164e2fe6dd358882ab30851f1cb5b. The immutable direct2 snapshot matches the production bytes. Its all-linters strict log is empty. The canonical target passes 1198 jobs. The canonical log retains only the existing ClosedCompletion unused-input warning. No prior production source or frozen evidence file changes.
+
+The single public theorem call compares two actual SourceCurrentConjunctionMemo.Call graphs with identical budget, initial memo, query record, and initial physical state. It requires no Ready, Fits, semantic correctness, availability, or resource premise. WorkerCompletion.call_complete gives each supplied graph a StableRun for the same literal worker. The proof chooses the maximum of their projection bounds and the maximum of their reader bounds. Both graphs then equal the same worker execution. Outcome.done.inj fixes the entire physical state and the complete output pair. Prod.mk.inj fixes the Boolean and saved memo separately.
+
+The physical equality covers both constructor heap and equality-operation state. It is exact equality of SourceCurrentConjunctionRowsAllocation.State. The saved memo is equal as a full function, not only at the current query key. Native memo tables and domains are outside this physical Call index. Their retention belongs to the checked caller adapter. The theorem adds no semantic interpretation of the Boolean.
+
+This is a supplied-actual-graph verification lemma for internal universal ranges. It does not produce an initial call or compute a new initial resource forecast. Existing initial completion endpoints construct the graphs used in its integrations. No old vacuous conditional result law is rebased or treated as a new execution fact.
+
+The imported public probe prints the full explicit theorem signature, universes, complete proof, and axiom report. It passes without diagnostics and uses only standard axioms. Two source-built integrations pass with full signatures and axiom reports. Their concrete construction proofs are kernel checked without printing the large proof terms.
+
+The integration fixture copies the immutable private fixture from exploration-memo-kernels-2.source.lean into the new CallUniqueIntegration namespace. Literal closed source contains productive raw Mu children under a parent with a nonempty equality class. Actual equality allocation and original field history derive physical Ready. The query is physically available. No completed Call, desired result, future state, resource law, or worker fuel is a caller premise.
+
+constructed_cold_pair invokes initial Memo.complete independently twice from the same empty memo, source query, budget3, and physical state. The new theorem proves equality of both returned Booleans, both complete physical states, and both complete saved memos.
+
+constructed_warm_pair first constructs its own cold Call. Its actual miss constructor proves that the returned memo stores the exact query and answer. That record supplies an actual warm hit at the first returned state. The kernel independently invokes initial Memo.complete at that same state. The new theorem proves that this warm result has the original answer, exact first-return physical state, and exact saved memo. The literal worker returns that hit for every projection and reader fuel. This includes zero fuels because the memo lookup occurs before the decision body.
+
+The sole failed production attempt is retained as an immutable source and raw log. It selected the similarly named RowsWorker.Outcome instead of the whole conjunction Worker.Outcome. The final proof uses the latter. Both integration theorems pass on their first attempt. No sorry, new axiom, unsafe declaration, or linter suppression is added. All final axiom reports are limited to propext, Classical.choice, and Quot.sound.

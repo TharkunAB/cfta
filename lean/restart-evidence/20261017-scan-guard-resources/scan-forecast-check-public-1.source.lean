@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentScanNumericForecast
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classStep
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classStep
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classStep_profile_ge
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classStep_profile_ge
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classStep_alphabet_ge
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classStep_alphabet_ge
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classStep_primary_ge
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classStep_primary_ge
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classStep_secondary_ge
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classStep_secondary_ge
+#check @MicroCFTA.SourceCurrentScanNumericForecast.schedule
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.schedule
+#check @MicroCFTA.SourceCurrentScanNumericForecast.schedule_profile_ge
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.schedule_profile_ge
+#check @MicroCFTA.SourceCurrentScanNumericForecast.schedule_alphabet_ge
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.schedule_alphabet_ge
+#check @MicroCFTA.SourceCurrentScanNumericForecast.Reserved
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.Reserved
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classFuel
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classFuel
+#check @MicroCFTA.SourceCurrentScanNumericForecast.classFuel_limits
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.classFuel_limits
+#check @MicroCFTA.SourceCurrentScanNumericForecast.fuel
+#print axioms MicroCFTA.SourceCurrentScanNumericForecast.fuel

@@ -1,0 +1,171 @@
+@MicroCFTA.SourceCurrentNativeGuardCode.Fields : {A : Type} →
+  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop) →
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A →
+      Prop
+'MicroCFTA.SourceCurrentNativeGuardCode.Fields' does not depend on any axioms
+@MicroCFTA.SourceCurrentNativeGuardCode.work_mono : ∀ {A : Type}
+  (first last : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop),
+  (∀ (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula), first guard → last guard) →
+    ∀
+      (job :
+        MicroCFTA.InternedConstructorTemplates.Work (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A),
+      @MicroCFTA.SourceEqualityAnnotationHeap.SafeWork
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) A first job →
+        @MicroCFTA.SourceEqualityAnnotationHeap.SafeWork
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) A last job
+'MicroCFTA.SourceCurrentNativeGuardCode.work_mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentNativeGuardCode.mono : ∀ {A : Type}
+  (first last : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop),
+  (∀ (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula), first guard → last guard) →
+    ∀
+      (code :
+        MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A),
+      @MicroCFTA.SourceCurrentNativeGuardCode.Fields A first code →
+        @MicroCFTA.SourceCurrentNativeGuardCode.Fields A last code
+'MicroCFTA.SourceCurrentNativeGuardCode.mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentNativeGuardCode.bind : ∀ {A B : Type}
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (code :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+  (next :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B),
+  @MicroCFTA.SourceCurrentNativeGuardCode.Fields A valid code →
+    (∀ (value : A), @MicroCFTA.SourceCurrentNativeGuardCode.Fields B valid (next value)) →
+      @MicroCFTA.SourceCurrentNativeGuardCode.Fields B valid
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.bind
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A B code next)
+'MicroCFTA.SourceCurrentNativeGuardCode.bind' does not depend on any axioms
+@MicroCFTA.SourceCurrentNativeGuardCode.walk.{u_1} : ∀ {A : Type u_1} {B : Type}
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (values : List.{u_1} A),
+  (∀ (value : A),
+      @Membership.mem.{u_1, u_1} A (List.{u_1} A) (@List.instMembership.{u_1} A) values value →
+        @MicroCFTA.SourceCurrentNativeGuardCode.Fields B valid (call value)) →
+    @MicroCFTA.SourceCurrentNativeGuardCode.Fields (List.{0} B) valid
+      (@MicroCFTA.SourceRecursiveIntersectionCode.walk.{u_1} A
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B call values)
+'MicroCFTA.SourceCurrentNativeGuardCode.walk' does not depend on any axioms
+@MicroCFTA.SourceCurrentNativeGuardCode.compileNode_fields : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.SourceCurrentNativeGuardCode.Fields
+    (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    valid
+    (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst request)
+'MicroCFTA.SourceCurrentNativeGuardCode.compileNode_fields' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentNativeGuardCode.sentinel_fields : ∀
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (left :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  valid (@MicroCFTA.SourceEqualityConstraintConstructors.top MicroCFTA.FullSyntax.Formula) →
+    @MicroCFTA.SourceCurrentNativeGuardCode.Fields
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      valid
+      (@MicroCFTA.SourceEqualityNativeCheckedCode.sentinel MicroCFTA.FullSyntax.Formula
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) left)
+'MicroCFTA.SourceCurrentNativeGuardCode.sentinel_fields' does not depend on any axioms
+MicroCFTA.SourceCurrentNativeGuardCode.children_fields : ∀
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula),
+  valid (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula combined) →
+    @MicroCFTA.SourceCurrentNativeGuardCode.Fields
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      valid
+      (@MicroCFTA.SourceEqualityNativeCheckedCode.children MicroCFTA.FullSyntax.Formula
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) domain left right combined)
+'MicroCFTA.SourceCurrentNativeGuardCode.children_fields' does not depend on any axioms
+@MicroCFTA.SourceCurrentNativeGuardCode.body_fields : ∀ {A : Type} {width : Nat}
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (next :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (rest : MicroCFTA.SourceEqualityNativeDemand.Control A),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+      (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before) →
+    @MicroCFTA.SourceEqualityNativeDemandOperations.Fields A
+        (@MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody A request next) →
+      valid (@MicroCFTA.SourceEqualityConstraintConstructors.top MicroCFTA.FullSyntax.Formula) →
+        valid
+            (MicroCFTA.SourceEqualityPCSNativeEdge.conjoin
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))))) →
+          (∀
+              (value :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              @MicroCFTA.SourceCurrentNativeGuardCode.Fields A valid (next value)) →
+            @Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Outcome width A)
+                (@MicroCFTA.SourceEqualityNativeDemand.body A width request next before)
+                (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width A rest after) →
+              @Exists.{2}
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+                fun code =>
+                And
+                  (@Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Control A) rest
+                    (@MicroCFTA.SourceEqualityNativeDemand.Control.code A code))
+                  (@MicroCFTA.SourceCurrentNativeGuardCode.Fields A valid code)
+'MicroCFTA.SourceCurrentNativeGuardCode.body_fields' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
