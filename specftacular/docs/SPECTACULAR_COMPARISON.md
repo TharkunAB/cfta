@@ -9,9 +9,12 @@ Specftacular recovers the general `concat` laws and list-monad laws that the
 port previously missed. Native checked execution, native unchecked execution,
 and the GHC frontend produce the same laws in the selected controls. Sparse
 evaluation reduces retained memory. It regenerates inputs when needed.
-The machine has other activity, so elapsed times do not
-establish a speed improvement. Several current workloads still reach the
-time limit where the original artifact completes.
+Completion now rejects impossible matches before comparing their types
+and reuses normal forms while the rules stay fixed. All three Regex size-7
+configurations finish within 60 seconds. HugeLists size 5 through phase 3
+still reaches the limit where the original artifact completes.
+The machine has other activity. Elapsed time alone does not isolate engine
+speed. Fixed-work allocation and instruction controls support the changes.
 
 ## Sources and method
 
@@ -20,7 +23,7 @@ The runs took place on 2026-10-17.
 | Input | Revision |
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
-| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/e27d61a9b686e3e29255b065f586df7bb7cb14dc/specftacular) | `e27d61a9` |
+| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/456123afd7f53abcc066c429395db0d281488839/specftacular) | `456123af` |
 | [Additional diagnostic instrumentation][diagnostic-source] | `c47a1d8b` |
 | [Published QuickSpec 2 benchmark artifact](https://zenodo.org/records/7565011) | Version 2.1.5, commit `967151eae493fa08a414386cdfb5ce7072477972` |
 | [Extended ICST paper](https://mpg.is/papers/gissurarson2023spectacular-extended.pdf) | PDF SHA-256 `44fcc9a6c67a5ddefccb29c37ce721a354b427bc99d6a01dadbb5b9355535882` |
@@ -32,13 +35,10 @@ The QuickSpec ZIP SHA-256 is
 QuickSpec 2 was not rerun. Its source and saved outputs provide reference
 evidence.
 
-The matrix executables were built from
-`ce9327fbe055a5e91d17c1074173b5ce89356e17`.
-A final lint cleanup uses `zipWithM` in two matcher expressions.
-Rebuilding all five native benchmark executables produces identical
-SHA-256 hashes. The matrix therefore measures that runtime. The diagnostic
-hooks below are measured separately.
-The frontend and memory controls also pass after that cleanup.
+The current matrix executables contain the completion changes in
+`456123afd7f53abcc066c429395db0d281488839`.
+The profiling section records the earlier diagnostic build that identified
+those changes. Its sampled percentages do not describe the new runtime.
 
 The host runs Ubuntu 24.04 under WSL2 on an AMD Ryzen 9 7950X. It exposes
 24 logical CPUs and 94.29 GiB of RAM. Spectacular uses GHC 8.10.7 and
@@ -50,6 +50,8 @@ checks effective GHC flags and store settings for 53 original
 and 100 current dependency units. Compiler-distributed libraries
 keep their toolchain settings. They were not rebuilt.
 A separate store audit verifies 111 external units for the GHC controls.
+The final native and GHC builds each have effective `-O2` compiler-command
+evidence for all seven local components in their checked closures.
 
 Both builds and all runs use `nix-shell`, `heavy-management`, and pueue.
 The jobs run serially. Each job has a verified 16 GiB cgroup cap and no job
@@ -83,58 +85,63 @@ results for identical workloads.
 
 | Signature | Size | Through phase | Original s | Original MiB | Original laws | Specftacular s | Specftacular MiB | Specftacular laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.53 | 21.5 | 16 |
-| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 11.74 | 81.6 | 34 |
-| Lists | 7 | 4 | T | 139.5 | — | 27.59 | 192.3 | 48 |
-| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 1.00 | 20.7 | 15 |
-| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 1.01 | 20.5 | 15 |
-| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 1.04 | 20.5 | 15 |
-| Regex | 7 | 2 | 3.06 | 18.7 | 42 | T | 19.4 | — |
-| Regex | 7 | 3 | 4.29 | 16.8 | 42 | T | 19.2 | — |
-| Regex | 7 | 4 | 5.84 | 17.1 | 42 | T | 19.4 | — |
-| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 2.84 | 42.5 | 11 |
-| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 2.98 | 45.5 | 11 |
-| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 13.33 | 188.5 | 21 |
-| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.11 | 17.1 | 30 |
-| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.20 | 22.5 | 42 |
-| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 1.87 | 50.0 | 50 |
-| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.50 | 26.8 | 56 |
-| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 1.88 | 64.5 | 96 |
-| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 20.77 | 201.0 | 171 |
-| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 6.66 | 177.6 | 106 |
-| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | T | 211.6 | — |
-| HugeLists | 5 | 4 | T | 165.1 | — | T | 211.3 | — |
-| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 12.60 | 266.6 | 149 |
-| HugeLists | 6 | 3 | T | 305.6 | — | T | 428.2 | — |
-| HugeLists | 6 | 4 | T | 308.9 | — | T | 429.2 | — |
-| HugeLists | 7 | 2 | T | 60.2 | — | T | 379.5 | — |
-| HugeLists | 7 | 3 | T | 58.0 | — | T | 379.3 | — |
-| HugeLists | 7 | 4 | T | 55.6 | — | T | 379.1 | — |
+| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.38 | 23.1 | 16 |
+| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 11.54 | 77.6 | 34 |
+| Lists | 7 | 4 | T | 139.5 | — | 27.34 | 195.4 | 48 |
+| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 0.90 | 21.1 | 15 |
+| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 0.95 | 21.1 | 15 |
+| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 0.95 | 23.7 | 15 |
+| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 56.79 | 46.4 | 60 |
+| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 57.89 | 47.6 | 60 |
+| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 58.06 | 47.3 | 60 |
+| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 2.84 | 35.8 | 11 |
+| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 2.94 | 35.8 | 11 |
+| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 12.53 | 190.8 | 21 |
+| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.11 | 17.2 | 30 |
+| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.20 | 22.9 | 42 |
+| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 1.76 | 47.3 | 50 |
+| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.48 | 26.9 | 56 |
+| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 1.72 | 61.7 | 96 |
+| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 19.68 | 178.9 | 171 |
+| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 6.03 | 177.9 | 106 |
+| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | T | 220.9 | — |
+| HugeLists | 5 | 4 | T | 165.1 | — | T | 220.9 | — |
+| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 10.12 | 258.6 | 149 |
+| HugeLists | 6 | 3 | T | 305.6 | — | T | 645.4 | — |
+| HugeLists | 6 | 4 | T | 308.9 | — | T | 642.8 | — |
+| HugeLists | 7 | 2 | T | 60.2 | — | T | 679.6 | — |
+| HugeLists | 7 | 3 | T | 58.0 | — | T | 679.6 | — |
+| HugeLists | 7 | 4 | T | 55.6 | — | T | 679.6 | — |
 
 Spectacular completes 20 runs and reaches the limit in 7. Specftacular
-completes 17 runs and reaches the limit in 10. No run has an unexpected exit
+completes 20 runs and reaches the limit in 7. No run has an unexpected exit
 status.
 
 Lists size 7 through phase 4 completes in Specftacular and reaches the limit
-in the original. Regex size 7 through phases 2, 3, and 4 completes in the
-original and reaches the limit in Specftacular. HugeLists size 5 through
-phase 3 also completes only in the original. The HugeLists definitions differ
-as stated above. Both implementations time out in the other six cells.
+in the original. Regex size 7 through phases 2, 3, and 4 now completes in
+both. HugeLists size 5 through phase 3 completes only in the original.
+The HugeLists definitions differ as stated above. Both implementations
+time out in the other six cells.
+
+Regex remains expensive. Its current runs finish close to the 60-second
+limit. The phase-2 run allocates 445.248 GiB, versus 17.185 GiB in the
+original. The changes remove timeouts without closing this cost difference.
 
 The current Lists7P4 run completes within the matrix limit. It prints 48 laws,
-uses 192.3 MiB peak RSS, retains 62.1 MiB at the largest GC sample, and
-allocates 121.39 GiB.
+uses 195.4 MiB peak RSS, retains 65.0 MiB at the largest GC sample, and
+allocates 112.49 GiB.
 
 Selected completed runs have these costs:
 
 | Signature, size, phase | Original allocation GiB | Specftacular allocation GiB | Original residency MiB | Specftacular residency MiB | Original GC CPU s | Specftacular GC CPU s |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists-7-p2 | 4.275 | 3.456 | 5.35 | 2.98 | 0.231 | 0.032 |
-| Octonions-7-p2 | 0.419 | 2.852 | 12.58 | 2.94 | 0.026 | 0.021 |
-| ListMonad-7-p2 | 0.961 | 17.972 | 3.47 | 13.29 | 0.030 | 0.966 |
-| ListMonad-7-p4 | 52.501 | 76.257 | 72.02 | 81.97 | 7.004 | 2.741 |
-| HugeLists-4-p4 | 126.783 | 116.336 | 39.68 | 72.78 | 8.920 | 4.794 |
-| HugeLists-6-p2 | 24.723 | 68.357 | 17.60 | 102.07 | 1.246 | 1.713 |
+| Lists-7-p2 | 4.275 | 2.208 | 5.35 | 3.13 | 0.231 | 0.034 |
+| Octonions-7-p2 | 0.419 | 2.216 | 12.58 | 2.94 | 0.026 | 0.026 |
+| Regex-7-p2 | 17.185 | 445.248 | 4.47 | 11.15 | 0.474 | 2.312 |
+| ListMonad-7-p2 | 0.961 | 17.501 | 3.47 | 9.46 | 0.030 | 1.030 |
+| ListMonad-7-p4 | 52.501 | 67.900 | 72.02 | 82.20 | 7.004 | 3.092 |
+| HugeLists-4-p4 | 126.783 | 112.550 | 39.68 | 74.67 | 8.920 | 4.582 |
+| HugeLists-6-p2 | 24.723 | 52.893 | 17.60 | 99.98 | 1.246 | 1.664 |
 
 ## Differences in laws
 
@@ -148,6 +155,27 @@ and saved QuickSpec 2 examples. The example settings differ from the matrix.
 | Bind associativity with function variables | Absent in native ListMonad runs | Present | Present |
 | Kleisli associativity | Absent in native ListMonad runs | Follows pointwise from the printed basis | Printed as a function equation |
 | Length of append expressed with `(+)` | Lists signature lacks `(+)` | Lists signature lacks `(+)` | Present with arithmetic background |
+
+### Completed Regex runs expose more general equations
+
+Each completed Regex size-7 run prints 60 laws. These include general
+alternation commutativity and both distribution laws. With shorter variable
+names and infix notation, they are:
+
+```text
+x | y == y | x
+x ; (y | z) == (x ; y) | (x ; z)
+(x | y) ; z == (x ; z) | (y ; z)
+```
+
+The retained original run prints commutativity instances with `any` and
+`e`. It does not print these three general equations. Both runs print
+general concatenation associativity. The original also prints seven
+associativity instances with `any`. These examples compare the printed
+bases. Their counts do not prove semantic coverage or independence.
+Regex equality checks acceptance on 100 fixed words. It does not establish
+complete language equivalence. The QuickSpec artifact has no saved Regex
+output, so it supplies no measured law comparison for this workload.
 
 ### Boolean carriers admit false general laws
 
@@ -363,7 +391,8 @@ and application counts. It skips only incompatible fixed heads. Wildcards,
 prefixes, and unknown heads retain the generic path. The index preserves
 template order and duplicates. It does not change suspended matches.
 
-A completed all-`-O2` control changes only this index. Lists size 7 through
+A completed all-`-O2` control before the completion changes varied only
+this index. Lists size 7 through
 phase 4 allocates 140.93 GiB without it and 121.39 GiB with it, a 13.9%
 reduction. Both runs print the same 48 equations in the same order. Peak RSS
 is 193.2 and 192.4 MiB. Regex size 4 through phase 2 keeps the same 17 laws;
@@ -386,16 +415,87 @@ check before its tester. New equalities still use every test case.
 An ordinary equality exception discards the candidate. Cancellation and timeouts
 propagate to the caller.
 
-A separate current Regex7P2 diagnostic with 100 random cases plus the same 40
-validation cases also reaches the 60-second limit. It does not replace the
-default-budget matrix cell.
+A separate diagnostic before the completion changes used 100 random cases
+plus the same 40 validation cases. It also reached the 60-second limit for
+Regex7P2. The new implementation completes the default-budget matrix cell.
 
-## Timeout diagnostics
+## Completion improvements
 
-Additional all-`-O2` traces identify the actual phases of all ten current
-timeout configurations. These runs keep the search and validation settings
-of the matrix. The [diagnostic build][diagnostic-source] adds optional
-instrumentation. The local
+The profiles identified repeated normalization and typed matching as the
+main completion costs. The current implementation makes two changes:
+
+- Check program symbols and application structure before typed matching.
+  A template variable still accepts any annotated subtree. A successful
+  shape check proceeds through every original annotation and binding check.
+- Cache whole-term normal forms while the completion rule set is fixed.
+  Start a new cache whenever completion adds an equation. The key includes
+  every type annotation. Structural equality checks hash collisions.
+
+Both changes operate on finite, total internal terms. They can demand a
+partial Haskell value earlier. The cache holds at most 256 entries. Both
+the input and its normal form must have at most 256 term nodes, including
+annotations. Input size is checked before hashing. Oversized results are
+not inserted. Terms outside these limits still normalize normally.
+The cache clears before an insertion into a full table.
+The eligibility check evaluates each accepted term node and symbol to weak
+head normal form. It does not force symbol payloads. Cache updates are
+forced between critical pairs. This prevents deferred updates from retaining
+old tables or large unevaluated results. Keys and values contain at most
+131,072 expanded term-node occurrences. This is not a bound on total heap
+bytes. CFTA source is unchanged. Phase order, increasing size order,
+generalization, critical-pair order, and completion guards stay unchanged.
+
+A local replay isolates completion from enumeration and value generation.
+It captures the actual typed inputs of Regex7P1. It completes the first 22
+laws and processes exactly 10,000 critical pairs for law 23. This limit
+exists only in the replay. Production completion keeps its existing policy.
+Serialization preserves term structure, but not the original heap sharing.
+Both variants produce the same 193-rule snapshot, including index
+classes, rule order, annotations, and binder names.
+
+Every component uses `-O2`. CPU time covers the final bounded completion
+interval. Allocation and peak RSS cover the whole replay, including the
+prefix and snapshot output. CPU times remain observations on a noisy host.
+
+| Replay variant | Completion CPU s | Whole allocation GiB | Peak RSS MiB |
+| --- | ---: | ---: | ---: |
+| Before both changes | 6.721 | 57.463 | 15.1 |
+| Current, shape check and bounded cache | 3.139 | 26.393 | 15.6 |
+
+The combined change reduces whole-replay allocation by 54.1%. Sampled
+allocation within the completion interval falls by 54.2%. Observed CPU
+time falls by 53.3%. A separate complete Lists4P1 Cachegrind control uses
+2.92% fewer instructions and 2.88% less allocation. Its ten laws are
+identical. Checked and unchecked golden tests pass. A finite matcher check
+compares 7,386,314 pattern, target, and initial-substitution combinations.
+It checks complete returned substitutions, including conflicts and malformed
+annotations. It finds no difference from the original matcher.
+
+The full matrix above uses the production implementation. All three Regex
+configurations now finish within the 60-second limit. The fixed-work replay
+compares both changes at the same completion frontier. It excludes the
+extra work that these completed searches can now reach.
+
+All 17 configurations that completed before these changes still complete.
+Their full numbered law sequences remain identical. Each allocates less:
+the reductions range from 0.5% to 36.1%. Lists7P4 allocates 7.3% less and
+HugeLists6P2 allocates 22.6% less. These completed searches provide evidence
+beyond the bounded replay and small instruction control.
+
+An unbounded cache was rejected after a HugeLists6P3 control reached
+5092.3 MiB RSS. Resetting the cache after 128 critical pairs still reached
+3458.5 MiB. Limiting entry count did not limit the retained term sizes.
+The selected size-bounded cache reaches 525.3 MiB in the same 60-second
+control. These timeout runs can reach different amounts of work. They are
+memory checks, not fixed-work allocation or speed comparisons.
+
+## Profiling that guided the completion changes
+
+These all-`-O2` traces describe the ten timeout configurations before
+`456123af`. They identified the optimization targets. Their costs and phase
+frontiers are historical diagnostics, not current matrix measurements.
+The [diagnostic build][diagnostic-source] adds optional instrumentation.
+The local
 drivers use an internal 60-second timeout. Cancellation closes the active
 intervals and permits a normal exit with RTS statistics. The process has the
 same 16 GiB cap, zero swap, one capability, and a 6 GiB RTS heap limit.
@@ -450,7 +550,7 @@ the memory cap. GC is not the main cost of the stalled phases.
 A completed Lists7P4 control checks the instrumentation. All four variants
 print the same 48 numbered laws in the same order.
 
-| Current Lists7P4 variant | CPU s | Allocated GiB | Peak RSS MiB |
+| Lists7P4 diagnostic variant before completion changes | CPU s | Allocated GiB | Peak RSS MiB |
 | --- | ---: | ---: | ---: |
 | Before diagnostic hooks | 28.06 | 121.3917 | 192.1 |
 | Diagnostics off | 28.64 | 121.3938 | 198.0 |
@@ -598,33 +698,36 @@ for that case. The tree retains a valuation only through discriminator values.
 It does not retain all generated
 nested lists and complete result vectors at every representative.
 
-A fresh local control restores shared input maps and retained result vectors
-in the current engine. It also restores the legacy decision tree's prefix
+A local control before the completion changes restores shared input maps
+and retained result vectors. It also restores the legacy decision tree's prefix
 comparisons. It keeps the same pruning, proof shortcut, and available
 validation cases. The strategies compare cases in different orders.
 They can therefore treat partial values differently. This control compares
 evaluation strategies, including storage. It does not isolate storage alone.
 All variants produce the same 29 numbered Lists5P4 laws.
 
-| Current Lists5P4 control, 1000 + 40 cases | Peak RSS, MiB | Allocated, GiB |
+| Lists5P4 storage control before completion changes, 1000 + 40 cases | Peak RSS, MiB | Allocated, GiB |
 | --- | ---: | ---: |
 | Shared inputs and retained result vectors | 1920.5 | 20.93 |
 | Sparse evaluation | 51.4 | 20.59 |
 | Sparse evaluation with native runtime checks | 54.2 | 21.36 |
 
-The GHC Lists5P4 control uses 537.8 MiB peak RSS. That process includes
-the compiler and interpreter. Its output agrees with both native modes.
+Fresh current Lists5P4 controls use 49.7 MiB peak RSS in native unchecked
+execution, 58.6 MiB in native checked execution, and 536.8 MiB in GHC.
+The GHC process includes the compiler and interpreter. All three produce
+the same 29 laws in the same order. Fresh ListMonad6P4 controls also agree
+on all 18 laws.
 
 Sparse evaluation regenerates inputs to reduce retained memory.
-The sparse run uses 97.3% less peak RSS and allocates 1.6% less. Retaining the
+In the storage control, it uses 97.3% less peak RSS and allocates 1.6% less. Retaining the
 complete input maps and result vectors restores the large peak. These
 controls do not establish an isolated automaton speed improvement.
 
 On Lists4P1, Cachegrind records 1,426,503,315 instructions for retained
 vectors and 445,870,706 for sparse evaluation. RTS allocation is 521,257,520
-and 178,430,168 bytes respectively. These are controls of the current source
-with different evaluation strategies. They are not measurements of an earlier
-port.
+and 178,430,168 bytes respectively. These controls vary the evaluation
+strategy in the same source revision. They precede the completion changes
+measured above.
 
 ## GHC frontend
 
