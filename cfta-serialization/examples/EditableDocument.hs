@@ -82,13 +82,12 @@ inspect document = do
 edit :: Document.Document String -> Either (Document.DocumentError String) (Document.Document String)
 edit before = Document.applyPatch changes before
   where
-    atoms = FTA.transitionsFrom (Document.sourceGraph before) "Atom"
     changes =
         Document.patch
             before
             [ Document.RemoveFact "Pair" "pair" "disabled"
             , Document.RemoveFact "Pair" "pair" "positive"
-            , Document.PutRow "Atom" (atoms <> [atom "two" "two" 2])
+            , Document.PutTransition "Atom" (atom "two" "two" 2)
             ]
 
 -- | Run an in-memory example, or continue editing a saved source document.

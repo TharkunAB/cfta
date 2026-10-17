@@ -157,3 +157,14 @@ other productions, missing states and names, ambiguous names, stale patches,
 atomic forward references, and simultaneous global arity changes. Compare
 compiled terms with the equivalent complete-row edits and retain all existing
 source-document and graph-codec checks.
+
+The direct operations pass the fresh strict all-component build, all six test
+suites, formatting, lint, and metadata checks. A focused probe verifies append,
+replacement, deletion, retained order and facts, missing and ambiguous targets,
+new productions followed by fact edits, stale patches, final-batch validation,
+and equivalence with complete-row edits. The prior document probe also passes.
+The saved edited example is byte-identical to the complete-row version.
+
+These operations are the low-level source edit layer. The primary user interface
+will compose language expressions for constructor and fact changes and named
+term or subtree exclusions. Saving the resulting value is a persistence step.
