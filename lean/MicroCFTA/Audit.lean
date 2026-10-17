@@ -2357,6 +2357,11 @@ import MicroCFTA.SourceCurrentAllocatedNativeResourceForecast
 import MicroCFTA.SourceCurrentConstrainedCapCheckedJointComputedQuery
 import MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources
 import MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence
+import MicroCFTA.SourceCurrentAllocatedProjectionResources
+import MicroCFTA.SourceMergedComparisonMass
+import MicroCFTA.SourceMergedSelectionMass
+import MicroCFTA.SourceCurrentMemoMergeMass
+import MicroCFTA.SourceCurrentConstrainedCapOperandFrame
 /-!
 # Proof dependency audit
 
