@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `bebaf1ed`.
+Status rechecked on 2026-10-17 at 18:33 CEST, proof checkpoint `c86f75c0`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
 Read `lean/notes-proof-status-20261017.md` for the current proof boundaries.
 
-The current native row and input-exchange proofs add no Haskell change.
+The current callback, native history, and invariant proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 3051 jobs and 67320 dependency checks.
+The last completed pinned Lean Audit passes: 3063 jobs and 67649 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -174,6 +174,44 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current callback normalization and causal native histories
+
+Updated: 2026-10-17 18:33 CEST. Starting checkpoint is 430332f6.
+Proof commit is c86f75c0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-callback-normalization.md for the exact new results.
+Read lean/notes-proof-status-20261017.md for the whole-library proof map.
+
+Actual union and record erasure now include bare self, ordinary merging,
+and replay across cache histories. Actual Depth callbacks and missing-key
+reservations derive freshness for live fixed captures. The general nested
+source comparison and stored-Mu body-to-ordinary law remain open.
+
+Completed checked native traces now derive literal earlier edge bodies
+and protected finishes from empty native tables. Live results retain the
+full source conjunction guard and ordered child calls. Warm demands recover
+the same request's writer. Actual request entries derive compiler checks
+internally. These results do not construct general query completion.
+
+Union normality now passes through the literal native compiler, projections,
+gates, Merge, conjunction, targets, edits, Scan, Local.reduce, and Parent.edge.
+The endpoint laws need only the initial invariant and actual worker inputs.
+They cover every stopping outcome. They assume no future preservation law.
+
+Audit passes 3063 jobs and 67649 dependency checks under verified 4 GiB
+MemoryMax, 4 GiB MemoryHigh, zero swap, and 375 MiB peak memory.
+All 12 final strict source logs are empty. All canonical targets pass.
+Evidence is in lean/restart-evidence/20261017-callback-normalization/.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+General recursive outer progress, repeated-pass convergence, current frontend
+and runtime adapters, and complete public Haskell correspondence remain open.
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair b9219b9e is merged and
+validated. Record later repairs there with reproducer, paths, commit, checks,
+and upstream status.
+
 
 ## Current native row histories and invariant transport
 

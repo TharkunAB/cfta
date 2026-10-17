@@ -1,5 +1,43 @@
 # cfta formal model
 
+## Current callback normalization and causal native histories
+
+Updated: 2026-10-17 18:33 CEST. Starting checkpoint is 430332f6.
+Proof commit is c86f75c0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-callback-normalization.md for the exact new results.
+Read lean/notes-proof-status-20261017.md for the whole-library proof map.
+
+Actual union and record erasure now include bare self, ordinary merging,
+and replay across cache histories. Actual Depth callbacks and missing-key
+reservations derive freshness for live fixed captures. The general nested
+source comparison and stored-Mu body-to-ordinary law remain open.
+
+Completed checked native traces now derive literal earlier edge bodies
+and protected finishes from empty native tables. Live results retain the
+full source conjunction guard and ordered child calls. Warm demands recover
+the same request's writer. Actual request entries derive compiler checks
+internally. These results do not construct general query completion.
+
+Union normality now passes through the literal native compiler, projections,
+gates, Merge, conjunction, targets, edits, Scan, Local.reduce, and Parent.edge.
+The endpoint laws need only the initial invariant and actual worker inputs.
+They cover every stopping outcome. They assume no future preservation law.
+
+Audit passes 3063 jobs and 67649 dependency checks under verified 4 GiB
+MemoryMax, 4 GiB MemoryHigh, zero swap, and 375 MiB peak memory.
+All 12 final strict source logs are empty. All canonical targets pass.
+Evidence is in lean/restart-evidence/20261017-callback-normalization/.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+General recursive outer progress, repeated-pass convergence, current frontend
+and runtime adapters, and complete public Haskell correspondence remain open.
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair b9219b9e is merged and
+validated. Record later repairs there with reproducer, paths, commit, checks,
+and upstream status.
+
+
 ## Current native row histories and invariant transport
 
 Updated: 2026-10-17 17:55 CEST. Starting checkpoint is 0068ade6.

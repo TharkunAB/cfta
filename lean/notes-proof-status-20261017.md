@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at proof checkpoint `f1f77bf1`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `c86f75c0`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -87,8 +87,12 @@ origins. It assumes no future Required result. Read
    Original-input exchange is now constructed when the raw returned value
    has no free changed name. Ordinary native rows retain indexed source
    pairs, literal accepted conjunction guards, and ordered child requests.
-   The general normalized recursive and warm bridge remains open. Read
-   [native row histories](notes-current-native-row-origins.md).
+   Earlier native edge bodies and protected finishes now follow from actual
+   completed traces from empty tables. Warm edge demands recover that writer
+   without an Original-child restriction. Root erasure covers bare self and
+   ordinary merging. Actual probes derive freshness for live fixed captures.
+   The general nested source comparison and stored-Mu body-to-ordinary law
+   remain open. Read [callback normalization](notes-current-callback-normalization.md).
 2. Derive progress for actual outer-node children after parent returns and
    inherited combine/descent. The measure must respect physical memo keys,
    or prove that a fresh request differs from every active owner. Ordinary
@@ -128,7 +132,7 @@ the failure, reproducer, affected paths, commit, validation, and merge status.
 It also records the earlier negative-bound and named-measure repairs.
 The historical failure reports retain their original bytes and source dates.
 
-The last completed full pinned Audit passes 3051 jobs and 67320 dependency
+The last completed full pinned Audit passes 3063 jobs and 67649 dependency
 checks. Only propext, Classical.choice, and Quot.sound occur. The unchanged
 Haskell source has a strict Nix all-component build, 798 examples plus golden,
 Fourmolu, and Cabal-gild validation. These checks are component evidence.
@@ -137,9 +141,12 @@ The Lean Audit and imported status theorem checks were run for this
 checkpoint. The unchanged Haskell source reuses its earlier validation.
 
 The latest completed audit evidence is in
-`restart-evidence/20261017-native-row-origins/`. It includes strict source,
+`restart-evidence/20261017-callback-normalization/`. It includes strict source,
 public signature, kernel axiom, constructed integration, and preservation
 checks. Earlier evidence retains selected recursive endpoints,
 unequal-depth paths, failed height bounds, and inherited path-depth growth.
-Finite observations do not prove general progress. No new Haskell defect
+Actual union-normality transport now reaches Local.reduce and Parent.edge
+on every stopping outcome from the initial invariant alone. It does not
+construct successful outer completion. Finite observations do not prove
+general progress. No new Haskell defect
 was established. Failed attempts and raw logs remain preserved.
