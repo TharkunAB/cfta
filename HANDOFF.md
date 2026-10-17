@@ -1,6 +1,49 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-17 05:14 CEST (Europe/Stockholm)**.
+Updated: **2026-10-17 05:28 CEST (Europe/Stockholm)**.
+
+## Current source rebase and finite generated checked queries
+
+Updated: 2026-10-17 05:28 CEST. This checkpoint starts at published `f08ebe13`.
+The proof commits are `ba847c76`, `2a2ee885`, and `42d08285`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-joint-source-rebase.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-joint-source-rebase/`.
+
+Eight additive modules retain represented source weights and captured
+original requests. Actual physical traces produce origins for all memo
+phases. Those origins recover the old antecedents of conditional joint laws.
+The laws rebase at the same populated native state. Concrete input models
+retain exact contextual laws and admit newly produced closed operands.
+Initial entry counters construct finite cold and generated warm queries.
+The same receipt retains exact language, cap, ranked occurrences, scope,
+Context, semantic admission, and captured origins. No future WordRanges,
+supplied completed execution, or desired result-law premise is required.
+Independent integration feeds the actual cold result into the next query.
+Each later entry still needs its own numeric capacity bounds.
+
+The pinned Audit passes 2835 jobs and 63081 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight strict checks are clean.
+All 67 imported pairs pass in ten groups. Five component manifests verify
+123 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 11815 starting files,
+2826 older non-Audit proofs, all 239 Haskell files, and 70 frozen production
+manifests with 592 entries. Stashes and three other worktrees are unchanged.
+
+Next prove universal finite-depth caps through actual memo-aware Merge.
+Compose projection, Target, Leaf, editor, and tail-first class callers with
+an explicit depth transformer. The ordinary source gate does not imply the
+older hereditary AtLeaves premise. Derive cumulative serial allocation bounds.
+General constrained descent, convergence, remaining recursive callers,
+frontend/runtime adapters, capacity, and complete public composition remain
+open. The full library goal stays active. Read
+next-merge-caps-and-serial-resources.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
 
 ## Current checked joint execution from initial numeric resources
 
