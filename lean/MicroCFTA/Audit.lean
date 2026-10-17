@@ -2494,6 +2494,10 @@ import MicroCFTA.SourceCurrentNodeTerminalNumeric
 import MicroCFTA.SourceCurrentNodeCallNumeric
 import MicroCFTA.SourceCurrentDescendantsNumeric
 import MicroCFTA.SourceCurrentOuterHeightBarrier
+import MicroCFTA.SourceCurrentGatePlainRegion
+import MicroCFTA.SourceCurrentRequiredGuardOrigins
+import MicroCFTA.SourceCurrentPrimaryEndpointCap
+import MicroCFTA.SourceCurrentOuterParentHeightGrowth
 /-!
 # Proof dependency audit
 
