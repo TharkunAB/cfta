@@ -2411,6 +2411,7 @@ import MicroCFTA.SourceCurrentConstrainedCapEditListNumeric
 import MicroCFTA.SourceCurrentConstrainedCapClassForecast
 import MicroCFTA.SourceCurrentConstrainedCapClassNumeric
 import MicroCFTA.SourceCurrentConstrainedCapClassPassNumeric
+import MicroCFTA.SourceCurrentConstrainedCapClassCallerNumeric
 /-!
 # Proof dependency audit
 
