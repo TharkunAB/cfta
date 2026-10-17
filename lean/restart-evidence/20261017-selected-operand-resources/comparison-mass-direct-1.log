@@ -1,0 +1,79 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:160:8: error: Type mismatch
+  found
+has type
+  MergedFreshOrdinaryExposure.nodeEdges fuel value before = MergedSourceExposure.Result.done rows after
+but is expected to have type
+  MergedSourceExposure.Result.done rows after = MergedSourceExposure.Result.done rows after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:201:20: error: Type mismatch
+  ih narrows middle (growth bound) result effect.right
+has type
+  Values middle wides →
+    Values middle narrows →
+      ClosedValues wides →
+        ClosedValues narrows →
+          MergedSourceComparison.children compare wides narrows middle = Result.done answer after →
+            Resources (iterate growth wides.length (growth bound)) origin after
+but is expected to have type
+  Resources (iterate growth (wide :: wides).length bound) origin after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:202:14: error: unexpected token '('; expected command
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:234:19: error: Type mismatch
+  ih middle (childrenBound growth bound) bounded effect.right
+has type
+  Values middle narrow.children →
+    Edges middle wides →
+      ClosedEdges wides →
+        anyCover clear compare narrow wides middle = Result.done answer after →
+          Resources (iterate (childrenBound growth) wides.length (childrenBound growth bound)) origin after
+but is expected to have type
+  Resources (iterate (childrenBound growth) (wide :: wides).length bound) origin after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:219:23: error: unsolved goals
+case cons.isFalse
+Symbol Guard : Type
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+growth : Nat → Nat
+mono : Monotone growth
+ge : ∀ (bound : Nat), bound ≤ growth bound
+clear : Guard → Bool
+compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool
+effects : SourceMergedComparisonEffects.Callback compare
+callback : Callback growth compare
+narrow : EdgeValue Symbol Guard
+origin : State Symbol Guard
+narrowClosed : ClosedValues narrow.children
+answer : Bool
+after : State Symbol Guard
+wide : EdgeValue Symbol Guard
+wides : List (EdgeValue Symbol Guard)
+ih :
+  ∀ (before : State Symbol Guard) (bound : Nat),
+    Resources bound origin before →
+      SemanticReady before →
+        Values before narrow.children →
+          Edges before wides →
+            ClosedEdges wides →
+              anyCover clear compare narrow wides before = Result.done answer after →
+                Resources (iterate (childrenBound growth) wides.length bound) origin after
+before : State Symbol Guard
+bound : Nat
+known : Resources bound origin before
+semantic : SemanticReady before
+narrowInputs : Values before narrow.children
+wideInputs : Edges before (wide :: wides)
+wideClosed : ClosedEdges (wide :: wides)
+h✝ :
+  ¬(wide.entry.key.symbol = narrow.entry.key.symbol ∧
+      wide.children.length = narrow.children.length ∧ clear wide.entry.key.constraint = true)
+done : anyCover clear compare narrow wides before = Result.done answer after
+⊢ Resources (iterate (childrenBound growth) (wide :: wides).length bound) origin after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:235:12: error: unexpected token '('; expected command
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:272:16: error: Type mismatch
+  ih middle (rowBound fuel growth bound) bounded first.right (Keeps.available first.left wide wideInput)
+has type
+  Edges middle narrows →
+    ClosedEdges narrows →
+      allRows fuel clear compare wide narrows middle = Result.done answer after →
+        Resources (iterate (rowBound fuel growth) narrows.length (rowBound fuel growth bound)) origin after
+but is expected to have type
+  Resources (iterate (rowBound fuel growth) (narrow :: narrows).length bound) origin after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceMergedComparisonMass.lean:273:10: error: unexpected token '('; expected command

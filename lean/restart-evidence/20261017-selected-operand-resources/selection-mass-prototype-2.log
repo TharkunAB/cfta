@@ -1,0 +1,33 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-operand-resources/selection-mass-prototype.lean:26:98: error: Tactic `decide` failed for proposition
+  heap.nodes.next < after.nodes.next ∧ heap.edges.next < after.edges.next
+because its `Decidable` instance
+  instDecidableAnd
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableAnd`, `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match heap.nodes.next.succ.ble after.nodes.next, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'MicroCFTA.SelectionMassPrototype.actual' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SelectionMassPrototype.actual : @Eq.{1}
+  (MicroCFTA.MergedSourceComparison.Result Nat Bool (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)))
+  MicroCFTA.SelectionMassPrototype.observed
+  (@MicroCFTA.MergedSourceComparison.Result.done Nat Bool
+    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) MicroCFTA.SelectionMassPrototype.recursive
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)))
+    MicroCFTA.SelectionMassPrototype.after)
+'MicroCFTA.SelectionMassPrototype.allocated' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+MicroCFTA.SelectionMassPrototype.allocated : And
+  (@LT.lt.{0} Nat instLTNat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool MicroCFTA.SelectionMassPrototype.heap))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool MicroCFTA.SelectionMassPrototype.after)))
+  (@LT.lt.{0} Nat instLTNat
+    (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+      (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool MicroCFTA.SelectionMassPrototype.heap))
+    (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Nat Bool)
+      (@MicroCFTA.InternedConstructorTemplates.State.edges Nat Bool MicroCFTA.SelectionMassPrototype.after)))

@@ -1,0 +1,202 @@
+'MicroCFTA.SourceCurrentAllocatedProjectionResources.execute_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedProjectionResources.execute_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+      @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+        And
+          (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+            (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling bound)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment before)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment
+                      before))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+                (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.charge bound)))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment
+                        before))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard before))
+                  (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.charge bound)))
+              (∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment
+                      before)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+                  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard result)
+                    (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling bound))))
+'MicroCFTA.SourceCurrentAllocatedProjectionResources.unfold_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedProjectionResources.unfold_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+      And
+        (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+          (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling bound)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value before)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value before))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+              (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.charge bound)))
+          (And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value before))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard before))
+                (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.charge bound)))
+            (∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+              @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value before)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+                @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard result)
+                  (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling bound))))
+'MicroCFTA.SourceCurrentAllocatedProjectionResources.collect_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedProjectionResources.collect_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (fuel : Nat)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard before →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        before →
+      ∀ (seen : List.{0} Nat) (pending : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before pending →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard pending →
+            ∀ (bound : Nat),
+              @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound before →
+                ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                      (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst fuel before seen pending)
+                      (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after) →
+                    And
+                      (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+                        (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter fuel bound) after)
+                      (And
+                        (@LE.le.{0} Nat instLENat
+                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+                            (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit fuel bound)))
+                        (And
+                          (@LE.le.{0} Nat instLENat
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard before))
+                              (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit fuel bound)))
+                          (@LE.le.{0} Nat instLENat
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+                            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) fuel
+                              (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter fuel bound)))))
+'MicroCFTA.SourceCurrentAllocatedProjectionResources.read_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedProjectionResources.read_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (fuel : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard before →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+          ∀ (bound : Nat),
+            @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound before →
+              ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                    (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before)
+                    (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after) →
+                  And
+                    (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+                      (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        bound)
+                      after)
+                    (And
+                      (@LE.le.{0} Nat instLENat
+                        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+                          (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            bound)))
+                      (And
+                        (@LE.le.{0} Nat instLENat
+                          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard before))
+                            (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.credit
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              bound)))
+                        (And
+                          (@LE.le.{0} Nat instLENat
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) rows)
+                            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.massAfter
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                bound)))
+                          (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard after rows))))

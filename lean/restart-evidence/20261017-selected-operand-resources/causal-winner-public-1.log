@@ -1,0 +1,65 @@
+'MicroCFTA.SourceCurrentMemoMergeMass.entry_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeMass.entry_bound : ∀ {Symbol Guard : Type} {bound : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard heap memo →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound heap →
+      ∀ {key : MicroCFTA.InternedBinderProtocol.NodeRef}
+        {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+        @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)) (memo key)
+            (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) →
+          And
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original Symbol Guard entry))
+              bound)
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry))
+              bound)
+'MicroCFTA.SourceCurrentMemoMergeMass.hit_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeMass.hit_bound : ∀ {Symbol Guard : Type} {bound : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard heap memo →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound heap →
+      ∀ {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+        {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+        @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+            (memo (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+            (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) →
+          And
+            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry))
+              bound)
+'MicroCFTA.SourceCurrentMemoMergeMass.winner_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeMass.winner_bound : ∀ {Symbol Guard : Type} {bound : Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard heap memo →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound heap →
+      ∀ (input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap candidate →
+          And
+            (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate)))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.InternedValueMass.value Symbol Guard
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol Guard memo input candidate)))
+              bound)
+'MicroCFTA.SourceCurrentMemoMergeMass.call_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMemoMergeMass.call_bound : ∀ {Symbol Guard : Type} {bound : Nat} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after saved →
+    @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved →
+      @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound after →
+        And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after output)
+          (@LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMass.value Symbol Guard output) bound)

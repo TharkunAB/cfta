@@ -1,0 +1,13 @@
+# Independent Operand frame review
+
+The reviewed production source is `SourceCurrentConstrainedCapOperandFrame.lean`, SHA-256 `b2d8151c78198256ece4c0e604724e3c360360072e896932b50de15dccd93bb8`. No material defect was found in its five public endpoints or the final three kernel declarations.
+
+`current` derives the current-heap joint invariant by the existing semantic and origin rebase. `advance` retains the fixed inventory and its contextual, coverage, joint-cell, and origin laws. Its native node and edge tables are exactly unchanged. It composes actual heap growth and issued history. Its guard-heap premise is an explicit local preservation input, not a claim that physical validity implies guard profiles.
+
+`of_receipt` discharges that guard premise. It opens the same actual Operand receipt, derives the guard heap at its projection return, and then invokes the actual Merge guard producer on the same Merge graph. Physical memo availability grows through the actual projection. The returned machine extension uses the receipt's actual growth, history, and unchanged domains. There is no unrelated execution or desired output law.
+
+`complete` constructs the old actual Operand and its receipt from initial selected-domain admission. The returned Frame is derived from that receipt. It does not require closure of every original root. `mixed_complete` retains that same receipt and Frame while adding the universal Merge law and exact operand-depth cap from the existing MixedTarget producer.
+
+The three-Operand kernel constructs all three calls and their intermediate frames. It reuses original values through each receipt's original availability. Its selected-open-sibling case supplies Empty beside an open depth reference and proves that the whole forest is not closed. Only the selected paths require closure. The final `generated_then_operand` kernel constructs a joint checked query from initial Fits and Room. It feeds its literal returned value to a selected Operand beside that open reference, derives the next Frame, and retains exactly the populated query tables and global memo validity. The kernel does not supply a future Frame or a query completion.
+
+The independent imported probe checks all five public axiom and full explicit signature pairs with no diagnostics and only standard axioms. The reviewed final root kernel source and log contain three complete pairs. This independent review does not add those three pairs to its own integration count. Neither the source nor these kernels derive a numeric resource forecast for Operand work or prove general selected-class or outer termination.

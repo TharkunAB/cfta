@@ -1,0 +1,19 @@
+import MicroCFTA.SourceCurrentConstrainedCapOperandFrame
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 2000000
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandFrame.current
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandFrame.current
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandFrame.advance
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandFrame.advance
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandFrame.of_receipt
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandFrame.of_receipt
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandFrame.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandFrame.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapOperandFrame.mixed_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapOperandFrame.mixed_complete

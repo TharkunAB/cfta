@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedProjectionResources
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionResources.execute_bound
+#check @MicroCFTA.SourceCurrentAllocatedProjectionResources.execute_bound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionResources.unfold_bound
+#check @MicroCFTA.SourceCurrentAllocatedProjectionResources.unfold_bound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionResources.collect_bound
+#check @MicroCFTA.SourceCurrentAllocatedProjectionResources.collect_bound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionResources.read_bound
+#check @MicroCFTA.SourceCurrentAllocatedProjectionResources.read_bound

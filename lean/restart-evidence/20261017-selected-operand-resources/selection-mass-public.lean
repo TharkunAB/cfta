@@ -1,0 +1,56 @@
+import MicroCFTA.SourceMergedSelectionMass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceMergedComparisonMass.Resources
+#check @MicroCFTA.SourceMergedComparisonMass.Resources
+#print axioms MicroCFTA.SourceMergedComparisonMass.Resources.refl
+#check @MicroCFTA.SourceMergedComparisonMass.Resources.refl
+#print axioms MicroCFTA.SourceMergedComparisonMass.Resources.mono
+#check @MicroCFTA.SourceMergedComparisonMass.Resources.mono
+#print axioms MicroCFTA.SourceMergedComparisonMass.Monotone
+#check @MicroCFTA.SourceMergedComparisonMass.Monotone
+#print axioms MicroCFTA.SourceMergedComparisonMass.iterate
+#check @MicroCFTA.SourceMergedComparisonMass.iterate
+#print axioms MicroCFTA.SourceMergedComparisonMass.iterate_mono
+#check @MicroCFTA.SourceMergedComparisonMass.iterate_mono
+#print axioms MicroCFTA.SourceMergedComparisonMass.iterate_ge
+#check @MicroCFTA.SourceMergedComparisonMass.iterate_ge
+#print axioms MicroCFTA.SourceMergedComparisonMass.iterate_count_mono
+#check @MicroCFTA.SourceMergedComparisonMass.iterate_count_mono
+#print axioms MicroCFTA.SourceMergedComparisonMass.iterate_family_mono
+#check @MicroCFTA.SourceMergedComparisonMass.iterate_family_mono
+#print axioms MicroCFTA.SourceMergedComparisonMass.readBound
+#check @MicroCFTA.SourceMergedComparisonMass.readBound
+#print axioms MicroCFTA.SourceMergedComparisonMass.readWidth
+#check @MicroCFTA.SourceMergedComparisonMass.readWidth
+#print axioms MicroCFTA.SourceMergedComparisonMass.comparisonBound
+#check @MicroCFTA.SourceMergedComparisonMass.comparisonBound
+#print axioms MicroCFTA.SourceMergedComparisonMass.comparisonBound_ge
+#check @MicroCFTA.SourceMergedComparisonMass.comparisonBound_ge
+#print axioms MicroCFTA.SourceMergedComparisonMass.comparisonBound_mono
+#check @MicroCFTA.SourceMergedComparisonMass.comparisonBound_mono
+#print axioms MicroCFTA.SourceMergedComparisonMass.check_resources
+#check @MicroCFTA.SourceMergedComparisonMass.check_resources
+#print axioms MicroCFTA.SourceMergedComparisonMass.check_bound
+#check @MicroCFTA.SourceMergedComparisonMass.check_bound
+#print axioms MicroCFTA.SourceMergedSelectionMass.selectionBound
+#check @MicroCFTA.SourceMergedSelectionMass.selectionBound
+#print axioms MicroCFTA.SourceMergedSelectionMass.selectionBound_ge
+#check @MicroCFTA.SourceMergedSelectionMass.selectionBound_ge
+#print axioms MicroCFTA.SourceMergedSelectionMass.selectionBound_mono
+#check @MicroCFTA.SourceMergedSelectionMass.selectionBound_mono
+#print axioms MicroCFTA.SourceMergedSelectionMass.selectionBound_count_mono
+#check @MicroCFTA.SourceMergedSelectionMass.selectionBound_count_mono
+#print axioms MicroCFTA.SourceMergedSelectionMass.select_bound
+#check @MicroCFTA.SourceMergedSelectionMass.select_bound
+#print axioms MicroCFTA.SourceMergedSelectionMass.select_complete
+#check @MicroCFTA.SourceMergedSelectionMass.select_complete
