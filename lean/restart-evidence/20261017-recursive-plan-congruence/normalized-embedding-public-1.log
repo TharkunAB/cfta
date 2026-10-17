@@ -1,0 +1,221 @@
+@MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent : ∀ {Symbol Guard : Type}
+  (first : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (firstInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (second : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second secondInputs →
+    @MicroCFTA.SourceCurrentNormalizedPlanRelation.Related Symbol Guard first firstInputs second secondInputs
+theorem MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent : ∀ {Symbol Guard : Type}
+  (first : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (firstInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (second : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second secondInputs →
+    @MicroCFTA.SourceCurrentNormalizedPlanRelation.Related Symbol Guard first firstInputs second secondInputs :=
+fun {Symbol Guard} first firstInputs second secondInputs paired =>
+  @MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent._mutual Symbol Guard
+    (@PSum.inl.{1, 1}
+      (@PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun first =>
+        @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+          @PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun second =>
+            @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+              @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                secondInputs)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                  secondInputs))
+      (@PSigma.mk.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+        (fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        first
+        (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (fun firstInputs =>
+            @PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                  secondInputs)
+          firstInputs
+          (@PSigma.mk.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+            (fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                  secondInputs)
+            second
+            (@PSigma.mk.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                  secondInputs)
+              secondInputs paired)))))
+'MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNormalizedPlanEmbedding.many_equivalent : ∀ {Symbol Guard : Type}
+  (first : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (firstInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (second : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second secondInputs →
+    @MicroCFTA.SourceCurrentNormalizedPlanRelation.ManyRelated Symbol Guard first firstInputs second secondInputs
+theorem MicroCFTA.SourceCurrentNormalizedPlanEmbedding.many_equivalent : ∀ {Symbol Guard : Type}
+  (first : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (firstInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (second : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second secondInputs →
+    @MicroCFTA.SourceCurrentNormalizedPlanRelation.ManyRelated Symbol Guard first firstInputs second secondInputs :=
+fun {Symbol Guard} first firstInputs second secondInputs paired =>
+  @MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent._mutual Symbol Guard
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun first =>
+        @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+          @PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun second =>
+            @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+              @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                secondInputs)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                  secondInputs))
+      (@PSum.inl.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+          (fun first =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+              @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+                @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+          first
+          (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (fun firstInputs =>
+              @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+                @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+            firstInputs
+            (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+              (fun second =>
+                @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+              second
+              (@PSigma.mk.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+                secondInputs paired))))))
+'MicroCFTA.SourceCurrentNormalizedPlanEmbedding.many_equivalent' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNormalizedPlanEmbedding.edges_equivalent : ∀ {Symbol Guard : Type}
+  (first : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (firstInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (second : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second secondInputs →
+    @MicroCFTA.SourceCurrentNormalizedPlanRelation.RowsRelated Symbol Guard first firstInputs second secondInputs
+theorem MicroCFTA.SourceCurrentNormalizedPlanEmbedding.edges_equivalent : ∀ {Symbol Guard : Type}
+  (first : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (firstInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (second : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second secondInputs →
+    @MicroCFTA.SourceCurrentNormalizedPlanRelation.RowsRelated Symbol Guard first firstInputs second secondInputs :=
+fun {Symbol Guard} first firstInputs second secondInputs paired =>
+  @MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent._mutual Symbol Guard
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun first =>
+        @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+          @PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun second =>
+            @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+              @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.Equivalent Symbol Guard first firstInputs second
+                secondInputs)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                  secondInputs))
+      (@PSum.inr.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.ManyEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun first =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+              @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun secondInputs =>
+                @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                  secondInputs)
+        (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+          (fun first =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun firstInputs =>
+              @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+                @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+          first
+          (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (fun firstInputs =>
+              @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun second =>
+                @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+            firstInputs
+            (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+              (fun second =>
+                @PSigma.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+              second
+              (@PSigma.mk.{1, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (fun secondInputs =>
+                  @MicroCFTA.InternedFreshOrdinaryPlanEquivalence.EdgesEquivalent Symbol Guard first firstInputs second
+                    secondInputs)
+                secondInputs paired))))))
+'MicroCFTA.SourceCurrentNormalizedPlanEmbedding.edges_equivalent' depends on axioms: [propext, Quot.sound.{u}]

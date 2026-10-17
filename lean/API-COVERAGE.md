@@ -1,5 +1,46 @@
 # Public API and source correspondence
 
+## Current recursive normalized construction and stored substitution
+
+Updated: 2026-10-17 20:43 CEST. Starting checkpoint is `10894d61`.
+Proof commit is `6cef8154`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-recursive-plan-congruence.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Node rows can now differ in order and multiplicity at every nested depth.
+The pure plan relation retains full symbols and guards, ordered children
+and union members, and binder bodies under each common reference.
+Actual warm stages expose both raw probes and their filters. Equal probes
+select the same actual stored winner. Initial Ready and available captures
+construct both plans in sequence with one exact returned Value and both
+Keeps histories. The stored-value adapter derives this result from a pure
+lexical relation. It covers closed captures and nested open Mu values.
+
+The actual-writer producer remains open. It must connect causal source
+histories to the retained-Mu recursive row and ordered-child relation.
+Prior union normalization, ordinary merging, raw unused Mu cleanup, and
+earlier warm winners still need an adequate relation. A checked source
+refutes general physical union-normalization/substitution commutation:
+`union[A, B, z]` and `union[AB, z]` differ physically but have the same open
+observations at every depth. This does not refute the specific retained-Mu
+claim or establish a Haskell defect. Separate cold runs can also give
+different payloads with the same numeric identity.
+General outer progress, convergence, current frontend/runtime adapters,
+and complete public Haskell correspondence remain open. Keep the full goal.
+
+Full pinned Audit passes 3105 jobs and 68281 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 366 MiB peak. All five final
+strict source logs are empty. Canonical builds pass. Exact selected checks
+and preservation reports are in
+`lean/restart-evidence/20261017-recursive-plan-congruence/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair there with its reproducer,
+paths, commit, checks, and upstream status.
+
 ## Current stored alpha reconstruction and node congruence
 
 Updated: 2026-10-17 20:29 CEST. Starting checkpoint is `d3486d3b`.

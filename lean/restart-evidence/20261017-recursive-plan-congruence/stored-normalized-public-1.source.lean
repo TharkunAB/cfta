@@ -1,0 +1,45 @@
+import MicroCFTA.SourceCurrentStoredNormalizedPlans
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.Related
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.Related
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.Related
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.ManyRelated
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.ManyRelated
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.ManyRelated
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.RowRelated
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.RowRelated
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.RowRelated
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.RowsRelated
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.RowsRelated
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.RowsRelated
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.encode_related
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.encode_related
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.encode_related
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeMany_related
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeMany_related
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeMany_related
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeRow_related
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeRow_related
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeRow_related
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeRows_related
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeRows_related
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.encodeRows_related
+
+#check @MicroCFTA.SourceCurrentStoredNormalizedPlans.complete
+#print MicroCFTA.SourceCurrentStoredNormalizedPlans.complete
+#print axioms MicroCFTA.SourceCurrentStoredNormalizedPlans.complete

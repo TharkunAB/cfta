@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentNormalizedPlanCongruence
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm
+#print MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm
+#check @MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_many
+#print MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_many
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_many
+#check @MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_row
+#print MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_row
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_row
+#check @MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_rows
+#print MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_rows
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanCongruence.warm_rows
+#check @MicroCFTA.SourceCurrentNormalizedPlanCongruence.completed
+#print MicroCFTA.SourceCurrentNormalizedPlanCongruence.completed
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanCongruence.completed
+#check @MicroCFTA.SourceCurrentNormalizedPlanCongruence.initial
+#print MicroCFTA.SourceCurrentNormalizedPlanCongruence.initial
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanCongruence.initial

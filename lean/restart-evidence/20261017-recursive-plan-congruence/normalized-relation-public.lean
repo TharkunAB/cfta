@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentNormalizedPlanRelation
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNormalizedPlanRelation.Related
+#print MicroCFTA.SourceCurrentNormalizedPlanRelation.Related
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanRelation.Related
+#check @MicroCFTA.SourceCurrentNormalizedPlanRelation.ManyRelated
+#print MicroCFTA.SourceCurrentNormalizedPlanRelation.ManyRelated
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanRelation.ManyRelated
+#check @MicroCFTA.SourceCurrentNormalizedPlanRelation.RowRelated
+#print MicroCFTA.SourceCurrentNormalizedPlanRelation.RowRelated
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanRelation.RowRelated
+#check @MicroCFTA.SourceCurrentNormalizedPlanRelation.RowsRelated
+#print MicroCFTA.SourceCurrentNormalizedPlanRelation.RowsRelated
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanRelation.RowsRelated

@@ -1,0 +1,63 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/warm-parts-direct-2.source.lean:58:99: error: Application type mismatch: The argument
+  actual
+has type
+  buildMany (expression :: expressions) environment common = Outcome.done outputs common
+but is expected to have type
+  ((build expression environment common).bind fun value state =>
+      (buildMany expressions environment state).bind fun values after => Outcome.done (value :: values) after) =
+    Outcome.done outputs common
+in the application
+  bind (build expression environment)
+    (fun value state =>
+      (buildMany expressions environment state).bind fun values after => Outcome.done (value :: values) after)
+    common outputs valid (build_correct expression environment) laterGrowing (build_replays expression environment)
+    actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/warm-parts-direct-2.source.lean:62:39: error: Application type mismatch: The argument
+  retained
+has type
+  InternedConstructorTemplates.Valid state
+but is expected to have type
+  InternedConstructorTemplates.Valid (Outcome.state (?m.153 values state))
+in the application
+  And.intro retained
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/warm-parts-direct-2.source.lean:92:49: error: Application type mismatch: The argument
+  actual
+has type
+  build (Syntax.node expressions) environment common = Outcome.done output common
+but is expected to have type
+  ((buildEdges expressions environment common).bind fun values state => work (makeNode values) state) =
+    Outcome.done output common
+in the application
+  bind (buildEdges expressions environment) (fun values state => work (makeNode values) state) common output valid
+    (buildEdges_correct expressions environment)
+    (fun values => InternedNestedConstruction.work_correct (makeNode values))
+    (buildEdges_replays expressions environment) actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/warm-parts-direct-2.source.lean:105:48: error: Application type mismatch: The argument
+  actual
+has type
+  build (Syntax.union expressions) environment common = Outcome.done output common
+but is expected to have type
+  ((buildMany expressions environment common).bind fun values state => work (makeUnion values) state) =
+    Outcome.done output common
+in the application
+  bind (buildMany expressions environment) (fun values state => work (makeUnion values) state) common output valid
+    (buildMany_correct expressions environment)
+    (fun values => InternedNestedConstruction.work_correct (makeUnion values))
+    (buildMany_replays expressions environment) actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/warm-parts-direct-2.source.lean:148:103: error: Application type mismatch: The argument
+  actual
+has type
+  build (Syntax.binder smart body) environment common = Outcome.done output common
+but is expected to have type
+  ((InternedFreshOrdinaryFacts.callback body environment Reference.depth common).bind fun value state =>
+      (InternedFreshOrdinaryFacts.callback body environment (Reference.uninterned (ordinaryLevel value)) state).bind
+        fun ordinary after =>
+        request smart value ordinary (InternedFreshOrdinaryFacts.callback body environment) after) =
+    Outcome.done output common
+in the application
+  bind (InternedFreshOrdinaryFacts.callback body environment Reference.depth)
+    (fun value state =>
+      (InternedFreshOrdinaryFacts.callback body environment (Reference.uninterned (ordinaryLevel value)) state).bind
+        fun ordinary after => request smart value ordinary (InternedFreshOrdinaryFacts.callback body environment) after)
+    common output valid (callback_growing body environment Reference.depth) laterGrowing
+    (callback_replays body environment Reference.depth) actual

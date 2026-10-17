@@ -1,0 +1,88 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:23:22: error: Tactic `assumption` failed
+
+Symbol Guard : Type
+firstInputs secondInputs : List (Value Symbol Guard)
+paired : True
+⊢ Related Syntax.empty firstInputs Syntax.empty secondInputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:24:29: error: Type mismatch
+  paired
+has type
+  firstInputs[left]?.getD Value.empty = secondInputs[right]?.getD Value.empty
+but is expected to have type
+  Related (Syntax.var left) firstInputs (Syntax.var right) secondInputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:25:31: error: Type mismatch
+  edges_equivalent left firstInputs right secondInputs paired
+has type
+  RowsRelated left firstInputs right secondInputs
+but is expected to have type
+  Related (Syntax.node left) firstInputs (Syntax.node right) secondInputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:26:33: error: Type mismatch
+  many_equivalent left firstInputs right secondInputs paired
+has type
+  ManyRelated left firstInputs right secondInputs
+but is expected to have type
+  Related (Syntax.union left) firstInputs (Syntax.union right) secondInputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:28:10: error: Invalid `⟨...⟩` notation: The expected type
+  Related (Syntax.binder firstSmart left) firstInputs (Syntax.binder secondSmart right) secondInputs
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:38:18: error: Tactic `assumption` failed
+
+Symbol Guard : Type
+firstInputs secondInputs : List (Value Symbol Guard)
+paired : True
+⊢ ManyRelated [] firstInputs [] secondInputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:40:10: error: Invalid `⟨...⟩` notation: The expected type
+  ManyRelated (left :: rest) firstInputs (right :: remaining) secondInputs
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:50:24: error: Invalid `⟨...⟩` notation: The expected type
+  RowsRelated [] firstInputs [] secondInputs
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:59:90: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  paired
+has type
+  EdgesEquivalent (EdgeSyntax.mk symbol guard children :: rest) firstInputs
+    (EdgeSyntax.mk otherSymbol otherGuard otherChildren :: remaining) secondInputs
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:60:82: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  paired
+has type
+  EdgesEquivalent (EdgeSyntax.mk symbol guard children :: rest) firstInputs
+    (EdgeSyntax.mk otherSymbol otherGuard otherChildren :: remaining) secondInputs
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:62:75: error: Invalid `⟨...⟩` notation: The expected type
+  RowRelated (EdgeSyntax.mk symbol guard children) firstInputs (EdgeSyntax.mk otherSymbol otherGuard otherChildren)
+    secondInputs
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:63:12: error: Tactic `constructor` failed: target is not an inductive datatype
+
+case mk.mk
+Symbol Guard : Type
+firstInputs secondInputs : List (Value Symbol Guard)
+rest remaining : List (EdgeSyntax Symbol Guard)
+symbol : Symbol
+guard : Guard
+children : List (Syntax Symbol Guard)
+otherSymbol : Symbol
+otherGuard : Guard
+otherChildren : List (Syntax Symbol Guard)
+paired :
+  EdgesEquivalent (EdgeSyntax.mk symbol guard children :: rest) firstInputs
+    (EdgeSyntax.mk otherSymbol otherGuard otherChildren :: remaining) secondInputs
+child : ManyRelated children firstInputs otherChildren secondInputs
+tail : RowsRelated rest firstInputs remaining secondInputs
+head :
+  RowRelated (EdgeSyntax.mk symbol guard children) firstInputs (EdgeSyntax.mk otherSymbol otherGuard otherChildren)
+    secondInputs
+⊢ RowsRelated (EdgeSyntax.mk symbol guard children :: rest) firstInputs
+    (EdgeSyntax.mk otherSymbol otherGuard otherChildren :: remaining) secondInputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:30:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:42:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-recursive-plan-congruence/normalized-embedding-direct-1.source.lean:74:0: warning: unused `termination_by`, function is not recursive

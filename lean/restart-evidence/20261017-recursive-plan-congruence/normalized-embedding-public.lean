@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentNormalizedPlanEmbedding
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent
+#print MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanEmbedding.equivalent
+
+#check @MicroCFTA.SourceCurrentNormalizedPlanEmbedding.many_equivalent
+#print MicroCFTA.SourceCurrentNormalizedPlanEmbedding.many_equivalent
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanEmbedding.many_equivalent
+
+#check @MicroCFTA.SourceCurrentNormalizedPlanEmbedding.edges_equivalent
+#print MicroCFTA.SourceCurrentNormalizedPlanEmbedding.edges_equivalent
+#print axioms MicroCFTA.SourceCurrentNormalizedPlanEmbedding.edges_equivalent
+

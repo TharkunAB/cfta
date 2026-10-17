@@ -1,0 +1,36 @@
+MicroCFTA.RecursivePlanKernels.captured_recursive_relation : ∀
+  (capture : MicroCFTA.InternedConstructorTemplates.Value Nat Bool),
+  @MicroCFTA.SourceCurrentNormalizedPlanRelation.Related Nat Bool
+    (MicroCFTA.RecursivePlanKernels.leftPlan (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (MicroCFTA.RecursivePlanKernels.firstInputs capture)
+    (MicroCFTA.RecursivePlanKernels.rightPlan (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (MicroCFTA.RecursivePlanKernels.secondInputs capture)
+'MicroCFTA.RecursivePlanKernels.captured_recursive_relation' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.RecursivePlanKernels.own_initial_relation : And
+  (@Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b =>
+        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a
+          b)
+      MicroCFTA.RecursivePlanKernels.seedSyntax (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+      MicroCFTA.RecursivePlanKernels.seed MicroCFTA.RecursivePlanKernels.initial))
+  (And (@MicroCFTA.SourceEqualityRequiredCache.Ready Nat Bool MicroCFTA.RecursivePlanKernels.initial)
+    (And
+      (@MicroCFTA.InternedNestedProvenance.Values Nat Bool MicroCFTA.RecursivePlanKernels.initial
+        (MicroCFTA.RecursivePlanKernels.firstInputs MicroCFTA.RecursivePlanKernels.seed))
+      (And
+        (@MicroCFTA.InternedNestedProvenance.Values Nat Bool MicroCFTA.RecursivePlanKernels.initial
+          (MicroCFTA.RecursivePlanKernels.secondInputs MicroCFTA.RecursivePlanKernels.seed))
+        (@MicroCFTA.SourceCurrentNormalizedPlanRelation.Related Nat Bool
+          (MicroCFTA.RecursivePlanKernels.leftPlan (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          (MicroCFTA.RecursivePlanKernels.firstInputs MicroCFTA.RecursivePlanKernels.seed)
+          (MicroCFTA.RecursivePlanKernels.rightPlan (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (MicroCFTA.RecursivePlanKernels.secondInputs MicroCFTA.RecursivePlanKernels.seed)))))
+'MicroCFTA.RecursivePlanKernels.own_initial_relation' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]

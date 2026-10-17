@@ -1,0 +1,77 @@
+MicroCFTA.RecursivePlanKernels.recursive_initial : @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+  fun value =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun middle =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+      And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                instDecidableEqBool a b)
+            (MicroCFTA.RecursivePlanKernels.leftPlan (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (MicroCFTA.RecursivePlanKernels.firstInputs MicroCFTA.RecursivePlanKernels.seed)
+            MicroCFTA.RecursivePlanKernels.initial)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value middle))
+        (And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                  instDecidableEqBool a b)
+              (MicroCFTA.RecursivePlanKernels.rightPlan (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (MicroCFTA.RecursivePlanKernels.secondInputs MicroCFTA.RecursivePlanKernels.seed) middle)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Nat Bool MicroCFTA.RecursivePlanKernels.initial middle)
+            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Nat Bool middle after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Nat Bool after value)
+                (And
+                  (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun entry =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun body =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun depth =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun ordinary =>
+                          And
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                              (MicroCFTA.RecursivePlanKernels.underUnion value)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Nat Bool entry body depth ordinary))
+                            (@Eq.{1} Bool (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Nat Bool depth ordinary)
+                              Bool.true))
+                  (And
+                    (@Ne.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Nat Bool value)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+                          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+                          (fun a b =>
+                            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                              instDecidableEqBool a b)
+                          (MicroCFTA.RecursivePlanKernels.leftPlan
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          (MicroCFTA.RecursivePlanKernels.firstInputs MicroCFTA.RecursivePlanKernels.seed) after)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+                          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value after))
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+                          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+                          (fun a b =>
+                            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                              instDecidableEqBool a b)
+                          (MicroCFTA.RecursivePlanKernels.rightPlan
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                          (MicroCFTA.RecursivePlanKernels.secondInputs MicroCFTA.RecursivePlanKernels.seed) after)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+                          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value after)))))))))
+'MicroCFTA.RecursivePlanKernels.recursive_initial' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
