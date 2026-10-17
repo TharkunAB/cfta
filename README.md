@@ -94,6 +94,10 @@ See [`docs/automata-syntax.md`](docs/automata-syntax.md) for the side-by-side
 FTA, ECTA, and LTA construction forms and the rationale for the guard-lambda
 syntax.
 
+The optional [cfta-serialization](cfta-serialization/README.md) package saves
+and reopens complete explicit graphs as versioned JSON. Its example displays
+and queries a saved recursive LTA in a fresh process.
+
 ## Three flagship languages
 
 The three generator APIs close a qualified-do child block in the same way, with
