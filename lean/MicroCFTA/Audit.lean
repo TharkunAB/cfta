@@ -2510,6 +2510,10 @@ import MicroCFTA.SourceCurrentRequiredRowOrigins
 import MicroCFTA.SourceCurrentRequiredPrimaryExposure
 import MicroCFTA.SourceCurrentRequiredPrimaryOrigins
 import MicroCFTA.SourceCurrentNativeCallbackErasure
+import MicroCFTA.SourceCurrentNativeInputExchange
+import MicroCFTA.SourceCurrentNativeRowOrigins
+import MicroCFTA.SourceCurrentRequiredUnionNormalNative
+import MicroCFTA.SourceCurrentRequiredUnionNormalRead
 /-!
 # Proof dependency audit
 
