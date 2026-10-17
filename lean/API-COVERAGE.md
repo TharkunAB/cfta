@@ -1,5 +1,54 @@
 # Public API and source correspondence
 
+## Current causal payload bounds and generated checked binders
+
+Updated: 2026-10-17 06:42 CEST. This checkpoint starts at published `1a8e5b7b`.
+The proof commits are `2f7a3bc1`, `aa3cb202`, `33387176`, and `5166ffde`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-causal-result-mass.md` for the top-level proof target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-causal-result-mass/`.
+
+Ten additive modules count complete structural payload mass, including every
+Mu body and both probes. Successful initial source reads produce a common
+store bound. Full actual constructor execution retains causal store and
+result bounds through nested Mu, unions, filtering, warm winners, candidate
+publication, and pending outcomes. Encoded widths and original constructor
+charges give a conservative numeric ceiling from initial payload mass.
+
+One initial computed source bound now constructs serial optional binders
+that consume their literal preceding results. Every later mass ceiling and
+allocation credit follows from the original number and call count. Actual
+checked physical traces retain both populated native tables, domains, and
+equality operations exactly. Initial semantic context and physical validity
+construct the complete return. No later-entry counters, future WordRanges,
+supplied execution, or desired result-law premise is used.
+
+This sequence contains only optionalBinder instructions. Other native query
+instructions, full generated-query resources, general Target and Force
+misses, editor/class completion, outer active/stored producers, arbitrary
+constrained Mu bodies, convergence, remaining recursive callers, current
+frontend/runtime adapters, concrete capacity, and complete public Haskell
+correspondence remain open. Mass is not a byte count. Conservative ceilings
+do not establish useful machine-word headroom or total memory capacity.
+
+The pinned Audit passes 2864 jobs and 63784 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All ten final strict logs are empty.
+All 134 imported axiom/signature pairs pass in fifteen groups.
+Seven component manifests verify 247 entries.
+Read checkpoint-validation.json for complete imported signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12398 starting
+files, 2853 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 74 frozen manifests with 621 entries. Stashes and three other
+worktrees retain their initial state.
+
+No Haskell source change or new Haskell defect occurs. Root FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` is merged
+and validated. Reuse unchanged strict Nix, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve all earlier work and the optimized
+interned core. The full library goal stays active. Read
+next-full-query-mass-resources.md in the evidence directory.
+
 ## Current recursive allocation and initial source profiles
 
 Updated: 2026-10-17 06:17 CEST. This checkpoint starts at published `8883b39a`.
