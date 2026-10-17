@@ -47,12 +47,20 @@ alternative order. Do not add states, symbols, or predicate children.
 
 ## Validation
 
-Compare quoted and file-parsed definitions with handwritten ordinary,
-equality-constrained, and refined-symbol graphs. Check bounded terms, counts,
-and ranks, including cycles and empty rows. Check malformed input, duplicate
-rows, missing states, arity conflicts, unknown bindings, and aliasing symbol
-bindings with conflicting arities. Compile a complete example. Use the normal
-PR gate and the memory cap.
+Quoted and file-parsed definitions match handwritten ordinary, equality,
+and refined-symbol graphs. Standalone checks cover counts, ordered terms,
+rank/unrank, cycles, empty rows, local and qualified bindings, string escapes,
+and aliases with conflicting arities. Two processes produce the same output.
+Six error-position checks and twelve expected compilation failures pass.
+The README program and the constrained-pair executable compile and run.
+
+The fresh all-component `-O0 -Werror` build, all six suites, formatting, lint,
+and package metadata checks pass. All local jobs use heavy-management with
+a 12 GiB process cap and a 4 GiB test RTS cap.
+
+All eight standard benchmark cells retain their checksums against main at
+`c0cc8a05`. All six executables are byte-identical to main. Instruction
+differences are below 0.11%; allocation differences are below 0.01%.
 
 ## Limits and follow-ups
 
