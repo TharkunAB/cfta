@@ -2461,6 +2461,14 @@ import MicroCFTA.SourceCurrentScanNumericForecast
 import MicroCFTA.SourceCurrentConjunctionCallUnique
 import MicroCFTA.SourceCurrentScanNumeric
 import MicroCFTA.SourceCurrentScanCallerNumeric
+import MicroCFTA.SourceCurrentRequiredGuard
+import MicroCFTA.SourceCurrentRequiredInitialNumeric
+import MicroCFTA.SourceCurrentTargetNumeric
+import MicroCFTA.SourceCurrentRecordScanNumeric
+import MicroCFTA.SourceCurrentInitialSelectionForecast
+import MicroCFTA.SourceCurrentScanRequiredWorker
+import MicroCFTA.SourceCurrentScanRequiredForecast
+import MicroCFTA.SourceCurrentScanRequiredNumeric
 /-!
 # Proof dependency audit
 
