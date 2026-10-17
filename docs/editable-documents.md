@@ -168,3 +168,8 @@ The saved edited example is byte-identical to the complete-row version.
 These operations are the low-level source edit layer. The primary user interface
 will compose language expressions for constructor and fact changes and named
 term or subtree exclusions. Saving the resulting value is a persistence step.
+
+The direct-edit change retains all eight standard benchmark checksums. The six
+core executables are byte-identical to main. Instruction differences are below
+0.11%, and allocation differences are below 0.01%. The shared JSON and 100-fact
+edit probes remain within 0.01% of the preceding document implementation.
