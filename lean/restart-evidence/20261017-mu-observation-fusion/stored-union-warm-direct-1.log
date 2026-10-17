@@ -1,0 +1,40 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-union-warm-direct-1.source.lean:70:14: error: Application type mismatch: The argument
+  actual
+has type
+  nodeStep (NodeKey.union (List.map Value.referenceOf members))
+      (fun entry => Value.union entry members (maximumDepth members) (childFree members)) common =
+    (Value.union actual✝ originals level free, common)
+of sort `Prop` but is expected to have type
+  Interned NodeKey
+of sort `Type` in the application
+  Exists.intro actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-union-warm-direct-1.source.lean:65:38: error: unsolved goals
+case union
+Symbol Guard : Type
+members : List (Value Symbol Guard)
+common : InternedConstructorTemplates.State Symbol Guard
+facts : Facts common
+available : Values common members
+key : NodeKey := NodeKey.union (List.map Value.referenceOf members)
+identify : Interned NodeKey → Value Symbol Guard :=
+  fun entry => Value.union entry members (maximumDepth members) (childFree members)
+entry actual✝ : Interned NodeKey
+originals : List (Value Symbol Guard)
+level : Nat
+free : List InternedBinderProtocol.Reference
+actual :
+  nodeStep (NodeKey.union (List.map Value.referenceOf members))
+      (fun entry => Value.union entry members (maximumDepth members) (childFree members)) common =
+    (Value.union actual✝ originals level free, common)
+present :
+  (Value.union actual✝ originals level free, common).snd.nodeRecords key =
+    some (Value.union actual✝ originals level free, common).fst
+output : Available common (Value.union actual✝ originals level free)
+fields :
+  actual✝ = entry ∧
+    key = NodeKey.union (List.map Value.referenceOf originals) ∧
+      level = maximumDepth originals ∧ free = childFree originals
+same : members = originals
+⊢ Value.union actual✝ originals (maximumDepth originals) (childFree originals) =
+    Value.union sorry originals (maximumDepth originals) (childFree originals)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-union-warm-direct-1.source.lean:126:22: error(lean.unknownIdentifier): Unknown identifier `InternedUnionSeparation.distinctNodes_nodup`

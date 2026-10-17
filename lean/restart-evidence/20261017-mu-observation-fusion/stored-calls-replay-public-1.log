@@ -1,0 +1,337 @@
+@MicroCFTA.SourceCurrentStoredCallsReplay.correct : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard}
+  {originals outputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals before outputs after →
+    @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+      And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after)
+theorem MicroCFTA.SourceCurrentStoredCallsReplay.correct : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard}
+  {originals outputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals before outputs after →
+    @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+      And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {environment}
+    {originals outputs} {before after} calls valid =>
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls.rec Symbol Guard inst environment
+    (fun {originals} {before} {outputs} {after} calls =>
+      @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+        And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after))
+    (fun state valid =>
+      @And.intro (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard state)
+        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard state state) valid
+        (@MicroCFTA.InternedConstructorTemplates.grows_refl Symbol Guard state))
+    (fun original originals before middle after output outputs called rest ih valid =>
+      have first :=
+        @Eq.mp.{0}
+          (And
+            (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before)))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before))))
+          (And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle))
+          (@congr.{1, 1} Prop Prop
+            (And
+              (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before))))
+            (And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before)))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle)
+            (@congrArg.{1, 1} Prop (Prop → Prop)
+              (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before)))
+              (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle) And
+              (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) Prop
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before))
+                middle (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard)
+                (@congrArg.{1, 1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output middle)
+                  (fun x =>
+                    @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                      fun key state => state)
+                  called)))
+            (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) Prop
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before))
+              middle (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before)
+              (@congrArg.{1, 1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output middle)
+                (fun x =>
+                  @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                    fun key state => state)
+                called)))
+          (@MicroCFTA.SourceCurrentStoredCallsReplay.execute_correct✝ Symbol Guard inst original environment before
+            valid);
+      have later :=
+        ih
+          (@And.left (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle) first);
+      @And.intro (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after)
+        (@And.left (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle after) later)
+        (@MicroCFTA.InternedConstructorTemplates.grows_trans Symbol Guard before middle after
+          (@And.right (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle) first)
+          (@And.right (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle after) later)))
+    originals before outputs after calls valid
+'MicroCFTA.SourceCurrentStoredCallsReplay.correct' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredCallsReplay.replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard}
+  {originals outputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals before outputs after →
+    ∀ (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+        @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+          @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            originals outputs
+theorem MicroCFTA.SourceCurrentStoredCallsReplay.replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard}
+  {originals outputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals before outputs after →
+    ∀ (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+        @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+          @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            originals outputs :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {environment}
+    {originals outputs} {before after} calls common valid growth =>
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls.rec Symbol Guard inst environment
+    (fun {originals} {before} {outputs} {after} calls =>
+      @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+        @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+          @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            originals outputs)
+    (fun state valid growth =>
+      @MicroCFTA.Language.All₂.nil (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun original output =>
+        @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+    (fun original originals before middle after output outputs called rest ih valid growth =>
+      have first :=
+        @Eq.mp.{0}
+          (And
+            (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before)))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before))))
+          (And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle))
+          (@congr.{1, 1} Prop Prop
+            (And
+              (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before))))
+            (And (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before)))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle)
+            (@congrArg.{1, 1} Prop (Prop → Prop)
+              (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before)))
+              (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle) And
+              (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) Prop
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before))
+                middle (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard)
+                (@congrArg.{1, 1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    before)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output middle)
+                  (fun x =>
+                    @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                      fun key state => state)
+                  called)))
+            (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) Prop
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before))
+              middle (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before)
+              (@congrArg.{1, 1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  before)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output middle)
+                (fun x =>
+                  @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                    fun key state => state)
+                called)))
+          (@MicroCFTA.SourceCurrentStoredCallsReplay.execute_correct✝ Symbol Guard inst original environment before
+            valid);
+      have later :=
+        @MicroCFTA.SourceCurrentStoredCallsReplay.correct Symbol Guard inst environment originals outputs middle after
+          rest
+          (@And.left (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle) first);
+      @MicroCFTA.Language.All₂.cons (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (fun original output =>
+          @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+        original output originals outputs
+        (@MicroCFTA.InternedFreshOrdinaryReplay.build_replay Symbol Guard inst
+          (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard original)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) original)
+          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment)
+            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard original))
+          before common output middle valid called
+          (@MicroCFTA.InternedConstructorTemplates.grows_trans Symbol Guard middle after common
+            (@And.right (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard after)
+              (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle after) later)
+            growth))
+        (ih
+          (@And.left (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard middle)
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before middle) first)
+          growth))
+    originals before outputs after calls valid growth
+'MicroCFTA.SourceCurrentStoredCallsReplay.replay' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredCallsReplay.same : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard}
+  {originals left right : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after later final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals before left after →
+    @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals later right final →
+      ∀ (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+          @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard later →
+            @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+              @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final common →
+                @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left right
+theorem MicroCFTA.SourceCurrentStoredCallsReplay.same : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard}
+  {originals left right : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after later final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals before left after →
+    @MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment originals later right final →
+      ∀ (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard before →
+          @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard later →
+            @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after common →
+              @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final common →
+                @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left right :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {environment}
+    {originals left right} {before after later final} first second common firstValid secondValid firstGrowth
+    secondGrowth =>
+  @MicroCFTA.SourceCurrentStoredCallsReplay.paired_equal✝ Symbol Guard inst environment common originals left right
+    (@MicroCFTA.SourceCurrentStoredCallsReplay.replay Symbol Guard inst environment originals left before after first
+      common firstValid firstGrowth)
+    (@MicroCFTA.SourceCurrentStoredCallsReplay.replay Symbol Guard inst environment originals right later final second
+      common secondValid secondGrowth)
+'MicroCFTA.SourceCurrentStoredCallsReplay.same' depends on axioms: [propext, Quot.sound.{u}]

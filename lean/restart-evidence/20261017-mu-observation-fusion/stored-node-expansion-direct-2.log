@@ -1,0 +1,106 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:75:106: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+edge : EdgeValue Symbol Guard
+resident : EdgeResident state edge
+fields : state.edges.table edge.entry.key = some edge.entry ∧ EdgeFields edge.entry.key edge
+key :
+  { symbol := edge.entry.key.symbol, children := List.map Value.referenceOf edge.children,
+      constraint := edge.entry.key.constraint } =
+    edge.entry.key
+⊢ (((match state.edgeRecords edge.entry.key with
+            | some val => state.edgeRecords
+            | none => put state.edgeRecords edge.entry.key (EdgeValue.mk edge.entry edge.children))
+            edge.entry.key).getD
+        (EdgeValue.mk edge.entry edge.children),
+      { edges := state.edges, nodes := state.nodes,
+        edgeRecords :=
+          match state.edgeRecords edge.entry.key with
+          | some val => state.edgeRecords
+          | none => put state.edgeRecords edge.entry.key (EdgeValue.mk edge.entry edge.children),
+        nodeRecords := state.nodeRecords }) =
+    (edge, state)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:81:78: warning: This simp argument is unused:
+  resident
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeEdge, run, key, edgeStep, Cache.intern, fields.1, keepFirst, Option.getD_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:81:88: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeEdge, run, key, edgeStep, Cache.intern, fields.1, keepFirst, resident]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:109:10: error(lean.unknownIdentifier): Unknown identifier `InternedStoredSubstitution.input_available`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:149:30: error: Ambiguous term
+  Ordinary
+Possible interpretations:
+  SourceEqualityRequiredCache.Ordinary : Value ?m.139 ?m.140 → Prop
+  
+  InternedConstructorTemplates.Ordinary : Work ?m.139 ?m.140 ?m.141 → Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:149:30: error: Ambiguous term
+  Ordinary
+Possible interpretations:
+  SourceEqualityRequiredCache.Ordinary : Value ?m.139 ?m.140 → Prop
+  
+  InternedConstructorTemplates.Ordinary : Work ?m.139 ?m.140 ?m.141 → Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:149:30: error: Ambiguous term
+  Ordinary
+Possible interpretations:
+  SourceEqualityRequiredCache.Ordinary : Value ?m.139 ?m.140 → Prop
+  
+  InternedConstructorTemplates.Ordinary : Work ?m.139 ?m.140 ?m.141 → Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:149:30: error: Ambiguous term
+  Ordinary
+Possible interpretations:
+  SourceEqualityRequiredCache.Ordinary : Value ?m.139 ?m.140 → Prop
+  
+  InternedConstructorTemplates.Ordinary : Work ?m.139 ?m.140 ?m.141 → Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:149:30: error: Ambiguous term
+  Ordinary
+Possible interpretations:
+  SourceEqualityRequiredCache.Ordinary : Value ?m.140 ?m.141 → Prop
+  
+  InternedConstructorTemplates.Ordinary : Work ?m.140 ?m.141 ?m.142 → Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:147:97: error: unsolved goals
+case union
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state view : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+rows : List (EdgeValue Symbol Guard)
+resident : Edges state rows
+row : EdgeValue Symbol Guard
+entry✝ : Interned NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+selected : (run (makeNode rows) state).fst = Value.union entry✝ members✝ depth✝ free✝
+ordinary : SourceEqualityRequiredCache.Ordinary (Value.union entry✝ members✝ depth✝ free✝)
+⊢ members✝ = []
+
+case mu
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state view : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+rows : List (EdgeValue Symbol Guard)
+resident : Edges state rows
+row : EdgeValue Symbol Guard
+entry✝ : Interned NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+selected : (run (makeNode rows) state).fst = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+ordinary : SourceEqualityRequiredCache.Ordinary (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+⊢ (match InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) view with
+    | Outcome.done result state => [result]
+    | Outcome.pending key state => []) =
+    []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:231:43: error: Dependent elimination failed: Failed to solve equation
+  encodeEdges context [] [] = []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-node-expansion-direct-2.source.lean:237:18: error: Dependent elimination failed: Failed to solve equation
+  encodeEdges context [] (EdgeValue.mk edge children :: source) = a✝ :: as✝

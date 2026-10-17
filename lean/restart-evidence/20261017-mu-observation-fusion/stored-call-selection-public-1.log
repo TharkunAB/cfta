@@ -1,0 +1,1043 @@
+@MicroCFTA.SourceCurrentStoredCallSelection.select : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (originals outputs selected : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (fun original output =>
+        @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+      originals outputs →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        Iff
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected value)
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value)) →
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+        And
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              Iff
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                  value)))
+theorem MicroCFTA.SourceCurrentStoredCallSelection.select : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (originals outputs selected : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (fun original output =>
+        @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+      originals outputs →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        Iff
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected value)
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value)) →
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+        And
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              Iff
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                  value))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] environment
+    common originals outputs selected actual membership =>
+  @Exists.casesOn.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (fun results =>
+      And
+        (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun original output =>
+            @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+          selected results)
+        (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+          common))
+    (fun x =>
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+        And
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              Iff
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                  value))))
+    (@MicroCFTA.SourceCurrentStoredCallSelection.assemble✝ Symbol Guard inst environment common originals outputs
+      selected actual fun value member =>
+      @Iff.mp
+        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected value)
+        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value)
+        (membership value) member)
+    fun results h =>
+    @And.casesOn.{0}
+      (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (fun original output =>
+          @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+        selected results)
+      (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+        common)
+      (fun x =>
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+          And
+            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun original output =>
+                @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+              selected results)
+            (And
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                results common)
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value))))
+      h fun paired calls =>
+      @Exists.intro.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (fun results =>
+          And
+            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun original output =>
+                @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+              selected results)
+            (And
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                results common)
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value))))
+        results
+        (@And.intro
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              Iff
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                  value)))
+          paired
+          (@And.intro
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              Iff
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs value))
+            calls fun value =>
+            @Iff.intro
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs value)
+              (fun member =>
+                @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun other =>
+                    And
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected
+                        other)
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst other environment
+                          common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common)))
+                  (fun x =>
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                      value)
+                  (@MicroCFTA.SourceCurrentStoredCallSelection.right_member✝
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun original output =>
+                      @Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                          environment common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                    selected results paired value member)
+                  fun original h =>
+                  @And.casesOn.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected
+                      original)
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                        common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common))
+                    (fun x =>
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                        value)
+                    h fun present called =>
+                    @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun other =>
+                        And
+                          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            outputs other)
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                              environment common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) other common)))
+                      (fun x =>
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                          value)
+                      (@MicroCFTA.SourceCurrentStoredCallSelection.left_member✝
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun original output =>
+                          @Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                              environment common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        originals outputs actual original
+                        (@Iff.mp
+                          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            selected original)
+                          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            originals original)
+                          (membership original) present))
+                      fun output h =>
+                      @And.casesOn.{0}
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                          output)
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                        (fun x =>
+                          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            outputs value)
+                        h fun included other =>
+                        have same :=
+                          @And.left (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value output)
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) common common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done.inj Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common output common
+                              (@Eq.trans.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common)
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common)
+                                (@Eq.symm.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                                    environment common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common)
+                                  called)
+                                other));
+                        @Eq.mpr.{0}
+                          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            outputs value)
+                          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            outputs output)
+                          (@id.{0}
+                            (@Eq.{1} Prop
+                              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                outputs value)
+                              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                outputs output))
+                            (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Prop value
+                              output
+                              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                outputs)
+                              same))
+                          included)
+              fun member =>
+              @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun other =>
+                  And
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals
+                      other)
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst other environment
+                        common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common)))
+                (fun x =>
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                (@MicroCFTA.SourceCurrentStoredCallSelection.right_member✝
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun original output =>
+                    @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                        common)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                  originals outputs actual value member)
+                fun original h =>
+                @And.casesOn.{0}
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals
+                    original)
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                      common)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common))
+                  (fun x =>
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                      value)
+                  h fun present called =>
+                  @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun other =>
+                      And
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                          other)
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) other common)))
+                    (fun x =>
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                        value)
+                    (@MicroCFTA.SourceCurrentStoredCallSelection.left_member✝
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun original output =>
+                        @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                            environment common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      selected results paired original
+                      (@Iff.mpr
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          selected original)
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          originals original)
+                        (membership original) present))
+                    fun output h =>
+                    @And.casesOn.{0}
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                        output)
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                          environment common)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                      (fun x =>
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                          value)
+                      h fun included other =>
+                      have same :=
+                        @And.left (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value output)
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) common common)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done.inj Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common output common
+                            (@Eq.trans.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common)
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                                environment common)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common)
+                              (@Eq.symm.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original
+                                  environment common)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value common)
+                                called)
+                              other));
+                      @Eq.mpr.{0}
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                          value)
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                          output)
+                        (@id.{0}
+                          (@Eq.{1} Prop
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              results value)
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              results output))
+                          (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Prop value
+                            output
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              results)
+                            same))
+                        included))
+'MicroCFTA.SourceCurrentStoredCallSelection.select' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredCallSelection.distinct : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (originals outputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard common →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard common originals →
+      @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun original output =>
+            @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+          originals outputs →
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+          And
+            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun original output =>
+                @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+              (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard originals) results)
+            (And
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment
+                (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard originals) common results common)
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value)))
+theorem MicroCFTA.SourceCurrentStoredCallSelection.distinct : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (originals outputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard common →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard common originals →
+      @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun original output =>
+            @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+          originals outputs →
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+          And
+            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun original output =>
+                @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+              (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard originals) results)
+            (And
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment
+                (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard originals) common results common)
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] environment
+    common originals outputs facts available actual =>
+  @MicroCFTA.SourceCurrentStoredCallSelection.select Symbol Guard inst environment common originals outputs
+    (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard originals) actual fun value =>
+    @Iff.intro
+      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.distinctNodes Symbol Guard originals) value)
+      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value)
+      (@MicroCFTA.InternedProbeProvenance.distinctNodes_member Symbol Guard originals value)
+      (@MicroCFTA.InternedUnionRetention.distinctNodes_retains Symbol Guard common
+        (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard common facts) originals
+        (fun value member =>
+          @MicroCFTA.InternedProbeProvenance.Available.resident Symbol Guard common value (available value member))
+        value)
+'MicroCFTA.SourceCurrentStoredCallSelection.distinct' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredCallSelection.observations : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (originals outputs selected : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (fun original output =>
+        @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+      originals outputs →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        Iff
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected value)
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value)) →
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+        And
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (And
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value))
+              (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs)))
+theorem MicroCFTA.SourceCurrentStoredCallSelection.observations : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (originals outputs selected : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (fun original output =>
+        @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+      originals outputs →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        Iff
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected value)
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originals value)) →
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+        And
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (And
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value))
+              (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] environment
+    common originals outputs selected actual membership =>
+  @Exists.casesOn.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (fun results =>
+      And
+        (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun original output =>
+            @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+          selected results)
+        (And
+          (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+            common)
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            Iff
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs value))))
+    (fun x =>
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+        And
+          (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun original output =>
+              @Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                  common)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+            selected results)
+          (And
+            (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+              common)
+            (And
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                Iff
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                    value)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                    value))
+              (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs))))
+    (@MicroCFTA.SourceCurrentStoredCallSelection.select Symbol Guard inst environment common originals outputs selected
+      actual membership)
+    fun results h =>
+    @And.casesOn.{0}
+      (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (fun original output =>
+          @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment common)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+        selected results)
+      (And
+        (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+          common)
+        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          Iff
+            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs value)))
+      (fun x =>
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+          And
+            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun original output =>
+                @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+              selected results)
+            (And
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                results common)
+              (And
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  Iff
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                      value)
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                      value))
+                (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs))))
+      h fun paired right =>
+      @And.casesOn.{0}
+        (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common results
+          common)
+        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          Iff
+            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results value)
+            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs value))
+        (fun x =>
+          @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun results =>
+            And
+              (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun original output =>
+                  @Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                      common)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                selected results)
+              (And
+                (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                  results common)
+                (And
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    Iff
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                        value)
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                        value))
+                  (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                    @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs))))
+        right fun calls same =>
+        @Exists.intro.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (fun results =>
+            And
+              (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun original output =>
+                  @Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                      common)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+                selected results)
+              (And
+                (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                  results common)
+                (And
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    Iff
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                        value)
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                        value))
+                  (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                    @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs))))
+          results
+          (@And.intro
+            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun original output =>
+                @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst original environment
+                    common)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output common))
+              selected results)
+            (And
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                results common)
+              (And
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  Iff
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                      value)
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                      value))
+                (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs)))
+            paired
+            (@And.intro
+              (@MicroCFTA.SourceCurrentStoredSubstitutionCalls.Calls Symbol Guard inst environment selected common
+                results common)
+              (And
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  Iff
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                      value)
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                      value))
+                (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs))
+              calls
+              (@And.intro
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  Iff
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                      value)
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) outputs
+                      value))
+                (∀ (depth : Nat) (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view results outputs)
+                same fun depth view =>
+                @MicroCFTA.SourceCurrentOpenObservationLists.of_members Symbol Guard inst depth view results outputs
+                  same)))
+'MicroCFTA.SourceCurrentStoredCallSelection.observations' depends on axioms: [propext, Quot.sound.{u}]

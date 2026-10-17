@@ -1,0 +1,161 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:110:33: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:110:8: error: unsolved goals
+case nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+originals : List (Value Symbol Guard)
+common : InternedConstructorTemplates.State Symbol Guard
+ready : Ready common
+available : Values common originals
+ordinary : ∀ (value : Value Symbol Guard), value ∈ originals → SourceEqualityRequiredCache.Ordinary value
+selected : List (Value Symbol Guard) := distinctNodes (List.flatMap unionMembers originals)
+nodes : ∀ (value : Value Symbol Guard), value ∈ selected → EqualityLeafProjectionUnion.NodeRoot value
+shape : selected = []
+⊢ match
+    (run
+        (match distinctNodes (List.flatMap unionMembers originals) with
+        | [] => Work.pure Value.empty
+        | [value] => Work.pure value
+        | members =>
+          match ordinaryEdges members with
+          | some edges => makeNode edges
+          | none =>
+            Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+              (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure)
+        common).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:115:47: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:115:47: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:115:47: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:115:47: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:115:47: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:113:12: error: unsolved goals
+case cons.nil.node
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+originals : List (Value Symbol Guard)
+common : InternedConstructorTemplates.State Symbol Guard
+ready : Ready common
+available : Values common originals
+selected : List (Value Symbol Guard) := distinctNodes (List.flatMap unionMembers originals)
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+ordinary :
+  ∀ (value : Value Symbol Guard),
+    value ∈ originals →
+      match value with
+      | Value.empty => True
+      | Value.node entry edges depth free => True
+      | x => False
+shape : selected = [Value.node entry✝ edges✝ depth✝ free✝]
+⊢ match
+    (run
+        (match distinctNodes (List.flatMap unionMembers originals) with
+        | [] => Work.pure Value.empty
+        | [value] => Work.pure value
+        | members =>
+          match ordinaryEdges members with
+          | some edges => makeNode edges
+          | none =>
+            Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+              (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure)
+        common).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:120:34: error(lean.unknownIdentifier): Unknown identifier `InternedEdgeResidency.selected_available`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:122:33: error: Invalid `←` modifier: `selected` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:122:10: error: Type mismatch: After simplification, term
+  output
+ has type
+  SourceEqualityRequiredCache.Ordinary (run (makeNode (List.flatMap nodeEdges (first :: second :: tail))) common).fst
+but is expected to have type
+  SourceEqualityRequiredCache.Ordinary
+    (run
+        (match distinctNodes (List.flatMap unionMembers originals) with
+        | [] => Work.pure Value.empty
+        | [value] => Work.pure value
+        | members =>
+          match ordinaryEdges members with
+          | some edges => makeNode edges
+          | none =>
+            Work.node (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members))
+              (fun entry => Value.union entry members (maximumDepth members) (childFree members)) Work.pure)
+        common).fst
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:110:45: warning: This simp argument is unused:
+  shape
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, ← selected, run, SourceEqualityRequiredCache.Ordinary]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:110:52: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [makeUnion, ← selected, shape, SourceEqualityRequiredCache.Ordinary]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:116:50: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all [makeUnion, ← selected, SourceEqualityRequiredCache.Ordinary, EqualityLeafProjectionUnion.NodeRoot]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:166:51: error: Application type mismatch: The argument
+  origin
+has type
+  ∃ root, root ∈ [result] ∧ Origin view [root] row
+but is expected to have type
+  Origin view [result] row
+in the application
+  (resultOrigins view row).mp origin
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:174:21: error: Application type mismatch: The argument
+  outputMember
+has type
+  output ∈ outputs
+but is expected to have type
+  Productivity.Reachable (MergedFreshOrdinaryGraph.successors view) outputs output
+in the application
+  And.intro outputMember
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:177:67: error: Application type mismatch: The argument
+  outputMember
+has type
+  Productivity.Reachable (MergedFreshOrdinaryGraph.successors view) outputs output
+but is expected to have type
+  output ∈ outputs
+in the application
+  pair_right paired output outputMember
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:179:50: error: Application type mismatch: The argument
+  origin
+has type
+  row ∈ nodeEdges output
+but is expected to have type
+  Origin view [output] row
+in the application
+  (otherOrigins view row).mp origin
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-mu-observation-fusion/stored-ordinary-union-direct-1.source.lean:185:6: error: Type mismatch
+  (resultOrigins view row).mpr (List.mem_filter.mpr ⟨otherMember, (List.mem_filter.mp retained).right⟩)
+has type
+  Origin view [result] row
+but is expected to have type
+  ∃ root, root ∈ [result] ∧ Origin view [root] row

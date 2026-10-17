@@ -1,5 +1,47 @@
 # Constrained languages, indexing, and distributions
 
+## Current stored reconstruction and union normalization
+
+Updated: 2026-10-17 21:03 CEST. Starting checkpoint is `5f6d6f3b`.
+Proof commit is `ca91ab34`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-mu-observation-fusion.md` for the exact result.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, available original values, and available replacements now
+construct both union-normalization and stored-substitution orders in one
+growing cache. All actual intermediate heaps, four Keeps facts, and both
+final available results are retained. The results have equal finite open
+observations at every depth and every fixed view. The theorem permits
+closed and open roots and arbitrary nested Mu values. No future completed
+call or desired output relation is an input.
+
+Actual child replay identifies exact rebuilt rows through ordinary merging.
+Closed nodes retain their literal rows; Ready does not imply canonical
+row order. Flattening and distinct-node selection derive actual member
+calls. A source-built integration retains the physical inequality between
+union[A, B, z] and union[AB, z] while applying the new initial theorem.
+Another checked case shows that even all-depth observations do not imply
+physical empty agreement. Keep exact child survival facts.
+
+The actual retained-Mu writer relation remains open. Connect selected body
+and ordinary-probe histories through recursive reconstruction, unused raw
+Mu cleanup, and warm winners. General outer progress, convergence, current
+frontend/runtime adapters, and complete public Haskell correspondence also
+remain open. Keep the whole-library goal active.
+
+Full pinned Audit passes 3114 jobs and 68344 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 379 MiB peak. All nine new
+strict source logs are empty. Canonical builds, 19 public checks, and 13
+constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-mu-observation-fusion/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair there with its reproducer,
+paths, commit, checks, and upstream status.
+
 ## Current recursive normalized construction and stored substitution
 
 Updated: 2026-10-17 20:43 CEST. Starting checkpoint is `10894d61`.
