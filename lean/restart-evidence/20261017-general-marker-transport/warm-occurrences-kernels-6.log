@@ -1,0 +1,12 @@
+'MicroCFTA.WarmOccurrenceKernels.actual_warm' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+actual_warm : ∀ (next : Reference → InternedConstructorTemplates.State Nat Bool → Outcome Nat Bool (Value Nat Bool)),
+  @Exists.{1} (Value Nat Bool) fun value =>
+    @Exists.{1} (InternedConstructorTemplates.State Nat Bool) fun state =>
+      And
+        (@Eq.{1} (Outcome Nat Bool (Value Nat Bool)) (warm next) (@Outcome.done Nat Bool (Value Nat Bool) value state))
+        (And (Not (@SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard true) Nat value))
+          (And
+            (@SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)
+            (@Classified Nat Bool (fun x => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)))

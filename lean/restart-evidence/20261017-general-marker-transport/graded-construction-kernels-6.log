@@ -1,0 +1,53 @@
+'MicroCFTA.GradedConstructionKernels.nested_typed' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.GradedConstructionKernels.nested_typed : ∀
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)),
+  @MicroCFTA.SourceCurrentConstrainedCapConstruction.Typed Bool Nat (fun guard => @Eq.{1} Bool guard Bool.true)
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) MicroCFTA.GradedConstructionKernels.nestedPlan
+    environment
+'MicroCFTA.GradedConstructionKernels.initial_mixed_nested' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.GradedConstructionKernels.initial_mixed_nested : @Exists.{1}
+  (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun capture =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun initial =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun result =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                  instDecidableEqBool a b)
+              MicroCFTA.GradedConstructionKernels.capturePlan
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) capture initial))
+          (And
+            (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) capture)
+            (And
+              (Not
+                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+                  Nat capture))
+              (And
+                (@Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+                    (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                  (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+                    (fun a b =>
+                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                        instDecidableEqBool a b)
+                    MicroCFTA.GradedConstructionKernels.nestedPlan
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) capture
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)))
+                    initial)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+                    (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) result after))
+                (And
+                  (@MicroCFTA.SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard Bool.true)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) result)
+                  (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Bool Nat
+                    (fun guard => @Eq.{1} Bool guard Bool.true) after)))))

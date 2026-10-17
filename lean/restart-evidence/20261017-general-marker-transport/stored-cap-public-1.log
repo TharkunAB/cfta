@@ -1,0 +1,227 @@
+'MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.input_cap' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.input_cap : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+    (∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+        (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (environment name)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) →
+          @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result) →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth
+        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment value)
+'MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encode_typed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encode_typed : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  (depth : Nat) (context : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (locals : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (localValues : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state context →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) leaf →
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) context leaf) →
+          @Eq.{1} Nat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) localValues)
+              (@List.length.{0} MicroCFTA.InternedBinderProtocol.Reference locals) →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) localValues
+                    value →
+                  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+                  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (environment name)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result) →
+                @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+                  @MicroCFTA.SourceCurrentConstrainedCapConstruction.Typed Guard Symbol valid depth
+                    (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard context locals value)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      localValues
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment) context))
+'MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeMany_typed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeMany_typed : ∀ {Guard Symbol : Type}
+  (valid : Guard → Prop) (depth : Nat) (context : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (locals : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (localValues values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state context →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state values →
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedStoredSubstitution.manyLeaves Symbol Guard values) leaf →
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) context leaf) →
+          @Eq.{1} Nat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) localValues)
+              (@List.length.{0} MicroCFTA.InternedBinderProtocol.Reference locals) →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) localValues
+                    value →
+                  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+                  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (environment name)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result) →
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                        value →
+                      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value) →
+                  @MicroCFTA.SourceCurrentConstrainedCapConstruction.ManyTyped Guard Symbol valid depth
+                    (@MicroCFTA.InternedStoredSubstitution.encodeMany Symbol Guard context locals values)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      localValues
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment) context))
+'MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeEdges_typed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeEdges_typed : ∀ {Guard Symbol : Type}
+  (valid : Guard → Prop) (depth : Nat) (context : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (locals : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (localValues : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state context →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard) edges)
+              value →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value) →
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedStoredSubstitution.edgeLeaves Symbol Guard edges) leaf →
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) context leaf) →
+          @Eq.{1} Nat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) localValues)
+              (@List.length.{0} MicroCFTA.InternedBinderProtocol.Reference locals) →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) localValues
+                    value →
+                  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+                  (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (environment name)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result) →
+                (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges
+                        edge →
+                      @MicroCFTA.SourceCurrentConstrainedCap.Edge Symbol Guard valid depth edge) →
+                  @MicroCFTA.SourceCurrentConstrainedCapConstruction.EdgesTyped Guard Symbol valid depth
+                    (@MicroCFTA.InternedStoredSubstitution.encodeEdges Symbol Guard context locals edges)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      localValues
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment) context))
+'MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.execute' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.execute : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard state environment →
+          (∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+              (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (environment name)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result) →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid state →
+              @MicroCFTA.SourceCurrentHereditaryConstruction.Checked Guard Symbol
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) valid
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment state)
+                (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth)
+'MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (depth : Nat) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+      @MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth value →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard state environment →
+          (∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+              (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (environment name)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result) →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result) →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid state →
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment
+                        state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+                    (And (@MicroCFTA.SourceCurrentConstrainedCap.Cap Symbol Guard valid depth result)
+                      (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                        (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard after)
+                            (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard state after)
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))))))))

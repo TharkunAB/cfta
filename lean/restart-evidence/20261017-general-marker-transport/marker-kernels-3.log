@@ -1,0 +1,45 @@
+'MicroCFTA.GeneralMarkerKernels.constructed_open_mu_reconstruction' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+constructed_open_mu_reconstruction : @Exists.{1} (Value Nat Unit) fun root =>
+  @Exists.{1} (Value Nat Unit) fun body =>
+    @Exists.{1} (Value Nat Unit) fun value =>
+      @Exists.{1} (InternedConstructorTemplates.State Nat Unit) fun before =>
+        @Exists.{1} (InternedConstructorTemplates.State Nat Unit) fun after =>
+          And
+            (@Eq.{1} (Outcome Nat Unit (Value Nat Unit))
+              (@InternedFreshOrdinaryConstruction.build Nat Unit
+                (fun a b => @instDecidableEqEdgeKey Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a b) expression
+                (@List.nil.{0} (Value Nat Unit)) (@empty Nat Unit))
+              (@Outcome.done Nat Unit (Value Nat Unit) root before))
+            (And (@Available Nat Unit before body)
+              (And
+                (@Eq.{1} Nat (@Value.depth Nat Unit body) (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (And
+                  (@Eq.{1} Nat (@Value.depth Nat Unit value)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                  (And
+                    (@Ne.{1} InternedBinderProtocol.NodeRef (@Value.referenceOf Nat Unit body)
+                      (@Value.referenceOf Nat Unit value))
+                    (And
+                      (@Eq.{1} (Outcome Nat Unit (Value Nat Unit))
+                        (@InternedFreshOrdinaryStoredSubstitution.execute Nat Unit
+                          (fun a b => @instDecidableEqEdgeKey Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                          body (@replacement Nat Unit old (@Value.reference Nat Unit Reference.depth)) before)
+                        (@Outcome.done Nat Unit (Value Nat Unit) value after))
+                      (And
+                        (@Classified Nat Unit weights (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                          body)
+                        (@Classified Nat Unit
+                          (mark weights Reference.depth (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)))))))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-general-marker-transport/marker-kernels.lean:90:59: error: Application type mismatch: The argument
+  captures
+has type
+  ?m.1
+but is expected to have type
+  List.{0} (Value Symbol Guard)
+in the application
+  @InternedFreshOrdinaryContext.Context Symbol Guard before captures
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-general-marker-transport/marker-kernels.lean:132:14: error(lean.unknownIdentifier): Unknown constant `general_warm_replay`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-general-marker-transport/marker-kernels.lean:133:8: error(lean.unknownIdentifier): Unknown identifier `general_warm_replay`

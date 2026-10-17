@@ -1,0 +1,139 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:36:42: error: Application type mismatch: The argument
+  replacements name result found
+has type
+  Annotated valid result
+but is expected to have type
+  Annotated valid (input environment (Value.reference name))
+in the application
+  Cap.plain depth (replacements name result found)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:89:8: error: Type mismatch
+  encodeEdges_typed valid depth context locals localValues edges environment state coherent contextAvailable
+    (fun child member => Available.children available child member) covered length localAnnotations replacements
+    fun edge member => SourceCurrentConstrainedCap.node_edge bounded edge member
+has type
+  EdgesTyped valid depth (encodeEdges context locals edges) (localValues ++ List.map (input environment) context)
+but is expected to have type
+  Typed valid depth
+    (match Value.node entry edges level free with
+    | Value.empty => InternedNestedConstruction.Syntax.empty
+    | Value.reference name =>
+      match List.findIdx? (fun x => x == name) locals with
+      | some index => InternedNestedConstruction.Syntax.var index
+      | none => InternedNestedConstruction.Syntax.var (locals.length + slot context (Value.node entry edges level free))
+    | Value.node entry edges depth free => InternedNestedConstruction.Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free =>
+      InternedNestedConstruction.Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      InternedNestedConstruction.Syntax.binder true (encode context (Reference.interned entry.identity :: locals) body))
+    (localValues ++ List.map (input environment) context)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:93:8: error: Type mismatch
+  encodeMany_typed valid depth context locals localValues members environment state coherent contextAvailable
+    (fun child member => Available.children available child member) covered length localAnnotations replacements
+    fun child member => SourceCurrentConstrainedCap.union_member bounded child member
+has type
+  ManyTyped valid depth (encodeMany context locals members) (localValues ++ List.map (input environment) context)
+but is expected to have type
+  Typed valid depth
+    (match Value.union entry members level free with
+    | Value.empty => InternedNestedConstruction.Syntax.empty
+    | Value.reference name =>
+      match List.findIdx? (fun x => x == name) locals with
+      | some index => InternedNestedConstruction.Syntax.var index
+      | none =>
+        InternedNestedConstruction.Syntax.var (locals.length + slot context (Value.union entry members level free))
+    | Value.node entry edges depth free => InternedNestedConstruction.Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free =>
+      InternedNestedConstruction.Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      InternedNestedConstruction.Syntax.binder true (encode context (Reference.interned entry.identity :: locals) body))
+    (localValues ++ List.map (input environment) context)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:100:18: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case isFalse.mu.mu
+Guard Symbol : Type
+valid : Guard → Prop
+depth : Nat
+context : List (Value Symbol Guard)
+locals : List Reference
+localValues : List (Value Symbol Guard)
+environment : Environment Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+contextAvailable : Values state context
+length : localValues.length = locals.length
+localAnnotations : ∀ (value : Value Symbol Guard), value ∈ localValues → Annotated valid value
+replacements :
+  ∀ (name : Reference) (result : Value Symbol Guard), environment name = some result → Annotated valid result
+entry : Interned InternedBinderProtocol.NodeKey
+body level ordinary : Value Symbol Guard
+available : Available state (Value.mu entry body level ordinary)
+bounded : Cap valid depth (Value.mu entry body level ordinary)
+opened : ¬(Value.mu entry body level ordinary).free.isEmpty = true
+covered :
+  ∀ (leaf : Value Symbol Guard),
+    (leaf ∈
+        match Value.mu entry body level ordinary with
+        | Value.empty => [Value.mu entry body level ordinary]
+        | Value.reference name => [Value.mu entry body level ordinary]
+        | Value.node entry edges depth free => edgeLeaves edges
+        | Value.union entry members depth free => manyLeaves members
+        | Value.mu entry body depthShape ordinaryShape => leaves body) →
+      leaf ∈ context
+bodyAnnotated : Annotated valid body
+⊢ Typed valid depth
+    (match Value.mu entry body level ordinary with
+    | Value.empty => InternedNestedConstruction.Syntax.empty
+    | Value.reference name =>
+      match List.findIdx? (fun x => x == name) locals with
+      | some index => InternedNestedConstruction.Syntax.var index
+      | none =>
+        InternedNestedConstruction.Syntax.var (locals.length + slot context (Value.mu entry body level ordinary))
+    | Value.node entry edges depth free => InternedNestedConstruction.Syntax.node (encodeEdges context locals edges)
+    | Value.union entry members depth free =>
+      InternedNestedConstruction.Syntax.union (encodeMany context locals members)
+    | Value.mu entry body depthShape ordinaryShape =>
+      InternedNestedConstruction.Syntax.binder true (encode context (Reference.interned entry.identity :: locals) body))
+    (localValues ++ List.map (input environment) context)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:120:11: error: Tactic `assumption` failed
+
+case nil
+Guard Symbol : Type
+valid : Guard → Prop
+depth : Nat
+context : List (Value Symbol Guard)
+locals : List Reference
+localValues : List (Value Symbol Guard)
+environment : Environment Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+contextAvailable : Values state context
+length : localValues.length = locals.length
+localAnnotations : ∀ (value : Value Symbol Guard), value ∈ localValues → Annotated valid value
+replacements :
+  ∀ (name : Reference) (result : Value Symbol Guard), environment name = some result → Annotated valid result
+available : Values state []
+covered : ∀ (leaf : Value Symbol Guard), leaf ∈ manyLeaves [] → leaf ∈ context
+bounded : ∀ (value : Value Symbol Guard), value ∈ [] → Cap valid depth value
+⊢ ManyTyped valid depth (encodeMany context locals []) (localValues ++ List.map (input environment) context)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:143:11: error: Tactic `assumption` failed
+
+case nil
+Guard Symbol : Type
+valid : Guard → Prop
+depth : Nat
+context : List (Value Symbol Guard)
+locals : List Reference
+localValues : List (Value Symbol Guard)
+environment : Environment Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+contextAvailable : Values state context
+length : localValues.length = locals.length
+localAnnotations : ∀ (value : Value Symbol Guard), value ∈ localValues → Annotated valid value
+replacements :
+  ∀ (name : Reference) (result : Value Symbol Guard), environment name = some result → Annotated valid result
+available : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children [] → Available state value
+covered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves [] → leaf ∈ context
+bounded : ∀ (edge : EdgeValue Symbol Guard), edge ∈ [] → SourceCurrentConstrainedCap.Edge valid depth edge
+⊢ EdgesTyped valid depth (encodeEdges context locals []) (localValues ++ List.map (input environment) context)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapStoredSubstitution.lean:108:0: warning: unused `termination_by`, function is not recursive

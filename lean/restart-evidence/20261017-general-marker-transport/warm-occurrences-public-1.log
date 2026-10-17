@@ -1,0 +1,175 @@
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.mark_other' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.mark_other : ∀
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (marker : MicroCFTA.InternedBinderProtocol.Reference)
+  (bound : Nat) (name : MicroCFTA.InternedBinderProtocol.Reference),
+  @Ne.{1} MicroCFTA.InternedBinderProtocol.Reference name marker →
+    @Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight marker bound name)
+      (weight name)
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_free' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_free : ∀ {Symbol Guard : Type}
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (firstName secondName : MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.FreeLE Symbol Guard
+      (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight firstName bound) bound first →
+    @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.FreeLE Symbol Guard
+        (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight secondName bound) bound second →
+      ∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+        @Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (MicroCFTA.InternedFreeNameDecoder.decode firstName secondName
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard first)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard second))
+            name →
+          @LE.le.{0} Nat instLENat (weight name) bound
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_deep' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_deep : ∀ {Symbol Guard : Type}
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (firstName secondName : MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+      (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight firstName bound) bound first →
+    @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+        (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight secondName bound) bound second →
+      ∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+        @Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (MicroCFTA.InternedFreeNameDecoder.decode firstName secondName
+              (@MicroCFTA.InternedDeepFreeDepth.deepNames Symbol Guard first)
+              (@MicroCFTA.InternedDeepFreeDepth.deepNames Symbol Guard second))
+            name →
+          Or (@LT.lt.{0} Nat instLTNat (weight name) bound)
+            (@Eq.{1} Nat bound (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.ordinary_unused' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.ordinary_unused : ∀ {Symbol Guard : Type}
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+    @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+        (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+          (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+          bound)
+        bound ordinary →
+      @Eq.{1} Bool (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Symbol Guard depth ordinary) false
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.no_wrapper' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.no_wrapper : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard state →
+    ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+      (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state key)
+          (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+        @Eq.{1} Bool (@MicroCFTA.InternedFreshOrdinaryDepthHeap.usesLocal Symbol Guard depth ordinary) false →
+          Or
+            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+              body)
+            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_classified' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_classified : ∀ {Symbol Guard : Type}
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+            (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+            @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+                  MicroCFTA.InternedBinderProtocol.Reference.depth bound)
+                bound depth →
+              @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                  (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    bound)
+                  bound ordinary →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound
+                  (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value)
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup : ∀ {Symbol Guard : Type}
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+            (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+            @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  bound)
+                bound ordinary →
+              @Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun entry =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun body =>
+                  And
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value) body)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+'MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.request_hit' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.request_hit : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat)
+  (depth ordinary value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (next :
+    MicroCFTA.InternedBinderProtocol.Reference →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state depth →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state ordinary →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+            (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+          @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) bound →
+            @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+                  MicroCFTA.InternedBinderProtocol.Reference.depth bound)
+                bound depth →
+              @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                  (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    bound)
+                  bound ordinary →
+                And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedNestedConstruction.request Symbol Guard inst true depth ordinary next state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value) state))
+                  (@MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound
+                    (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard true value))

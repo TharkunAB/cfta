@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentConstrainedCapConstruction
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapConstruction.Typed
+#check @MicroCFTA.SourceCurrentConstrainedCapConstruction.Typed
+#print axioms MicroCFTA.SourceCurrentConstrainedCapConstruction.ManyTyped
+#check @MicroCFTA.SourceCurrentConstrainedCapConstruction.ManyTyped
+#print axioms MicroCFTA.SourceCurrentConstrainedCapConstruction.EdgesTyped
+#check @MicroCFTA.SourceCurrentConstrainedCapConstruction.EdgesTyped
+#print axioms MicroCFTA.SourceCurrentConstrainedCapConstruction.build
+#check @MicroCFTA.SourceCurrentConstrainedCapConstruction.build
+#print axioms MicroCFTA.SourceCurrentConstrainedCapConstruction.buildMany
+#check @MicroCFTA.SourceCurrentConstrainedCapConstruction.buildMany
+#print axioms MicroCFTA.SourceCurrentConstrainedCapConstruction.buildEdges
+#check @MicroCFTA.SourceCurrentConstrainedCapConstruction.buildEdges

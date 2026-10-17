@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.mark_other
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.mark_other
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_free
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_free
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_deep
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.decode_deep
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.ordinary_unused
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.ordinary_unused
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.no_wrapper
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.no_wrapper
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_classified
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_classified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.hit_cleanup
+#print axioms MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.request_hit
+#check @MicroCFTA.SourceCurrentConstrainedCapWarmOccurrences.request_hit

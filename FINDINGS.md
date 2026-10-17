@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `2d828a42`.
+Status rechecked on 2026-10-17 at proof checkpoint `e5dd8505`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-native-occurrence-support.md` for the current proof boundaries.
+Read `lean/notes-current-general-native-callbacks.md` for the current proof boundaries.
 
-The current recursive-prefix proofs add no Haskell change.
+The current general callback proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2785 jobs and 62415 dependency checks.
+The last completed pinned Lean Audit passes: 2791 jobs and 62515 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,52 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current general native marker and cap transport
+
+Updated: 2026-10-17 03:52 CEST. This checkpoint starts at published `91ea29d3`.
+The proof commits are `443106e4`, `5912ff25`, and `e5dd8505`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-general-native-callbacks.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-general-marker-transport/`.
+
+Six additive modules prove general stored marker and finite-cap transport.
+They cover arbitrary available capped bodies, including open nested Mu
+reconstruction and earlier nested winners. Selective lexical typing permits
+unused constrained captures. Complete initial caches construct actual
+normalized callbacks and retain the same cap, marked classification,
+MuStored, Ready, availability, and histories. Exact warm outer Mu reads
+now derive occurrence bounds from their actual probes.
+
+Separate callback certificates permit an unfinished outer reservation.
+They derive actual returned laws without a successful-callback premise.
+Initial Ready has Covered []; a fresh outer reservation normally has
+Covered [key]. Keep these interfaces distinct. Literal candidate cleanup
+does not certify the guard cap of an earlier keep-first outer Mu winner.
+That readback and joint native result-cell classification are the next target.
+Read next-outer-mu-cap-readback.md in the new evidence directory.
+
+The pinned Audit passes 2791 jobs and 62515 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All six new production sources pass
+absolute-path strict checks without diagnostics. All 61 imported pairs pass
+in 16 groups. Seven component manifests verify 155 entries. Failed sources
+and raw logs remain preserved. One older warning remains in canonical replay.
+Preservation retains 10871 starting files, 2784 older non-Audit proofs,
+all 239 Haskell files, and 65 frozen production manifests with 548 entries.
+Stashes and three other worktrees remain unchanged.
+
+General mixed native closure, finite warm callers, constrained recursive
+descent, repeated convergence, remaining recursive callers, current frontend
+and runtime adapters, capacity, serial public pipelines, and complete public
+composition remain open. The final source gate remains broader than the
+current supported family. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Recursive field-pool repair `b9219b9e` is merged and
+validated. Reuse unchanged strict Nix build, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve the optimized interned core and
+every earlier proof, counterexample, repair, and marked draft.
 
 ## Current ranked native occurrences and captured finishes
 

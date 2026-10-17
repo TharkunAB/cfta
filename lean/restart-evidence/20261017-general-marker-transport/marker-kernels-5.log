@@ -1,0 +1,68 @@
+'MicroCFTA.GeneralMarkerKernels.constructed_open_mu_reconstruction' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+constructed_open_mu_reconstruction : @Exists.{1} (Value Nat Unit) fun root =>
+  @Exists.{1} (Value Nat Unit) fun body =>
+    @Exists.{1} (Value Nat Unit) fun value =>
+      @Exists.{1} (InternedConstructorTemplates.State Nat Unit) fun before =>
+        @Exists.{1} (InternedConstructorTemplates.State Nat Unit) fun after =>
+          And
+            (@Eq.{1} (Outcome Nat Unit (Value Nat Unit))
+              (@InternedFreshOrdinaryConstruction.build Nat Unit
+                (fun a b => @instDecidableEqEdgeKey Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a b) expression
+                (@List.nil.{0} (Value Nat Unit)) (@empty Nat Unit))
+              (@Outcome.done Nat Unit (Value Nat Unit) root before))
+            (And (@Available Nat Unit before body)
+              (And
+                (@Eq.{1} Nat (@Value.depth Nat Unit body) (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (And
+                  (@Eq.{1} Nat (@Value.depth Nat Unit value)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                  (And
+                    (@Ne.{1} InternedBinderProtocol.NodeRef (@Value.referenceOf Nat Unit body)
+                      (@Value.referenceOf Nat Unit value))
+                    (And
+                      (@Eq.{1} (Outcome Nat Unit (Value Nat Unit))
+                        (@InternedFreshOrdinaryStoredSubstitution.execute Nat Unit
+                          (fun a b => @instDecidableEqEdgeKey Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                          body (@replacement Nat Unit old (@Value.reference Nat Unit Reference.depth)) before)
+                        (@Outcome.done Nat Unit (Value Nat Unit) value after))
+                      (And
+                        (@Classified Nat Unit weights (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                          body)
+                        (@Classified Nat Unit
+                          (mark weights Reference.depth (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)))))))
+'MicroCFTA.GeneralMarkerKernels.general_warm_replay' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@general_warm_replay : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} (EdgeKey Symbol Guard)]
+  {captures : List.{0} (Value Symbol Guard)} (body : Value Symbol Guard)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  @InternedFreshOrdinaryContext.Context Symbol Guard before captures →
+    @InternedFreshOrdinaryDepthHeap.Heap Symbol Guard before →
+      @Available Symbol Guard before body →
+        ∀ (old marker : Reference),
+          @Available Symbol Guard before (@Value.reference Symbol Guard marker) →
+            ∀ (weight : Reference → Nat) (bound : Nat),
+              @Eq.{1} Nat (weight old) bound →
+                @Classified Symbol Guard weight bound body →
+                  Not
+                      (@Membership.mem.{0, 0} Reference (List.{0} Reference) (@List.instMembership.{0} Reference)
+                        (@Value.free Symbol Guard body) marker) →
+                    ∀ (value : Value Symbol Guard) (after : InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1} (Outcome Symbol Guard (Value Symbol Guard))
+                          (@InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                            (@replacement Symbol Guard old (@Value.reference Symbol Guard marker)) before)
+                          (@Outcome.done Symbol Guard (Value Symbol Guard) value after) →
+                        And (@Classified Symbol Guard (mark weight marker bound) bound value)
+                          (And
+                            (@Eq.{1} (Outcome Symbol Guard (Value Symbol Guard))
+                              (@InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                                (@replacement Symbol Guard old (@Value.reference Symbol Guard marker)) after)
+                              (@Outcome.done Symbol Guard (Value Symbol Guard) value after))
+                            (And
+                              (@InternedFreshOrdinaryContext.Context Symbol Guard after
+                                (@List.map.{0, 0} (Value Symbol Guard) (Value Symbol Guard)
+                                  (@InternedStoredSubstitution.input Symbol Guard
+                                    (@replacement Symbol Guard old (@Value.reference Symbol Guard marker)))
+                                  (@InternedStoredSubstitution.leaves Symbol Guard body)))
+                              (@InternedFreshOrdinaryDepthHeap.Heap Symbol Guard after)))

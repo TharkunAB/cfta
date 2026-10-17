@@ -1,0 +1,70 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-general-marker-transport/warm-occurrences-kernels.lean:55:44: error: Type mismatch
+  guards ?m.233 ?m.234
+has type
+  @Eq.{1} Bool (@EdgeKey.constraint Nat Bool (@Interned.key (EdgeKey Nat Bool) (@EdgeValue.entry Nat Bool ?m.233))) true
+but is expected to have type
+  @Eq.{1} Bool false true
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-general-marker-transport/warm-occurrences-kernels.lean:55:54: error: unsolved goals
+next : Reference → InternedConstructorTemplates.State Nat Bool → Outcome Nat Bool (Value Nat Bool)
+guards :
+  ∀ (edge : EdgeValue Nat Bool),
+    @Membership.mem.{0, 0} (EdgeValue Nat Bool) (List.{0} (EdgeValue Nat Bool))
+        (@List.instMembership.{0} (EdgeValue Nat Bool))
+        (@List.cons.{0} (EdgeValue Nat Bool)
+          (@EdgeValue.mk Nat Bool
+            (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+            (@List.nil.{0} (Value Nat Bool)))
+          (@List.nil.{0} (EdgeValue Nat Bool)))
+        edge →
+      @Eq.{1} Bool (@EdgeKey.constraint Nat Bool (@Interned.key (EdgeKey Nat Bool) (@EdgeValue.entry Nat Bool edge)))
+        true
+children✝ :
+  ∀ (child : Value Nat Bool),
+    @Membership.mem.{0, 0} (Value Nat Bool) (List.{0} (Value Nat Bool)) (@List.instMembership.{0} (Value Nat Bool))
+        (@List.flatMap.{0, 0} (EdgeValue Nat Bool) (Value Nat Bool) (@EdgeValue.children Nat Bool)
+          (@List.cons.{0} (EdgeValue Nat Bool)
+            (@EdgeValue.mk Nat Bool
+              (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+                  (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+              (@List.nil.{0} (Value Nat Bool)))
+            (@List.nil.{0} (EdgeValue Nat Bool))))
+        child →
+      @SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard true) Nat child
+⊢ @Eq.{1} (EdgeValue Nat Bool) ?m.233
+    (@EdgeValue.mk Nat Bool
+      (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+          (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+      (@List.nil.{0} (Value Nat Bool)))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-general-marker-transport/warm-occurrences-kernels.lean:58:29: error: unsolved goals
+next : Reference → InternedConstructorTemplates.State Nat Bool → Outcome Nat Bool (Value Nat Bool)
+child : Value Nat Bool
+member :
+  @Membership.mem.{0, 0} (Value Nat Bool) (List.{0} (Value Nat Bool)) (@List.instMembership.{0} (Value Nat Bool))
+    (@EdgeValue.children Nat Bool
+      (@EdgeValue.mk Nat Bool
+        (@Interned.mk (EdgeKey Nat Bool) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@EdgeKey.mk Nat Bool (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+            (@List.nil.{0} InternedBinderProtocol.NodeRef) false))
+        (@List.nil.{0} (Value Nat Bool))))
+    child
+⊢ @SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) child
+'MicroCFTA.WarmOccurrenceKernels.actual_warm' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+actual_warm : ∀ (next : Reference → InternedConstructorTemplates.State Nat Bool → Outcome Nat Bool (Value Nat Bool)),
+  @Exists.{1} (Value Nat Bool) fun value =>
+    @Exists.{1} (InternedConstructorTemplates.State Nat Bool) fun state =>
+      And
+        (@Eq.{1} (Outcome Nat Bool (Value Nat Bool)) (warm next) (@Outcome.done Nat Bool (Value Nat Bool) value state))
+        (And (Not (@SourceEqualityAnnotationLanguage.Annotated Bool (fun guard => @Eq.{1} Bool guard true) Nat value))
+          (And
+            (@SourceCurrentConstrainedCap.Cap Nat Bool (fun guard => @Eq.{1} Bool guard true)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)
+            (@Classified Nat Bool (fun x => @OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) value)))

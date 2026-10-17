@@ -1,0 +1,70 @@
+'MicroCFTA.SourceCurrentConstrainedCapMarkerTransport.transport' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMarkerTransport.transport : ∀ {Symbol Guard : Type}
+  {captures : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard state captures →
+    @MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard state →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+        ∀ (old marker : MicroCFTA.InternedBinderProtocol.Reference),
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+            ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat),
+              @Eq.{1} Nat (weight old) bound →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound body →
+                  Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body) marker) →
+                    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                            (@MicroCFTA.InternedStoredSubstitutionRebind.replacement Symbol Guard old
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+                            state)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+                        @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                          (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight marker bound) bound
+                          value
+'MicroCFTA.SourceCurrentConstrainedCapMarkerTransport.callback' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapMarkerTransport.callback : ∀ {Symbol Guard : Type}
+  {captures : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard state captures →
+    @MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard state →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+        ∀ (old marker : MicroCFTA.InternedBinderProtocol.Reference),
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+            ∀ (weight : MicroCFTA.InternedBinderProtocol.Reference → Nat) (bound : Nat),
+              @Eq.{1} Nat (weight old) bound →
+                @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard weight bound body →
+                  Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body) marker) →
+                    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst old body marker
+                            state)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+                        @MicroCFTA.SourceCurrentConstrainedCapPairOccurrences.Classified Symbol Guard
+                          (MicroCFTA.SourceCurrentConstrainedCapPairOccurrenceCallbacks.mark weight marker bound) bound
+                          value

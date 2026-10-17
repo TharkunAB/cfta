@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentConstrainedCapCallbackCertificates
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.filter_keeps
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.filter_keeps
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.finish_local
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.finish_local
+#print axioms MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.candidate_complete
+#check @MicroCFTA.SourceCurrentConstrainedCapNativeCallbacks.candidate_complete

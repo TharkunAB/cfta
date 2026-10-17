@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.input_cap
+#check @MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.input_cap
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encode_typed
+#check @MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encode_typed
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeMany_typed
+#check @MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeMany_typed
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeEdges_typed
+#check @MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.encodeEdges_typed
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.execute
+#check @MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.execute
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapStoredSubstitution.complete
