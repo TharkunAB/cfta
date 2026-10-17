@@ -1,0 +1,35 @@
+import MicroCFTA.SourceCurrentStoredMuActiveChildLineage
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredMuActiveChildLineage.Compatible
+#print MicroCFTA.SourceCurrentStoredMuActiveChildLineage.Compatible
+#print axioms MicroCFTA.SourceCurrentStoredMuActiveChildLineage.Compatible
+
+#check @MicroCFTA.SourceCurrentStoredMuActiveChildLineage.Aligned
+#print MicroCFTA.SourceCurrentStoredMuActiveChildLineage.Aligned
+#print axioms MicroCFTA.SourceCurrentStoredMuActiveChildLineage.Aligned
+
+#check @MicroCFTA.SourceCurrentStoredMuActiveChildLineage.StrictChild
+#print MicroCFTA.SourceCurrentStoredMuActiveChildLineage.StrictChild
+#print axioms MicroCFTA.SourceCurrentStoredMuActiveChildLineage.StrictChild
+
+#check @MicroCFTA.SourceCurrentStoredMuActiveChildLineage.reference
+#print MicroCFTA.SourceCurrentStoredMuActiveChildLineage.reference
+#print axioms MicroCFTA.SourceCurrentStoredMuActiveChildLineage.reference
+
+#check @MicroCFTA.SourceCurrentStoredMuActiveChildLineage.ordinary
+#print MicroCFTA.SourceCurrentStoredMuActiveChildLineage.ordinary
+#print axioms MicroCFTA.SourceCurrentStoredMuActiveChildLineage.ordinary
+
+#check @MicroCFTA.SourceCurrentStoredMuActiveChildLineage.node_complete
+#print MicroCFTA.SourceCurrentStoredMuActiveChildLineage.node_complete
+#print axioms MicroCFTA.SourceCurrentStoredMuActiveChildLineage.node_complete
+

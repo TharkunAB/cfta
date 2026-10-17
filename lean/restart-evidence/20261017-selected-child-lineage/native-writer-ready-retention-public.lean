@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentNativeWriterReadyRetention
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeWriterReadyRetention.trace_retained
+#print MicroCFTA.SourceCurrentNativeWriterReadyRetention.trace_retained
+#print axioms MicroCFTA.SourceCurrentNativeWriterReadyRetention.trace_retained
+
+#check @MicroCFTA.SourceCurrentNativeWriterReadyRetention.Written
+#print MicroCFTA.SourceCurrentNativeWriterReadyRetention.Written
+#print axioms MicroCFTA.SourceCurrentNativeWriterReadyRetention.Written
+
+#check @MicroCFTA.SourceCurrentNativeWriterReadyRetention.Written.forget
+#print MicroCFTA.SourceCurrentNativeWriterReadyRetention.Written.forget
+#print axioms MicroCFTA.SourceCurrentNativeWriterReadyRetention.Written.forget
+
+#check @MicroCFTA.SourceCurrentNativeWriterReadyRetention.writers
+#print MicroCFTA.SourceCurrentNativeWriterReadyRetention.writers
+#print axioms MicroCFTA.SourceCurrentNativeWriterReadyRetention.writers
+
+#check @MicroCFTA.SourceCurrentNativeWriterReadyRetention.edge_writers
+#print MicroCFTA.SourceCurrentNativeWriterReadyRetention.edge_writers
+#print axioms MicroCFTA.SourceCurrentNativeWriterReadyRetention.edge_writers

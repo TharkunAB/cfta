@@ -1,0 +1,64 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-2.source.lean:80:8: error: Type mismatch
+  known handle original result
+    (Eq.mp
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrFun'
+              (congrArg FlatMemoThunk.State.cells
+                (congrArg SourceRecursiveIntersectionThunks.State.nodes
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | none => (NodeSelection.direct request, state)
+                          | some key =>
+                            match FlatMemoThunk.lookupOrInsert key request state.nodes with
+                            | (handle, nodes) =>
+                              (NodeSelection.memoized handle,
+                                { machine := state.machine, nodes := nodes, edges := state.edges }))
+                        requested)
+                      (congr
+                        (congrArg Prod.mk
+                          (congrArg NodeSelection.memoized
+                            (congrArg Prod.fst
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | some handle => (handle, state.nodes)
+                                  | none =>
+                                    (state.nodes.next,
+                                      { table := put state.nodes.table key state.nodes.next,
+                                        cells :=
+                                          put state.nodes.cells state.nodes.next
+                                            { request := request, status := FlatMemoThunk.Status.suspended },
+                                        next := state.nodes.next + 1 }))
+                                found))))
+                        (congrFun'
+                          (congrArg (SourceRecursiveIntersectionThunks.State.mk state.machine)
+                            (congrArg Prod.snd
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | some handle => (handle, state.nodes)
+                                  | none =>
+                                    (state.nodes.next,
+                                      { table := put state.nodes.table key state.nodes.next,
+                                        cells :=
+                                          put state.nodes.cells state.nodes.next
+                                            { request := request, status := FlatMemoThunk.Status.suspended },
+                                        next := state.nodes.next + 1 }))
+                                found)))
+                          state.edges))))))
+              handle)
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => ite_eq_right same) x_0 x_1 x_2 x_3)
+              (instDecidableEqNat handle state.nodes.next)
+              (Option (FlatMemoThunk.Cell (NodeRequest Symbol Guard) (Value Symbol Guard)))
+              (some { request := request, status := FlatMemoThunk.Status.suspended }) (state.nodes.cells handle))))
+        (some { request := original, status := FlatMemoThunk.Status.returned result }))
+      stored)
+has type
+  Written handle original result state.machine.heap
+but is expected to have type
+  Written handle original result (lookupNode width request state).snd.machine.heap

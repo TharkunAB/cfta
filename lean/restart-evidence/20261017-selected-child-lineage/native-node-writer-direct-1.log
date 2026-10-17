@@ -1,0 +1,90 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:73:36: error: Application type mismatch: The argument
+  key
+has type
+  SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key✝
+of sort `Prop` but is expected to have type
+  IntersectionFlatMemoKeyDomain.Triple width
+of sort `Type` in the application
+  state.nodes.table key
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:74:21: error: Type mismatch: After simplification, term
+  known
+ has type
+  Recorded state
+but is expected to have type
+  Recorded
+    { machine := state.machine,
+      nodes :=
+        (match state.nodes.table key✝ with
+          | some handle => (handle, state.nodes)
+          | none =>
+            (state.nodes.next,
+              { table := put state.nodes.table key✝ state.nodes.next,
+                cells :=
+                  put state.nodes.cells state.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := state.nodes.next + 1 })).snd,
+      edges := state.edges }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:78:6: error: unsolved goals
+case pos
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Native width Symbol Guard
+request : NodeRequest Symbol Guard
+known : Recorded state
+key✝ : IntersectionFlatMemoKeyDomain.Triple width
+key : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key✝
+found : state.nodes.table sorry = none
+original : NodeRequest Symbol Guard
+result : Value Symbol Guard
+stored :
+  (match state.nodes.table key✝ with
+          | some handle => (handle, state.nodes)
+          | none =>
+            (state.nodes.next,
+              { table := put state.nodes.table key✝ state.nodes.next,
+                cells :=
+                  put state.nodes.cells state.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := state.nodes.next + 1 })).snd.cells
+      state.nodes.next =
+    some { request := original, status := FlatMemoThunk.Status.returned result }
+⊢ Written state.nodes.next original result (lookupNode width request state).snd.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:81:10: error: Type mismatch: After simplification, term
+  stored
+ has type
+  (match state.nodes.table key✝ with
+          | some handle => (handle, state.nodes)
+          | none =>
+            (state.nodes.next,
+              { table := put state.nodes.table key✝ state.nodes.next,
+                cells :=
+                  put state.nodes.cells state.nodes.next
+                    { request := request, status := FlatMemoThunk.Status.suspended },
+                next := state.nodes.next + 1 })).snd.cells
+      handle =
+    some { request := original, status := FlatMemoThunk.Status.returned result }
+but is expected to have type
+  state.nodes.cells handle = some { request := original, status := FlatMemoThunk.Status.returned result }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:79:58: warning: This simp argument is unused:
+  found
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [lookupNode, key, FlatMemoThunk.lookupOrInsert, Cache.put] at stored
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:79:64: warning: This simp argument is unused:
+  Cache.put
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [lookupNode, key, FlatMemoThunk.lookupOrInsert, found] at stored
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/native-node-writer-direct-1.source.lean:219:78: error: Application type mismatch: The argument
+  bodyFields
+has type
+  Fields (Control.code (compileNode actual)) { native := running, operations := before.operations }
+but is expected to have type
+  NodeReady { native := running, operations := before.operations }.native.machine actual
+in the application
+  And.intro bodyFields

@@ -1,0 +1,213 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-selected-child-lineage/mu-active-child-kernels-1.source.lean:171:37: error: Tactic `decide` failed for proposition
+  @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawFirst)
+    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawSecond)
+because its `Decidable` instance
+  @instDecidableNot
+    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawFirst)
+      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawSecond))
+    (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef
+      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawFirst)
+      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawSecond))
+did not reduce to `Decidable.isTrue` or `Decidable.isFalse`.
+
+After unfolding the instances `instDecidableNot`, `MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef`, and `MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq`, reduction got stuck at the `Decidable` instance
+  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq.match_1.{1}
+    (fun x x_1 => Decidable (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef x x_1))
+    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawFirst)
+    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Nat Bool MicroCFTA.MuActiveChildKernels.rawSecond)
+    (fun _ =>
+      @Decidable.isTrue
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        (@rfl.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+    (fun identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+          (MicroCFTA.InternedBinderProtocol.NodeRef.node identity))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_1 identity))
+    (fun identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+          (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_2 identity))
+    (fun identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+          (MicroCFTA.InternedBinderProtocol.NodeRef.union identity))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_3 identity))
+    (fun reference =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+          (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_4 reference))
+    (fun identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node identity)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_5 identity))
+    (fun a b =>
+      @dite.{1}
+        (Decidable
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node a)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.node b)))
+        (@Eq.{1} Nat a b) (instDecidableEqNat a b)
+        (fun h =>
+          @Eq.ndrec.{1, 1} Nat a
+            (fun b =>
+              Decidable
+                (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node a)
+                  (MicroCFTA.InternedBinderProtocol.NodeRef.node b)))
+            (@Decidable.isTrue
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node a)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.node a))
+              (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_6 a))
+            b h)
+        fun h =>
+        @Decidable.isFalse
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node a)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.node b))
+          (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_7 a b h))
+    (fun identity identity_1 =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity_1))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_8 identity identity_1))
+    (fun identity identity_1 =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.union identity_1))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_9 identity identity_1))
+    (fun identity reference =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.node identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_10 identity reference))
+    (fun identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_11 identity))
+    (fun identity identity_1 =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.node identity_1))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_12 identity identity_1))
+    (fun a b =>
+      @dite.{1}
+        (Decidable
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu a)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.mu b)))
+        (@Eq.{1} Nat a b) (instDecidableEqNat a b)
+        (fun h =>
+          @Eq.ndrec.{1, 1} Nat a
+            (fun b =>
+              Decidable
+                (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu a)
+                  (MicroCFTA.InternedBinderProtocol.NodeRef.mu b)))
+            (@Decidable.isTrue
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu a)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.mu a))
+              (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_13 a))
+            b h)
+        fun h =>
+        @Decidable.isFalse
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu a)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.mu b))
+          (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_14 a b h))
+    (fun identity identity_1 =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.union identity_1))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_15 identity identity_1))
+    (fun identity reference =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_16 identity reference))
+    (fun identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union identity)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_17 identity))
+    (fun identity identity_1 =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.node identity_1))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_18 identity identity_1))
+    (fun identity identity_1 =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity_1))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_19 identity identity_1))
+    (fun a b =>
+      @dite.{1}
+        (Decidable
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union a)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.union b)))
+        (@Eq.{1} Nat a b) (instDecidableEqNat a b)
+        (fun h =>
+          @Eq.ndrec.{1, 1} Nat a
+            (fun b =>
+              Decidable
+                (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union a)
+                  (MicroCFTA.InternedBinderProtocol.NodeRef.union b)))
+            (@Decidable.isTrue
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union a)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.union a))
+              (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_20 a))
+            b h)
+        fun h =>
+        @Decidable.isFalse
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union a)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.union b))
+          (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_21 a b h))
+    (fun identity reference =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.union identity)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_22 identity reference))
+    (fun reference =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_23 reference))
+    (fun reference identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.node identity))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_24 reference identity))
+    (fun reference identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.mu identity))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_25 reference identity))
+    (fun reference identity =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref reference)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.union identity))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_26 reference identity))
+    fun a b =>
+    @dite.{1}
+      (Decidable
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref a)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.ref b)))
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference a b)
+      (MicroCFTA.InternedBinderProtocol.instDecidableEqReference a b)
+      (fun h =>
+        @Eq.ndrec.{1, 1} MicroCFTA.InternedBinderProtocol.Reference a
+          (fun b =>
+            Decidable
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref a)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref b)))
+          (@Decidable.isTrue
+            (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref a)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref a))
+            (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_27 a))
+          b h)
+      fun h =>
+      @Decidable.isFalse
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef (MicroCFTA.InternedBinderProtocol.NodeRef.ref a)
+          (MicroCFTA.InternedBinderProtocol.NodeRef.ref b))
+        (MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef.decEq._proof_28 a b h)
