@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/tritlo/Code/heavy-management/bin/capped",
+    "--mem",
+    "4G",
+    "--time",
+    "10m",
+    "bash",
+    "-c",
+    "control=$(cut -d: -f3 /proc/self/cgroup); for key in memory.max memory.high memory.swap.max; do cat \"/sys/fs/cgroup${control}/${key}\"; done >\"$NATIVE_ROW_CAPS\"; exec \"$@\"",
+    "--",
+    "/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+    "-Dlinter.all=true",
+    "/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-public-1.source.lean"
+  ],
+  "exit_code": 0,
+  "source": "native-row-public-1.source.lean",
+  "source_sha256": "afc68636f2fff1ec9e3dcb11483925c598bca84e072ba40a2a870146cd2bd627",
+  "log": "native-row-public-1.log",
+  "timestamp": "2026-10-17T17:55:11.598546+02:00",
+  "LEAN_PATH": "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean",
+  "memory_max": "4G",
+  "swap_max": 0
+}

@@ -1,0 +1,40 @@
+import MicroCFTA.SourceSizedFiniteKeysRankEvaluation
+import MicroCFTA.SourceRecursiveIntersectionComputedFuel
+import MicroCFTA.SourceCurrentAllocatedNativeComputedBudget
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot
+import MicroCFTA.SourceCurrentRequiredPrimaryOrigins
+import MicroCFTA.SourceCurrentOuterKeyIdentity
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws
+#print MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws
+#print axioms MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws
+
+#check @MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_numeric
+#print MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_numeric
+#print axioms MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_numeric
+
+#check @MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.initial
+#print MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.initial
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.initial
+
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.constructed_root
+#print MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.constructed_root
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.constructed_root
+
+#check @MicroCFTA.SourceCurrentRequiredPrimaryOrigins.constructed
+#print MicroCFTA.SourceCurrentRequiredPrimaryOrigins.constructed
+#print axioms MicroCFTA.SourceCurrentRequiredPrimaryOrigins.constructed
+
+#check @MicroCFTA.SourceCurrentOuterKeyIdentity.node_eq_of_key
+#print MicroCFTA.SourceCurrentOuterKeyIdentity.node_eq_of_key
+#print axioms MicroCFTA.SourceCurrentOuterKeyIdentity.node_eq_of_key
+

@@ -1,0 +1,87 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:69:84: error: unsolved goals
+case refine_1
+⊢ some (IntersectSchedule.Input.mu 3) = some (IntersectSchedule.Input.mu 1)
+
+case refine_2
+⊢ some (IntersectSchedule.Input.mu 3) = some (IntersectSchedule.Input.mu 1)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:99:10: error: Invalid `⟨...⟩` notation: The expected type
+  match Control.code rowsCode, before with
+  | Control.code (Code.work job next), state =>
+    SourceEqualityNativeDemandHeapPrimitives.WorkInputs state.native.machine.heap job
+  | Control.code (Code.enter domain left right first second next), state =>
+    Domain state.native.machine domain ∧
+      Available state.native.machine.heap left ∧ Available state.native.machine.heap right
+  | Control.code (Code.optionalBinder key value next), state => Available state.native.machine.heap value
+  | Control.code (Code.node request next), state =>
+    NodeReady state.native.machine request ∧
+      ∀ (key : IntersectionFlatMemoKeyDomain.Triple 8),
+        SourceRecursiveIntersectionMemo.requestKey 8 request.domain request.left request.right = some key →
+          SourceRecursiveIntersectionMemo.KeySafe 8 request.domain request.left request.right
+  | Control.code (Code.edge request next), state =>
+    EdgeReady state.native.machine request ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe 8 request.domain request.left request.right
+  | Control.code (Code.finishNode handle value next), state =>
+    ∃ request,
+      state.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+        Available state.native.machine.heap value
+  | Control.code (Code.finishEdge handle value next), state =>
+    ∃ request,
+      state.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+        EdgeResident state.native.machine.heap value
+  | x, x_1 => True
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:100:2: error: 'change' tactic failed, pattern
+  True ∧ ?m.12
+is not definitionally equal to target
+  match step (Control.code rowsCode) before with
+  | Outcome.yielded next after => SourceCurrentAllocatedNativePhysicalExecution.InputsThrough 15 next after
+  | Outcome.done value state => True
+  | Outcome.failed failure state => True
+  | Outcome.constraintError message state => True
+  | Outcome.blocked reason control state => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:120:29: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:120:2: error: 'change' tactic failed, pattern
+  (∃ actual, ?m.26 actual = some ?m.21 ∧ Available heap mu) ∧ ?m.28
+is not definitionally equal to target
+  match step (Control.code unionCode) before with
+  | Outcome.yielded next after => SourceCurrentAllocatedNativePhysicalExecution.InputsThrough 15 next after
+  | Outcome.done value state => True
+  | Outcome.failed failure state => True
+  | Outcome.constraintError message state => True
+  | Outcome.blocked reason control state => True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:133:28: error: typeclass instance problem is stuck
+  GetElem? (List (EdgeValue Symbol Guard)) (?m.129 program initialState finalState result count)
+    (EdgeValue Symbol Guard) (?m.130 program initialState finalState result count outputIndex output)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:154:28: error: typeclass instance problem is stuck
+  GetElem? (List (EdgeValue Symbol Guard)) (?m.129 program initialState finalState result count)
+    (EdgeValue Symbol Guard) (?m.130 program initialState finalState result count outputIndex output)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:168:10: error: typeclass instance problem is stuck
+  GetElem? (List Node) (?m.133 program initialState finalState count view output) Node
+    (?m.135 program initialState finalState count view output index member value current next childFuel)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:194:10: error: typeclass instance problem is stuck
+  GetElem? (List Node) (?m.133 program initialState finalState count view output) Node
+    (?m.135 program initialState finalState count view output index member value current next childFuel)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:205:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.NativeRowOriginKernels.ordinary_rows`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:206:7: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.NativeRowOriginKernels.ordinary_rows`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:207:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.NativeRowOriginKernels.ordinary_rows`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:208:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.NativeRowOriginKernels.union_members`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:209:7: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.NativeRowOriginKernels.union_members`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/native-row-kernels-3.source.lean:210:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.NativeRowOriginKernels.union_members`

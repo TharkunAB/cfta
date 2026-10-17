@@ -1,0 +1,63 @@
+import MicroCFTA.SourceCurrentRequiredUnionNormalNative
+import MicroCFTA.SourceCurrentRequiredUnionNormalRead
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.all true
+
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.callback
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.callback
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.callback
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.construct
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.construct
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.construct
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.optional
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.optional
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.optional
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.work_normal
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.work_normal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.work_normal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.step_normal
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.step_normal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.step_normal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.execute_normal
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.execute_normal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.execute_normal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.trace_normal
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.trace_normal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.trace_normal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalNative.query
+#print MicroCFTA.SourceCurrentRequiredUnionNormalNative.query
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalNative.query
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.collect
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.collect
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.collect
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.nodeEdges
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.nodeEdges
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.nodeEdges
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.read
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.read
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.read
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.StoppedNormal
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.StoppedNormal
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.StoppedNormal
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.head
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.head
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.head
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.require
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.require
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.require
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.requireAll
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.requireAll
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.requireAll
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.required_node
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.required_node
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.required_node
+#check @MicroCFTA.SourceCurrentRequiredUnionNormalRead.head_graph
+#print MicroCFTA.SourceCurrentRequiredUnionNormalRead.head_graph
+#print axioms MicroCFTA.SourceCurrentRequiredUnionNormalRead.head_graph

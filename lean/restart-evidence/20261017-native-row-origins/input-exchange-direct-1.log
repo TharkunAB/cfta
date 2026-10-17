@@ -1,0 +1,26 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/input-exchange-direct-1.source.lean:32:7: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/input-exchange-direct-1.source.lean:31:13: error: unsolved goals
+case inr
+Symbol Guard Atom : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+expression : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+before after : State Symbol Guard
+context : Context before (List.map (input firstNames) inputs)
+value : Value Symbol Guard
+actual : build expression (List.map (input firstNames) inputs) before = Outcome.done value after
+absent : ∀ (atom : Atom), firstNames atom ≠ secondNames atom → ¬firstNames atom ∈ value.free
+atom : Atom
+live : Sum.inr atom ∈ liveInputs expression inputs
+⊢ Sum.elim id firstNames (Sum.inr atom) = Sum.elim id secondNames (Sum.inr atom)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/input-exchange-direct-1.source.lean:52:87: error: Application type mismatch: The argument
+  changedActual
+has type
+  build expression (List.map.{u_1, 0} (input secondNames) inputs) later = Outcome.done changed final
+but is expected to have type
+  build expression (List.map.{0, 0} (input ?m.68) ?m.64) later = Outcome.done changed final
+in the application
+  InternedFreshOrdinaryLiveInputReplay.build_same expression ?m.64 ?m.66 ?m.68 ?m.83 before later common after final
+    ?m.84 ?m.85 coherent value changed ?m.86 changedActual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-native-row-origins/input-exchange-direct-1.source.lean:71:7: error(lean.unknownIdentifier): Unknown identifier `build_correct`
