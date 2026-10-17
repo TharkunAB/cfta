@@ -2347,6 +2347,12 @@ import MicroCFTA.SourceCurrentAllocatedNativeInstructionStep
 import MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace
 import MicroCFTA.SourceCurrentAllocatedNativeInitialInstructionBudget
 import MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone
+import MicroCFTA.SourceRecursiveIntersectionMassInputBounds
+import MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile
+import MicroCFTA.IntersectNumericRank
+import MicroCFTA.IntersectNumericFuel
+import MicroCFTA.SourceRecursiveIntersectionComputedFuel
+import MicroCFTA.SourceCurrentAllocatedNativeComputedBudget
 /-!
 # Proof dependency audit
 
