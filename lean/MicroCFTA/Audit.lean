@@ -2368,6 +2368,13 @@ import MicroCFTA.SourceCurrentAllocatedReaderControl
 import MicroCFTA.SourceCurrentAllocatedReaderConsumed
 import MicroCFTA.SourceCurrentAllocatedReaderNumeric
 import MicroCFTA.SourceCurrentAllocatedRowReadNumeric
+import MicroCFTA.SourceCurrentAllocatedUnfoldHistory
+import MicroCFTA.SourceCurrentAllocatedRowReadUniform
+import MicroCFTA.SourceCurrentAllocatedReaderHistory
+import MicroCFTA.SourceMergedComparisonHistory
+import MicroCFTA.SourceMergedComparisonReplayStages
+import MicroCFTA.SourceMergedComparisonNumeric
+import MicroCFTA.SourceMergedSelectionNumeric
 /-!
 # Proof dependency audit
 
