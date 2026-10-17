@@ -1,6 +1,49 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-17 03:14 CEST (Europe/Stockholm)**.
+Updated: **2026-10-17 03:33 CEST (Europe/Stockholm)**.
+
+## Current ranked native occurrences and captured finishes
+
+Updated: 2026-10-17 03:33 CEST. This checkpoint starts at published `4e4f59e9`.
+The proof commits are `c68841ef`, `9787e349`, and `2d828a42`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-native-occurrence-support.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-native-cap-producer/`.
+
+Eight additive modules derive closed-input scope, source Mu coverage,
+strict ordinary child descent, and compatibility with actual numeric pairs.
+Exact source reads derive the pair weights. Local construction retains
+free/deep occurrence bounds. A direct-union callback marks its actual fresh
+reference with the old pair's positive weight and produces its exact result.
+Captured body receipts publish already-derived laws at the same actual cache
+owner. These results do not prove general nested callback transport or
+arbitrary mixed native completion. The source gate remains broader.
+
+The full pinned Audit passes 2785 jobs and 62415 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All eight production sources
+pass absolute-path strict checks without diagnostics. Exact imported checks
+and component hashes are in checkpoint-validation.json. Failed sources and
+raw logs remain preserved. Canonical replay retains one older warning.
+Preservation retains 10705 starting files, 2776 older non-Audit proof sources,
+all 239 Haskell files, and 64 frozen production manifests with 542 entries.
+Stashes and three other worktrees remain unchanged.
+
+Next prove general marker and cap transport through actual stored
+substitution and normalized callbacks, including populated Mu keys. Existing
+semantic readiness supplies repaired free/deep readback; selected-body cap
+transport remains open. Then derive joint native laws, finite warm callers,
+and general constrained descent. Repeated convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, serial public pipelines, and
+complete composition remain open. Read next-general-marker-transport.md
+in the new evidence directory. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+handoff and merged field-pool repair `b9219b9e` first. The Chain example is
+already repaired and returns `Left (FieldAtomOnDatatype "Next" 0)`.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve the optimized interned core and every earlier
+proof, counterexample, repair, and marked draft.
 
 ## Current native cap laws and normalized binder producer
 
