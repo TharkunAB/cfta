@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentNormalizedInheritedPrefix
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNormalizedInheritedPrefix.combine_empty_right
+#print MicroCFTA.SourceCurrentNormalizedInheritedPrefix.combine_empty_right
+#print axioms MicroCFTA.SourceCurrentNormalizedInheritedPrefix.combine_empty_right
+#check @MicroCFTA.SourceCurrentNormalizedInheritedPrefix.plain
+#print MicroCFTA.SourceCurrentNormalizedInheritedPrefix.plain
+#print axioms MicroCFTA.SourceCurrentNormalizedInheritedPrefix.plain
+#check @MicroCFTA.SourceCurrentNormalizedInheritedPrefix.descend
+#print MicroCFTA.SourceCurrentNormalizedInheritedPrefix.descend
+#print axioms MicroCFTA.SourceCurrentNormalizedInheritedPrefix.descend
+#check @MicroCFTA.SourceCurrentNormalizedInheritedPrefix.normalized
+#print MicroCFTA.SourceCurrentNormalizedInheritedPrefix.normalized
+#print axioms MicroCFTA.SourceCurrentNormalizedInheritedPrefix.normalized

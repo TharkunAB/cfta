@@ -2,17 +2,19 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 21:38 CEST. Proof checkpoint is `c8272004`.
-The full pinned Audit passes 3126 jobs and 68475 dependency checks.
-Initial Ready and available values now derive matching literal atoms and
-complete rows for both union-normalization/substitution orders. Actual root
-self filtering preserves those parts. The retained-Mu writer relation and
-smart cleanup remain open. Actual immediate inherited descent strictly
-lowers nonempty payload path height and changes its memo identity. General
-outer progress and repeated-pass convergence remain unproved.
+Current proof update: 2026-10-17 22:01 CEST. Proof checkpoint is `85fd098d`.
+The full pinned Audit passes 3133 jobs and 68560 dependency checks.
+Actual normalization and combination produce an exact ordered fixed point.
+Actual trie descent preserves it. The full accessor/prefix/descent sequence
+derives this invariant from initial Ready data and field availability.
+An actual empty-own prefix retains normalized inherited values, which lets
+nonempty descent strictly lower path height and change the memo identity.
+Nonempty local classes and all-active-ancestor exclusion still need the
+general outer progress proof. Repeated-pass convergence remains open.
+
 These proof results establish no new Haskell defect. No Haskell change is
 added. Field-pool repair `b9219b9e` remains merged and validated in source
-`c0cc8a05`. Read `lean/notes-current-literal-union-provenance.md`.
+`c0cc8a05`. Read `lean/notes-current-inherited-normalization.md`.
 Keep this repair registry before historical failure reports. Record each
 later repair with its failure, reproducer, paths, commit, checks, and upstream
 status so external work can use it.
@@ -190,6 +192,44 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current inherited normalization and actual prefix progress
+
+Updated: 2026-10-17 22:01 CEST. Starting checkpoint is `eb18c2a5`.
+Proof commit is `85fd098d`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-inherited-normalization.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Actual normalization produces an exact ordered fixed point. Exact physical
+readback retains WellFormed payloads. The actual source sorter supplies
+ordered output, and actual trie descent preserves normalization fixedness.
+The full allocated accessor/prefix/descent sequence derives this invariant
+from initial operation validity, inherited readiness, and field availability.
+It needs no Fixed input, empty-own field, or future completed call.
+
+An actual empty-own prefix retains an initially normalized complete inherited
+value. Nonempty descent then strictly lowers path height and changes its
+identity. Actual initial raw normalization supplies the fixed-point premise.
+Cold and warm cases retain exact full operation effects. A constructed case
+also starts with Ready but unsaturated overlapping classes and derives the
+fixed child through the actual prefix and descent.
+
+General outer progress still needs a causal order for nonempty local classes
+and exclusion of all active ancestor keys. Repeated-pass convergence,
+retained-Mu writer correspondence, frontend/runtime adapters, and complete
+public Haskell correspondence remain open. Keep the full goal active.
+
+Full pinned Audit passes 3133 jobs and 68560 dependency checks. All seven new
+strict logs are empty. Thirty-three public and eleven constructed checks pass.
+Checks use verified 4 GiB maximum/high and zero swap. The Audit peak is at most
+363 MiB. Evidence is in `lean/restart-evidence/20261017-inherited-normalization/`.
+All earlier proofs, counterexamples, repairs, drafts, evidence, stashes,
+other worktrees, and optimized code remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS retains
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record each later repair with its reproducer, paths,
+commit, checks, and upstream status.
 
 ## Current literal union provenance and inherited descent
 

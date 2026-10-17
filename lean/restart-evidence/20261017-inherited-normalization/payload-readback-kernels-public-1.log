@@ -1,0 +1,69 @@
+MicroCFTA.PayloadReadbackKernels.repeated_order : And
+  (@Eq.{1} (Option.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+    (MicroCFTA.SourceEqualityClassOrder.recordsOf
+      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class
+        (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) (@List.nil.{0} Nat))
+          (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) (@List.nil.{0} Nat))
+            (@List.nil.{0} MicroCFTA.EqualityNormalize.Path)))
+        (@List.cons.{0} MicroCFTA.EqualityNormalize.Class
+          (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+            (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+              (@List.nil.{0} MicroCFTA.EqualityNormalize.Path)))
+          (@List.cons.{0} MicroCFTA.EqualityNormalize.Class
+            (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) (@List.nil.{0} Nat))
+              (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) (@List.nil.{0} Nat))
+                (@List.nil.{0} MicroCFTA.EqualityNormalize.Path)))
+            (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)))))
+    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+      (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.low
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+            (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))
+  (And
+    (MicroCFTA.SourceEqualityDescend.WellFormed
+      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+        (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.low
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))
+    (And
+      (@Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+        (MicroCFTA.SourceEqualityPhysicalPayload.read
+          (MicroCFTA.SourceEqualityInheritedPayload.classes
+            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+                (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.low
+                  (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+                    (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+        (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint
+          (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.low
+                (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.high
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+      (@Ne.{1} MicroCFTA.EqualityNormalize.Class MicroCFTA.PayloadReadbackKernels.high.paths
+        MicroCFTA.PayloadReadbackKernels.low.paths)))
+'MicroCFTA.PayloadReadbackKernels.repeated_order' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.PayloadReadbackKernels.ascending_boundary : And
+  (MicroCFTA.SourceEqualityClassOrder.Coherent MicroCFTA.PayloadReadbackKernels.reversed)
+  (And (Not (MicroCFTA.EqualityTrie.Ascending MicroCFTA.PayloadReadbackKernels.reversed.trie))
+    (And
+      (@Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+        (MicroCFTA.SourceEqualityPhysicalPayload.read
+          (MicroCFTA.SourceEqualityInheritedPayload.classes
+            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.reversed
+                (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))
+        (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint
+          (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.PayloadReadbackKernels.low
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))
+      (@Ne.{1} MicroCFTA.EqualityTrie.Trie MicroCFTA.PayloadReadbackKernels.reversed.trie
+        MicroCFTA.PayloadReadbackKernels.low.trie)))
+'MicroCFTA.PayloadReadbackKernels.ascending_boundary' depends on axioms: [propext, Quot.sound.{u}]

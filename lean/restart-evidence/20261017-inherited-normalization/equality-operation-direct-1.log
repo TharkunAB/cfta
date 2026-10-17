@@ -1,0 +1,19 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/equality-operation-direct-1.source.lean:21:95: error: Tactic `decide` failed for proposition
+  EqualityNormalize.congruenceStep [] = some []
+because its `Decidable` instance
+  (EqualityNormalize.congruenceStep []).instDecidableEq (some [])
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Option.instDecidableEq`, reduction got stuck at the `Decidable` instance
+  match EqualityNormalize.congruenceStep [] with
+  | none =>
+    match some [] with
+    | none => isTrue ⋯
+    | some val => isFalse ⋯
+  | some a =>
+    match some [] with
+    | none => isFalse ⋯
+    | some b =>
+      match (fun a b => instDecidableEqList a b) a b with
+      | isTrue h => isTrue ⋯
+      | isFalse n => isFalse ⋯

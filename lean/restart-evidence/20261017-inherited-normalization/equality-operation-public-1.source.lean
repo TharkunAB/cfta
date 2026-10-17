@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentEqualityOperationFixed
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.FixedPayload
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.FixedPayload
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.FixedPayload
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.normalize
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.normalize
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.normalize
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.combine
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.combine
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.combine
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.descend
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.descend
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.descend
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.combine_then_descend
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.combine_then_descend
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.combine_then_descend
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.inherited_prefix
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.inherited_prefix
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.inherited_prefix
+#check @MicroCFTA.SourceCurrentEqualityOperationFixed.prefix_descend
+#print MicroCFTA.SourceCurrentEqualityOperationFixed.prefix_descend
+#print axioms MicroCFTA.SourceCurrentEqualityOperationFixed.prefix_descend

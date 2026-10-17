@@ -1,0 +1,41 @@
+import MicroCFTA.SourceCurrentEqualityDescendFixed
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_invariants
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_invariants
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_invariants
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_disjoint
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_disjoint
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_disjoint
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_consistent
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_consistent
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_consistent
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_closed
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_closed
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_closed
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_ordered
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_ordered
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_ordered
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_step
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_step
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_step
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.records_fixed
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.records_fixed
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.records_fixed
+
+#check @MicroCFTA.SourceCurrentEqualityDescendFixed.descend_fixed
+#print MicroCFTA.SourceCurrentEqualityDescendFixed.descend_fixed
+#print axioms MicroCFTA.SourceCurrentEqualityDescendFixed.descend_fixed

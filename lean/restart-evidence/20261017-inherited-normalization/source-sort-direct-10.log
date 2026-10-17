@@ -1,0 +1,129 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:197:0: warning: unused termination hints, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:209:19: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:243:19: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:198:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.extra.unreachableTactic false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:347:85: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:347:42: error: unsolved goals
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+runs : List (List Item)
+a b c d e f g : List Item
+rest : List (List Item)
+ordered : ∀ (run : List Item), run ∈ a :: b :: c :: d :: e :: f :: g :: rest → List.Pairwise relation run
+run✝ : List Item
+member✝¹ : run✝ ∈ merge4 gt a b c d :: reduceOnce gt (e :: f :: g :: rest)
+member✝ : run✝ ∈ reduceOnce gt (e :: f :: g :: rest)
+run : List Item
+member : run = e ∨ run = f ∨ run = g ∨ run ∈ rest
+⊢ run = a ∨ run = b ∨ run = c ∨ run = d ∨ run = e ∨ run = f ∨ run = g ∨ run ∈ rest
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:340:44: error: unsolved goals
+case x_1
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+runs : List (List Item)
+a b c d e f g : List Item
+rest : List (List Item)
+ordered : ∀ (run : List Item), run ∈ a :: b :: c :: d :: e :: f :: g :: rest → List.Pairwise relation run
+run : List Item
+member : run ∈ reduceOnce gt (a :: b :: c :: d :: e :: f :: g :: rest)
+⊢ ∀ (e_1 : List Item), e :: f :: g :: rest = [e_1] → False
+
+case x_2
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+runs : List (List Item)
+a b c d e f g : List Item
+rest : List (List Item)
+ordered : ∀ (run : List Item), run ∈ a :: b :: c :: d :: e :: f :: g :: rest → List.Pairwise relation run
+run : List Item
+member : run ∈ reduceOnce gt (a :: b :: c :: d :: e :: f :: g :: rest)
+⊢ ∀ (e_1 f_1 : List Item), e :: f :: g :: rest = [e_1, f_1] → False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:357:13: error: Type mismatch
+  ordered run List.mem_cons_self
+has type
+  List.Pairwise relation run
+but is expected to have type
+  List.Pairwise relation (mergeAll gt [run])
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:374:85: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:374:95: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:374:105: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:374:115: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:375:31: error: unsolved goals
+case x_1
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+input : List Item
+head✝⁴ head✝³ head✝² head✝¹ head✝ : Item
+tail✝ : List Item
+⊢ head✝⁴ :: head✝³ :: head✝² :: head✝¹ :: head✝ :: tail✝ = [] → False
+
+case x_2
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+input : List Item
+head✝⁴ head✝³ head✝² head✝¹ head✝ : Item
+tail✝ : List Item
+⊢ ∀ (a : Item), head✝⁴ :: head✝³ :: head✝² :: head✝¹ :: head✝ :: tail✝ = [a] → False
+
+case x_3
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+input : List Item
+head✝⁴ head✝³ head✝² head✝¹ head✝ : Item
+tail✝ : List Item
+⊢ ∀ (a b : Item), head✝⁴ :: head✝³ :: head✝² :: head✝¹ :: head✝ :: tail✝ = [a, b] → False
+
+case x_4
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+input : List Item
+head✝⁴ head✝³ head✝² head✝¹ head✝ : Item
+tail✝ : List Item
+⊢ ∀ (a b c : Item), head✝⁴ :: head✝³ :: head✝² :: head✝¹ :: head✝ :: tail✝ = [a, b, c] → False
+
+case x_5
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+input : List Item
+head✝⁴ head✝³ head✝² head✝¹ head✝ : Item
+tail✝ : List Item
+⊢ ∀ (a b c d : Item), head✝⁴ :: head✝³ :: head✝² :: head✝¹ :: head✝ :: tail✝ = [a, b, c, d] → False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:393:18: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Std.LawfulOrderOrd EqualityNormalize.Class
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/source-sort-direct-10.source.lean:389:101: error: unsolved goals
+records : List SourceEqualityClassOrder.Record
+first second : SourceEqualityClassOrder.Record
+⊢ if (compare first.paths second.paths == Ordering.gt) = true then second.paths ≤ first.paths
+  else first.paths ≤ second.paths

@@ -1,0 +1,48 @@
+@MicroCFTA.SourceListSortRunsOrdered.sequences_ordered.{u_1} : ∀ {Item : Type u_1} (relation : Item → Item → Prop)
+  (gt : Item → Item → Bool),
+  (∀ {a b c : Item}, relation a b → relation b c → relation a c) →
+    (∀ (a b : Item),
+        @ite.{1} Prop (@Eq.{1} Bool (gt a b) Bool.true) (instDecidableEqBool (gt a b) Bool.true) (relation b a)
+          (relation a b)) →
+      ∀ (input run : List.{u_1} Item),
+        @Membership.mem.{u_1, u_1} (List.{u_1} Item) (List.{u_1} (List.{u_1} Item))
+            (@List.instMembership.{u_1} (List.{u_1} Item)) (@MicroCFTA.SourceListSort.sequences.{u_1} Item gt input)
+            run →
+          @List.Pairwise.{u_1} Item relation run
+theorem MicroCFTA.SourceListSortRunsOrdered.sequences_ordered.{u_1} : ∀ {Item : Type u_1}
+  (relation : Item → Item → Prop) (gt : Item → Item → Bool),
+  (∀ {a b c : Item}, relation a b → relation b c → relation a c) →
+    (∀ (a b : Item),
+        @ite.{1} Prop (@Eq.{1} Bool (gt a b) Bool.true) (instDecidableEqBool (gt a b) Bool.true) (relation b a)
+          (relation a b)) →
+      ∀ (input run : List.{u_1} Item),
+        @Membership.mem.{u_1, u_1} (List.{u_1} Item) (List.{u_1} (List.{u_1} Item))
+            (@List.instMembership.{u_1} (List.{u_1} Item)) (@MicroCFTA.SourceListSort.sequences.{u_1} Item gt input)
+            run →
+          @List.Pairwise.{u_1} Item relation run :=
+fun {Item} relation gt transitive compared input =>
+  @MicroCFTA.SourceListSortRunsOrdered.sequences_ordered._mutual.{u_1} Item relation gt transitive compared
+    (@PSum.inl.{u_1 + 1, u_1 + 1} (List.{u_1} Item)
+      (PSum.{u_1 + 1, u_1 + 1}
+        (@PSigma.{u_1 + 1, u_1 + 1} Item fun last =>
+          @PSigma.{u_1 + 1, u_1 + 1} (List.{u_1} Item) fun reversed =>
+            @PSigma.{u_1 + 1, 0} (List.{u_1} Item) fun rest =>
+              @List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item last reversed))
+        (@PSigma.{u_1 + 1, u_1 + 1} Item fun last =>
+          @PSigma.{u_1 + 1, u_1 + 1} (List.{u_1} Item → List.{u_1} Item) fun append =>
+            @PSigma.{u_1 + 1, u_1 + 1} (List.{u_1} Item) fun rest =>
+              @PSigma.{u_1 + 1, 1} (List.{u_1} Item) fun initial =>
+                @PSigma.{0, 0}
+                  (∀ (suffix : List.{u_1} Item),
+                    @Eq.{u_1 + 1} (List.{u_1} Item) (append suffix)
+                      (@HAppend.hAppend.{u_1, u_1, u_1} (List.{u_1} Item) (List.{u_1} Item) (List.{u_1} Item)
+                        (@instHAppendOfAppend.{u_1} (List.{u_1} Item) (@List.instAppend.{u_1} Item)) initial suffix))
+                  fun exact =>
+                  @List.Pairwise.{u_1} Item relation
+                    (@HAppend.hAppend.{u_1, u_1, u_1} (List.{u_1} Item) (List.{u_1} Item) (List.{u_1} Item)
+                      (@instHAppendOfAppend.{u_1} (List.{u_1} Item) (@List.instAppend.{u_1} Item)) initial
+                      (@List.cons.{u_1} Item last (@List.nil.{u_1} Item)))))
+      input)
+'MicroCFTA.SourceListSortRunsOrdered.sequences_ordered' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

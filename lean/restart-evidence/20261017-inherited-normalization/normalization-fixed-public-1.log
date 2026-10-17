@@ -1,0 +1,633 @@
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed : MicroCFTA.EqualityNormalize.Constraints → Prop
+def MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed : MicroCFTA.EqualityNormalize.Constraints → Prop :=
+fun classes =>
+  @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (MicroCFTA.SourceCompactGuards.normalize classes) (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step : ∀ (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.EqualityNormalize.Active classes →
+    @Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) (MicroCFTA.EqualityNormalize.congruenceStep classes)
+        (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) →
+      MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes
+theorem MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.EqualityNormalize.Active classes →
+    @Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) (MicroCFTA.EqualityNormalize.congruenceStep classes)
+        (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) →
+      MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes :=
+fun classes active step =>
+  have normal := MicroCFTA.EqualitySaturation.step_normal classes classes active step;
+  have one :=
+    @of_eq_true
+      (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+        (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          classes)
+        (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+      (@Eq.trans.{1} Prop
+        (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+          (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            classes)
+          (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+        (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+          (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+        True
+        (@congrFun'.{1, 1} MicroCFTA.EqualityNormalize.RunResult Prop
+          (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+            (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              classes))
+          (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+          (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.RunResult (MicroCFTA.EqualityNormalize.RunResult → Prop)
+            (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              classes)
+            (MicroCFTA.EqualityNormalize.RunResult.normalized classes) (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult)
+            (@Eq.trans.{1} MicroCFTA.EqualityNormalize.RunResult
+              (MicroCFTA.EqualityNormalize.completeFuel.match_1.{1} (fun x => MicroCFTA.EqualityNormalize.RunResult)
+                (MicroCFTA.EqualityNormalize.congruenceStep
+                  (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                (fun _ => MicroCFTA.EqualityNormalize.RunResult.contradiction) fun next =>
+                @ite.{1} MicroCFTA.EqualityNormalize.RunResult
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints next
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (@instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Class
+                    (fun a b =>
+                      @instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Path
+                        (fun a b => @instDecidableEqList.{0} Nat instDecidableEqNat a b) a b)
+                    next (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.fixMaybe (nat_lit 0) next))
+              (MicroCFTA.EqualityNormalize.completeFuel.match_1.{1} (fun x => MicroCFTA.EqualityNormalize.RunResult)
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+                (fun _ => MicroCFTA.EqualityNormalize.RunResult.contradiction) fun next =>
+                @ite.{1} MicroCFTA.EqualityNormalize.RunResult
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints next
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (@instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Class
+                    (fun a b =>
+                      @instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Path
+                        (fun a b => @instDecidableEqList.{0} Nat instDecidableEqNat a b) a b)
+                    next (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.fixMaybe (nat_lit 0) next))
+              (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+              (@congrArg.{1, 1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+                MicroCFTA.EqualityNormalize.RunResult
+                (MicroCFTA.EqualityNormalize.congruenceStep
+                  (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+                (fun x =>
+                  MicroCFTA.EqualityNormalize.completeFuel.match_1.{1} (fun x => MicroCFTA.EqualityNormalize.RunResult)
+                    x (fun _ => MicroCFTA.EqualityNormalize.RunResult.contradiction) fun next =>
+                    @ite.{1} MicroCFTA.EqualityNormalize.RunResult
+                      (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints next
+                        (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                      (@instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Class
+                        (fun a b =>
+                          @instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Path
+                            (fun a b => @instDecidableEqList.{0} Nat instDecidableEqNat a b) a b)
+                        next (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                      (MicroCFTA.EqualityNormalize.RunResult.normalized
+                        (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                      (MicroCFTA.EqualityNormalize.fixMaybe (nat_lit 0) next))
+                (@Eq.trans.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+                  (MicroCFTA.EqualityNormalize.congruenceStep
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.congruenceStep classes)
+                  (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+                  (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Constraints
+                    (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)) classes
+                    MicroCFTA.EqualityNormalize.congruenceStep
+                    (@Eq.trans.{1} MicroCFTA.EqualityNormalize.Constraints
+                      (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes))
+                      (MicroCFTA.EqualityNormalize.complete classes) classes
+                      (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Constraints MicroCFTA.EqualityNormalize.Constraints
+                        (MicroCFTA.EqualityNormalize.prepare classes) classes MicroCFTA.EqualityNormalize.complete
+                        (MicroCFTA.SourceCurrentEqualityNormalizationFixed.prepare_fixed✝ classes normal))
+                      (MicroCFTA.SourceCurrentEqualityNormalizationFixed.complete_fixed✝ classes normal)))
+                  step))
+              (@Eq.trans.{1} MicroCFTA.EqualityNormalize.RunResult
+                (@ite.{1} MicroCFTA.EqualityNormalize.RunResult
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (@instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Class
+                    (fun a b =>
+                      @instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Path
+                        (fun a b => @instDecidableEqList.{0} Nat instDecidableEqNat a b) a b)
+                    classes (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.fixMaybe (nat_lit 0) classes))
+                (@ite.{1} MicroCFTA.EqualityNormalize.RunResult True instDecidableTrue
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                  MicroCFTA.EqualityNormalize.RunResult.timeout)
+                (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                (@ite.congr_simp.{1} MicroCFTA.EqualityNormalize.RunResult
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  True
+                  (@Eq.trans.{1} Prop
+                    (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes
+                      (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                    (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes classes) True
+                    (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Constraints Prop
+                      (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)) classes
+                      (@Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes)
+                      (@Eq.trans.{1} MicroCFTA.EqualityNormalize.Constraints
+                        (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes))
+                        (MicroCFTA.EqualityNormalize.complete classes) classes
+                        (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Constraints
+                          MicroCFTA.EqualityNormalize.Constraints (MicroCFTA.EqualityNormalize.prepare classes) classes
+                          MicroCFTA.EqualityNormalize.complete
+                          (MicroCFTA.SourceCurrentEqualityNormalizationFixed.prepare_fixed✝ classes normal))
+                        (MicroCFTA.SourceCurrentEqualityNormalizationFixed.complete_fixed✝ classes normal)))
+                    (@eq_self.{1} MicroCFTA.EqualityNormalize.Constraints classes))
+                  (@instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Class
+                    (fun a b =>
+                      @instDecidableEqList.{0} MicroCFTA.EqualityNormalize.Path
+                        (fun a b => @instDecidableEqList.{0} Nat instDecidableEqNat a b) a b)
+                    classes (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  instDecidableTrue
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)))
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                  (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Constraints MicroCFTA.EqualityNormalize.RunResult
+                    (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes)) classes
+                    MicroCFTA.EqualityNormalize.RunResult.normalized
+                    (@Eq.trans.{1} MicroCFTA.EqualityNormalize.Constraints
+                      (MicroCFTA.EqualityNormalize.complete (MicroCFTA.EqualityNormalize.prepare classes))
+                      (MicroCFTA.EqualityNormalize.complete classes) classes
+                      (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Constraints MicroCFTA.EqualityNormalize.Constraints
+                        (MicroCFTA.EqualityNormalize.prepare classes) classes MicroCFTA.EqualityNormalize.complete
+                        (MicroCFTA.SourceCurrentEqualityNormalizationFixed.prepare_fixed✝ classes normal))
+                      (MicroCFTA.SourceCurrentEqualityNormalizationFixed.complete_fixed✝ classes normal)))
+                  (MicroCFTA.EqualityNormalize.fixMaybe (nat_lit 0) classes)
+                  MicroCFTA.EqualityNormalize.RunResult.timeout
+                  (@id.{0}
+                    (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+                      (MicroCFTA.EqualityNormalize.fixMaybe (nat_lit 0) classes)
+                      MicroCFTA.EqualityNormalize.RunResult.timeout)
+                    (@Eq.refl.{1} MicroCFTA.EqualityNormalize.RunResult MicroCFTA.EqualityNormalize.RunResult.timeout)))
+                (@ite_true.{1} MicroCFTA.EqualityNormalize.RunResult instDecidableTrue
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                  MicroCFTA.EqualityNormalize.RunResult.timeout))))
+          (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+        (@eq_self.{1} MicroCFTA.EqualityNormalize.RunResult
+          (MicroCFTA.EqualityNormalize.RunResult.normalized classes)));
+  have array :=
+    MicroCFTA.SourceEqualityNormalizationReceipt.array_eq (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      classes
+      (@Eq.mpr.{0}
+        (@Ne.{1} MicroCFTA.EqualityNormalize.RunResult
+          (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            classes)
+          MicroCFTA.EqualityNormalize.RunResult.timeout)
+        (@Ne.{1} MicroCFTA.EqualityNormalize.RunResult (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+          MicroCFTA.EqualityNormalize.RunResult.timeout)
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Ne.{1} MicroCFTA.EqualityNormalize.RunResult
+              (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                classes)
+              MicroCFTA.EqualityNormalize.RunResult.timeout)
+            (@Ne.{1} MicroCFTA.EqualityNormalize.RunResult (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+              MicroCFTA.EqualityNormalize.RunResult.timeout))
+          (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.RunResult Prop
+            (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              classes)
+            (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+            (fun _a => @Ne.{1} MicroCFTA.EqualityNormalize.RunResult _a MicroCFTA.EqualityNormalize.RunResult.timeout)
+            one))
+        fun impossible =>
+        @Eq.casesOn.{0, 1} MicroCFTA.EqualityNormalize.RunResult
+          (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+          (fun a t =>
+            @Eq.{1} MicroCFTA.EqualityNormalize.RunResult MicroCFTA.EqualityNormalize.RunResult.timeout a →
+              @HEq.{0}
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+                    (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                    MicroCFTA.EqualityNormalize.RunResult.timeout)
+                  impossible
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+                    (MicroCFTA.EqualityNormalize.RunResult.normalized classes) a)
+                  t →
+                False)
+          MicroCFTA.EqualityNormalize.RunResult.timeout impossible
+          (fun h =>
+            @False.elim.{0}
+              (@HEq.{0}
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+                    (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                    MicroCFTA.EqualityNormalize.RunResult.timeout)
+                  impossible
+                  (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult
+                    (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+                    (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+                  (@Eq.refl.{1} MicroCFTA.EqualityNormalize.RunResult
+                    (MicroCFTA.EqualityNormalize.RunResult.normalized classes)) →
+                False)
+              (@noConfusion_of_Nat.{1} MicroCFTA.EqualityNormalize.RunResult
+                MicroCFTA.EqualityNormalize.RunResult.ctorIdx MicroCFTA.EqualityNormalize.RunResult.timeout
+                (MicroCFTA.EqualityNormalize.RunResult.normalized classes) h))
+          (@Eq.refl.{1} MicroCFTA.EqualityNormalize.RunResult MicroCFTA.EqualityNormalize.RunResult.timeout)
+          (@HEq.refl.{0}
+            (@Eq.{1} MicroCFTA.EqualityNormalize.RunResult (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+              MicroCFTA.EqualityNormalize.RunResult.timeout)
+            impossible));
+  @id.{0} (MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes)
+    (@id.{0}
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (MicroCFTA.SourceCompactGuards.normalize classes)
+        (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+      (@Eq.mpr.{0}
+        (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+          (MicroCFTA.SymbolicEqualityBridge.resultClasses (MicroCFTA.SourceCompactGuards.arrayNormalize classes))
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+        (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+          (MicroCFTA.SymbolicEqualityBridge.resultClasses
+            (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              classes))
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SymbolicEqualityBridge.resultClasses (MicroCFTA.SourceCompactGuards.arrayNormalize classes))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+            (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SymbolicEqualityBridge.resultClasses
+                (MicroCFTA.EqualityNormalize.mkEqConstraints
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) classes))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)))
+          (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.RunResult Prop
+            (MicroCFTA.SourceCompactGuards.arrayNormalize classes)
+            (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              classes)
+            (fun _a =>
+              @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                (MicroCFTA.SymbolicEqualityBridge.resultClasses _a)
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+            array))
+        (@Eq.mpr.{0}
+          (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+            (MicroCFTA.SymbolicEqualityBridge.resultClasses
+              (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                classes))
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+          (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+            (MicroCFTA.SymbolicEqualityBridge.resultClasses (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                (MicroCFTA.SymbolicEqualityBridge.resultClasses
+                  (MicroCFTA.EqualityNormalize.mkEqConstraints
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) classes))
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+              (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                (MicroCFTA.SymbolicEqualityBridge.resultClasses
+                  (MicroCFTA.EqualityNormalize.RunResult.normalized classes))
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)))
+            (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.RunResult Prop
+              (MicroCFTA.EqualityNormalize.mkEqConstraints (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                classes)
+              (MicroCFTA.EqualityNormalize.RunResult.normalized classes)
+              (fun _a =>
+                @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (MicroCFTA.SymbolicEqualityBridge.resultClasses _a)
+                  (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+              one))
+          (@Eq.refl.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+            (MicroCFTA.SymbolicEqualityBridge.resultClasses
+              (MicroCFTA.EqualityNormalize.RunResult.normalized classes))))))
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.normalize_idempotent : ∀
+  (classes output : MicroCFTA.EqualityNormalize.Constraints),
+  @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.normalize classes)
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints output) →
+    MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed output
+theorem MicroCFTA.SourceCurrentEqualityNormalizationFixed.normalize_idempotent : ∀
+  (classes output : MicroCFTA.EqualityNormalize.Constraints),
+  @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.normalize classes)
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints output) →
+    MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed output :=
+fun classes output actual =>
+  have invariant :=
+    MicroCFTA.EqualityNormalize.mkEqConstraints_invariants (MicroCFTA.EqualityTermination.normalizationBound classes)
+      classes output (MicroCFTA.SourceCurrentEqualityNormalizationFixed.successful✝ classes output actual);
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step output
+    (@And.left (MicroCFTA.EqualityNormalize.Active output)
+      (And (@Eq.{1} Bool (MicroCFTA.EqualityNormalize.isContradicting output) Bool.false)
+        (And
+          (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+            (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false) output)
+          (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+            (MicroCFTA.EqualityNormalize.congruenceStep output)
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints output))))
+      invariant)
+    (@And.right
+      (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+        (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false) output)
+      (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) (MicroCFTA.EqualityNormalize.congruenceStep output)
+        (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints output))
+      (@And.right (@Eq.{1} Bool (MicroCFTA.EqualityNormalize.isContradicting output) Bool.false)
+        (And
+          (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+            (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false) output)
+          (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+            (MicroCFTA.EqualityNormalize.congruenceStep output)
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints output)))
+        (@And.right (MicroCFTA.EqualityNormalize.Active output)
+          (And (@Eq.{1} Bool (MicroCFTA.EqualityNormalize.isContradicting output) Bool.false)
+            (And
+              (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+                (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false) output)
+              (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+                (MicroCFTA.EqualityNormalize.congruenceStep output)
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints output))))
+          invariant)))
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.normalize_idempotent' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants : ∀ (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    And (MicroCFTA.EqualityNormalize.Active classes)
+      (And (@Eq.{1} Bool (MicroCFTA.EqualityNormalize.isContradicting classes) Bool.false)
+        (And
+          (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+            (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false) classes)
+          (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+            (MicroCFTA.EqualityNormalize.congruenceStep classes)
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))))
+theorem MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    And (MicroCFTA.EqualityNormalize.Active classes)
+      (And (@Eq.{1} Bool (MicroCFTA.EqualityNormalize.isContradicting classes) Bool.false)
+        (And
+          (@List.Pairwise.{0} MicroCFTA.EqualityNormalize.Class
+            (fun left right => @Eq.{1} Bool (MicroCFTA.EqualityNormalize.overlap left right) Bool.false) classes)
+          (@Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints)
+            (MicroCFTA.EqualityNormalize.congruenceStep classes)
+            (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)))) :=
+fun classes fixed =>
+  MicroCFTA.EqualityNormalize.mkEqConstraints_invariants (MicroCFTA.EqualityTermination.normalizationBound classes)
+    classes classes (MicroCFTA.SourceCurrentEqualityNormalizationFixed.successful✝ classes classes fixed)
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.empty_append : ∀ (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.normalize
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.EqualityNormalize.Class) MicroCFTA.EqualityNormalize.Constraints
+          (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.EqualityNormalize.Class)
+            (@List.instAppend.{0} MicroCFTA.EqualityNormalize.Class))
+          (@List.nil.{0} MicroCFTA.EqualityNormalize.Class) classes))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+theorem MicroCFTA.SourceCurrentEqualityNormalizationFixed.empty_append : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.normalize
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.EqualityNormalize.Class) MicroCFTA.EqualityNormalize.Constraints
+          (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.EqualityNormalize.Class)
+            (@List.instAppend.{0} MicroCFTA.EqualityNormalize.Class))
+          (@List.nil.{0} MicroCFTA.EqualityNormalize.Class) classes))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) :=
+fun classes fixed =>
+  @id.{0}
+    (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.normalize
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.EqualityNormalize.Class) MicroCFTA.EqualityNormalize.Constraints
+          (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.EqualityNormalize.Class)
+            (@List.instAppend.{0} MicroCFTA.EqualityNormalize.Class))
+          (@List.nil.{0} MicroCFTA.EqualityNormalize.Class) classes))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+    fixed
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.empty_append' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_left : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.combineEqualities
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+theorem MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_left : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.combineEqualities
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) :=
+fun classes fixed =>
+  @List.casesOn.{0, 0} MicroCFTA.EqualityNormalize.Class
+    (fun t =>
+      @Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes t →
+        @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+          (MicroCFTA.SourceCompactGuards.combineEqualities
+            (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+              (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+            (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes))
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+    classes
+    (fun h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Constraints (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)
+        (fun classes =>
+          MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+            @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.combineEqualities
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+        (fun fixed =>
+          @Eq.refl.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+            (MicroCFTA.SourceCompactGuards.combineEqualities
+              (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                (@List.nil.{0} MicroCFTA.EqualityNormalize.Class))))
+        classes
+        (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Constraints classes (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)
+          h)
+        fixed)
+    (fun first rest h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Constraints
+        (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)
+        (fun classes =>
+          MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+            @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.combineEqualities
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+        (fun fixed =>
+          @id.{0}
+            (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.combineEqualities
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)))
+            fixed)
+        classes
+        (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Constraints classes
+          (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest) h)
+        fixed)
+    (@Eq.refl.{1} MicroCFTA.EqualityNormalize.Constraints classes)
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_left' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_right : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.combineEqualities
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes)
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes)
+theorem MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_right : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+    @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (MicroCFTA.SourceCompactGuards.combineEqualities
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes)
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) :=
+fun classes fixed =>
+  @List.casesOn.{0, 0} MicroCFTA.EqualityNormalize.Class
+    (fun t =>
+      @Eq.{1} MicroCFTA.EqualityNormalize.Constraints classes t →
+        @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+          (MicroCFTA.SourceCompactGuards.combineEqualities
+            (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes)
+            (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+              (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+          (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+    classes
+    (fun h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Constraints (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)
+        (fun classes =>
+          MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+            @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.combineEqualities
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes)
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+        (fun fixed =>
+          @Eq.refl.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+            (MicroCFTA.SourceCompactGuards.combineEqualities
+              (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                (@List.nil.{0} MicroCFTA.EqualityNormalize.Class))
+              (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))))
+        classes
+        (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Constraints classes (@List.nil.{0} MicroCFTA.EqualityNormalize.Class)
+          h)
+        fixed)
+    (fun first rest h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Constraints
+        (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)
+        (fun classes =>
+          MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed classes →
+            @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.combineEqualities
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) classes)
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+        (fun fixed =>
+          @Eq.mpr.{0}
+            (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.combineEqualities
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)))
+            (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+              (MicroCFTA.SourceCompactGuards.normalize (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+              (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (MicroCFTA.SourceCompactGuards.combineEqualities
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                  (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)))
+                (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (MicroCFTA.SourceCompactGuards.normalize
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+                  (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))))
+              (@congrFun'.{1, 1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) Prop
+                (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (MicroCFTA.SourceCompactGuards.combineEqualities
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))))
+                (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (MicroCFTA.SourceCompactGuards.normalize
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)))
+                (@congrArg.{1, 1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)) → Prop)
+                  (MicroCFTA.SourceCompactGuards.combineEqualities
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                  (MicroCFTA.SourceCompactGuards.normalize
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))
+                  (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                  (@congrArg.{1, 1} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                    (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@instHAppendOfAppend.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@List.instAppend.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)
+                      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest)
+                    MicroCFTA.SourceCompactGuards.normalize
+                    (@List.append_nil.{0} MicroCFTA.EqualityNormalize.Class
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))))
+                (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints
+                  (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest))))
+            fixed)
+        classes
+        (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Constraints classes
+          (@List.cons.{0} MicroCFTA.EqualityNormalize.Class first rest) h)
+        fixed)
+    (@Eq.refl.{1} MicroCFTA.EqualityNormalize.Constraints classes)
+'MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_right' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

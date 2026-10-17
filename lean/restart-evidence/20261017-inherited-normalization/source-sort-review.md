@@ -1,0 +1,13 @@
+# Ordered output of the actual source sort
+
+The module verifies the existing source algorithm. It does not replace it with a library sorter. The public generic theorem assumes a transitive relation and correctness of the actual Boolean branch choice. If the comparator takes the right head, that head must precede the left head. Otherwise the left head must precede the right head. No antisymmetry, strict comparison, stable sort law, or initially sorted input is a premise.
+
+The two-way merge proof uses the actual selected head and sorted input tails. The three-way and held-X workers have exact nested two-way equations. The held-Y and four-way workers use direct held-head lower bounds. The proof covers all seven merge workers. It does not assume arbitrary-comparator merge associativity. Natural-run orderedness comes from the separate immutable SourceListSortRunsOrdered producer. Every short-list case and each special five-run and six-run reduction uses the actual source constructor. The longer reduction and complete merge loop preserve orderedness recursively.
+
+The paths specialization has no premise. It proves Pairwise path-list ordering for the actual source sort of arbitrary complete class records. A private recursive comparison lemma relates the actual nested List Nat comparator to lexicographic less-than. It avoids assuming a missing LawfulOrderOrd instance for nested lists. Exact physical list permutation remains the older SourceListSort.sortBy_perm theorem; orderedness does not remove duplicate records or change their fields.
+
+Two constructed integrations exercise actual source schedules. The first constructs five, six, and seven natural runs, proves the complete actual sorted lists, retains a duplicate zero, and invokes the generic orderedness theorem. The second builds actual trie records, sorts an out-of-order list with a repeated record, proves the complete returned record list, and invokes the physical paths theorem.
+
+Strict source attempt 13 and kernel attempt 1 have empty raw logs. Canonical target attempt 2 passed 20 jobs. Earlier exploratory failures and nonempty warning logs remain immutable. In particular, the abandoned arbitrary-comparator nested-association attempt is not selected as a proof. Three full public signature/proof/axiom pairs and two constructed signature/axiom pairs pass. All eight options are explicit. Only standard axioms occur. Selected runs record effective memory.max and memory.high of 4294967296 bytes and memory.swap.max of zero.
+
+This component proves the lawful ordering prerequisite of actual inherited descent. It does not prove outer recursive termination or establish a causal rank by itself.

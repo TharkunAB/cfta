@@ -1,0 +1,37 @@
+import MicroCFTA.SourceCurrentEqualityNormalizationFixed
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.Fixed
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.of_step
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.normalize_idempotent
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.normalize_idempotent
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.normalize_idempotent
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.invariants
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.empty_append
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.empty_append
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.empty_append
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_left
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_left
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_left
+
+#check @MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_right
+#print MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_right
+#print axioms MicroCFTA.SourceCurrentEqualityNormalizationFixed.combine_empty_right

@@ -1,0 +1,2009 @@
+@MicroCFTA.SourceListSortOrdered.actualSort_ordered.{u_1} : ∀ {Item : Type u_1} (relation : Item → Item → Prop)
+  (gt : Item → Item → Bool),
+  (∀ {a b c : Item}, relation a b → relation b c → relation a c) →
+    (∀ (a b : Item),
+        @ite.{1} Prop (@Eq.{1} Bool (gt a b) Bool.true) (instDecidableEqBool (gt a b) Bool.true) (relation b a)
+          (relation a b)) →
+      ∀ (input : List.{u_1} Item),
+        @List.Pairwise.{u_1} Item relation (@MicroCFTA.SourceListSort.actualSort.{u_1} Item gt input)
+theorem MicroCFTA.SourceListSortOrdered.actualSort_ordered.{u_1} : ∀ {Item : Type u_1} (relation : Item → Item → Prop)
+  (gt : Item → Item → Bool),
+  (∀ {a b c : Item}, relation a b → relation b c → relation a c) →
+    (∀ (a b : Item),
+        @ite.{1} Prop (@Eq.{1} Bool (gt a b) Bool.true) (instDecidableEqBool (gt a b) Bool.true) (relation b a)
+          (relation a b)) →
+      ∀ (input : List.{u_1} Item),
+        @List.Pairwise.{u_1} Item relation (@MicroCFTA.SourceListSort.actualSort.{u_1} Item gt input) :=
+fun {Item} relation gt transitive compared input =>
+  @MicroCFTA.SourceListSortOrdered.actualSort_ordered.match_1_1.{u_1} Item
+    (fun input => @List.Pairwise.{u_1} Item relation (@MicroCFTA.SourceListSort.actualSort.{u_1} Item gt input)) input
+    (fun _ =>
+      @of_eq_true (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item))
+        (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+    (fun head =>
+      @of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item head (@List.nil.{u_1} Item)))
+        (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item head (@List.nil.{u_1} Item)))
+          (And
+            (∀ (a' : Item),
+              @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item) (@List.nil.{u_1} Item)
+                  a' →
+                relation head a')
+            (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+          True (@List.pairwise_cons._simp_1.{u_1} Item relation head (@List.nil.{u_1} Item))
+          (@Eq.trans.{1} Prop
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation head a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            (And True True) True
+            (@congr.{1, 1} Prop Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation head a'))
+              (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+              (@congrArg.{1, 1} Prop (Prop → Prop)
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation head a')
+                True And
+                (@Eq.trans.{1} Prop
+                  (∀ (a : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a →
+                      relation head a)
+                  (∀ (a : Item), True) True
+                  (@forall_congr.{u_1 + 1} Item
+                    (fun a =>
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation head a)
+                    (fun a => True) fun a' =>
+                    @Eq.trans.{1} Prop
+                      (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a' →
+                        relation head a')
+                      (False → relation head a') True
+                      (@implies_congr.{0, 0}
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a')
+                        False (relation head a') (relation head a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                        (@Eq.refl.{1} Prop (relation head a')))
+                      (false_implies (relation head a')))
+                  (implies_true.{u_1 + 1} Item)))
+              (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+            (and_self True))))
+    (fun a b =>
+      @MicroCFTA.SourceListSortOrdered.merge_ordered✝.{u_1} Item relation gt (fun {a b c} => @transitive a b c) compared
+        (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation a a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation a (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation a a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation a a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation a a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a_1 : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a_1 →
+                        relation a a_1)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a_1 =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a_1 →
+                          relation a a_1)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation a a')
+                        (False → relation a a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation a a') (relation a a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation a a')))
+                        (false_implies (relation a a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True))))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation b a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation b (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation b a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation b a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation b a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation b a)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a →
+                          relation b a)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation b a')
+                        (False → relation b a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation b a') (relation b a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation b a')))
+                        (false_implies (relation b a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True)))))
+    (fun a b c =>
+      @MicroCFTA.SourceListSortOrdered.merge3_ordered✝.{u_1} Item relation gt (fun {a b c} => @transitive a b c)
+        compared (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))
+        (@List.cons.{u_1} Item c (@List.nil.{u_1} Item))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation a a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation a (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation a a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation a a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation a a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a_1 : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a_1 →
+                        relation a a_1)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a_1 =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a_1 →
+                          relation a a_1)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation a a')
+                        (False → relation a a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation a a') (relation a a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation a a')))
+                        (false_implies (relation a a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True))))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation b a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation b (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation b a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation b a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation b a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation b a)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a →
+                          relation b a)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation b a')
+                        (False → relation b a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation b a') (relation b a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation b a')))
+                        (false_implies (relation b a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True))))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation c a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation c (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation c a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation c a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation c a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation c a)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a →
+                          relation c a)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation c a')
+                        (False → relation c a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation c a') (relation c a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation c a')))
+                        (false_implies (relation c a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True)))))
+    (fun a b c d =>
+      @MicroCFTA.SourceListSortOrdered.merge4_ordered✝.{u_1} Item relation gt (fun {a b c} => @transitive a b c)
+        compared (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))
+        (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)) (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation a a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation a (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation a a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation a a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation a a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a_1 : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a_1 →
+                        relation a a_1)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a_1 =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a_1 →
+                          relation a a_1)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation a a')
+                        (False → relation a a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation a a') (relation a a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation a a')))
+                        (false_implies (relation a a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True))))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation b a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation b (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation b a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation b a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation b a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation b a)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a →
+                          relation b a)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation b a')
+                        (False → relation b a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation b a') (relation b a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation b a')))
+                        (false_implies (relation b a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True))))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation c a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation c (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation c a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation c a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation c a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation c a)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a →
+                          relation c a)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation c a')
+                        (False → relation c a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation c a') (relation c a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation c a')))
+                        (false_implies (relation c a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True))))
+        (@of_eq_true (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))
+          (@Eq.trans.{1} Prop (@List.Pairwise.{u_1} Item relation (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))
+            (And
+              (∀ (a' : Item),
+                @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                    (@List.nil.{u_1} Item) a' →
+                  relation d a')
+              (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+            True (@List.pairwise_cons._simp_1.{u_1} Item relation d (@List.nil.{u_1} Item))
+            (@Eq.trans.{1} Prop
+              (And
+                (∀ (a' : Item),
+                  @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                      (@List.nil.{u_1} Item) a' →
+                    relation d a')
+                (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)))
+              (And True True) True
+              (@congr.{1, 1} Prop Prop
+                (And
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation d a'))
+                (And True) (@List.Pairwise.{u_1} Item relation (@List.nil.{u_1} Item)) True
+                (@congrArg.{1, 1} Prop (Prop → Prop)
+                  (∀ (a' : Item),
+                    @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                        (@List.nil.{u_1} Item) a' →
+                      relation d a')
+                  True And
+                  (@Eq.trans.{1} Prop
+                    (∀ (a : Item),
+                      @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                          (@List.nil.{u_1} Item) a →
+                        relation d a)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a =>
+                        @Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a →
+                          relation d a)
+                      (fun a => True) fun a' =>
+                      @Eq.trans.{1} Prop
+                        (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a' →
+                          relation d a')
+                        (False → relation d a') True
+                        (@implies_congr.{0, 0}
+                          (@Membership.mem.{u_1, u_1} Item (List.{u_1} Item) (@List.instMembership.{u_1} Item)
+                            (@List.nil.{u_1} Item) a')
+                          False (relation d a') (relation d a') (@List.not_mem_nil._simp_1.{u_1} Item a')
+                          (@Eq.refl.{1} Prop (relation d a')))
+                        (false_implies (relation d a')))
+                    (implies_true.{u_1 + 1} Item)))
+                (@List.Pairwise.nil._simp_1.{u_1} Item relation))
+              (and_self True)))))
+    fun head head_1 head_2 head_3 head_4 tail =>
+    @Eq.mpr.{0}
+      (@List.Pairwise.{u_1} Item relation
+        (@MicroCFTA.SourceListSort.actualSort.{u_1} Item gt
+          (@List.cons.{u_1} Item head
+            (@List.cons.{u_1} Item head_1
+              (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))))
+      (@List.Pairwise.{u_1} Item relation
+        (@MicroCFTA.SourceListSort.mergeAll.{u_1} Item gt
+          (@MicroCFTA.SourceListSort.sequences.{u_1} Item gt
+            (@List.cons.{u_1} Item head
+              (@List.cons.{u_1} Item head_1
+                (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))))))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@List.Pairwise.{u_1} Item relation
+            (@MicroCFTA.SourceListSort.actualSort.{u_1} Item gt
+              (@List.cons.{u_1} Item head
+                (@List.cons.{u_1} Item head_1
+                  (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))))
+          (@List.Pairwise.{u_1} Item relation
+            (@MicroCFTA.SourceListSort.mergeAll.{u_1} Item gt
+              (@MicroCFTA.SourceListSort.sequences.{u_1} Item gt
+                (@List.cons.{u_1} Item head
+                  (@List.cons.{u_1} Item head_1
+                    (@List.cons.{u_1} Item head_2
+                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))))))
+        (@congrArg.{u_1 + 1, 1} (List.{u_1} Item) Prop
+          (@MicroCFTA.SourceListSort.actualSort.{u_1} Item gt
+            (@List.cons.{u_1} Item head
+              (@List.cons.{u_1} Item head_1
+                (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))))
+          (@MicroCFTA.SourceListSort.mergeAll.{u_1} Item gt
+            (@MicroCFTA.SourceListSort.sequences.{u_1} Item gt
+              (@List.cons.{u_1} Item head
+                (@List.cons.{u_1} Item head_1
+                  (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))))
+          (fun _a => @List.Pairwise.{u_1} Item relation _a)
+          (@MicroCFTA.SourceListSort.actualSort.eq_6.{u_1} Item gt
+            (@List.cons.{u_1} Item head
+              (@List.cons.{u_1} Item head_1
+                (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+            (@of_eq_true
+              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                  (@List.cons.{u_1} Item head
+                    (@List.cons.{u_1} Item head_1
+                      (@List.cons.{u_1} Item head_2
+                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                  (@List.nil.{u_1} Item) →
+                False)
+              (@Eq.trans.{1} Prop
+                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                    (@List.cons.{u_1} Item head
+                      (@List.cons.{u_1} Item head_1
+                        (@List.cons.{u_1} Item head_2
+                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                    (@List.nil.{u_1} Item) →
+                  False)
+                (False → False) True
+                (@implies_congr.{0, 0}
+                  (@Eq.{u_1 + 1} (List.{u_1} Item)
+                    (@List.cons.{u_1} Item head
+                      (@List.cons.{u_1} Item head_1
+                        (@List.cons.{u_1} Item head_2
+                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                    (@List.nil.{u_1} Item))
+                  False False False
+                  (@eq_false'
+                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                      (@List.cons.{u_1} Item head
+                        (@List.cons.{u_1} Item head_1
+                          (@List.cons.{u_1} Item head_2
+                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                      (@List.nil.{u_1} Item))
+                    fun h =>
+                    @False.elim.{0} False
+                      (@noConfusion_of_Nat.{u_1 + 1} (List.{u_1} Item) (@List.ctorIdx.{u_1} Item)
+                        (@List.cons.{u_1} Item head
+                          (@List.cons.{u_1} Item head_1
+                            (@List.cons.{u_1} Item head_2
+                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                        (@List.nil.{u_1} Item) h))
+                  (@Eq.refl.{1} Prop False))
+                (@imp_self._simp_1 False)))
+            (@of_eq_true
+              (∀ (a : Item),
+                @Eq.{u_1 + 1} (List.{u_1} Item)
+                    (@List.cons.{u_1} Item head
+                      (@List.cons.{u_1} Item head_1
+                        (@List.cons.{u_1} Item head_2
+                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                    (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) →
+                  False)
+              (@Eq.trans.{1} Prop
+                (∀ (a : Item),
+                  @Eq.{u_1 + 1} (List.{u_1} Item)
+                      (@List.cons.{u_1} Item head
+                        (@List.cons.{u_1} Item head_1
+                          (@List.cons.{u_1} Item head_2
+                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                      (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) →
+                    False)
+                (∀ (a : Item), True) True
+                (@forall_congr.{u_1 + 1} Item
+                  (fun a =>
+                    @Eq.{u_1 + 1} (List.{u_1} Item)
+                        (@List.cons.{u_1} Item head
+                          (@List.cons.{u_1} Item head_1
+                            (@List.cons.{u_1} Item head_2
+                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                        (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) →
+                      False)
+                  (fun a => True) fun a =>
+                  @Eq.trans.{1} Prop
+                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                        (@List.cons.{u_1} Item head
+                          (@List.cons.{u_1} Item head_1
+                            (@List.cons.{u_1} Item head_2
+                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                        (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)) →
+                      False)
+                    (False → False) True
+                    (@implies_congr.{0, 0}
+                      (@Eq.{u_1 + 1} (List.{u_1} Item)
+                        (@List.cons.{u_1} Item head
+                          (@List.cons.{u_1} Item head_1
+                            (@List.cons.{u_1} Item head_2
+                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                        (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+                      False False False
+                      (@Eq.trans.{1} Prop
+                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a (@List.nil.{u_1} Item)))
+                        (And (@Eq.{u_1 + 1} Item head a)
+                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                            (@List.nil.{u_1} Item)))
+                        False
+                        (@List.cons.injEq.{u_1} Item head
+                          (@List.cons.{u_1} Item head_1
+                            (@List.cons.{u_1} Item head_2
+                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                          a (@List.nil.{u_1} Item))
+                        (@Eq.trans.{1} Prop
+                          (And (@Eq.{u_1 + 1} Item head a)
+                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head_1
+                                (@List.cons.{u_1} Item head_2
+                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                              (@List.nil.{u_1} Item)))
+                          (And (@Eq.{u_1 + 1} Item head a) False) False
+                          (@congrArg.{1, 1} Prop Prop
+                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head_1
+                                (@List.cons.{u_1} Item head_2
+                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                              (@List.nil.{u_1} Item))
+                            False (And (@Eq.{u_1 + 1} Item head a))
+                            (@eq_false'
+                              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                (@List.nil.{u_1} Item))
+                              fun h =>
+                              @False.elim.{0} False
+                                (@noConfusion_of_Nat.{u_1 + 1} (List.{u_1} Item) (@List.ctorIdx.{u_1} Item)
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                  (@List.nil.{u_1} Item) h)))
+                          (and_false (@Eq.{u_1 + 1} Item head a))))
+                      (@Eq.refl.{1} Prop False))
+                    (@imp_self._simp_1 False))
+                (implies_true.{u_1 + 1} Item)))
+            (@of_eq_true
+              (∀ (a a_1 : Item),
+                @Eq.{u_1 + 1} (List.{u_1} Item)
+                    (@List.cons.{u_1} Item head
+                      (@List.cons.{u_1} Item head_1
+                        (@List.cons.{u_1} Item head_2
+                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                    (@List.cons.{u_1} Item a (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))) →
+                  False)
+              (@Eq.trans.{1} Prop
+                (∀ (a a_1 : Item),
+                  @Eq.{u_1 + 1} (List.{u_1} Item)
+                      (@List.cons.{u_1} Item head
+                        (@List.cons.{u_1} Item head_1
+                          (@List.cons.{u_1} Item head_2
+                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                      (@List.cons.{u_1} Item a (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))) →
+                    False)
+                (∀ (a : Item), True) True
+                (@forall_congr.{u_1 + 1} Item
+                  (fun a =>
+                    ∀ (a_1 : Item),
+                      @Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))) →
+                        False)
+                  (fun a => True) fun a =>
+                  @Eq.trans.{1} Prop
+                    (∀ (a_1 : Item),
+                      @Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))) →
+                        False)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a_1 =>
+                        @Eq.{u_1 + 1} (List.{u_1} Item)
+                            (@List.cons.{u_1} Item head
+                              (@List.cons.{u_1} Item head_1
+                                (@List.cons.{u_1} Item head_2
+                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                            (@List.cons.{u_1} Item a (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))) →
+                          False)
+                      (fun a => True) fun b =>
+                      @Eq.trans.{1} Prop
+                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                            (@List.cons.{u_1} Item head
+                              (@List.cons.{u_1} Item head_1
+                                (@List.cons.{u_1} Item head_2
+                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                            (@List.cons.{u_1} Item a (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))) →
+                          False)
+                        (False → False) True
+                        (@implies_congr.{0, 0}
+                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                            (@List.cons.{u_1} Item head
+                              (@List.cons.{u_1} Item head_1
+                                (@List.cons.{u_1} Item head_2
+                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                            (@List.cons.{u_1} Item a (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))))
+                          False False False
+                          (@Eq.trans.{1} Prop
+                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                              (@List.cons.{u_1} Item a (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))))
+                            (And (@Eq.{u_1 + 1} Item head a)
+                              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))))
+                            False
+                            (@List.cons.injEq.{u_1} Item head
+                              (@List.cons.{u_1} Item head_1
+                                (@List.cons.{u_1} Item head_2
+                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                              a (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+                            (@Eq.trans.{1} Prop
+                              (And (@Eq.{u_1 + 1} Item head a)
+                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                  (@List.cons.{u_1} Item b (@List.nil.{u_1} Item))))
+                              (And (@Eq.{u_1 + 1} Item head a) False) False
+                              (@congrArg.{1, 1} Prop Prop
+                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                  (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+                                False (And (@Eq.{u_1 + 1} Item head a))
+                                (@Eq.trans.{1} Prop
+                                  (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                    (@List.cons.{u_1} Item head_1
+                                      (@List.cons.{u_1} Item head_2
+                                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                    (@List.cons.{u_1} Item b (@List.nil.{u_1} Item)))
+                                  (And (@Eq.{u_1 + 1} Item head_1 b)
+                                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                      (@List.cons.{u_1} Item head_2
+                                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                      (@List.nil.{u_1} Item)))
+                                  False
+                                  (@List.cons.injEq.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                    b (@List.nil.{u_1} Item))
+                                  (@Eq.trans.{1} Prop
+                                    (And (@Eq.{u_1 + 1} Item head_1 b)
+                                      (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                        (@List.nil.{u_1} Item)))
+                                    (And (@Eq.{u_1 + 1} Item head_1 b) False) False
+                                    (@congrArg.{1, 1} Prop Prop
+                                      (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                        (@List.nil.{u_1} Item))
+                                      False (And (@Eq.{u_1 + 1} Item head_1 b))
+                                      (@eq_false'
+                                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                          (@List.cons.{u_1} Item head_2
+                                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                          (@List.nil.{u_1} Item))
+                                        fun h =>
+                                        @False.elim.{0} False
+                                          (@noConfusion_of_Nat.{u_1 + 1} (List.{u_1} Item) (@List.ctorIdx.{u_1} Item)
+                                            (@List.cons.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                            (@List.nil.{u_1} Item) h)))
+                                    (and_false (@Eq.{u_1 + 1} Item head_1 b)))))
+                              (and_false (@Eq.{u_1 + 1} Item head a))))
+                          (@Eq.refl.{1} Prop False))
+                        (@imp_self._simp_1 False))
+                    (implies_true.{u_1 + 1} Item))
+                (implies_true.{u_1 + 1} Item)))
+            (@of_eq_true
+              (∀ (a a_1 a_2 : Item),
+                @Eq.{u_1 + 1} (List.{u_1} Item)
+                    (@List.cons.{u_1} Item head
+                      (@List.cons.{u_1} Item head_1
+                        (@List.cons.{u_1} Item head_2
+                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                    (@List.cons.{u_1} Item a
+                      (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item)))) →
+                  False)
+              (@Eq.trans.{1} Prop
+                (∀ (a a_1 a_2 : Item),
+                  @Eq.{u_1 + 1} (List.{u_1} Item)
+                      (@List.cons.{u_1} Item head
+                        (@List.cons.{u_1} Item head_1
+                          (@List.cons.{u_1} Item head_2
+                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                      (@List.cons.{u_1} Item a
+                        (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item)))) →
+                    False)
+                (∀ (a : Item), True) True
+                (@forall_congr.{u_1 + 1} Item
+                  (fun a =>
+                    ∀ (a_1 a_2 : Item),
+                      @Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a
+                            (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item)))) →
+                        False)
+                  (fun a => True) fun a =>
+                  @Eq.trans.{1} Prop
+                    (∀ (a_1 a_2 : Item),
+                      @Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a
+                            (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item)))) →
+                        False)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a_1 =>
+                        ∀ (a_2 : Item),
+                          @Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                              (@List.cons.{u_1} Item a
+                                (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item)))) →
+                            False)
+                      (fun a => True) fun b =>
+                      @Eq.trans.{1} Prop
+                        (∀ (a_1 : Item),
+                          @Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                              (@List.cons.{u_1} Item a
+                                (@List.cons.{u_1} Item b (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item)))) →
+                            False)
+                        (∀ (a : Item), True) True
+                        (@forall_congr.{u_1 + 1} Item
+                          (fun a_1 =>
+                            @Eq.{u_1 + 1} (List.{u_1} Item)
+                                (@List.cons.{u_1} Item head
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                (@List.cons.{u_1} Item a
+                                  (@List.cons.{u_1} Item b (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item)))) →
+                              False)
+                          (fun a => True) fun c =>
+                          @Eq.trans.{1} Prop
+                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                (@List.cons.{u_1} Item head
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                (@List.cons.{u_1} Item a
+                                  (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))) →
+                              False)
+                            (False → False) True
+                            (@implies_congr.{0, 0}
+                              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                (@List.cons.{u_1} Item head
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                (@List.cons.{u_1} Item a
+                                  (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))))
+                              False False False
+                              (@Eq.trans.{1} Prop
+                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                  (@List.cons.{u_1} Item head
+                                    (@List.cons.{u_1} Item head_1
+                                      (@List.cons.{u_1} Item head_2
+                                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                  (@List.cons.{u_1} Item a
+                                    (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))))
+                                (And (@Eq.{u_1 + 1} Item head a)
+                                  (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                    (@List.cons.{u_1} Item head_1
+                                      (@List.cons.{u_1} Item head_2
+                                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                    (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))))
+                                False
+                                (@List.cons.injEq.{u_1} Item head
+                                  (@List.cons.{u_1} Item head_1
+                                    (@List.cons.{u_1} Item head_2
+                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                  a (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item))))
+                                (@Eq.trans.{1} Prop
+                                  (And (@Eq.{u_1 + 1} Item head a)
+                                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                      (@List.cons.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                      (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))))
+                                  (And (@Eq.{u_1 + 1} Item head a) False) False
+                                  (@congrArg.{1, 1} Prop Prop
+                                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                      (@List.cons.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                      (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item))))
+                                    False (And (@Eq.{u_1 + 1} Item head a))
+                                    (@Eq.trans.{1} Prop
+                                      (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                        (@List.cons.{u_1} Item head_1
+                                          (@List.cons.{u_1} Item head_2
+                                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                        (@List.cons.{u_1} Item b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item))))
+                                      (And (@Eq.{u_1 + 1} Item head_1 b)
+                                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                          (@List.cons.{u_1} Item head_2
+                                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                          (@List.cons.{u_1} Item c (@List.nil.{u_1} Item))))
+                                      False
+                                      (@List.cons.injEq.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                        b (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+                                      (@Eq.trans.{1} Prop
+                                        (And (@Eq.{u_1 + 1} Item head_1 b)
+                                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                            (@List.cons.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                            (@List.cons.{u_1} Item c (@List.nil.{u_1} Item))))
+                                        (And (@Eq.{u_1 + 1} Item head_1 b) False) False
+                                        (@congrArg.{1, 1} Prop Prop
+                                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                            (@List.cons.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                            (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+                                          False (And (@Eq.{u_1 + 1} Item head_1 b))
+                                          (@Eq.trans.{1} Prop
+                                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                              (@List.cons.{u_1} Item head_2
+                                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                              (@List.cons.{u_1} Item c (@List.nil.{u_1} Item)))
+                                            (And (@Eq.{u_1 + 1} Item head_2 c)
+                                              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                (@List.nil.{u_1} Item)))
+                                            False
+                                            (@List.cons.injEq.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)) c
+                                              (@List.nil.{u_1} Item))
+                                            (@Eq.trans.{1} Prop
+                                              (And (@Eq.{u_1 + 1} Item head_2 c)
+                                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                  (@List.nil.{u_1} Item)))
+                                              (And (@Eq.{u_1 + 1} Item head_2 c) False) False
+                                              (@congrArg.{1, 1} Prop Prop
+                                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                  (@List.nil.{u_1} Item))
+                                                False (And (@Eq.{u_1 + 1} Item head_2 c))
+                                                (@eq_false'
+                                                  (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                    (@List.nil.{u_1} Item))
+                                                  fun h =>
+                                                  @False.elim.{0} False
+                                                    (@noConfusion_of_Nat.{u_1 + 1} (List.{u_1} Item)
+                                                      (@List.ctorIdx.{u_1} Item)
+                                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                      (@List.nil.{u_1} Item) h)))
+                                              (and_false (@Eq.{u_1 + 1} Item head_2 c)))))
+                                        (and_false (@Eq.{u_1 + 1} Item head_1 b)))))
+                                  (and_false (@Eq.{u_1 + 1} Item head a))))
+                              (@Eq.refl.{1} Prop False))
+                            (@imp_self._simp_1 False))
+                        (implies_true.{u_1 + 1} Item))
+                    (implies_true.{u_1 + 1} Item))
+                (implies_true.{u_1 + 1} Item)))
+            (@of_eq_true
+              (∀ (a a_1 a_2 a_3 : Item),
+                @Eq.{u_1 + 1} (List.{u_1} Item)
+                    (@List.cons.{u_1} Item head
+                      (@List.cons.{u_1} Item head_1
+                        (@List.cons.{u_1} Item head_2
+                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                    (@List.cons.{u_1} Item a
+                      (@List.cons.{u_1} Item a_1
+                        (@List.cons.{u_1} Item a_2 (@List.cons.{u_1} Item a_3 (@List.nil.{u_1} Item))))) →
+                  False)
+              (@Eq.trans.{1} Prop
+                (∀ (a a_1 a_2 a_3 : Item),
+                  @Eq.{u_1 + 1} (List.{u_1} Item)
+                      (@List.cons.{u_1} Item head
+                        (@List.cons.{u_1} Item head_1
+                          (@List.cons.{u_1} Item head_2
+                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                      (@List.cons.{u_1} Item a
+                        (@List.cons.{u_1} Item a_1
+                          (@List.cons.{u_1} Item a_2 (@List.cons.{u_1} Item a_3 (@List.nil.{u_1} Item))))) →
+                    False)
+                (∀ (a : Item), True) True
+                (@forall_congr.{u_1 + 1} Item
+                  (fun a =>
+                    ∀ (a_1 a_2 a_3 : Item),
+                      @Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a
+                            (@List.cons.{u_1} Item a_1
+                              (@List.cons.{u_1} Item a_2 (@List.cons.{u_1} Item a_3 (@List.nil.{u_1} Item))))) →
+                        False)
+                  (fun a => True) fun a =>
+                  @Eq.trans.{1} Prop
+                    (∀ (a_1 a_2 a_3 : Item),
+                      @Eq.{u_1 + 1} (List.{u_1} Item)
+                          (@List.cons.{u_1} Item head
+                            (@List.cons.{u_1} Item head_1
+                              (@List.cons.{u_1} Item head_2
+                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                          (@List.cons.{u_1} Item a
+                            (@List.cons.{u_1} Item a_1
+                              (@List.cons.{u_1} Item a_2 (@List.cons.{u_1} Item a_3 (@List.nil.{u_1} Item))))) →
+                        False)
+                    (∀ (a : Item), True) True
+                    (@forall_congr.{u_1 + 1} Item
+                      (fun a_1 =>
+                        ∀ (a_2 a_3 : Item),
+                          @Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                              (@List.cons.{u_1} Item a
+                                (@List.cons.{u_1} Item a_1
+                                  (@List.cons.{u_1} Item a_2 (@List.cons.{u_1} Item a_3 (@List.nil.{u_1} Item))))) →
+                            False)
+                      (fun a => True) fun b =>
+                      @Eq.trans.{1} Prop
+                        (∀ (a_1 a_2 : Item),
+                          @Eq.{u_1 + 1} (List.{u_1} Item)
+                              (@List.cons.{u_1} Item head
+                                (@List.cons.{u_1} Item head_1
+                                  (@List.cons.{u_1} Item head_2
+                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                              (@List.cons.{u_1} Item a
+                                (@List.cons.{u_1} Item b
+                                  (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item))))) →
+                            False)
+                        (∀ (a : Item), True) True
+                        (@forall_congr.{u_1 + 1} Item
+                          (fun a_1 =>
+                            ∀ (a_2 : Item),
+                              @Eq.{u_1 + 1} (List.{u_1} Item)
+                                  (@List.cons.{u_1} Item head
+                                    (@List.cons.{u_1} Item head_1
+                                      (@List.cons.{u_1} Item head_2
+                                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                  (@List.cons.{u_1} Item a
+                                    (@List.cons.{u_1} Item b
+                                      (@List.cons.{u_1} Item a_1 (@List.cons.{u_1} Item a_2 (@List.nil.{u_1} Item))))) →
+                                False)
+                          (fun a => True) fun c =>
+                          @Eq.trans.{1} Prop
+                            (∀ (a_1 : Item),
+                              @Eq.{u_1 + 1} (List.{u_1} Item)
+                                  (@List.cons.{u_1} Item head
+                                    (@List.cons.{u_1} Item head_1
+                                      (@List.cons.{u_1} Item head_2
+                                        (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                  (@List.cons.{u_1} Item a
+                                    (@List.cons.{u_1} Item b
+                                      (@List.cons.{u_1} Item c (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))))) →
+                                False)
+                            (∀ (a : Item), True) True
+                            (@forall_congr.{u_1 + 1} Item
+                              (fun a_1 =>
+                                @Eq.{u_1 + 1} (List.{u_1} Item)
+                                    (@List.cons.{u_1} Item head
+                                      (@List.cons.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                    (@List.cons.{u_1} Item a
+                                      (@List.cons.{u_1} Item b
+                                        (@List.cons.{u_1} Item c (@List.cons.{u_1} Item a_1 (@List.nil.{u_1} Item))))) →
+                                  False)
+                              (fun a => True) fun d =>
+                              @Eq.trans.{1} Prop
+                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                    (@List.cons.{u_1} Item head
+                                      (@List.cons.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                    (@List.cons.{u_1} Item a
+                                      (@List.cons.{u_1} Item b
+                                        (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))) →
+                                  False)
+                                (False → False) True
+                                (@implies_congr.{0, 0}
+                                  (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                    (@List.cons.{u_1} Item head
+                                      (@List.cons.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                    (@List.cons.{u_1} Item a
+                                      (@List.cons.{u_1} Item b
+                                        (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))))
+                                  False False False
+                                  (@Eq.trans.{1} Prop
+                                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                      (@List.cons.{u_1} Item head
+                                        (@List.cons.{u_1} Item head_1
+                                          (@List.cons.{u_1} Item head_2
+                                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))
+                                      (@List.cons.{u_1} Item a
+                                        (@List.cons.{u_1} Item b
+                                          (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))))
+                                    (And (@Eq.{u_1 + 1} Item head a)
+                                      (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                        (@List.cons.{u_1} Item head_1
+                                          (@List.cons.{u_1} Item head_2
+                                            (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                        (@List.cons.{u_1} Item b
+                                          (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))))
+                                    False
+                                    (@List.cons.injEq.{u_1} Item head
+                                      (@List.cons.{u_1} Item head_1
+                                        (@List.cons.{u_1} Item head_2
+                                          (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                      a
+                                      (@List.cons.{u_1} Item b
+                                        (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))))
+                                    (@Eq.trans.{1} Prop
+                                      (And (@Eq.{u_1 + 1} Item head a)
+                                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                          (@List.cons.{u_1} Item head_1
+                                            (@List.cons.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                          (@List.cons.{u_1} Item b
+                                            (@List.cons.{u_1} Item c
+                                              (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))))
+                                      (And (@Eq.{u_1 + 1} Item head a) False) False
+                                      (@congrArg.{1, 1} Prop Prop
+                                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                          (@List.cons.{u_1} Item head_1
+                                            (@List.cons.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                          (@List.cons.{u_1} Item b
+                                            (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))))
+                                        False (And (@Eq.{u_1 + 1} Item head a))
+                                        (@Eq.trans.{1} Prop
+                                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                            (@List.cons.{u_1} Item head_1
+                                              (@List.cons.{u_1} Item head_2
+                                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))
+                                            (@List.cons.{u_1} Item b
+                                              (@List.cons.{u_1} Item c
+                                                (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))))
+                                          (And (@Eq.{u_1 + 1} Item head_1 b)
+                                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                              (@List.cons.{u_1} Item head_2
+                                                (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                              (@List.cons.{u_1} Item c
+                                                (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))))
+                                          False
+                                          (@List.cons.injEq.{u_1} Item head_1
+                                            (@List.cons.{u_1} Item head_2
+                                              (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                            b
+                                            (@List.cons.{u_1} Item c (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))
+                                          (@Eq.trans.{1} Prop
+                                            (And (@Eq.{u_1 + 1} Item head_1 b)
+                                              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                (@List.cons.{u_1} Item head_2
+                                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                                (@List.cons.{u_1} Item c
+                                                  (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))))
+                                            (And (@Eq.{u_1 + 1} Item head_1 b) False) False
+                                            (@congrArg.{1, 1} Prop Prop
+                                              (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                (@List.cons.{u_1} Item head_2
+                                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                                (@List.cons.{u_1} Item c
+                                                  (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))
+                                              False (And (@Eq.{u_1 + 1} Item head_1 b))
+                                              (@Eq.trans.{1} Prop
+                                                (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                  (@List.cons.{u_1} Item head_2
+                                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))
+                                                  (@List.cons.{u_1} Item c
+                                                    (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))
+                                                (And (@Eq.{u_1 + 1} Item head_2 c)
+                                                  (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                    (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                    (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))
+                                                False
+                                                (@List.cons.injEq.{u_1} Item head_2
+                                                  (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)) c
+                                                  (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))
+                                                (@Eq.trans.{1} Prop
+                                                  (And (@Eq.{u_1 + 1} Item head_2 c)
+                                                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                      (@List.cons.{u_1} Item d (@List.nil.{u_1} Item))))
+                                                  (And (@Eq.{u_1 + 1} Item head_2 c) False) False
+                                                  (@congrArg.{1, 1} Prop Prop
+                                                    (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                      (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))
+                                                      (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))
+                                                    False (And (@Eq.{u_1 + 1} Item head_2 c))
+                                                    (@Eq.trans.{1} Prop
+                                                      (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                        (@List.cons.{u_1} Item head_3
+                                                          (@List.cons.{u_1} Item head_4 tail))
+                                                        (@List.cons.{u_1} Item d (@List.nil.{u_1} Item)))
+                                                      (And (@Eq.{u_1 + 1} Item head_3 d)
+                                                        (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                          (@List.cons.{u_1} Item head_4 tail) (@List.nil.{u_1} Item)))
+                                                      False
+                                                      (@List.cons.injEq.{u_1} Item head_3
+                                                        (@List.cons.{u_1} Item head_4 tail) d (@List.nil.{u_1} Item))
+                                                      (@Eq.trans.{1} Prop
+                                                        (And (@Eq.{u_1 + 1} Item head_3 d)
+                                                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                            (@List.cons.{u_1} Item head_4 tail) (@List.nil.{u_1} Item)))
+                                                        (And (@Eq.{u_1 + 1} Item head_3 d) False) False
+                                                        (@congrArg.{1, 1} Prop Prop
+                                                          (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                            (@List.cons.{u_1} Item head_4 tail) (@List.nil.{u_1} Item))
+                                                          False (And (@Eq.{u_1 + 1} Item head_3 d))
+                                                          (@eq_false'
+                                                            (@Eq.{u_1 + 1} (List.{u_1} Item)
+                                                              (@List.cons.{u_1} Item head_4 tail)
+                                                              (@List.nil.{u_1} Item))
+                                                            fun h =>
+                                                            @False.elim.{0} False
+                                                              (@noConfusion_of_Nat.{u_1 + 1} (List.{u_1} Item)
+                                                                (@List.ctorIdx.{u_1} Item)
+                                                                (@List.cons.{u_1} Item head_4 tail)
+                                                                (@List.nil.{u_1} Item) h)))
+                                                        (and_false (@Eq.{u_1 + 1} Item head_3 d)))))
+                                                  (and_false (@Eq.{u_1 + 1} Item head_2 c)))))
+                                            (and_false (@Eq.{u_1 + 1} Item head_1 b)))))
+                                      (and_false (@Eq.{u_1 + 1} Item head a))))
+                                  (@Eq.refl.{1} Prop False))
+                                (@imp_self._simp_1 False))
+                            (implies_true.{u_1 + 1} Item))
+                        (implies_true.{u_1 + 1} Item))
+                    (implies_true.{u_1 + 1} Item))
+                (implies_true.{u_1 + 1} Item))))))
+      (@MicroCFTA.SourceListSortOrdered.mergeAll_ordered✝.{u_1} Item relation gt (fun {a b c} => @transitive a b c)
+        compared
+        (@MicroCFTA.SourceListSort.sequences.{u_1} Item gt
+          (@List.cons.{u_1} Item head
+            (@List.cons.{u_1} Item head_1
+              (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail))))))
+        (@MicroCFTA.SourceListSortRunsOrdered.sequences_ordered.{u_1} Item relation gt
+          (fun {a b c} => @transitive a b c) compared
+          (@List.cons.{u_1} Item head
+            (@List.cons.{u_1} Item head_1
+              (@List.cons.{u_1} Item head_2 (@List.cons.{u_1} Item head_3 (@List.cons.{u_1} Item head_4 tail)))))))
+'MicroCFTA.SourceListSortOrdered.actualSort_ordered' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceListSortOrdered.sortBy_ordered.{u_1} : ∀ {Item : Type u_1} (relation : Item → Item → Prop)
+  (compare : Item → Item → Ordering),
+  (∀ {a b c : Item}, relation a b → relation b c → relation a c) →
+    (∀ (a b : Item),
+        @ite.{1} Prop
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) (compare a b)
+              Ordering.gt)
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) (compare a b)
+              Ordering.gt)
+            Bool.true)
+          (relation b a) (relation a b)) →
+      ∀ (input : List.{u_1} Item),
+        @List.Pairwise.{u_1} Item relation (@MicroCFTA.SourceListSort.sortBy.{u_1} Item compare input)
+theorem MicroCFTA.SourceListSortOrdered.sortBy_ordered.{u_1} : ∀ {Item : Type u_1} (relation : Item → Item → Prop)
+  (compare : Item → Item → Ordering),
+  (∀ {a b c : Item}, relation a b → relation b c → relation a c) →
+    (∀ (a b : Item),
+        @ite.{1} Prop
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) (compare a b)
+              Ordering.gt)
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) (compare a b)
+              Ordering.gt)
+            Bool.true)
+          (relation b a) (relation a b)) →
+      ∀ (input : List.{u_1} Item),
+        @List.Pairwise.{u_1} Item relation (@MicroCFTA.SourceListSort.sortBy.{u_1} Item compare input) :=
+fun {Item} relation compare transitive compared input =>
+  @MicroCFTA.SourceListSortOrdered.actualSort_ordered.{u_1} Item relation
+    (fun a b =>
+      @BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) (compare a b) Ordering.gt)
+    (fun {a b c} => @transitive a b c) compared input
+'MicroCFTA.SourceListSortOrdered.sortBy_ordered' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceListSortOrdered.paths : ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @List.Pairwise.{0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun a b =>
+      @LE.le.{0} MicroCFTA.EqualityNormalize.Class
+        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) a.paths b.paths)
+    (@MicroCFTA.SourceListSort.sortBy.{0} MicroCFTA.SourceEqualityClassOrder.Record
+      (fun a b =>
+        @Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+          (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) a.paths b.paths)
+      records)
+theorem MicroCFTA.SourceListSortOrdered.paths : ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @List.Pairwise.{0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun a b =>
+      @LE.le.{0} MicroCFTA.EqualityNormalize.Class
+        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) a.paths b.paths)
+    (@MicroCFTA.SourceListSort.sortBy.{0} MicroCFTA.SourceEqualityClassOrder.Record
+      (fun a b =>
+        @Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+          (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) a.paths b.paths)
+      records) :=
+fun records =>
+  @MicroCFTA.SourceListSortOrdered.sortBy_ordered.{0} MicroCFTA.SourceEqualityClassOrder.Record
+    (fun a b =>
+      @LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) a.paths b.paths)
+    (fun a b =>
+      @Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+        (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) a.paths b.paths)
+    (fun {a b c} before after =>
+      @List.le_trans.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)
+        (@List.instLE.{0} Nat instLTNat)
+        (@List.instIsLinearOrder.{0} Nat instLTNat instLENat Nat.instIsLinearOrder Lean.Grind.instLawfulOrderLTNat)
+        (@List.instLawfulOrderLTOfAsymmLt.{0} Nat instLTNat
+          (@List.instAsymmLt.{0} Nat instLTNat
+            (@Std.instAsymmLtOfLawfulOrderLT.{0} Nat instLTNat instLENat Lean.Grind.instLawfulOrderLTNat)))
+        a.paths b.paths c.paths before after)
+    (fun first second =>
+      have one :=
+        @MicroCFTA.SourceListSortOrdered.list_compare_cases✝.{0} Nat instOrdNat instLTNat
+          (fun x x_1 found =>
+            @Iff.mp (@Eq.{1} Ordering (@Ord.compare.{0} Nat instOrdNat x x_1) Ordering.lt)
+              (@LT.lt.{0} Nat instLTNat x x_1) (@Nat.compare_eq_lt x x_1) found)
+          (fun x x_1 found =>
+            @Iff.mp (@Eq.{1} Ordering (@Ord.compare.{0} Nat instOrdNat x x_1) Ordering.eq) (@Eq.{1} Nat x x_1)
+              (@Nat.compare_eq_eq x x_1) found)
+          fun x x_1 found =>
+          @Iff.mp (@Eq.{1} Ordering (@Ord.compare.{0} Nat instOrdNat x x_1) Ordering.gt)
+            (@LT.lt.{0} Nat instLTNat x_1 x) (@Nat.compare_eq_gt x x_1) found;
+      have two :=
+        @MicroCFTA.SourceListSortOrdered.list_compare_cases✝.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)
+          (@List.instLT.{0} Nat instLTNat)
+          (fun a b found =>
+            @And.left
+              (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.lt →
+                @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) a b)
+              (And
+                (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.eq →
+                  @Eq.{1} (List.{0} Nat) a b)
+                (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.gt →
+                  @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) b a))
+              (one a b) found)
+          (fun a b found =>
+            @And.left
+              (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.eq →
+                @Eq.{1} (List.{0} Nat) a b)
+              (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.gt →
+                @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) b a)
+              (@And.right
+                (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.lt →
+                  @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) a b)
+                (And
+                  (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b)
+                      Ordering.eq →
+                    @Eq.{1} (List.{0} Nat) a b)
+                  (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b)
+                      Ordering.gt →
+                    @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) b a))
+                (one a b))
+              found)
+          (fun a b found =>
+            @And.right
+              (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.eq →
+                @Eq.{1} (List.{0} Nat) a b)
+              (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.gt →
+                @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) b a)
+              (@And.right
+                (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b) Ordering.lt →
+                  @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) a b)
+                (And
+                  (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b)
+                      Ordering.eq →
+                    @Eq.{1} (List.{0} Nat) a b)
+                  (@Eq.{1} Ordering (@Ord.compare.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat) a b)
+                      Ordering.gt →
+                    @LT.lt.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat) b a))
+                (one a b))
+              found)
+          first.paths second.paths;
+      @Ordering.casesOn.{0}
+        (fun t =>
+          @Eq.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)
+              t →
+            @ite.{1} Prop
+              (@Eq.{1} Bool
+                (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                  (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                    (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                    second.paths)
+                  Ordering.gt)
+                Bool.true)
+              (instDecidableEqBool
+                (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                  (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                    (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                    second.paths)
+                  Ordering.gt)
+                Bool.true)
+              (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                first.paths)
+              (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                second.paths))
+        (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+          (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+          second.paths)
+        (fun h =>
+          @Eq.ndrec.{0, 1} Ordering Ordering.lt
+            (fun x =>
+              @Eq.{1} Ordering
+                  (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                    (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                    second.paths)
+                  x →
+                @ite.{1} Prop
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) x Ordering.gt)
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) x Ordering.gt)
+                    Bool.true)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                    first.paths)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths))
+            (fun actual =>
+              @Eq.mpr.{0}
+                (@ite.{1} Prop
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.lt
+                      Ordering.gt)
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.lt
+                      Ordering.gt)
+                    Bool.true)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                    first.paths)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths))
+                (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                  (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                  second.paths)
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@ite.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.lt
+                          Ordering.gt)
+                        Bool.true)
+                      (instDecidableEqBool
+                        (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.lt
+                          Ordering.gt)
+                        Bool.true)
+                      (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat))
+                        second.paths first.paths)
+                      (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                        second.paths))
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                      second.paths))
+                  (@ite_eq_right_of_eq_false.{1} Prop
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.lt
+                        Ordering.gt)
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.lt
+                        Ordering.gt)
+                      Bool.true)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                      first.paths)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                      second.paths)
+                    Bool.false_eq_true))
+                (@List.le_of_lt.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)
+                  (@List.instAsymmLt.{0} Nat instLTNat
+                    (@Std.instAsymmLtOfLawfulOrderLT.{0} Nat instLTNat instLENat Lean.Grind.instLawfulOrderLTNat))
+                  first.paths second.paths
+                  (@And.left
+                    (@Eq.{1} Ordering
+                        (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                          (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                          second.paths)
+                        Ordering.lt →
+                      @LT.lt.{0} (List.{0} (List.{0} Nat))
+                        (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) first.paths second.paths)
+                    (And
+                      (@Eq.{1} Ordering
+                          (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                            (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                            second.paths)
+                          Ordering.eq →
+                        @Eq.{1} (List.{0} (List.{0} Nat)) first.paths second.paths)
+                      (@Eq.{1} Ordering
+                          (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                            (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                            second.paths)
+                          Ordering.gt →
+                        @LT.lt.{0} (List.{0} (List.{0} Nat))
+                          (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) second.paths first.paths))
+                    two actual)))
+            (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+              (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+              second.paths)
+            (@Eq.symm.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)
+              Ordering.lt h)
+            (@Eq.refl.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)))
+        (fun h =>
+          @Eq.ndrec.{0, 1} Ordering Ordering.eq
+            (fun x =>
+              @Eq.{1} Ordering
+                  (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                    (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                    second.paths)
+                  x →
+                @ite.{1} Prop
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) x Ordering.gt)
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) x Ordering.gt)
+                    Bool.true)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                    first.paths)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths))
+            (fun actual =>
+              @of_eq_true
+                (@ite.{1} Prop
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.eq
+                      Ordering.gt)
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.eq
+                      Ordering.gt)
+                    Bool.true)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                    first.paths)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths))
+                (@Eq.trans.{1} Prop
+                  (@ite.{1} Prop
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.eq
+                        Ordering.gt)
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.eq
+                        Ordering.gt)
+                      Bool.true)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                      first.paths)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                      second.paths))
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths)
+                  True
+                  (@ite_eq_right_of_eq_false.{1} Prop
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.eq
+                        Ordering.gt)
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.eq
+                        Ordering.gt)
+                      Bool.true)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                      first.paths)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                      second.paths)
+                    Bool.false_eq_true)
+                  (@Eq.trans.{1} Prop
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                      second.paths)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                      second.paths)
+                    True
+                    (@congrFun'.{1, 1} MicroCFTA.EqualityNormalize.Class Prop
+                      (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat))
+                        first.paths)
+                      (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat))
+                        second.paths)
+                      (@congrArg.{1, 1} MicroCFTA.EqualityNormalize.Class
+                        (List.{0} MicroCFTA.EqualityNormalize.Path → Prop) first.paths second.paths
+                        (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                          (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)))
+                        (@And.left
+                          (@Eq.{1} Ordering
+                              (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                                (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                                second.paths)
+                              Ordering.eq →
+                            @Eq.{1} (List.{0} (List.{0} Nat)) first.paths second.paths)
+                          (@Eq.{1} Ordering
+                              (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                                (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                                second.paths)
+                              Ordering.gt →
+                            @LT.lt.{0} (List.{0} (List.{0} Nat))
+                              (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) second.paths
+                              first.paths)
+                          (@And.right
+                            (@Eq.{1} Ordering
+                                (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                                  (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                                  second.paths)
+                                Ordering.lt →
+                              @LT.lt.{0} (List.{0} (List.{0} Nat))
+                                (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) first.paths
+                                second.paths)
+                            (And
+                              (@Eq.{1} Ordering
+                                  (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                                    (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                                    second.paths)
+                                  Ordering.eq →
+                                @Eq.{1} (List.{0} (List.{0} Nat)) first.paths second.paths)
+                              (@Eq.{1} Ordering
+                                  (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                                    (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                                    second.paths)
+                                  Ordering.gt →
+                                @LT.lt.{0} (List.{0} (List.{0} Nat))
+                                  (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) second.paths
+                                  first.paths))
+                            two)
+                          actual))
+                      second.paths)
+                    (@Std.le_refl._simp_1.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat))
+                      (@List.instReflLeOfIrreflLt.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)
+                        (@List.ltIrrefl.{0} Nat instLTNat
+                          (@Std.instIrreflOfAsymm.{1} Nat (fun x1 x2 => @LT.lt.{0} Nat instLTNat x1 x2)
+                            (@Std.instAsymmLtOfLawfulOrderLT.{0} Nat instLTNat instLENat
+                              Lean.Grind.instLawfulOrderLTNat))))
+                      second.paths))))
+            (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+              (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+              second.paths)
+            (@Eq.symm.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)
+              Ordering.eq h)
+            (@Eq.refl.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)))
+        (fun h =>
+          @Eq.ndrec.{0, 1} Ordering Ordering.gt
+            (fun x =>
+              @Eq.{1} Ordering
+                  (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                    (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                    second.paths)
+                  x →
+                @ite.{1} Prop
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) x Ordering.gt)
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) x Ordering.gt)
+                    Bool.true)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                    first.paths)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths))
+            (fun actual =>
+              @Eq.mpr.{0}
+                (@ite.{1} Prop
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                      Ordering.gt)
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                      Ordering.gt)
+                    Bool.true)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                    first.paths)
+                  (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                    (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                    second.paths))
+                (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                  (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                  first.paths)
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@ite.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                          Ordering.gt)
+                        Bool.true)
+                      (instDecidableEqBool
+                        (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                          Ordering.gt)
+                        Bool.true)
+                      (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat))
+                        second.paths first.paths)
+                      (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                        (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                        second.paths))
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                      first.paths))
+                  (@ite_eq_left_of_eq_true.{1} Prop
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                        Ordering.gt)
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                        Ordering.gt)
+                      Bool.true)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) second.paths
+                      first.paths)
+                    (@LE.le.{0} (List.{0} MicroCFTA.EqualityNormalize.Path)
+                      (@List.instLE.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)) first.paths
+                      second.paths)
+                    (@Eq.trans.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering) Ordering.gt
+                          Ordering.gt)
+                        Bool.true)
+                      (@Eq.{1} Bool Bool.true Bool.true) True
+                      (@congrFun'.{1, 1} Bool Prop
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                            Ordering.gt Ordering.gt))
+                        (@Eq.{1} Bool Bool.true)
+                        (@congrArg.{1, 1} Bool (Bool → Prop)
+                          (@BEq.beq.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                            Ordering.gt Ordering.gt)
+                          Bool.true (@Eq.{1} Bool)
+                          (@BEq.rfl.{0} Ordering (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                            (@EquivBEq.toReflBEq.{0} Ordering
+                              (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                              (@instEquivBEqOfLawfulBEq.{0} Ordering
+                                (@instBEqOfDecidableEq.{0} Ordering instDecidableEqOrdering)
+                                (@instLawfulBEq.{0} Ordering instDecidableEqOrdering)))
+                            Ordering.gt))
+                        Bool.true)
+                      (@eq_self.{1} Bool Bool.true))))
+                (@List.le_of_lt.{0} MicroCFTA.EqualityNormalize.Path (@List.instLT.{0} Nat instLTNat)
+                  (@List.instAsymmLt.{0} Nat instLTNat
+                    (@Std.instAsymmLtOfLawfulOrderLT.{0} Nat instLTNat instLENat Lean.Grind.instLawfulOrderLTNat))
+                  second.paths first.paths
+                  (@And.right
+                    (@Eq.{1} Ordering
+                        (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                          (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                          second.paths)
+                        Ordering.eq →
+                      @Eq.{1} (List.{0} (List.{0} Nat)) first.paths second.paths)
+                    (@Eq.{1} Ordering
+                        (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                          (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                          second.paths)
+                        Ordering.gt →
+                      @LT.lt.{0} (List.{0} (List.{0} Nat))
+                        (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) second.paths first.paths)
+                    (@And.right
+                      (@Eq.{1} Ordering
+                          (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                            (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                            second.paths)
+                          Ordering.lt →
+                        @LT.lt.{0} (List.{0} (List.{0} Nat))
+                          (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) first.paths second.paths)
+                      (And
+                        (@Eq.{1} Ordering
+                            (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                              (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                              second.paths)
+                            Ordering.eq →
+                          @Eq.{1} (List.{0} (List.{0} Nat)) first.paths second.paths)
+                        (@Eq.{1} Ordering
+                            (@Ord.compare.{0} (List.{0} (List.{0} Nat))
+                              (@List.instOrd.{0} (List.{0} Nat) (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                              second.paths)
+                            Ordering.gt →
+                          @LT.lt.{0} (List.{0} (List.{0} Nat))
+                            (@List.instLT.{0} (List.{0} Nat) (@List.instLT.{0} Nat instLTNat)) second.paths
+                            first.paths))
+                      two)
+                    actual)))
+            (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+              (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+              second.paths)
+            (@Eq.symm.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)
+              Ordering.gt h)
+            (@Eq.refl.{1} Ordering
+              (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+                (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+                second.paths)))
+        (@Eq.refl.{1} Ordering
+          (@Ord.compare.{0} MicroCFTA.EqualityNormalize.Class
+            (@List.instOrd.{0} MicroCFTA.EqualityNormalize.Path (@List.instOrd.{0} Nat instOrdNat)) first.paths
+            second.paths)))
+    records
+'MicroCFTA.SourceListSortOrdered.paths' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]

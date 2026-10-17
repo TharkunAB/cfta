@@ -1,0 +1,59 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:45:18: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case cons.cons.isTrue
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+a b : Item
+rest : List Item
+take : gt a b = true
+⊢ (∀ (a' : Item), a' = a → relation b a') ∧ (∀ (a' : Item), a' ∈ [] → relation a a') ∧ List.Pairwise relation []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:52:18: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case cons.cons.isFalse
+Item : Type u_1
+relation : Item → Item → Prop
+gt : Item → Item → Bool
+transitive : ∀ {a b c : Item}, relation a b → relation b c → relation a c
+compared : ∀ (a b : Item), if gt a b = true then relation b a else relation a b
+a b : Item
+rest : List Item
+take : ¬gt a b = true
+⊢ (∀ (a' : Item), a' = b → relation a a') ∧ (∀ (a' : Item), a' ∈ [] → relation b a') ∧ List.Pairwise relation []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:114:46: error: Type mismatch: After simplification, term
+  take
+ has type
+  (!gt last b) = true
+but is expected to have type
+  gt last b = false
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:55:0: warning: unused termination hints, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:44:63: warning: This simp argument is unused:
+  List.pairwise_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.pairwise_cons, List.mem_singleton, and_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:44:88: warning: This simp argument is unused:
+  and_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.pairwise_cons, List.mem_singleton, List.pairwise_singleton]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:51:86: warning: This simp argument is unused:
+  List.pairwise_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.singleton_append, List.pairwise_cons, List.mem_singleton, and_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-inherited-normalization/sort-runs-direct-1.source.lean:51:111: warning: This simp argument is unused:
+  and_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.singleton_append, List.pairwise_cons, List.mem_singleton, List.pairwise_singleton]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
