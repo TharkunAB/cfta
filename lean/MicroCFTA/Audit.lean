@@ -2362,6 +2362,12 @@ import MicroCFTA.SourceMergedComparisonMass
 import MicroCFTA.SourceMergedSelectionMass
 import MicroCFTA.SourceCurrentMemoMergeMass
 import MicroCFTA.SourceCurrentConstrainedCapOperandFrame
+import MicroCFTA.HeightOrderControlled
+import MicroCFTA.InternedValueMassBinderDepth
+import MicroCFTA.SourceCurrentAllocatedReaderControl
+import MicroCFTA.SourceCurrentAllocatedReaderConsumed
+import MicroCFTA.SourceCurrentAllocatedReaderNumeric
+import MicroCFTA.SourceCurrentAllocatedRowReadNumeric
 /-!
 # Proof dependency audit
 
