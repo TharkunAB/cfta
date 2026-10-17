@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at published proof checkpoint `e0c1929e`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `f1f77bf1`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -41,8 +41,10 @@ interned core remains the construction and transformation path. Read
 | --- | --- | --- |
 | Exact Sized queries | Exact accepted size classes, finite class evaluation, counts, size-major enumeration, retained row order, and both distinct-term rank/unrank inverses. The finite carrier comes from validated raw graph keys. | Concrete host and solver adapters and complete public pipeline composition. See [Sized contracts](notes-sized-finite-keys.md). |
 | Interned construction | Repaired closed syntax has a finite constructor execution. Syntax includes binders and unions. Actual construction and field histories derive physical and semantic entry facts. | Concrete lazy Haskell publication, interning, and runtime correspondence. The word Ordinary in older module names does not by itself exclude binders. |
-| Recursive native intersection | Current checked cold execution returns the exact intersection language for closed Original resident operands. The same return has scoped caches, idle native state, and a closed output. Mu and union operands are included. | The public theorem still assumes WordRanges over reached checked prefixes. Initial resource conditions must derive these ranges for the general recursive family. |
+| Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
+| General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
+| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. | General node-busy exclusion still needs a compatible progress or owner-disjointness argument. The constructed case is not a general host schedule theorem. |
 | Other library components | Checked language, equality, enumeration, arithmetic, union-find, memo, ranking, generation, and sampling results exist. Some source drivers and restricted adapters are complete. | Their remaining adapters and recursive callers do not yet form a complete current-library implementation theorem. See [API coverage](API-COVERAGE.md). |
 
 The finite ordinary result is in
@@ -50,32 +52,50 @@ The finite ordinary result is in
 `constructed_root`, and `prepared_root`. The caller no longer supplies the
 reached numeric Plan. Read [the resource result](notes-current-raw-reach-capacity.md).
 
-The recursive native result is
+The earlier recursive native result is
 `SourceCurrentAllocatedNativeColdClosedExact.cold_complete`.
 `SourceRecursiveIntersectionRequestProgress.initial_complete` already derives
-semantic completion for closed Original inputs. The current native theorem
-does not require the caller to supply semantic Completes.
+semantic completion for closed Original inputs. These semantic results
+do not require the caller to supply semantic Completes.
 `SourceCurrentAllocatedNativeConstructedHistory.query_complete` also derives
 entry facts from actual generic construction and a covered field history.
 It retains the actual build and WordRanges premises.
 
-WordRanges is defined in `SourceCurrentAllocatedNativeRequestBounds`.
-It requires machine-key safety at every reached checked node and edge
-instruction. It assumes no completed result, but still quantifies over
-execution prefixes. Deriving it from initial syntax, histories, and headroom
-is a remaining proof obligation. Do not report general recursive native
-semantic completion as wholly absent.
+`SourceCurrentAllocatedNativeComputedBudget.initial` now constructs the
+complete physical query and its resources from initial counters, causal
+stored mass, closed Original operands, semantic readiness, idle native
+tables, and numeric headroom. It does not require a future Trace,
+WordRanges, instruction count, or returned-result law. Read
+[computed query budgets](notes-current-computable-query-rank.md).
+This receipt still needs contextual language composition on the same trace.
+It does not bound all internal constructor work, solver work, or total memory.
+
+The latest Required entry is
+`SourceCurrentRequiredPrimaryOrigins.constructed`. Actual construction
+derives its readiness, cost, guard, and union-normality facts. An earlier
+false primary class and initial operand availability construct a complete
+Required return with exact guarded language and indexed original row
+origins. It assumes no future Required result. Read
+[Required origins](notes-current-required-origins.md).
 
 ## Remaining work
 
-1. Derive general recursive native machine ranges from initial resources.
-   Account for domain identities, Mu entry, references, unions, original
-   operands, constructor requests, and actual memo schedules.
-2. Extend the constrained reduction progress argument to recursive selected
-   paths. The outer worker stops at Mu and union roots. Selected path lookup,
-   required paths, edits, and target intersection can still enter them.
-   Preserve the actual refusal policy and inherited equality payloads.
-   Ordinary height does not supply a general decreasing measure here.
+1. Complete native row provenance through recursive callbacks and earlier
+   warm winners. Erasing an unused local from a returned callback record
+   removes later substitution dependence. It does not yet exchange the
+   original callback inputs or identify a warm body with its ordinary probe.
+   Original-input exchange is now constructed when the raw returned value
+   has no free changed name. Ordinary native rows retain indexed source
+   pairs, literal accepted conjunction guards, and ordered child requests.
+   The general normalized recursive and warm bridge remains open. Read
+   [native row histories](notes-current-native-row-origins.md).
+2. Derive progress for actual outer-node children after parent returns and
+   inherited combine/descent. The measure must respect physical memo keys,
+   or prove that a fresh request differs from every active owner. Ordinary
+   height and maximum constrained depth do not give that measure. Then
+   complete nonempty live child walks, ordered rows, ordinary node bodies,
+   and the full mutual outer pass. Mu and union roots can be terminal while
+   selected paths still enter their contents.
 3. Prove convergence for repeated reduction passes and complete the remaining
    recursive pruning and compilation callers. One exact completed pass does
    not establish a fixed point. Semantic narrowing alone does not bound
@@ -87,7 +107,8 @@ semantic completion as wholly absent.
    arrays, signed indexes and counters, lazy memo publication and forcing,
    process-global state, interning, codecs, solver answers, IO, and random
    draws. Keep explicit primitive and user-code assumptions visible.
-6. Compose complete public pipelines through construction, transformations,
+6. Compose generated result-fed native queries and complete public pipelines
+   through construction, transformations,
    graph conversion, exact queries, generation, and sampling. Abstract
    composition does not discharge a missing implementation adapter.
 
@@ -107,19 +128,18 @@ the failure, reproducer, affected paths, commit, validation, and merge status.
 It also records the earlier negative-bound and named-measure repairs.
 The historical failure reports retain their original bytes and source dates.
 
-The last completed full pinned Audit passes 2693 jobs and 61393 dependency
+The last completed full pinned Audit passes 3051 jobs and 67320 dependency
 checks. Only propext, Classical.choice, and Quot.sound occur. The unchanged
 Haskell source has a strict Nix all-component build, 798 examples plus golden,
 Fourmolu, and Cabal-gild validation. These checks are component evidence.
 They do not provide a meaningful percentage of whole-library completion.
-This status audit reuses that evidence after source hash checks. It does not
-claim a new full build or a new mathematical result.
+The Lean Audit and imported status theorem checks were run for this
+checkpoint. The unchanged Haskell source reuses its earlier validation.
 
-The current audit evidence is in
-`restart-evidence/20261017-recursive-source-progress/`. Imported public
-signature and axiom checks inspect the recursive completion premises.
-Four focused Nix source checks exercise selected recursive endpoints,
-unequal-depth paths, a failed ordinary min-height bound, and inherited
-path-depth growth. Their finite observations do not prove general progress.
-No new Haskell defect was established. Earlier failed probe expectations
-and raw logs remain in that directory.
+The latest completed audit evidence is in
+`restart-evidence/20261017-native-row-origins/`. It includes strict source,
+public signature, kernel axiom, constructed integration, and preservation
+checks. Earlier evidence retains selected recursive endpoints,
+unequal-depth paths, failed height bounds, and inherited path-depth growth.
+Finite observations do not prove general progress. No new Haskell defect
+was established. Failed attempts and raw logs remain preserved.
