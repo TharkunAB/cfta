@@ -2469,6 +2469,20 @@ import MicroCFTA.SourceCurrentInitialSelectionForecast
 import MicroCFTA.SourceCurrentScanRequiredWorker
 import MicroCFTA.SourceCurrentScanRequiredForecast
 import MicroCFTA.SourceCurrentScanRequiredNumeric
+import MicroCFTA.SourceCurrentForceNumeric
+import MicroCFTA.SourceCurrentLeafNumeric
+import MicroCFTA.SourceCurrentEditFrame
+import MicroCFTA.SourceCurrentEditScans
+import MicroCFTA.SourceCurrentEditNumeric
+import MicroCFTA.SourceCurrentEditListNumeric
+import MicroCFTA.SourceCurrentClassNumeric
+import MicroCFTA.SourceCurrentClassPassNumeric
+import MicroCFTA.SourceCurrentClassCallerNumeric
+import MicroCFTA.SourceCurrentClassesForecast
+import MicroCFTA.SourceCurrentScanRequiredClassGraph
+import MicroCFTA.SourceCurrentClassesNumeric
+import MicroCFTA.SourceCurrentLocalForecast
+import MicroCFTA.SourceCurrentLocalNumeric
 /-!
 # Proof dependency audit
 
