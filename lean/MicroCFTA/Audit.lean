@@ -2375,6 +2375,10 @@ import MicroCFTA.SourceMergedComparisonHistory
 import MicroCFTA.SourceMergedComparisonReplayStages
 import MicroCFTA.SourceMergedComparisonNumeric
 import MicroCFTA.SourceMergedSelectionNumeric
+import MicroCFTA.HeightOrderControlledMonotone
+import MicroCFTA.SourceCurrentMemoMergeResourceControl
+import MicroCFTA.SourceCurrentMemoMergeMeasured
+import MicroCFTA.SourceCurrentMemoMergeDirectCost
 /-!
 # Proof dependency audit
 
