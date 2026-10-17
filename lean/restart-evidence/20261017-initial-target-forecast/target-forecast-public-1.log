@@ -1,0 +1,252 @@
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand : List.{0} Int →
+  Nat →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile : Nat →
+  List.{0} Int →
+    List.{0} (List.{0} Int) →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile : Nat →
+  List.{0} (List.{0} Int) →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved : Nat →
+  Nat → List.{0} Int → List.{0} (List.{0} Int) → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Prop
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved : Nat →
+  Nat → List.{0} (List.{0} Int) → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Prop
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_nodes' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_nodes : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat profile.nodes (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_edges' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_edges : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat profile.edges (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mass' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mass : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat profile.mass (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar first)
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar last)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_le_operand' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar_le_operand : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile)
+    (MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.workFuel path count
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile))
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand_ge : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand_domains' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand_domains : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile).domains profile.domains
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile_nil : ∀ (count : Nat) (seed : List.{0} Int)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed (@List.nil.{0} (List.{0} Int)) profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand seed count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile_cons' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile_cons : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed
+      (@List.cons.{0} (List.{0} Int) path rest) profile)
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)))
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile_ge : ∀ (count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.fold_head_le' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.fold_head_le : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed
+      (@List.cons.{0} (List.{0} Int) path rest) profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.fold_tail_le' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.fold_tail_le : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile))
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed
+      (@List.cons.{0} (List.{0} Int) path rest) profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile_nil : ∀ (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile count (@List.nil.{0} (List.{0} Int)) profile)
+    profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile_cons' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile_cons : ∀ (count : Nat) (seed : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile count (@List.cons.{0} (List.{0} Int) seed rest)
+      profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile_ge : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile count paths profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.reserved_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.reserved_nil : ∀ (bits count : Nat) (seed : List.{0} Int)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed (@List.nil.{0} (List.{0} Int)) profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.reserved_cons_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.reserved_cons_iff : ∀ (bits count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed
+      (@List.cons.{0} (List.{0} Int) path rest) profile)
+    (And
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed rest
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile))
+      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest
+          (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile))))
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved.tail' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved.tail : ∀ {bits count : Nat} {seed path : List.{0} Int}
+  {rest : List.{0} (List.{0} Int)} {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed (@List.cons.{0} (List.{0} Int) path rest)
+      profile →
+    MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed rest
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved.query' does not depend on any axioms
+@MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved.query : ∀ {bits count : Nat} {seed path : List.{0} Int}
+  {rest : List.{0} (List.{0} Int)} {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed (@List.cons.{0} (List.{0} Int) path rest)
+      profile →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile))
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.reserved_of_final_room' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.reserved_of_final_room : ∀ (bits count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths profile) →
+    MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed paths profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetReserved_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetReserved_nil : ∀ (bits count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits count (@List.nil.{0} (List.{0} Int)) profile
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetReserved_cons_iff' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetReserved_cons_iff : ∀ (bits count : Nat) (seed : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  Iff
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits count
+      (@List.cons.{0} (List.{0} Int) seed rest) profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed rest profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel : List.{0} Int →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel : Nat →
+  List.{0} Int → List.{0} (List.{0} Int) → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel : Nat →
+  List.{0} (List.{0} Int) → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_projection' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_projection : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentProjectionNumeric.workFuel path)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_read' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_read : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentProjectionNumeric.readFuel path count
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile))
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_merge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_merge : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.workFuel path count
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile))
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_selection' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel_selection : ∀ (path : List.{0} Int) (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentConstrainedCapOperandNumeric.selectionFuel path count
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar profile))
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_nil : ∀ (count : Nat) (seed : List.{0} Int)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int)) profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel seed count profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_cons' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_cons : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.cons.{0} (List.{0} Int) path rest)
+      profile)
+    (@Max.max.{0} Nat Nat.instMax (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count profile)
+      (@Max.max.{0} Nat Nat.instMax
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed rest
+          (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile))
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel
+          (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest
+            (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)))))
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_head' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_head : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel path count profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.cons.{0} (List.{0} Int) path rest)
+      profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_tail' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_tail : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed rest
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile))
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.cons.{0} (List.{0} Int) path rest)
+      profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_query' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_query : ∀ (count : Nat) (seed path : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed rest
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)))
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.cons.{0} (List.{0} Int) path rest)
+      profile)
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel_nil' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel_nil : ∀ (count : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count (@List.nil.{0} (List.{0} Int)) profile)
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel_cons' does not depend on any axioms
+MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel_cons : ∀ (count : Nat) (seed : List.{0} Int)
+  (rest : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count (@List.cons.{0} (List.{0} Int) seed rest)
+      profile)
+    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed rest profile)

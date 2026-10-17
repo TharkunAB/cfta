@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentAllocatedMergeNumericReplay
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 8000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.eraseOutcome
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.eraseOutcome
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.execute_erase
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.execute_erase
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_erase
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_erase
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.run_replay
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.run_replay
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_replay
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_replay
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.of_call
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.of_call
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.complete
+#check @MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.complete

@@ -1,0 +1,310 @@
+import MicroCFTA.SourceCurrentConstrainedCapTargetReceiptComposition
+import MicroCFTA.SourceCurrentConstrainedCapOperandNumeric
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointInventoryCold
+import MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo
+import MicroCFTA.SourceCurrentConstrainedCapGuardExecution
+import MicroCFTA.InternedFreshOrdinaryClosedCompletion
+import MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence
+import MicroCFTA.EndpointMemoGateSource
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+namespace MicroCFTA.TargetReceiptIntegration
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open InternedNestedConstruction (Syntax)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) := SourceEqualityPCSNativeEdge.guardDecidableEq
+
+private instance : DecidableEq FullSyntax.Formula :=
+  fun first second => decidable_of_iff (FormulaOrder.compareFormula first second = .eq) (FormulaOrder.formula_eq first second)
+private instance : DecidableEq Guard := fun first second =>
+  decidable_of_iff (first.equalities = second.equalities ∧ first.guard = second.guard)
+    (by cases first; cases second; simp)
+
+private def top : Guard := SourceEqualityConstraintConstructors.top
+private def expression : Syntax Symbol Guard := .node [.mk ("roots", .top) top [
+  .node [.mk ("a", .top) top [], .mk ("b", .top) top []],
+  .node [.mk ("a", .top) top [], .mk ("c", .top) top []]]]
+private def built := InternedFreshOrdinaryConstruction.build expression [] empty
+private def root : Value Symbol Guard := match built with | .done value _ => value | .pending .. => .empty
+private def heap := built.state
+private def left : Value Symbol Guard := ((children root)[0]?).getD .empty
+private def right : Value Symbol Guard := ((children root)[1]?).getD .empty
+private def machine : Machine Symbol Guard := ⟨heap, Cache.emptyState⟩
+private def seedEqualities : Option EqualityNormalize.Constraints := some [[[0], [1]]]
+private def seedBuild := SourceEqualityConstraintAllocation.construct seedEqualities Cache.emptyState
+private def seedValue : SourceEqualityConstraintAllocation.Value := match seedBuild.1 with
+  | .ok value => value
+  | .error _ => .contradiction
+private def seedState := SourceEqualityConstraintMemoAllocation.initial seedBuild.2
+private def preparedOperations := (SourceEqualityConstraintMemoAllocation.descend seedValue 0 seedState).2
+private def operations := SourceEqualityMkEdgeAllocation.emptyField preparedOperations
+
+private theorem seed_cached : SourceEqualityGuardReadback.Cached seedEqualities := by
+  have actual : EqualityNormalize.mkEqConstraints 2 [[[0], [1]]] = .normalized [[[0], [1]]] := by cbv
+  intro classes same
+  cases same
+  exact SourceEqualityGuardReadback.normalized actual
+
+private theorem seed_constructed : seedBuild.1 = .ok seedValue := by cbv
+
+private theorem prepared_valid : SourceEqualityConstraintMemoAllocation.Valid preparedOperations := by
+  obtain ⟨value, cache, built, cacheValid, ready, _steps, _read, _classes⟩ :=
+    SourceEqualityConstraintAllocation.construct_complete seedEqualities seed_cached Cache.emptyState Cache.empty_valid
+  have same : value = seedValue := Except.ok.inj ((congrArg Prod.fst built).symm.trans seed_constructed)
+  subst value
+  have cacheSame : cache = seedBuild.2 := (congrArg Prod.snd built).symm
+  subst cache
+  exact (SourceEqualityConstraintMemoAllocation.descend_correct seedValue 0 seedState
+    (SourceEqualityConstraintMemoAllocation.initial_valid _ cacheValid) ready).1
+private def before (width : Nat) : Checked width := ⟨initial width machine, operations⟩
+private def request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+
+private theorem constructed : built = .done root heap := by
+  obtain ⟨value, state, done⟩ := InternedFreshOrdinaryClosedCompletion.closed_complete expression
+  simp only [built, root, heap, done, InternedNestedConstruction.Outcome.state]
+
+private theorem initial_good (width : Nat) : Good (before width) := by
+  have semantic := SourceEqualityRequiredSemanticCache.constructed expression root heap constructed
+  have guarded : SourceEqualityAnnotationHeap.Heap (fun guard : Guard => guard = top) heap := by
+    have checked := SourceEqualityAnnotationConstruction.build (fun guard : Guard => guard = top) expression
+      (by simp [expression, SourceEqualityAnnotationConstruction.Allowed,
+        SourceEqualityAnnotationConstruction.EdgesAllowed, SourceEqualityAnnotationConstruction.ManyAllowed]) [] empty
+      (SourceEqualityAnnotationHeap.empty_heap _)
+    simpa only [built, heap] using checked
+  have loaded := SourceCurrentConjunctionFieldAllocation.empty_field (Formula := FullSyntax.Formula) preparedOperations
+    prepared_valid
+  refine ⟨SourceCurrentAllocatedNativePhysicalCache.initial_valid machine
+    ⟨semantic.ready.semantic.1.normal.facts, Cache.empty_valid⟩, semantic.ready, loaded.1, ?_⟩
+  intro key row found
+  have same := guarded key row found
+  rw [same]
+  exact loaded.2.2
+
+private theorem originals : Available heap left ∧ Available heap right := by
+  have available := (InternedFreshOrdinaryFacts.closed_verified expression).result root heap constructed
+  constructor
+  · exact available.children left (by cbv; exact .head _)
+  · exact available.children right (by cbv; exact .tail _ (.head _))
+
+private theorem node_ready : NodeReady machine request := ⟨empty_domain machine, originals.1, originals.2⟩
+
+private def row : EdgeValue Symbol Guard := match left with
+  | .node _ (row :: _) _ _ => row
+  | _ => (run (makeEdge ("unused", .top) top []) empty).1
+private def candidate : Value Symbol Guard := (run (makeNode [row]) heap).1
+private def nodeControl : Control (Value Symbol Guard) := .code (requestNode request.domain left right)
+private noncomputable def afterFirst (width : Nat) : Checked width := (execute 8 nodeControl (before width)).state
+
+private theorem evaluated (width : Nat) : execute 8 nodeControl (before width) = .done candidate (afterFirst width) := by
+  set_option cbv.maxSteps 200000000 in cbv
+
+private theorem candidate_absent : SourcePreparedSharedRows.read heap 3 = none := by cbv
+private theorem operation_record : ∃ cell,
+    operations.descents (seedValue.identity, 0) = some cell ∧
+      SourceEqualityConstraintMemoAllocation.DescendGood operations.constraints (seedValue.identity, 0) cell := by
+  have present : (operations.descents (seedValue.identity, 0)).isSome = true := by cbv
+  cases found : operations.descents (seedValue.identity, 0) with
+  | none => rw [found] at present; cases present
+  | some cell => exact ⟨cell, rfl, (SourceEqualityMkEdgeAllocation.emptyField_correct preparedOperations prepared_valid).1.descents _ _ found⟩
+
+private theorem candidate_input : SourceRecursiveIntersectionInputView.inputOf candidate = .node 3 := by cbv
+
+private theorem candidate_outside : SourceRecursiveIntersectionInputView.inputOf candidate ∉
+    SourceRecursiveIntersectionInputView.inventory heap := by
+  rw [candidate_input]
+  have count : heap.nodes.next = 3 := by cbv
+  simp only [SourceRecursiveIntersectionInputView.inventory, count]
+  decide
+
+private theorem initial_semantic : SourceEqualityRequiredSemanticCache.SemanticReady heap :=
+  SourceEqualityRequiredSemanticCache.constructed expression root heap constructed
+
+private theorem initial_guards : SourceCurrentConstrainedCapGuardHeap.Heap
+    SourceCurrentConstrainedCapCheckedJointClosed.Plain heap := by
+  simpa only [built, heap] using SourceCurrentConstrainedCapGuardExecution.closed_heap
+    SourceCurrentConstrainedCapCheckedJointClosed.Plain expression
+
+private theorem initial_ready (width : Nat) : SourceCurrentConjunctionClassScan.Ready (before width) := by
+  have costs : InternedFreshOrdinaryCostHeap.Heap heap := by
+    simpa only [built, heap] using InternedFreshOrdinaryCosts.closed_heap expression
+  exact ⟨initial_good width, initial_semantic, costs,
+    SourceCurrentAllocatedNativeScopeCache.initial_scoped width machine,
+    SourceRecursiveIntersectionNative.idle_initial machine⟩
+
+private theorem initial_caps : SourceCurrentConstrainedCap.Cap SourceCurrentConstrainedCapCheckedJointClosed.Plain 1 left ∧
+    SourceCurrentConstrainedCap.Cap SourceCurrentConstrainedCapCheckedJointClosed.Plain 1 right := by
+  constructor
+  · cbv
+    apply SourceCurrentConstrainedCap.Cap.node 0
+    intro child member
+    cbv at member
+    cases member
+  · cbv
+    apply SourceCurrentConstrainedCap.Cap.node 0
+    intro child member
+    cbv at member
+    cases member
+
+private theorem initial_closed : left.free = [] ∧ right.free = [] := by constructor <;> cbv
+
+private def inventory : SourceCurrentAllocatedNativeInventoryState.Inventory :=
+  SourceCurrentAllocatedNativeInventoryCold.pairInventory heap
+    (initial_good 0).native.machine.1 left right
+    (SourceRecursiveIntersectionOriginalOutput.closed_original left heap (initial_good 0).native.machine.1.coherent
+      originals.1 initial_closed.1)
+    (SourceRecursiveIntersectionOriginalOutput.closed_original right heap (initial_good 0).native.machine.1.coherent
+      originals.2 initial_closed.2)
+    originals.1 originals.2 initial_closed.1 initial_closed.2
+
+private def profile : SourceCurrentAllocatedNativeResourceForecast.Profile :=
+  ⟨heap.nodes.next, heap.edges.next, machine.domains.next, InternedValueMassHeap.initialBound heap⟩
+
+private theorem initial_fits (width : Nat) : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile (before width) :=
+  ⟨Nat.le_refl _, Nat.le_refl _, Nat.le_refl _, InternedValueMassHeap.initial heap (initial_good width).native.machine.1⟩
+
+private theorem initial_pool (width : Nat) : SourceCurrentConstrainedCapGeneratedQuerySequence.Pool 1 [left, right] (before width) := by
+  constructor
+  · intro value member
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at member
+    rcases member with rfl | rfl
+    · exact originals.1
+    · exact originals.2
+  · intro value member
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at member
+    rcases member with rfl | rfl
+    · exact initial_closed.1
+    · exact initial_closed.2
+  · intro value member
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at member
+    rcases member with rfl | rfl
+    · exact initial_caps.1
+    · exact initial_caps.2
+
+
+open InternedNestedProvenance (Values)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame)
+open SourceCurrentMemoMergeResourceControl (Fits)
+open SourceCurrentAllocatedTargetGraph (Operand)
+local notation "Memo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Domain" => SourceEqualityProjectionPathDomain.ForestClosed
+local notation "numWork" => SourceCurrentConstrainedCapOperandNumeric.workFuel
+local notation "numSelection" => SourceCurrentConstrainedCapOperandNumeric.selectionFuel
+local notation "numRead" => SourceCurrentProjectionNumeric.readFuel
+local notation "projectWork" => SourceCurrentProjectionNumeric.workFuel
+local notation "clear" => SourceCurrentAllocatedMerge.literalClear
+
+private def inputs : List (Value Symbol Guard) := [left, right, .reference .depth]
+private def resource := SourceCurrentMemoMergeResourceControl.initialBound heap.nodes.next heap.edges.next profile.mass
+private theorem scalar_fits (width : Nat) : Fits resource (before width).native.machine.heap :=
+  SourceCurrentMemoMergeResourceControl.initial heap profile.mass
+    (InternedValueMassHeap.initial heap (initial_good width).native.machine.1)
+private theorem input_available (width : Nat) : Values (before width).native.machine.heap inputs := by
+  intro value member
+  simp only [inputs, List.mem_cons, List.not_mem_nil, or_false] at member
+  rcases member with rfl | rfl | rfl
+  · exact originals.1
+  · exact originals.2
+  · exact InternedNestedProvenance.depth_available _
+private theorem first_domain : Domain [0] inputs := by
+  simpa [SourceEqualityProjectionPathDomain.ForestClosed, SourceEqualityProjectionPathDomain.NodeClosed,
+    SourceEqualityProjectionGraph.select, inputs] using initial_closed.1
+private theorem second_domain : Domain [1] inputs := by
+  simpa [SourceEqualityProjectionPathDomain.ForestClosed, SourceEqualityProjectionPathDomain.NodeClosed,
+    SourceEqualityProjectionGraph.select, inputs] using initial_closed.2
+private theorem open_input : ¬MergedColdReaderClosedInputs.ClosedValues inputs := by
+  intro closed
+  have impossible := closed (.reference .depth) (by simp [inputs])
+  cases impossible
+private theorem empty_covered (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+      (SourceCurrentMemoMergeGraph.empty : Memo) := by
+  intro ambient key entry absent
+  cases absent
+
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedTargetGraph (Fold Target)
+open SourceCurrentAllocatedTargetComplete (FoldReads TargetReads)
+open SourceCurrentConstrainedCapTargetReceiptComposition (of_operand cons of_fold_reads of_target_reads)
+local notation "TargetReceipt" => SourceCurrentAllocatedTargetComplete.Receipt
+
+/-- Own initial physical facts construct the actual singleton Target and its full composed receipt. -/
+theorem constructed_singleton (width : Nat) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    ¬MergedColdReaderClosedInputs.ClosedValues inputs ∧
+    ∃ result after saved final, ∃ actual : Target inputs [[0]] (before width) SourceCurrentMemoMergeGraph.empty result after saved,
+      TargetReads formulas solver actual EndpointMemoGateTrace.empty final ∧
+      TargetReceipt formulas solver inventory inputs [[0]] (before width) SourceCurrentMemoMergeGraph.empty
+        result after saved EndpointMemoGateTrace.empty final ∧ Frame formulas solver inventory after ∧
+      Fits (numWork [0] inputs.length resource) after.native.machine.heap := by
+  have frame := Frame.initial formulas solver inventory machine operations (initial_ready width) initial_guards rfl
+  obtain ⟨result, after, saved, final, operand, receipt, returned, fits, _mass, _schedule⟩ :=
+    SourceCurrentConstrainedCapOperandNumeric.complete formulas solver inventory [0] inputs (before width)
+      SourceCurrentMemoMergeGraph.empty resource frame (input_available width) first_domain
+      (SourceCurrentMemoMergeEffects.stored_empty _) (empty_covered formulas solver)
+      EndpointMemoGateTrace.empty (EndpointMemoGateTrace.empty_valid heap) (scalar_fits width)
+  exact ⟨open_input, result, after, saved, final, .nonempty (.nil operand),
+    .cons (.nil (operand := operand) receipt), of_operand receipt, returned, fits⟩
+
+/-- Empty Target composition retains the exact constructed checked state and all initial tables. -/
+theorem constructed_empty (width : Nat) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    ∃ actual : Target inputs [] (before width) SourceCurrentMemoMergeGraph.empty .empty
+        (before width) SourceCurrentMemoMergeGraph.empty,
+      TargetReads formulas solver actual EndpointMemoGateTrace.empty EndpointMemoGateTrace.empty ∧
+      ∃ next, TargetReceipt formulas solver next inputs [] (before width) SourceCurrentMemoMergeGraph.empty
+        .empty (before width) SourceCurrentMemoMergeGraph.empty EndpointMemoGateTrace.empty EndpointMemoGateTrace.empty := by
+  have frame := Frame.initial formulas solver inventory machine operations (initial_ready width) initial_guards rfl
+  have reads : TargetReads formulas solver (Target.nil (values := inputs) (before := before width)
+      (memo := SourceCurrentMemoMergeGraph.empty)) EndpointMemoGateTrace.empty EndpointMemoGateTrace.empty := .nil
+  exact ⟨.nil, reads, of_target_reads reads frame.ready frame.admitted (input_available width)
+    (SourceCurrentMemoMergeEffects.stored_empty _) (empty_covered formulas solver) (EndpointMemoGateTrace.empty_valid heap)⟩
+
+/-- Actual head and seed receipts compose in source execution order with the same checked query return. -/
+theorem ordered_two {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {headInventory seedInventory finalInventory : Inventory} {values : List (Value Symbol Guard)}
+    {seed path : List Int} {before middle later after : Checked width} {memo current saved : Memo}
+    {headValue tail result : Value Symbol Guard} {memos nextGlobals lastGlobals : Memos}
+    (headActual : Operand path values before memo headValue middle current)
+    (seedActual : Operand seed values middle current tail later saved)
+    (first : SourceCurrentAllocatedMergeOperand.Receipt formulas solver headInventory path values
+      before memo headValue middle current memos nextGlobals)
+    (last : SourceCurrentAllocatedMergeOperand.Receipt formulas solver seedInventory seed values
+      middle current tail later saved nextGlobals lastGlobals)
+    (query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver finalInventory headValue tail later result after lastGlobals) :
+    ∃ actual : Target values [seed, path] before memo result after saved,
+      TargetReads formulas solver actual memos lastGlobals ∧
+      TargetReceipt formulas solver finalInventory values [seed, path] before memo result after saved memos lastGlobals ∧
+      ∃ chosen, TargetReceipt formulas solver chosen values [seed, path] before memo result after saved memos lastGlobals := by
+  let fold : Fold values seed [path] before memo result after saved :=
+    .cons headActual (.nil seedActual) query.actual
+  have reads : FoldReads formulas solver fold memos lastGlobals :=
+    .cons (operand := headActual) (rest := .nil seedActual) (step := query.actual)
+      first (.nil (operand := seedActual) last) query
+  exact ⟨.nonempty fold, .cons reads, cons first (of_operand last) query, of_fold_reads reads⟩
+
+end MicroCFTA.TargetReceiptIntegration
+
+#print axioms MicroCFTA.TargetReceiptIntegration.constructed_singleton
+#check @MicroCFTA.TargetReceiptIntegration.constructed_singleton
+#print axioms MicroCFTA.TargetReceiptIntegration.constructed_empty
+#check @MicroCFTA.TargetReceiptIntegration.constructed_empty
+#print axioms MicroCFTA.TargetReceiptIntegration.ordered_two
+#check @MicroCFTA.TargetReceiptIntegration.ordered_two

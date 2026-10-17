@@ -1,0 +1,351 @@
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.eraseOutcome' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.eraseOutcome : {Output : Type} →
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output →
+    MicroCFTA.SourceCurrentMemoMergeWorker.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.execute_erase' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.execute_erase : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (fuel selection : Nat) (code : MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output)
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  @Eq.{1}
+    (MicroCFTA.SourceCurrentMemoMergeWorker.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output)
+    (@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.eraseOutcome Output
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.execute Output inst inst_1 clear fuel selection code before memo))
+    (@MicroCFTA.SourceCurrentMemoMergeWorker.execute (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst inst_1 clear
+      MicroCFTA.SourceCurrentAllocatedMergeGraph.top fuel selection
+      (@MicroCFTA.SourceCurrentAllocatedMergeGraph.erase Output code)
+      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+      memo)
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_erase' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_erase : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (fuel selection : Nat)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  @Eq.{1}
+    (MicroCFTA.SourceCurrentMemoMergeWorker.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+    (@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.eraseOutcome
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call inst inst_1 clear fuel selection input before memo))
+    (@MicroCFTA.SourceCurrentMemoMergeWorker.call (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst inst_1 clear
+      MicroCFTA.SourceCurrentAllocatedMergeGraph.top fuel selection input
+      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+      memo)
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.run_replay' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.run_replay : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {code : MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo} {output : Output},
+  @MicroCFTA.SourceCurrentAllocatedMergeGraph.Run inst inst_1 clear Output code before memo output after saved →
+    ∀ (fuel selection : Nat),
+      @Eq.{1}
+          (MicroCFTA.SourceCurrentMemoMergeWorker.Outcome
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output)
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.execute
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst inst_1 clear
+            MicroCFTA.SourceCurrentAllocatedMergeGraph.top fuel selection
+            (@MicroCFTA.SourceCurrentAllocatedMergeGraph.erase Output code)
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+            memo)
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.Outcome.done
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output output
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula after)
+            saved) →
+        @Eq.{1} (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome Output)
+          (@MicroCFTA.SourceCurrentAllocatedMergeWorker.execute Output inst inst_1 clear fuel selection code before
+            memo)
+          (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done Output output after saved)
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_replay' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.call_replay : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  @MicroCFTA.SourceCurrentAllocatedMergeGraph.Call inst inst_1 clear input before memo output after saved →
+    ∀ (fuel selection : Nat),
+      @Eq.{1}
+          (MicroCFTA.SourceCurrentMemoMergeWorker.Outcome
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.call
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst inst_1 clear
+            MicroCFTA.SourceCurrentAllocatedMergeGraph.top fuel selection input
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+            memo)
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.Outcome.done
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            output
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula after)
+            saved) →
+        @Eq.{1}
+          (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call inst inst_1 clear fuel selection input before memo)
+          (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            output after saved)
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.of_call' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.of_call : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  @MicroCFTA.SourceCurrentAllocatedMergeGraph.Call inst inst_1 clear input before memo output after saved →
+    ∀ (bound : Nat),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+        @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+          @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+              memo →
+            @MicroCFTA.InternedProbeProvenance.Available
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+                input →
+              @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) bound
+                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    before) →
+                And
+                  (@Eq.{1}
+                    (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call inst inst_1 clear
+                      (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound)
+                      (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel bound) input before memo)
+                    (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      output after saved))
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound)
+                      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                        after))
+                    (And
+                      (@LE.le.{0} Nat instLENat
+                        (@MicroCFTA.InternedValueMass.value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) output)
+                        (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound))
+                      (∀ (workExtra selectionExtra : Nat),
+                        @Eq.{1}
+                          (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call inst inst_1 clear
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound) workExtra)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel bound) selectionExtra)
+                            input before memo)
+                          (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            output after saved))))
+'MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedMergeNumericReplay.complete : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo)
+  (bound : Nat),
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before →
+    @MicroCFTA.SourceCurrentMemoMergeEffects.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+        memo →
+      @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+          input →
+        @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) bound
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+          @Exists.{1}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            fun output =>
+            @Exists.{1} MicroCFTA.SourceCurrentAllocatedMergeGraph.State fun after =>
+              @Exists.{1} MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo fun saved =>
+                And
+                  (@MicroCFTA.SourceCurrentAllocatedMergeGraph.Call inst inst_1 clear input before memo output after
+                    saved)
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call inst inst_1 clear
+                        (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound)
+                        (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel bound) input before memo)
+                      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        output after saved))
+                    (And
+                      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                        before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.FullSyntax.Formula after)
+                          saved)
+                        (And
+                          (@MicroCFTA.InternedProbeProvenance.Available
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              MicroCFTA.FullSyntax.Formula after)
+                            output)
+                          (And
+                            (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.free
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.free
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) output)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            (And
+                              (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound)
+                                (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  MicroCFTA.FullSyntax.Formula after))
+                              (And
+                                (@LE.le.{0} Nat instLENat
+                                  (@MicroCFTA.InternedValueMass.value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) output)
+                                  (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound))
+                                (∀ (workExtra selectionExtra : Nat),
+                                  @Eq.{1}
+                                    (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                    (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call inst inst_1 clear
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.workFuel bound) workExtra)
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        (MicroCFTA.SourceCurrentMemoMergeUniformNumeric.selectionFuel bound)
+                                        selectionExtra)
+                                      input before memo)
+                                    (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      output after saved)))))))))

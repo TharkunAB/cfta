@@ -1,0 +1,94 @@
+'MicroCFTA.TargetForecastIntegration.empty_target' does not depend on any axioms
+MicroCFTA.TargetForecastIntegration.empty_target : ∀ (bits : Nat),
+  And
+    (@Eq.{1} Nat
+      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar
+        { nodes := @OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)),
+          edges := @OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)),
+          domains := @OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)),
+          mass := @OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)) })
+      (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5))))
+    (And
+      (@Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile
+          (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))) (@List.nil.{0} (List.{0} Int))
+          { nodes := @OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)),
+            edges := @OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)),
+            domains := @OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)),
+            mass := @OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)) })
+        { nodes := @OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)),
+          edges := @OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)),
+          domains := @OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)),
+          mass := @OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)) })
+      (And
+        (@Eq.{1} Nat
+          (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel
+            (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))) (@List.nil.{0} (List.{0} Int))
+            { nodes := @OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)),
+              edges := @OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)),
+              domains := @OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)),
+              mass := @OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)) })
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.TargetReserved bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))) (@List.nil.{0} (List.{0} Int))
+          { nodes := @OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)),
+            edges := @OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)),
+            domains := @OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)),
+            mass := @OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)) })))
+'MicroCFTA.TargetForecastIntegration.ordered_three_paths' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.TargetForecastIntegration.ordered_three_paths : ∀ (bits count : Nat) (seed first second : List.{0} Int)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed
+      (@List.cons.{0} (List.{0} Int) first (@List.cons.{0} (List.{0} Int) second (@List.nil.{0} (List.{0} Int))))
+      profile →
+    have one := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand first count profile;
+    have two := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand second count one;
+    have base := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand seed count two;
+    And
+      (@Eq.{1} MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetProfile count
+          (@List.cons.{0} (List.{0} Int) seed
+            (@List.cons.{0} (List.{0} Int) first (@List.cons.{0} (List.{0} Int) second (@List.nil.{0} (List.{0} Int)))))
+          profile)
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step base)))
+      (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile one)
+        (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le one two)
+          (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le two base)
+            (And
+              (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le base
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step base))
+              (And
+                (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step base)
+                  (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+                    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step base)))
+                (And
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.Reserved bits count seed
+                    (@List.cons.{0} (List.{0} Int) second (@List.nil.{0} (List.{0} Int))) one)
+                  (And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits base)
+                    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step base)))))))))
+'MicroCFTA.TargetForecastIntegration.three_path_fuels' depends on axioms: [propext]
+MicroCFTA.TargetForecastIntegration.three_path_fuels : ∀ (count : Nat) (seed first second : List.{0} Int)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  have one := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand first count profile;
+  have two := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand second count one;
+  have base := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand seed count two;
+  have fuel :=
+    MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count
+      (@List.cons.{0} (List.{0} Int) seed
+        (@List.cons.{0} (List.{0} Int) first (@List.cons.{0} (List.{0} Int) second (@List.nil.{0} (List.{0} Int)))))
+      profile;
+  And
+    (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel first count profile)
+      fuel)
+    (And
+      (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel second count one) fuel)
+      (And
+        (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operandFuel seed count two) fuel)
+        (And (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel base) fuel)
+          (@LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel
+              (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step base))
+            fuel))))
