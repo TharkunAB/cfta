@@ -2,17 +2,19 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 21:03 CEST. Proof checkpoint is `ca91ab34`.
-The full pinned Audit passes 3114 jobs and 68344 dependency checks.
+Current proof update: 2026-10-17 21:15 CEST. Proof checkpoint is `17b9e2fe`.
+The full pinned Audit passes 3119 jobs and 68380 dependency checks.
 Initial Ready and available values now construct both union-normalization
-and stored-substitution orders. Their actual results have the same finite
-open observations at every depth and fixed view. All four cache histories
-and both final availability facts are retained. Physical equality is not
-claimed. Even all-depth observations do not imply physical empty agreement.
-The actual retained-Mu writer-to-row relation remains open.
-No Haskell change or new production defect is added. Field-pool repair
-`b9219b9e` remains merged and validated in source `c0cc8a05`.
-Read `lean/notes-current-mu-observation-fusion.md` for the proof boundary.
+and stored-substitution orders with physical empty agreement and matching
+finite observations. Actual parent construction preserves that relation,
+including full guards, ordered children, and derived row survival.
+A checked source shows that this relation and equal aggregate metadata
+still do not make root self filtering congruent. Literal immediate union
+member provenance is required. The actual retained-Mu writer relation
+remains open. This proof boundary establishes no Haskell defect.
+No Haskell change is added. Field-pool repair `b9219b9e` remains merged and
+validated in source `c0cc8a05`. Read
+`lean/notes-current-constructor-observations.md` for the proof boundary.
 Keep this repair registry before historical failure reports.
 
 Audited source main is `c0cc8a05`, merged into `formalize` at `896b0a1c`.
@@ -188,6 +190,48 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current physical empty agreement and parent construction
+
+Updated: 2026-10-17 21:15 CEST. Starting checkpoint is `dc9504dc`.
+Proof commit is `17b9e2fe`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-constructor-observations.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, original availability, and replacement availability now
+construct both union-normalization/substitution orders with physical empty
+agreement as well as all finite open observations. All actual heaps, four
+Keeps facts, and both final available results remain. The proof handles
+closed and open unions and arbitrary nested Mu values. It does not assume
+a future completed call or output relation.
+
+The new Related predicate combines physical empty agreement and observations
+at every depth and fixed view. Actual ordinary nodes derive row survival
+from their original related rows. Actual union construction preserves the
+relation. A separate initial theorem constructs both sequential parent
+edges and nodes, including exact guards and ordered children. Its integration
+starts from the physically unequal union results and derives Related parents.
+
+A checked source shows that Related, equal free/deep-name lists, equal depth,
+and equal nonbare root classification still do not make self filtering
+congruent. A literal reference member can be removed while the same reference
+exposed through Mu remains. Preserve literal immediate member provenance.
+The actual retained-Mu writer relation, smart cleanup, and binder composition
+remain open. General outer progress, convergence, frontend/runtime adapters,
+and complete public Haskell correspondence also remain open.
+
+Full pinned Audit passes 3119 jobs and 68380 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 378 MiB peak. All five new
+strict source logs are empty. Canonical builds and eleven public declaration
+checks pass. Selected constructed checks and preservation evidence are in
+`lean/restart-evidence/20261017-constructor-observations/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved. Keep the full goal active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair there with its reproducer,
+paths, commit, checks, and upstream status.
 
 ## Current stored reconstruction and union normalization
 
