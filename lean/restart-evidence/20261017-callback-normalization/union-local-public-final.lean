@@ -1,0 +1,91 @@
+import MicroCFTA.SourceCurrentUnionNormalNativePrograms
+import MicroCFTA.SourceCurrentUnionNormalProjectionGate
+import MicroCFTA.SourceCurrentUnionNormalMerge
+import MicroCFTA.SourceCurrentUnionNormalConjunction
+import MicroCFTA.SourceCurrentUnionNormalTargets
+import MicroCFTA.SourceCurrentUnionNormalEdits
+import MicroCFTA.SourceCurrentUnionNormalScan
+import MicroCFTA.SourceCurrentUnionNormalLocalParent
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.all true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentUnionNormalNativePrograms.request
+#print MicroCFTA.SourceCurrentUnionNormalNativePrograms.request
+#print axioms MicroCFTA.SourceCurrentUnionNormalNativePrograms.request
+
+#check @MicroCFTA.SourceCurrentUnionNormalProjectionGate.forest
+#print MicroCFTA.SourceCurrentUnionNormalProjectionGate.forest
+#print axioms MicroCFTA.SourceCurrentUnionNormalProjectionGate.forest
+
+#check @MicroCFTA.SourceCurrentUnionNormalProjectionGate.gate
+#print MicroCFTA.SourceCurrentUnionNormalProjectionGate.gate
+#print axioms MicroCFTA.SourceCurrentUnionNormalProjectionGate.gate
+
+#check @MicroCFTA.SourceCurrentUnionNormalMerge.comparison
+#print MicroCFTA.SourceCurrentUnionNormalMerge.comparison
+#print axioms MicroCFTA.SourceCurrentUnionNormalMerge.comparison
+
+#check @MicroCFTA.SourceCurrentUnionNormalMerge.selection
+#print MicroCFTA.SourceCurrentUnionNormalMerge.selection
+#print axioms MicroCFTA.SourceCurrentUnionNormalMerge.selection
+
+#check @MicroCFTA.SourceCurrentUnionNormalMerge.merge
+#print MicroCFTA.SourceCurrentUnionNormalMerge.merge
+#print axioms MicroCFTA.SourceCurrentUnionNormalMerge.merge
+
+#check @MicroCFTA.SourceCurrentUnionNormalConjunction.call
+#print MicroCFTA.SourceCurrentUnionNormalConjunction.call
+#print axioms MicroCFTA.SourceCurrentUnionNormalConjunction.call
+
+#check @MicroCFTA.SourceCurrentUnionNormalTargets.seeded
+#print MicroCFTA.SourceCurrentUnionNormalTargets.seeded
+#print axioms MicroCFTA.SourceCurrentUnionNormalTargets.seeded
+
+#check @MicroCFTA.SourceCurrentUnionNormalTargets.target
+#print MicroCFTA.SourceCurrentUnionNormalTargets.target
+#print axioms MicroCFTA.SourceCurrentUnionNormalTargets.target
+
+#check @MicroCFTA.SourceCurrentUnionNormalTargets.force
+#print MicroCFTA.SourceCurrentUnionNormalTargets.force
+#print axioms MicroCFTA.SourceCurrentUnionNormalTargets.force
+
+#check @MicroCFTA.SourceCurrentUnionNormalTargets.shared_leaf
+#print MicroCFTA.SourceCurrentUnionNormalTargets.shared_leaf
+#print axioms MicroCFTA.SourceCurrentUnionNormalTargets.shared_leaf
+
+#check @MicroCFTA.SourceCurrentUnionNormalEdits.edit
+#print MicroCFTA.SourceCurrentUnionNormalEdits.edit
+#print axioms MicroCFTA.SourceCurrentUnionNormalEdits.edit
+
+#check @MicroCFTA.SourceCurrentUnionNormalEdits.editList
+#print MicroCFTA.SourceCurrentUnionNormalEdits.editList
+#print axioms MicroCFTA.SourceCurrentUnionNormalEdits.editList
+
+#check @MicroCFTA.SourceCurrentUnionNormalEdits.pass
+#print MicroCFTA.SourceCurrentUnionNormalEdits.pass
+#print axioms MicroCFTA.SourceCurrentUnionNormalEdits.pass
+
+#check @MicroCFTA.SourceCurrentUnionNormalScan.scan
+#print MicroCFTA.SourceCurrentUnionNormalScan.scan
+#print axioms MicroCFTA.SourceCurrentUnionNormalScan.scan
+
+#check @MicroCFTA.SourceCurrentUnionNormalScan.records
+#print MicroCFTA.SourceCurrentUnionNormalScan.records
+#print axioms MicroCFTA.SourceCurrentUnionNormalScan.records
+
+#check @MicroCFTA.SourceCurrentUnionNormalLocalParent.reduce
+#print MicroCFTA.SourceCurrentUnionNormalLocalParent.reduce
+#print axioms MicroCFTA.SourceCurrentUnionNormalLocalParent.reduce
+
+#check @MicroCFTA.SourceCurrentUnionNormalLocalParent.parent
+#print MicroCFTA.SourceCurrentUnionNormalLocalParent.parent
+#print axioms MicroCFTA.SourceCurrentUnionNormalLocalParent.parent
+

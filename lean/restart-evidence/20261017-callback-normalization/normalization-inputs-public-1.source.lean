@@ -1,0 +1,43 @@
+import MicroCFTA.SourceCurrentNativeNormalizationInputs
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.inputNames
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.inputNames
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.inputNames
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.support
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.support
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.support
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.instantiated
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.instantiated
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.instantiated
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.actual_free
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.actual_free
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.actual_free
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.fixed_origin
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.fixed_origin
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.fixed_origin
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.callback_fixed
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.callback_fixed
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.callback_fixed
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.ordinary_fresh_fixed
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.ordinary_fresh_fixed
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.ordinary_fresh_fixed
+
+#check @MicroCFTA.SourceCurrentNativeNormalizationInputs.reserved_fresh_fixed
+#print MicroCFTA.SourceCurrentNativeNormalizationInputs.reserved_fresh_fixed
+#print axioms MicroCFTA.SourceCurrentNativeNormalizationInputs.reserved_fresh_fixed
+
