@@ -1,0 +1,39 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-kernels-1.source.lean:166:61: error: unsolved goals
+created :
+  SourceEqualityConstraintFieldLookup.load nonemptyGuard nonemptyAllocation.snd =
+      Except.ok (some { stored := own, guard := nonemptyGuard.guard }) ∧
+    SourceEqualityConjoinAllocation.readback { stored := own, guard := nonemptyGuard.guard } = nonemptyGuard ∧
+      SourceEqualityConstraintAllocation.Ready nonemptyAllocation.snd own ∧
+        SourceEqualityPhysicalPayload.read nonemptyGuard.equalities = Except.ok own.payload ∧
+          Cache.Valid nonemptyAllocation.snd
+valid : Cache.Valid nonemptyAllocation.snd
+allocation :
+  SourceEqualityConstraintMemoAllocation.Valid
+      (SourceCurrentAllocatedPartialInitialization.operations nonemptyAllocation.snd) ∧
+    SourceEqualityConstraintMemoAllocation.Grows (SourceEqualityConstraintMemoAllocation.initial nonemptyAllocation.snd)
+        (SourceCurrentAllocatedPartialInitialization.operations nonemptyAllocation.snd) ∧
+      SourceEqualityConstraintAllocation.Ready
+        (SourceCurrentAllocatedPartialInitialization.operations nonemptyAllocation.snd).constraints
+        (SourceCurrentAllocatedPartialInitialization.emptyValue nonemptyAllocation.snd)
+initialReady :
+  SourceEqualityConstraintAllocation.Ready
+    (SourceCurrentAllocatedPartialInitialization.operations nonemptyAllocation.snd).constraints own
+initialLoad :
+  SourceEqualityConstraintFieldLookup.load nonemptyGuard
+      (SourceCurrentAllocatedPartialInitialization.operations nonemptyAllocation.snd).constraints =
+    Except.ok (some { stored := own, guard := SourceGuards.Guard.top })
+builtDone : built = InternedNestedConstruction.Outcome.done original heap
+⊢ (match
+      nodeCall 0 0 0 0 0 0 0 0 0 0 0
+        { inherited := (SourceCurrentAllocatedPartialGraph.descend nonemptyBefore own 0).fst, value := Value.empty }
+        (SourceCurrentAllocatedPartialGraph.descend nonemptyBefore own 0).snd with
+    | Outcome.done value state => Outcome.done [value] state
+    | Outcome.failed fault state => Outcome.failed fault state) =
+    Outcome.done [Value.empty] emptyAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-kernels-1.source.lean:179:18: warning: This simp argument is unused:
+  emptyDone
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [walk, Outcome.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

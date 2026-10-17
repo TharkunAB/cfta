@@ -1,0 +1,39 @@
+import MicroCFTA.SourceCurrentRetainedMuWriterAlignment
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer.grows
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer.grows
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer.grows
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.source_writer
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.source_writer
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.source_writer
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Reconstruction
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Reconstruction
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Reconstruction
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer.reconstruct
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer.reconstruct
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.Writer.reconstruct
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.retained
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.retained
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.retained
+
+#check @MicroCFTA.SourceCurrentRetainedMuWriterAlignment.initial
+#print MicroCFTA.SourceCurrentRetainedMuWriterAlignment.initial
+#print axioms MicroCFTA.SourceCurrentRetainedMuWriterAlignment.initial
+

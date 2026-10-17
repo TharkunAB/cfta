@@ -1,0 +1,96 @@
+import MicroCFTA.SourceCurrentOperationGrowth
+import MicroCFTA.SourceCurrentWorkerOperationGrowth
+import MicroCFTA.SourceCurrentOuterExecutionGrowth
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 10000
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.combine
+#print MicroCFTA.SourceCurrentOperationGrowth.combine
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.combine
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.descend
+#print MicroCFTA.SourceCurrentOperationGrowth.descend
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.descend
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.accessor
+#print MicroCFTA.SourceCurrentOperationGrowth.accessor
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.accessor
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.emptyField
+#print MicroCFTA.SourceCurrentOperationGrowth.emptyField
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.emptyField
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.inherited
+#print MicroCFTA.SourceCurrentOperationGrowth.inherited
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.inherited
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.precheck
+#print MicroCFTA.SourceCurrentOperationGrowth.precheck
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.precheck
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.equality_fold
+#print MicroCFTA.SourceCurrentOperationGrowth.equality_fold
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.equality_fold
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.mkEdge
+#print MicroCFTA.SourceCurrentOperationGrowth.mkEdge
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.mkEdge
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.native_step
+#print MicroCFTA.SourceCurrentOperationGrowth.native_step
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.native_step
+
+#check @MicroCFTA.SourceCurrentOperationGrowth.native
+#print MicroCFTA.SourceCurrentOperationGrowth.native
+#print axioms MicroCFTA.SourceCurrentOperationGrowth.native
+
+#check @MicroCFTA.SourceCurrentWorkerOperationGrowth.parent
+#print MicroCFTA.SourceCurrentWorkerOperationGrowth.parent
+#print axioms MicroCFTA.SourceCurrentWorkerOperationGrowth.parent
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.phase
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.phase
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.phase
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.step
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.step
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.step
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.reached
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.reached
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.reached
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.ready
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.ready
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.ready
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.field
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.field
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.field
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.cache_valid
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.cache_valid
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.cache_valid
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.identity
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.identity
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.identity
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.GrowingAncestor
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.GrowingAncestor
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.GrowingAncestor
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.ancestor
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.ancestor
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.ancestor
+
+#check @MicroCFTA.SourceCurrentOuterExecutionGrowth.initial
+#print MicroCFTA.SourceCurrentOuterExecutionGrowth.initial
+#print axioms MicroCFTA.SourceCurrentOuterExecutionGrowth.initial

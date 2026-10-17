@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/own-class-origin-direct-1.source.lean:63:9: error: unsolved goals
+case h_1
+original : Guard
+output : Constraints
+x✝ : Option (Option (List (List SourceGuards.Path)))
+active : SourceCompactGuards.ActiveOption none
+raw : some output = none
+heq✝ : SourceCompactGuards.positiveNormalized original.guard = none
+actual : original.equalities = none
+⊢ ∃ stored, none = some stored ∧ Covers stored output
+
+case h_2
+original : Guard
+output : Constraints
+x✝ : Option (Option (List (List SourceGuards.Path)))
+active : SourceCompactGuards.ActiveOption none
+raw : some output = none
+heq✝ : SourceCompactGuards.positiveNormalized original.guard = some (some [])
+actual : original.equalities = none
+⊢ ∃ stored, none = some stored ∧ Covers stored output
+
+case h_3
+original : Guard
+output : Constraints
+x✝¹ : Option (Option (List (List SourceGuards.Path)))
+added✝ : Option (List (List SourceGuards.Path))
+active : SourceCompactGuards.ActiveOption (some output)
+raw : original.equalities = some output
+x✝ : added✝ = some [] → False
+heq✝ : SourceCompactGuards.positiveNormalized original.guard = some added✝
+actual : none = some output
+⊢ ∃ stored, some output = some stored ∧ Covers stored output
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/own-class-origin-direct-1.source.lean:119:72: error: unsolved goals
+original : Guard
+before : Operations
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+field : SourceCurrentConjunctionEquality.FieldAvailable before original
+contradictory : SourceCompactGuards.sourceEqualities original = none
+index : Nat
+ready : Ready before.constraints Value.contradiction
+⊢ ¬(match
+        (SourceEqualityConstraintMemoAllocation.descend Value.contradiction index
+            (prefix original Value.contradiction before).snd).fst with
+      | Value.contradiction => none
+      | Value.live identity records => some records) =
+      some []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/own-class-origin-direct-1.source.lean:166:9: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  {
+      equalities :=
+        SourceCompactGuards.combineEqualities request.left.entry.key.constraint.equalities
+          request.right.entry.key.constraint.equalities,
+      guard :=
+        GuardConjunction.merge GuardStructuralOrder.le request.left.entry.key.constraint.guard
+          request.right.entry.key.constraint.guard } =
+    result.entry.key.3
+at case `Eq.refl`

@@ -1,0 +1,179 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:23:4: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.41
+has type
+  Grows ?m.41 ?m.41
+but is expected to have type
+  Grows before
+    (have key := (first.identity, second.identity);
+      match before.combinations key with
+      | some cell => (Except.ok cell.result, before)
+      | none => (Except.error message✝, before)).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:24:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this structure, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2
+first second : Value
+before : SourceEqualityConstraintMemoAllocation.State
+x✝ : Except String SourceEqualityPrecheck.Constraint
+payload✝ : SourceEqualityPrecheck.Constraint
+heq✝ : SourceEqualityInheritedPayload.combine first.payload second.payload = Except.ok payload✝
+⊢ Grows before
+    (have key := (first.identity, second.identity);
+      match before.combinations key with
+      | some cell => (Except.ok cell.result, before)
+      | none =>
+        have built := SourceEqualityConstraintAllocation.intern payload✝ before.constraints;
+        (Except.ok built.fst,
+          { constraints := built.snd,
+            combinations := keepFirst before.combinations key { first := first, second := second, result := built.fst },
+            descents := before.descents })).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:50:6: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this structure, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case live.cons
+index : Nat
+before : SourceEqualityConstraintMemoAllocation.State
+identity : Nat
+head : SourceEqualityClassOrder.Record
+tail : List SourceEqualityClassOrder.Record
+⊢ Grows before
+    (have key := ((Value.live identity (head :: tail)).identity, index);
+      match before.descents key with
+      | some cell => (cell.result, before)
+      | none =>
+        have built :=
+          SourceEqualityConstraintAllocation.intern
+            (SourceEqualityDescend.descend (Value.live identity (head :: tail)).payload index) before.constraints;
+        (built.fst,
+          { constraints := built.snd, combinations := before.combinations,
+            descents :=
+              keepFirst before.descents key
+                { input := Value.live identity (head :: tail), index := index, result := built.fst } })).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:69:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this structure, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case combine
+first second : SourceEqualityGuardAllocationPlan.Plan
+ihFirst :
+  ∀ (before : SourceEqualityConstraintMemoAllocation.State),
+    Grows before (SourceEqualityGuardAllocation.demand first before).snd
+ihSecond :
+  ∀ (before : SourceEqualityConstraintMemoAllocation.State),
+    Grows before (SourceEqualityGuardAllocation.demand second before).snd
+before : SourceEqualityConstraintMemoAllocation.State
+⊢ Grows before
+    (have head := SourceEqualityGuardAllocation.demand first before;
+      match head.fst with
+      | Except.error a => head
+      | Except.ok Value.contradiction => head
+      | Except.ok first =>
+        have tail := SourceEqualityGuardAllocation.demand second head.snd;
+        match tail.fst with
+        | Except.error a => tail
+        | Except.ok second => SourceEqualityConstraintMemoAllocation.combine first second tail.snd).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:86:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this structure, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Formula : Type
+stored : Value
+guard : SourceGuards.Guard Formula
+before : SourceEqualityConstraintMemoAllocation.State
+⊢ Grows before
+    (have positive := SourceEqualityGuardAllocation.demandPositive guard before;
+      match positive.fst with
+      | Except.error message => (Except.error message, positive.snd)
+      | Except.ok none => (Except.ok stored, positive.snd)
+      | Except.ok (some (Value.live identity [])) => (Except.ok stored, positive.snd)
+      | Except.ok (some added) => SourceEqualityConstraintMemoAllocation.combine stored added positive.snd).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:119:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this structure, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse
+Formula : Type
+inst✝ : DecidableEq (SourceGuards.Guard Formula)
+le : SourceGuards.Guard Formula → SourceGuards.Guard Formula → Bool
+first second : SourceEqualityConjoinAllocation.Constraint Formula
+left right : Nat
+before : SourceEqualityConstraintMemoAllocation.State
+h✝ : ¬left ≠ right
+⊢ Grows before
+    (have combined := SourceEqualityConjoinAllocation.conjoin le first second before;
+      match combined.fst with
+      | Except.error message => (Except.error message, combined.snd)
+      | Except.ok constraint =>
+        have checked := SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard left combined.snd;
+        match checked.fst with
+        | Except.error message => (Except.error message, checked.snd)
+        | Except.ok keep =>
+          (Except.ok
+              (if keep = true then SourceEqualityIntersectionEdgeAllocation.Branch.ready constraint
+              else SourceEqualityIntersectionEdgeAllocation.Branch.rejected),
+            checked.snd)).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:123:39: error(lean.unknownIdentifier): Unknown identifier `SourceRecursiveIntersectionCode.EdgeRequest`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:138:8: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this structure, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_3
+Output : Type
+width : Nat
+request : sorry
+next :
+  InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+    SourceRecursiveIntersectionCode.Code (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula) Output
+before : SourceEqualityNativeDemand.State width
+h✝ : ¬sorry.left.children.length ≠ sorry.right.children.length
+x✝¹ : Except String (Option (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+second✝¹ : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+heq✝¹ :
+  SourceEqualityConstraintFieldLookup.load sorry.left.entry.key.constraint before.operations.constraints =
+    Except.ok (some second✝¹)
+x✝ : Except String (Option (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+second✝ : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+heq✝ :
+  SourceEqualityConstraintFieldLookup.load sorry.right.entry.key.constraint before.operations.constraints =
+    Except.ok (some second✝)
+⊢ Grows before.operations
+    (have checked :=
+          SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le second✝¹ second✝
+            sorry.left.children.length sorry.right.children.length before.operations;
+        have after := { native := before.native, operations := checked.snd };
+        match checked.fst with
+        | Except.error message => SourceEqualityNativeDemand.Outcome.constraintError message after
+        | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.mismatch =>
+          SourceEqualityNativeDemand.sentinel sorry next after
+        | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.rejected =>
+          SourceEqualityNativeDemand.sentinel sorry next after
+        | Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) =>
+          SourceEqualityNativeDemand.Outcome.yielded
+            (SourceEqualityNativeDemand.Control.code
+              ((SourceEqualityNativeCheckedCode.children sorry.domain sorry.left sorry.right combined).bind next))
+            after).state.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:149:8: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-operations-direct-1.source.lean:169:24: error: Application type mismatch: The argument
+  ih next after
+has type
+  Grows after.operations (SourceEqualityNativeDemand.execute fuel next after).state.operations
+but is expected to have type
+  Grows after.operations (SourceEqualityNativeDemand.execute (fuel + 1) control before).state.operations
+in the application
+  trans first (ih next after)

@@ -1,0 +1,260 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:157:6: error: Type mismatch
+  conjunction_explore p h budget table rest before
+has type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (SourceCurrentConjunctionWorker.explore p h budget table rest before).state.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (SourceCurrentConjunctionWorker.Outcome.done table before).state.equality
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:159:8: error: Type mismatch
+  conjunction_explore p h budget table rest before
+has type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (SourceCurrentConjunctionWorker.explore p h budget table rest before).state.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (SourceCurrentConjunctionWorker.explore p h budget table rest✝ before).state.equality
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:162:32: error: Type mismatch: After simplification, term
+  first
+ has type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+      | SourceCurrentConjunctionRowsWorker.Outcome.done output state => state
+      | SourceCurrentConjunctionRowsWorker.Outcome.failed fault state => state).equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key
+                SourceCurrentConjunctionWorklist.closed budget table nodes✝ =
+              true then
+          SourceCurrentConjunctionWorker.explore p h budget table rest✝ before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes✝ before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            SourceCurrentConjunctionWorker.explore p h (budget - 1) ({ nodes := nodes✝, rows := requirements } :: table)
+              (requirements.flatten ++ rest✝) middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            SourceCurrentConjunctionWorker.Outcome.failed
+              (SourceCurrentConjunctionWorker.Fault.rows fault table (nodes✝ :: rest✝)) after).state.equality
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:164:67: error: Type mismatch: After simplification, term
+  first
+ has type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality
+    (match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+      | SourceCurrentConjunctionRowsWorker.Outcome.done output state => state
+      | SourceCurrentConjunctionRowsWorker.Outcome.failed fault state => state).equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.equality middle.equality
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:165:28: error: Application type mismatch: The argument
+  conjunction_explore p h (budget - 1) ?m.184 ?m.185 middle
+has type
+  SourceEqualityConstraintMemoAllocation.Grows middle.equality
+    (SourceCurrentConjunctionWorker.explore p h (budget - 1) ?m.184 ?m.185 middle).state.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows middle.equality
+    (if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key
+                SourceCurrentConjunctionWorklist.closed budget table nodes✝ =
+              true then
+          SourceCurrentConjunctionWorker.explore p h budget table rest✝ before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes✝ before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            SourceCurrentConjunctionWorker.explore p h (budget - 1) ({ nodes := nodes✝, rows := requirements } :: table)
+              (requirements.flatten ++ rest✝) middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            SourceCurrentConjunctionWorker.Outcome.failed
+              (SourceCurrentConjunctionWorker.Fault.rows fault table (nodes✝ :: rest✝)) after).state.equality
+in the application
+  trans first (conjunction_explore p h (budget - 1) ?m.184 ?m.185 middle)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:166:0: warning: unused termination hints, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:191:6: error: Tactic `apply` failed: could not unify the conclusion of `physical_bind
+  (SourceCurrentConjunctionWorker.decision p h budget value ?m.69) ?m.65 (conjunction_decision p h budget value ?m.69)`
+  SourceEqualityConstraintMemoAllocation.Grows (SourceCurrentConjunctionRowsAllocation.State.equality ?m.69)
+    ((SourceCurrentConjunctionWorker.decision p h budget value ?m.69).bind ?m.65).state.equality
+with the goal
+  SourceEqualityConstraintMemoAllocation.Grows before.operations
+    ((SourceCurrentConjunctionWorker.decision p h budget value
+              (SourceCurrentAllocatedNativeEffects.physical before)).bind
+          fun answer after =>
+          SourceCurrentConjunctionWorker.Outcome.done (answer, SourceCurrentEmptinessMemo.insert memo value answer)
+            after).state.equality
+
+Note: The full type of `physical_bind (SourceCurrentConjunctionWorker.decision p h budget value ?m.69) ?m.65
+  (conjunction_decision p h budget value ?m.69)` is
+  (∀ (value : Bool) (middle : Physical),
+      SourceEqualityConstraintMemoAllocation.Grows middle.equality
+        (SourceCurrentConjunctionWorker.Outcome.state (?m.65 value middle)).equality) →
+    SourceEqualityConstraintMemoAllocation.Grows (SourceCurrentConjunctionRowsAllocation.State.equality ?m.69)
+      ((SourceCurrentConjunctionWorker.decision p h budget value ?m.69).bind ?m.65).state.equality
+
+case h_2
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+inst✝ : DecidableEq Node
+p h budget : Nat
+value : Node
+before : Checked width
+memo : Fourth
+x✝ : Option (Node × Bool)
+heq✝ : memo value.referenceOf = none
+⊢ SourceEqualityConstraintMemoAllocation.Grows before.operations
+    ((SourceCurrentConjunctionWorker.decision p h budget value
+              (SourceCurrentAllocatedNativeEffects.physical before)).bind
+          fun answer after =>
+          SourceCurrentConjunctionWorker.Outcome.done (answer, SourceCurrentEmptinessMemo.insert memo value answer)
+            after).state.equality
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:197:4: error: Type mismatch: After simplification, term
+  first
+ has type
+  SourceEqualityConstraintMemoAllocation.Grows before.operations state✝.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.operations
+    (SourceCurrentAllocatedConjunctionWorker.Outcome.done output✝.fst
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before state✝) output✝.snd).state.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:197:4: error: Type mismatch: After simplification, term
+  first
+ has type
+  SourceEqualityConstraintMemoAllocation.Grows before.operations state✝.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.operations
+    (SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault✝
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before state✝) memo).state.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:213:31: error: don't know how to synthesize implicit argument `a`
+  @And.right
+    (∀ (clear : Guard → Bool) (s : Nat) (code : SourceCurrentAllocatedMergeGraph.Code ?m.252)
+      (state : SourceCurrentAllocatedMergeGraph.State) (memo : SourceCurrentAllocatedMergeGraph.Memo),
+      SourceEqualityConstraintMemoAllocation.Grows state.equality
+        (SourceCurrentAllocatedMergeWorker.execute clear fuel s code state memo).state.equality)
+    (∀ (clear : Guard → Bool) (s : Nat) (value : Node) (state : SourceCurrentAllocatedMergeGraph.State)
+      (memo : SourceCurrentAllocatedMergeGraph.Memo),
+      SourceEqualityConstraintMemoAllocation.Grows state.equality
+        (SourceCurrentAllocatedMergeWorker.call clear fuel s value state memo).state.equality)
+    ih clear s value before memo
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fuel : Nat
+ih :
+  ∀ {A : Type},
+    (∀ (clear : Guard → Bool) (s : Nat) (code : SourceCurrentAllocatedMergeGraph.Code A)
+        (state : SourceCurrentAllocatedMergeGraph.State) (memo : SourceCurrentAllocatedMergeGraph.Memo),
+        SourceEqualityConstraintMemoAllocation.Grows state.equality
+          (SourceCurrentAllocatedMergeWorker.execute clear fuel s code state memo).state.equality) ∧
+      ∀ (clear : Guard → Bool) (s : Nat) (value : Node) (state : SourceCurrentAllocatedMergeGraph.State)
+        (memo : SourceCurrentAllocatedMergeGraph.Memo),
+        SourceEqualityConstraintMemoAllocation.Grows state.equality
+          (SourceCurrentAllocatedMergeWorker.call clear fuel s value state memo).state.equality
+clear : Guard → Bool
+s : Nat
+before : SourceCurrentAllocatedMergeGraph.State
+memo : SourceCurrentAllocatedMergeGraph.Memo
+value : Node
+⊢ Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:213:34: error: don't know how to synthesize placeholder
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fuel : Nat
+ih :
+  ∀ {A : Type},
+    (∀ (clear : Guard → Bool) (s : Nat) (code : SourceCurrentAllocatedMergeGraph.Code A)
+        (state : SourceCurrentAllocatedMergeGraph.State) (memo : SourceCurrentAllocatedMergeGraph.Memo),
+        SourceEqualityConstraintMemoAllocation.Grows state.equality
+          (SourceCurrentAllocatedMergeWorker.execute clear fuel s code state memo).state.equality) ∧
+      ∀ (clear : Guard → Bool) (s : Nat) (value : Node) (state : SourceCurrentAllocatedMergeGraph.State)
+        (memo : SourceCurrentAllocatedMergeGraph.Memo),
+        SourceEqualityConstraintMemoAllocation.Grows state.equality
+          (SourceCurrentAllocatedMergeWorker.call clear fuel s value state memo).state.equality
+clear : Guard → Bool
+s : Nat
+before : SourceCurrentAllocatedMergeGraph.State
+memo : SourceCurrentAllocatedMergeGraph.Memo
+value : Node
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:235:6: error: Type mismatch: After simplification, term
+  first
+ has type
+  SourceEqualityConstraintMemoAllocation.Grows (SourceCurrentAllocatedNativeEffects.physical middle).equality
+    state✝.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows middle.operations
+    (SourceCurrentAllocatedTargetWorker.Outcome.done output✝
+          (SourceCurrentAllocatedQueryMemo.advancePhysical middle state✝) memo✝).state.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:235:6: error: Type mismatch: After simplification, term
+  first
+ has type
+  SourceEqualityConstraintMemoAllocation.Grows (SourceCurrentAllocatedNativeEffects.physical middle).equality
+    state✝.equality
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows middle.operations
+    (SourceCurrentAllocatedTargetWorker.Outcome.failed (SourceCurrentAllocatedTargetWorker.Fault.merge fault✝)
+          (SourceCurrentAllocatedQueryMemo.advancePhysical middle state✝) memo✝).state.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-workers-direct-2.source.lean:238:115: error: unsolved goals
+case h_1
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width n : Nat
+left right : Node
+before : Checked width
+memo : Memo
+x✝ : SourceEqualityNativeDemand.Outcome width Node
+result✝ : Node
+after✝ : Checked width
+first : SourceEqualityConstraintMemoAllocation.Grows before.operations after✝.operations
+heq✝ :
+  SourceEqualityNativeDemand.execute n
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      before =
+    SourceEqualityNativeDemand.Outcome.done result✝ after✝
+⊢ SourceEqualityConstraintMemoAllocation.Grows before.operations
+    (SourceCurrentAllocatedTargetWorker.Outcome.done result✝ after✝ memo).state.operations
+
+case h_2
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width n : Nat
+left right : Node
+before : Checked width
+memo : Memo
+x✝¹ : SourceEqualityNativeDemand.Outcome width Node
+first :
+  SourceEqualityConstraintMemoAllocation.Grows before.operations
+    (match
+        SourceEqualityNativeDemand.execute n
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+          before with
+      | SourceEqualityNativeDemand.Outcome.yielded control state => state
+      | SourceEqualityNativeDemand.Outcome.done value state => state
+      | SourceEqualityNativeDemand.Outcome.failed failure state => state
+      | SourceEqualityNativeDemand.Outcome.constraintError message state => state
+      | SourceEqualityNativeDemand.Outcome.blocked reason control state => state).operations
+x✝ :
+  ∀ (result : Node) (after : Checked width),
+    SourceEqualityNativeDemand.execute n
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+          before =
+        SourceEqualityNativeDemand.Outcome.done result after →
+      False
+⊢ SourceEqualityConstraintMemoAllocation.Grows before.operations
+    (SourceCurrentAllocatedTargetWorker.Outcome.failed
+          (SourceCurrentAllocatedTargetWorker.Fault.native
+            (SourceEqualityNativeDemand.execute n
+              (SourceEqualityNativeDemand.Control.code
+                (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+              before))
+          (match
+            SourceEqualityNativeDemand.execute n
+              (SourceEqualityNativeDemand.Control.code
+                (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+              before with
+          | SourceEqualityNativeDemand.Outcome.yielded control state => state
+          | SourceEqualityNativeDemand.Outcome.done value state => state
+          | SourceEqualityNativeDemand.Outcome.failed failure state => state
+          | SourceEqualityNativeDemand.Outcome.constraintError message state => state
+          | SourceEqualityNativeDemand.Outcome.blocked reason control state => state)
+          memo).state.operations

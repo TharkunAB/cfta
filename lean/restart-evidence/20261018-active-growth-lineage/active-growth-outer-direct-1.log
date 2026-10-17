@@ -1,0 +1,208 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:81:15: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.80
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.80 ?m.80
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (walk fuel g s r e p h m c n budget combined index [] before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:84:18: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.110
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.110 ?m.110
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (walk 0 g s r e p h m c n budget combined index (value :: rest) before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:90:10: error: Tactic `apply` failed: could not unify the conclusion of `bind
+  (nodeCall fuel g s r e p h m c n budget
+    { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+    (SourceCurrentAllocatedPartialGraph.descend before combined index).snd)
+  ?m.145 (trans descent first)`
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    ((nodeCall fuel g s r e p h m c n budget
+                { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+                (SourceCurrentAllocatedPartialGraph.descend before combined index).snd).bind
+            ?m.145).state.checked.operations
+with the goal
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (walk (fuel + 1) g s r e p h m c n budget combined index (value :: rest) before).state.checked.operations
+
+Note: The full type of `bind
+  (nodeCall fuel g s r e p h m c n budget
+    { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+    (SourceCurrentAllocatedPartialGraph.descend before combined index).snd)
+  ?m.145 (trans descent first)` is
+  (∀ (value : Node) (middle : Caller width),
+      SourceEqualityConstraintMemoAllocation.Grows middle.checked.operations
+        (Outcome.state (?m.145 value middle)).checked.operations) →
+    SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+      ((nodeCall fuel g s r e p h m c n budget
+                  { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst,
+                    value := value }
+                  (SourceCurrentAllocatedPartialGraph.descend before combined index).snd).bind
+              ?m.145).state.checked.operations
+
+case cons.succ
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width g s r e p h m c n budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+before : Caller width
+value : Node
+rest : List Node
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → NodeAt m ∧ BodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+descent :
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (SourceEqualityConstraintMemoAllocation.descend combined index before.checked.operations).snd
+first :
+  SourceEqualityConstraintMemoAllocation.Grows
+    (SourceCurrentAllocatedPartialGraph.descend before combined index).snd.checked.operations
+    (nodeCall fuel g s r e p h m c n budget
+            { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+            (SourceCurrentAllocatedPartialGraph.descend before combined index).snd).state.checked.operations
+⊢ SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (walk (fuel + 1) g s r e p h m c n budget combined index (value :: rest) before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:98:25: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.199
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.199 ?m.199
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (children fuel g s r e p h m c n budget SourceEqualityConstraintAllocation.Value.contradiction values
+            before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:99:33: error: Type mismatch
+  walkAt g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) 0 values before
+has type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (walk fuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) 0 values
+            before).state.checked.operations
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (children fuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) values
+            before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:115:15: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.375
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.375 ?m.375
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (rows fuel g s r e p h m c n budget inherited [] before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:118:18: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.405
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.405 ?m.405
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (rows 0 g s r e p h m c n budget inherited (value :: rest) before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:120:10: error: Tactic `apply` failed: could not unify the conclusion of `bind
+  (edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := value } before) ?m.423
+  (edge_call fuel g s r e p h m c n budget { inherited := inherited, value := value } before)`
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    ((edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := value } before).bind
+            ?m.423).state.checked.operations
+with the goal
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (rows (fuel + 1) g s r e p h m c n budget inherited (value :: rest) before).state.checked.operations
+
+Note: The full type of `bind (edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := value } before)
+  ?m.423 (edge_call fuel g s r e p h m c n budget { inherited := inherited, value := value } before)` is
+  (∀ (value : EdgeValue Symbol Guard) (middle : Caller width),
+      SourceEqualityConstraintMemoAllocation.Grows middle.checked.operations
+        (Outcome.state (?m.423 value middle)).checked.operations) →
+    SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+      ((edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := value } before).bind
+              ?m.423).state.checked.operations
+
+case cons.succ
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width g s r e p h m c n budget : Nat
+inherited : SourceEqualityConstraintAllocation.Value
+before : Caller width
+value : EdgeValue Symbol Guard
+rest : List (EdgeValue Symbol Guard)
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → NodeAt m ∧ BodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt (fuel + 1)
+childrenAt : ChildrenAt (fuel + 1)
+descendantsAt : DescendantsAt (fuel + 1)
+⊢ SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (rows (fuel + 1) g s r e p h m c n budget inherited (value :: rest) before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:131:37: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.494
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.494 ?m.494
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (nodeBody fuel g s r e p h m c n budget { inherited := inherited, value := Value.empty }
+            before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:131:37: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.505
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.505 ?m.505
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (nodeBody fuel g s r e p h m c n budget { inherited := inherited, value := Value.reference name✝ }
+            before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:131:37: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.516
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.516 ?m.516
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (nodeBody fuel g s r e p h m c n budget
+            { inherited := inherited, value := Value.union entry✝ members✝ depth✝ free✝ }
+            before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:137:18: error: Type mismatch
+  SourceEqualityConstraintMemoAllocation.grows_refl ?m.595
+has type
+  SourceEqualityConstraintMemoAllocation.Grows ?m.595 ?m.595
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (nodeBody 0 g s r e p h m c n budget { inherited := inherited, value := Value.node entry original depth free }
+            before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:139:10: error: Tactic `apply` failed: could not unify the conclusion of `bind
+  (rows fuel g s r e p h m c n budget inherited original before) ?m.613
+  ((ih fuel (Nat.lt_succ_self fuel)).right.right.left g s r e p h m c n budget inherited original before)`
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    ((rows fuel g s r e p h m c n budget inherited original before).bind ?m.613).state.checked.operations
+with the goal
+  SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (nodeBody (fuel + 1) g s r e p h m c n budget
+            { inherited := inherited, value := Value.node entry original depth free } before).state.checked.operations
+
+Note: The full type of `bind (rows fuel g s r e p h m c n budget inherited original before) ?m.613
+  ((ih fuel (Nat.lt_succ_self fuel)).right.right.left g s r e p h m c n budget inherited original before)` is
+  (∀ (value : List (EdgeValue Symbol Guard)) (middle : Caller width),
+      SourceEqualityConstraintMemoAllocation.Grows middle.checked.operations
+        (Outcome.state (?m.613 value middle)).checked.operations) →
+    SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+      ((rows fuel g s r e p h m c n budget inherited original before).bind ?m.613).state.checked.operations
+
+case node.succ
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width g s r e p h m c n budget : Nat
+before : Caller width
+inherited : SourceEqualityConstraintAllocation.Value
+entry : Interned InternedBinderProtocol.NodeKey
+original : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → NodeAt m ∧ BodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt (fuel + 1)
+childrenAt : ChildrenAt (fuel + 1)
+descendantsAt : DescendantsAt (fuel + 1)
+rowsAt : RowsAt (fuel + 1)
+⊢ SourceEqualityConstraintMemoAllocation.Grows before.checked.operations
+    (nodeBody (fuel + 1) g s r e p h m c n budget
+            { inherited := inherited, value := Value.node entry original depth free } before).state.checked.operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-active-growth-lineage/active-growth-outer-direct-1.source.lean:190:46: error(lean.invalidField): Invalid field `checked`: The environment does not contain `MicroCFTA.SourceEqualityNativeDemand.State.checked`, so it is not possible to project the field `checked` from an expression
+  state
+of type
+  SourceEqualityNativeDemand.State ?m.121
