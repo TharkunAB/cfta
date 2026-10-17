@@ -1,0 +1,128 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:23:68: error(lean.unknownIdentifier): Unknown identifier `NodeSourceRecursiveIntersectionCode.Below`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:29:68: error(lean.unknownIdentifier): Unknown identifier `EdgeSourceRecursiveIntersectionCode.Below`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:41:41: error(lean.unknownIdentifier): Unknown identifier `EdgeSourceRecursiveIntersectionCode.Below`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:56:32: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+source : InternedConstructorTemplates.State Symbol Guard
+holds : Guard → Language.Term Symbol → Bool
+limit rank : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned DomainKey
+left right : List (EdgeValue Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : SourceRecursiveIntersectionKernel.Domain state domain
+leftResident : ∀ (row : EdgeValue Symbol Guard), row ∈ left → EdgeResident state.heap row
+rightResident : ∀ (row : EdgeValue Symbol Guard), row ∈ right → EdgeResident state.heap row
+bounds : (rows : EdgeValue Symbol Guard × EdgeValue Symbol Guard) → rows ∈ pairs left right → sorry
+input : Machine Symbol Guard → EdgeValue Symbol Guard × EdgeValue Symbol Guard → Prop :=
+  fun current rows =>
+    SourceRecursiveIntersectionKernel.Domain current domain ∧
+      EdgeResident current.heap rows.fst ∧ EdgeResident current.heap rows.snd
+stable : Stable input
+original : ∀ (rows : EdgeValue Symbol Guard × EdgeValue Symbol Guard), rows ∈ pairs left right → input state rows
+rows : EdgeValue Symbol Guard × EdgeValue Symbol Guard
+member : rows ∈ pairs left right
+current : Machine Symbol Guard
+a✝ : SourceRecursiveIntersectionKernel.Valid current
+ready : input current rows
+⊢ At ?m.241 ?m.242 limit (requestEdge domain rows.fst rows.snd) current (budget limit (rank - 1)) fun state edge =>
+    EdgeResident state.heap edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:43:115: error: unsolved goals
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+source : InternedConstructorTemplates.State Symbol Guard
+holds : Guard → Language.Term Symbol → Bool
+limit rank : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned DomainKey
+left right : List (EdgeValue Symbol Guard)
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : SourceRecursiveIntersectionKernel.Domain state domain
+leftResident : ∀ (row : EdgeValue Symbol Guard), row ∈ left → EdgeResident state.heap row
+rightResident : ∀ (row : EdgeValue Symbol Guard), row ∈ right → EdgeResident state.heap row
+bounds : (rows : EdgeValue Symbol Guard × EdgeValue Symbol Guard) → rows ∈ pairs left right → sorry
+input : Machine Symbol Guard → EdgeValue Symbol Guard × EdgeValue Symbol Guard → Prop :=
+  fun current rows =>
+    SourceRecursiveIntersectionKernel.Domain current domain ∧
+      EdgeResident current.heap rows.fst ∧ EdgeResident current.heap rows.snd
+stable : Stable input
+original : ∀ (rows : EdgeValue Symbol Guard × EdgeValue Symbol Guard), rows ∈ pairs left right → input state rows
+⊢ At source holds limit (SourceRecursiveIntersectionCode.compileRows domain left right) state
+    ((pairs left right).length * budget limit (rank - 1) + 1) fun after value => Available after.heap value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:68:47: error(lean.unknownIdentifier): Unknown identifier `NodeSourceRecursiveIntersectionCode.Below`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:69:11: error(lean.unknownIdentifier): Unknown identifier `NodeSourceRecursiveIntersectionCode.Below`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:86:29: error: Application type mismatch: The argument
+  ready.right.right
+has type
+  Available current.heap member
+but is expected to have type
+  Available current.heap (NodeRequest.right ?m.252)
+in the application
+  ⟨?m.239, ready.right.right⟩
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:88:29: error: Application type mismatch: The argument
+  ready.right.left
+has type
+  Available current.heap other
+but is expected to have type
+  Available current.heap (NodeRequest.right ?m.286)
+in the application
+  ⟨?m.273, ready.right.left⟩
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:97:8: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:100:5: warning: Variable name `bounded` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bounded
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:119:8: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:175:93: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 3
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 1
+where
+ a := ↑(sourceBranching source)
+ b := ↑limit * ↑(budget limit (rank - 1))
+ c := ↑(budget limit (rank - 1))
+ d := ↑(budget (sourceBranching source) (?m.294 - 1))
+ e := ↑(sourceBranching source) *
+  ↑(budget (sourceBranching source)
+      (requiredFuel (view source holds) (nodeSemantic { domain := domain, left := left, right := right }) complete - 1))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:181:80: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 3
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 1
+where
+ a := ↑(sourceBranching source)
+ b := ↑limit * ↑(budget limit (rank - 1))
+ c := ↑(budget limit (rank - 1))
+ d := ↑(budget (sourceBranching source) (?m.353 - 1))
+ e := ↑(sourceBranching source) *
+  ↑(budget (sourceBranching source)
+      (requiredFuel (view source holds) (nodeSemantic { domain := domain, left := left, right := right }) complete - 1))
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:171:72: warning: This simp argument is unused:
+  SourceRecursiveIntersectionCode.Below
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionCode.compileNode, selected] at bounded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:177:72: warning: This simp argument is unused:
+  SourceRecursiveIntersectionCode.Below
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionCode.compileNode, selected] at bounded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

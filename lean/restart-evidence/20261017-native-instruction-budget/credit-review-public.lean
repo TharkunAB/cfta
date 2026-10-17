@@ -1,0 +1,38 @@
+import MicroCFTA.SourceRecursiveIntersectionInstructionCredit
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.NodeCharge
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.NodeCharge
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.EdgeCharge
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.EdgeCharge
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.At
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.At
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.mono
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.mono
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.bind
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.bind
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.walk
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.walk
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.request_node
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.request_node
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.request_edge
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.request_edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.work
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.work
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.node
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.node
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.edge
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.union
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.union
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionCredit.optional
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionCredit.optional

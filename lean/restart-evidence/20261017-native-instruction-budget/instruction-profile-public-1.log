@@ -1,0 +1,134 @@
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits →
+  Nat
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching' depends on axioms: [propext]
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Nat
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget : Nat → Nat → Nat
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_zero' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_zero : ∀ (limit : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ : ∀ (limit height : Nat),
+  @Eq.{1} Nat
+    (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) height
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) limit
+        (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit height)))
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ_ge' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ_ge : ∀ (limit height : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit height)
+    (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) height
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_mono' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    ∀ (height : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget first height)
+        (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget last height)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_height_mono' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_height_mono : ∀ (limit : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit first)
+      (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit last)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_parameters_mono' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_parameters_mono : ∀
+  {firstLimit lastLimit firstHeight lastHeight : Nat},
+  @LE.le.{0} Nat instLENat firstLimit lastLimit →
+    @LE.le.{0} Nat instLENat firstHeight lastHeight →
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget firstLimit firstHeight)
+        (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget lastLimit lastHeight)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_ge_four' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_ge_four : ∀ (limit height : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) height →
+    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+      (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit height)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_pos' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_pos : ∀ (limit height : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) height →
+    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget limit height)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_pos' depends on axioms: [propext]
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_pos : ∀
+  (bounds : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits),
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching bounds)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_rows' depends on axioms: [propext]
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_rows : ∀
+  (bounds : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits),
+  @LE.le.{0} Nat instLENat (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bounds.rows bounds.rows)
+    (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching bounds)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_members' depends on axioms: [propext]
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_members : ∀
+  (bounds : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits),
+  @LE.le.{0} Nat instLENat bounds.members (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching bounds)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_arity' depends on axioms: [propext]
+MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_arity : ∀
+  (bounds : MicroCFTA.SourceRecursiveIntersectionSourceProfile.Limits),
+  @LE.le.{0} Nat instLENat bounds.arity (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching bounds)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching_pos' depends on axioms: [propext]
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching_pos : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.row_pairs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.row_pairs : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol] (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source request →
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0}
+            (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Symbol Guard inst
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))))
+          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.left_members' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.left_members : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source request →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.right_members' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.right_members : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source request →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+'MicroCFTA.SourceRecursiveIntersectionInstructionProfile.edge_zip' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.edge_zip : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (request : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionCode.EdgeScope Symbol Guard source request →
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0}
+            (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.zip.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left Symbol Guard request))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right Symbol Guard request))))
+          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)

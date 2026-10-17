@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `ffb195b2`.
+Status rechecked on 2026-10-17 at proof checkpoint `d224177b`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-native-width-producer.md` for the current proof boundaries.
+Read `lean/notes-current-native-instruction-budget.md` for the current proof boundaries.
 
-The current initial width and checked trace proofs add no Haskell change.
+The current initial native instruction proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2876 jobs and 63991 dependency checks.
+The last completed pinned Lean Audit passes: 2884 jobs and 64123 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,62 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current complete native instruction and payload budgets
+
+Updated: 2026-10-17 07:39 CEST. This checkpoint starts at published `59884b14`.
+The proof commits are `1580eb22`, `d2b7ca41`, and `d224177b`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-native-instruction-budget.md` for the full target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-instruction-budget/`.
+
+Eight additive modules derive whole-query instruction credit from initial
+source branching and semantic rank. All node compiler branches and both
+checked edge branches produce their own credit. Every actual yielded step
+spends at least one credit. Cold publication, checked bodies, warm returns,
+and both captured native finish frames retain their exact continuations.
+
+Closed original roots, initial numeric headroom, Good, SemanticReady, and
+Idle now construct their own complete checked physical receipt. Idle permits
+populated completed tables. That same trace fits the initial instruction
+budget. Exact execute, returned mass, current stores, and both constructor
+identity supplies use that budget. The initial endpoint takes no physical
+trace, future WordRanges, later entry counters, or desired result law.
+
+The budget is an initial-source mathematical value based on noncomputable
+semantic requiredFuel. It is not a computed syntax-only bound. Work and
+optionalBinder each count as one checked instruction. Internal constructor
+work, solver work, bytes, and total memory capacity need separate measures.
+The new initial endpoint gives physical and resource results. Compose the
+existing contextual language laws on the same trace for serial semantics.
+
+The pinned Audit passes 2884 jobs and 64123 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight final strict logs are empty.
+All 74 imported complete signature and axiom pairs pass in twelve groups.
+These comprise 63 public checks and eleven constructive integration proofs.
+Six proof component manifests verify 166 entries. The next-target source
+survey adds 23 entries. Aggregate validation checks seven manifests with
+189 entries.
+Read checkpoint-validation.json for complete imported signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12943 starting
+files, 2875 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 77 frozen manifests with 641 entries. Stashes and three other
+worktrees retain their initial state.
+
+Next derive a computed initial semantic rank bound. Then forecast resources
+for complete queries that consume their actual preceding results. Preserve
+populated native, equality, and global caches. General Target and Force
+misses, editor/class completion, outer active/stored producers, arbitrary
+constrained Mu bodies, convergence, remaining callers, current frontend and
+runtime adapters, concrete capacity, and full public Haskell correspondence
+remain open. The full library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the repair
+registry first. Field-pool repair `b9219b9e` is merged and validated. Reuse
+unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier artifacts and the optimized interned core.
+Read next-computable-rank-and-result-fed-queries.md in the evidence directory.
 
 ## Current initial native widths and checked trace resources
 

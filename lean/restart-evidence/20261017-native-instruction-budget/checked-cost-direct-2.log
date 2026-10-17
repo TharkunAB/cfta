@@ -1,0 +1,54 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:36:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol RowGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:44:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol RowGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:33:58: error: unsolved goals
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint sorry))
+holds : SourceSymbolicIndex.Constraint sorry → Language.Term Symbol → Bool
+limit rank : Nat
+domain : Interned DomainKey
+left right : EdgeValue Symbol RowGuard
+combined : SourceEqualityConjoinAllocation.Constraint Formula
+state : Machine Symbol RowGuard
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : SourceRecursiveIntersectionKernel.Domain state domain
+leftResident : EdgeResident state.heap left
+rightResident : EdgeResident state.heap right
+bounds :
+  ∀ (pair : Value Symbol RowGuard × Value Symbol RowGuard),
+    pair ∈ left.children.zip right.children →
+      NodeBelow sorry holds rank { domain := domain, left := sorry, right := sorry }
+input : Machine Symbol RowGuard → Value Symbol RowGuard × Value Symbol RowGuard → Prop :=
+  fun current pair =>
+    SourceRecursiveIntersectionKernel.Domain current domain ∧
+      Available current.heap pair.fst ∧ Available current.heap pair.snd
+⊢ At sorry holds limit (SourceEqualityNativeCheckedCode.children domain sorry sorry sorry) sorry
+    ((left.children.zip right.children).length * budget limit (rank - 1) + 1) fun after edge =>
+    EdgeResident after.heap edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:59:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol RowGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:89:77: error: Invalid argument name `source` for function `sentinel_at`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `Symbol`: s̵o̵u̵r̵c̵e̵S̲y̲m̲b̲o̲l̲
+  • `Formula`: s̵o̵u̵r̵c̵e̵F̲o̲r̲m̲u̲l̲a̲
+  • `left`: s̵o̵u̵r̵c̵e̵l̲e̲f̲t̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `valid`: s̵o̵u̵r̵c̵e̵v̲a̲l̲i̲d̲
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:89:193: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 2
+where
+ a := ↑?m.150
+ b := ↑(sourceBranching source) *
+  ↑(budget (sourceBranching source) (requiredFuel (view source holds) (edgeSemantic holds request) complete - 1))

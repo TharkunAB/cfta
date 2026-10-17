@@ -1,0 +1,39 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionInstructionCredit.lean:142:59: error: don't know how to synthesize placeholder for argument `post`
+context:
+Symbol Guard A B : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+source : InternedConstructorTemplates.State Symbol Guard
+holds : Guard → Language.Term Symbol → Bool
+limit : Nat
+call : A → Code Symbol Guard B
+perCall : Nat
+input : Machine Symbol Guard → A → Prop
+output : Machine Symbol Guard → B → Prop
+inputStable : Stable input
+outputStable : Stable output
+first : A
+rest : List A
+ih :
+  (∀ (request : A),
+      request ∈ rest →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            input state request → At source holds limit (call request) state perCall output) →
+    ∀ (state : Machine Symbol Guard),
+      SourceRecursiveIntersectionKernel.Valid state →
+        (∀ (request : A), request ∈ rest → input state request) →
+          At source holds limit (SourceRecursiveIntersectionCode.walk call rest) state (rest.length * perCall)
+            fun after values => values.length = rest.length ∧ ∀ (value : B), value ∈ values → output after value
+calls :
+  ∀ (request : A),
+    request ∈ first :: rest →
+      ∀ (state : Machine Symbol Guard),
+        SourceRecursiveIntersectionKernel.Valid state →
+          input state request → At source holds limit (call request) state perCall output
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+inputs : ∀ (request : A), request ∈ first :: rest → input state request
+firstCall : At source holds limit (call first) state perCall output
+⊢ Machine Symbol Guard → List B → Prop
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionInstructionCredit.lean:140:11: error: failed to infer `have` declaration type

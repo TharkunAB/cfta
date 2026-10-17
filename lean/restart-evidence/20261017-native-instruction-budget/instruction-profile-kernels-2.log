@@ -1,0 +1,143 @@
+'MicroCFTA.InstructionProfileKernels.closed_source_credit' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InstructionProfileKernels.closed_source_credit : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) (height : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) height →
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun source =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst_1 expression
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value source))
+          (And (@MicroCFTA.InternedNestedFacts.Facts Symbol Guard source)
+            (And
+              (@MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                  MicroCFTA.IntersectionEmptyDomain.emptyDomain value value))
+              (And
+                (@LE.le.{0} Nat instLENat
+                  (@List.length.{0}
+                    (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Symbol Guard inst
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value)
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value)))
+                  (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source))
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount Symbol Guard value)
+                    (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source))
+                  (And
+                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source))
+                    (And
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                        (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+                          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+                          height))
+                      (@LE.le.{0} Nat instLENat
+                        (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+                          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+                          height)
+                        (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+                          (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) height
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))))
+'MicroCFTA.InstructionProfileKernels.recursive_source_branches' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.InstructionProfileKernels.recursive_source_branches : And
+  (@Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b =>
+        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a
+          b)
+      MicroCFTA.InstructionProfileKernels.plan (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+      MicroCFTA.InstructionProfileKernels.root MicroCFTA.InstructionProfileKernels.source))
+  (And
+    (@MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Nat Bool MicroCFTA.InstructionProfileKernels.source
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Nat Bool
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain MicroCFTA.InstructionProfileKernels.root
+        MicroCFTA.InstructionProfileKernels.root))
+    (And
+      (@MicroCFTA.SourceRecursiveIntersectionCode.EdgeScope Nat Bool MicroCFTA.InstructionProfileKernels.source
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Nat Bool
+          MicroCFTA.IntersectionEmptyDomain.emptyDomain MicroCFTA.InstructionProfileKernels.selected
+          MicroCFTA.InstructionProfileKernels.selected))
+      (And
+        (@Eq.{1} Nat
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount Nat Bool
+            MicroCFTA.InstructionProfileKernels.root)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (And
+          (@Eq.{1} Nat
+            (@List.length.{0}
+              (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool))
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Nat Bool instDecidableEqNat
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Bool MicroCFTA.InstructionProfileKernels.ordinary)
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Bool MicroCFTA.InstructionProfileKernels.ordinary)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (And
+            (@Eq.{1} Nat
+              (@List.length.{0}
+                (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                  (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                (@List.zip.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                  (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Nat Bool
+                    MicroCFTA.InstructionProfileKernels.selected)
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Nat Bool
+                    MicroCFTA.InstructionProfileKernels.selected)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (And
+              (@Eq.{1} Nat
+                (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Bool
+                  MicroCFTA.InstructionProfileKernels.source)
+                (@OfNat.ofNat.{0} Nat (nat_lit 36) (instOfNatNat (nat_lit 36))))
+              (And
+                (@LE.le.{0} Nat instLENat
+                  (@List.length.{0}
+                    (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool))
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Nat Bool instDecidableEqNat
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Bool MicroCFTA.InstructionProfileKernels.ordinary)
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Bool
+                        MicroCFTA.InstructionProfileKernels.ordinary)))
+                  (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Bool
+                    MicroCFTA.InstructionProfileKernels.source))
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (@List.length.{0}
+                      (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                      (@List.zip.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Nat Bool
+                          MicroCFTA.InstructionProfileKernels.selected)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Nat Bool
+                          MicroCFTA.InstructionProfileKernels.selected)))
+                    (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Bool
+                      MicroCFTA.InstructionProfileKernels.source))
+                  (And
+                    (@LE.le.{0} Nat instLENat
+                      (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.memberCount Nat Bool
+                        MicroCFTA.InstructionProfileKernels.root)
+                      (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Bool
+                        MicroCFTA.InstructionProfileKernels.source))
+                    (@Eq.{1} Nat
+                      (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+                        (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Bool
+                          MicroCFTA.InstructionProfileKernels.source)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 5332) (instOfNatNat (nat_lit 5332)))))))))))))

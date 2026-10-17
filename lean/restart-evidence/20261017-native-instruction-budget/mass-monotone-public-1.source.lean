@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.ceiling_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.ceiling_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.charge_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.charge_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.massAfter_bound_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.massAfter_bound_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.massAfter_count_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.massAfter_count_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.massAfter_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.massAfter_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.credit_bound_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.credit_bound_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.credit_count_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.credit_count_mono
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.credit_mono
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveMassMonotone.credit_mono

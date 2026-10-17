@@ -1,0 +1,54 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:36:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:44:82: error: Application type mismatch: The argument
+  inputs
+has type
+  input current pair
+but is expected to have type
+  SourceRecursiveIntersectionThunks.NodeReady current ?m.184
+in the application
+  SourceRecursiveIntersectionInstructionCredit.request_node ?m.184 current ?m.185 inputs
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:44:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:33:58: error: unsolved goals
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint sorry))
+holds : SourceSymbolicIndex.Constraint sorry → Language.Term Symbol → Bool
+limit rank : Nat
+domain : Interned DomainKey
+left right : EdgeValue Symbol Guard
+combined : SourceEqualityConjoinAllocation.Constraint Formula
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : SourceRecursiveIntersectionKernel.Domain state domain
+leftResident : EdgeResident state.heap left
+rightResident : EdgeResident state.heap right
+bounds :
+  ∀ (pair : Value Symbol Guard × Value Symbol Guard),
+    pair ∈ left.children.zip right.children →
+      NodeBelow sorry holds rank { domain := domain, left := sorry, right := sorry }
+input : Machine Symbol Guard → Value Symbol Guard × Value Symbol Guard → Prop :=
+  fun current pair =>
+    SourceRecursiveIntersectionKernel.Domain current domain ∧
+      Available current.heap pair.fst ∧ Available current.heap pair.snd
+⊢ At sorry holds limit (SourceEqualityNativeCheckedCode.children domain sorry sorry sorry) sorry
+    ((left.children.zip right.children).length * budget limit (rank - 1) + 1) fun after edge =>
+    EdgeResident after.heap edge
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:59:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeCheckedInstructionCredit.lean:89:123: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 2
+where
+ a := ↑?m.150
+ b := ↑(sourceBranching source) *
+  ↑(budget (sourceBranching source) (requiredFuel (view source holds) (edgeSemantic holds request) complete - 1))

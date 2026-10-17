@@ -1,0 +1,40 @@
+import MicroCFTA.SourceCurrentAllocatedNativeInstructionStep
+import MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionStep.ControlAt
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionStep.ControlAt
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionStep.ControlAt.mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionStep.ControlAt.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionStep.yielded
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionStep.yielded
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.nodeBudget
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.edgeBudget
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.nodeBudget_of_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.nodeBudget_of_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.edgeBudget_of_complete
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.edgeBudget_of_complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.prefix_bound
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.prefix_bound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.node_prefix
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.node_prefix
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.edge_prefix
+#check @MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.edge_prefix

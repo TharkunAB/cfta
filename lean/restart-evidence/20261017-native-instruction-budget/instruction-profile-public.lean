@@ -1,0 +1,69 @@
+import MicroCFTA.SourceRecursiveIntersectionInstructionProfile
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_zero
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_zero
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ_ge
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_succ_ge
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_mono
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_mono
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_height_mono
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_height_mono
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_parameters_mono
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_parameters_mono
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_ge_four
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_ge_four
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_pos
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget_pos
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_pos
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_pos
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_rows
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_rows
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_members
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_members
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_arity
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.branching_arity
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching_pos
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching_pos
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.row_pairs
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.row_pairs
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.left_members
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.left_members
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.right_members
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.right_members
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionInstructionProfile.edge_zip
+#check @MicroCFTA.SourceRecursiveIntersectionInstructionProfile.edge_zip

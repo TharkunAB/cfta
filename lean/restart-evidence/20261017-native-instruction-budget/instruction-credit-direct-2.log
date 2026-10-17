@@ -1,0 +1,13 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionInstructionCredit.lean:144:8: error: Type mismatch: After simplification, term
+  combined
+ has type
+  @At Symbol Guard (List B) inst✝¹ inst✝ source holds limit
+    ((call first).bind fun value =>
+      (SourceRecursiveIntersectionCode.walk call rest).bind fun values => Code.pure (value :: values))
+    state (perCall + rest.length * perCall) fun final values =>
+    values.length = rest.length + 1 ∧ ∀ (actual : B), actual ∈ values → output final actual
+but is expected to have type
+  @At Symbol Guard (List B) inst✝¹ inst✝ source holds limit (SourceRecursiveIntersectionCode.walk call (first :: rest))
+    state (perCall + rest.length * perCall) fun after values =>
+    values.length = rest.length + 1 ∧ ∀ (value : B), value ∈ values → output after value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionInstructionCredit.lean:155:45: error(lean.unknownIdentifier): Unknown identifier `value`

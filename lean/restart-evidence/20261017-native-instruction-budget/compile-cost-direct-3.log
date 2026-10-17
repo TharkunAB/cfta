@@ -1,0 +1,58 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:198:20: error: don't know how to synthesize implicit argument `limit`
+  @compileUnion Symbol Guard inst✝¹ source holds ?m.590
+    (requiredFuel (view source holds)
+      (nodeSemantic { domain := domain, left := Value.union entry members depth free, right := right }) complete)
+    inst✝ domain members right true state valid known rightAvailable
+    (fun child member => Available.children leftAvailable child member) calls
+context:
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+source : InternedConstructorTemplates.State Symbol Guard
+facts : Facts source
+holds : Guard → Language.Term Symbol → Bool
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+growth : Grows source state.heap
+history : Extends source.nodes.issued state.heap.nodes.issued
+limit : Nat := ⋯
+positive : 1 ≤ limit
+domain : Interned DomainKey
+right : Value Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List Reference
+scope : NodeScope source { domain := domain, left := Value.union entry members depth free, right := right }
+complete :
+  Completes (view source holds)
+    (nodeSemantic { domain := domain, left := Value.union entry members depth free, right := right })
+rank : Nat := ⋯
+localRoom : budget limit (rank - 1) + 2 ≤ 2 + limit * budget limit (rank - 1)
+bounded :
+  SourceRecursiveIntersectionCode.Below source holds
+    (requiredFuel (view source holds)
+      (nodeSemantic { domain := domain, left := Value.union entry members depth free, right := right }) complete)
+    (SourceRecursiveIntersectionCode.compileNode
+      { domain := domain, left := Value.union entry members depth free, right := right })
+    state
+known :
+  SourceRecursiveIntersectionKernel.Domain state
+    { domain := domain, left := Value.union entry members depth free, right := right }.domain
+leftAvailable :
+  Available state.heap { domain := domain, left := Value.union entry members depth free, right := right }.left
+rightAvailable :
+  Available state.heap { domain := domain, left := Value.union entry members depth free, right := right }.right
+selected :
+  SourceRecursiveIntersectionControl.decision domain.key (Value.union entry members depth free) right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+width : members.length ≤ limit
+calls :
+  ∀ (child : Value Symbol Guard),
+    child ∈ members →
+      NodeBelow source holds
+        (requiredFuel (view source holds)
+          (nodeSemantic { domain := domain, left := Value.union entry members depth free, right := right }) complete)
+        { domain := domain, left := child, right := right }
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileInstructionCredit.lean:198:13: error: failed to infer `have` declaration type
