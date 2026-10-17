@@ -2353,6 +2353,10 @@ import MicroCFTA.IntersectNumericRank
 import MicroCFTA.IntersectNumericFuel
 import MicroCFTA.SourceRecursiveIntersectionComputedFuel
 import MicroCFTA.SourceCurrentAllocatedNativeComputedBudget
+import MicroCFTA.SourceCurrentAllocatedNativeResourceForecast
+import MicroCFTA.SourceCurrentConstrainedCapCheckedJointComputedQuery
+import MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources
+import MicroCFTA.SourceCurrentConstrainedCapGeneratedQuerySequence
 /-!
 # Proof dependency audit
 
