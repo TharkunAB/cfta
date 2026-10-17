@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentConstrainedCapMixedEdit
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedEdit.outputDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedEdit.outputDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedEdit.childrenDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedEdit.childrenDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedEdit.node
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedEdit.node
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedEdit.children
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedEdit.children
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedEdit.rows
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedEdit.rows
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedEdit.list
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedEdit.list

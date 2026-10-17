@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentConstrainedCapStaticQueries
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 2000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStaticQueries.resources
+#check @MicroCFTA.SourceCurrentConstrainedCapStaticQueries.resources
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStaticQueries.ranges
+#check @MicroCFTA.SourceCurrentConstrainedCapStaticQueries.ranges
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStaticQueries.retained
+#check @MicroCFTA.SourceCurrentConstrainedCapStaticQueries.retained
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStaticQueries.complete
+#check @MicroCFTA.SourceCurrentConstrainedCapStaticQueries.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStaticQueries.Queries
+#check @MicroCFTA.SourceCurrentConstrainedCapStaticQueries.Queries
+#print axioms MicroCFTA.SourceCurrentConstrainedCapStaticQueries.complete_many
+#check @MicroCFTA.SourceCurrentConstrainedCapStaticQueries.complete_many

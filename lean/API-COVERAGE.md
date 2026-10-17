@@ -1,5 +1,52 @@
 # Public API and source correspondence
 
+## Current mixed editor depths and original-source serial resources
+
+Updated: 2026-10-17 06:00 CEST. This checkpoint starts at published `bf306940`.
+The proof commits are `c0876d1a`, `181f668f`, and `140f5c7a`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-mixed-editor-class.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-mixed-editor-class/`.
+
+Five additive modules retain mixed stores and caps through actual node,
+child, row, and list editor reads, compiled classes, and the tail-first
+class pass. Selected path domains suffice. Unrelated captured roots can
+stay open. Each head captures its literal tail result. Depth follows an
+explicit conservative syntax transformer. This noncomputable logical size
+bound is not an executable allocation estimate. Actual warm-slot integration
+constructs its own finite nonplain leaf edit from initial entry counters.
+General first target misses and class completion remain open.
+
+A separate endpoint constructs arbitrary finite serial queries over one
+fixed original source from one initial numeric resource budget. Actual past
+domain allocation retains the same missing-key credit across every call.
+It preserves populated native tables, equality operations, and global tables.
+No later-entry counters or future WordRanges are supplied. This result does
+not admit newly produced operands outside that original source.
+
+The pinned Audit passes 2849 jobs and 63208 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All five strict checks are clean.
+All 28 imported pairs pass in eight groups. Four component manifests verify
+98 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 12120 starting files, 2843 older non-Audit proofs,
+all 239 Haskell files, and 72 frozen production manifests with 606 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next derive initial serial resources for newly produced operands. Construct
+general Target and Force misses, then mixed editor and class completion.
+Produce outer active and stored certificates. General constrained descent,
+arbitrary constrained Mu bodies, convergence, remaining recursive callers,
+frontend/runtime adapters, concrete capacity, and full public composition
+remain open. Completed graph proofs do not establish Haskell lazy publication
+or runtime forcing. The full library goal stays active. Read
+next-generated-resources-and-class-completion.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
 ## Current mixed Merge caps and selected target callers
 
 Updated: 2026-10-17 05:46 CEST. This checkpoint starts at published `5b0c56a8`.

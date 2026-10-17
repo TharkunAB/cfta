@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentConstrainedCapMixedClass
+import MicroCFTA.SourceCurrentConstrainedCapMixedClassPass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedClass.classDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedClass.classDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedClass.verified
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedClass.verified
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.foldDepth
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.foldDepth
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.propagate_caps
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.propagate_caps
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.fold
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.fold
+#print axioms MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.pass
+#check @MicroCFTA.SourceCurrentConstrainedCapMixedClassPass.pass

@@ -1,0 +1,145 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:15:57: error: unexpected token '('; expected command
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:31:4: error: Failed to find LCNF signature for List._sizeOf_inst
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:35:4: error: Failed to find LCNF signature for List._sizeOf_inst
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:170:111: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+leafCase :
+  ∀ {next : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {path : EqualityNormalize.Path} {value : Value Symbol Guard}
+    {before : SourceCurrentAllocatedSharedTargetState.State width} {result : Value Symbol Guard}
+    {after : SourceCurrentAllocatedSharedTargetState.State width} {memos saved : Memos}
+    (receipt :
+      SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path value before result
+        after memos saved),
+    NodeGoal ⋯ memos
+emptyCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos}, NodeGoal ⋯ memos
+ordinaryCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : HeapState} {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat}
+    {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsReads formulas solver base actual memos saved → RowsGoal actual memos → NodeGoal ⋯ memos
+recursiveCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos current saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {original : Value Symbol Guard} {before : SharedState width}
+    {exposed : Value Symbol Guard} {heap : HeapState} {value : Value Symbol Guard} {after : SharedState width}
+    {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    SourceCurrentRequiredQueryMemos.HeadReads head memos current →
+      SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current →
+        NodeReads formulas solver base body current saved → NodeGoal body current → NodeGoal ⋯ memos
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+entries : List (Int × Edits EqualityNormalize.Path)
+offset : Nat
+state : SharedState width
+memos : Memos
+inventory : Inventory
+capturedDepth depth : Nat
+a✝⁹ : Populated (Edits.editBelow entries)
+a✝⁸ : Allowed record (Edits.editBelow entries)
+a✝⁷ : Ready formulas solver inventory record originals base state
+a✝⁶ : Values state.checked.native.machine.heap []
+a✝⁵ : ChildrenSafe entries offset []
+a✝⁴ : Valid state.checked.native.machine.heap memos
+a✝³ : Values base originals
+a✝² : ∀ (path : EqualityNormalize.Path), path ∈ record.paths → Domain (List.map Int.ofNat path) originals
+a✝¹ : Stored record originals state
+stored : ∀ (original : Value Symbol Guard), original ∈ originals → Cap Plain capturedDepth original
+a✝ : ∀ (value : Value Symbol Guard), value ∈ [] → Cap Plain depth value
+⊢ Stored record originals state ∧
+    ∀ (value : Value Symbol Guard), value ∈ [] → Cap Plain (childrenDepth capturedDepth depth entries) value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConstrainedCapMixedEdit.lean:221:104: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : HeapState
+leafCase :
+  ∀ {next : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {path : EqualityNormalize.Path} {value : Value Symbol Guard}
+    {before : SourceCurrentAllocatedSharedTargetState.State width} {result : Value Symbol Guard}
+    {after : SourceCurrentAllocatedSharedTargetState.State width} {memos saved : Memos}
+    (receipt :
+      SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path value before result
+        after memos saved),
+    NodeGoal ⋯ memos
+emptyCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos}, NodeGoal ⋯ memos
+ordinaryCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+    {value : Value Symbol Guard} {heap : HeapState} {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat}
+    {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsReads formulas solver base actual memos saved → RowsGoal actual memos → NodeGoal ⋯ memos
+recursiveCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos current saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {original : Value Symbol Guard} {before : SharedState width}
+    {exposed : Value Symbol Guard} {heap : HeapState} {value : Value Symbol Guard} {after : SharedState width}
+    {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    SourceCurrentRequiredQueryMemos.HeadReads head memos current →
+      SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current →
+        NodeReads formulas solver base body current saved → NodeGoal body current → NodeGoal ⋯ memos
+nilChildren :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width} {memos : Memos},
+    ChildrenGoal ⋯ memos
+unselectedCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width}
+    {value : Value Symbol Guard} {offset : Nat} {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenReads formulas solver base rest memos saved → ChildrenGoal rest memos → ChildrenGoal ⋯ memos
+selectedCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)} {memos current saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState width} {result : Value Symbol Guard} {middle : SharedState width}
+    {values results : List (Value Symbol Guard)} {after : SharedState width} {offset : Nat}
+    {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeReads formulas solver base first memos current →
+      ChildrenReads formulas solver base rest current saved →
+        NodeGoal first memos → ChildrenGoal rest current → ChildrenGoal ⋯ memos
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+entries : List (Int × Edits EqualityNormalize.Path)
+state : SharedState width
+memos : Memos
+inventory : Inventory
+capturedDepth depth : Nat
+a✝⁹ : Populated (Edits.editBelow entries)
+a✝⁸ : Allowed record (Edits.editBelow entries)
+a✝⁷ : Ready formulas solver inventory record originals base state
+a✝⁶ : Edges state.checked.native.machine.heap []
+a✝⁵ : RowsSafe entries []
+a✝⁴ : Valid state.checked.native.machine.heap memos
+a✝³ : Values base originals
+a✝² : ∀ (path : EqualityNormalize.Path), path ∈ record.paths → Domain (List.map Int.ofNat path) originals
+a✝¹ : Stored record originals state
+stored : ∀ (original : Value Symbol Guard), original ∈ originals → Cap Plain capturedDepth original
+a✝ : ∀ (edge : EdgeValue Symbol Guard), edge ∈ [] → EdgeCap Plain depth edge
+⊢ Stored record originals state ∧
+    ∀ (edge : EdgeValue Symbol Guard),
+      edge ∈ [] → EdgeCap Plain (outputDepth capturedDepth depth (Edits.editBelow entries)) edge
