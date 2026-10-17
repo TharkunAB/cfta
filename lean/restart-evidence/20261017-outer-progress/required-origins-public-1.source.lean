@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentRequiredGuardOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentRequiredGuardOrigins.RowOrigin
+#check @MicroCFTA.SourceCurrentRequiredGuardOrigins.RowOrigin
+#print MicroCFTA.SourceCurrentRequiredGuardOrigins.RowOrigin
+#print axioms MicroCFTA.SourceCurrentRequiredGuardOrigins.rows
+#check @MicroCFTA.SourceCurrentRequiredGuardOrigins.rows
+#print MicroCFTA.SourceCurrentRequiredGuardOrigins.rows
+#print axioms MicroCFTA.SourceCurrentRequiredGuardOrigins.ordinary
+#check @MicroCFTA.SourceCurrentRequiredGuardOrigins.ordinary
+#print MicroCFTA.SourceCurrentRequiredGuardOrigins.ordinary
+#print axioms MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_unfold
+#check @MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_unfold
+#print MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_unfold
+#print axioms MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_head
+#check @MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_head
+#print MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_head
+#print axioms MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_node
+#check @MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_node
+#print MicroCFTA.SourceCurrentRequiredGuardOrigins.accepted_node

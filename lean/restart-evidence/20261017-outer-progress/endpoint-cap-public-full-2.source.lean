@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentPrimaryEndpointCap
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentPrimaryEndpointCap.reaches_cap
+#print MicroCFTA.SourceCurrentPrimaryEndpointCap.reaches_cap
+#print axioms MicroCFTA.SourceCurrentPrimaryEndpointCap.reaches_cap
+#check @MicroCFTA.SourceCurrentPrimaryEndpointCap.reaches_finite
+#print MicroCFTA.SourceCurrentPrimaryEndpointCap.reaches_finite
+#print axioms MicroCFTA.SourceCurrentPrimaryEndpointCap.reaches_finite
+#check @MicroCFTA.SourceCurrentPrimaryEndpointCap.endpoint_clear
+#print MicroCFTA.SourceCurrentPrimaryEndpointCap.endpoint_clear
+#print axioms MicroCFTA.SourceCurrentPrimaryEndpointCap.endpoint_clear
+#check @MicroCFTA.SourceCurrentPrimaryEndpointCap.endpoint_cap
+#print MicroCFTA.SourceCurrentPrimaryEndpointCap.endpoint_cap
+#print axioms MicroCFTA.SourceCurrentPrimaryEndpointCap.endpoint_cap

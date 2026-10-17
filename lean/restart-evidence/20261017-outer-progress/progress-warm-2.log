@@ -1,0 +1,8 @@
+finite_outer_warm : match outerCall with
+| SourceCurrentAllocatedPartialWorker.Outcome.done value after =>
+  MergedOrdinaryHeight.height value = 4 ∧
+    (SourceCurrentAllocatedPartialState.beginNode { inherited := plainValue, value := b } after).snd.fst =
+        FlatMemoThunk.Observation.ready b ∧
+      (SourceCurrentAllocatedPartialState.beginNode { inherited := plainValue, value := b } after).snd.snd = after
+| SourceCurrentAllocatedPartialWorker.Outcome.failed fault state => False
+'MicroCFTA.OuterParentWarmWitness.finite_outer_warm' depends on axioms: [propext, Classical.choice, Quot.sound]

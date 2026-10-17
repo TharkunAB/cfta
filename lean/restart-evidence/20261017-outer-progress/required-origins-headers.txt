@@ -1,0 +1,37 @@
+Source SHA256 ced8b8c96614ac5886bdf2046c48412981a17a2740e1dc548523d4951cd1446e
+
+27: def RowOrigin (original result : EdgeValue Symbol Guard) : Prop :=
+
+32: theorem rows {entries : List (Int × Needed)} {originals results : List (EdgeValue Symbol Guard)}
+33:     {before after : State Symbol Guard} (actual : RequireRows entries originals before results after)
+34:     (semantic : SemanticReady before) (costs : CostHeap before) (resident : Edges before originals) :
+35:     ∀ result ∈ results, ∃ original ∈ originals, RowOrigin original result := by
+
+76: theorem ordinary {needed : Needed} {entry : Interned InternedBinderProtocol.NodeKey}
+77:     {originals : List (EdgeValue Symbol Guard)} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+78:     {result : Value Symbol Guard} {before after : State Symbol Guard}
+79:     (actual : RequireNode needed (.node entry originals depth free) before result after)
+80:     (semantic : SemanticReady before) (costs : CostHeap before)
+81:     (available : Available before (.node entry originals depth free)) :
+82:     ∀ edge ∈ nodeEdges result, ∃ original ∈ originals, RowOrigin original edge := by
+
+125: theorem accepted_unfold {value result : Value SourceSymbol SourceGuard} {before after : State SourceSymbol SourceGuard}
+126:     (actual : InternedFreshOrdinaryStoredSubstitution.unfold value before = .done result after)
+127:     (semantic : SemanticReady before) (available : Available before value) (guards : GuardHeap Plain before)
+128:     (accepted : SourceMemoGate.unconstrained value = true) :
+129:     GuardHeap Plain after ∧ Annotated Plain result ∧
+130:       ∀ edge ∈ nodeEdges result, SourceEqualityPhysicalPayload.own edge.entry.key.constraint = .ok (some []) := by
+
+139: theorem accepted_head {value result : Value SourceSymbol SourceGuard} {before after : State SourceSymbol SourceGuard}
+140:     (actual : SourceEqualityRequiredHead.Head value before result after)
+141:     (semantic : SemanticReady before) (costs : CostHeap before) (available : Available before value)
+142:     (guards : GuardHeap Plain before) (accepted : SourceMemoGate.unconstrained value = true) :
+143:     GuardHeap Plain after ∧ Annotated Plain result ∧
+144:       ∀ edge ∈ nodeEdges result, SourceEqualityPhysicalPayload.own edge.entry.key.constraint = .ok (some []) := by
+
+153: theorem accepted_node {needed : Needed} {value result : Value SourceSymbol SourceGuard} {before after : State SourceSymbol SourceGuard}
+154:     (actual : RequireNode needed value before result after) (semantic : SemanticReady before) (costs : CostHeap before)
+155:     (available : Available before value) (guards : GuardHeap Plain before) (accepted : SourceMemoGate.unconstrained value = true) :
+156:     GuardHeap Plain after ∧ Annotated Plain result ∧
+157:       ∀ edge ∈ nodeEdges result, SourceEqualityPhysicalPayload.own edge.entry.key.constraint = .ok (some []) := by
+
