@@ -12,13 +12,13 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-Status rechecked on 2026-10-17 at proof checkpoint `61c48e57`.
+Status rechecked on 2026-10-17 at proof checkpoint `3152aaf8`.
 The source rejects the direct recursive pool in derivation validation.
 The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
-Read `lean/notes-current-generated-query-resources.md` for the current proof boundaries.
+Read `lean/notes-current-selected-operand-resources.md` for the current proof boundaries.
 
-The current finite generated-query proofs add no Haskell change.
+The current selected Operand and recursive resource proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2894 jobs and 64310 dependency checks.
+The last completed pinned Lean Audit passes: 2899 jobs and 64377 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -174,6 +174,54 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current selected Operand frames and recursive resource bounds
+
+Updated: 2026-10-17 08:36 CEST. This checkpoint starts at published b0bd69c6.
+Proof commits are 8440539c and 3152aaf8. Source main remains c0cc8a05,
+merged locally at 896b0a1c. Read
+lean/notes-current-selected-operand-resources.md for the complete target,
+proof map, and missing areas. Evidence is in
+lean/restart-evidence/20261017-selected-operand-resources/.
+
+Five additive modules retain the full generated-query Frame through actual
+selected Operand work. The complete endpoint constructs its own Operand,
+receipt, and returned Frame from initial selected support. It permits
+unrelated open ordinary roots. The mixed endpoint retains its cap and Merge
+laws. Integration constructs a generated query and passes its exact result
+to an Operand while retaining the same native cells and global validity.
+
+Full stored substitution, unfolding, recursive row reads, comparisons, and
+selection derive causal mass and node/edge bounds. Reader and comparison
+transfers use explicit proof fuel. Selection completion constructs its own
+return with a fuel-indexed envelope. It does not derive a sufficient fuel or
+complete Operand forecast from initial forest and path data. A current causal
+store bounds the actual memo winner even when a different candidate is smaller.
+
+The pinned Audit passes 2899 jobs and 64377 dependency checks. All five
+production strict logs are empty. All 49 imported full signature and axiom
+pairs pass in nine groups: 35 distinct public declarations, five independent
+repeat checks, and nine constructive integrations. Only propext,
+Classical.choice, and Quot.sound occur. Six component manifests verify
+169 entries. Read checkpoint-validation.json for the exact source and log hashes. Preservation retains 13393 starting files,
+2893 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 80 frozen module manifests with 656 entries. Stashes and three
+other worktrees retain their initial state.
+
+Next derive an initial computable bound for dynamic Mu-degree reader descent.
+Then bound general Merge, forecast complete selected Operand work, and
+compose Target in its actual head, tail, then query order. General Target,
+Force, Edit/ClassPass, outer active/stored descent, arbitrary constrained Mu,
+convergence, current adapters, concrete capacity, and full public Haskell
+correspondence remain open. Source gates and all-root cap assumptions need
+separate coverage. The complete library goal stays active.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS records the
+merged and validated field-pool repair b9219b9e first. The Chain reproducer
+returns Left (FieldAtomOnDatatype "Next" 0). Reuse unchanged strict Nix,
+798 examples plus golden, Fourmolu, and Cabal-gild evidence. Record each later
+Haskell fix there for external work. Preserve all older proofs, counterexamples,
+repairs, marked drafts, and the optimized interned core.
 
 ## Current finite result-fed query resources
 
