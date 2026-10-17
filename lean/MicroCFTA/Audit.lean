@@ -2397,6 +2397,9 @@ import MicroCFTA.SourceCurrentConstrainedCapTargetForecast
 import MicroCFTA.SourceCurrentConstrainedCapTargetReceiptComposition
 import MicroCFTA.SourceCurrentConstrainedCapTargetOperand
 import MicroCFTA.SourceCurrentConstrainedCapTargetNumeric
+import MicroCFTA.SourceCurrentConstrainedCapSharedForecast
+import MicroCFTA.SourceCurrentConstrainedCapForceNumeric
+import MicroCFTA.SourceCurrentConstrainedCapLeafNumeric
 /-!
 # Proof dependency audit
 
