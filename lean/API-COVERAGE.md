@@ -1,5 +1,51 @@
 # Public API and source correspondence
 
+## Current general native marker and cap transport
+
+Updated: 2026-10-17 03:52 CEST. This checkpoint starts at published `91ea29d3`.
+The proof commits are `443106e4`, `5912ff25`, and `e5dd8505`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-general-native-callbacks.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-general-marker-transport/`.
+
+Six additive modules prove general stored marker and finite-cap transport.
+They cover arbitrary available capped bodies, including open nested Mu
+reconstruction and earlier nested winners. Selective lexical typing permits
+unused constrained captures. Complete initial caches construct actual
+normalized callbacks and retain the same cap, marked classification,
+MuStored, Ready, availability, and histories. Exact warm outer Mu reads
+now derive occurrence bounds from their actual probes.
+
+Separate callback certificates permit an unfinished outer reservation.
+They derive actual returned laws without a successful-callback premise.
+Initial Ready has Covered []; a fresh outer reservation normally has
+Covered [key]. Keep these interfaces distinct. Literal candidate cleanup
+does not certify the guard cap of an earlier keep-first outer Mu winner.
+That readback and joint native result-cell classification are the next target.
+Read next-outer-mu-cap-readback.md in the new evidence directory.
+
+The pinned Audit passes 2791 jobs and 62515 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All six new production sources pass
+absolute-path strict checks without diagnostics. All 61 imported pairs pass
+in 16 groups. Seven component manifests verify 155 entries. Failed sources
+and raw logs remain preserved. One older warning remains in canonical replay.
+Preservation retains 10871 starting files, 2784 older non-Audit proofs,
+all 239 Haskell files, and 65 frozen production manifests with 548 entries.
+Stashes and three other worktrees remain unchanged.
+
+General mixed native closure, finite warm callers, constrained recursive
+descent, repeated convergence, remaining recursive callers, current frontend
+and runtime adapters, capacity, serial public pipelines, and complete public
+composition remain open. The final source gate remains broader than the
+current supported family. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Recursive field-pool repair `b9219b9e` is merged and
+validated. Reuse unchanged strict Nix build, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve the optimized interned core and
+every earlier proof, counterexample, repair, and marked draft.
+
 ## Current ranked native occurrences and captured finishes
 
 Updated: 2026-10-17 03:33 CEST. This checkpoint starts at published `4e4f59e9`.
