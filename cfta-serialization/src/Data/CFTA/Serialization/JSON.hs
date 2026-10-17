@@ -6,6 +6,8 @@ module Data.CFTA.Serialization.JSON (
     explainDecodeError,
     encodeGraph,
     decodeGraph,
+    encodeDocument,
+    decodeDocument,
 ) where
 
 import Control.Monad (foldM_, unless)
@@ -25,6 +27,7 @@ import Data.Aeson (
     (.=),
  )
 import Data.Aeson.Key (Key)
+import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import Data.Aeson.Parser (eitherDecodeWith, jsonNoDup')
 import Data.Aeson.Types (JSONPath, JSONPathElement (..), Parser, formatError, iparse, (<?>))
@@ -40,6 +43,7 @@ import qualified Data.Vector as Vector
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint (..), Guard (..), Substitution (..))
+import qualified Data.CFTA.Document as Document
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -54,12 +58,14 @@ import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbo
 data DecodeError state
     = InvalidDocument !JSONPath !String
     | InvalidGraph !(FTA.FTAError state Symbol)
+    | InvalidDefinition !(Document.DocumentError state)
     deriving (Eq, Show)
 
 -- | Render a decoding failure with its document path or graph identity.
 explainDecodeError :: (Show state) => DecodeError state -> String
 explainDecodeError failure = case failure of
     InvalidDocument location message -> formatError location message
+    InvalidDefinition error' -> Document.explainDocumentError error'
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
     InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
@@ -71,17 +77,33 @@ No graph transformation or solver query occurs. This stores graph data, not
 host functions, named source facts, query plans, or enumeration cursors.
 -}
 encodeGraph :: (ToJSON state) => FTA.PlainFTA state Symbol -> ByteString.ByteString
-encodeGraph graph =
-    encode $
-        object
-            [ "format" .= ("cfta-graph" :: Text)
-            , "version" .= (1 :: Int)
-            , "initial" .= FTA.initialState graph
-            , "states"
-                .= [ object ["state" .= state, "transitions" .= map transitionJSON transitions]
-                   | (state, transitions) <- Map.toAscList $ FTA.transitionTable graph
-                   ]
-            ]
+encodeGraph = encode . graphJSON "cfta-graph" (\constraint -> ["constraint" .= constraintJSON constraint])
+
+-- | Encode named source facts and transition identities as @cfta-document@ version 1.
+encodeDocument :: (ToJSON state) => Document.Document state -> ByteString.ByteString
+encodeDocument = encode . graphJSON "cfta-document" annotationFields . Document.sourceGraph
+  where
+    annotationFields annotation =
+        [ "name" .= Document.annotationName annotation
+        , "facts"
+            .= object
+                [ Key.fromText name .= constraintJSON constraint
+                | (name, constraint) <- Map.toAscList $ Document.annotationFacts annotation
+                ]
+        ]
+
+-- | Encode shared graph structure with the annotation fields of its format.
+graphJSON :: (ToJSON state) => Text -> (annotation -> [(Key, Value)]) -> FTA.FTA state Symbol annotation -> Value
+graphJSON format annotationFields graph =
+    object
+        [ "format" .= format
+        , "version" .= (1 :: Int)
+        , "initial" .= FTA.initialState graph
+        , "states"
+            .= [ object ["state" .= state, "transitions" .= map (transitionJSON annotationFields) transitions]
+               | (state, transitions) <- Map.toAscList $ FTA.transitionTable graph
+               ]
+        ]
 
 {- | Read one complete snapshot and validate references and symbol arities.
 Reject duplicate JSON keys and state identities, unknown fields and tags,
@@ -91,19 +113,35 @@ syntax. This function does not enumerate terms or invoke a solver.
 decodeGraph ::
     (Ord state, FromJSON state) => ByteString.ByteString -> Either (DecodeError state) (FTA.PlainFTA state Symbol)
 decodeGraph input = do
-    (initial, rows) <- first (uncurry InvalidDocument) $ eitherDecodeWith completeJSON (iparse parseDocument) input
+    (initial, rows) <- first (uncurry InvalidDocument) $ readJSON (parseGraphData "cfta-graph" parseTransition) input
     first InvalidGraph $ FTA.mkFTA initial rows
+
+-- | Read and validate a source document without compiling or removing its facts.
+decodeDocument ::
+    (Ord state, FromJSON state) => ByteString.ByteString -> Either (DecodeError state) (Document.Document state)
+decodeDocument input = do
+    (initial, rows) <-
+        first (uncurry InvalidDocument) $ readJSON (parseGraphData "cfta-document" parseSourceTransition) input
+    first InvalidDefinition $ Document.mkDocument initial rows
+
+-- | Require one complete JSON value and reject duplicate object keys.
+readJSON :: (Value -> Parser a) -> ByteString.ByteString -> Either (JSONPath, String) a
+readJSON parser = eitherDecodeWith completeJSON (iparse parser)
   where
     completeJSON = jsonNoDup' <* skipWhile (`elem` [9, 10, 13, 32]) <* endOfInput
 
 -- | The fields and version of one snapshot, before graph validation.
-parseDocument ::
-    (Ord state, FromJSON state) => Value -> Parser (state, [(state, [FTA.Transition state Symbol Constraint])])
-parseDocument = fields "graph" ["format", "version", "initial", "states"] $ \o -> do
+parseGraphData ::
+    (Ord state, FromJSON state) =>
+    Text ->
+    (Value -> Parser (FTA.Transition state Symbol annotation)) ->
+    Value ->
+    Parser (state, [(state, [FTA.Transition state Symbol annotation])])
+parseGraphData expected transitionParser = fields "graph" ["format", "version", "initial", "states"] $ \o -> do
     format <- o .: "format"
-    unless (format == ("cfta-graph" :: Text)) $ fail "expected format cfta-graph" <?> Key "format"
+    unless (format == expected) $ fail ("expected format " <> Text.unpack expected) <?> Key "format"
     version <- o .: "version"
-    unless (version == (1 :: Int)) $ fail "unsupported cfta-graph version" <?> Key "version"
+    unless (version == (1 :: Int)) $ fail ("unsupported " <> Text.unpack expected <> " version") <?> Key "version"
     initial <- o .: "initial"
     rows <- field (list parseRow) o "states"
     foldM_ distinct Set.empty (zip [0 ..] rows)
@@ -113,21 +151,32 @@ parseDocument = fields "graph" ["format", "version", "initial", "states"] $ \o -
         | Set.member state seen = fail "duplicate state identity" <?> Key "state" <?> Index index <?> Key "states"
         | otherwise = pure $ Set.insert state seen
     parseRow = fields "state row" ["state", "transitions"] $ \o ->
-        (,) <$> o .: "state" <*> field (list parseTransition) o "transitions"
+        (,) <$> o .: "state" <*> field (list transitionParser) o "transitions"
 
 -- | A transition with ordered child states and a complete annotation.
-transitionJSON :: (ToJSON state) => FTA.Transition state Symbol Constraint -> Value
-transitionJSON transition =
-    object
+transitionJSON :: (ToJSON state) => (annotation -> [(Key, Value)]) -> FTA.Transition state Symbol annotation -> Value
+transitionJSON annotationFields transition =
+    object $
         [ "symbol" .= symbolJSON (FTA.transitionSymbol transition)
         , "children" .= FTA.transitionChildren transition
-        , "constraint" .= constraintJSON (FTA.transitionConstraint transition)
         ]
+            <> annotationFields (FTA.transitionConstraint transition)
 
 -- | Read a transition without interpreting its annotation.
 parseTransition :: (FromJSON state) => Value -> Parser (FTA.Transition state Symbol Constraint)
 parseTransition = fields "transition" ["symbol", "children", "constraint"] $ \o ->
     FTA.Transition <$> field parseSymbol o "symbol" <*> o .: "children" <*> field parseConstraint o "constraint"
+
+-- | Read stable production names and each separate fact.
+parseSourceTransition :: (FromJSON state) => Value -> Parser (FTA.Transition state Symbol Document.Annotation)
+parseSourceTransition = fields "source transition" ["symbol", "children", "name", "facts"] $ \o ->
+    FTA.Transition
+        <$> field parseSymbol o "symbol"
+        <*> o .: "children"
+        <*> (Document.Annotation <$> o .: "name" <*> field parseFacts o "facts")
+  where
+    parseFacts = withObject "named facts" $ \facts -> Map.fromList <$> traverse parseFact (KeyMap.toList facts)
+    parseFact (name, value) = (,) (Key.toText name) <$> (parseConstraint value <?> Key name)
 
 -- | Store symbol contents, without its process-local identity.
 symbolJSON :: Symbol -> Value

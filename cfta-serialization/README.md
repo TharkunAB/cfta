@@ -128,3 +128,81 @@ Graph snapshots do not retain individual facts that constraint compilation
 has combined. Use an editable source document when you need to remove one of
 those facts. A query checkpoint additionally needs the graph version, query
 route, order, bounds, assumptions, and next position. Those are separate APIs.
+
+## Editable documents
+
+Use `Data.CFTA.Document` when each fact must remain removable. A source graph
+has `Annotation name facts` on each transition. The transition name is unique
+within its state. `facts` is a `Map Text Constraint`. `mkDocument` checks the
+state rows, references, symbol arities, and transition names. `sourceGraph`
+exposes these annotations; `compileGraph` combines the remaining facts for
+queries. It retains false productions in source. A single fact keeps its exact
+syntax when compiled.
+
+`FTA.terms` lists ordinary tree shapes and does not interpret constraints.
+Use `Sized.sized` for equality size classes or `Sized.sizedUpTo` with an
+entailment solver for semantic guards. The executable uses `sizedUpTo`.
+
+`fromGraph` imports each existing constraint as one fact named `imported`.
+It names transitions `t0`, `t1`, and so on within each row. This cannot recover
+source facts or alternatives removed before the import. Removing `imported`
+removes the complete combined constraint.
+
+`patch before edits` prepares a patch against one source snapshot.
+`applyPatch prepared current` checks that `current` equals that snapshot before
+applying the ordered edits. It returns a new checked document. The old document
+remains available for undo. Any stale snapshot, missing target, duplicate name,
+or invalid final graph is an error. Nothing commits partially.
+
+| Edit | Effect |
+| --- | --- |
+| `PutRow state transitions` | Add or replace a complete row. Preserve the written alternative order. |
+| `DeleteRow state` | Remove an existing row. The final graph must still have its initial state and all referenced children. |
+| `SetFact state transitionName factName body` | Add a fact or replace that fact's body. |
+| `RemoveFact state transitionName factName` | Remove exactly one existing named fact. |
+
+Fact edits resolve their named target at that point in the edit sequence. Row
+edits can introduce forward references if the complete batch supplies the rows.
+The initial state stays fixed. There is no implication that an old rank remains
+valid after an edit. Rebuild the query for the new graph.
+
+`encodeDocument` and `decodeDocument` store these source definitions as
+`cfta-document`, version 1. The graph fields and symbol/refinement codecs are
+the same as graph snapshots. Each transition has `symbol`, `children`, `name`,
+and `facts`. The `facts` object maps names to the full constraint objects defined
+above. For example:
+
+```json
+{
+  "symbol": {"text": "zero", "refinement": ["top"]},
+  "children": [],
+  "name": "zero",
+  "facts": {"disabled": {"equalities": null, "guard": ["top"]}}
+}
+```
+
+A document with this transition retains its disabled production. Removing
+`disabled` restores it. Duplicate fact keys are errors. Graph and document
+readers reject each other's format tag. `InvalidDefinition` reports a document
+invariant failure. `explainDecodeError` also renders this error.
+
+Run the complete source-editing example in separate processes:
+
+```sh
+cabal run cfta-editable-document -- save /tmp/source.json
+cabal run cfta-editable-document -- show /tmp/source.json
+cabal run cfta-editable-document -- edit /tmp/source.json /tmp/edited.json
+cabal run cfta-editable-document -- show /tmp/edited.json
+```
+
+The source language has zero accepted pairs because its `disabled` fact is
+false. The patch removes `disabled` and `positive`, retains `same`, and adds the
+constructor `two`. The edited language has exactly `pair(zero,zero)`,
+`pair(one,one)`, and `pair(two,two)`. Reopening the edited file retains the
+remaining fact and constructor names.
+
+The patch keeps a complete starting document and compares its contents. It is
+not a compact change log or a constant-time version check. Applying it validates
+and rebuilds the graph. Count-table reuse and efficient document digests remain
+separate work. Documents store source data; query plans, cursors, host functions,
+and serialized patches are not part of this format.
