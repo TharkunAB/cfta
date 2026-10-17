@@ -1,0 +1,386 @@
+[
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderNumeric.lean",
+    "sha256": "47b4a8c3564818237557ac54515a367702fa2a8f3141b08a6eb6d2237a7e32a7",
+    "declaration": "initialControl",
+    "first_line": 24,
+    "last_line": 25,
+    "text": "def initialControl (nodes edges mass count : Nat) : Nat :=\n  max (max nodes edges) (max mass (count * mass))\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderNumeric.lean",
+    "sha256": "47b4a8c3564818237557ac54515a367702fa2a8f3141b08a6eb6d2237a7e32a7",
+    "declaration": "collectFuel",
+    "first_line": 28,
+    "last_line": 29,
+    "text": "def collectFuel (nodes edges mass count : Nat) : Nat :=\n  HeightOrderControlled.majorant g (mass + 1) (initialControl nodes edges mass count)\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderNumeric.lean",
+    "sha256": "47b4a8c3564818237557ac54515a367702fa2a8f3141b08a6eb6d2237a7e32a7",
+    "declaration": "control_complete",
+    "first_line": 62,
+    "last_line": 68,
+    "text": "theorem control_complete (limit control : Nat) (before : Config Symbol Guard)\n    (good : Good limit before) (fits : Fits control before) :\n    ∃ count rows after,\n      Run count before rows after ∧ count ≤ fuel limit control ∧ Good limit after ∧\n      Fits (fuel limit control) after ∧ after.pending = [] ∧\n      collect (fuel limit control) before.heap before.seen before.pending = .done rows after.heap ∧\n      ∀ extra, collect (fuel limit control + extra) before.heap before.seen before.pending = .done rows after.heap := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderNumeric.lean",
+    "sha256": "47b4a8c3564818237557ac54515a367702fa2a8f3141b08a6eb6d2237a7e32a7",
+    "declaration": "collect_complete",
+    "first_line": 80,
+    "last_line": 89,
+    "text": "theorem collect_complete (heap : State Symbol Guard) (seen : List Nat) (pending : List (Value Symbol Guard))\n    (mass : Nat) (semantic : SemanticHeap heap) (covered : Covered [] heap)\n    (depth : InternedOpenDepthReadback.Heap heap) (available : Values heap pending) (closed : ClosedValues pending)\n    (stored : InternedValueMassHeap.Stored mass heap) :\n    ∃ count rows after,\n      Run count ⟨heap, seen, pending⟩ rows after ∧\n      count ≤ collectFuel heap.nodes.next heap.edges.next mass pending.length ∧ Good mass after ∧\n      Fits (collectFuel heap.nodes.next heap.edges.next mass pending.length) after ∧ after.pending = [] ∧\n      collect (collectFuel heap.nodes.next heap.edges.next mass pending.length) heap seen pending = .done rows after.heap ∧\n      ∀ extra, collect (collectFuel heap.nodes.next heap.edges.next mass pending.length + extra) heap seen pending = .done rows after.heap := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean",
+    "sha256": "eb9f8391cdc7630f6c113ea160002711d570eee5b46786cdb6396490fd40a4fc",
+    "declaration": "readFuel",
+    "first_line": 24,
+    "last_line": 27,
+    "text": "def readFuel (nodes edges mass : Nat) : Nat :=\n  fuel mass (g (initialControl nodes edges mass 1))\n\nvariable [DecidableEq (EdgeKey Symbol Guard)]\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean",
+    "sha256": "eb9f8391cdc7630f6c113ea160002711d570eee5b46786cdb6396490fd40a4fc",
+    "declaration": "complete_bound",
+    "first_line": 30,
+    "last_line": 37,
+    "text": "theorem complete_bound (value : Value Symbol Guard) (heap : State Symbol Guard) (mass : Nat)\n    (semantic : SemanticHeap heap) (covered : Covered [] heap) (depth : InternedOpenDepthReadback.Heap heap)\n    (available : Available heap value) (closed : value.free = []) (stored : InternedValueMassHeap.Stored mass heap) :\n    ∃ rows after,\n      nodeEdges (readFuel heap.nodes.next heap.edges.next mass) value heap = .done rows after ∧\n      InternedValueMassHeap.Stored (readFuel heap.nodes.next heap.edges.next mass) after ∧\n      after.nodes.next ≤ readFuel heap.nodes.next heap.edges.next mass ∧\n      after.edges.next ≤ readFuel heap.nodes.next heap.edges.next mass := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean",
+    "sha256": "eb9f8391cdc7630f6c113ea160002711d570eee5b46786cdb6396490fd40a4fc",
+    "declaration": "complete",
+    "first_line": 98,
+    "last_line": 109,
+    "text": "theorem complete (value : Value Symbol Guard) (heap : State Symbol Guard) (mass : Nat)\n    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady heap)\n    (available : Available heap value) (closed : value.free = []) (stored : InternedValueMassHeap.Stored mass heap) :\n    ∃ rows after,\n      nodeEdges (readFuel heap.nodes.next heap.edges.next mass) value heap = .done rows after ∧\n      SourceEqualityProjectionRead.Read value heap rows after ∧\n      SourceEqualityRequiredCache.Keeps heap after ∧ SourceEqualityRequiredSemanticCache.SemanticReady after ∧\n      InternedValueMassHeap.Stored (readFuel heap.nodes.next heap.edges.next mass) after ∧\n      after.nodes.next ≤ readFuel heap.nodes.next heap.edges.next mass ∧\n      after.edges.next ≤ readFuel heap.nodes.next heap.edges.next mass ∧\n      Edges after rows ∧ MergedColdReaderClosedInputs.ClosedEdges rows ∧\n      ∀ extra, nodeEdges (readFuel heap.nodes.next heap.edges.next mass + extra) value heap = .done rows after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean",
+    "sha256": "11b325bf91fd152ac65c6c3d7dab35ffbd5cb4d44e54551dc1cc750795e15d39",
+    "declaration": "g",
+    "first_line": 88,
+    "last_line": 88,
+    "text": "def g (bound : Nat) : Nat := bound + charge bound + ceiling bound + 1\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean",
+    "sha256": "11b325bf91fd152ac65c6c3d7dab35ffbd5cb4d44e54551dc1cc750795e15d39",
+    "declaration": "Step.good",
+    "first_line": 169,
+    "last_line": 170,
+    "text": "theorem Step.good [DecidableEq (EdgeKey Symbol Guard)] {limit : Nat} {before after : Config Symbol Guard}\n    (step : Step before after) (good : Good limit before) : Good limit after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean",
+    "sha256": "11b325bf91fd152ac65c6c3d7dab35ffbd5cb4d44e54551dc1cc750795e15d39",
+    "declaration": "Step.fits",
+    "first_line": 222,
+    "last_line": 223,
+    "text": "theorem Step.fits [DecidableEq (EdgeKey Symbol Guard)] {limit bound : Nat} {before after : Config Symbol Guard}\n    (step : Step before after) (good : Good limit before) (fits : Fits bound before) : Fits (g bound) after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean",
+    "sha256": "11b325bf91fd152ac65c6c3d7dab35ffbd5cb4d44e54551dc1cc750795e15d39",
+    "declaration": "Step.decreases",
+    "first_line": 258,
+    "last_line": 260,
+    "text": "theorem Step.decreases [DecidableEq (EdgeKey Symbol Guard)] {limit : Nat} {before after : Config Symbol Guard}\n    (step : Step before after) (good : Good limit before) :\n    HeightOrder.VectorBelow (limit + 1) (measure limit after) (measure limit before) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderConsumed.lean",
+    "sha256": "c1901c9f2e7a3f30117d2fae0f622c4a00d22b97ad2fda2060afa57d798f2aa7",
+    "declaration": "Run",
+    "first_line": 34,
+    "last_line": 43,
+    "text": "inductive Run [DecidableEq (EdgeKey Symbol Guard)] :\n    Nat → Config Symbol Guard → List (EdgeValue Symbol Guard) → Config Symbol Guard → Prop where\n  /-- An empty pending list succeeds without a successor. -/\n  | nil (heap : State Symbol Guard) (seen : List Nat) :\n      Run 0 ⟨heap, seen, []⟩ [] ⟨heap, seen, []⟩\n  /-- An actual successor emits its rows before the remaining successful run. -/\n  | step (actual : SourceCurrentAllocatedReaderControl.Step before middle) (tail : Run count middle rows after) :\n      Run (count + 1) before (emitted before ++ rows) after\n\n/-- Every completed run retains its exact underlying successor path. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedReaderConsumed.lean",
+    "sha256": "c1901c9f2e7a3f30117d2fae0f622c4a00d22b97ad2fda2060afa57d798f2aa7",
+    "declaration": "extract",
+    "first_line": 78,
+    "last_line": 82,
+    "text": "theorem extract [DecidableEq (EdgeKey Symbol Guard)]\n    (fuel : Nat) (heap : State Symbol Guard) (seen : List Nat) (pending : List (Value Symbol Guard))\n    (rows : List (EdgeValue Symbol Guard)) (after : State Symbol Guard)\n    (done : collect fuel heap seen pending = .done rows after) :\n    ∃ count finalSeen, count ≤ fuel ∧ Run count ⟨heap, seen, pending⟩ rows ⟨after, finalSeen, []⟩ := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/HeightOrderControlled.lean",
+    "sha256": "a98abdc7880f17c9de7b6f3aa78a963aa9a7e6f3c22e52858d46af0b345f86a4",
+    "declaration": "majorant",
+    "first_line": 45,
+    "last_line": 48,
+    "text": "def majorant (control : Nat → Nat) : Nat → Nat → Nat\n  | 0, value => value\n  | dimension + 1, value =>\n      iterate (fun current => control (majorant control dimension current)) (value + 1) value\n"
+  },
+  {
+    "source": "lean/MicroCFTA/HeightOrderControlled.lean",
+    "sha256": "a98abdc7880f17c9de7b6f3aa78a963aa9a7e6f3c22e52858d46af0b345f86a4",
+    "declaration": "Path.final_le",
+    "first_line": 166,
+    "last_line": 171,
+    "text": "theorem Path.final_le {control : Nat → Nat}\n    (mono : ∀ {first last}, first ≤ last → control first ≤ control last)\n    (grows : ∀ value, value < control value)\n    {dimension firstControl lastControl length : Nat} {first last : Nat → Nat}\n    (actual : Path control dimension first firstControl last lastControl length) :\n    lastControl ≤ majorant control dimension firstControl := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedValueMassBinderDepth.lean",
+    "sha256": "1c4e37c116feaa3e0e84d27ecdd734925b4067e6b7388f980ba1aab5ed37e5f4",
+    "declaration": "stored_bounded",
+    "first_line": 64,
+    "last_line": 65,
+    "text": "theorem stored_bounded (heap : State Symbol Guard) (bound : Nat) (stored : InternedValueMassHeap.Stored bound heap) :\n    InternedMuDepthInventory.Bounded heap bound := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshMuUnfoldBudget.lean",
+    "sha256": "4c99e6c0140d8ad5ed811aef053aa750db8e6cf6cba3b7739f83906f687aa9af",
+    "declaration": "Settled",
+    "first_line": 18,
+    "last_line": 19,
+    "text": "def Settled [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (value : Value Symbol Guard) : Prop :=\n  ∃ result, InternedFreshOrdinaryStoredSubstitution.unfold value state = .done result state\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshMuUnfoldBudget.lean",
+    "sha256": "4c99e6c0140d8ad5ed811aef053aa750db8e6cf6cba3b7739f83906f687aa9af",
+    "declaration": "count",
+    "first_line": 44,
+    "last_line": 45,
+    "text": "def count [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (degree : Nat) : Nat :=\n  (List.range state.nodes.next).countP (unfinishedAt state degree)\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshMuUnfoldBudget.lean",
+    "sha256": "4c99e6c0140d8ad5ed811aef053aa750db8e6cf6cba3b7739f83906f687aa9af",
+    "declaration": "Progress",
+    "first_line": 48,
+    "last_line": 49,
+    "text": "def Progress [DecidableEq (EdgeKey Symbol Guard)] (limit : Nat) (before after : State Symbol Guard) : Prop :=\n  HeightOrder.VectorBelow limit (fun index => count after index) (fun index => count before index) ∨ after = before\n"
+  },
+  {
+    "source": "lean/MicroCFTA/InternedFreshMuUnfoldBudget.lean",
+    "sha256": "4c99e6c0140d8ad5ed811aef053aa750db8e6cf6cba3b7739f83906f687aa9af",
+    "declaration": "unfold_progress",
+    "first_line": 144,
+    "last_line": 149,
+    "text": "theorem unfold_progress [DecidableEq (EdgeKey Symbol Guard)] (limit : Nat) (value : Value Symbol Guard)\n    (before : State Symbol Guard) (semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap before)\n    (covered : Covered [] before) (heap : InternedOpenDepthReadback.Heap before) (bounded : Bounded before limit)\n    (available : Available before value) (closed : value.free = []) (result : Value Symbol Guard) (after : State Symbol Guard)\n    (done : InternedFreshOrdinaryStoredSubstitution.unfold value before = .done result after) :\n    Progress limit before after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedFreshOrdinaryColdBudget.lean",
+    "sha256": "4a7190149c8152cef441cf8020b531bb73b2b2ea11c0a9cd4ee117b5f7e9c998",
+    "declaration": "collect_progress",
+    "first_line": 24,
+    "last_line": 30,
+    "text": "theorem collect_progress [DecidableEq (EdgeKey Symbol Guard)] (fuel limit : Nat)\n    (before : State Symbol Guard) (semantic : SemanticHeap before) (covered : Covered [] before)\n    (heap : InternedOpenDepthReadback.Heap before) (bounded : Bounded before limit)\n    (seen : List Nat) (pending : List (Value Symbol Guard)) (inputs : Values before pending) (closed : ClosedValues pending)\n    (edges : List (EdgeValue Symbol Guard)) (after : State Symbol Guard)\n    (done : collect fuel before seen pending = .done edges after) :\n    InternedOpenDepthReadback.Heap after ∧ Bounded after limit ∧ Progress limit before after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedFreshOrdinaryColdBudget.lean",
+    "sha256": "4a7190149c8152cef441cf8020b531bb73b2b2ea11c0a9cd4ee117b5f7e9c998",
+    "declaration": "nodeEdges_progress",
+    "first_line": 126,
+    "last_line": 131,
+    "text": "theorem nodeEdges_progress [DecidableEq (EdgeKey Symbol Guard)] (fuel limit : Nat)\n    (value : Value Symbol Guard) (before : State Symbol Guard) (semantic : SemanticHeap before) (covered : Covered [] before)\n    (heap : InternedOpenDepthReadback.Heap before) (bounded : Bounded before limit)\n    (available : Available before value) (closed : value.free = []) (edges : List (EdgeValue Symbol Guard))\n    (after : State Symbol Guard) (done : nodeEdges fuel value before = .done edges after) :\n    InternedOpenDepthReadback.Heap after ∧ Bounded after limit ∧ Progress limit before after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedFreshOrdinaryComparison.lean",
+    "sha256": "595918dd693ba7f83f0d91f148086ba19bdab0b4977ddd3ead040816353560dc",
+    "declaration": "allRows",
+    "first_line": 20,
+    "last_line": 27,
+    "text": "def allRows [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol] (fuel : Nat) (clear : Guard → Bool)\n    (compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool)\n    (wide : Value Symbol Guard) : List (EdgeValue Symbol Guard) → State Symbol Guard → Result Symbol Guard Bool\n  | [], state => .done true state\n  | narrow :: rest, state =>\n      (MergedFreshOrdinaryExposure.read fuel wide state).bind fun wides afterRead =>\n        (anyCover clear compare narrow wides afterRead).bind fun accepted after =>\n          if accepted then allRows fuel clear compare wide rest after else .done false after\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedFreshOrdinaryComparison.lean",
+    "sha256": "595918dd693ba7f83f0d91f148086ba19bdab0b4977ddd3ead040816353560dc",
+    "declaration": "check",
+    "first_line": 30,
+    "last_line": 45,
+    "text": "def check [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol] (clear : Guard → Bool) :\n    Nat → List (Nat × Nat) → Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool\n  | fuel, above, wide, narrow, state =>\n      if narrow.referenceOf = .empty then .done true state\n      else if wide.referenceOf = .empty then .done false state\n      else if wide.referenceOf = narrow.referenceOf then .done true state\n      else match identity wide, identity narrow with\n        | none, _ => .failed (.identity wide.referenceOf) state\n        | _, none => .failed (.identity narrow.referenceOf) state\n        | some wideId, some narrowId =>\n            if (wideId, narrowId) ∈ above then .done true state\n            else match fuel with\n              | 0 => .failed .exhausted state\n              | fuel + 1 =>\n                  (MergedFreshOrdinaryExposure.read (fuel + 1) narrow state).bind fun narrows after =>\n                    allRows (fuel + 1) clear (check clear fuel ((wideId, narrowId) :: above)) wide narrows after\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedSourceComparison.lean",
+    "sha256": "215330f70fa1b4ad03924607a653c5ebce213f866f2cc1f588a3b25ce25132fc",
+    "declaration": "identity",
+    "first_line": 39,
+    "last_line": 42,
+    "text": "def identity : Value Symbol Guard → Option Nat\n  | .node entry .. | .union entry .. | .mu entry .. => some entry.identity\n  | .reference (.interned identity) => some identity\n  | _ => none\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedSourceComparison.lean",
+    "sha256": "215330f70fa1b4ad03924607a653c5ebce213f866f2cc1f588a3b25ce25132fc",
+    "declaration": "children",
+    "first_line": 54,
+    "last_line": 59,
+    "text": "def children (compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool) :\n    List (Value Symbol Guard) → List (Value Symbol Guard) → State Symbol Guard → Result Symbol Guard Bool\n  | [], _, state | _, [], state => .done true state\n  | wide :: wides, narrow :: narrows, state =>\n      (compare wide narrow state).bind fun accepted after =>\n        if accepted then children compare wides narrows after else .done false after\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedSourceComparison.lean",
+    "sha256": "215330f70fa1b4ad03924607a653c5ebce213f866f2cc1f588a3b25ce25132fc",
+    "declaration": "anyCover",
+    "first_line": 62,
+    "last_line": 70,
+    "text": "def anyCover [DecidableEq Symbol] (clear : Guard → Bool)\n    (compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool)\n    (narrow : EdgeValue Symbol Guard) : List (EdgeValue Symbol Guard) → State Symbol Guard → Result Symbol Guard Bool\n  | [], state => .done false state\n  | wide :: rest, state =>\n      if wide.entry.key.symbol = narrow.entry.key.symbol ∧ wide.children.length = narrow.children.length ∧ clear wide.entry.key.constraint = true then\n        (children compare wide.children narrow.children state).bind fun accepted after =>\n          if accepted then .done true after else anyCover clear compare narrow rest after\n      else anyCover clear compare narrow rest state\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonStages.lean",
+    "sha256": "20c34b3758d1b2d58fc0b66159782a79917d15e42c694dfa97cc3909d7e3fd5a",
+    "declaration": "CompleteCallback",
+    "first_line": 39,
+    "last_line": 42,
+    "text": "def CompleteCallback (limit : Nat) (before : State Symbol Guard)\n    (compare : Nat → Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool) : Prop :=\n  ∀ wide narrow state, SemanticReady state → Bounded state limit → Available state wide → Available state narrow →\n    wide.free = [] → narrow.free = [] → Budget limit before state → EventuallyDone (fun fuel => compare fuel wide narrow state)\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonStages.lean",
+    "sha256": "20c34b3758d1b2d58fc0b66159782a79917d15e42c694dfa97cc3909d7e3fd5a",
+    "declaration": "children_eventually",
+    "first_line": 45,
+    "last_line": 50,
+    "text": "theorem children_eventually (limit : Nat) (before : State Symbol Guard)\n    (compare : Nat → Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool)\n    (callbacks : ∀ fuel, Callback limit (compare fuel)) (complete : CompleteCallback limit before compare)\n    (wides narrows : List (Value Symbol Guard)) (state : State Symbol Guard) (semantic : SemanticReady state) (bounded : Bounded state limit)\n    (wideInputs : Values state wides) (narrowInputs : Values state narrows) (wideClosed : ClosedValues wides) (narrowClosed : ClosedValues narrows)\n    (reached : Budget limit before state) : EventuallyDone (fun fuel => children (compare fuel) wides narrows state) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonStages.lean",
+    "sha256": "20c34b3758d1b2d58fc0b66159782a79917d15e42c694dfa97cc3909d7e3fd5a",
+    "declaration": "anyCover_eventually",
+    "first_line": 73,
+    "last_line": 80,
+    "text": "theorem anyCover_eventually [DecidableEq Symbol] (limit : Nat) (before : State Symbol Guard) (clear : Guard → Bool)\n    (compare : Nat → Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool)\n    (callbacks : ∀ fuel, Callback limit (compare fuel)) (complete : CompleteCallback limit before compare)\n    (narrow : EdgeValue Symbol Guard) (wides : List (EdgeValue Symbol Guard)) (state : State Symbol Guard)\n    (semantic : SemanticReady state) (bounded : Bounded state limit)\n    (narrowInput : Values state narrow.children) (wideInputs : Edges state wides)\n    (narrowClosed : ClosedValues narrow.children) (wideClosed : ClosedEdges wides) (reached : Budget limit before state) :\n    EventuallyDone (fun fuel => anyCover clear (compare fuel) narrow wides state) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonStages.lean",
+    "sha256": "20c34b3758d1b2d58fc0b66159782a79917d15e42c694dfa97cc3909d7e3fd5a",
+    "declaration": "allRows_eventually",
+    "first_line": 106,
+    "last_line": 112,
+    "text": "theorem allRows_eventually [DecidableEq Symbol] (limit : Nat) (before : State Symbol Guard) (clear : Guard → Bool)\n    (compare : Nat → Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool)\n    (callbacks : ∀ fuel, Callback limit (compare fuel)) (complete : CompleteCallback limit before compare)\n    (wide : Value Symbol Guard) (narrows : List (EdgeValue Symbol Guard)) (state : State Symbol Guard)\n    (semantic : SemanticReady state) (bounded : Bounded state limit)\n    (wideInput : Available state wide) (narrowInputs : Edges state narrows) (wideClosed : wide.free = []) (narrowClosed : ClosedEdges narrows)\n    (reached : Budget limit before state) : EventuallyDone (fun fuel => allRows (fuel + 1) clear (compare fuel) wide narrows state) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonCompletion.lean",
+    "sha256": "521e6c8238877e6c2ca97105df5f4cbb968ed62cbfee36bc1400eb8a48959f4a",
+    "declaration": "check_eventually",
+    "first_line": 27,
+    "last_line": 31,
+    "text": "theorem check_eventually [DecidableEq Symbol] (limit : Nat) (clear : Guard → Bool)\n    (state : State Symbol Guard) (semantic : SemanticReady state) (bounded : Bounded state limit)\n    (above : List (Nat × Nat)) (wide narrow : Value Symbol Guard)\n    (wideInput : Available state wide) (narrowInput : Available state narrow) (wideClosed : wide.free = []) (narrowClosed : narrow.free = []) :\n    EventuallyDone (fun fuel => check clear fuel above wide narrow state) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonCompletion.lean",
+    "sha256": "521e6c8238877e6c2ca97105df5f4cbb968ed62cbfee36bc1400eb8a48959f4a",
+    "declaration": "check_complete",
+    "first_line": 93,
+    "last_line": 96,
+    "text": "theorem check_complete [DecidableEq Symbol] (clear : Guard → Bool)\n    (state : State Symbol Guard) (semantic : SemanticReady state) (above : List (Nat × Nat)) (wide narrow : Value Symbol Guard)\n    (wideInput : Available state wide) (narrowInput : Available state narrow) (wideClosed : wide.free = []) (narrowClosed : narrow.free = []) :\n    ∃ bound accepted after, (∀ fuel, bound ≤ fuel → check clear fuel above wide narrow state = .done accepted after) ∧ Effect state after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedComparisonCompletion.lean",
+    "sha256": "50b3b3a285d8fe00ae08ecd7f513a51aada597ae59b939c794a84c57fc951baa",
+    "declaration": "identity_closed",
+    "first_line": 69,
+    "last_line": 72,
+    "text": "theorem identity_closed (value : Value Symbol Guard) (state : State Symbol Guard)\n    (facts : Facts state) (available : Available state value) (closed : value.free = [])\n    (nonempty : value.referenceOf ≠ .empty) :\n    ∃ number, identity value = some number ∧ number < state.nodes.next := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedComparisonCompletion.lean",
+    "sha256": "50b3b3a285d8fe00ae08ecd7f513a51aada597ae59b939c794a84c57fc951baa",
+    "declaration": "remainingPairs",
+    "first_line": 83,
+    "last_line": 85,
+    "text": "def remainingPairs (limit : Nat) (above : List (Nat × Nat)) : List (Nat × Nat) :=\n  ((List.range limit).flatMap fun left => (List.range limit).map (left, ·)).filter\n    (fun pair => decide (pair ∉ above))\n"
+  },
+  {
+    "source": "lean/MicroCFTA/MergedComparisonCompletion.lean",
+    "sha256": "50b3b3a285d8fe00ae08ecd7f513a51aada597ae59b939c794a84c57fc951baa",
+    "declaration": "remaining_cons_lt",
+    "first_line": 96,
+    "last_line": 98,
+    "text": "theorem remaining_cons_lt (limit : Nat) (above : List (Nat × Nat)) (pair : Nat × Nat)\n    (member : pair ∈ remainingPairs limit above) :\n    (remainingPairs limit (pair :: above)).length < (remainingPairs limit above).length := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonBudget.lean",
+    "sha256": "637db47284b4979535a9ad69ac21c18a9ccae1d07cba09afea0063e98bc2bd90",
+    "declaration": "Budget",
+    "first_line": 24,
+    "last_line": 29,
+    "text": "structure Budget (limit : Nat) (before after : State Symbol Guard) : Prop where\n  effect : Effect before after\n  bounded : Bounded after limit\n  progress : Progress limit before after\n\n/-- Ordered successful stages compose degree progress through their actual cache. -/\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonBudget.lean",
+    "sha256": "637db47284b4979535a9ad69ac21c18a9ccae1d07cba09afea0063e98bc2bd90",
+    "declaration": "Callback",
+    "first_line": 55,
+    "last_line": 57,
+    "text": "def Callback (limit : Nat) (compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool) : Prop :=\n  ∀ wide narrow before, SemanticReady before → Bounded before limit → Available before wide → Available before narrow →\n    wide.free = [] → narrow.free = [] → ∀ answer after, compare wide narrow before = .done answer after → Budget limit before after\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonBudget.lean",
+    "sha256": "637db47284b4979535a9ad69ac21c18a9ccae1d07cba09afea0063e98bc2bd90",
+    "declaration": "check_budget",
+    "first_line": 133,
+    "last_line": 137,
+    "text": "theorem check_budget [DecidableEq Symbol] (limit : Nat) (clear : Guard → Bool)\n    (fuel : Nat) (above : List (Nat × Nat)) (wide narrow : Value Symbol Guard) (before : State Symbol Guard)\n    (semantic : SemanticReady before) (bounded : Bounded before limit)\n    (wideInput : Available before wide) (narrowInput : Available before narrow) (wideClosed : wide.free = []) (narrowClosed : narrow.free = [])\n    (answer : Bool) (after : State Symbol Guard) (done : check clear fuel above wide narrow before = .done answer after) : Budget limit before after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonMass.lean",
+    "sha256": "ad09e92efeb8507f3262c48947348e031491273be648f8855c6d01ad9d2891d0",
+    "declaration": "comparisonBound",
+    "first_line": 126,
+    "last_line": 129,
+    "text": "def comparisonBound : Nat → Nat → Nat\n  | 0, bound => bound\n  | fuel + 1, bound => iterate (rowBound (fuel + 1) (comparisonBound fuel))\n      (readWidth (fuel + 1) bound) (readBound (fuel + 1) bound)\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonMass.lean",
+    "sha256": "ad09e92efeb8507f3262c48947348e031491273be648f8855c6d01ad9d2891d0",
+    "declaration": "check_bound",
+    "first_line": 318,
+    "last_line": 324,
+    "text": "theorem check_bound [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (fuel : Nat) (above : List (Nat × Nat))\n    (wide narrow : Value Symbol Guard) (before : State Symbol Guard) (bound : Nat)\n    (semantic : SemanticReady before) (stored : Stored bound before)\n    (wideInput : Available before wide) (narrowInput : Available before narrow)\n    (wideClosed : wide.free = []) (narrowClosed : narrow.free = [])\n    (answer : Bool) (after : State Symbol Guard) (done : check clear fuel above wide narrow before = .done answer after) :\n    Resources (comparisonBound fuel bound) before after :=\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonStability.lean",
+    "sha256": "94a1896238f7a962718ecbb2e0a82274de5e216d1c624af0f1f9f4f9af4d11ee",
+    "declaration": "check_stable",
+    "first_line": 84,
+    "last_line": 88,
+    "text": "theorem check_stable [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]\n    (clear : Guard → Bool) (fuel extra : Nat) (above : List (Nat × Nat)) (wide narrow : Value Symbol Guard)\n    (state : State Symbol Guard) (value : Bool) (after : State Symbol Guard)\n    (done : check clear fuel above wide narrow state = .done value after) :\n    check clear (fuel + extra) above wide narrow state = check clear fuel above wide narrow state :=\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedComparisonStability.lean",
+    "sha256": "94a1896238f7a962718ecbb2e0a82274de5e216d1c624af0f1f9f4f9af4d11ee",
+    "declaration": "successful_results_eq",
+    "first_line": 92,
+    "last_line": 97,
+    "text": "theorem successful_results_eq [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]\n    (clear : Guard → Bool) (first second : Nat) (above : List (Nat × Nat)) (wide narrow : Value Symbol Guard)\n    (state : State Symbol Guard) (left right : Bool) (after final : State Symbol Guard)\n    (firstDone : check clear first above wide narrow state = .done left after)\n    (secondDone : check clear second above wide narrow state = .done right final) :\n    (left, after) = (right, final) := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceMergedSelectionMass.lean",
+    "sha256": "5f99d4c647468393489d7957d6ca3a6617f64094107a431b37f488f0a013d3e4",
+    "declaration": "select_complete",
+    "first_line": 131,
+    "last_line": 135,
+    "text": "theorem select_complete (clear : Guard → Bool) (inputs : List (Value Symbol Guard))\n    (before : State Symbol Guard) (bound : Nat) (semantic : SemanticReady before) (stored : Stored bound before)\n    (available : Values before inputs) (closed : ClosedValues inputs) :\n    ∃ fuel result after, select clear fuel inputs before = .done result after ∧\n      Resources (selectionBound fuel inputs.length bound) before after := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceCurrentAllocatedProjectionResources.lean",
+    "sha256": "ee3d7393150a44ab035ef8edb446816128ef8e3dd33528047c222eceff37c42e",
+    "declaration": "unfold_bound",
+    "first_line": 61,
+    "last_line": 67,
+    "text": "theorem unfold_bound [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard) (before : State Symbol Guard) (bound : Nat)\n    (stored : Stored bound before) (available : Available before value) :\n    Stored (ceiling bound) (InternedFreshOrdinaryStoredSubstitution.unfold value before).state ∧\n      (InternedFreshOrdinaryStoredSubstitution.unfold value before).state.nodes.next ≤ before.nodes.next + charge bound ∧\n      (InternedFreshOrdinaryStoredSubstitution.unfold value before).state.edges.next ≤ before.edges.next + charge bound ∧\n      ∀ result after, InternedFreshOrdinaryStoredSubstitution.unfold value before = .done result after →\n        InternedValueMass.value result ≤ ceiling bound := by\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceEqualityProjectionPathDomain.lean",
+    "sha256": "d18005ba25014c81f7942926af189a11366e51486bf8e3b3c4f5fd128bc46c42",
+    "declaration": "NodeClosed",
+    "first_line": 22,
+    "last_line": 29,
+    "text": "def NodeClosed (path : List Int) (value : Value Symbol Guard) : Prop :=\n  match path, value with\n  | [], value => value.free = []\n  | _ :: _, .empty => True\n  | index :: path, .node _ edges _ _ =>\n      ∀ edge ∈ edges, ∀ child, select edge.children index = some child → NodeClosed path child\n  | _ :: _, value => value.free = []\ntermination_by path.length\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceEqualityProjectionPathDomain.lean",
+    "sha256": "d18005ba25014c81f7942926af189a11366e51486bf8e3b3c4f5fd128bc46c42",
+    "declaration": "ForestClosed",
+    "first_line": 36,
+    "last_line": 39,
+    "text": "def ForestClosed (path : List Int) (values : List (Value Symbol Guard)) : Prop :=\n  match path with\n  | [] => ClosedValues values\n  | index :: path => ∀ value, select values index = some value → NodeClosed path value\n"
+  },
+  {
+    "source": "lean/MicroCFTA/SourceEqualityProjectionPathDomain.lean",
+    "sha256": "d18005ba25014c81f7942926af189a11366e51486bf8e3b3c4f5fd128bc46c42",
+    "declaration": "forest_effects",
+    "first_line": 140,
+    "last_line": 144,
+    "text": "theorem forest_effects [DecidableEq (EdgeKey Symbol Guard)]\n    {path : List Int} {values : List (Value Symbol Guard)} {result : Value Symbol Guard} {before after : State Symbol Guard}\n    (trace : Forest path values before result after) (semantic : SemanticReady before)\n    (available : Values before values) (domain : ForestClosed path values) :\n    Keeps before after ∧ SemanticReady after ∧ Available after result ∧ result.free = [] := by\n"
+  }
+]

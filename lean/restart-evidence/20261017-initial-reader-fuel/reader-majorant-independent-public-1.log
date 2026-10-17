@@ -1,0 +1,57 @@
+'MicroCFTA.HeightOrderControlled.majorant' does not depend on any axioms
+MicroCFTA.HeightOrderControlled.majorant : (Nat → Nat) → Nat → Nat → Nat
+'MicroCFTA.HeightOrderControlled.Path.final_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.HeightOrderControlled.Path.final_le : ∀ {control : Nat → Nat},
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (control first) (control last)) →
+    (∀ (value : Nat), @LT.lt.{0} Nat instLTNat value (control value)) →
+      ∀ {dimension firstControl lastControl length : Nat} {first last : Nat → Nat},
+        MicroCFTA.HeightOrderControlled.Path control dimension first firstControl last lastControl length →
+          @LE.le.{0} Nat instLENat lastControl (MicroCFTA.HeightOrderControlled.majorant control dimension firstControl)
+'MicroCFTA.HeightOrderControlled.Path.length_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.HeightOrderControlled.Path.length_le : ∀ {control : Nat → Nat},
+  (∀ {first last : Nat},
+      @LE.le.{0} Nat instLENat first last → @LE.le.{0} Nat instLENat (control first) (control last)) →
+    (∀ (value : Nat), @LT.lt.{0} Nat instLTNat value (control value)) →
+      ∀ {dimension firstControl lastControl length : Nat} {first last : Nat → Nat},
+        MicroCFTA.HeightOrderControlled.Path control dimension first firstControl last lastControl length →
+          @LE.le.{0} Nat instLENat length (MicroCFTA.HeightOrderControlled.majorant control dimension firstControl)
+'MicroCFTA.HeightOrderControlled.Path.elapsed_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.HeightOrderControlled.Path.elapsed_le : ∀ {control : Nat → Nat}
+  {dimension firstControl lastControl length : Nat} {first last : Nat → Nat},
+  MicroCFTA.HeightOrderControlled.Path control dimension first firstControl last lastControl length →
+    @LE.le.{0} Nat instLENat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstControl length)
+      lastControl
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.good' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.good : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit after
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.fits' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.fits : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit bound : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard bound before →
+        @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentAllocatedReaderControl.g bound) after
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.decreases' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.decreases : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+      MicroCFTA.HeightOrder.VectorBelow
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit after)
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit before)

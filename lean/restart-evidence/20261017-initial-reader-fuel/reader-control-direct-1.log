@@ -1,0 +1,180 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:35:4: warning: missing doc string for public constructor Step.empty
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:36:4: warning: missing doc string for public constructor Step.node
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:37:4: warning: missing doc string for public constructor Step.union_seen
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:39:4: warning: missing doc string for public constructor Step.union_fresh
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:41:4: warning: missing doc string for public constructor Step.mu_seen
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:43:4: warning: missing doc string for public constructor Step.mu_fresh
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:98:51: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:98:51: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:98:51: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:98:51: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:105:11: error: Type mismatch
+  Nat.le_refl ?m.131
+has type
+  ?m.131 ≤ ?m.131
+but is expected to have type
+  workWeight [] ≤ InternedValueMass.values []
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:130:13: error: Type mismatch
+  Nat.le_refl ?m.36
+has type
+  ?m.36 ≤ ?m.36
+but is expected to have type
+  workWeight [] ≤ [].length * bound
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:172:60: error: Application type mismatch: The argument
+  heap
+has type
+  List Nat
+but is expected to have type
+  InternedConstructorTemplates.State ?m.324 ?m.325
+in the application
+  MergedColdReaderClosed.union_members_closed heap
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:178:77: error: Application type mismatch: The argument
+  entry
+has type
+  Value Symbol Guard
+but is expected to have type
+  Interned NodeKey
+in the application
+  Value.mu entry
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:180:14: error: Tactic `subst` failed: 'produced' occurs at
+  ?m.485
+
+case mu_fresh
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+limit : Nat
+heap : List Nat
+seen : Interned NodeKey
+entry body depth : Value Symbol Guard
+ordinary : InternedConstructorTemplates.State Symbol Guard
+rest : Value Symbol Guard
+result : InternedConstructorTemplates.State Symbol Guard
+after : List (Value Symbol Guard)
+unvisited : ¬seen.identity ∈ heap
+actual :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu seen entry body depth) ordinary =
+    InternedNestedConstruction.Outcome.done rest result
+good : Good limit { heap := ordinary, seen := heap, pending := Value.mu seen entry body depth :: after }
+available :
+  Available { heap := ordinary, seen := heap, pending := Value.mu seen entry body depth :: after }.heap
+    (Value.mu seen entry body depth)
+produced : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+done :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu sorry body depth sorry) sorry =
+    InternedNestedConstruction.Outcome.done produced middle
+context : InternedFreshOrdinaryContext.Context middle ?m.401
+cached : InternedFreshOrdinaryDepthHeap.Heap middle
+covered : Covered [] middle
+output : Available middle produced
+growth : Grows sorry middle
+history : Extends sorry.nodes.issued middle.nodes.issued
+left✝ : produced = ?m.485
+right✝ : middle = ?m.486
+⊢ Good limit { heap := result, seen := seen.identity :: heap, pending := rest :: after }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:208:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 0
+  a - d ≤ -1
+where
+ a := ↑bound
+ b := ↑(weight value)
+ c := ↑(workWeight rest)
+ d := ↑(workWeight { heap := heap, seen := laterSeen, pending := rest }.pending)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:216:6: error: Type mismatch
+  Fits.mono
+    (have this := { stored := fits.stored, nodes := fits.nodes, edges := fits.edges, work := ?m.281 };
+    this)
+    (Nat.le_of_lt (g_strict bound))
+has type
+  Fits (g bound) { heap := heap✝, seen := seen✝, pending := Value.union entry✝ members✝ depth✝ free✝ :: rest✝ }
+but is expected to have type
+  Fits (g bound) { heap := heap✝, seen := entry✝.identity :: seen✝, pending := members✝ ++ rest✝ }
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:222:13: error: Application type mismatch: The argument
+  entry
+has type
+  Value Symbol Guard
+but is expected to have type
+  Interned NodeKey
+in the application
+  Value.mu entry
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:224:32: error: Application type mismatch: The argument
+  result
+has type
+  InternedConstructorTemplates.State Symbol Guard
+but is expected to have type
+  Value Symbol Guard
+in the application
+  output result
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:225:35: error: Application type mismatch: The argument
+  result
+has type
+  InternedConstructorTemplates.State Symbol Guard
+but is expected to have type
+  Value ?m.370 ?m.371
+in the application
+  weight_le_mass result
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:223:17: warning: This simp argument is unused:
+  actual
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [InternedNestedConstruction.Outcome.state] at stored nodes edges
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:240:23: error: don't know how to synthesize implicit argument `Guard`
+  @weight_positive ?m.102 ?m.103 ?m.104
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+limit : Nat
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+seen✝ : List Nat
+rest✝ : List (Value Symbol Guard)
+good : Good limit { heap := heap✝, seen := seen✝, pending := Value.empty :: rest✝ }
+⊢ Type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:240:23: error: don't know how to synthesize implicit argument `Symbol`
+  @weight_positive ?m.102 ?m.103 ?m.104
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+limit : Nat
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+seen✝ : List Nat
+rest✝ : List (Value Symbol Guard)
+good : Good limit { heap := heap✝, seen := seen✝, pending := Value.empty :: rest✝ }
+⊢ Type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:240:39: error: don't know how to synthesize placeholder for argument `value`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+limit : Nat
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+seen✝ : List Nat
+rest✝ : List (Value Symbol Guard)
+good : Good limit { heap := heap✝, seen := seen✝, pending := Value.empty :: rest✝ }
+⊢ Value ?m.102 ?m.103
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:240:11: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedReaderControl.lean:250:63: error: Application type mismatch: The argument
+  heap
+has type
+  List Nat
+but is expected to have type
+  InternedConstructorTemplates.State ?m.418 ?m.419
+in the application
+  InternedStoredPlanBinderDepthProgress.Lower heap

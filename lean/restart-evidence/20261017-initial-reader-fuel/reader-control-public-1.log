@@ -1,0 +1,203 @@
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Config' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedReaderControl.Config : Type → Type → Type
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard →
+      MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Good' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Good : {Symbol Guard : Type} →
+  Nat → MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits : {Symbol Guard : Type} →
+  Nat → MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedReaderControl.measure' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.measure : {Symbol Guard : Type} →
+  (limit : Nat) →
+    MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard →
+      Fin
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+        Nat
+'MicroCFTA.SourceCurrentAllocatedReaderControl.g' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedReaderControl.g : Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedReaderControl.g_strict' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedReaderControl.g_strict : ∀ (bound : Nat),
+  @LT.lt.{0} Nat instLTNat bound (MicroCFTA.SourceCurrentAllocatedReaderControl.g bound)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.g_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.g_mono : ∀ {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentAllocatedReaderControl.g first)
+      (MicroCFTA.SourceCurrentAllocatedReaderControl.g last)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.weight_le_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.weight_le_mass : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.MergedColdReaderTermination.weight Symbol Guard value)
+    (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.workWeight_le_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.workWeight_le_mass : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.MergedColdReaderTermination.workWeight Symbol Guard values)
+    (@MicroCFTA.InternedValueMass.values Symbol Guard values)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits.mono : ∀ {Symbol Guard : Type} {first last : Nat}
+  {config : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard first config →
+    @LE.le.{0} Nat instLENat first last → @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard last config
+'MicroCFTA.SourceCurrentAllocatedReaderControl.initialBound' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedReaderControl.initialBound : {Symbol Guard : Type} →
+  Nat →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedReaderControl.initial_fits' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.initial_fits : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (seen : List.{0} Nat)
+  (pending : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound heap →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap pending →
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.initialBound Symbol Guard bound heap pending)
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen pending)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.measure_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.measure_le : ∀ {Symbol Guard : Type} {limit bound : Nat}
+  {config : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard bound config →
+    ∀
+      (index :
+        Fin
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),
+      @LE.le.{0} Nat instLENat (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit config index)
+        bound
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.good' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.good : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit after
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.fits' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.fits : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit bound : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard bound before →
+        @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard
+          (MicroCFTA.SourceCurrentAllocatedReaderControl.g bound) after
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.decreases' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.decreases : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {limit : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst before after →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+      MicroCFTA.HeightOrder.VectorBelow
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit after)
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit before)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.empty' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.empty : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {seen : List.{0} Nat}
+  {rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) rest))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen rest)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.node' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {seen : List.{0} Nat}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry rows depth free) rest))
+    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen rest)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.union_seen' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.union_seen : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {seen : List.{0} Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) seen
+      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry) →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) rest))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen rest)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.union_fresh' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.union_fresh : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {seen : List.{0} Nat}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  Not
+      (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) seen
+        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)) →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) rest))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap
+        (@List.cons.{0} Nat (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry) seen)
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          members rest))
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.mu_seen' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.mu_seen : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {seen : List.{0} Nat}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) seen
+      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry) →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) rest))
+      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen rest)
+'MicroCFTA.SourceCurrentAllocatedReaderControl.Step.mu_fresh' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderControl.Step.mu_fresh : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {seen : List.{0} Nat}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {body depth ordinary result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {rest : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  Not
+      (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) seen
+        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)) →
+    @Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) heap)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Step Symbol Guard inst
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) rest))
+        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard after
+          (@List.cons.{0} Nat (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry) seen)
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result rest))

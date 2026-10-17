@@ -1,0 +1,13 @@
+# Exact consumed collector steps
+
+The new module records the literal repaired collector successors. `Run.step` places the current ordinary rows before the tail rows. Union and Mu branches use the actual identity test. A fresh Mu step stores its literal successful `unfold` equation. The terminal constructor requires an empty pending list.
+
+`extract` uses induction on the supplied successful collector fuel. It derives a true consumed count at most that fuel. It records the exact final heap and final visited list. `Run.exact` reconstructs the same rows and heap at that count. `Run.stable` uses existing completed-reader stability to choose any larger fuel. None of these operational theorems requires semantic readiness, closedness, a future store bound, or a completion oracle.
+
+This is an internal bridge. It does not define an initial fuel bound by choosing an arbitrary successful witness. The numeric producer must bound the extracted path independently and then use `Run.stable`. It must retain the existing physical and degree hypotheses along every actual successor.
+
+Validation: strict direct attempt 2 exits 0 with an empty log. Canonical build exits 0 after 1213 jobs. That log replays the existing unused-input warning from `InternedFreshOrdinaryClosedCompletion`; the new source has no warnings. All eight public declarations have explicit imported signature and axiom checks. Both integration declarations have the same checks. All ten pairs use only standard axioms.
+
+The integration source builds a closed literal nested raw-Mu/union expression with both true and false guards. It derives its own collector completion from initial construction facts, extracts a positive consumed run, and reconstructs exact and padded fuel. The second theorem replays from the exact first returned heap, derives a second consumed run, and returns the same full heap and ordered rows. The test does not assume a completed graph or later resource certificate. It does not claim an initial numerical collector budget or a new lower-degree Mu witness. The separate ReaderControl tests cover actual fresh unfolding, new counters, union expansion, and visited replay.
+
+Direct attempt 1 failed because `Cache.Step` and the new `Step` were both open. The source and raw log are retained. Integration attempt 1 used literal reduction of the full nested collector. It was interrupted with exit 130 after a bounded check interval; its empty raw log and exact source are retained. Attempt 2 failed on two singleton proofs and a namespace name. Attempt 3 is the final successful integration check. No earlier source or evidence file was changed.

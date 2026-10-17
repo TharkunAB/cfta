@@ -1,0 +1,22 @@
+@MicroCFTA.InternedValueMassBinderDepth.value_lt : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedStoredPlanBinderDepth.valueDepth Symbol Guard value)
+    (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+'MicroCFTA.InternedValueMassBinderDepth.value_lt' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.many_le : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedStoredPlanBinderDepth.manyDepth Symbol Guard values)
+    (@MicroCFTA.InternedValueMass.values Symbol Guard values)
+'MicroCFTA.InternedValueMassBinderDepth.many_le' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.edges_le : ∀ {Symbol Guard : Type}
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedStoredPlanBinderDepth.edgesDepth Symbol Guard rows)
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedValueMassBinderDepth.edges_le' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.stored_bounded : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound heap →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard heap bound
+'MicroCFTA.InternedValueMassBinderDepth.stored_bounded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

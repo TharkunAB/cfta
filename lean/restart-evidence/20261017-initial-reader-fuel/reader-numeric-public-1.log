@@ -1,0 +1,307 @@
+'MicroCFTA.InternedValueMassBinderDepth.value_lt' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.value_lt : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.InternedStoredPlanBinderDepth.valueDepth Symbol Guard value)
+    (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+'MicroCFTA.InternedValueMassBinderDepth.many_le' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.many_le : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedStoredPlanBinderDepth.manyDepth Symbol Guard values)
+    (@MicroCFTA.InternedValueMass.values Symbol Guard values)
+'MicroCFTA.InternedValueMassBinderDepth.edges_le' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.edges_le : ∀ {Symbol Guard : Type}
+  (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.InternedStoredPlanBinderDepth.edgesDepth Symbol Guard rows)
+    (@MicroCFTA.InternedValueMass.edges Symbol Guard rows)
+'MicroCFTA.InternedValueMassBinderDepth.stored_bounded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedValueMassBinderDepth.stored_bounded : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (bound : Nat),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound heap →
+    @MicroCFTA.InternedMuDepthInventory.Bounded Symbol Guard heap bound
+'MicroCFTA.SourceCurrentAllocatedReaderNumeric.initialControl' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedReaderNumeric.initialControl : Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedReaderNumeric.collectFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedReaderNumeric.collectFuel : Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedReaderNumeric.fuel' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedReaderNumeric.fuel : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedReaderNumeric.path_control' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderNumeric.path_control : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {count limit : Nat}
+  {before after : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedReaderConsumed.Path Symbol Guard inst count before after →
+    ∀ (control : Nat),
+      @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+        @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard control before →
+          @Exists.{1} Nat fun finalControl =>
+            And (@MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit after)
+              (And (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard finalControl after)
+                (MicroCFTA.HeightOrderControlled.Path MicroCFTA.SourceCurrentAllocatedReaderControl.g
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@MicroCFTA.HeightOrder.extend
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit before))
+                  control
+                  (@MicroCFTA.HeightOrder.extend
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) limit
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@MicroCFTA.SourceCurrentAllocatedReaderControl.measure Symbol Guard limit after))
+                  finalControl count))
+'MicroCFTA.SourceCurrentAllocatedReaderNumeric.control_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderNumeric.control_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (limit control : Nat)
+  (before : MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit before →
+    @MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard control before →
+      @Exists.{1} Nat fun count =>
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) fun rows =>
+          @Exists.{1} (MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard) fun after =>
+            And (@MicroCFTA.SourceCurrentAllocatedReaderConsumed.Run Symbol Guard inst count before rows after)
+              (And (@LE.le.{0} Nat instLENat count (MicroCFTA.SourceCurrentAllocatedReaderNumeric.fuel limit control))
+                (And (@MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard limit after)
+                  (And
+                    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard
+                      (MicroCFTA.SourceCurrentAllocatedReaderNumeric.fuel limit control) after)
+                    (And
+                      (@Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.pending Symbol Guard after)
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (And
+                        (@Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                          (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst
+                            (MicroCFTA.SourceCurrentAllocatedReaderNumeric.fuel limit control)
+                            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard before)
+                            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.seen Symbol Guard before)
+                            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.pending Symbol Guard before))
+                          (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows
+                            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard after)))
+                        (∀ (extra : Nat),
+                          @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                            (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (MicroCFTA.SourceCurrentAllocatedReaderNumeric.fuel limit control) extra)
+                              (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard before)
+                              (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.seen Symbol Guard before)
+                              (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.pending Symbol Guard before))
+                            (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows
+                              (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard after))))))))
+'MicroCFTA.SourceCurrentAllocatedReaderNumeric.collect_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedReaderNumeric.collect_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (seen : List.{0} Nat)
+  (pending : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (mass : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard heap →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        heap →
+      @MicroCFTA.InternedOpenDepthReadback.Heap Symbol Guard heap →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard heap pending →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard pending →
+            @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass heap →
+              @Exists.{1} Nat fun count =>
+                @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) fun rows =>
+                  @Exists.{1} (MicroCFTA.SourceCurrentAllocatedReaderControl.Config Symbol Guard) fun after =>
+                    And
+                      (@MicroCFTA.SourceCurrentAllocatedReaderConsumed.Run Symbol Guard inst count
+                        (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.mk Symbol Guard heap seen pending) rows
+                        after)
+                      (And
+                        (@LE.le.{0} Nat instLENat count
+                          (MicroCFTA.SourceCurrentAllocatedReaderNumeric.collectFuel
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                            mass
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) pending)))
+                        (And (@MicroCFTA.SourceCurrentAllocatedReaderControl.Good Symbol Guard mass after)
+                          (And
+                            (@MicroCFTA.SourceCurrentAllocatedReaderControl.Fits Symbol Guard
+                              (MicroCFTA.SourceCurrentAllocatedReaderNumeric.collectFuel
+                                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                                (@MicroCFTA.Cache.State.next
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                                mass
+                                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) pending))
+                              after)
+                            (And
+                              (@Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.pending Symbol Guard after)
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (And
+                                (@Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                                  (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst
+                                    (MicroCFTA.SourceCurrentAllocatedReaderNumeric.collectFuel
+                                      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                                      (@MicroCFTA.Cache.State.next
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                                      mass
+                                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                        pending))
+                                    heap seen pending)
+                                  (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows
+                                    (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard after)))
+                                (∀ (extra : Nat),
+                                  @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                                    (@MicroCFTA.MergedFreshOrdinaryExposure.collect Symbol Guard inst
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        (MicroCFTA.SourceCurrentAllocatedReaderNumeric.collectFuel
+                                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                                          (@MicroCFTA.Cache.State.next
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                                          mass
+                                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                            pending))
+                                        extra)
+                                      heap seen pending)
+                                    (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows
+                                      (@MicroCFTA.SourceCurrentAllocatedReaderControl.Config.heap Symbol Guard
+                                        after))))))))
+'MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedRowReadNumeric.complete_bound' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedRowReadNumeric.complete_bound : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (mass : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap Symbol Guard heap →
+    @MicroCFTA.InternedRecordCoherence.Covered Symbol Guard (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeKey)
+        heap →
+      @MicroCFTA.InternedOpenDepthReadback.Heap Symbol Guard heap →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap value →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass heap →
+              @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) fun rows =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                  And
+                    (@Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                      (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst
+                        (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                          mass)
+                        value heap)
+                      (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after))
+                    (And
+                      (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+                        (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                          mass)
+                        after)
+                      (And
+                        (@LE.le.{0} Nat instLENat
+                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                          (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                            mass))
+                        (@LE.le.{0} Nat instLENat
+                          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                          (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                            mass))))
+'MicroCFTA.SourceCurrentAllocatedRowReadNumeric.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedRowReadNumeric.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (mass : Nat),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard heap →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard heap value →
+      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+        @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass heap →
+          @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) fun rows =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+              And
+                (@Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                  (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst
+                    (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                      mass)
+                    value heap)
+                  (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after))
+                (And (@MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst value heap rows after)
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard heap after)
+                    (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                      (And
+                        (@MicroCFTA.InternedValueMassHeap.Stored Symbol Guard
+                          (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                            mass)
+                          after)
+                        (And
+                          (@LE.le.{0} Nat instLENat
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                            (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                              mass))
+                          (And
+                            (@LE.le.{0} Nat instLENat
+                              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                              (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                                (@MicroCFTA.Cache.State.next
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                                mass))
+                            (And (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard after rows)
+                              (And (@MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard rows)
+                                (∀ (extra : Nat),
+                                  @Eq.{1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                                    (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        (MicroCFTA.SourceCurrentAllocatedRowReadNumeric.readFuel
+                                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard heap))
+                                          (@MicroCFTA.Cache.State.next
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard heap))
+                                          mass)
+                                        extra)
+                                      value heap)
+                                    (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard rows after))))))))))

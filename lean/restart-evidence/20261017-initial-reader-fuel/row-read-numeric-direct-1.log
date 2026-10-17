@@ -1,0 +1,94 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean:60:44: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+mass : Nat
+semantic : SemanticHeap heap
+covered : Covered [] heap
+depth : InternedOpenDepthReadback.Heap heap
+available : Available heap value
+closed : value.free = []
+stored : InternedValueMassHeap.Stored mass heap
+control : Nat := initialControl heap.nodes.next heap.edges.next mass 1
+total : Nat := fuel mass (g control)
+initialGood : Good mass { heap := heap, seen := [], pending := [value] }
+initialFits : Fits control { heap := heap, seen := [], pending := [value] }
+larger : control ≤ total
+unchanged :
+  ∀ (rows : List (EdgeValue Symbol Guard)),
+    nodeEdges total value heap = Result.done rows heap →
+      ∃ rows after,
+        nodeEdges total value heap = Result.done rows after ∧
+          InternedValueMassHeap.Stored total after ∧ after.nodes.next ≤ total ∧ after.edges.next ≤ total
+current : InternedConstructorTemplates.State Symbol Guard
+good : Good mass { heap := current, seen := [], pending := [value] }
+fits : Fits (g control) { heap := current, seen := [], pending := [value] }
+count : Nat
+rows : List (EdgeValue Symbol Guard)
+after : Config Symbol Guard
+_actual : SourceCurrentAllocatedReaderConsumed.Run count { heap := current, seen := [], pending := [value] } rows after
+_countBound : count ≤ fuel mass (g control)
+_afterGood : Good mass after
+afterFits : Fits (fuel mass (g control)) after
+_empty : after.pending = []
+done :
+  collect (fuel mass (g control)) { heap := current, seen := [], pending := [value] }.heap
+      { heap := current, seen := [], pending := [value] }.seen
+      { heap := current, seen := [], pending := [value] }.pending =
+    Result.done rows after.heap
+_stable :
+  ∀ (extra : Nat),
+    collect (fuel mass (g control) + extra) { heap := current, seen := [], pending := [value] }.heap
+        { heap := current, seen := [], pending := [value] }.seen
+        { heap := current, seen := [], pending := [value] }.pending =
+      Result.done rows after.heap
+⊢ (match collect total current [] [value] with
+    | Result.done edges state => Result.done (canonicalEdges edges) state
+    | Result.unresolved name state => Result.unresolved name state
+    | Result.pending key state => Result.pending key state
+    | Result.exhausted state => Result.exhausted state) =
+    Result.done (canonicalEdges rows) after.heap
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean:92:33: error: Type mismatch: After simplification, term
+  done
+ has type
+  @Eq (Result Symbol Guard) (collect total middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+but is expected to have type
+  @Eq (Result Symbol Guard)
+    (collect (readFuel heap.nodes.next heap.edges.next mass) middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean:92:33: error: Type mismatch: After simplification, term
+  done
+ has type
+  @Eq (Result Symbol Guard) (collect total middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+but is expected to have type
+  @Eq (Result Symbol Guard)
+    (collect (readFuel heap.nodes.next heap.edges.next mass) middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean:92:33: error: Type mismatch: After simplification, term
+  done
+ has type
+  @Eq (Result Symbol Guard) (collect total middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+but is expected to have type
+  @Eq (Result Symbol Guard)
+    (collect (readFuel heap.nodes.next heap.edges.next mass) middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean:92:33: error: Type mismatch: After simplification, term
+  done
+ has type
+  @Eq (Result Symbol Guard) (collect total middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+but is expected to have type
+  @Eq (Result Symbol Guard)
+    (collect (readFuel heap.nodes.next heap.edges.next mass) middle [] [Value.mu entry body level ordinary]).canonical
+    (Result.done rows after)
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedRowReadNumeric.lean:60:58: warning: This simp argument is unused:
+  done
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Result.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
