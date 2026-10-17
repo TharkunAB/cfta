@@ -1,0 +1,64 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-3.source.lean:151:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ -1
+  c - d ≤ -1
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑heap.nodes.next
+ b := ↑entry.identity
+ c := ↑(SourceCurrentProjectionUnionResources.readFuel bound)
+ d := ↑fuel
+ e := ↑(readWidth bound)
+ f := ↑rows.length
+case neg
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+bound : Nat
+semantic : SemanticReady heap
+fits : Fits bound heap
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary next : Value Symbol Guard
+actual :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry body depth ordinary) heap =
+    InternedNestedConstruction.Outcome.done next heap
+rest✝ : WarmHead heap next
+ih :
+  Available heap next →
+    ∀ (seen remaining : List Nat),
+      (∀ (identity : Nat), identity < heap.nodes.next → ¬identity ∈ seen → identity ∈ remaining) →
+        ∃ fuel rows after,
+          fuel ≤ remaining.length + SourceCurrentProjectionUnionResources.readFuel bound + 1 ∧
+            collect fuel heap seen [next] = MergedSourceExposure.Result.done rows after ∧
+              Fits (SourceCurrentProjectionUnionResources.readFuel bound) after ∧ rows.length ≤ readWidth bound
+available : Available heap (Value.mu entry body depth ordinary)
+seen remaining : List Nat
+unseen : ∀ (identity : Nat), identity < heap.nodes.next → ¬identity ∈ seen → identity ∈ remaining
+visited : ¬entry.identity ∈ seen
+facts : InternedNestedFacts.Facts heap
+stored : heap.nodes.table entry.key = some entry
+issued : entry.identity < heap.nodes.next
+member : entry.identity ∈ remaining
+retained :
+  ∀ (identity : Nat),
+    identity < heap.nodes.next → ¬identity ∈ entry.identity :: seen → identity ∈ remaining.erase entry.identity
+fuel : Nat
+rows : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+enough : fuel ≤ (remaining.erase entry.identity).length + SourceCurrentProjectionUnionResources.readFuel bound + 1
+done : collect fuel heap (entry.identity :: seen) [next] = MergedSourceExposure.Result.done rows after
+afterFits : Fits (SourceCurrentProjectionUnionResources.readFuel bound) after
+width : rows.length ≤ readWidth bound
+shorter : (remaining.erase entry.identity).length = remaining.length - 1
+⊢ ∃ fuel rows after,
+    fuel ≤ remaining.length + SourceCurrentProjectionUnionResources.readFuel bound + 1 ∧
+      collect fuel heap seen [Value.mu entry body depth ordinary] = MergedSourceExposure.Result.done rows after ∧
+        Fits (SourceCurrentProjectionUnionResources.readFuel bound) after ∧ rows.length ≤ readWidth bound

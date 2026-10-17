@@ -1,0 +1,80 @@
+@MicroCFTA.SourceEqualityRequiredGraph.RequireChildren.selected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Prod Int MicroCFTA.SourceEqualityNeeded.Needed)} {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {values results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} (index : Nat),
+  @Eq (Option MicroCFTA.SourceEqualityNeeded.Needed)
+      (@MicroCFTA.SourceEqualityNeededMap.lookup MicroCFTA.SourceEqualityNeeded.Needed
+        (@Nat.cast Int instNatCastInt index) entries)
+      (@some MicroCFTA.SourceEqualityNeeded.Needed needed) →
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result middle →
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) index
+            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          values middle results after →
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index
+          (@List.cons (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value values) before
+          (@List.cons (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result results) after
+@MicroCFTA.SourceEqualityRequiredGraph.RequireRows.kept : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List (Prod Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {afterEdge : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges results : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @Eq Bool
+      (MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+        (@List.length (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)))
+      true →
+    @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+        (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) before values middle →
+      @Eq
+          (Prod (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge)))
+              values)
+            middle)
+          (@Prod.mk (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result afterEdge) →
+        @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges afterEdge results after →
+          @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries
+            (@List.cons (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge edges) before
+            (@List.cons (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) result results) after
+@MicroCFTA.SourceEqualityRequiredExecution.requireAll_execution_iff : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (paths : List MicroCFTA.SourceEqualityNeeded.Path)
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  Iff
+    (MicroCFTA.SourceEqualityRequiredExecution.requireAll.match_1 (fun x => Prop)
+      (MicroCFTA.SourceEqualityNeeded.build paths) fun entries =>
+      @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries
+        (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) values before results after)
+    (@Exists Nat fun fuel =>
+      @Exists Nat fun readFuel =>
+        @Eq
+          (MicroCFTA.SourceEqualityRequiredWorker.Result Symbol Guard
+            (List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          (@MicroCFTA.SourceEqualityRequiredExecution.requireAll Symbol Guard inst fuel readFuel paths values before)
+          (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Symbol Guard
+            (List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results after))

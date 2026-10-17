@@ -1,0 +1,50 @@
+'MicroCFTA.RequiredForecastIntegration.open_head_and_child_room' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.RequiredForecastIntegration.open_head_and_child_room : ∀ (bits level : Nat)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) {row child : Nat},
+  @LT.lt.{0} Nat instLTNat row
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+        (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stageProfile profile)) →
+    @LT.lt.{0} Nat instLTNat child
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+          (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stageProfile profile)) →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+          (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            profile) →
+        And
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+            {
+              nodes :=
+                MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile),
+              edges :=
+                MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile),
+              domains := profile.domains,
+              mass :=
+                MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) })
+          (And
+            (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+              (MicroCFTA.SourceCurrentConstrainedCapEditForecast.constructorProfile
+                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar profile) profile))
+            (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+              (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level
+                (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                  (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile level) child
+                  (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scan
+                    (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep level
+                      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar
+                        (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stageProfile profile)))
+                    row (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stageProfile profile))))))
+'MicroCFTA.RequiredForecastIntegration.larger_plan_reservation' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.RequiredForecastIntegration.larger_plan_reservation : ∀ {bits firstLevel lastLevel : Nat}
+  {first last : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile},
+  @LE.le.{0} Nat instLENat firstLevel lastLevel →
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le first last →
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+          (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile lastLevel last) →
+        And (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits first)
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+            (MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile firstLevel first))

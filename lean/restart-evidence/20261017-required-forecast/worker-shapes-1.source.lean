@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentRequiredHeapEffects
+set_option pp.explicit true
+#check @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren.selected
+#check @MicroCFTA.SourceEqualityRequiredGraph.RequireRows.kept
+#check @MicroCFTA.SourceEqualityRequiredExecution.requireAll_execution_iff

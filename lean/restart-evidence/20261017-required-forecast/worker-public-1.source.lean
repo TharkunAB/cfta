@@ -1,0 +1,35 @@
+import MicroCFTA.SourceCurrentRequiredWorkerNumeric
+import MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+
+#check @MicroCFTA.SourceCurrentRequiredWorkerNumeric.workFuel
+#print axioms MicroCFTA.SourceCurrentRequiredWorkerNumeric.workFuel
+#print MicroCFTA.SourceCurrentRequiredWorkerNumeric.workFuel
+
+#check @MicroCFTA.SourceCurrentRequiredWorkerNumeric.node
+#print axioms MicroCFTA.SourceCurrentRequiredWorkerNumeric.node
+#print MicroCFTA.SourceCurrentRequiredWorkerNumeric.node
+
+#check @MicroCFTA.SourceCurrentRequiredWorkerNumeric.children
+#print axioms MicroCFTA.SourceCurrentRequiredWorkerNumeric.children
+#print MicroCFTA.SourceCurrentRequiredWorkerNumeric.children
+
+#check @MicroCFTA.SourceCurrentRequiredWorkerNumeric.requireAll
+#print axioms MicroCFTA.SourceCurrentRequiredWorkerNumeric.requireAll
+#print MicroCFTA.SourceCurrentRequiredWorkerNumeric.requireAll
+
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker.complete
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker.complete
+#print MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker.complete
+
+#check @MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker.caller
+#print axioms MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker.caller
+#print MicroCFTA.SourceCurrentConstrainedCapSelectedRequiredWorker.caller

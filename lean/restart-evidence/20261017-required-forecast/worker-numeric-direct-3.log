@@ -1,0 +1,304 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-3.source.lean:178:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 2
+where
+ a := ↑(sizeOf entries)
+ b := ↑(sizeOf index)
+ c := ↑(sizeOf childNeeded)
+ d := ↑(sizeOf needed)
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+_x :
+  (needed : Needed) ×'
+    (value : Value Symbol Guard) ×'
+      (result : Value Symbol Guard) ×'
+        (before : State Symbol Guard) ×'
+          (after : State Symbol Guard) ×'
+            (_ : RequireNode needed value before result after) ×'
+              (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value
+a✝⁸ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y _x →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+needed : Needed
+value✝¹ :
+  (value : Value Symbol Guard) ×'
+    (result : Value Symbol Guard) ×'
+      (before : State Symbol Guard) ×'
+        (after : State Symbol Guard) ×'
+          (_ : RequireNode needed value before result after) ×'
+            (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value
+a✝⁷ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, value✝¹⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+value✝ : Value Symbol Guard
+result✝¹ :
+  (result : Value Symbol Guard) ×'
+    (before : State Symbol Guard) ×'
+      (after : State Symbol Guard) ×'
+        (_ : RequireNode needed value✝ before result after) ×'
+          (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value✝
+a✝⁶ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, result✝¹⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+result✝ : Value Symbol Guard
+before✝¹ :
+  (before : State Symbol Guard) ×'
+    (after : State Symbol Guard) ×'
+      (_ : RequireNode needed value✝ before result✝ after) ×'
+        (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value✝
+a✝⁵ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, ⟨result✝, before✝¹⟩⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+before✝ : State Symbol Guard
+after✝¹ :
+  (after : State Symbol Guard) ×'
+    (_ : RequireNode needed value✝ before✝ result✝ after) ×'
+      (_ : SemanticReady before✝) ×' (_ : CostHeap before✝) ×' Available before✝ value✝
+a✝⁴ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, ⟨result✝, ⟨before✝, after✝¹⟩⟩⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+after✝ : State Symbol Guard
+actual✝¹ :
+  (_ : RequireNode needed value✝ before✝ result✝ after✝) ×'
+    (_ : SemanticReady before✝) ×' (_ : CostHeap before✝) ×' Available before✝ value✝
+a✝³ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, ⟨result✝, ⟨before✝, ⟨after✝, actual✝¹⟩⟩⟩⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+actual✝ : RequireNode needed value✝ before✝ result✝ after✝
+semantic✝¹ : (_ : SemanticReady before✝) ×' (_ : CostHeap before✝) ×' Available before✝ value✝
+a✝² :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, ⟨result✝, ⟨before✝, ⟨after✝, ⟨actual✝, semantic✝¹⟩⟩⟩⟩⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+semantic✝ : SemanticReady before✝
+costs✝¹ : (_ : CostHeap before✝) ×' Available before✝ value✝
+a✝¹ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, ⟨result✝, ⟨before✝, ⟨after✝, ⟨actual✝, ⟨semantic✝, costs✝¹⟩⟩⟩⟩⟩⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+costs✝ : CostHeap before✝
+available✝ : Available before✝ value✝
+a✝ :
+  ∀
+    (y :
+      (needed : Needed) ×'
+        (value : Value Symbol Guard) ×'
+          (result : Value Symbol Guard) ×'
+            (before : State Symbol Guard) ×'
+              (after : State Symbol Guard) ×'
+                (_ : RequireNode needed value before result after) ×'
+                  (_ : SemanticReady before) ×' (_ : CostHeap before) ×' Available before value),
+    InvImage (fun x1 x2 => x1 < x2)
+        (fun x =>
+          PSigma.casesOn x fun needed value =>
+            PSigma.casesOn value fun value result =>
+              PSigma.casesOn result fun result before =>
+                PSigma.casesOn before fun before after =>
+                  PSigma.casesOn after fun after actual =>
+                    PSigma.casesOn actual fun actual semantic =>
+                      PSigma.casesOn semantic fun semantic costs =>
+                        PSigma.casesOn costs fun costs available => sizeOf needed)
+        y ⟨needed, ⟨value✝, ⟨result✝, ⟨before✝, ⟨after✝, ⟨actual✝, ⟨semantic✝, ⟨costs✝, available✝⟩⟩⟩⟩⟩⟩⟩⟩ →
+      ∃ headBound,
+        ∀ (worker reader : Nat),
+          workFuel y.1 ≤ worker →
+            headBound ≤ reader → require worker reader y.1 y.2.1 y.2.2.2.1 = Result.done y.2.2.1 y.2.2.2.2.1
+entries : List (Int × Needed)
+h✝ : needed = Needed.node entries
+actual : RequireNode (Needed.node entries) value✝ before✝ result✝ after✝
+index : Int
+childNeeded : Needed
+member : (index, childNeeded) ∈ entries
+value result : Value Symbol Guard
+before after : State Symbol Guard
+graph : RequireNode childNeeded value before result after
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+⊢ sizeOf childNeeded < sizeOf needed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-3.source.lean:177:34: warning: This simp argument is unused:
+  Needed.node.sizeOf_spec
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Prod.mk.sizeOf_spec] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

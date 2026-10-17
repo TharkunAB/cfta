@@ -1,0 +1,84 @@
+import MicroCFTA.SourceCurrentConstrainedCapRequiredForecast
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+set_option maxRecDepth 30000
+set_option maxHeartbeats 8000000
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.headProfile_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stageProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stageProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_head_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_head_profile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_constructor_profile
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.stage_constructor_profile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.planProfile
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_zero
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_zero
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_succ
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep_ge
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep_ge
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.rowStep_mono
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_stage
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_stage
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.scan_succ_right
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.scan_succ_right
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_row_entry
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_row_entry
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_row_return
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_row_return
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_child_entry
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_child_entry
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_child_return
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_child_return
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_level_succ
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_level_succ
+
+#print axioms MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_level_mono
+#check @MicroCFTA.SourceCurrentConstrainedCapRequiredForecast.plan_level_mono
+

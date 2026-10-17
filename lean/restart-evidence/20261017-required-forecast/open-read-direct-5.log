@@ -1,0 +1,110 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:202:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceCurrentProjectionUnionResources.readFuel bound + (bound + 1)
+in the target expression
+  nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound + (bound + 1)) value heap =
+    MergedSourceExposure.Result.done rows after
+
+case closed
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+heap : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+bound : Nat
+semantic : SemanticReady heap
+available : Available heap value
+fits : Fits bound heap
+unchanged :
+  ∀ (rows : List (EdgeValue Symbol Guard)),
+    nodeEdges (readFuel bound) value heap = MergedSourceExposure.Result.done rows heap →
+      rows.length ≤ bound →
+        ∃ rows after,
+          nodeEdges (readFuel bound) value heap = MergedSourceExposure.Result.done rows after ∧
+            Fits (readGrowth bound) after ∧ rows.length ≤ readWidth bound
+closed : value.free = []
+rows : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+done :
+  nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) value heap =
+    MergedSourceExposure.Result.done rows after
+left✝⁴ : SourceEqualityProjectionRead.Read value heap rows after
+left✝³ : SourceEqualityRequiredCache.Keeps heap after
+left✝² : SemanticReady after
+stored : InternedValueMassHeap.Stored (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound) after
+nodes : after.nodes.next ≤ SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound
+edges : after.edges.next ≤ SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound
+left✝¹ : Edges after rows
+left✝ : MergedColdReaderClosedInputs.ClosedEdges rows
+stable :
+  ∀ (extra : Nat),
+    nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound + extra) value heap =
+      MergedSourceExposure.Result.done rows after
+width :
+  InternedValueMassHeap.Stored (massAfter (SourceCurrentProjectionUnionResources.readFuel bound + 1) bound) after ∧
+    after.nodes.next ≤
+        heap.nodes.next +
+          SourceCurrentAllocatedRecursiveMassTrace.credit (SourceCurrentProjectionUnionResources.readFuel bound + 1)
+            bound ∧
+      after.edges.next ≤
+          heap.edges.next +
+            SourceCurrentAllocatedRecursiveMassTrace.credit (SourceCurrentProjectionUnionResources.readFuel bound + 1)
+              bound ∧
+        rows.length ≤
+            (SourceCurrentProjectionUnionResources.readFuel bound + 1) *
+              massAfter (SourceCurrentProjectionUnionResources.readFuel bound + 1) bound ∧
+          Edges after rows
+extra :
+  nodeEdges (SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound + (bound + 1)) value heap =
+    MergedSourceExposure.Result.done rows after
+same : SourceCurrentProjectionUnionResources.readFuel bound + (bound + 1) = readFuel bound
+⊢ ∃ rows after,
+    nodeEdges (readFuel bound) value heap = MergedSourceExposure.Result.done rows after ∧
+      Fits (readGrowth bound) after ∧ rows.length ≤ readWidth bound
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:232:6: error: Function expected at
+  Keeps
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  heap
+
+Hint: The identifier `Keeps` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:239:10: error(lean.unknownIdentifier): Unknown identifier `rows`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:239:16: error(lean.unknownIdentifier): Unknown identifier `after`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:255:42: error(lean.unknownIdentifier): Unknown identifier `SourceEqualityProjectionCosts.read_effects`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:255:9: error: Tactic `rcases` failed: `x✝ : ?m.151` is not an inductive datatype
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:265:4: error: don't know how to synthesize implicit argument `Keeps`
+  @complete Symbol Guard inst✝ (?m.101 read_ready actual bound larger semantic available warm fits increase)
+    (?m.102 read_ready actual bound larger semantic available warm fits increase) value before larger semantic available
+    warm (Fits.mono fits increase)
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+actual : SourceEqualityProjectionRead.Read value before rows after
+bound larger : Nat
+semantic : SemanticReady before
+available : Available before value
+warm : WarmHead before value
+fits : Fits bound before
+increase : bound ≤ larger
+⊢ ?m.101 read_ready actual bound larger semantic available warm fits increase
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/open-read-direct-5.source.lean:265:4: error: don't know how to synthesize implicit argument
+  @complete Symbol Guard inst✝ (?m.101 read_ready actual bound larger semantic available warm fits increase)
+    (?m.102 read_ready actual bound larger semantic available warm fits increase) value before larger semantic available
+    warm (Fits.mono fits increase)
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+actual : SourceEqualityProjectionRead.Read value before rows after
+bound larger : Nat
+semantic : SemanticReady before
+available : Available before value
+warm : WarmHead before value
+fits : Fits bound before
+increase : bound ≤ larger
+⊢ Sort ?u.20

@@ -1,0 +1,74 @@
+import MicroCFTA.SourceCurrentOpenRowReadResources
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 30000
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readFuel
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readWidth
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readWidth
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readWidth
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+#print MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readFuel_mono
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readFuel_mono
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readWidth_mono
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readWidth_mono
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readWidth_mono
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth_mono
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth_mono
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth_mono
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth_ge
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth_ge
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readGrowth_ge
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.readWidth_le_growth
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.readWidth_le_growth
+#print MicroCFTA.SourceCurrentOpenRowReadResources.readWidth_le_growth
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth_mono
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth_mono
+#print MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth_mono
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth_ge
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth_ge
+#print MicroCFTA.SourceCurrentOpenRowReadResources.headGrowth_ge
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.collect_complete
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.collect_complete
+#print MicroCFTA.SourceCurrentOpenRowReadResources.collect_complete
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.complete
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.complete
+#print MicroCFTA.SourceCurrentOpenRowReadResources.complete
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.read
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.read
+#print MicroCFTA.SourceCurrentOpenRowReadResources.read
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.read_ready
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.read_ready
+#print MicroCFTA.SourceCurrentOpenRowReadResources.read_ready
+
+#print axioms MicroCFTA.SourceCurrentOpenRowReadResources.head
+#check @MicroCFTA.SourceCurrentOpenRowReadResources.head
+#print MicroCFTA.SourceCurrentOpenRowReadResources.head

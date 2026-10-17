@@ -1,0 +1,149 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:146:64: error: Application type mismatch: The argument
+  actual
+has type
+  RequireNode needed value before result after
+but is expected to have type
+  RequireNode (Needed.node entries) ?m.155 ?m.157 ?m.156 ?m.158
+in the application
+  ordinary_replay entries child actual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:154:29: error: Tactic `rfl` failed: The left-hand side
+  require (worker + 1) reader (Needed.node entries) value before
+is not definitionally equal to the right-hand side
+  Result.done value before
+
+case neg.identity.succ
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+before : State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+entries : List (Int × Needed)
+child : ChildReplay entries (2 * sizeOf (Needed.node entries) - 1)
+ordinary : ¬SourceEqualityRequiredCache.Ordinary value
+shape : Needed.node [] = Needed.node entries
+reader : Nat
+a✝ : 0 ≤ reader
+worker : Nat
+enough : workFuel (Needed.node entries) ≤ worker + 1
+⊢ require (worker + 1) reader (Needed.node entries) value before = Result.done value before
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:159:74: error: Application type mismatch: The argument
+  body
+has type
+  RequireNode (Needed.node entries✝) exposed✝ middle✝ result after
+but is expected to have type
+  RequireNode (Needed.node entries) ?m.522 ?m.524 ?m.523 ?m.525
+in the application
+  ordinary_replay entries child body
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:172:29: error: unsolved goals
+case neg.recursive.succ.mu
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+result : Value Symbol Guard
+before after : State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+entries : List (Int × Needed)
+child : ChildReplay entries (2 * sizeOf (Needed.node entries) - 1)
+entries✝ : List (Int × Needed)
+exposed✝ : Value Symbol Guard
+middle✝ : State Symbol Guard
+nonempty : entries✝ ≠ []
+shape : Needed.node entries✝ = Needed.node entries
+body : RequireNode (Needed.node entries✝) exposed✝ middle✝ result after
+effects : Keeps before middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Available middle✝ exposed✝
+bodyBound headBound reader : Nat
+readEnough : max bodyBound headBound ≤ reader
+worker : Nat
+enough : workFuel (Needed.node entries) ≤ worker + 1
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+available : Available before (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+ordinary : ¬SourceEqualityRequiredCache.Ordinary (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+recursive : Recursive (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+head : SourceEqualityRequiredHead.Head (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) before exposed✝ middle✝
+bodyDone :
+  ∀ (worker reader : Nat),
+    2 * sizeOf (Needed.node entries) ≤ worker →
+      bodyBound ≤ reader →
+        (fun worker reader => require worker reader (Needed.node entries) exposed✝ middle✝) worker reader =
+          Result.done (?m.674 available ordinary recursive head) (?m.675 available ordinary recursive head)
+headDone :
+  ∀ (fuel : Nat),
+    headBound ≤ fuel →
+      SourceEqualityRequiredWorker.head fuel (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) before =
+        Result.done exposed✝ middle✝
+bodyResult :
+  (fun worker reader => require worker reader (Needed.node entries) exposed✝ middle✝) worker reader =
+    Result.done (?m.674 available ordinary recursive head) (?m.675 available ordinary recursive head)
+headResult :
+  SourceEqualityRequiredWorker.head reader (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) before =
+    Result.done exposed✝ middle✝
+⊢ (if entries = [] then Result.done (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) before
+    else Result.done (?m.674 available ordinary recursive head) (?m.675 available ordinary recursive head)) =
+    Result.done result after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:172:29: error: unsolved goals
+case neg.recursive.succ.union
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+result : Value Symbol Guard
+before after : State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+entries : List (Int × Needed)
+child : ChildReplay entries (2 * sizeOf (Needed.node entries) - 1)
+entries✝ : List (Int × Needed)
+exposed✝ : Value Symbol Guard
+middle✝ : State Symbol Guard
+nonempty : entries✝ ≠ []
+shape : Needed.node entries✝ = Needed.node entries
+body : RequireNode (Needed.node entries✝) exposed✝ middle✝ result after
+effects : Keeps before middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Available middle✝ exposed✝
+bodyBound headBound reader : Nat
+readEnough : max bodyBound headBound ≤ reader
+worker : Nat
+enough : workFuel (Needed.node entries) ≤ worker + 1
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+available : Available before (Value.union entry✝ members✝ depth✝ free✝)
+ordinary : ¬SourceEqualityRequiredCache.Ordinary (Value.union entry✝ members✝ depth✝ free✝)
+recursive : Recursive (Value.union entry✝ members✝ depth✝ free✝)
+head : SourceEqualityRequiredHead.Head (Value.union entry✝ members✝ depth✝ free✝) before exposed✝ middle✝
+bodyDone :
+  ∀ (worker reader : Nat),
+    2 * sizeOf (Needed.node entries) ≤ worker →
+      bodyBound ≤ reader →
+        (fun worker reader => require worker reader (Needed.node entries) exposed✝ middle✝) worker reader =
+          Result.done (?m.674 available ordinary recursive head) (?m.675 available ordinary recursive head)
+headDone :
+  ∀ (fuel : Nat),
+    headBound ≤ fuel →
+      SourceEqualityRequiredWorker.head fuel (Value.union entry✝ members✝ depth✝ free✝) before =
+        Result.done exposed✝ middle✝
+bodyResult :
+  (fun worker reader => require worker reader (Needed.node entries) exposed✝ middle✝) worker reader =
+    Result.done (?m.674 available ordinary recursive head) (?m.675 available ordinary recursive head)
+headResult :
+  SourceEqualityRequiredWorker.head reader (Value.union entry✝ members✝ depth✝ free✝) before =
+    Result.done exposed✝ middle✝
+⊢ (if entries = [] then Result.done (Value.union entry✝ members✝ depth✝ free✝) before
+    else Result.done (?m.674 available ordinary recursive head) (?m.675 available ordinary recursive head)) =
+    Result.done result after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:173:0: warning: unused termination hints, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:172:70: warning: This simp argument is unused:
+  nonempty
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [require, List.isEmpty_iff, ite_false, headResult, Result.bind, bodyResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-required-forecast/worker-numeric-direct-4.source.lean:172:80: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [require, List.isEmpty_iff, nonempty, headResult, Result.bind, bodyResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
