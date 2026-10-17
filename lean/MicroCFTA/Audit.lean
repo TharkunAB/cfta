@@ -2334,6 +2334,11 @@ import MicroCFTA.SourceRecursiveIntersectionCompileMass
 import MicroCFTA.SourceEqualityNativeCheckedMassInputs
 import MicroCFTA.SourceRecursiveIntersectionCompileMassInputs
 import MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace
+import MicroCFTA.SourceRecursiveIntersectionCodeMass
+import MicroCFTA.SourceRecursiveIntersectionCompileWidth
+import MicroCFTA.SourceEqualityNativeCheckedWidth
+import MicroCFTA.SourceCurrentAllocatedNativeWidthStep
+import MicroCFTA.SourceCurrentAllocatedNativeWidthTrace
 /-!
 # Proof dependency audit
 
