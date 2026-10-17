@@ -1,0 +1,160 @@
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol Guard → MicroCFTA.IntersectSchedule.Input → Nat
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_readback' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_readback : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+        ∀ (input : MicroCFTA.IntersectSchedule.Input),
+          @Eq.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+              (MicroCFTA.IntersectionFlatMemoKey.input
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value))
+              (@Option.some.{0} MicroCFTA.IntersectSchedule.Input input) →
+            @Eq.{1} Nat (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state input)
+              (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_le : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state
+            (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard value))
+          (@MicroCFTA.InternedValueMass.value Symbol Guard value)
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_pos' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_pos : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (input : MicroCFTA.IntersectSchedule.Input),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state input)
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.body_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.body_mass : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (name : Nat),
+      @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard state
+          (MicroCFTA.IntersectSchedule.Input.mu name) →
+        @LT.lt.{0} Nat instLTNat
+          (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state
+            (@MicroCFTA.IntersectSchedule.View.body Symbol
+              (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds) name))
+          (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state
+            (MicroCFTA.IntersectSchedule.Input.mu name))
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.rows_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.rows_mass : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (identity : Nat)
+      (selectedRow : MicroCFTA.IntersectSchedule.Row Symbol),
+      @Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+          (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+          (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+          (@MicroCFTA.IntersectSchedule.View.rows Symbol
+            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds) identity)
+          selectedRow →
+        ∀ (input : MicroCFTA.IntersectSchedule.Input),
+          @Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Input (List.{0} MicroCFTA.IntersectSchedule.Input)
+              (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Input)
+              (@MicroCFTA.IntersectSchedule.Row.children Symbol selectedRow) input →
+            @LT.lt.{0} Nat instLTNat
+              (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state input)
+              (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state
+                (MicroCFTA.IntersectSchedule.Input.node identity))
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.members_mass' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.members_mass : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (identity : Nat)
+      (input : MicroCFTA.IntersectSchedule.Input),
+      @Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Input (List.{0} MicroCFTA.IntersectSchedule.Input)
+          (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Input)
+          (@MicroCFTA.IntersectSchedule.View.members Symbol
+            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds) identity)
+          input →
+        @LT.lt.{0} Nat instLTNat (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state input)
+          (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state
+            (MicroCFTA.IntersectSchedule.Input.union identity))
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.localWeight' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.localWeight : {Symbol Guard : Type} →
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) →
+    @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+      (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) →
+        @MicroCFTA.IntersectSchedule.LocalWeight Symbol
+          (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds)
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_inputBounds' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_inputBounds : {Symbol Guard : Type} →
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) →
+    (facts : @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state) →
+      (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) →
+        (leftRoot rightRoot : MicroCFTA.IntersectSchedule.Input) →
+          (leftOriginal : @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard state leftRoot) →
+            (rightOriginal :
+                @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard state rightRoot) →
+              (leftClosed :
+                  @Eq.{1} Bool
+                    (@MicroCFTA.IntersectSchedule.closed Symbol
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds) leftRoot)
+                    Bool.true) →
+                (rightClosed :
+                    @Eq.{1} Bool
+                      (@MicroCFTA.IntersectSchedule.closed Symbol
+                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds) rightRoot)
+                      Bool.true) →
+                  @MicroCFTA.IntersectSchedule.InputBounds Symbol
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard state holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.finiteInput Symbol Guard state facts holds leftRoot
+                      rightRoot leftOriginal rightOriginal leftClosed rightClosed)
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_stored : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ {bound : Nat},
+      @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+        ∀ (input : MicroCFTA.IntersectSchedule.Input),
+          @LE.le.{0} Nat instLENat (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state input)
+            bound
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.local_stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.local_stored : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    ∀ {bound : Nat},
+      @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+        ∀ (input : MicroCFTA.IntersectSchedule.Input),
+          @LE.le.{0} Nat instLENat
+            (MicroCFTA.IntersectSchedule.localSize
+              (@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass Symbol Guard state) input)
+            bound
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.inventory_length' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.inventory_length : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1} Nat
+    (@List.length.{0} MicroCFTA.IntersectSchedule.Input
+      (@MicroCFTA.SourceRecursiveIntersectionInputView.inventory Symbol Guard state))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))))
+'MicroCFTA.SourceRecursiveIntersectionMassInputBounds.pairs_length' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionMassInputBounds.pairs_length : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1} Nat
+    (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+      (MicroCFTA.IntersectSchedule.inputPairs
+        (@MicroCFTA.SourceRecursiveIntersectionInputView.inventory Symbol Guard state)))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))))

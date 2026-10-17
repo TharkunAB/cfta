@@ -1,0 +1,89 @@
+'MicroCFTA.NumericFuelResetKernel.reset_same_result' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.NumericFuelResetKernel.reset_same_result : ∀ {Symbol : Type} [inst : DecidableEq.{1} Symbol]
+  (view : MicroCFTA.IntersectSchedule.View Symbol) (inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view),
+  @MicroCFTA.IntersectSchedule.FreeCorrect Symbol view →
+    ∀ (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs)
+      (rank :
+        @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs → MicroCFTA.IntersectSchedule.Call Symbol → Nat),
+      (∀ (roots nextRoots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+          (parent child : MicroCFTA.IntersectSchedule.Call Symbol),
+          @LT.lt.{0} Nat instLTNat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots))
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs roots))
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs roots))) →
+            @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds roots parent →
+              @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds nextRoots child →
+                @LT.lt.{0} Nat instLTNat (rank nextRoots child) (rank roots parent)) →
+        (∀ (roots nextRoots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+            (parent child : MicroCFTA.IntersectSchedule.Call Symbol),
+            @Eq.{1} Nat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots))
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs roots))
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs roots))) →
+              @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds roots parent →
+                @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds nextRoots child →
+                  @MicroCFTA.IntersectSchedule.LocalStep Symbol view
+                      (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds) child parent →
+                    @LT.lt.{0} Nat instLTNat (rank nextRoots child) (rank roots parent)) →
+          ∀ (roots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+            (domain : MicroCFTA.IntersectSchedule.Domain) (left right : MicroCFTA.IntersectSchedule.Input),
+            @MicroCFTA.IntersectSchedule.NodeReady Symbol view inputs roots domain left right →
+              Not
+                  (Or (@Eq.{1} MicroCFTA.IntersectSchedule.Input left MicroCFTA.IntersectSchedule.Input.empty)
+                    (@Eq.{1} MicroCFTA.IntersectSchedule.Input right MicroCFTA.IntersectSchedule.Input.empty)) →
+                @Eq.{1} Bool
+                    (((@MicroCFTA.IntersectSchedule.closed Symbol view left).and
+                          (@MicroCFTA.IntersectSchedule.closed Symbol view right)).and
+                      (@List.isEmpty.{0} (Prod.{0, 0} Nat MicroCFTA.IntersectSchedule.Input) domain.free).not)
+                    Bool.true →
+                  @Exists.{1} (@MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs) fun nextRoots =>
+                    And
+                      (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                        (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots) left)
+                      (And
+                        (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                          (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots) right)
+                        (And
+                          (@LT.lt.{0} Nat instLTNat
+                            (rank nextRoots (@MicroCFTA.IntersectSchedule.Call.node Symbol { } left right))
+                            (rank roots (@MicroCFTA.IntersectSchedule.Call.node Symbol domain left right)))
+                          (@Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) fun result =>
+                            And
+                              (∀ (fuel : Nat),
+                                @LE.le.{0} Nat instLENat
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (rank roots (@MicroCFTA.IntersectSchedule.Call.node Symbol domain left right))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                    fuel →
+                                  @Eq.{1}
+                                    (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                    (@MicroCFTA.IntersectSchedule.run Symbol inst view fuel domain left right)
+                                    (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                              (∀ (fuel : Nat),
+                                @LE.le.{0} Nat instLENat
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (rank nextRoots (@MicroCFTA.IntersectSchedule.Call.node Symbol { } left right))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                    fuel →
+                                  @Eq.{1}
+                                    (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                    (@MicroCFTA.IntersectSchedule.run Symbol inst view fuel { } left right)
+                                    (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result)))))

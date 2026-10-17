@@ -1,0 +1,31 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericFuel.lean:79:6: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericFuel.lean:72:18: error: unsolved goals
+case ind
+Symbol : Type
+inst✝ : DecidableEq Symbol
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+rank : ClosedRoots view inputs → Call Symbol → Nat
+roots✝ : ClosedRoots view inputs
+call✝ : Call Symbol
+ready✝ : WorkReady bounds roots✝ call✝
+amount : Nat
+ih :
+  ∀ (m : Nat),
+    m < amount →
+      ∀ (roots : ClosedRoots view inputs) (call : Call Symbol),
+        rank roots call = m → WorkReady bounds roots call → NumericBound (m + 1) fun fuel => execute view fuel call
+roots : ClosedRoots view inputs
+call : Call Symbol
+sameRank : rank roots call = amount
+ready : WorkReady bounds roots call
+recurse :
+  ∀ (nextRoots : ClosedRoots view inputs) (child : Call Symbol),
+    WorkReady bounds nextRoots child →
+      rank nextRoots child < amount → NumericBound amount fun fuel => execute view fuel child
+⊢ NumericBound (amount + 1) fun fuel => execute view fuel call
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericFuel.lean:273:52: error(lean.unknownIdentifier): Unknown identifier `freeCorrect`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericFuel.lean:273:76: error(lean.unknownIdentifier): Unknown identifier `root_decrease`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericFuel.lean:273:90: error(lean.unknownIdentifier): Unknown identifier `local_decrease`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericFuel.lean:273:9: error: Tactic `rcases` failed: `x✝ : ?m.123` is not an inductive datatype

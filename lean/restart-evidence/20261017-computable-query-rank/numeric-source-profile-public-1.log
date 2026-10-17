@@ -1,0 +1,60 @@
+'MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.limits_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.limits_bound : ∀ {Symbol Guard : Type} {mass : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass source →
+    And
+      (@LE.le.{0} Nat instLENat (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source).rows
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          mass))
+      (And
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source).members
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+            mass))
+        (@LE.le.{0} Nat instLENat (@MicroCFTA.SourceRecursiveIntersectionSourceProfile.limits Symbol Guard source).arity
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard source))
+            mass)))
+'MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.initial_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.initial_bound : ∀ {Symbol Guard : Type} {mass : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass source →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.InternedValueMassHeap.initialBound Symbol Guard source)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard source)))
+          mass))
+'MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching : Nat → Nat → Nat → Nat
+'MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.source_branching' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.source_branching : ∀ {Symbol Guard : Type} {mass : Nat}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard mass source →
+    @LE.le.{0} Nat instLENat
+      (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Symbol Guard source)
+      (MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard source))
+        mass)
+'MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching_mono : ∀
+  {firstNodes lastNodes firstEdges lastEdges firstMass lastMass : Nat},
+  @LE.le.{0} Nat instLENat firstNodes lastNodes →
+    @LE.le.{0} Nat instLENat firstEdges lastEdges →
+      @LE.le.{0} Nat instLENat firstMass lastMass →
+        @LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching firstNodes firstEdges firstMass)
+          (MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching lastNodes lastEdges lastMass)

@@ -1,0 +1,23 @@
+import MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+set_option cbv.maxSteps 100000000
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.limits_bound
+#check @MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.limits_bound
+#print axioms MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.initial_bound
+#check @MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.initial_bound
+#print axioms MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching
+#check @MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching
+#print axioms MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.source_branching
+#check @MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.source_branching
+#print axioms MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching_mono
+#check @MicroCFTA.SourceRecursiveIntersectionNumericSourceProfile.branching_mono

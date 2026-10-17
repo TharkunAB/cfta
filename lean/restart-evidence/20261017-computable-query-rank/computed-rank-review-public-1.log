@@ -1,0 +1,244 @@
+'MicroCFTA.IntersectNumericRank.combine' does not depend on any axioms
+MicroCFTA.IntersectNumericRank.combine : Nat → Nat → Nat → Nat
+'MicroCFTA.IntersectNumericRank.combine_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.combine_lt : ∀ {width firstHigh lastHigh firstLow lastLow : Nat},
+  @LE.le.{0} Nat instLENat firstLow width →
+    Or (@LT.lt.{0} Nat instLTNat firstHigh lastHigh)
+        (And (@Eq.{1} Nat firstHigh lastHigh) (@LT.lt.{0} Nat instLTNat firstLow lastLow)) →
+      @LT.lt.{0} Nat instLTNat (MicroCFTA.IntersectNumericRank.combine width firstHigh firstLow)
+        (MicroCFTA.IntersectNumericRank.combine width lastHigh lastLow)
+'MicroCFTA.IntersectNumericRank.combine_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.combine_bound : ∀ {width high low capacity : Nat},
+  @LT.lt.{0} Nat instLTNat high capacity →
+    @LE.le.{0} Nat instLENat low width →
+      @LT.lt.{0} Nat instLTNat (MicroCFTA.IntersectNumericRank.combine width high low)
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) capacity
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) width
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.IntersectNumericRank.rootSize' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.rootSize : {Symbol : Type} →
+  {view : MicroCFTA.IntersectSchedule.View Symbol} →
+    {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view} →
+      @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs →
+        @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs → Nat
+'MicroCFTA.IntersectNumericRank.rank' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.rank : {Symbol : Type} →
+  {view : MicroCFTA.IntersectSchedule.View Symbol} →
+    {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view} →
+      @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs →
+        Nat →
+          @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs → MicroCFTA.IntersectSchedule.Call Symbol → Nat
+'MicroCFTA.IntersectNumericRank.ceiling' does not depend on any axioms
+MicroCFTA.IntersectNumericRank.ceiling : Nat → Nat → Nat
+'MicroCFTA.IntersectNumericRank.parts_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.parts_bound : ∀ {Symbol : Type} {view : MicroCFTA.IntersectSchedule.View Symbol}
+  {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view}
+  (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs) (bound : Nat),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+          (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds) input)
+        bound) →
+    ∀ (call : MicroCFTA.IntersectSchedule.Call Symbol),
+      And
+        (@LE.le.{0} Nat instLENat
+          (@Prod.fst.{0, 0} Nat (Prod.{0, 0} Nat Nat)
+            (@MicroCFTA.IntersectSchedule.measure Symbol
+              (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+              (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+                (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds))
+              call))
+          (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+            (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)))
+        (And
+          (@LE.le.{0} Nat instLENat
+            (@Prod.fst.{0, 0} Nat Nat
+              (@Prod.snd.{0, 0} Nat (Prod.{0, 0} Nat Nat)
+                (@MicroCFTA.IntersectSchedule.measure Symbol
+                  (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+                    (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds))
+                  call)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bound)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@LE.le.{0} Nat instLENat
+            (@Prod.snd.{0, 0} Nat Nat
+              (@Prod.snd.{0, 0} Nat (Prod.{0, 0} Nat Nat)
+                (@MicroCFTA.IntersectSchedule.measure Symbol
+                  (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+                    (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds))
+                  call)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.IntersectNumericRank.rank_bound' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.rank_bound : ∀ {Symbol : Type} {view : MicroCFTA.IntersectSchedule.View Symbol}
+  {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view}
+  (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs) (bound : Nat),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @LE.le.{0} Nat instLENat (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds input) bound) →
+    (∀ (input : MicroCFTA.IntersectSchedule.Input),
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+            (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds) input)
+          bound) →
+      ∀ (roots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+        (call : MicroCFTA.IntersectSchedule.Call Symbol),
+        @LT.lt.{0} Nat instLTNat (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound roots call)
+          (MicroCFTA.IntersectNumericRank.ceiling
+            (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+              (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds))
+            bound)
+'MicroCFTA.IntersectNumericRank.root_decrease' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.root_decrease : ∀ {Symbol : Type} {view : MicroCFTA.IntersectSchedule.View Symbol}
+  {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view}
+  (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs) (bound : Nat),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+          (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds) input)
+        bound) →
+    ∀ (roots nextRoots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+      (parent child : MicroCFTA.IntersectSchedule.Call Symbol),
+      @LT.lt.{0} Nat instLTNat (@MicroCFTA.IntersectNumericRank.rootSize Symbol view inputs bounds nextRoots)
+          (@MicroCFTA.IntersectNumericRank.rootSize Symbol view inputs bounds roots) →
+        @LT.lt.{0} Nat instLTNat (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound nextRoots child)
+          (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound roots parent)
+'MicroCFTA.IntersectNumericRank.local_decrease' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.IntersectNumericRank.local_decrease : ∀ {Symbol : Type} {view : MicroCFTA.IntersectSchedule.View Symbol}
+  {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view}
+  (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs) (bound : Nat),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+          (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds) input)
+        bound) →
+    ∀ (roots nextRoots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+      (parent child : MicroCFTA.IntersectSchedule.Call Symbol),
+      @Eq.{1} Nat (@MicroCFTA.IntersectNumericRank.rootSize Symbol view inputs bounds nextRoots)
+          (@MicroCFTA.IntersectNumericRank.rootSize Symbol view inputs bounds roots) →
+        @MicroCFTA.IntersectSchedule.LocalStep Symbol view
+            (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds) child parent →
+          @LT.lt.{0} Nat instLTNat
+            (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound nextRoots child)
+            (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound roots parent)
+'MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling : Nat → Nat → Nat
+'MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling_mono : ∀ {firstNodes lastNodes firstBound lastBound : Nat},
+  @LE.le.{0} Nat instLENat firstNodes lastNodes →
+    @LE.le.{0} Nat instLENat firstBound lastBound →
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling firstNodes firstBound)
+        (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling lastNodes lastBound)
+'MicroCFTA.SourceRecursiveIntersectionComputedFuel.schedule_numeric' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionComputedFuel.schedule_numeric : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol] (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (leftRoot rightRoot : MicroCFTA.IntersectSchedule.Input),
+      @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source leftRoot →
+        @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source rightRoot →
+          @Eq.{1} Bool
+              (@MicroCFTA.IntersectSchedule.closed Symbol
+                (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) leftRoot)
+              Bool.true →
+            @Eq.{1} Bool
+                (@MicroCFTA.IntersectSchedule.closed Symbol
+                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) rightRoot)
+                Bool.true →
+              ∀ {bound : Nat},
+                @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+                  @Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) fun result =>
+                    ∀ (fuel : Nat),
+                      @LE.le.{0} Nat instLENat
+                          (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+                            bound)
+                          fuel →
+                        @Eq.{1}
+                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) fuel
+                            (@MicroCFTA.IntersectSchedule.Call.node Symbol { } leftRoot rightRoot))
+                          (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result)
+'MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_numeric' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_numeric : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol] (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+      (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard left →
+        @MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard right →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source left →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source right →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard left)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard right)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                  ∀ {bound : Nat},
+                    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+                      @Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) fun result =>
+                        ∀ (fuel : Nat),
+                          @LE.le.{0} Nat instLENat
+                              (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling
+                                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+                                bound)
+                              fuel →
+                            @Eq.{1}
+                              (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                              (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) fuel
+                                (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Symbol Guard
+                                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                                    MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                              (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result)
+'MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_requiredFuel_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionComputedFuel.initial_requiredFuel_le : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol] (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+      (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard left →
+        @MicroCFTA.SourceRecursiveIntersectionInputView.Original Symbol Guard right →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source left →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source right →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard left)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard right)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                  ∀ {bound : Nat},
+                    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound source →
+                      ∀
+                        (complete :
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Symbol Guard
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))),
+                        @LE.le.{0} Nat instLENat
+                          (@MicroCFTA.IntersectSchedule.requiredFuel Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Symbol Guard
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                            complete)
+                          (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+                            bound)

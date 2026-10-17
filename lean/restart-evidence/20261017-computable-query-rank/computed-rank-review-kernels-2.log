@@ -1,0 +1,217 @@
+'MicroCFTA.ComputedRankReview.duplicate_pairs_rows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.ComputedRankReview.duplicate_pairs_rows : ∀ {Symbol : Type} {view : MicroCFTA.IntersectSchedule.View Symbol}
+  {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view}
+  (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs) (bound : Nat),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+          (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds) input)
+        bound) →
+    ∀ (roots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+      (domain : MicroCFTA.IntersectSchedule.Domain) (first second : Nat)
+      (left right : MicroCFTA.IntersectSchedule.Row Symbol),
+      @Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+          (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+          (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+          (@MicroCFTA.IntersectSchedule.View.rows Symbol view first) left →
+        @Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+            (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+            (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+            (@MicroCFTA.IntersectSchedule.View.rows Symbol view second) right →
+          ∀ (children : Prod.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input),
+            @Membership.mem.{0, 0} (Prod.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input)
+                (List.{0} (Prod.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input))
+                (@List.instMembership.{0}
+                  (Prod.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input))
+                (@List.zip.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input
+                  (@MicroCFTA.IntersectSchedule.Row.children Symbol left)
+                  (@MicroCFTA.IntersectSchedule.Row.children Symbol right))
+                children →
+              have doubled :=
+                @MicroCFTA.IntersectSchedule.InputBounds.mk Symbol view inputs
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                    (List.{0} MicroCFTA.IntersectSchedule.Pair) (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                    (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                      (@List.instAppend.{0} MicroCFTA.IntersectSchedule.Pair))
+                    (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                    (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds))
+                  (fun left right first second nonemptyLeft nonemptyRight =>
+                    @Iff.mpr
+                      (@Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Pair
+                        (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                        (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Pair)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (List.{0} MicroCFTA.IntersectSchedule.Pair) (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                            (@List.instAppend.{0} MicroCFTA.IntersectSchedule.Pair))
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds))
+                        (MicroCFTA.IntersectSchedule.pair left right))
+                      (Or
+                        (@Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Pair
+                          (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                          (MicroCFTA.IntersectSchedule.pair left right))
+                        (@Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Pair
+                          (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                          (MicroCFTA.IntersectSchedule.pair left right)))
+                      (@List.mem_append.{0} MicroCFTA.IntersectSchedule.Pair
+                        (MicroCFTA.IntersectSchedule.pair left right)
+                        (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                        (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds))
+                      (@Or.inl
+                        (@Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Pair
+                          (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                          (MicroCFTA.IntersectSchedule.pair left right))
+                        (@Membership.mem.{0, 0} MicroCFTA.IntersectSchedule.Pair
+                          (List.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@List.instMembership.{0} MicroCFTA.IntersectSchedule.Pair)
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds)
+                          (MicroCFTA.IntersectSchedule.pair left right))
+                        (@MicroCFTA.IntersectSchedule.InputBounds.pair_mem Symbol view inputs bounds left right first
+                          second nonemptyLeft nonemptyRight)))
+                  (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.body Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.child Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.member Symbol view inputs bounds)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.closed_reach Symbol view inputs bounds);
+              And
+                (@Eq.{1} Nat
+                  (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+                    (MicroCFTA.IntersectSchedule.unseen
+                      (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs doubled) domain))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+                      (MicroCFTA.IntersectSchedule.unseen
+                        (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds) domain))))
+                (And
+                  (@LT.lt.{0} Nat instLTNat
+                    (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs doubled bound roots
+                      (@MicroCFTA.IntersectSchedule.Call.node Symbol domain
+                        (@Prod.fst.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input children)
+                        (@Prod.snd.{0, 0} MicroCFTA.IntersectSchedule.Input MicroCFTA.IntersectSchedule.Input
+                          children)))
+                    (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs doubled bound roots
+                      (@MicroCFTA.IntersectSchedule.Call.edge Symbol domain left right)))
+                  (@LT.lt.{0} Nat instLTNat
+                    (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs doubled bound roots
+                      (@MicroCFTA.IntersectSchedule.Call.edge Symbol domain left right))
+                    (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs doubled bound roots
+                      (@MicroCFTA.IntersectSchedule.Call.node Symbol domain
+                        (MicroCFTA.IntersectSchedule.Input.node first)
+                        (MicroCFTA.IntersectSchedule.Input.node second)))))
+'MicroCFTA.ComputedRankReview.reset_then_swap' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.ComputedRankReview.reset_then_swap : ∀ {Symbol : Type} {view : MicroCFTA.IntersectSchedule.View Symbol}
+  {inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view}
+  (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs) (bound : Nat),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.IntersectSchedule.LocalWeight.value Symbol view
+          (@MicroCFTA.IntersectSchedule.InputBounds.localWeight Symbol view inputs bounds) input)
+        bound) →
+    ∀ (roots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+      (domain : MicroCFTA.IntersectSchedule.Domain) (left right : MicroCFTA.IntersectSchedule.Input),
+      @MicroCFTA.IntersectSchedule.NodeReady Symbol view inputs roots domain left right →
+        @Eq.{1} Bool
+            (((@MicroCFTA.IntersectSchedule.closed Symbol view left).and
+                  (@MicroCFTA.IntersectSchedule.closed Symbol view right)).and
+              (@List.isEmpty.{0} (Prod.{0, 0} Nat MicroCFTA.IntersectSchedule.Input) domain.free).not)
+            Bool.true →
+          @Eq.{1} Bool (MicroCFTA.IntersectSchedule.greater left right) Bool.true →
+            @Exists.{1} (@MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs) fun nextRoots =>
+              And
+                (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots) left)
+                (And
+                  (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots) right)
+                  (And
+                    (@LT.lt.{0} Nat instLTNat
+                      (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound nextRoots
+                        (@MicroCFTA.IntersectSchedule.Call.node Symbol { } left right))
+                      (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound roots
+                        (@MicroCFTA.IntersectSchedule.Call.node Symbol domain left right)))
+                    (And
+                      (@LT.lt.{0} Nat instLTNat
+                        (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound
+                          (@MicroCFTA.IntersectSchedule.ClosedRoots.swap Symbol view inputs nextRoots)
+                          (@MicroCFTA.IntersectSchedule.Call.node Symbol { } right left))
+                        (@MicroCFTA.IntersectNumericRank.rank Symbol view inputs bounds bound nextRoots
+                          (@MicroCFTA.IntersectSchedule.Call.node Symbol { } left right)))
+                      (@Eq.{1} Nat
+                        (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+                          (MicroCFTA.IntersectSchedule.unseen
+                            (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds) { }))
+                        (@List.length.{0} MicroCFTA.IntersectSchedule.Pair
+                          (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds))))))
+'MicroCFTA.ComputedRankReview.constructed_guarded_numeric' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.ComputedRankReview.constructed_guarded_numeric : And
+  (@Eq.{1} (MicroCFTA.InternedNestedConstruction.Outcome Nat Nat (MicroCFTA.InternedConstructorTemplates.Value Nat Nat))
+    MicroCFTA.ComputedRankReview.built
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Nat (MicroCFTA.InternedConstructorTemplates.Value Nat Nat)
+      MicroCFTA.ComputedRankReview.root MicroCFTA.ComputedRankReview.source))
+  (And
+    (@Ne.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Nat) MicroCFTA.ComputedRankReview.left
+      MicroCFTA.ComputedRankReview.right)
+    (And
+      (@MicroCFTA.InternedValueMassHeap.Stored Nat Nat MicroCFTA.ComputedRankReview.initialMass
+        MicroCFTA.ComputedRankReview.source)
+      (And
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Nat MicroCFTA.ComputedRankReview.source))
+          MicroCFTA.ComputedRankReview.initialNodes)
+        (@Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Nat)) fun result =>
+          And
+            (∀ (fuel : Nat),
+              @LE.le.{0} Nat instLENat MicroCFTA.ComputedRankReview.fuelCeiling fuel →
+                @Eq.{1}
+                  (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                    (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Nat)))
+                  (@MicroCFTA.IntersectSchedule.execute Nat instDecidableEqNat
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Nat MicroCFTA.ComputedRankReview.source
+                      MicroCFTA.ComputedRankReview.holds)
+                    fuel
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Nat
+                      MicroCFTA.ComputedRankReview.request))
+                  (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                    (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Nat)) result))
+            (@Exists.{0}
+              (@MicroCFTA.IntersectSchedule.Completes Nat instDecidableEqNat
+                (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Nat MicroCFTA.ComputedRankReview.source
+                  MicroCFTA.ComputedRankReview.holds)
+                (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Nat
+                  MicroCFTA.ComputedRankReview.request))
+              fun complete =>
+              And
+                (@LE.le.{0} Nat instLENat
+                  (@MicroCFTA.IntersectSchedule.requiredFuel Nat instDecidableEqNat
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Nat MicroCFTA.ComputedRankReview.source
+                      MicroCFTA.ComputedRankReview.holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Nat
+                      MicroCFTA.ComputedRankReview.request)
+                    complete)
+                  MicroCFTA.ComputedRankReview.fuelCeiling)
+                (@LE.le.{0} Nat instLENat
+                  (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+                    (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Nat
+                      MicroCFTA.ComputedRankReview.source)
+                    (@MicroCFTA.IntersectSchedule.requiredFuel Nat instDecidableEqNat
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Nat MicroCFTA.ComputedRankReview.source
+                        MicroCFTA.ComputedRankReview.holds)
+                      (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Nat
+                        MicroCFTA.ComputedRankReview.request)
+                      complete))
+                  (MicroCFTA.SourceRecursiveIntersectionInstructionProfile.budget
+                    (@MicroCFTA.SourceRecursiveIntersectionInstructionProfile.sourceBranching Nat Nat
+                      MicroCFTA.ComputedRankReview.source)
+                    MicroCFTA.ComputedRankReview.fuelCeiling)))))))

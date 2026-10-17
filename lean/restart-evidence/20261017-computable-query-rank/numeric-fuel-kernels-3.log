@@ -1,0 +1,190 @@
+'MicroCFTA.NumericFuelResetKernel.reset_same_result' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.NumericFuelResetKernel.reset_same_result : ∀ {Symbol : Type} [inst : DecidableEq.{1} Symbol]
+  (view : MicroCFTA.IntersectSchedule.View Symbol) (inputs : @MicroCFTA.IntersectSchedule.FiniteInput Symbol view),
+  @MicroCFTA.IntersectSchedule.FreeCorrect Symbol view →
+    ∀ (bounds : @MicroCFTA.IntersectSchedule.InputBounds Symbol view inputs)
+      (rank :
+        @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs → MicroCFTA.IntersectSchedule.Call Symbol → Nat),
+      (∀ (roots nextRoots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+          (parent child : MicroCFTA.IntersectSchedule.Call Symbol),
+          @LT.lt.{0} Nat instLTNat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots))
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs roots))
+                (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                  (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs roots))) →
+            @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds roots parent →
+              @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds nextRoots child →
+                @LT.lt.{0} Nat instLTNat (rank nextRoots child) (rank roots parent)) →
+        (∀ (roots nextRoots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+            (parent child : MicroCFTA.IntersectSchedule.Call Symbol),
+            @Eq.{1} Nat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots))
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs roots))
+                  (@MicroCFTA.IntersectSchedule.InputBounds.size Symbol view inputs bounds
+                    (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs roots))) →
+              @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds roots parent →
+                @MicroCFTA.IntersectSchedule.WorkReady Symbol view inputs Symbol bounds nextRoots child →
+                  @MicroCFTA.IntersectSchedule.LocalStep Symbol view
+                      (@MicroCFTA.IntersectSchedule.InputBounds.pairs Symbol view inputs bounds) child parent →
+                    @LT.lt.{0} Nat instLTNat (rank nextRoots child) (rank roots parent)) →
+          ∀ (roots : @MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs)
+            (domain : MicroCFTA.IntersectSchedule.Domain) (left right : MicroCFTA.IntersectSchedule.Input),
+            @MicroCFTA.IntersectSchedule.NodeReady Symbol view inputs roots domain left right →
+              Not
+                  (Or (@Eq.{1} MicroCFTA.IntersectSchedule.Input left MicroCFTA.IntersectSchedule.Input.empty)
+                    (@Eq.{1} MicroCFTA.IntersectSchedule.Input right MicroCFTA.IntersectSchedule.Input.empty)) →
+                @Eq.{1} Bool
+                    (((@MicroCFTA.IntersectSchedule.closed Symbol view left).and
+                          (@MicroCFTA.IntersectSchedule.closed Symbol view right)).and
+                      (@List.isEmpty.{0} (Prod.{0, 0} Nat MicroCFTA.IntersectSchedule.Input) domain.free).not)
+                    Bool.true →
+                  @Exists.{1} (@MicroCFTA.IntersectSchedule.ClosedRoots Symbol view inputs) fun nextRoots =>
+                    And
+                      (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                        (@MicroCFTA.IntersectSchedule.ClosedRoots.left Symbol view inputs nextRoots) left)
+                      (And
+                        (@Eq.{1} MicroCFTA.IntersectSchedule.Input
+                          (@MicroCFTA.IntersectSchedule.ClosedRoots.right Symbol view inputs nextRoots) right)
+                        (And
+                          (@LT.lt.{0} Nat instLTNat
+                            (rank nextRoots (@MicroCFTA.IntersectSchedule.Call.node Symbol { } left right))
+                            (rank roots (@MicroCFTA.IntersectSchedule.Call.node Symbol domain left right)))
+                          (@Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) fun result =>
+                            And
+                              (∀ (fuel : Nat),
+                                @LE.le.{0} Nat instLENat
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (rank roots (@MicroCFTA.IntersectSchedule.Call.node Symbol domain left right))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                    fuel →
+                                  @Eq.{1}
+                                    (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                    (@MicroCFTA.IntersectSchedule.run Symbol inst view fuel domain left right)
+                                    (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                              (∀ (fuel : Nat),
+                                @LE.le.{0} Nat instLENat
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (rank nextRoots (@MicroCFTA.IntersectSchedule.Call.node Symbol { } left right))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                    fuel →
+                                  @Eq.{1}
+                                    (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                    (@MicroCFTA.IntersectSchedule.run Symbol inst view fuel { } left right)
+                                    (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                      (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result)))))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-computable-query-rank/numeric-fuel-kernels.lean:105:28: error: unsolved goals
+root : MicroCFTA.InternedConstructorTemplates.Value Nat Bool
+heap : MicroCFTA.InternedConstructorTemplates.State Nat Bool
+built :
+  @Eq.{1}
+    (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b =>
+        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a
+          b)
+      MicroCFTA.NumericFuelSourceKernel.fixture (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+    (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+      root heap)
+verified :
+  @MicroCFTA.InternedNestedFacts.Verified Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+    (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool)
+    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+      (fun a b =>
+        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat instDecidableEqBool a
+          b)
+      MicroCFTA.NumericFuelSourceKernel.fixture (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+      (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+    (@MicroCFTA.InternedProbeProvenance.Available Nat Bool)
+facts : @MicroCFTA.InternedNestedFacts.Facts Nat Bool heap
+available : @MicroCFTA.InternedProbeProvenance.Available Nat Bool heap root
+⊢ @Eq.{1} Bool Bool.false Bool.true
+'MicroCFTA.NumericFuelSourceKernel.constructed_recursive_numeric' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.NumericFuelSourceKernel.constructed_recursive_numeric : @Exists.{1}
+  (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun root =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun heap =>
+    And
+      (@Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+              instDecidableEqBool a b)
+          MicroCFTA.NumericFuelSourceKernel.fixture
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+          (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+          (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) root heap))
+      (And
+        (@Eq.{1} (List.{0} Nat)
+          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) Nat
+            MicroCFTA.NumericFuelSourceKernel.kind (@MicroCFTA.InternedProbeProvenance.children Nat Bool root))
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) (@List.nil.{0} Nat)))))
+        (∀ (left : MicroCFTA.InternedConstructorTemplates.Value Nat Bool),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@MicroCFTA.InternedProbeProvenance.children Nat Bool root) left →
+            ∀ (right : MicroCFTA.InternedConstructorTemplates.Value Nat Bool),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                  (@MicroCFTA.InternedProbeProvenance.children Nat Bool root) right →
+                @Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Nat)) fun result =>
+                  And
+                    (∀ (fuel : Nat),
+                      @LE.le.{0} Nat instLENat
+                          (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool heap))
+                            (@MicroCFTA.InternedValueMassHeap.initialBound Nat Bool heap))
+                          fuel →
+                        @Eq.{1}
+                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Nat)))
+                          (@MicroCFTA.IntersectSchedule.execute Nat instDecidableEqNat
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Bool heap fun guard x => guard)
+                            fuel
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Bool
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Nat Bool
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                          (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Nat)) result))
+                    (@Exists.{0}
+                      (@MicroCFTA.IntersectSchedule.Completes Nat instDecidableEqNat
+                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Bool heap fun guard x => guard)
+                        (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Bool
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Nat Bool
+                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                      fun complete =>
+                      @LE.le.{0} Nat instLENat
+                        (@MicroCFTA.IntersectSchedule.requiredFuel Nat instDecidableEqNat
+                          (@MicroCFTA.SourceRecursiveIntersectionInputView.view Nat Bool heap fun guard x => guard)
+                          (@MicroCFTA.SourceRecursiveIntersectionNative.nodeSemantic Nat Bool
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Nat Bool
+                              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                          complete)
+                        (MicroCFTA.SourceRecursiveIntersectionComputedFuel.ceiling
+                          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Nat Bool heap))
+                          (@MicroCFTA.InternedValueMassHeap.initialBound Nat Bool heap)))))

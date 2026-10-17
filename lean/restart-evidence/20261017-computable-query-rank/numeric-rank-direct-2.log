@@ -1,0 +1,170 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:66:22: error(lean.unknownIdentifier): Unknown identifier `largest_le`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:100:16: error: don't know how to synthesize implicit argument `lastLow`
+  @combine_lt bounds.pairs.length (rootSize bounds nextRoots) (rootSize bounds roots)
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ?m.41 parts.left (Or.inl less)
+context:
+Symbol : Type
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+bound : Nat
+weights : ∀ (input : Input), bounds.localWeight.value input ≤ bound
+roots nextRoots : ClosedRoots view inputs
+parent child : Call Symbol
+less : rootSize bounds nextRoots < rootSize bounds roots
+parts :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ≤ bounds.pairs.length ∧
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ≤ 2 * bound + 1 ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.snd ≤ 1
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:100:36: error: don't know how to synthesize implicit argument `b`
+  @Or.inl (rootSize bounds nextRoots < rootSize bounds roots)
+    (rootSize bounds nextRoots = rootSize bounds roots ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst < ?m.41)
+    less
+context:
+Symbol : Type
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+bound : Nat
+weights : ∀ (input : Input), bounds.localWeight.value input ≤ bound
+roots nextRoots : ClosedRoots view inputs
+parent child : Call Symbol
+less : rootSize bounds nextRoots < rootSize bounds roots
+parts :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ≤ bounds.pairs.length ∧
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ≤ 2 * bound + 1 ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.snd ≤ 1
+⊢ Prop
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:100:7: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:98:74: error: unsolved goals
+Symbol : Type
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+bound : Nat
+weights : ∀ (input : Input), bounds.localWeight.value input ≤ bound
+roots nextRoots : ClosedRoots view inputs
+parent child : Call Symbol
+less : rootSize bounds nextRoots < rootSize bounds roots
+parts :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ≤ bounds.pairs.length ∧
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ≤ 2 * bound + 1 ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.snd ≤ 1
+⊢ rank bounds bound nextRoots child < rank bounds bound roots parent
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:117:19: error: don't know how to synthesize implicit argument `lastLow`
+  @combine_lt (2 * bound + 1)
+    (rootSize bounds roots * (bounds.pairs.length + 1) +
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst)
+    (rootSize bounds roots * (bounds.pairs.length + 1) +
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst)
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ?m.107 parts.right.left
+    (Or.inl first)
+context:
+Symbol : Type
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+bound : Nat
+weights : ∀ (input : Input), bounds.localWeight.value input ≤ bound
+roots nextRoots : ClosedRoots view inputs
+parent child : Call Symbol
+same : rootSize bounds nextRoots = rootSize bounds roots
+actual : LocalStep view bounds.pairs child parent
+parts :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ≤ bounds.pairs.length ∧
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ≤ 2 * bound + 1 ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.snd ≤ 1
+descent :
+  Prod.Lex Nat.lt (Prod.Lex Nat.lt Nat.lt) (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child)
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent)
+unseenLess :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst.lt
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst
+first :
+  rootSize bounds roots * (bounds.pairs.length + 1) +
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst <
+    rootSize bounds roots * (bounds.pairs.length + 1) +
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:117:41: error: don't know how to synthesize implicit argument `b`
+  @Or.inl
+    (rootSize bounds roots * (bounds.pairs.length + 1) +
+        (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst <
+      rootSize bounds roots * (bounds.pairs.length + 1) +
+        (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst)
+    (rootSize bounds roots * (bounds.pairs.length + 1) +
+          (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst =
+        rootSize bounds roots * (bounds.pairs.length + 1) +
+          (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst < ?m.107)
+    first
+context:
+Symbol : Type
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+bound : Nat
+weights : ∀ (input : Input), bounds.localWeight.value input ≤ bound
+roots nextRoots : ClosedRoots view inputs
+parent child : Call Symbol
+same : rootSize bounds nextRoots = rootSize bounds roots
+actual : LocalStep view bounds.pairs child parent
+parts :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ≤ bounds.pairs.length ∧
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ≤ 2 * bound + 1 ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.snd ≤ 1
+descent :
+  Prod.Lex Nat.lt (Prod.Lex Nat.lt Nat.lt) (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child)
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent)
+unseenLess :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst.lt
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst
+first :
+  rootSize bounds roots * (bounds.pairs.length + 1) +
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst <
+    rootSize bounds roots * (bounds.pairs.length + 1) +
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst
+⊢ Prop
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:117:9: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/MicroCFTA/IntersectNumericRank.lean:119:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst
+in the target expression
+  (have parts := IntersectSchedule.measure bounds.pairs bounds.localWeight.value child;
+    combine 1 (combine (2 * bound + 1) (combine bounds.pairs.length (rootSize bounds roots) parts.fst) parts.snd.fst)
+      parts.snd.snd) <
+    have parts := IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent;
+    combine 1 (combine (2 * bound + 1) (combine bounds.pairs.length (rootSize bounds roots) parts.fst) parts.snd.fst)
+      parts.snd.snd
+
+case inr
+Symbol : Type
+view : View Symbol
+inputs : FiniteInput view
+bounds : InputBounds view inputs
+bound : Nat
+weights : ∀ (input : Input), bounds.localWeight.value input ≤ bound
+roots nextRoots : ClosedRoots view inputs
+parent child : Call Symbol
+same : rootSize bounds nextRoots = rootSize bounds roots
+actual : LocalStep view bounds.pairs child parent
+parts :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst ≤ bounds.pairs.length ∧
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.fst ≤ 2 * bound + 1 ∧
+      (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd.snd ≤ 1
+descent :
+  Prod.Lex Nat.lt (Prod.Lex Nat.lt Nat.lt) (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child)
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent)
+unseenSame :
+  (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).fst =
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).fst
+localLess :
+  Prod.Lex Nat.lt Nat.lt (IntersectSchedule.measure bounds.pairs bounds.localWeight.value child).snd
+    (IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent).snd
+⊢ (have parts := IntersectSchedule.measure bounds.pairs bounds.localWeight.value child;
+    combine 1 (combine (2 * bound + 1) (combine bounds.pairs.length (rootSize bounds roots) parts.fst) parts.snd.fst)
+      parts.snd.snd) <
+    have parts := IntersectSchedule.measure bounds.pairs bounds.localWeight.value parent;
+    combine 1 (combine (2 * bound + 1) (combine bounds.pairs.length (rootSize bounds roots) parts.fst) parts.snd.fst)
+      parts.snd.snd

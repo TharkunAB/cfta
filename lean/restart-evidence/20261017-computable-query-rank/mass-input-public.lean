@@ -1,0 +1,48 @@
+import MicroCFTA.SourceRecursiveIntersectionMassInputBounds
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_readback
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_readback
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_le
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_le
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_pos
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_pos
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.body_mass
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.body_mass
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.rows_mass
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.rows_mass
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.members_mass
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.members_mass
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.localWeight
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.localWeight
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_inputBounds
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_inputBounds
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_stored
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.mass_stored
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.local_stored
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.local_stored
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.inventory_length
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.inventory_length
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionMassInputBounds.pairs_length
+#check @MicroCFTA.SourceRecursiveIntersectionMassInputBounds.pairs_length

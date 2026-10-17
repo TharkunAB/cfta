@@ -1,0 +1,37 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeComputedBudget.lean:54:89: error: Application type mismatch: The argument
+  complete
+has type
+  Completes (view source holds)
+    (Call.node (SourceRecursiveIntersectionSchedule.domain IntersectionEmptyDomain.emptyKey) (inputOf left)
+      (inputOf right))
+but is expected to have type
+  Completes (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic ?m.47)
+in the application
+  SourceCurrentAllocatedNativeInstructionTrace.nodeBudget_of_complete source holds ?m.47 complete
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeComputedBudget.lean:49:120: error: unsolved goals
+mass : Nat
+inst✝ : DecidableEq Symbol
+source : InternedConstructorTemplates.State Symbol Guard
+facts : InternedNestedFacts.Facts source
+holds : Guard → Language.Term Symbol → Bool
+left right : Value Symbol Guard
+leftOriginal : Original left
+rightOriginal : Original right
+leftAvailable : Available source left
+rightAvailable : Available source right
+leftClosed : left.free = []
+rightClosed : right.free = []
+stored : Stored mass source
+complete :
+  Completes (view source holds)
+    (Call.node (SourceRecursiveIntersectionSchedule.domain IntersectionEmptyDomain.emptyKey) (inputOf left)
+      (inputOf right))
+fuel :
+  requiredFuel (view source holds)
+      (SourceRecursiveIntersectionNative.nodeSemantic
+        { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right })
+      complete ≤
+    SourceRecursiveIntersectionComputedFuel.ceiling source.nodes.next mass
+⊢ SourceCurrentAllocatedNativeInstructionTrace.nodeBudget source holds
+      { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right } ≤
+    instructionBound source.nodes.next source.edges.next mass
