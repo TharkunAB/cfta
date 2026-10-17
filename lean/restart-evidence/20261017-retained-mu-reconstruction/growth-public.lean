@@ -1,0 +1,74 @@
+import MicroCFTA.SourceCurrentNativeMuGrowthHistory
+import MicroCFTA.SourceCurrentNativeMuGrowthWriters
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.reserve_growth
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.reserve_growth
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.reserve_growth
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.publication_growth
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.publication_growth
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.publication_growth
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.refl
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.refl
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.refl
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.retain
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.retain
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.retain
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.trans
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.trans
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.trans
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.publication
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.publication
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.publication
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.history
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.history
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.history
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.growth
+#print MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.growth
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.growth
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.prepend
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.prepend
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.prepend
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.later
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.later
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.later
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.history
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.history
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.history
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.writers
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.writers
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.writers
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.from_empty
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.from_empty
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.from_empty
+
+#check @MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.raw_callbacks
+#print MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.raw_callbacks
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthWriters.Written.raw_callbacks

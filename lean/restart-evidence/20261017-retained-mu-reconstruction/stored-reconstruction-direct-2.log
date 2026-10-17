@@ -1,0 +1,62 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-retained-mu-reconstruction/stored-reconstruction-direct-2.source.lean:66:6: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (fun name => if name = Reference.interned entry.identity then some replacement else none) name = some value
+of `found`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+key : NodeKey
+entry : Interned NodeKey
+body depth ordinary replacement : Value Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+present : before.nodeRecords key = some (Value.mu entry body depth ordinary)
+replacementAvailable : Available before replacement
+selected : Available before (Value.mu entry body depth ordinary)
+bodyAvailable : Available before body
+ordinaryAvailable : Available before ordinary
+name : Reference
+value : Value Symbol Guard
+found : (fun name => if name = Reference.interned entry.identity then some replacement else none) name = some value
+⊢ Available before value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-retained-mu-reconstruction/stored-reconstruction-direct-2.source.lean:74:6: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (fun name =>
+        if name = Reference.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth) then some replacement
+        else none)
+      name =
+    some value
+of `found`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+key : NodeKey
+entry : Interned NodeKey
+body depth ordinary replacement : Value Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+present : before.nodeRecords key = some (Value.mu entry body depth ordinary)
+replacementAvailable : Available before replacement
+selected : Available before (Value.mu entry body depth ordinary)
+bodyAvailable : Available before body
+ordinaryAvailable : Available before ordinary
+left : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+bodyDone :
+  InternedFreshOrdinaryStoredSubstitution.execute body
+      (fun name => if name = Reference.interned entry.identity then some replacement else none) before =
+    Outcome.done left middle
+first : Keeps before middle
+leftAvailable : Available middle left
+firstHistory : Nonempty (History before middle)
+name : Reference
+value : Value Symbol Guard
+found :
+  (fun name =>
+        if name = Reference.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth) then some replacement
+        else none)
+      name =
+    some value
+⊢ Available middle value

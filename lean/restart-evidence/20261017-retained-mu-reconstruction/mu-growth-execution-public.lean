@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentNativeMuGrowthExecution
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentNativeMuGrowthExecution.build_path
+#print MicroCFTA.SourceCurrentNativeMuGrowthExecution.build_path
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthExecution.build_path
+#check @MicroCFTA.SourceCurrentNativeMuGrowthExecution.buildMany_path
+#print MicroCFTA.SourceCurrentNativeMuGrowthExecution.buildMany_path
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthExecution.buildMany_path
+#check @MicroCFTA.SourceCurrentNativeMuGrowthExecution.buildEdges_path
+#print MicroCFTA.SourceCurrentNativeMuGrowthExecution.buildEdges_path
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthExecution.buildEdges_path
+#check @MicroCFTA.SourceCurrentNativeMuGrowthExecution.closed_path
+#print MicroCFTA.SourceCurrentNativeMuGrowthExecution.closed_path
+#print axioms MicroCFTA.SourceCurrentNativeMuGrowthExecution.closed_path
