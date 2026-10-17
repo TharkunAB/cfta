@@ -2498,6 +2498,11 @@ import MicroCFTA.SourceCurrentGatePlainRegion
 import MicroCFTA.SourceCurrentRequiredGuardOrigins
 import MicroCFTA.SourceCurrentPrimaryEndpointCap
 import MicroCFTA.SourceCurrentOuterParentHeightGrowth
+import MicroCFTA.SourceCurrentOuterKeyIdentity
+import MicroCFTA.SourceCurrentOuterBusyOwners
+import MicroCFTA.SourceCurrentOuterEdgeIdle
+import MicroCFTA.SourceCurrentNativeGuardOccurrenceGrowth
+import MicroCFTA.SourceCurrentOuterCopiedWarmHit
 /-!
 # Proof dependency audit
 
