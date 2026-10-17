@@ -1,0 +1,4 @@
+import MicroCFTA.SourceCurrentAllocatedSharedEditGraph
+set_option pp.explicit true
+set_option pp.fullNames true
+#check @MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditChildren.rec

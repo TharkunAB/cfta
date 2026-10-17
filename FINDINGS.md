@@ -2,16 +2,16 @@
 
 ## Haskell fix handoff for external work
 
-Current proof update: 2026-10-17 23:15 CEST. Proof checkpoint is `d41ba9ab`.
-Full pinned Audit passes 3144 jobs and 69399 dependency checks. Actual native
-compilation retains source row/child lineage and captured growing writers.
-Actual inherited prefixes retain original class constituent dependencies.
-Actual ordinary-node Mu callbacks have equal child Empty tests and row-drop
-decisions. General node-owner exclusion, convergence, and full correspondence
-remain open. No Haskell change or new production defect is added.
+Current proof update: 2026-10-17 23:39 CEST. Proof checkpoint is `c1be0445`.
+Full pinned Audit passes 3148 jobs and 69431 dependency checks. Actual Parent
+execution retains native writer history. Actual edited rows retain full fields,
+indexed execution prefixes, and captured writer histories. Independent Mu
+children construct equal sequential stored results. General node-owner
+exclusion, active-child alignment, convergence, and full correspondence remain
+open. No Haskell change or new production defect is added.
 
 Field-pool repair `b9219b9e` remains merged and validated in source `c0cc8a05`.
-Read `lean/notes-current-active-row-progress.md`. Keep this repair registry
+Read `lean/notes-current-parent-row-lineage.md`. Keep this repair registry
 before historical failure reports. Record each later repair with its failure,
 reproducer, paths, commit, checks, and upstream status for external work.
 
@@ -188,6 +188,43 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current parent histories and indexed rows
+
+Updated: 2026-10-17 23:39 CEST. Starting checkpoint is `97451269`.
+Proof commit is `c1be0445`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-parent-row-lineage.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the full target and plain-English claim.
+
+Actual completed Parent execution retains native writer history through
+Scan, Required, class edits, local reduction, and construction. The existing
+Parent range plan remains explicit. Actual edit and class-pass history
+transport do not add that range premise or a future history law.
+
+Raw edited rows retain their original index, full symbol and guard, exact
+ordered child reads, and the execution of preceding rows. Actual normalized
+survivors retain an indexed live source. Initial native history follows that
+exact execution to the same captured row start and constructor states.
+Their heaps grow into the actual final reader. These are completed-graph
+results. They do not establish general outer completion or owner exclusion.
+
+Independent callback children now construct equal sequential stored results
+under replacement maps that agree on fixed source support. Arbitrary nested
+Mu values remain included. Active-child alignment remains open. General
+outer progress, all-active key compatibility, repeated-pass convergence,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+
+Full pinned Audit passes 3148 jobs and 69431 dependency checks. All four new
+strict source logs are empty. Thirteen full public proof and axiom checks
+pass. The Audit replays one unchanged old unused-variable warning. Verified
+caps are 4 GiB maximum/high and zero swap; Audit peak is 383 MiB. Evidence is
+in `lean/restart-evidence/20261017-parent-row-lineage/`. Preserve all older
+proofs, counterexamples, repairs, drafts, and raw attempts. Keep the goal active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record each later Haskell fix with its failure,
+reproducer, paths, commit, checks, and upstream status. Keep optimized code.
 
 ## Current actual row lineage and inherited dependencies
 
