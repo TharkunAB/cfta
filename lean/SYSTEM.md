@@ -1,5 +1,61 @@
 # Constrained languages, indexing, and distributions
 
+## Current initial gate and seeded query resources
+
+Updated: 2026-10-17 13:06 CEST. Starting checkpoint is 50abb08b.
+Proof commits are 9468af32 and c36639a1. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-initial-gates-seeded.md for the
+whole-library target, proof map, exact support, and remaining obligations.
+Evidence is in lean/restart-evidence/20261017-initial-scan-resources/.
+
+Initial primary and secondary class gates now construct their own actual
+traces, full query Frame, forecast Fits, and exact worker result at every
+larger computed fuel. Causal GuardHeap retention follows those same traces.
+The gates add no closedness, finite Cap, or WarmHead premise. Native tables
+and domain supplies remain exact at their returned heaps.
+
+The initial first-seeded producer constructs its own selected projections
+and native queries in source order. Anchored selected PathSupport permits
+open WarmHead exposure. No whole-forest closedness or finite input Cap is
+required. Pure initial reservations supply query Room. The same return
+retains actual reads, full receipt, Frame, caller Post, forecast Fits,
+closed available result, global memos, probes, and nonempty-path Includes.
+Both outer result tables, fourth memo, and Merge remain exact. Projection,
+reader, and native fuels can increase independently with the same result.
+The native query Frame adapter also covers closed constrained Mu operands
+outside every finite Cap. Includes remains one-way.
+
+The full public target remains: valid and explicitly supported initial
+inputs terminate and satisfy each operation's intended contract. These
+logical majorants do not establish extracted Haskell budgets or capacity.
+Next construct numeric conjunction Decision/Memo resources, then compose
+the complete Scan at actual returned heaps. The old Scan still uses reached
+ClassScanCompletion.Ranges and SeededRanges. Selected support must connect
+to the false secondary trace. Full source control flow, remaining Required
+caps, outer descent, arbitrary constrained Mu, convergence, current adapters,
+runtime, and complete public Haskell correspondence remain open.
+
+Audit passes 2971 jobs and 65537 dependency checks. All ten final strict
+logs are empty and all ten canonical targets pass. Earlier warning-bearing
+attempts retain their bytes. Read checkpoint-validation.json for all final
+hashes, complete signature/axiom pairs, integrations, and component counts.
+Ten groups check all 87 public declarations and ten constructed integrations.
+Eight manifests retain 299 entries and 299 hash references. Only propext,
+Classical.choice, and Quot.sound occur in successful probes.
+Preservation retains 15137 starting files, 2960 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 94 frozen module manifests with 728 entries. Audit adds
+ten imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core. The goal stays active.
+
 ## Current complete initial Required numeric resources
 
 Updated: 2026-10-17 12:39 CEST. Starting checkpoint is 415b2c9c.

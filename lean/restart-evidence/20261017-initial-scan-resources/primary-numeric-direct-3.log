@@ -1,0 +1,36 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-3.source.lean:134:84: error: don't know how to synthesize placeholder
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained reaches : Value Symbol Guard → Bool
+before after : State Symbol Guard
+answer : Bool
+semantic : SemanticReady before
+costs : CostHeap before
+bound : Nat
+fits : Fits bound before
+depth index : Nat
+rest : Path
+edges : List (EdgeValue Symbol Guard)
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+free : List InternedBinderProtocol.Reference
+slow : (depth == 0 && free.isEmpty) = false
+ranked : rank (Value.node entry edges depth free) ≤ 0
+available : Available before (Value.node entry edges depth free)
+rows : EdgesTrace unconstrained reaches index rest edges before answer after
+smaller : Nat
+outer : ∀ (m : Nat), m < smaller + 1 → NodeSpec unconstrained reaches m
+length : (index :: rest).length ≤ smaller + 1
+checked :
+  Fits (iterate (nodeBound smaller) edges.length bound) after ∧
+    ∀ (fuel : Nat),
+      nodeFuel smaller (iterate (nodeBound smaller) edges.length bound) ≤ fuel →
+        anyKnown (fun edge current => child (nodeMeets unconstrained reaches fuel) edge.children index rest current)
+            edges before =
+          Outcome.done (some answer) after
+rowWidth : edges.length ≤ InternedValueMass.edges edges
+mass : 1 + InternedValueMass.edges edges ≤ bound
+below : iterate (nodeBound smaller) edges.length bound ≤ ordinaryBound (smaller + 1) bound
+fuel : Nat
+enough : 0 + ordinaryFuel (smaller + 1) (muPrefix 0 bound) ≤ fuel + 1
+⊢ Nat

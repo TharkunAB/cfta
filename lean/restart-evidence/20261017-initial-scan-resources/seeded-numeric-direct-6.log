@@ -1,0 +1,776 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:119:32: error: don't know how to synthesize implicit argument `native`
+  @cons_reads (bits + 2) inst✝¹ inst✝ values seed path paths before middle later after head tail result ?m.787 first
+    rest ?m.792 memos middleMemos laterMemos firstReads restReads
+    (SourceCurrentAllocatedSeededMemos.NativeReads.silent events runs silent)
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tailAt :
+  SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) (foldFuel values.length seed (path :: paths) profile) values
+      seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+nativeAt :
+  SourceEqualityNativeDemand.execute (foldFuel values.length seed (path :: paths) profile)
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+      later =
+    SourceEqualityNativeDemand.Outcome.done result after
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+runs :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := after.native.machine.heap, unfolding := laterMemos.unfolding } events
+silent : SourceGlobalUnfold.NoGlobal events
+⊢ SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace ?m.787
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+    later (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:119:32: error: don't know how to synthesize implicit argument `nativeFuel`
+  @cons_reads (bits + 2) inst✝¹ inst✝ values seed path paths before middle later after head tail result ?m.787 first
+    rest ?m.792 memos middleMemos laterMemos firstReads restReads
+    (SourceCurrentAllocatedSeededMemos.NativeReads.silent events runs silent)
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tailAt :
+  SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) (foldFuel values.length seed (path :: paths) profile) values
+      seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+nativeAt :
+  SourceEqualityNativeDemand.execute (foldFuel values.length seed (path :: paths) profile)
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+      later =
+    SourceEqualityNativeDemand.Outcome.done result after
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+runs :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := after.native.machine.heap, unfolding := laterMemos.unfolding } events
+silent : SourceGlobalUnfold.NoGlobal events
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:119:65: error: don't know how to synthesize implicit argument `trace`
+  @SourceCurrentAllocatedSeededMemos.NativeReads.silent (bits + 2) inst✝¹ inst✝ (Value Symbol Guard) ?m.787
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+    (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) later after ?m.792
+    laterMemos events runs silent
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tailAt :
+  SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) (foldFuel values.length seed (path :: paths) profile) values
+      seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+nativeAt :
+  SourceEqualityNativeDemand.execute (foldFuel values.length seed (path :: paths) profile)
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+      later =
+    SourceEqualityNativeDemand.Outcome.done result after
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+runs :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := after.native.machine.heap, unfolding := laterMemos.unfolding } events
+silent : SourceGlobalUnfold.NoGlobal events
+⊢ SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace ?m.787
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+    later (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:119:65: error: don't know how to synthesize implicit argument `fuel`
+  @SourceCurrentAllocatedSeededMemos.NativeReads.silent (bits + 2) inst✝¹ inst✝ (Value Symbol Guard) ?m.787
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+    (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result)) later after ?m.792
+    laterMemos events runs silent
+context:
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tailAt :
+  SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) (foldFuel values.length seed (path :: paths) profile) values
+      seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+nativeAt :
+  SourceEqualityNativeDemand.execute (foldFuel values.length seed (path :: paths) profile)
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+      later =
+    SourceEqualityNativeDemand.Outcome.done result after
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+runs :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := after.native.machine.heap, unfolding := laterMemos.unfolding } events
+silent : SourceGlobalUnfold.NoGlobal events
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:115:6: error: don't know how to synthesize placeholder
+context:
+case cons
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tailAt :
+  SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) (foldFuel values.length seed (path :: paths) profile) values
+      seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+nativeAt :
+  SourceEqualityNativeDemand.execute
+      (queryFuel (foldProfile values.length seed paths (projectionProfile path values.length profile)) +
+        (foldFuel values.length seed (path :: paths) profile -
+          queryFuel (foldProfile values.length seed paths (projectionProfile path values.length profile))))
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain head tail))
+      later =
+    SourceEqualityNativeDemand.Outcome.done result after
+⊢ ∃ result after next final actual,
+    FoldReads actual memos final ∧
+      Receipt formulas solver next before result after memos final ∧
+        Fits (foldProfile values.length seed (path :: paths) profile) after ∧
+          Includes formulas solver values (seed :: path :: paths) result ∧
+            SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+                (foldFuel values.length seed (path :: paths) profile)
+                (foldFuel values.length seed (path :: paths) profile) values seed (path :: paths) before =
+              SourceCurrentAllocatedSeededWorker.Outcome.done result after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:112:6: error: don't know how to synthesize placeholder
+context:
+case cons
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tailAt :
+  SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) (foldFuel values.length seed (path :: paths) profile) values
+      seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+⊢ ∃ result after next final actual,
+    FoldReads actual memos final ∧
+      Receipt formulas solver next before result after memos final ∧
+        Fits (foldProfile values.length seed (path :: paths) profile) after ∧
+          Includes formulas solver values (seed :: path :: paths) result ∧
+            SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+                (foldFuel values.length seed (path :: paths) profile)
+                (foldFuel values.length seed (path :: paths) profile) values seed (path :: paths) before =
+              SourceCurrentAllocatedSeededWorker.Outcome.done result after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-numeric-direct-6.source.lean:110:6: error: don't know how to synthesize placeholder
+context:
+case cons
+bits : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile),
+    Frame formulas solver inventory before →
+      Fits profile before →
+        Values before.native.machine.heap values →
+          Grows anchor before.native.machine.heap →
+            (∀ (path : List Int), path ∈ seed :: paths → PathSupport unconstrained anchor path values) →
+              (∀ (path : List Int), path ∈ seed :: paths → path ≠ []) →
+                Reserved bits values.length seed paths profile →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after next final actual,
+                        FoldReads actual memos final ∧
+                          Receipt formulas solver next before result after memos final ∧
+                            Fits (foldProfile values.length seed paths profile) after ∧
+                              Includes formulas solver values (seed :: paths) result ∧
+                                SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile)
+                                    (foldFuel values.length seed paths profile) values seed paths before =
+                                  SourceCurrentAllocatedSeededWorker.Outcome.done result after
+inventory : Inventory
+before : Checked (bits + 2)
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : Frame formulas solver inventory before
+fits : Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → PathSupport unconstrained anchor path_1 values
+proper : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1 ≠ []
+reserved : Reserved bits values.length seed (path :: paths) profile
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked (bits + 2)
+middleMemos : Memos
+first : Operand path values before head middle
+firstReads : OperandReads first memos middleMemos
+middleFrame : Frame formulas solver inventory middle
+middleFits : Fits (projectionProfile path values.length profile) middle
+firstEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+firstExtension : SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine
+headAvailable : Available middle.native.machine.heap head
+headClosed : head.free = []
+firstGlobals :
+  SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap middle.native.machine.heap memos middleMemos
+firstDone :
+  SourceCurrentAllocatedSeededWorker.operand (projectionFuel path values.length profile)
+      (projectionFuel path values.length profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+tail : Value Symbol Guard
+later : Checked (bits + 2)
+next : Inventory
+laterMemos : Memos
+rest : Fold values (paths ++ [seed]) middle tail later
+restReads : FoldReads rest middleMemos laterMemos
+restReceipt : Receipt formulas solver next middle tail later middleMemos laterMemos
+laterFits : Fits (foldProfile values.length seed paths (projectionProfile path values.length profile)) later
+restIncluded : Includes formulas solver values (seed :: paths) tail
+restDone :
+  SourceCurrentAllocatedSeededWorker.fold
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile))
+      (foldFuel values.length seed paths (projectionProfile path values.length profile)) values seed paths middle =
+    SourceCurrentAllocatedSeededWorker.Outcome.done tail later
+last : Inventory
+nativeFuel : Nat
+result : Value Symbol Guard
+after : Checked (bits + 2)
+native :
+  SourceCurrentGeneratedQueryFrameResources.Receipt
+    (foldProfile values.length seed paths (projectionProfile path values.length profile)) formulas solver last
+    nativeFuel head tail later result after laterMemos
+headAt :
+  SourceCurrentAllocatedSeededWorker.operand (foldFuel values.length seed (path :: paths) profile)
+      (foldFuel values.length seed (path :: paths) profile) path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+⊢ ∃ result after next final actual,
+    FoldReads actual memos final ∧
+      Receipt formulas solver next before result after memos final ∧
+        Fits (foldProfile values.length seed (path :: paths) profile) after ∧
+          Includes formulas solver values (seed :: path :: paths) result ∧
+            SourceCurrentAllocatedSeededWorker.fold (foldFuel values.length seed (path :: paths) profile)
+                (foldFuel values.length seed (path :: paths) profile)
+                (foldFuel values.length seed (path :: paths) profile) values seed (path :: paths) before =
+              SourceCurrentAllocatedSeededWorker.Outcome.done result after

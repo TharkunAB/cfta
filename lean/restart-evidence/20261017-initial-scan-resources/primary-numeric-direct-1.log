@@ -1,0 +1,114 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-1.source.lean:124:37: error: don't know how to synthesize implicit argument `Guard`
+  @InternedStoredEncodingWidth.edges_length ?m.755 ?m.756 ?m.757
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained reaches : Value Symbol Guard → Bool
+before after : State Symbol Guard
+answer : Bool
+semantic : SemanticReady before
+costs : CostHeap before
+bound : Nat
+fits : Fits bound before
+depth✝ index✝ : Nat
+rest✝ : Path
+edges✝ : List (EdgeValue Symbol Guard)
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+free✝ : List InternedBinderProtocol.Reference
+slow : (depth✝ == 0 && free✝.isEmpty) = false
+ranked : rank (Value.node entry✝ edges✝ depth✝ free✝) ≤ 0
+available : Available before (Value.node entry✝ edges✝ depth✝ free✝)
+rows : EdgesTrace unconstrained reaches index✝ rest✝ edges✝ before answer after
+smaller : Nat
+outer : ∀ (m : Nat), m < smaller + 1 → NodeSpec unconstrained reaches m
+length : (index✝ :: rest✝).length ≤ smaller + 1
+checked :
+  Fits (iterate (nodeBound smaller) edges✝.length bound) after ∧
+    ∀ (fuel : Nat),
+      nodeFuel smaller (iterate (nodeBound smaller) edges✝.length bound) ≤ fuel →
+        anyKnown (fun edge current => child (nodeMeets unconstrained reaches fuel) edge.children index✝ rest✝ current)
+            edges✝ before =
+          Outcome.done (some answer) after
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-1.source.lean:124:37: error: don't know how to synthesize implicit argument `Symbol`
+  @InternedStoredEncodingWidth.edges_length ?m.755 ?m.756 ?m.757
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained reaches : Value Symbol Guard → Bool
+before after : State Symbol Guard
+answer : Bool
+semantic : SemanticReady before
+costs : CostHeap before
+bound : Nat
+fits : Fits bound before
+depth✝ index✝ : Nat
+rest✝ : Path
+edges✝ : List (EdgeValue Symbol Guard)
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+free✝ : List InternedBinderProtocol.Reference
+slow : (depth✝ == 0 && free✝.isEmpty) = false
+ranked : rank (Value.node entry✝ edges✝ depth✝ free✝) ≤ 0
+available : Available before (Value.node entry✝ edges✝ depth✝ free✝)
+rows : EdgesTrace unconstrained reaches index✝ rest✝ edges✝ before answer after
+smaller : Nat
+outer : ∀ (m : Nat), m < smaller + 1 → NodeSpec unconstrained reaches m
+length : (index✝ :: rest✝).length ≤ smaller + 1
+checked :
+  Fits (iterate (nodeBound smaller) edges✝.length bound) after ∧
+    ∀ (fuel : Nat),
+      nodeFuel smaller (iterate (nodeBound smaller) edges✝.length bound) ≤ fuel →
+        anyKnown (fun edge current => child (nodeMeets unconstrained reaches fuel) edge.children index✝ rest✝ current)
+            edges✝ before =
+          Outcome.done (some answer) after
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-1.source.lean:124:78: error: don't know how to synthesize placeholder for argument `rows`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained reaches : Value Symbol Guard → Bool
+before after : State Symbol Guard
+answer : Bool
+semantic : SemanticReady before
+costs : CostHeap before
+bound : Nat
+fits : Fits bound before
+depth✝ index✝ : Nat
+rest✝ : Path
+edges✝ : List (EdgeValue Symbol Guard)
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+free✝ : List InternedBinderProtocol.Reference
+slow : (depth✝ == 0 && free✝.isEmpty) = false
+ranked : rank (Value.node entry✝ edges✝ depth✝ free✝) ≤ 0
+available : Available before (Value.node entry✝ edges✝ depth✝ free✝)
+rows : EdgesTrace unconstrained reaches index✝ rest✝ edges✝ before answer after
+smaller : Nat
+outer : ∀ (m : Nat), m < smaller + 1 → NodeSpec unconstrained reaches m
+length : (index✝ :: rest✝).length ≤ smaller + 1
+checked :
+  Fits (iterate (nodeBound smaller) edges✝.length bound) after ∧
+    ∀ (fuel : Nat),
+      nodeFuel smaller (iterate (nodeBound smaller) edges✝.length bound) ≤ fuel →
+        anyKnown (fun edge current => child (nodeMeets unconstrained reaches fuel) edge.children index✝ rest✝ current)
+            edges✝ before =
+          Outcome.done (some answer) after
+⊢ List (EdgeValue ?m.755 ?m.756)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-1.source.lean:124:25: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-1.source.lean:166:20: error: Type mismatch: After simplification, term
+  tail
+ has type
+  @Eq (Outcome Symbol Guard (Option Bool)) (nodeMeets unconstrained reaches fuel path next✝ after✝)
+    (Outcome.done (some answer) after)
+but is expected to have type
+  @Eq (Outcome Symbol Guard (Option Bool))
+    (if (body✝.depth + 1 == 0 && false) = true then Outcome.done (some false) before
+    else nodeMeets unconstrained reaches fuel path next✝ after✝)
+    (Outcome.done (some answer) after)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/primary-numeric-direct-1.source.lean:202:29: error: Application type mismatch: The argument
+  wider
+has type
+  ordinaryBound height (muPrefix bound bound) ≤ ordinaryBound height (muPrefix bound.succ bound)
+but is expected to have type
+  ordinaryBound height (muPrefix bound bound) ≤ nodeBound height bound
+in the application
+  Fits.mono checked.left wider

@@ -1,0 +1,138 @@
+import MicroCFTA.SourceCurrentPrimaryGateNumericReplay
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+set_option maxRecDepth 30000
+set_option maxHeartbeats 8000000
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.cost_le_mass
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.cost_le_mass
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.many_cost_le_mass
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.many_cost_le_mass
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.edge_cost_le_mass
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.edge_cost_le_mass
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.rank_le_mass
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.rank_le_mass
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.rank_le
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.rank_le
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.unfold_fits
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.unfold_fits
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.unfoldPrefix
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.unfoldPrefix
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryBound
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryBound
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound_eq
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound_eq
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix_succ
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.muPrefix_succ
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.unfoldPrefix_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.unfoldPrefix_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.unfoldPrefix_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.unfoldPrefix_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryBound_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryBound_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryBound_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryBound_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel_eq
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel_eq
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.pathBound
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.pathBound
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.pathFuel
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.pathFuel
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.classBound
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.classBound
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.classFuel
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.classFuel
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel_pos
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel_pos
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel_le_nodeFuel
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.ordinaryFuel_le_nodeFuel
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.pathBound_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.pathBound_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.pathBound_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.pathBound_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.pathFuel_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.pathFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.classBound_ge
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.classBound_ge
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.classBound_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.classBound_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateResources.classFuel_mono
+#check @MicroCFTA.SourceCurrentPrimaryGateResources.classFuel_mono
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateNumericReplay.node
+#check @MicroCFTA.SourceCurrentPrimaryGateNumericReplay.node
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateNumericReplay.path
+#check @MicroCFTA.SourceCurrentPrimaryGateNumericReplay.path
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateNumericReplay.classes
+#check @MicroCFTA.SourceCurrentPrimaryGateNumericReplay.classes
+
+#print axioms MicroCFTA.SourceCurrentPrimaryGateNumericReplay.class_complete
+#check @MicroCFTA.SourceCurrentPrimaryGateNumericReplay.class_complete
+

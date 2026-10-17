@@ -1,0 +1,101 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-projection-direct-1.source.lean:106:91: error: don't know how to synthesize placeholder
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : InternedFreshOrdinaryMemoGateTrace.Ready anchor
+path : EqualityNormalize.Path
+index : Nat
+childBound :
+  ∀ {value result : Value Symbol Guard} {before after : InternedConstructorTemplates.State Symbol Guard}
+    (actual : Project (List.map Int.ofNat path) value before result after) (resource : Nat),
+    SemanticReady before →
+      CostHeap before →
+        Available before value →
+          Grows anchor before →
+            Support unconstrained anchor path value →
+              Fits resource before →
+                Fits (nodeBound (List.length path) resource) after ∧
+                  ProjectReady (readFuel (nodeBound (List.length path) resource)) actual
+result : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+resource : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+growth : Grows anchor before
+fits : Fits resource before
+edges : List (EdgeValue Symbol Guard)
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+available : Available before (Value.node entry edges depth free)
+support :
+  ∀ (edge : EdgeValue Symbol Guard),
+    edge ∈ InternedEdgeResidency.nodeEdges (Value.node entry edges depth free) →
+      ∀ (child : Value Symbol Guard), edge.children[index]? = some child → Support unconstrained anchor path child
+isOrdinary : SourceEqualityRequiredCache.Ordinary (Value.node entry edges depth free)
+rows : ProjectRows (List.map Int.ofNat path) (Int.ofNat index) edges before values middle
+joined : SourceEqualityProjectionUnion.Union values middle result after
+facts : InternedNestedFacts.Facts before
+resident :
+  ∀ (edge : EdgeValue Symbol Guard),
+    edge ∈ InternedEdgeResidency.nodeEdges (Value.node entry edges depth free) →
+      InternedEdgeResidency.EdgeResident before edge
+first :
+  Fits (rowsBound (nodeBound (List.length path)) edges.length resource) middle ∧
+    RowsReady (readFuel (rowsBound (nodeBound (List.length path)) edges.length resource)) rows ∧
+      values.length ≤ edges.length
+mass : InternedValueMass.value (Value.node entry edges depth free) ≤ resource
+length : edges.length ≤ resource
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-projection-direct-1.source.lean:106:11: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-projection-direct-1.source.lean:141:67: error: don't know how to synthesize placeholder
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : InternedFreshOrdinaryMemoGateTrace.Ready anchor
+index : Nat
+path : List Nat
+ih :
+  ∀ {value result : Value Symbol Guard} {before after : InternedConstructorTemplates.State Symbol Guard}
+    (actual : Project (List.map Int.ofNat path) value before result after) (resource : Nat),
+    SemanticReady before →
+      CostHeap before →
+        Available before value →
+          Grows anchor before →
+            Support unconstrained anchor path value →
+              Fits resource before →
+                Fits (nodeBound path.length resource) after ∧
+                  ProjectReady (readFuel (nodeBound path.length resource)) actual
+value result : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+resource : Nat
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before value
+growth : Grows anchor before
+support : Support unconstrained anchor (index :: path) value
+fits : Fits resource before
+exposed✝ : Value Symbol Guard
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+recursive : SourceEqualityRequiredGraph.Recursive value
+head : SourceEqualityRequiredHead.Head value before exposed✝ middle✝
+body : Project (Int.ofNat index :: List.map Int.ofNat path) exposed✝ middle✝ result after
+warm : SourceSecondaryGateHead.WarmHead before value
+first :
+  SourceCurrentMemoMergeEffects.Effect before middle✝ ∧
+    Fits (SourceCurrentOpenRowReadResources.headGrowth resource) middle✝ ∧
+      Available middle✝ exposed✝ ∧
+        SourceEqualityRequiredCache.Ordinary exposed✝ ∧
+          SourceCurrentProjectionNumericReplay.HeadReady
+            (readFuel (SourceCurrentOpenRowReadResources.headGrowth resource)) head
+physical : Keeps before middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Available middle✝ exposed✝
+edge : EdgeValue Symbol Guard
+⊢ Value Symbol Guard

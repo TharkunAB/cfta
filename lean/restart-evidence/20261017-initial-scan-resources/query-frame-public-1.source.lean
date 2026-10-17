@@ -1,0 +1,16 @@
+import MicroCFTA.SourceCurrentGeneratedQueryFrameResources
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentGeneratedQueryFrameResources.Receipt
+#print axioms MicroCFTA.SourceCurrentGeneratedQueryFrameResources.Receipt
+#print MicroCFTA.SourceCurrentGeneratedQueryFrameResources.Receipt
+
+#check @MicroCFTA.SourceCurrentGeneratedQueryFrameResources.complete
+#print axioms MicroCFTA.SourceCurrentGeneratedQueryFrameResources.complete
+#print MicroCFTA.SourceCurrentGeneratedQueryFrameResources.complete

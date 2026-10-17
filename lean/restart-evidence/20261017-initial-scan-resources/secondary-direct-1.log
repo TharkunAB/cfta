@@ -1,0 +1,88 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:112:48: error: Type mismatch
+  Fits.mono fits (muPrefix_ge ?m.551 bound)
+has type
+  Fits (muPrefix ?m.551 bound) index
+but is expected to have type
+  Fits start before
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:181:78: error: Application type mismatch: The argument
+  rest
+has type
+  InternedConstructorTemplates.State Symbol Guard
+but is expected to have type
+  List (InternedConstructorTemplates.State Symbol Guard)
+in the application
+  edge :: rest
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:182:93: error(lean.invalidField): Invalid field `length`: The environment does not contain `MicroCFTA.InternedConstructorTemplates.State.length`, so it is not possible to project the field `length` from an expression
+  rest
+of type
+  InternedConstructorTemplates.State Symbol Guard
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:197:58: error(lean.invalidField): Invalid field `length`: The environment does not contain `MicroCFTA.InternedConstructorTemplates.State.length`, so it is not possible to project the field `length` from an expression
+  rest
+of type
+  InternedConstructorTemplates.State Symbol Guard
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:245:32: error: Application type mismatch: The argument
+  rest
+has type
+  InternedConstructorTemplates.State Symbol Guard
+but is expected to have type
+  List (List Nat)
+in the application
+  classBound_ge rest
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:255:45: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+values : List (Value Symbol Guard)
+paths : List (List Nat)
+before✝ after✝ : InternedConstructorTemplates.State Symbol Guard
+answer✝ : Bool
+selected : EqualityNormalize.Path
+rest before : InternedConstructorTemplates.State Symbol Guard
+middle : EqualityNormalize.Class
+answer : Bool
+after : InternedConstructorTemplates.State Symbol Guard
+head : PathTrace unconstrained values selected rest false before
+tail : ClassTrace unconstrained values middle before answer after
+ih :
+  SemanticReady before →
+    CostHeap before →
+      Values before values →
+        ∀ (bound : Nat),
+          Fits bound before →
+            Fits (classBound middle bound) after ∧
+              ∀ (fuel : Nat),
+                classFuel middle bound ≤ fuel →
+                  classMeets unconstrained fuel values middle before = Outcome.done (some answer) after
+semantic : SemanticReady rest
+costs : CostHeap rest
+available : Values rest values
+bound : Nat
+fits : Fits bound rest
+first :
+  Fits (pathBound selected bound) before ∧
+    ∀ (fuel : Nat),
+      pathFuel selected bound ≤ fuel → meets unconstrained fuel values selected rest = Outcome.done (some false) before
+effects :
+  SemanticReady before ∧
+    SourceEqualityRequiredCache.Keeps rest before ∧
+      CostHeap before ∧ SourceEqualityAnnotationHeap.Heap (fun x => True) before
+remaining :
+  Fits (classBound middle (pathBound selected bound)) after ∧
+    ∀ (fuel : Nat),
+      classFuel middle (pathBound selected bound) ≤ fuel →
+        classMeets unconstrained fuel values middle before = Outcome.done (some answer) after
+fuel : Nat
+enough : classFuel (selected :: middle) bound ≤ fuel
+firstDone : meets unconstrained fuel values selected rest = Outcome.done (some false) before
+restDone : classMeets unconstrained fuel values middle before = Outcome.done (some answer) after
+⊢ anyKnown
+      (fun path current => SourceCurrentMuEndpoint.meets false unconstrained (fun x => false) fuel values path current)
+      middle before =
+    Outcome.done (some answer) after
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSecondaryGateResources.lean:258:102: warning: This simp argument is unused:
+  restDone
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [classMeets, SourceCurrentMuEndpoint.classMeets, anyKnown, firstDone, Outcome.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

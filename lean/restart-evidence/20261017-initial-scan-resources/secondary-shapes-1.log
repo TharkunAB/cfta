@@ -1,0 +1,86 @@
+@MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace.branches : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool} {depth index : Nat}
+  {rest : MicroCFTA.EqualityNormalize.Path}
+  {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {answer : Bool}
+  {final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {free : List MicroCFTA.InternedBinderProtocol.Reference},
+  @Eq Bool
+      ((@BEq.beq Nat (@instBEqOfDecidableEq Nat instDecidableEqNat) depth
+            (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))).and
+        (@List.isEmpty MicroCFTA.InternedBinderProtocol.Reference free))
+      false →
+    @MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace Symbol Guard inst unconstrained index rest edges state answer
+        final →
+      @MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace Symbol Guard inst unconstrained (@List.cons Nat index rest)
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) state answer final
+@MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace.unfold : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {next : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {path : MicroCFTA.EqualityNormalize.Path}
+  {answer : Bool} {final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @Eq Bool (unconstrained (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+      true →
+    @Eq Bool
+        (@List.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+        false →
+      @Eq
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) state)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) next after) →
+        @MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace Symbol Guard inst unconstrained path next after answer final →
+          @MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace Symbol Guard inst unconstrained path
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) state answer final
+@MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace.stop : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool} {index : Nat}
+  {path : MicroCFTA.EqualityNormalize.Path} {state final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {rest : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ChildTrace Symbol Guard inst unconstrained
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) index path state true final →
+    @MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace Symbol Guard inst unconstrained index path
+      (@List.cons (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge rest) state true final
+@MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace.next : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool} {index : Nat}
+  {path : MicroCFTA.EqualityNormalize.Path} {state middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rest : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {answer : Bool}
+  {final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ChildTrace Symbol Guard inst unconstrained
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) index path state false middle →
+    @MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace Symbol Guard inst unconstrained index path rest middle answer
+        final →
+      @MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace Symbol Guard inst unconstrained index path
+        (@List.cons (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge rest) state answer final
+@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace.stop : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool}
+  {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {path : MicroCFTA.EqualityNormalize.Path}
+  {state final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rest : List MicroCFTA.EqualityNormalize.Path},
+  @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path state true final →
+    @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values
+      (@List.cons MicroCFTA.EqualityNormalize.Path path rest) state true final
+@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace.next : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool}
+  {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {path : MicroCFTA.EqualityNormalize.Path}
+  {state middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {rest : MicroCFTA.EqualityNormalize.Class}
+  {answer : Bool} {final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values path state false middle →
+    @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values rest middle answer final →
+      @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values
+        (@List.cons MicroCFTA.EqualityNormalize.Path path rest) state answer final

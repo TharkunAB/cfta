@@ -1,0 +1,89 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-projection-direct-4.source.lean:217:32: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq SourceSymbol
+inst✝ : DecidableEq (EdgeKey SourceSymbol SourceGuard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : SourceCurrentAllocatedNativeInventoryState.Inventory
+unconstrained : Value SourceSymbol SourceGuard → Bool
+anchor : InternedConstructorTemplates.State SourceSymbol SourceGuard
+anchorSemantic : SemanticReady anchor
+anchorReady : InternedFreshOrdinaryMemoGateTrace.Ready anchor
+values : List (Value SourceSymbol SourceGuard)
+before : SourceEqualityNativeDemand.State width
+profile : SourceCurrentAllocatedNativeResourceForecast.Profile
+frame : SourceCurrentConstrainedCapGeneratedQueryResources.Frame formulas solver inventory before
+fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+memos : EndpointMemoGateTrace.Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+natural : EqualityNormalize.Path
+supported : ForestSupport unconstrained anchor natural values
+physicalReady : SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before)
+result : Value SourceSymbol SourceGuard
+heap : InternedConstructorTemplates.State SourceSymbol SourceGuard
+projected :
+  Forest (List.map Int.ofNat natural) values (SourceCurrentAllocatedNativeEffects.physical before).heap result heap
+effects :
+  SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before)
+    { heap := heap, equality := (SourceCurrentAllocatedNativeEffects.physical before).equality }
+resident : Available heap result
+closed : result.free = []
+after : SourceEqualityNativeDemand.State width :=
+  SourceCurrentAllocatedQueryMemo.advancePhysical before { heap := heap, equality := before.operations }
+extension :
+  SourceRecursiveIntersectionKernel.Extension before.native.machine
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before
+          { heap := heap, equality := before.operations }).native.machine
+guards : SourceCurrentConstrainedCapGuardHeap.Heap SourceCurrentConstrainedCapCheckedJointClosed.Plain heap
+finalFrame : SourceCurrentConstrainedCapGeneratedQueryResources.Frame formulas solver inventory after
+initialFits : Fits (SourceCurrentConstrainedCapTargetForecast.scalar profile) before.native.machine.heap
+bounded :
+  Fits
+      (forestBound (List.map Int.ofNat natural) values.length
+        (SourceCurrentConstrainedCapTargetForecast.scalar profile))
+      heap ∧
+    ForestReady
+      (readFuel
+        (forestBound (List.map Int.ofNat natural) values.length
+          (SourceCurrentConstrainedCapTargetForecast.scalar profile)))
+      projected
+final : EndpointMemoGateTrace.Memos
+reads : SourceEqualityQueryGlobalMemos.ProjectionReads projected memos final
+finalValid : EndpointMemoGateTrace.Valid heap final
+retained : Extends memos.unfolding final.unfolding
+replay :
+  SourceEqualityProjectionWorker.forest
+      (SourceCurrentConstrainedCapSeededForecast.projectionFuel (List.map Int.ofNat natural) values.length profile)
+      (SourceCurrentConstrainedCapSeededForecast.projectionFuel (List.map Int.ofNat natural) values.length profile)
+      (List.map Int.ofNat natural) values (SourceCurrentAllocatedNativeEffects.physical before).heap =
+    SourceEqualityRequiredWorker.Result.done result heap
+⊢ (match
+      SourceEqualityProjectionWorker.forest
+        (SourceCurrentConstrainedCapSeededForecast.projectionFuel (List.map Int.ofNat natural) values.length profile)
+        (SourceCurrentConstrainedCapSeededForecast.projectionFuel (List.map Int.ofNat natural) values.length profile)
+        (List.map Int.ofNat natural) values before.native.machine.heap with
+    | SourceEqualityRequiredWorker.Result.done value heap =>
+      SourceCurrentAllocatedSeededWorker.Outcome.done value
+        (SourceCurrentAllocatedQueryMemo.advancePhysical before { heap := heap, equality := before.operations })
+    | SourceEqualityRequiredWorker.Result.pending key heap =>
+      SourceCurrentAllocatedSeededWorker.Outcome.failed
+        (SourceCurrentAllocatedSeededWorker.Fault.projection (SourceEqualityRequiredWorker.Result.pending key heap))
+        (SourceCurrentAllocatedQueryMemo.advancePhysical before { heap := heap, equality := before.operations })
+    | SourceEqualityRequiredWorker.Result.unresolved name heap =>
+      SourceCurrentAllocatedSeededWorker.Outcome.failed
+        (SourceCurrentAllocatedSeededWorker.Fault.projection (SourceEqualityRequiredWorker.Result.unresolved name heap))
+        (SourceCurrentAllocatedQueryMemo.advancePhysical before { heap := heap, equality := before.operations })
+    | SourceEqualityRequiredWorker.Result.exhausted limit heap =>
+      SourceCurrentAllocatedSeededWorker.Outcome.failed
+        (SourceCurrentAllocatedSeededWorker.Fault.projection (SourceEqualityRequiredWorker.Result.exhausted limit heap))
+        (SourceCurrentAllocatedQueryMemo.advancePhysical before { heap := heap, equality := before.operations })) =
+    SourceCurrentAllocatedSeededWorker.Outcome.done result after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261017-initial-scan-resources/seeded-projection-direct-4.source.lean:246:57: warning: This simp argument is unused:
+  replay
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceCurrentAllocatedSeededWorker.operand]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

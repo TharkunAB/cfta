@@ -1,0 +1,102 @@
+'MicroCFTA.SourceCurrentSecondaryGateResources.node' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentSecondaryGateResources.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool) {path : List.{0} Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {answer : Bool},
+  @MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace Symbol Guard inst unconstrained path value before answer after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          ∀ (bound : Nat),
+            @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound before →
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                  (MicroCFTA.SourceCurrentPrimaryGateResources.nodeBound (@List.length.{0} Nat path) bound) after)
+                (∀ (fuel : Nat),
+                  @LE.le.{0} Nat instLENat
+                      (MicroCFTA.SourceCurrentPrimaryGateResources.nodeFuel (@List.length.{0} Nat path) bound) fuel →
+                    @Eq.{1} (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard (Option.{0} Bool))
+                      (@MicroCFTA.SourceCurrentSecondaryTrace.nodeMeets Symbol Guard inst unconstrained fuel path value
+                        before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard (Option.{0} Bool)
+                        (@Option.some.{0} Bool answer) after))
+'MicroCFTA.SourceCurrentSecondaryGateResources.path' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentSecondaryGateResources.path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {selected : List.{0} Nat}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {answer : Bool},
+  @MicroCFTA.SourceCurrentSecondaryTrace.PathTrace Symbol Guard inst unconstrained values selected before answer after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          ∀ (bound : Nat),
+            @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound before →
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                  (MicroCFTA.SourceCurrentPrimaryGateResources.pathBound selected bound) after)
+                (∀ (fuel : Nat),
+                  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentPrimaryGateResources.pathFuel selected bound) fuel →
+                    @Eq.{1} (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard (Option.{0} Bool))
+                      (@MicroCFTA.SourceCurrentSecondaryTrace.meets Symbol Guard inst unconstrained fuel values selected
+                        before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard (Option.{0} Bool)
+                        (@Option.some.{0} Bool answer) after))
+'MicroCFTA.SourceCurrentSecondaryGateResources.classes' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentSecondaryGateResources.classes : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {paths : List.{0} (List.{0} Nat)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {answer : Bool},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths before answer after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          ∀ (bound : Nat),
+            @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound before →
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                  (MicroCFTA.SourceCurrentPrimaryGateResources.classBound paths bound) after)
+                (∀ (fuel : Nat),
+                  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentPrimaryGateResources.classFuel paths bound) fuel →
+                    @Eq.{1} (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard (Option.{0} Bool))
+                      (@MicroCFTA.SourceCurrentSecondaryTrace.classMeets Symbol Guard inst unconstrained fuel values
+                        paths before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard (Option.{0} Bool)
+                        (@Option.some.{0} Bool answer) after))
+'MicroCFTA.SourceCurrentSecondaryGateResources.class_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentSecondaryGateResources.class_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (paths : List.{0} (List.{0} Nat))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        ∀ (bound : Nat),
+          @MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard bound before →
+            @Exists.{1} Bool fun answer =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And
+                  (@MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard inst unconstrained values paths before
+                    answer after)
+                  (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                    (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                      (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+                        (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after values)
+                          (And
+                            (@MicroCFTA.SourceCurrentMemoMergeResourceControl.Fits Symbol Guard
+                              (MicroCFTA.SourceCurrentPrimaryGateResources.classBound paths bound) after)
+                            (∀ (fuel : Nat),
+                              @LE.le.{0} Nat instLENat
+                                  (MicroCFTA.SourceCurrentPrimaryGateResources.classFuel paths bound) fuel →
+                                @Eq.{1} (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard (Option.{0} Bool))
+                                  (@MicroCFTA.SourceCurrentSecondaryTrace.classMeets Symbol Guard inst unconstrained
+                                    fuel values paths before)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard (Option.{0} Bool)
+                                    (@Option.some.{0} Bool answer) after)))))))
