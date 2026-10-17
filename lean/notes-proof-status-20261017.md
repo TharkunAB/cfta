@@ -1,6 +1,6 @@
 # Proof status at 2026-10-17
 
-Checked at proof checkpoint `c8272004`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `85fd098d`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -47,8 +47,8 @@ interned core remains the construction and transformation path. Read
 | Stored substitution | Recursive node-row matching constructs both plans with one exact Value. Initial Ready and available data construct both union-normalization/substitution orders with physical empty agreement, equal observations at every depth and fixed view, and exact literal root parts. Actual self filtering preserves those parts from the derived final heap. Actual parent construction preserves this relation, including row survival, full guards, and ordered children. Closed and open roots and nested Mu values remain included. | Derive the literal relation for the actual retained-Mu body and ordinary-probe writers, then compose smart cleanup and warm winners. General root self-filter congruence is proved for normal available roots with the same literal atoms and exact rows. See [literal provenance](notes-current-literal-union-provenance.md). |
 | Recursive native intersection | Checked execution has exact intersection semantics for closed Original resident operands. Initial numeric bounds construct a physical query, its checked instruction schedule, and allocation bounds. Mu and union operands are included. | Compose contextual semantics and generated result-fed callers on the same actual trace. Complete concrete runtime and total memory bounds. |
 | Finite ordinary constrained reduction | Initial profiles and constructor headroom derive the original universal raw Reach numeric Plan. The complete modeled outer pass has stable execution, exact full guarded-language preservation, retained stores, and constructor request bounds. | The domain excludes Mu, references, and explicit unions in every descendant. The theorem does not bound total Haskell runtime or memory. |
-| General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
-| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. | General node-busy exclusion still needs a compatible progress or owner-disjointness argument across local combination and all active ancestors. The local descent fixture is a protocol prefix, not a reached general outer execution. |
+| General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. Initial Ready data and field availability derive exact normalization fixedness through the actual inherited prefix and indexed descent. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
+| Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. An actual empty-own prefix retains normalized inherited values. Actual normalization and combination produce fixed payloads, and indexed descent preserves fixedness. | General node-busy exclusion still needs a causal progress or owner-disjointness argument for nonempty local classes and all active ancestors. The constructed prefix and descent cases do not prove a general outer parent-and-child execution. See [inherited normalization](notes-current-inherited-normalization.md). |
 | Other library components | Checked language, equality, enumeration, arithmetic, union-find, memo, ranking, generation, and sampling results exist. Some source drivers and restricted adapters are complete. | Their remaining adapters and recursive callers do not yet form a complete current-library implementation theorem. See [API coverage](API-COVERAGE.md). |
 
 The finite ordinary result is in
@@ -105,13 +105,17 @@ origins. It assumes no future Required result. Read
 2. Derive progress for actual outer-node children after parent returns and
    inherited combine/descent. The measure must respect physical memo keys,
    or prove that a fresh request differs from every active owner. Actual
-   immediate descent now strictly lowers the path height of a Ready live
-   nonempty inherited payload and changes its canonical identity. The full
-   proof must control local combination and all active ancestors. Ordinary
-   height and maximum constrained depth do not give that measure. Then
-   complete nonempty live child walks, ordered rows, ordinary node bodies,
-   and the full mutual outer pass. Mu and union roots can be terminal while
-   selected paths still enter their contents.
+   normalization and combination now produce exact fixed payloads. Actual
+   trie descent preserves fixedness. The full accessor/prefix/descent path
+   derives it from initial Ready data and field availability. Empty-own
+   prefixes retain normalized inherited values; nonempty descent then
+   strictly lowers path height and changes its canonical identity. The
+   remaining argument must control nonempty local classes and all active
+   ancestors. Ordinary height and maximum constrained depth do not suffice.
+   Then complete nonempty live child walks, ordered rows, ordinary node
+   bodies, and the full mutual outer pass. Mu and union roots can be terminal
+   while selected paths still enter their contents. Read
+   [inherited normalization](notes-current-inherited-normalization.md).
 3. Prove convergence for repeated reduction passes and complete the remaining
    recursive pruning and compilation callers. One exact completed pass does
    not establish a fixed point. Semantic narrowing alone does not bound
