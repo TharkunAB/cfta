@@ -1,0 +1,46 @@
+import MicroCFTA.SourceCurrentNativePublicationTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs.threshold 254
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.work_noNewMu
+#print MicroCFTA.SourceCurrentNativePublicationTrace.work_noNewMu
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.work_noNewMu
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.work
+#print MicroCFTA.SourceCurrentNativePublicationTrace.work
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.work
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.step
+#print MicroCFTA.SourceCurrentNativePublicationTrace.step
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.step
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.trace
+#print MicroCFTA.SourceCurrentNativePublicationTrace.trace
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.trace
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.execute
+#print MicroCFTA.SourceCurrentNativePublicationTrace.execute
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.execute
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.from_history
+#print MicroCFTA.SourceCurrentNativePublicationTrace.from_history
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.from_history
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.source_trace
+#print MicroCFTA.SourceCurrentNativePublicationTrace.source_trace
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.source_trace
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.reached_unused
+#print MicroCFTA.SourceCurrentNativePublicationTrace.reached_unused
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.reached_unused
+
+#check @MicroCFTA.SourceCurrentNativePublicationTrace.source_unused
+#print MicroCFTA.SourceCurrentNativePublicationTrace.source_unused
+#print axioms MicroCFTA.SourceCurrentNativePublicationTrace.source_unused
