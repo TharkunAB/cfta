@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentAllocatedNativeWidthTrace
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.widths
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.widths
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.prefix_bound
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.prefix_bound
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.initial
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.initial
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.node_prefix
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.node_prefix
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.edge_prefix
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.edge_prefix
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.node_return
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.node_return
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.edge_return
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.edge_return

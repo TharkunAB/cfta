@@ -1,0 +1,145 @@
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound : {A : Type} →
+  MicroCFTA.SourceEqualityNativeDemand.Control A → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_ge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_ge : ∀ {A : Type}
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A) (bound : Nat),
+  @LE.le.{0} Nat instLENat bound (@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound A control bound)
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.step_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.step_heap : ∀ {width bound : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (@MicroCFTA.SourceEqualityNativeDemand.State.native width before) →
+    @MicroCFTA.InternedValueMassHeap.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) bound
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) →
+      ∀ (inputs : @MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs width A inst inst_1 control before),
+        (@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.step_heap.match_1.{1} width A inst inst_1 before
+            (fun control inputs => Prop) control inputs
+            (fun X job next inputs =>
+              @MicroCFTA.SourceRecursiveIntersectionWorkMass.Inputs
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound)
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+                X job)
+            fun x inputs => True) →
+          @MicroCFTA.InternedValueMassHeap.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound A control bound)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                  (@MicroCFTA.SourceEqualityNativeDemand.Outcome.state width A
+                    (@MicroCFTA.SourceEqualityNativeDemand.step A width inst inst_1 control before)))))
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_le_ceiling' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_le_ceiling : ∀ {A : Type}
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A) (bound : Nat),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound A control bound)
+    (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling bound)
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt : {width : Nat} →
+  {A : Type} →
+    [DecidableEq.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      MicroCFTA.SourceEqualityNativeDemand.Control A →
+        MicroCFTA.SourceEqualityNativeDemand.State width →
+          Nat →
+            (MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                A → Prop) →
+              Prop
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt.mono : ∀ {width : Nat} {A : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop}
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A) (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  {first last : Nat},
+  @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt width A inst control before first post →
+    @LE.le.{0} Nat instLENat first last →
+      @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt width A inst control before last post
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.inputs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.inputs : ∀ {width : Nat} {A : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop}
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A) (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (bound : Nat),
+  @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt width A inst control before bound post →
+    @MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.Inputs width A bound control before
+'MicroCFTA.SourceCurrentAllocatedNativeWidthStep.yielded_at' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeWidthStep.yielded_at : ∀ {width : Nat} {A : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (bound : Nat)
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop),
+  @MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good width before →
+    @MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs width A inst_1 inst control before →
+      @MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields A width control before →
+        @MicroCFTA.InternedValueMassHeap.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) bound
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) →
+          @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt width A inst control before bound post →
+            @Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Outcome width A)
+                (@MicroCFTA.SourceEqualityNativeDemand.step A width inst_1 inst control before)
+                (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width A next after) →
+              @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt width A inst next after
+                (MicroCFTA.SourceCurrentAllocatedRecursiveMassTrace.ceiling bound) post

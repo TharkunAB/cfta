@@ -1,0 +1,34 @@
+import MicroCFTA.SourceRecursiveIntersectionCodeMass
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.work_inputs_mono
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.work_inputs_mono
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.At
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.At
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.mono
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.mono
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.bind
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.bind
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.walk
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.walk
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.request_node
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.request_node
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.request_edge
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.request_edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.optional
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.optional
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.work
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.work
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.edge
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.edge
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.node
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.node
+#print axioms MicroCFTA.SourceRecursiveIntersectionCodeMass.union
+#check @MicroCFTA.SourceRecursiveIntersectionCodeMass.union

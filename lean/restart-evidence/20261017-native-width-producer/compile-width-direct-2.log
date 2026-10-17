@@ -1,0 +1,122 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:123:53: error: don't know how to synthesize placeholder for argument `key`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned DomainKey
+left right : Value Symbol Guard
+state : Machine Symbol Guard
+bound : Nat
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : Domain state domain
+leftAvailable : Available state.heap left
+rightAvailable : Available state.heap right
+firstId : Nat
+first : SourceRecursiveIntersectionControl.identity left = some firstId
+secondId : Nat
+second : SourceRecursiveIntersectionControl.identity right = some secondId
+_valid :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+_growth :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+enteredDomain :
+  Domain
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst
+larger : Nat
+a✝⁶ :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+growth :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+a✝⁵ : bound ≤ larger
+a✝⁴ : Stored larger state.heap
+value : Value Symbol Guard
+after : Machine Symbol Guard
+last : Nat
+a✝³ : SourceRecursiveIntersectionKernel.Valid after
+a✝² :
+  Extension
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    after
+a✝¹ : larger ≤ last
+a✝ : Stored last after.heap
+available : Available after.heap value
+⊢ Nat × Nat
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:111:57: error: unsolved goals
+case some.some
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned DomainKey
+left right : Value Symbol Guard
+state : Machine Symbol Guard
+bound : Nat
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : Domain state domain
+leftAvailable : Available state.heap left
+rightAvailable : Available state.heap right
+firstId : Nat
+first : SourceRecursiveIntersectionControl.identity left = some firstId
+secondId : Nat
+second : SourceRecursiveIntersectionControl.identity right = some secondId
+_valid :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+_growth :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+enteredDomain :
+  Domain
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst
+larger : Nat
+a✝⁶ :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+growth :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+a✝⁵ : bound ≤ larger
+a✝⁴ : Stored larger state.heap
+value : Value Symbol Guard
+after : Machine Symbol Guard
+last : Nat
+a✝³ : SourceRecursiveIntersectionKernel.Valid after
+a✝² :
+  Extension
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    after
+a✝¹ : larger ≤ last
+a✝ : Stored last after.heap
+available : Available after.heap value
+⊢ Available after.heap value ∧
+    ∀ (value : Value Symbol Guard) (after_1 : Machine Symbol Guard) (larger : Nat),
+      SourceRecursiveIntersectionKernel.Valid after_1 →
+        Extension after after_1 →
+          last ≤ larger → Stored larger after_1.heap → Available after_1.heap value → Available after_1.heap value

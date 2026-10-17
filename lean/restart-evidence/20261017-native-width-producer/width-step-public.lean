@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentAllocatedNativeWidthStep
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_ge
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_ge
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.step_heap
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.step_heap
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_le_ceiling
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.nextBound_le_ceiling
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt.mono
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.ControlAt.mono
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.inputs
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.inputs
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeWidthStep.yielded_at
+#check @MicroCFTA.SourceCurrentAllocatedNativeWidthStep.yielded_at

@@ -1,0 +1,27 @@
+import MicroCFTA.SourceRecursiveIntersectionCompileWidth
+import MicroCFTA.InternedFreshOrdinaryClosedCompletion
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 4000000
+set_option maxRecDepth 20000
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.union_width
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.union_width
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.rows_width
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.rows_width
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileRows
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileRows
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileUnion
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileUnion
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileMu
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileMu
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileReference
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileReference
+#print axioms MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileNode
+#check @MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileNode

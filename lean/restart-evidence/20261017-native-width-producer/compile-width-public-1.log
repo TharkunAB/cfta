@@ -1,0 +1,162 @@
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.union_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.union_width : ∀ {Symbol Guard : Type} {bound : Nat}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) (level : Nat)
+      (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members level free) →
+        @LE.le.{0} Nat instLENat (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) members)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound)
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.rows_width' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.rows_width : ∀ {Symbol Guard : Type} {bound : Nat}
+  [inst : DecidableEq.{1} Symbol] (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound state →
+    ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state left →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state right →
+          @LE.le.{0} Nat instLENat
+            (@List.length.{0}
+              (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Symbol Guard inst
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard left)
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard right)))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound)
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileRows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileRows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol]
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol Guard state →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) →
+      @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state domain →
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) left row →
+              @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) row) →
+          (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) right row →
+                @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) row) →
+            @LE.le.{0} Nat instLENat
+                (@List.length.{0}
+                  (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.pairs Symbol Guard inst_1 left right))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound) →
+              @MicroCFTA.SourceRecursiveIntersectionCodeMass.At Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.SourceRecursiveIntersectionCode.compileRows Symbol Guard inst_1 domain left right) state
+                bound fun after value =>
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard after) value
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileUnion' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileUnion : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (members : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (other : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (left : Bool)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol Guard state →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) →
+      @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state domain →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) other →
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) members value →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) value) →
+            @LE.le.{0} Nat instLENat
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) members)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) bound bound) →
+              @MicroCFTA.SourceRecursiveIntersectionCodeMass.At Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.SourceRecursiveIntersectionCode.Code.bind Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.walk.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun member =>
+                      @ite.{2}
+                        (MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@Eq.{1} Bool left Bool.true) (instDecidableEqBool left Bool.true)
+                        (@MicroCFTA.SourceRecursiveIntersectionCode.requestNode Symbol Guard domain member other)
+                        (@MicroCFTA.SourceRecursiveIntersectionCode.requestNode Symbol Guard domain other member))
+                    members)
+                  fun values =>
+                  @MicroCFTA.SourceRecursiveIntersectionCode.Code.work Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.makeUnion Symbol Guard values)
+                    (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                state bound fun after value =>
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard after) value
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileMu' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileMu : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol Guard state →
+    @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state domain →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) left →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) right →
+          @MicroCFTA.SourceRecursiveIntersectionCodeMass.At Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.SourceRecursiveIntersectionCode.compileMu Symbol Guard domain left right) state bound
+            fun after value =>
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard after) value
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileReference' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileReference : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (left : Bool)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol Guard state →
+    @MicroCFTA.SourceRecursiveIntersectionKernel.Domain Symbol Guard state domain →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) other →
+        @MicroCFTA.SourceRecursiveIntersectionCodeMass.At Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+          (@MicroCFTA.SourceRecursiveIntersectionCode.compileReference Symbol Guard domain name other left) state bound
+          fun after value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard after) value
+'MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileNode' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileNode : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_1 : DecidableEq.{1} Symbol] (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard) (bound : Nat),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid Symbol Guard state →
+    @MicroCFTA.InternedValueMassHeap.Stored Symbol Guard bound
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard state) →
+      @MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady Symbol Guard state request →
+        @MicroCFTA.SourceRecursiveIntersectionCodeMass.At Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+          (@MicroCFTA.SourceRecursiveIntersectionCode.compileNode Symbol Guard inst_1 request) state bound
+          fun after value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard after) value

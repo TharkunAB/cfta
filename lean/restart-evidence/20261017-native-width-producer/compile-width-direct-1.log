@@ -1,0 +1,149 @@
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:75:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileUnion`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:74:0: warning: `compileUnion` does not use the following hypothesis in its type:
+  • [DecidableEq Symbol] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:114:73: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.140 ?m.141 → Value ?m.140 ?m.141 → Code ?m.140 ?m.141 ?m.142
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.140 ?m.141 →
+    Value ?m.140 ?m.141 → Machine ?m.140 ?m.141 → Result ?m.140 ?m.141 ?m.142
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:114:73: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.141 ?m.142 → Value ?m.141 ?m.142 → Code ?m.141 ?m.142 ?m.143
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.141 ?m.142 →
+    Value ?m.141 ?m.142 → Machine ?m.141 ?m.142 → Result ?m.141 ?m.142 ?m.143
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:114:73: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.142 ?m.143 → Value ?m.142 ?m.143 → Code ?m.142 ?m.143 ?m.144
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.142 ?m.143 →
+    Value ?m.142 ?m.143 → Machine ?m.142 ?m.143 → Result ?m.142 ?m.143 ?m.144
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:114:73: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.143 ?m.144 → Value ?m.143 ?m.144 → Code ?m.143 ?m.144 ?m.145
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.143 ?m.144 →
+    Value ?m.143 ?m.144 → Machine ?m.143 ?m.144 → Result ?m.143 ?m.144 ?m.145
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:111:57: error: unsolved goals
+case some.some
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned DomainKey
+left right : Value Symbol Guard
+state : Machine Symbol Guard
+bound : Nat
+valid : SourceRecursiveIntersectionKernel.Valid state
+known : Domain state domain
+leftAvailable : Available state.heap left
+rightAvailable : Available state.heap right
+firstId : Nat
+first : SourceRecursiveIntersectionControl.identity left = some firstId
+secondId : Nat
+second : SourceRecursiveIntersectionControl.identity right = some secondId
+_valid :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+_growth :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+enteredDomain :
+  Domain
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst
+larger : Nat
+a✝⁶ :
+  SourceRecursiveIntersectionKernel.Valid
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+growth :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+a✝⁵ : bound ≤ larger
+a✝⁴ : Stored larger state.heap
+value : Value Symbol Guard
+after : Machine Symbol Guard
+last : Nat
+a✝³ : SourceRecursiveIntersectionKernel.Valid after
+a✝² :
+  Extension
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+    after
+a✝¹ : larger ≤ last
+a✝ : Stored last after.heap
+available : Available after.heap value
+⊢ Available after.heap value ∧
+    ∀ (value : Value Symbol Guard) (after_1 : Machine Symbol Guard) (larger : Nat),
+      SourceRecursiveIntersectionKernel.Valid after_1 →
+        Extension after after_1 →
+          last ≤ larger → Stored larger after_1.heap → Available after_1.heap value → Available after_1.heap value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:126:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceRecursiveIntersectionCompileWidth.compileReference`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:125:0: warning: `compileReference` does not use the following hypothesis in its type:
+  • [DecidableEq Symbol] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:201:89: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1350 ?m.1351 →
+    Value ?m.1350 ?m.1351 → Code ?m.1350 ?m.1351 ?m.1352
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1350 ?m.1351 →
+    Value ?m.1350 ?m.1351 → Machine ?m.1350 ?m.1351 → Result ?m.1350 ?m.1351 ?m.1352
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:201:20: error: unsolved goals
+case mk.unsupported
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : Machine Symbol Guard
+bound : Nat
+valid : SourceRecursiveIntersectionKernel.Valid state
+stored : Stored bound state.heap
+domain : Interned DomainKey
+left right : Value Symbol Guard
+known : Domain state { domain := domain, left := left, right := right }.domain
+leftAvailable : Available state.heap { domain := domain, left := left, right := right }.left
+rightAvailable : Available state.heap { domain := domain, left := left, right := right }.right
+selected :
+  SourceRecursiveIntersectionControl.decision domain.key left right =
+    SourceRecursiveIntersectionControl.Branch.unsupported
+⊢ At (SourceRecursiveIntersectionCode.unsupported left right) state bound fun after value => Available after.heap value
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompileWidth.lean:201:102: warning: This simp argument is unused:
+  At
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionCode.compileNode, selected, unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
