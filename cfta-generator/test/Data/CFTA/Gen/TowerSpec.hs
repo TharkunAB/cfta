@@ -73,6 +73,18 @@ spec = describe "Data.CFTA.Gen.Tower" $ do
                     , observedResponse observation /= fallback
                     ]
         Tower.descriptionLength vocabulary final `shouldSatisfy` (< Tower.descriptionLength [] concrete)
+    it "adds two predicates together when neither one shortens the spec alone" $ do
+        -- A sum is accepted when it is even and every digit is at most 4.
+        let accepts term = even (sum values) && all (<= 4) values where values = digitsOf term
+            tests =
+                [ Observation test (accepts test) | test <- map lit [0 .. 9] <> [Node "add" [lit a, lit b] | a <- [0 .. 9], b <- [0 .. 9]]
+                ]
+            Result vocabulary final steps outcome = Tower.refine templates False [] Map.empty tests
+            concrete = Map.fromList [(observedTest test, True) | test <- tests, observedResponse test]
+        outcome `shouldBe` Agreed
+        Set.fromList vocabulary `shouldBe` Set.fromList [greaterThan 4, divisibleBy 2]
+        take 2 steps `shouldBe` map Extend vocabulary
+        Tower.descriptionLength vocabulary final `shouldSatisfy` (< Tower.descriptionLength [] concrete)
   where
     agrees vocabulary final =
         and
@@ -96,6 +108,15 @@ observations = [observe first second | first <- [0 .. 9], second <- [0 .. 9]]
 -- | The test of one pair, with the response of the model.
 observe :: Integer -> Integer -> Observation Response
 observe first second = Observation (Node "pair" [digit first, digit second]) (model first second)
+
+-- | A digit leaf as a term.
+lit :: Integer -> Term Symbol
+lit = digit
+
+-- | The digits of the leaves of a test.
+digitsOf :: Term Symbol -> [Integer]
+digitsOf (Node symbol []) = [value | value <- [0 .. 9], Node symbol [] == digit value]
+digitsOf (Node _ children) = concatMap digitsOf children
 
 -- | A leaf with an exact value.
 digit :: Integer -> Term Symbol
