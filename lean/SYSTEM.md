@@ -1,5 +1,59 @@
 # Constrained languages, indexing, and distributions
 
+## Current stored Empty transport and cold union preparation
+
+Updated: 2026-10-18 15:45 CEST. Proof checkpoint is `c4c058c2`.
+Starting checkpoint is `4df4242f`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-stored-empty-transport.md`.
+
+For the same original stored value, equal resolved physical Empty tests
+on its original free names imply equal actual returned Empty tests.
+Replacement records, entry heaps and returned heaps can differ. The proof
+restricts both maps to original free support before comparing the full
+encoded plan. Internal bound names need no external map agreement.
+
+Arbitrary nonempty replacements on original free names now preserve the
+original physical Empty test. Positive occurrence costs prove identity
+retention through the full stored plan. Actual Mu unfolding therefore has
+the same physical Empty test as its stored body. This result includes
+arbitrary open nested Mu values. Physical Empty is the constructor test.
+It is not the semantic claim that the accepted finite language is empty.
+
+Generated pairs and lexical Inputs now transport through actual Keeps
+growth. Their original historical receipts remain unchanged. Every warm
+source, filter and stored call replays at the later reader. This proves
+membership transport, not observation equality or Directed simulation.
+
+Actual historical union calls now recover complete availability of all
+original raw source members at a Ready reader. Finite preparation runs
+each member filter and stored call, then the parent calls. It derives
+the final Keeps, availability and warm replays. No initial warm subgroup
+filter or caller-supplied child schedule is required. The generated
+relation still requires historical build-to-filter adjacency. The new
+forward schedules alone do not supply that receipt.
+
+The strongest broad statement remains conditional partial correctness:
+under the stated initial semantic, heap and resource assumptions, a
+successful checked model traversal with an empty list of inherited
+constraints accepts exactly the same finite trees as its input. General termination and full
+public Haskell correspondence remain open. General source/filter/stored
+fusion and changing-capture binder simulation remain the main local gap.
+Initial operands, active-owner exclusion, fresh bounds, repeated
+convergence, equality resources and host Int adequacy remain separate.
+
+Full Audit passes 3330 jobs and 72328 dependency checks.
+All 10 new public and 4 constructed heads pass full
+statement, proof and standard-axiom checks. Eight selected strict logs
+are empty. All four canonical builds are warning-free. Audit retains
+only the existing ClosedCompletion warning. Five manifests pin 242
+entries. Independent review checks the nonempty replacement proof.
+Evidence is in `lean/restart-evidence/20261018-stored-empty-transport/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current source Empty abstraction and derived child schedules
 
 Updated: 2026-10-18 15:23 CEST. Proof checkpoint is `89f0bfd3`.
