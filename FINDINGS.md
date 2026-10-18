@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 10:30 CEST. Proof checkpoint is `80e7b363`.
+Successful native queries with selected physical ordinary rows now derive
+all terminal writer branches, including actual open reference calls.
+Ordinary origins retain actual guard conjunction and ordered child calls.
+The theorem derives codecs from the selected row. It needs no closedness
+or Original premise. Initial source ancestry, retained used-Mu alignment
+and general recursive completion remain open. Full Audit passes 3288 jobs
+and 71452 checks. One actual open warm call returns a nonempty leaf.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-open-query-row-origins.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 10:04 CEST. Proof checkpoint is `cf2dc597`.
 Actual open reference calls now derive exact domain reads and ordered child
 traces at unchanged checked entries. Actual Mu writers derive their open

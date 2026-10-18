@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentNativeOpenRowOrigins
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentNativeOpenRowOrigins.Joined
+#print MicroCFTA.SourceCurrentNativeOpenRowOrigins.Joined
+#print axioms MicroCFTA.SourceCurrentNativeOpenRowOrigins.Joined
+#check @MicroCFTA.SourceCurrentNativeOpenRowOrigins.ordinary
+#print MicroCFTA.SourceCurrentNativeOpenRowOrigins.ordinary
+#print axioms MicroCFTA.SourceCurrentNativeOpenRowOrigins.ordinary
+#check @MicroCFTA.SourceCurrentNativeOpenRowOrigins.union
+#print MicroCFTA.SourceCurrentNativeOpenRowOrigins.union
+#print axioms MicroCFTA.SourceCurrentNativeOpenRowOrigins.union

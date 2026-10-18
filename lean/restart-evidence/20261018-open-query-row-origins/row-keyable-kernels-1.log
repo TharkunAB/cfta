@@ -1,0 +1,163 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-query-row-origins/row-keyable-kernels-1.source.lean:96:34: error: unsolved goals
+facts : Facts before.native.machine.heap
+closedLeft : left.free = []
+closedRight : right.free = []
+originalLeft : Original left
+originalRight : Original right
+semantic : SourceEqualityRequiredSemanticCache.SemanticReady heap
+fuel : Nat
+left✝⁶ :
+  fuel ≤
+    SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+      { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }
+left✝⁵ :
+  InternedValueMass.value left ≤
+    SourceCurrentAllocatedRecursiveMassTrace.massAfter
+      (SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+        { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right })
+      (InternedValueMassHeap.initialBound before.native.machine.heap)
+left✝⁴ : SourceRecursiveIntersectionNative.Idle (SourceEqualityNativeDemand.execute 64 control before).state.native
+left✝³ :
+  InternedValueMassHeap.Stored
+    (SourceCurrentAllocatedRecursiveMassTrace.massAfter
+      (SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+        { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right })
+      (InternedValueMassHeap.initialBound before.native.machine.heap))
+    (SourceEqualityNativeDemand.execute 64 control before).state.native.machine.heap
+left✝² :
+  (SourceEqualityNativeDemand.execute 64 control before).state.native.machine.heap.nodes.next ≤
+    before.native.machine.heap.nodes.next +
+      SourceCurrentAllocatedRecursiveMassTrace.credit
+        (SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+          { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right })
+        (InternedValueMassHeap.initialBound before.native.machine.heap)
+left✝¹ :
+  (SourceEqualityNativeDemand.execute 64 control before).state.native.machine.heap.edges.next ≤
+    before.native.machine.heap.edges.next +
+      SourceCurrentAllocatedRecursiveMassTrace.credit
+        (SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+          { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right })
+        (InternedValueMassHeap.initialBound before.native.machine.heap)
+right✝ :
+  (SourceEqualityNativeDemand.execute 64 control before).state.native.machine.domains.next ≤
+    before.native.machine.domains.next +
+      SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+        { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }
+receipt :
+  SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt fuel
+    (Control.code
+      (requestNode { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.domain
+        { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.left
+        { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.right))
+    before left (SourceEqualityNativeDemand.execute 64 control before).state fun final result =>
+    Available final.heap result
+left✝ :
+  SourceEqualityNativeDemand.execute
+      (SourceCurrentAllocatedNativeInstructionTrace.nodeBudget before.native.machine.heap (fun x x_1 => true)
+          { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right } +
+        1)
+      (Control.code
+        (requestNode { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.domain
+          { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.left
+          { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.right))
+      before =
+    Outcome.done left (SourceEqualityNativeDemand.execute 64 control before).state
+⊢ Value.node { identity := 4, key := InternedBinderProtocol.NodeKey.node [3] }
+        [EdgeValue.mk
+            { identity := 3,
+              key :=
+                { symbol := ("kept", FullSyntax.Formula.top), children := [InternedBinderProtocol.NodeRef.mu 2],
+                  constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+            [Value.mu
+                { identity := 2,
+                  key :=
+                    InternedBinderProtocol.NodeKey.mu
+                      { depthShape := InternedBinderProtocol.NodeRef.node 0,
+                        ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                (Value.node { identity := 3, key := InternedBinderProtocol.NodeKey.node [2] }
+                  [EdgeValue.mk
+                      { identity := 2,
+                        key :=
+                          { symbol := ("loop", FullSyntax.Formula.top),
+                            children :=
+                              [InternedBinderProtocol.NodeRef.ref (InternedBinderProtocol.Reference.interned 2)],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                      [Value.reference (InternedBinderProtocol.Reference.interned 2)]]
+                  0 [InternedBinderProtocol.Reference.interned 2])
+                (Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+                  [EdgeValue.mk
+                      { identity := 0,
+                        key :=
+                          { symbol := ("loop", FullSyntax.Formula.top),
+                            children := [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                      [Value.reference InternedBinderProtocol.Reference.depth]]
+                  0 [InternedBinderProtocol.Reference.depth])
+                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [1] }
+                  [EdgeValue.mk
+                      { identity := 1,
+                        key :=
+                          { symbol := ("loop", FullSyntax.Formula.top),
+                            children :=
+                              [InternedBinderProtocol.NodeRef.ref (InternedBinderProtocol.Reference.uninterned 0)],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                      [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                  0 [InternedBinderProtocol.Reference.uninterned 0])]]
+        1 [] =
+      Value.node { identity := 5, key := InternedBinderProtocol.NodeKey.node [3, 4] }
+        [EdgeValue.mk
+            { identity := 3,
+              key :=
+                { symbol := ("kept", FullSyntax.Formula.top), children := [InternedBinderProtocol.NodeRef.mu 2],
+                  constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+            [Value.mu
+                { identity := 2,
+                  key :=
+                    InternedBinderProtocol.NodeKey.mu
+                      { depthShape := InternedBinderProtocol.NodeRef.node 0,
+                        ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                (Value.node { identity := 3, key := InternedBinderProtocol.NodeKey.node [2] }
+                  [EdgeValue.mk
+                      { identity := 2,
+                        key :=
+                          { symbol := ("loop", FullSyntax.Formula.top),
+                            children :=
+                              [InternedBinderProtocol.NodeRef.ref (InternedBinderProtocol.Reference.interned 2)],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                      [Value.reference (InternedBinderProtocol.Reference.interned 2)]]
+                  0 [InternedBinderProtocol.Reference.interned 2])
+                (Value.node { identity := 0, key := InternedBinderProtocol.NodeKey.node [0] }
+                  [EdgeValue.mk
+                      { identity := 0,
+                        key :=
+                          { symbol := ("loop", FullSyntax.Formula.top),
+                            children := [InternedBinderProtocol.NodeRef.ref InternedBinderProtocol.Reference.depth],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                      [Value.reference InternedBinderProtocol.Reference.depth]]
+                  0 [InternedBinderProtocol.Reference.depth])
+                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [1] }
+                  [EdgeValue.mk
+                      { identity := 1,
+                        key :=
+                          { symbol := ("loop", FullSyntax.Formula.top),
+                            children :=
+                              [InternedBinderProtocol.NodeRef.ref (InternedBinderProtocol.Reference.uninterned 0)],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                      [Value.reference (InternedBinderProtocol.Reference.uninterned 0)]]
+                  0 [InternedBinderProtocol.Reference.uninterned 0])],
+          EdgeValue.mk
+            { identity := 4,
+              key :=
+                { symbol := ("other", FullSyntax.Formula.top), children := [],
+                  constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+            []]
+        1 [] →
+    False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-query-row-origins/row-keyable-kernels-1.source.lean:96:71: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.275 = ?m.275
+but is expected to have type
+  row.children = [Value.mu ?m.264 ?m.267 ?m.270 ?m.273]
+in the application
+  Exists.intro ?m.273 rfl

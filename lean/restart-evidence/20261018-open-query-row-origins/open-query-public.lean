@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.Reference
+#print MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.Reference
+#print axioms MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.Reference
+
+#check @MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.Resolved
+#print MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.Resolved
+#print axioms MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.Resolved
+
+#check @MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.returned
+#print MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.returned
+#print axioms MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.returned
+
+#check @MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.request
+#print MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.request
+#print axioms MicroCFTA.SourceCurrentNativeOpenQueryRowOrigins.request
+
