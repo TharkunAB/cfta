@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 17:05 CEST. Proof checkpoint is `0ac270a2`.
+Actual issued-name paths now retain earlier writer suffixes and derive
+complete lexical reader Contexts, including unused captures. Strict
+original callback depths and actual source child bounds support the next
+binder induction. The exact stored open-Mu Empty plan retains outer lower.
+A checked nested example requires that operation. General body/probe
+fusion and changing-capture observations remain open. One focused case
+checks actual probe keys, retained handles and two Empty results; its
+full historical-contract fixture remains incomplete. It establishes no
+counterexample or Haskell defect. Full Audit passes 3343 jobs and
+72509 checks. No Haskell patch or new executable defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-binder-empty-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 16:32 CEST. Proof checkpoint is `0744fbc7`.
 General reader-filtered Empty fusion now has empty, variable, node and
 union cases. Strong induction proves the full BinderFree source fragment.
