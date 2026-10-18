@@ -1,0 +1,58 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-empty-fusion/historical-context-kernels-2.source.lean:90:82: error: Application type mismatch: The argument
+  members
+has type
+  All₂ (fun expression value => build expression inputs final = Outcome.done value final) [child, leaf 2]
+    [subgroup, last]
+but is expected to have type
+  All₂ Eq (build child inputs final :: ?m.587) (Outcome.done subgroup final :: ?m.589)
+in the application
+  first_known members
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-empty-fusion/historical-context-kernels-2.source.lean:77:51: error: unsolved goals
+middle : InternedConstructorTemplates.State Nat Bool
+filtered : Value Nat Bool
+filterHeap : InternedConstructorTemplates.State Nat Bool
+result : Value Nat Bool
+final : InternedConstructorTemplates.State Nat Bool
+parentFilter : run (withoutSelfReference Reference.depth raw) middle = (filtered, filterHeap)
+parentDone : execute filtered (fun x => none) filterHeap = Outcome.done result final
+first : Keeps reader middle
+second : Keeps middle filterHeap
+third : Keeps filterHeap final
+left✝¹¹ : Available final filtered
+left✝¹⁰ : Available final result
+finalContext : Context final inputs
+whole : Keeps reader final
+left✝⁹ : run (withoutSelfReference Reference.depth raw) final = (filtered, final)
+left✝⁸ : execute filtered (fun x => none) final = Outcome.done result final
+left✝⁷ : build (Syntax.union [child, leaf 2]) inputs final = Outcome.done raw final
+left✝⁶ : InternedNestedProvenance.Values reader [subgroup, last]
+left✝⁵ : InternedNestedProvenance.Values final [subgroup, last]
+left✝⁴ : buildMany [child, leaf 2] inputs final = Outcome.done [subgroup, last] final
+left✝³ : run (makeUnion [subgroup, last]) final = (raw, final)
+members :
+  All₂ (fun expression value => build expression inputs final = Outcome.done value final) [child, leaf 2]
+    [subgroup, last]
+left✝² : Context reader inputs
+many : buildMany [child, leaf 2] inputs reader = Outcome.done [subgroup, last] reader
+left✝¹ : run (makeUnion [subgroup, last]) reader = (raw, reader)
+childFiltered : Value Nat Bool
+otherFilters : List (Value Nat Bool)
+filterCall : run (withoutSelfReference Reference.depth subgroup) final = (childFiltered, final)
+finalFilters : InternedNestedProvenance.Values final (childFiltered :: otherFilters)
+filtersWarm :
+  All₂ (fun raw filtered => run (withoutSelfReference Reference.depth raw) final = (filtered, final)) [subgroup, last]
+    (childFiltered :: otherFilters)
+childOutput : Value Nat Bool
+otherOutputs : List (Value Nat Bool)
+storedCall : execute childFiltered (fun x => none) final = Outcome.done childOutput final
+left✝ : InternedNestedProvenance.Values final (childOutput :: otherOutputs)
+storedWarm :
+  All₂ (fun filtered output => execute filtered (fun x => none) final = Outcome.done output final)
+    (childFiltered :: otherFilters) (childOutput :: otherOutputs)
+calls :
+  FilteredCalls Reference.depth (fun x => none) [subgroup, last] reader (childFiltered :: otherFilters)
+    (childOutput :: otherOutputs) middle
+⊢ ∃ childFiltered childOutput,
+    run (withoutSelfReference Reference.depth subgroup) final = (childFiltered, final) ∧
+      execute childFiltered (fun x => none) final = Outcome.done childOutput final ∧
+        Generated final childOutput childOutput

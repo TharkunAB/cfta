@@ -1,0 +1,21 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-empty-fusion/historical-context-direct-1.source.lean:85:74: error: Application type mismatch: The argument
+  ih
+has type
+  build (Syntax.union as✝) inputs before = Outcome.done raw after →
+    InternedNestedFacts.Verified before (build (Syntax.union as✝) inputs before) Available →
+      buildMany as✝ inputs before = Outcome.done bs✝ rawHeap →
+        run (makeUnion bs✝) rawHeap = (raw, after) →
+          Values reader bs✝ →
+            FilteredCalls own environment bs✝ reader filters outputs middle →
+              Values final bs✝ →
+                All₂ (fun raw filtered => run (withoutSelfReference own raw) final = (filtered, final)) bs✝ filters →
+                  build (Syntax.union as✝) inputs final = Outcome.done raw final →
+                    buildMany as✝ inputs final = Outcome.done bs✝ final →
+                      run (makeUnion bs✝) final = (raw, final) →
+                        build (Syntax.union as✝) inputs final = Outcome.done raw final →
+                          All₂ (fun expression value => build expression inputs final = Outcome.done value final) as✝
+                            bs✝
+but is expected to have type
+  All₂ (fun expression value => build expression inputs final = Outcome.done value final) as✝ bs✝
+in the application
+  All₂.cons (Exists.choose_spec (Exists.choose_spec head)).right.right.right ih

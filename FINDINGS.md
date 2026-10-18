@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 16:07 CEST. Proof checkpoint is `ac73c4cd`.
+Actual selected-writer binder reconstructions now derive physical Empty
+agreement. Node rows derive opposite survival and parent Empty from strict
+source child fusion. Actual Keeps supplies the original lexical Context
+and adjacent prepared union-member calls. Exact filtered-union coverage
+derives the parent Empty criterion with the bare-self exception. The
+checked Empty-parent/nonempty-excluded-self example is expected behavior,
+not a Haskell defect. General fusion, changing-capture simulation and the
+older writer's issued suffix remain open. Full Audit passes 3334 jobs
+and 72359 checks. No Haskell patch or new executable defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-filtered-empty-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 15:45 CEST. Proof checkpoint is `c4c058c2`.
 The same original stored value now preserves actual output Empty under
 resolved Empty agreement on original free names. Nonempty replacements
