@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 08:14 CEST. Proof checkpoint is `dce1e970`.
+Initial semantic facts, scheduled capacity and edge idle now exclude all
+edge memo diagnostics in every outer phase. Actual reached entries retain
+edge idle. A terminal Parent fault can still retain its evaluating edge
+owner. The integration checks both states. No lower-fuel ceiling or
+successful enclosing call is assumed. Node-owner exclusion and fresh-call
+bounds remain open. Native Mu/union source-anchor producers are the next
+target. Full Audit passes 3265 jobs and 71327 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-outer-edge-idle.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 08:01 CEST. Proof checkpoint is `6c0e42bc`.
 Initial scheduled capacity and nine lower-fuel bounds now exclude every
 Parent diagnostic from all six outer phases. An actual reported Parent

@@ -1,0 +1,281 @@
+MicroCFTA.OuterEdgeIdleKernels.Claim : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+  MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula → Prop
+private def MicroCFTA.OuterEdgeIdleKernels.Claim : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+  MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula → Prop :=
+fun formulas solver =>
+  And
+    (@Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      MicroCFTA.OuterEdgeIdleKernels.built
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.OuterEdgeIdleKernels.value MicroCFTA.OuterEdgeIdleKernels.heap))
+    (And
+      (∀ (depth : Nat),
+        Not
+          (@MicroCFTA.SourceCurrentConstrainedCap.Cap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.SourceCurrentConstrainedCapCheckedJointClosed.Plain depth
+            MicroCFTA.OuterEdgeIdleKernels.recursive))
+      (And
+        (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a b)
+              MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterEdgeIdleKernels.widthBits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          formulas solver MicroCFTA.OuterEdgeIdleKernels.inventory
+          (MicroCFTA.OuterEdgeIdleKernels.caller
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterEdgeIdleKernels.widthBits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          MicroCFTA.EndpointMemoGateTrace.empty)
+        (And
+          (@Eq.{2}
+            (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterEdgeIdleKernels.widthBits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            (MicroCFTA.OuterEdgeIdleKernels.low
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterEdgeIdleKernels.widthBits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterEdgeIdleKernels.widthBits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  MicroCFTA.OuterEdgeIdleKernels.widthBits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (MicroCFTA.OuterEdgeIdleKernels.lowFault
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    MicroCFTA.OuterEdgeIdleKernels.widthBits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+              (MicroCFTA.OuterEdgeIdleKernels.lowAfter
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  MicroCFTA.OuterEdgeIdleKernels.widthBits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+          (And
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+              (@MicroCFTA.FlatMemoThunk.State.cells MicroCFTA.SourceCurrentAllocatedPartialState.EdgeKey
+                MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.edgeResults
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    MicroCFTA.OuterEdgeIdleKernels.widthBits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  (MicroCFTA.OuterEdgeIdleKernels.lowAfter
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      MicroCFTA.OuterEdgeIdleKernels.widthBits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (@Option.some.{0}
+                (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.OuterEdgeIdleKernels.edgeOwner
+                  (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))))
+            (And
+              (@Exists.{1} Nat fun fuel =>
+                @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                  @Exists.{1}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    fun original =>
+                    @Exists.{1}
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      fun rest =>
+                      @Exists.{2}
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            MicroCFTA.OuterEdgeIdleKernels.widthBits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                        fun before =>
+                        And
+                          (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached
+                            (fun a b =>
+                              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                                instDecidableEqString
+                                MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a b)
+                            (fun a b =>
+                              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (fun a b =>
+                                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                                    instDecidableEqString
+                                    MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a b)
+                                MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+                            MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqValueLabelFormulaConstraint_restart-evidence»
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              MicroCFTA.OuterEdgeIdleKernels.widthBits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (MicroCFTA.OuterEdgeIdleKernels.start
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              inherited
+                              (@List.cons.{0}
+                                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                original rest)
+                              before))
+                          (And
+                            (@MicroCFTA.SourceCurrentOuterEdgeIdle.EdgeIdle
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              before)
+                            (@Eq.{2}
+                              (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall
+                                (fun a b =>
+                                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                                    instDecidableEqString
+                                    MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a b)
+                                (fun a b =>
+                                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (fun a b =>
+                                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name
+                                        MicroCFTA.FullSyntax.Formula instDecidableEqString
+                                        MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a b)
+                                    MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqConstraintFormula_restart-evidence» a
+                                    b)
+                                MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqValueLabelFormulaConstraint_restart-evidence»
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                fuel (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                { inherited := inherited, value := original } before)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                    MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                  (MicroCFTA.OuterEdgeIdleKernels.lowFault
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                                (MicroCFTA.OuterEdgeIdleKernels.lowAfter
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                    MicroCFTA.OuterEdgeIdleKernels.widthBits
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))))
+              (∀ (g s r e p h m c n handle : Nat)
+                (observation :
+                  MicroCFTA.FlatMemoThunk.Observation MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (after :
+                  MicroCFTA.SourceCurrentAllocatedPartialState.State
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      MicroCFTA.OuterEdgeIdleKernels.widthBits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+                @Ne.{2}
+                  (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      MicroCFTA.OuterEdgeIdleKernels.widthBits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  (@MicroCFTA.SourceCurrentOuterActiveAncestry.run
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                        instDecidableEqString MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a
+                        b)
+                    (fun a b =>
+                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (fun a b =>
+                          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                            instDecidableEqString
+                            MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqFormula_restart-evidence» a b)
+                        MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+                    MicroCFTA.OuterEdgeIdleKernels.«instDecidableEqValueLabelFormulaConstraint_restart-evidence»
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      MicroCFTA.OuterEdgeIdleKernels.widthBits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    g s r e p h m c n (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (MicroCFTA.OuterEdgeIdleKernels.start
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        MicroCFTA.OuterEdgeIdleKernels.widthBits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                  (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      MicroCFTA.OuterEdgeIdleKernels.widthBits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.edgeMemo
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        MicroCFTA.OuterEdgeIdleKernels.widthBits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      handle observation)
+                    after)))))))
+'_private.«restart-evidence».«20261018-outer-edge-idle».«root-edge-claim-public-1.source».0.MicroCFTA.OuterEdgeIdleKernels.Claim' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
