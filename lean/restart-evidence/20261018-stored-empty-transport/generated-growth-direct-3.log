@@ -1,0 +1,52 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/generated-growth-direct-3.source.lean:54:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before : State Symbol Guard
+first✝ second✝ : Value Symbol Guard
+first second : Environment Symbol Guard
+later✝ : State Symbol Guard
+a✝ : Keeps before later✝
+⊢ Inputs later✝ first second [] []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/generated-growth-direct-3.source.lean:57:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case reference
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before : State Symbol Guard
+first second : Value Symbol Guard
+first✝ second✝ : Environment Symbol Guard
+a✝¹ b✝ : InternedBinderProtocol.Reference
+left✝ right✝ : List (Value Symbol Guard)
+head : Generated before ((first✝ a✝¹).getD (Value.reference a✝¹)) ((second✝ b✝).getD (Value.reference b✝))
+backward : Generated before ((second✝ b✝).getD (Value.reference b✝)) ((first✝ a✝¹).getD (Value.reference a✝¹))
+tail : Inputs before first✝ second✝ left✝ right✝
+headIH :
+  ∀ {later : State Symbol Guard},
+    Keeps before later →
+      Generated later ((first✝ a✝¹).getD (Value.reference a✝¹)) ((second✝ b✝).getD (Value.reference b✝))
+backwardIH :
+  ∀ {later : State Symbol Guard},
+    Keeps before later →
+      Generated later ((second✝ b✝).getD (Value.reference b✝)) ((first✝ a✝¹).getD (Value.reference a✝¹))
+tailIH : ∀ (later : State Symbol Guard), Keeps before later → Inputs later first✝ second✝ left✝ right✝
+later✝ : State Symbol Guard
+a✝ : Keeps before later✝
+⊢ Inputs later✝ first✝ second✝ (Value.reference a✝¹ :: left✝) (Value.reference b✝ :: right✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/generated-growth-direct-3.source.lean:60:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case fixed
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before : State Symbol Guard
+first second : Value Symbol Guard
+first✝ second✝ : Environment Symbol Guard
+left✝ right✝ : List (Value Symbol Guard)
+value : Value Symbol Guard
+agree : ∀ (name : InternedBinderProtocol.Reference), name ∈ value.free → first✝ name = second✝ name
+tail : Inputs before first✝ second✝ left✝ right✝
+tailIH : ∀ (later : State Symbol Guard), Keeps before later → Inputs later first✝ second✝ left✝ right✝
+later✝ : State Symbol Guard
+a✝ : Keeps before later✝
+⊢ Inputs later✝ first✝ second✝ (value :: left✝) (value :: right✝)

@@ -1,0 +1,55 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/nonempty-replacement-direct-1.source.lean:76:4: error: Tactic `rfl` failed: The left-hand side
+  InternedProfileSemantics.isEmpty (InternedRootProfile.profile Value.empty)
+is not definitionally equal to the right-hand side
+  Value.empty.referenceOf == InternedBinderProtocol.NodeRef.empty
+
+case pos
+Symbol Guard : Type
+state : State Symbol Guard
+normal : InternedStoredMuOrigins.Normal state
+available : Available state Value.empty
+context : List (Value Symbol Guard) := leaves Value.empty
+inputs :
+  InternedStoredCostInputs.Inputs context [] (List.map shape context) (List.map costs context) fun name => [(name, 0)]
+retained :
+  (InternedStoredCostRetention.Retains (costs Value.empty)
+      (InternedOccurrenceCostSemantics.evaluate (encode context [] Value.empty) (List.map shape context)
+        (List.map costs context))
+      fun name => [(name, 0)]) ∧
+    (Value.empty.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      (InternedDepthSemantics.evaluate (encode context [] Value.empty) (List.map shape context)).isEmpty = false)
+projected :
+  InternedDepthSemanticProjections.profile
+      (InternedDepthSemantics.evaluate (encode context [] Value.empty) (List.map shape context)) =
+    InternedProfileSemantics.evaluate (encode context [] Value.empty) (List.map InternedRootProfile.profile context)
+resolved :
+  List.map (fun leaf => InternedRootProfile.profile (input (fun x => none) leaf)) context =
+    List.map InternedRootProfile.profile context
+pureTest :
+  (SourceCurrentStoredEmptyInterpreter.test Value.empty fun x => none) =
+    (InternedDepthSemantics.evaluate (encode context [] Value.empty) (List.map shape context)).isEmpty
+empty : Value.empty.referenceOf = InternedBinderProtocol.NodeRef.empty
+⊢ InternedProfileSemantics.isEmpty (InternedRootProfile.profile Value.empty) =
+    (Value.empty.referenceOf == InternedBinderProtocol.NodeRef.empty)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/nonempty-replacement-direct-1.source.lean:94:6: error: Type mismatch: After simplification, term
+  beq_eq_false_iff_ne.mpr (nonempty name member)
+ has type
+  @Eq Bool
+    ((match (environment name).getD (Value.reference name) with
+      | Value.empty => InternedBinderProtocol.NodeRef.empty
+      | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+      | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+      | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+      | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) ==
+      InternedBinderProtocol.NodeRef.empty)
+    false
+but is expected to have type
+  @Eq Bool
+    ((match (environment name).getD (Value.reference name) with
+      | Value.empty => InternedBinderProtocol.NodeRef.empty
+      | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+      | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+      | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+      | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) ==
+      InternedBinderProtocol.NodeRef.empty)
+    (InternedBinderProtocol.NodeRef.ref name == InternedBinderProtocol.NodeRef.empty)

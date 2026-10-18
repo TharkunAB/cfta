@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentStoredNonemptyReplacement
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredNonemptyReplacement.execute_nonempty
+#print MicroCFTA.SourceCurrentStoredNonemptyReplacement.execute_nonempty
+#print axioms MicroCFTA.SourceCurrentStoredNonemptyReplacement.execute_nonempty
+#check @MicroCFTA.SourceCurrentStoredNonemptyReplacement.unfold_mu
+#print MicroCFTA.SourceCurrentStoredNonemptyReplacement.unfold_mu
+#print axioms MicroCFTA.SourceCurrentStoredNonemptyReplacement.unfold_mu

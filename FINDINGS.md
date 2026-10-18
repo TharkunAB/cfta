@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 15:45 CEST. Proof checkpoint is `c4c058c2`.
+The same original stored value now preserves actual output Empty under
+resolved Empty agreement on original free names. Nonempty replacements
+preserve its original physical Empty test. Actual Mu unfolding retains
+the stored body's test. Generated memberships transport through Keeps.
+Actual union history recovers complete original-member availability and
+constructs cold member filter/stored schedules with final warm replays.
+Historical filter adjacency, general semantic fusion and changing-capture
+binder simulation remain open. These are proof results, not executable
+Haskell repair requests. Full Audit passes 3330 jobs and 72328
+checks. No Haskell patch or new executable defect is added. Field-pool
+repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-stored-empty-transport.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 15:23 CEST. Proof checkpoint is `89f0bfd3`.
 One full source expression now preserves physical Empty under equal
 ordered lexical Empty tests. Actual calls derive this law from initial

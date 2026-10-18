@@ -1,0 +1,79 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:72:61: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:72:10: error: Type mismatch: After simplification, term
+  agree name member
+ has type
+  (((first name).getD (Value.reference name)).referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    (((second name).getD (Value.reference name)).referenceOf == InternedBinderProtocol.NodeRef.empty)
+but is expected to have type
+  ((fun leaf => leaf.referenceOf == InternedBinderProtocol.NodeRef.empty) ∘
+        input fun name => if name ∈ value.free then first name else none)
+      (Value.reference name) =
+    ((fun leaf => leaf.referenceOf == InternedBinderProtocol.NodeRef.empty) ∘
+        input fun name => if name ∈ value.free then second name else none)
+      (Value.reference name)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:73:60: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:73:8: error: unsolved goals
+case neg
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+first second : Environment Symbol Guard
+before later : State Symbol Guard
+firstReady : Ready before
+secondReady : Ready later
+firstAvailable : Available before value
+secondAvailable : Available later value
+firstReplacements : Replacements before first
+secondReplacements : Replacements later second
+left : Value Symbol Guard
+after : State Symbol Guard
+right : Value Symbol Guard
+final : State Symbol Guard
+firstDone : execute value first before = Outcome.done left after
+secondDone : execute value second later = Outcome.done right final
+agree :
+  ∀ (name : Reference),
+    name ∈ value.free →
+      (((first name).getD (Value.reference name)).referenceOf == InternedBinderProtocol.NodeRef.empty) =
+        (((second name).getD (Value.reference name)).referenceOf == InternedBinderProtocol.NodeRef.empty)
+restrictedFirst : Environment Symbol Guard := fun name => if name ∈ value.free then first name else none
+restrictedSecond : Environment Symbol Guard := fun name => if name ∈ value.free then second name else none
+firstRestricted : Replacements before restrictedFirst
+secondRestricted : Replacements later restrictedSecond
+firstInputs : List (Value Symbol Guard) := List.map (input restrictedFirst) (leaves value)
+secondInputs : List (Value Symbol Guard) := List.map (input restrictedSecond) (leaves value)
+plan : InternedNestedConstruction.Syntax Symbol Guard := encode (leaves value) [] value
+firstContext : InternedFreshOrdinaryContext.Context before firstInputs
+secondContext : InternedFreshOrdinaryContext.Context later secondInputs
+firstActual : build plan firstInputs before = Outcome.done left after
+secondActual : build plan secondInputs later = Outcome.done right final
+name : Reference
+a✝ : Value.reference name ∈ leaves value
+member : ¬name ∈ value.free
+⊢ ((fun leaf => leaf.referenceOf == InternedBinderProtocol.NodeRef.empty) ∘
+        input fun name => if name ∈ value.free then first name else none)
+      (Value.reference name) =
+    ((fun leaf => leaf.referenceOf == InternedBinderProtocol.NodeRef.empty) ∘
+        input fun name => if name ∈ value.free then second name else none)
+      (Value.reference name)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:73:21: warning: This simp argument is unused:
+  input
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [restrictedFirst, restrictedSecond, if_neg member, Option.getD_none]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:73:60: warning: This simp argument is unused:
+  if_neg member
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [input, restrictedFirst, restrictedSecond, Option.getD_none]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-empty-transport/empty-congruence-direct-1.source.lean:73:74: warning: This simp argument is unused:
+  Option.getD_none
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [input, restrictedFirst, restrictedSecond, if_neg member]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

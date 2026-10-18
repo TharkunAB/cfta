@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentGeneratedUnionPreparation
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentGeneratedUnionPreparation.source_members
+#print MicroCFTA.SourceCurrentGeneratedUnionPreparation.source_members
+#print axioms MicroCFTA.SourceCurrentGeneratedUnionPreparation.source_members
+
+#check @MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls
+#print MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls
+#print axioms MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls
+
+#check @MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls.nil
+#print MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls.nil
+#print axioms MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls.nil
+
+#check @MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls.cons
+#print MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls.cons
+#print axioms MicroCFTA.SourceCurrentGeneratedUnionPreparation.FilteredCalls.cons
+
+#check @MicroCFTA.SourceCurrentGeneratedUnionPreparation.prepare
+#print MicroCFTA.SourceCurrentGeneratedUnionPreparation.prepare
+#print axioms MicroCFTA.SourceCurrentGeneratedUnionPreparation.prepare
