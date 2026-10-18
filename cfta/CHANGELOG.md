@@ -7,6 +7,8 @@ Before release, the package was called `microcfta`.
 - Add `Data.CFTA.Document`: editable source documents with named
   productions and named facts, and patches that check the document they
   were prepared on.
+- Add `Data.CFTA.Language`: updates that combine with `<>` over a source
+  document, and named exclusions that `restore` removes again.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
   the input becomes, so that a caller can carry data about the edges of a
   graph through `refold`, whose new edges have new identities.
