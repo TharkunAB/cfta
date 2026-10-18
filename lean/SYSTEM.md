@@ -1,5 +1,59 @@
 # Constrained languages, indexing, and distributions
 
+## Current recursive Empty fusion and exact union coverage
+
+Updated: 2026-10-18 16:07 CEST. Proof checkpoint is `ac73c4cd`.
+Starting checkpoint is `0b1a176b`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-filtered-empty-fusion.md`.
+
+Actual source builds, root filters and stored calls now derive physical
+Empty agreement under nonempty resolved replacements. The publication
+and binder endpoints recover the selected earlier writer and derive
+Empty agreement for its actual body and ordinary reconstructions. They
+retain the real calls, Keeps, availability and both Generated directions.
+The used-Mu example selects an earlier writer with different source syntax.
+
+Node reconstruction now derives opposite stored-row survival and parent
+Empty agreement from fusion of strict source children. The complete row
+symbol, guard and ordered child Empty tests are retained. Child schedules
+and live aliases come from the actual parent calls. The proof needs no
+reader-wide lexical availability or desired parent output law.
+
+An actual source return followed by Keeps now derives the original
+lexical Context at the later reader. Union preparation retains that
+Context and all adjacent source, filter and stored calls at its final
+heap. The existing Generated.filtered constructor is used unchanged.
+An unused issued capture and a cold subgroup filter are checked. Plain
+Grows still does not supply the older writer's issued-name suffix.
+
+Filtered union reconstruction now has exact literal-atom and full-row
+coverage by retained original source members. The parent is physically
+Empty exactly when every retained member reconstruction is Empty. A bare
+self member is retained only when the entire parent is that bare self.
+A source-built example has an Empty parent and an excluded self member
+whose reconstruction is a nonempty used Mu. Both new laws are applied.
+
+The strongest broad theorem remains conditional finite-language
+preservation for a successful supported checked-model traversal with an
+empty list of inherited constraints. Initial semantic cache and recursive
+heap assumptions, plus computed resource bounds, remain explicit. General
+two-sided source/filter/stored fusion and changing-capture simulation
+remain open. So do arbitrary older-writer issued-history transport,
+recursive completion, repeated convergence and public Haskell correspondence.
+
+Full Audit passes 3334 jobs and 72359 dependency checks.
+All 10 new public and 4 constructed heads pass full statement, proof and
+standard-axiom checks. Eight selected strict logs are empty. All four
+canonical builds are warning-free. Audit retains only the existing
+ClosedCompletion warning. Five selected manifests pin 238 entries.
+Independent union-coverage review finds no material issue. Evidence is
+in `lean/restart-evidence/20261018-filtered-empty-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current stored Empty transport and cold union preparation
 
 Updated: 2026-10-18 15:45 CEST. Proof checkpoint is `c4c058c2`.
