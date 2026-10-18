@@ -6,3 +6,5 @@
   graphs (`graph 2;`), source documents (`document 2;`), and languages
   (`language 2;`). A parsed value is equal to the printed value, and printing
   it again gives the same text.
+- Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
+  `Language.Update`, one statement for each operation.
