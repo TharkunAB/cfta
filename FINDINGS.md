@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 09:31 CEST. Proof checkpoint is `83199114`.
+Actual stored substitution now derives original indexed transition anchors
+or explicit replacement origins for literal ordinary result rows. Anchors
+retain full fields and actual lexical child calls or identity. The bound
+is on original children, not generated output children. Native construct
+readback now yields an anchor in its own input body. Query-operand ancestry
+and general recursive progress remain open. Full Audit passes 3279 jobs
+and 71402 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-stored-literal-row-lineage.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 09:09 CEST. Proof checkpoint is `32ea01b1`.
 Actual open stored Mu substitution now supplies an exact original-body
 execution under sparse lexical shadowing. Each selected physical ordinary

@@ -1,5 +1,51 @@
 # cfta formal model
 
+## Current original stored transitions from actual result rows
+
+Updated: 2026-10-18 09:31 CEST. Proof checkpoint is `83199114`.
+Generic lineage proof is `f226dc0a`. Starting checkpoint is `9e1e57f3`.
+Main source remains `c0cc8a05`. Read
+`lean/notes-current-stored-literal-row-lineage.md` for exact boundaries.
+
+Actual stored substitution now derives a finite source trace for every
+literal ordinary result row. It follows indexed original union members
+and strict original Mu bodies. It retains closed identity and external
+replacement origins separately. Source anchors retain full symbols,
+guards, arity and either identical rows or actual ordered lexical child
+calls. Reference-only and Empty replacements cannot supply row origins.
+Each anchored original child is strictly smaller than the original input.
+Generated output children have no such size bound.
+
+Initial semantic inputs, coverage, replacement availability and global
+publication history construct successful substitution with every row trace.
+The scope retains arbitrary nested Mu values. It adds no BinderFree or
+finite ordinary Cap condition. Literal rows follow root unions and keep
+retained Mu opaque.
+
+Actual native smart construction now consumes this trace. Its selected
+physical row has an indexed row in that construct's input body. The proof
+derives the exact post-depth semantic entry and uses final reader history
+with forward growth. That input body can be a generated native child
+result. Original query-operand or public-source ancestry is not yet proved.
+Compose those anchors through native writers, class folds, Parent and walks.
+Retained used-Mu epsilon exposure, all-owner node-key exclusion, fresh-call
+bounds, general recursive outer completion and repeated convergence remain
+open. Equality-operation resources, host Int adequacy and public Haskell
+correspondence remain separate obligations.
+
+Full Audit passes 3279 jobs and 71402 checks. All thirteen production public
+pairs and both constructed pairs pass full statements, proofs and axioms
+in six groups. Four production and two integration strict logs are empty.
+The examples cover mixed-union output with open nested Mu, and an actual
+used-pair construct with a changed reader and warm replay. Independent
+reviews find no material issue. Evidence is in
+`lean/restart-evidence/20261018-stored-literal-row-lineage/`.
+
+No Haskell patch or new executable defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
 ## Current stored Mu rows from the original body execution
 
 Updated: 2026-10-18 09:09 CEST. Proof checkpoint is `32ea01b1`.
