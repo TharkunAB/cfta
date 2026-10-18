@@ -1,272 +1,199 @@
 # Spectacular and Specftacular
 
-This report compares the published ICST 2023 Spectacular artifact with the
-current Specftacular implementation. It reports elapsed time, allocation,
-GC, peak RSS, and differences in the discovered laws. A larger law count
-does not imply a better result. False and redundant laws increase the count.
+This report compares the published ICST 2023 Spectacular artifact with
+Specftacular at `d2e91fdf`. It covers elapsed time, allocation, GC, peak
+RSS, and differences in the discovered laws. A larger law count is not a
+better result by itself. False and redundant equations increase the count.
 
-Specftacular recovers the general `concat` laws and list-monad laws that the
-port previously missed. Native checked execution, native unchecked execution,
-and the GHC frontend produce the same laws in the selected controls. Sparse
-evaluation reduces retained memory. It regenerates inputs when needed.
-Completion now rejects impossible matches before comparing their types
-and reuses normal forms while the rules stay fixed. CFTA checks mandatory
-node pairs once during structural subsumption. Specftacular validates stronger
-equation schemes before it adds their rules. Rule orientation now remains
-valid across type substitutions. Critical-pair batches share their incoming
-terms. Completion preserves generic critical pairs across type instances.
-Directed inputs reject the earlier recorded integer-boundary counterexamples.
-The 60-second matrix completes 21 of 27 configurations, including HugeLists
-size 5 through phase 3. Longer trials complete size 7 through phase 2,
-bringing the retained completion count to 22. That output contains five
-further false laws with verified counterexamples. These remain unfixed.
-The longer trials therefore do not establish a quality improvement.
-The machine has other activity. Elapsed time alone does not isolate engine
-speed. The controls below record both savings and regressions.
+The engine retains pruning during enumeration, increasing program size
+order, occurrence generalization, and validated polymorphic schemes. Sparse
+evaluation reduces retained inputs. Typed completion preserves rules across
+type substitutions. The new 1064-case schedule rejects six additional false
+equations at their actual admission identities. The previous 1040
+Specftacular cases all passed for those equations. The GHC frontend uses the
+same input policy.
+
+The optional ordered CFTA cursor passes its API and default CFTA cost
+controls. The Specftacular cursor variants fail their selection controls, so
+the selected engine keeps its existing enumeration path. Those small default
+controls do not establish the cost of larger Specftacular runs. The profiles
+guide the proposed alternatives below. They are not measurements of the
+current default engine.
+
+The selected runtime completes 22 of 27 configurations within 300 seconds.
+The completed HugeLists size 7, phase 2 run has 242 laws. It omits six
+concretely refuted equations from the earlier 248-law output. Printed
+absence and bounded derivability checks have separate roles below.
 
 ## Sources and method
 
-The 60-second matrix ran on 2026-10-17. The longer current-only trials ran
-on 2026-10-18 with the same runtime and binary.
+The original columns retain the earlier all-`-O2` measurements. Original
+Spectacular and QuickSpec 2 are not rerun. The current matrix runs on
+2026-10-18 with the selected source and the 1064-case schedule.
 
 | Input | Revision |
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
-| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/102965d3bbffc564b79cb718b73b9f589f95f2ce/specftacular) | `102965d3` |
-| [Profiled predecessor][diagnostic-source] | `9be187a0` |
+| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/d2e91fdf297659382329e8d9375082024439dc8c/specftacular) | `d2e91fdf` |
+| [Initial 1064-case input policy](https://github.com/TharkunAB/cfta/commit/54b17ac82e87e5ae6a15e640658058cf4d26bd6b) | `54b17ac8` |
+| [Optional CFTA cursor](https://github.com/TharkunAB/cfta/commit/3cfd0ae71e92974640f6a386e91a9452735cd825) | `3cfd0ae7` |
+| [Profiled 1040-case predecessor](https://github.com/TharkunAB/cfta/tree/102965d3bbffc564b79cb718b73b9f589f95f2ce/specftacular) | `102965d3` |
 | [Published QuickSpec 2 benchmark artifact](https://zenodo.org/records/7565011) | Version 2.1.5, commit `967151eae493fa08a414386cdfb5ce7072477972` |
 | [Extended ICST paper](https://mpg.is/papers/gissurarson2023spectacular-extended.pdf) | PDF SHA-256 `44fcc9a6c67a5ddefccb29c37ce721a354b427bc99d6a01dadbb5b9355535882` |
 
 All 63 Haskell files in the Spectacular archive remain unchanged. Its ZIP
-SHA-256 is `48ff8dc6671edd9636c3d2c44928aab80fd3c0f92cb56d380ece8a3ae0ca3fa0`.
-The QuickSpec ZIP SHA-256 is
+SHA-256 is
+`48ff8dc6671edd9636c3d2c44928aab80fd3c0f92cb56d380ece8a3ae0ca3fa0`. The
+QuickSpec ZIP SHA-256 is
 `3de3b0cb9c1411f81a329ea3a39b2be92c346bbdc4b5f61718f966ff930c3a91`.
-QuickSpec 2 was not rerun. Its source and saved outputs provide reference
-evidence.
+QuickSpec source and saved outputs provide reference evidence.
 
-The selected runtime is `102965d3`. It includes type-stable orientation,
-shared critical-pair inputs, type-uniform completion, and the extended
-boundary inputs. The GHC frontend uses the same rewriter and retains
-generalized logical carrier resolution. The current columns below come
-from a fresh complete matrix of that runtime.
-The diagnostic sections identify each measured source state. Current native
-traces locate phase and bucket costs. Historical cost-centre percentages
-describe their named predecessors, not the selected runtime.
-
-The host runs Ubuntu 24.04 under WSL2 on an AMD Ryzen 9 7950X. It exposes
-24 logical CPUs and 94.29 GiB of RAM. Spectacular uses GHC 8.10.7 and
+The host runs Ubuntu 24.04 under WSL2 on an AMD Ryzen 9 7950X. It exposes 24
+logical CPUs and 94.29 GiB of RAM. Spectacular uses GHC 8.10.7 and
 QuickCheck 2.14.2. Specftacular uses GHC 9.14.1 and QuickCheck 2.18.0.0.
-The runs use separate Cabal projects with `optimization: 2` globally and
-in `package *`. They do not use the workspace development defaults. The
-executables and all Cabal-built dependencies use `-O2`. The build audit
-checks effective GHC flags and store settings for 53 original
-and 100 current dependency units. Compiler-distributed libraries
-keep their toolchain settings. They were not rebuilt.
-A separate store audit verifies 111 external units for the GHC controls.
-The final native and GHC builds each have effective `-O2` compiler-command
-evidence for all seven local components in their checked closures.
+Separate Cabal projects set `optimization: 2` globally and in `package *`.
+Executables and Cabal-built dependencies use `-O2`. The original store audit
+covers 53 external units. The selected d2e91fdf build passes fresh effective
+`-O2` checks for all seven local components in each closure and 100/111
+native/GHC external entries. These entries include build tools. The existing
+checked and unchecked goldens pass. Native unchecked, native checked, and
+GHC produce identical 24-law Lists size 5, phase 4 and 9-law Monad size 6,
+phase 4 sequences. Physical alias probes pass. Compiler-distributed
+libraries retain their toolchain settings. They are not rebuilt.
 
-Both builds and all runs use `nix-shell`, `heavy-management`, and pueue.
-The jobs run serially. Each job has a verified 16 GiB cgroup cap and no job
-swap. Benchmarks use `+RTS -N1 -M6G -s -RTS`. Small controls use heap caps
-of 2 to 4 GiB. These limits stay below the requested 80 GB maximum.
+Builds and runs use `nix-shell`, `heavy-management`, and pueue. Jobs run
+serially with a verified 16 GiB cgroup cap and no job swap. Benchmarks use
+`+RTS -N1 -M6G -s -RTS`. These limits remain below the requested 80 GB
+maximum. A preflight waits for low host load before measurements. It does
+not reserve the host. Machine activity can change during a run, so
+elapsed-time ratios do not isolate engine speed.
 
-The matrix compares all 27 Table I configurations. The original measurements
-come from the all-`-O2` baseline run. Every current configuration has a fresh
-run of the selected runtime.
-Each process in the main matrix has a 60-second timeout. The paper used
-3600 seconds. The longer current-only trials use 300- and 900-second limits. Every
-matrix result below comes from an audited all-`-O2` build. Machine activity differs
-between runs. Elapsed-time ratios do not isolate engine speed.
+The matrix covers the 27 Table I configurations. Original runs have a
+60-second limit. The fresh current base pass has a 300-second limit. A
+900-second pass revisits unfinished searches under the recorded policy. The
+paper used 3600 seconds. These different limits must remain explicit. A
+same-size later phase can be inferred after an earlier-phase timeout at the
+same limit. Such an entry has no independent cost or law-count measurement.
+A user-policy skip is `NOT RUN`, not an inferred timeout. No inference
+crosses maximum sizes. The longer pass retains completions only from this
+same fresh current base pass.
 
 Spectacular runs 100 fresh QuickCheck tests per comparison. Specftacular
-uses 1000 shared random cases, eight separately seeded cases, and 32 directed
-integer-boundary and list cases. Compiler versions, generators, validation,
-pruning, and enumeration differ. The comparison does not isolate the cost of
-the automaton implementation.
+uses 1000 shared random cases, eight separately seeded cases, 40 boundary
+cases, and 16 predicate cases. All previous 1040 descriptors retain their
+order and seeds. Compiler versions, signatures, generators, validation,
+pruning, and enumeration differ. The comparison does not isolate automaton
+cost.
 
-GNU `time` reports peak RSS in KiB. The tables convert it to MiB. RTS maximum
-residency measures the live heap at GC samples. It is not RSS. Allocation is
-cumulative traffic, not simultaneous RAM use. A timeout has no final law
-count. Its captured output can also omit buffered laws. Counted prefixes include
-only newline-terminated equations. A trailing fragment is not another law.
+GNU `time` reports peak RSS in KiB; tables convert it to MiB. RTS maximum
+residency is live heap at GC samples, not RSS. Allocation is cumulative
+traffic, not simultaneous RAM use. A timeout has no final law count. Its
+buffered output can omit laws. Prefix counts include only newline-terminated
+equations. A trailing fragment is not another law.
 
 ## Results
 
-T means a 60-second timeout. A dash means that the run has no final law
-count. HugeLists uses different `usort` definitions: the original preserves
-duplicates, while the current benchmark removes them. Its law counts are not
-results for identical workloads.
+The original `T` means a 60-second timeout. A current `T` means a timeout at
+the stated current limit. A dash means no final law count. HugeLists uses
+different `usort` definitions: the original preserves duplicates, while the
+current benchmark removes them. Its outputs are not identical workloads.
 
-| Signature | Size | Through phase | Original s | Original MiB | Original laws | Specftacular s | Specftacular MiB | Specftacular laws |
+| Signature | Size | Through phase | Original s (60 s limit) | Original MiB | Original laws | Specftacular s (300 s limit) | Specftacular MiB | Specftacular laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.37 | 21.3 | 15 |
-| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 11.43 | 75.3 | 33 |
-| Lists | 7 | 4 | T | 139.5 | — | 26.17 | 193.8 | 41 |
-| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 0.92 | 21.0 | 15 |
-| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 0.91 | 20.8 | 15 |
-| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 0.92 | 21.2 | 15 |
-| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 52.04 | 47.2 | 60 |
-| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 51.58 | 48.7 | 60 |
-| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 52.17 | 48.5 | 60 |
-| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 3.75 | 39.4 | 9 |
-| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 3.84 | 39.6 | 9 |
-| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 7.65 | 187.6 | 9 |
-| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.11 | 17.0 | 28 |
-| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.19 | 22.7 | 40 |
-| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 1.85 | 50.3 | 46 |
-| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.50 | 26.9 | 46 |
-| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 1.76 | 69.8 | 84 |
-| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 12.96 | 159.9 | 125 |
-| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 6.71 | 174.8 | 92 |
-| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | 37.33 | 516.8 | 197 |
-| HugeLists | 5 | 4 | T | 165.1 | — | T | 651.6 | — |
-| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 10.91 | 250.5 | 130 |
-| HugeLists | 6 | 3 | T | 305.6 | — | T | 611.7 | — |
-| HugeLists | 6 | 4 | T | 308.9 | — | T | 611.7 | — |
-| HugeLists | 7 | 2 | T | 60.2 | — | T | 433.6 | — |
-| HugeLists | 7 | 3 | T | 58.0 | — | T | 508.5 | — |
-| HugeLists | 7 | 4 | T | 55.6 | — | T | 509.5 | — |
+| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.33 | 21.2 | 15 |
+| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 10.64 | 88.7 | 33 |
+| Lists | 7 | 4 | T | 139.5 | — | 26.91 | 193.7 | 41 |
+| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 0.92 | 20.8 | 15 |
+| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 1.03 | 21.0 | 15 |
+| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 0.99 | 21.0 | 15 |
+| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 54.66 | 47.6 | 60 |
+| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 52.38 | 48.1 | 60 |
+| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 56.36 | 48.5 | 60 |
+| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 3.63 | 42.9 | 9 |
+| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 3.83 | 42.8 | 9 |
+| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 7.25 | 187.8 | 9 |
+| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.10 | 16.9 | 28 |
+| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.20 | 22.6 | 40 |
+| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 1.89 | 48.1 | 46 |
+| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.51 | 26.7 | 46 |
+| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 1.77 | 69.7 | 84 |
+| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 14.29 | 156.7 | 125 |
+| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 6.73 | 183.4 | 92 |
+| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | 36.72 | 519.5 | 197 |
+| HugeLists | 5 | 4 | T | 165.1 | — | T | 819.5 | — |
+| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 11.84 | 252.7 | 130 |
+| HugeLists | 6 | 3 | T | 305.6 | — | T | 613.6 | — |
+| HugeLists | 6 | 4 | T | 308.9 | — | T (inferred) | — | — |
+| HugeLists | 7 | 2 | T | 60.2 | — | 86.70 | 904.6 | 242 |
+| HugeLists | 7 | 3 | T | 58.0 | — | NOT RUN | — | — |
+| HugeLists | 7 | 4 | T | 55.6 | — | NOT RUN | — | — |
 
-Spectacular completes 20 runs and reaches the limit in 7. Specftacular
-completes 21 runs and reaches the limit in 6. No run has an unexpected exit
-status.
+The retained original completes 20 runs and times out in seven. At 300
+seconds: 22 new completions, 2 measured timeouts, 1 same-size inferred
+timeout, 2 policy skips.
 
-Lists size 7 through phase 4 completes in Specftacular and reaches the limit
-in the original. Regex size 7 through phases 2, 3, and 4 now completes in
-both. HugeLists size 5 through phase 3 now also completes in both.
-The HugeLists definitions differ as stated above. Both implementations
-time out in the other six cells.
+The completed-run costs remain mixed. Lists7P3 and HugeLists4P4 take less
+elapsed time than the retained original runs. Regex and Octonions take more.
+Regex7P2 allocates 399.451 GiB against the original 17.185 GiB, although its
+peak RSS is only 47.6 MiB. HugeLists5P3 takes 36.72 seconds and 519.5 MiB,
+against the original 27.27 seconds and 104.8 MiB. The larger test budget,
+different equation bases, and changed workload meanings prevent an isolated
+automaton-speed conclusion. The 22 current completions at 300 seconds and 20
+original completions at 60 seconds are not a matched-budget advantage.
 
-Regex remains expensive. Its runs take 51.58 to 52.17 seconds, close to the
-60-second limit. Phase 2 allocates 396.615 GiB, versus 17.185 GiB in the
-original. The changes remove timeouts without closing this cost difference.
-
-Lists7P4 prints 41 laws in 26.17 seconds. It uses 193.8 MiB peak RSS,
-retains 69.6 MiB at the largest GC sample, and allocates 101.061 GiB.
-HugeLists5P3 prints 197 laws in 37.33 seconds, uses 516.8 MiB peak RSS,
-and allocates 210.460 GiB. The largest RSS in the 60-second matrix is 651.6 MiB in the
-interrupted HugeLists5P4 run. It is a censored measurement, not a completed
-peak for that search.
-
-Selected completed runs have these costs:
+The resource table reports selected completed runs. Original reference
+measurements remain unchanged.
 
 | Signature, size, phase | Original allocation GiB | Specftacular allocation GiB | Original residency MiB | Specftacular residency MiB | Original GC CPU s | Specftacular GC CPU s |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists-7-p2 | 4.275 | 1.972 | 5.35 | 2.53 | 0.231 | 0.031 |
-| Octonions-7-p2 | 0.419 | 2.078 | 12.58 | 2.94 | 0.026 | 0.024 |
-| Regex-7-p2 | 17.185 | 396.615 | 4.47 | 11.16 | 0.474 | 1.863 |
-| ListMonad-7-p2 | 0.961 | 25.800 | 3.47 | 9.95 | 0.030 | 1.020 |
-| ListMonad-7-p4 | 52.501 | 38.832 | 72.02 | 82.68 | 7.004 | 1.790 |
-| HugeLists-4-p4 | 126.783 | 70.585 | 39.68 | 63.47 | 8.920 | 2.122 |
-| HugeLists-6-p2 | 24.723 | 57.066 | 17.60 | 95.83 | 1.246 | 1.686 |
+| Lists-7-p2 | 4.275 | 1.975 | 5.35 | 2.54 | 0.231 | 0.027 |
+| Octonions-7-p2 | 0.419 | 2.104 | 12.58 | 2.89 | 0.026 | 0.026 |
+| Regex-7-p2 | 17.185 | 399.451 | 4.47 | 11.16 | 0.474 | 1.921 |
+| ListMonad-7-p2 | 0.961 | 25.803 | 3.47 | 12.99 | 0.030 | 0.987 |
+| ListMonad-7-p4 | 52.501 | 38.836 | 72.02 | 82.77 | 7.004 | 1.670 |
+| HugeLists-4-p4 | 126.783 | 70.602 | 39.68 | 57.24 | 8.920 | 2.176 |
+| HugeLists-6-p2 | 24.723 | 57.100 | 17.60 | 96.45 | 1.246 | 1.861 |
 
-All 21 configurations that completed at `dd5da750` still complete.
-Sixteen retain exactly the same ordered output. Five completed HugeLists
-bases omit 14 printed equations in total and add none. HugeLists5P3 omits
-seven equations with verified overflow or partiality counterexamples.
-The HugeLists4P4 omissions also include a valid zip-empty equation.
-A separate typed check derives it from the current HugeLists4P4 rules.
-A shorter basis alone does not establish lost coverage or stronger results.
-Thirteen completed runs allocate less and eight allocate more than
-`dd5da750`. The input domain and some bases changed. These are whole-search
-cost comparisons, not identical-work measurements.
+### Longer current-only trials
 
-The six 60-second timeout outputs remain censored. HugeLists5P4 exposes 180 complete
-lines. HugeLists6P3 and P4 expose 170 each, versus 76 at `dd5da750`.
-The three HugeLists7 runs expose 148 each. These are lower bounds from
-buffered output. Trailing numbered fragments do not count as equations.
-Neither their lengths nor the unchanged completion count establishes an
-overall performance improvement.
+| Configuration | 900-second outcome | Measured seconds | Peak RSS MiB | Final laws | Visible complete prefix |
+| --- | --- | ---: | ---: | ---: | ---: |
+| HugeLists-5-p4 | T | 900.04 | 1078.4 | — | 281 |
+| HugeLists-6-p3 | T | 900.00 | 689.9 | — | 170 |
+| HugeLists-6-p4 | T (inferred) | — | — | — | — |
+| HugeLists-7-p3 | NOT RUN | — | — | — | — |
+| HugeLists-7-p4 | NOT RUN | — | — | — | — |
 
-An isolated core control explains the corrected HugeLists6 stall. It applies
-type-uniform completion with the preceding input policy. The phase-3 size-4
-`Int` bucket completes in 2.46 CPU seconds; `dd5da750` spends 49.27 CPU
-seconds there before interruption. The control reaches 230 printed laws
-and size-6 `Int`, then still reaches the 60-second limit. Its size-5 `Int`
-bucket takes 20.58 CPU seconds. These are core-only diagnostics. The matrix
-above measures the combined runtime and revised inputs; it has no matching
-phase trace. The control does not establish another completed matrix cell.
+At 900 seconds: 0 new completions, 22 retained 300-second completions, 2
+measured timeouts, 1 same-size inferred timeout, 2 policy skips. Only
+same-source 300-second completions are retained. Timeout prefixes contain
+complete lines only; buffered output can omit accepted laws. Inferred
+timeouts and policy skips have no measured costs or law counts. No timeout
+inference crosses maximum sizes.
 
-All twenty configurations that completed at `456123af` also still complete.
-Fourteen allocate less and six allocate more. Five increases exceed 5%:
-
-| Completed configuration | Allocation change from `456123af` |
-| --- | ---: |
-| ListMonad7P2 | +47.42% |
-| ListMonad7P3 | +45.16% |
-| HugeLists4P2 | +7.26% |
-| HugeLists5P2 | +21.88% |
-| HugeLists6P2 | +7.89% |
-
-HugeLists4P3 increases by 0.77%. The regressions are not confined to small
-workloads. Later phases can benefit: allocation falls by 42.81% for
-ListMonad7P4, 37.29% for HugeLists4P4, and 10.16% for Lists7P4. Some
-printed bases change relative to `456123af`. These comparisons do not uniformly hold output fixed.
-
-### Longer current-only trials on 2026-10-18
-
-These trials retain all 21 completed 60-second cells. They use the same
-`102965d3` binary, all-O2 libraries, 1040 test cases, N1, and 6 GiB heap cap.
-The serial job has a verified 16 GiB memory cap and no swap. The original
-Spectacular measurements remain unchanged.
-
-At each maximum size, a timeout in an earlier phase makes a later-phase
-trial unnecessary for the same time limit. The later phase must execute
-that earlier prefix. Such outcomes are labelled inferred. They have no
-independent timing, RSS, or law-count measurement. Host noise can change
-elapsed time; this inference does not replace an independent measurement.
-Different maximum sizes change the search and completion bounds. No timeout
-is inferred across sizes.
-
-All rows below use HugeLists. T means a timeout at the column's limit.
-A count with ≥ is an observed complete-line prefix, not a final law count.
-
-| Size | Through phase | 300s result | Laws or prefix | Peak RSS MiB | 900s result | Laws or prefix | Peak RSS MiB |
-| --- | ---: | --- | ---: | ---: | --- | ---: | ---: |
-| 5 | 4 | T, measured | ≥180 | 832.2 | T, measured | ≥281 | 1071.6 |
-| 6 | 3 | T, measured | ≥170 | 611.6 | T, measured | ≥170 | 690.4 |
-| 6 | 4 | T, measured | ≥170 | 611.6 | T, inferred from phase 3 | — | — |
-| 7 | 2 | 88.55s, complete | 248 | 859.8 | Not needed | — | — |
-| 7 | 3 | T, measured | ≥291 | 1210.0 | NOT RUN | — | — |
-| 7 | 4 | T, inferred from phase 3 | — | — | NOT RUN | — | — |
-
-The 300-second stage raises the retained completion count to 22 of 27.
-The 900-second stage adds no completion. It measures two timeouts and
-infers one later-phase timeout at size 6. After the size-6 phase-3 timeout,
-the run plan omitted the larger size-7 phase-3 and phase-4 trials. Those two
-cells are NOT RUN by policy, not inferred timeouts. An interrupted start
-of size 7 through phase 3 is excluded from the measurements.
-
-The completed size-7 phase-2 run uses 88.625 RTS CPU seconds, including
-7.138 GC CPU seconds. It allocates 561.523 GiB and reaches 327.701 MiB
-sampled live heap and 859.8 MiB peak RSS. Its 248 printed laws preserve
-the earlier 148-line prefix. The five false equations described below are
-in the newly visible tail. More completed search does not imply valid laws.
-
-The largest RSS in these trials is 1210.0 MiB in the interrupted 300-second
-size-7 phase-3 run. Every timeout RSS is censored. Buffered prefixes do not
-locate the active phase, bucket, or computation. These timing runs alone
-do not explain where the remaining time is spent.
+Measured timeouts, same-size inferences, retained completions, and policy
+skips are separate outcomes. Inferred or skipped rows have no measured RSS,
+allocation, or law count. Timeout RSS and visible law prefixes remain
+censored.
 
 ## Differences in laws
 
-The table compares the completed current controls with the original output
-and saved QuickSpec 2 examples. The example settings differ from the matrix.
-
-| Law family | Original Spectacular | Current Specftacular | Saved QuickSpec 2 output |
-| --- | --- | --- | --- |
-| Map over concat | Present | Present | Present |
-| Concat over append | Present | Present | Present |
-| Bind associativity with function variables | Absent in native ListMonad runs | Present | Present |
-| Kleisli associativity | Absent in native ListMonad runs | Follows pointwise from the printed basis | Printed as a function equation |
-| Length of append expressed with `(+)` | Lists signature lacks `(+)` | Lists signature lacks `(+)` | Present with arithmetic background |
+The fresh size-7 outputs contain 15, 33, and 41 Lists laws at phases 2, 3,
+and 4. ListMonad prints nine laws in each phase. Regex prints 60 and
+Octonions prints 15 in each phase. Each of these completed numbered streams
+is identical to the corresponding `102965d3` 1040-case stream. This compares
+printed bases. It does not prove equivalence of the complete search spaces
+or validity of every law.
 
 ### Completed Regex runs expose more general equations
 
-Each completed current Regex size-7 run prints 60 laws. These include general
-alternation commutativity and both distribution laws. With shorter variable
-names and infix notation, they are:
+All three current completed phase bounds print the same 60 equations, with
+general alternation commutativity at law 8, concatenation associativity at
+law 25, and the two distribution laws at laws 58 and 59. The full numbered
+streams match `102965d3`. The retained original has 42 equations and does
+not print these three general commutativity and distribution equations. The
+established Specftacular controls at `102965d3` include general alternation
+commutativity and both distribution laws. With shorter names, these are:
 
 ```text
 x | y == y | x
@@ -274,18 +201,19 @@ x ; (y | z) == (x ; y) | (x ; z)
 (x | y) ; z == (x ; z) | (y ; z)
 ```
 
-The retained original run prints commutativity instances with `any` and
-`e`. It does not print these three general equations. Both runs print
-general concatenation associativity. The original also prints seven
-associativity instances with `any`. These examples compare the printed
-bases. Their counts do not prove semantic coverage or independence.
-Regex equality checks acceptance on 100 fixed words. It does not establish
-complete language equivalence. The QuickSpec artifact has no saved Regex
-output, so it supplies no measured law comparison for this workload.
+The retained original run prints commutativity instances with `any` and `e`.
+It does not print these three general equations. Both runs print general
+concatenation associativity. The original also prints seven associativity
+instances with `any`. These examples compare the printed bases. Their counts
+do not prove semantic coverage or independence. Regex equality checks
+acceptance on 100 fixed words. It does not establish complete language
+equivalence. The QuickSpec artifact has no saved Regex output, so it
+supplies no measured law comparison for this workload.
 
 ### Boolean carriers admit false general laws
 
-The original Lists7P2 run prints this equation, with variable names simplified:
+The original Lists7P2 run prints this equation, with variable names
+simplified:
 
 ```haskell
 map f xs == map f (map f (map f xs))
@@ -293,12 +221,16 @@ map f xs == map f (map f (map f xs))
 
 Set `f = succ :: Int -> Int` and `xs = [0]`. The two sides are `[1]` and
 `[3]`. The original carrier types wrap `Data.Monoid.Any`, which contains a
-`Bool`. Every total Boolean endomorphism satisfies `f^3 = f`. More tests over
-that carrier cannot reject this equation. A fixed-seed sample of 1000
-original carrier values contains only two distinct values. The integer
-carriers in Specftacular give 61 values in the corresponding sample.
-The current run does not print the false equation. This does not prove all
-surviving laws.
+`Bool`. Every total Boolean endomorphism satisfies `f^3 = f`. More tests
+over that carrier cannot reject this equation. A historical fixed-seed
+sample of 1000 original carrier values contains only two distinct values.
+The integer carriers in Specftacular give 61 values in the corresponding
+sample. The complete fresh Lists size-7 outputs at phases 2, 3, and 4 do not
+print this form. The check permits consistent variable renaming and equation
+reversal. It preserves displayed types and repeated variable identity. The
+retained original Lists7P2 prints it as law 24. Printed absence does not
+establish that current Rules cannot derive it. A finite sample does not
+prove all surviving laws.
 
 ### Polymorphic list laws return
 
@@ -312,104 +244,83 @@ Native checked execution constructs the specialized runtime type and retains
 Rewrite rules share one substitution for term variables and type variables.
 Repeated occurrences must agree. Smaller type sizes come first. Among
 equal-sized types, abstract instances precede concrete instances during
-exploration. This suppresses many ground consequences.
-QuickSpec 2's [polymorphism layer][qs-poly] provides the design reference.
+exploration. This suppresses many ground consequences. QuickSpec 2's
+[polymorphism layer][qs-poly] provides the design reference.
 
-Lists5P4 produces the same 24 numbered laws in native checked execution,
-native unchecked execution, and the GHC frontend. There are no exact
-text duplicates after law numbers are removed. The normalized law text has
-SHA-256 `8088731afcad759c3a22db9f0c34a29b26b8d096115a55d19aa44a4850ec1821`.
-Both general laws are present:
+Fresh Lists size 5 through phase 4 produces the same 24 numbered laws in
+native checked execution, native unchecked execution, and the GHC frontend.
+There are no exact text duplicates after law numbers are removed. The
+normalized law text has SHA-256
+`8088731afcad759c3a22db9f0c34a29b26b8d096115a55d19aa44a4850ec1821`. Both
+general laws are present:
 
 ```haskell
 map f (concat xss) == concat (map (map f) xss)
 concat xss ++ concat yss == concat (xss ++ yss)
 ```
 
-The selected size-5 control also contains
-`concat (concat xsss) == concat (map concat xsss)`. It has no exact duplicate
-law text. These checks do not establish a minimal or independent law basis.
+The selected size-5 control also contains `concat (concat xsss) == concat
+(map concat xsss)`. It has no exact duplicate law text. These checks do not
+establish a minimal or independent law basis.
 
-### Completion follows nested polymorphic consequences
+### Completion and typed law coverage
 
-Completion gives distinct names to the term and type variables of each
-rule before it computes an overlap. It unifies type constructors and rejects
-cyclic term and type substitutions. This permits overlaps that require
-`a := [b]` or `a := [[b]]`. A literal annotation comparison misses these
-consequences. For example, double reverse, map/reverse, and an earlier
-concat/reverse law can prove
+Completion gives distinct names to each rule's term and type variables
+before it computes an overlap. It unifies type constructors and rejects
+cyclic substitutions. This permits overlaps such as `a := [b]` and `a :=
+[[b]]`. A literal annotation comparison misses these consequences. For
+example, double reverse, map/reverse, and a concat/reverse rule can prove:
 
 ```haskell
 reverse (concat xss) == concat (reverse (map reverse xss))
 ```
 
-Current coverage controls load the actual final Rules from three runs.
-Their numbered output matches the corresponding production controls exactly.
-The checks cover 597 retained target occurrences from earlier Specftacular
-outputs. They derive 586. Eleven have independently verified counterexamples;
-the bounded prover derives none of those eleven.
+Fresh all-`-O2` captures at `d2e91fdf` reproduce the selected 41-law Lists,
+197-law HugeLists, and nine-law Monad outputs exactly. Their final Rules
+derive 586 of 597 retained targets. The other 11 target occurrences have
+independently checked counterexamples. The bounded prover returns no
+derivation for those 11. No target is unproved without a counterexample,
+unknown, or still derived despite its counterexample. All targets come from
+retained Specftacular outputs. The six HugeLists size 7, phase 2 checks form
+a separate control.
 
-| Current control | Printed laws | Retained target corpora | Derived | Independently refuted |
+| Current control at `d2e91fdf` | Printed laws | Retained target corpora | Derived | Independently refuted |
 | --- | ---: | --- | ---: | ---: |
 | Lists7P4 | 41 | Exact typed 48-, 63-, and 41-law outputs | 152 | 0 |
 | HugeLists5P3 | 197 | Earlier 214-law prefix and exact typed 204-law output | 407 | 11 |
 | ListMonad6P4 | 9 | Earlier 18-law frontend output and exact typed nine-law output | 27 | 0 |
 
-These are retained Specftacular corpora, not the published Spectacular
-artifact. The 214-law HugeLists and 18-law Monad printed targets omit
-constant type annotations. Their reconstruction retains rigid given types
-and shared variable identity. It freshens constant occurrences and jointly
-infers both sides. The stronger reconstructed scheme covers the hidden old
-constant instances. Exact typed targets keep their original annotations.
-The checker verifies the reconstruction against those typed targets before
-it uses this inference policy for the printed-only targets.
+Printed-only targets lack constant annotations. Their reconstruction keeps
+rigid given types and shared variable identities, freshens each constant
+occurrence, and infers both sides jointly. It checks that policy against the
+retained exactly typed targets. Exact typed targets retain their
+annotations. The checker tries direct typed subsumption in both directions,
+then normalization, with a two-second limit. It inserts no target and
+performs no extra completion. Failed or timed-out proofs remain unknown
+unless a separate concrete counterexample refutes that exact target.
 
-The eleven refuted occurrences comprise two total-value counterexamples
-and nine partial-context counterexamples. They repeat seven equation forms
-across the two HugeLists corpora. They are identified by exact source,
-target index, and equation text. Other failed proofs would remain unknown;
-they would not become counterexamples. All 586 remaining targets have a
-derivation. There are no parse/type failures, proof errors, or timeouts.
+The 11 refuted occurrences repeat seven HugeLists forms: two total-value
+counterexamples and nine partial-context counterexamples. The bounded prover
+returned no derivation for them. That does not prove non-derivability or
+basis consistency. A false concat/reverse control also remained unproved;
+`[[1],[2]]` supplies its concrete witness. A separate historical check at
+`102965d3` derived the omitted zip-empty equation from its 125-law
+HugeLists4P4 basis, with distinct rigid A/B carriers. These controls do not
+establish equivalence of all 27 matrix bases. The Monad coverage control
+uses size 6, not size 7.
 
-The checker first tries direct typed subsumption in both directions, then
-normalization. It inserts no old targets and runs no extra completion.
-Each target has a two-second proof limit. An independently refuted target
-passes its negative check only when the prover returns no derivation.
-That bounded result is not a proof of non-derivability or basis consistency.
-A separate false concat/reverse equation remains unproved in each control;
-`[[1],[2]]` gives a concrete counterexample. These checks establish typed
-derivability from tested equations. They do not formally verify Haskell
-semantics or prove that a basis is minimal.
-
-The Monad control uses size 6. Its nine-equation output matches all three
-frontend controls and differs from the size-7 matrix output. This is not
-exhaustive equivalence of all 27 matrix bases.
-
-A separate capture checks the valid equation omitted from HugeLists4P4:
-
-```haskell
-zip ([] :: [A]) (ys :: [B]) == zip (xs :: [A]) ([] :: [B])
-```
-
-Both sides have result type `[(A,B)]`, with distinct rigid carriers.
-Normalization proves the equation from the actual 125-law run's Rules.
-The capture reproduces that run's exact output. It inserts no target and
-runs no extra completion. Its false concat/reverse control remains unproved.
-Other smaller-HugeLists and phase bases were not each checked.
-
-Polymorphic completion has an explicit annotation-depth budget. Program
-leaf count alone does not bound type depth. The budget depends on the
-requested size and declared signature types. It can omit valid critical
-pairs. It is not a completeness bound for the grammar and does not bound
-transient unification or normalization cost.
+Completion has an explicit annotation-depth budget. Program leaf count alone
+does not bound type depth. The budget can omit valid critical pairs and does
+not bound transient unification or normalization cost.
 
 ### Higher-order ListMonad coverage improves
 
 The native resolver composes function generators from a `CoArbitrary` domain
 and a generated codomain. It supports the `A -> [B]` variables required by
-ListMonad. User overrides take priority in random generation. Function values do not receive a
-fabricated `Eq` instance. Unsupported generator types produce warnings.
-See QuickSpec 2's [generator resolution][qs-generators].
+ListMonad. User overrides take priority in random generation. Function
+values do not receive a fabricated `Eq` instance. Unsupported generator
+types produce warnings. See QuickSpec 2's [generator
+resolution][qs-generators].
 
 Applications such as `f x` can serve as representatives. The size-4 existing
 golden now includes general list-monad left identity:
@@ -430,18 +341,19 @@ associativity in this form:
 QuickSpec 2 uses [function observation][qs-observe] to compare results at
 generated arguments. It can print equations between functions. Specftacular
 compares their applications and supplies no function equality. Its output
-does not print the exact Kleisli associativity equation from the saved output. The applied Kleisli definition and bind associativity
-imply that equation pointwise. Different equation bases need a derivability
-check; their raw counts do not measure discovery quality.
+does not print the exact Kleisli associativity equation from the saved
+output. The applied Kleisli definition and bind associativity imply that
+equation pointwise. Different equation bases need a derivability check;
+their raw counts do not measure discovery quality.
 
-### HugeLists now uses duplicate-removing `usort`
+### HugeLists uses duplicate-removing `usort`
 
-The current size-4 phase-4 run includes
-`usort (xs ++ xs) == usort xs`. The duplicate-removing definition supports
-that equation. The published duplicate-preserving definition does not.
-That output keeps `sort` and `usort` distinct. Both selected native and GHC
-probes confirm `usort [1,1] == [1]`. This fixes a benchmark mismatch.
-It does not make the two measured HugeLists signatures identical.
+The selected native and GHC definitions remove duplicates. Their focused
+probes confirm `usort [1,1] == [1]`. For finite total lists, this supports
+`usort (xs ++ xs) == usort xs`. The published duplicate-preserving
+definition does not support that equation. This fixes a benchmark mismatch.
+It does not make the measured original and current HugeLists signatures
+identical.
 
 ### Directed cases reject the recorded false candidates
 
@@ -453,12 +365,11 @@ length (take 1 (xs ++ ys)) == length (take 1 (zs ++ ys))
 ```
 
 For the first equation, use `n = maxBound :: Int` and `xs = [0]`. Machine
-integer addition gives `n + n == -2`. The sides are `[0]` and `[]`.
-For the second, use `xs = [0]`, `ys = []`, and `zs = []`. The lengths are
-1 and 0.
+integer addition gives `n + n == -2`. The sides are `[0]` and `[]`. For the
+second, use `xs = [0]`, `ys = []`, and `zs = []`. The lengths are 1 and 0.
 
-The directed schedule also addresses mixed Int-list values. For `x = 1`
-and `xs = [0,maxBound]`, these sides have different total results:
+The directed schedule also addresses mixed Int-list values. For `x = 1` and
+`xs = [0,maxBound]`, these sides have different total results:
 
 ```haskell
 sort (map (+ x) xs) == map (+ x) (sort xs)
@@ -466,14 +377,14 @@ sort (map (+ x) xs) == map (+ x) (sort xs)
 ```
 
 The duplicate-removing `usort` version fails in the same way. The retained
-original HugeLists5P3 output prints the `sort` equation as law 133.
-The [published signature][original-hugelist-signature] uses concrete `Int`.
+original HugeLists5P3 output prints the `sort` equation as law 133. The
+[published signature][original-hugelist-signature] uses concrete `Int`.
 
-`succ` has a different failure: it throws at `maxBound`. For
-`xs = [0,maxBound]`, demanding the first element of
-`sort (map succ xs)` throws, while the first element of
-`map succ (sort xs)` is 1. The `usort` version has the same difference.
-At `xs = [maxBound]`, these three equations also fail:
+`succ` has a different failure: it throws at `maxBound`. For `xs =
+[0,maxBound]`, demanding the first element of `sort (map succ xs)` throws,
+while the first element of `map succ (sort xs)` is 1. The `usort` version
+has the same difference. At `xs = [maxBound]`, these three equations also
+fail:
 
 ```haskell
 map succ xs == map (+ 1) xs
@@ -484,35 +395,20 @@ sum (map succ xs) == sum (length xs : xs)
 Demanding the left scalar or first list element throws. The corresponding
 right result is `minBound`. These equations are unsafe as unconditional
 rewrites under non-strict Haskell contexts. Full list equality can throw
-rather than return `False`. The controls record that distinction.
-The current HugeLists5P3 output omits all seven recorded equation forms.
-Its remaining 197 equations retain their previous order.
+rather than return `False`. The controls record that distinction. The
+`102965d3` HugeLists5P3 output omitted all seven recorded forms. The
+completed fresh HugeLists5P3 output has 197 laws and omits the two recorded
+`take` forms and all seven recorded Int mapping, sorting, and `succ` forms.
+The seven Int checks allow the same arbitrary list expression on both sides,
+including `concat` expressions. The check for `(+ x)` retains the displayed
+`x :: Int`. These are checks of printed syntax. They do not prove
+nonderivability or reject every other false specialization.
 
-The schedule preserves the original random cases and eight independent-seed
-cases. It retains 32 directed boundary descriptors. At `minBound` and
-`maxBound`, a selected concrete Int list contains `[0,boundary]`. The same
-innermost pair appears in the existing two nested Int-list types. Other
-Int cases retain their earlier policy. Direct values for abstract carriers
-and their first three list types also retain their earlier policy.
-A list type without a direct boundary value uses its existing generator
-at size zero in an inactive slot and size 100 in an active slot. This permits
-empty `[Bool]` inputs without changing the scalar boundary or replacing the
-generator. A custom generator need not return an empty list at size zero.
+### Six false equations and the input correction
 
-Given-variable indexes select slots modulo 4. Some variables therefore
-share a presence pattern. Repeated occurrences use the same valuation.
-The old take-overflow and asymmetric-list counterexamples remain covered.
-`SPECFTACULAR_TESTS` counts only random cases; the default total remains
-1040. Direct boundary values can lie outside a custom generator's domain,
-as before. Other values come from their declared generators. The shared
-lookup uses logical types, so the concrete Int cases do not replace abstract
-carrier cases in the GHC frontend. Finite testing still permits false laws
-that can affect subsequent pruning.
-
-### Longer search exposes five further false laws
-
-The completed HugeLists7P2 run prints the following four false equations.
-The numbers are its printed law numbers; variable names are shortened.
+The completed `102965d3` HugeLists size 7, phase 2 run printed the following
+five false predicate equations. The numbers are its printed law numbers;
+variable names are shortened.
 
 | Law | Printed equation, with shorter names | Predicate |
 | --- | --- | --- |
@@ -520,13 +416,13 @@ The numbers are its printed law numbers; variable names are shortened.
 | 167 | `drop n (filter p (takeWhile q xs)) == filter p (drop n (takeWhile q xs))` | `p = (== 1)` |
 | 175 | `dropWhile p (take n (takeWhile q xs)) == take n (dropWhile p (takeWhile q xs))` | `p = (== 0)` |
 | 178 | `filter p (take n (takeWhile q xs)) == take n (filter p (takeWhile q xs))` | `p = (== 1)` |
+| 185 | `drop n (takeWhile p (takeWhile q xs)) == takeWhile p (drop n (takeWhile q xs))` | `p = (== 1)` |
 
-For each equation, use `Int` for the abstract carrier. Set
-`n = 1`, `xs = [0,1] :: [Int]`, and
-`q = const True`. The left side is `[]`; the right side is `[1]`.
-These witnesses use total values and functions. They require no overflow.
-An argument predicate can distinguish values even when the list operations
-are parametric.
+For each equation, use `Int` for the abstract carrier. Set `n = 1`, `xs =
+[0,1] :: [Int]`, and `q = const True`. The left side is `[]`; the right side
+is `[1]`. These witnesses use total values and functions. They require no
+overflow. An argument predicate can distinguish values even when the list
+operations are parametric.
 
 Law 208 has a separate overflow counterexample:
 
@@ -534,151 +430,180 @@ Law 208 has a separate overflow counterexample:
 drop n (drop n (drop n xs)) == drop (n + (n + n)) xs
 ```
 
-Set `n = div maxBound 2 + 1 :: Int` and `xs = [0]`. On the 64-bit host,
-`n` is 4611686018427387904. The sum on the right wraps to
-−4611686018427387904. The left side is `[]`; the right side is `[0]`.
+Set `n = div maxBound 2 + 1 :: Int` and `xs = [0]`. On the 64-bit host, `n`
+is 4611686018427387904. The sum on the right wraps to −4611686018427387904.
+The left side is `[]`; the right side is `[0]`.
 
-A standalone Haskell control confirms all five counterexamples. These
-equations remain in the measured `102965d3` output and remain unfixed.
-The earlier boundary fixes still reject their recorded counterexamples;
-they do not cover these new cases. The cause of these validation misses
-has not been measured. Accepted false equations can affect later pruning.
+The original focused Haskell control checks laws 160, 167, 175, 178, and
+208. An exact admission capture records their types and actual variable
+identities. Both original and post-generalization terms pass all 1040 old
+cases in checked and unchecked execution. Ordinary decision-tree insertion
+equates every pair. There are no exception observations. Generalization
+leaves these five equations unchanged. That first control covered five
+equations. The current all-`-O2` control below also checks law 185.
 
-This is a bounded review of the new output. It does not validate the other
-243 equations. The earlier typed-coverage control uses HugeLists5P3, not
-this size-7 basis. These findings concern current Specftacular output.
-They do not establish a new defect in the published paper or artifact.
+Generation seeds include variable names. Replaying the canonically printed
+names gives a different sample and refutes the first four equations in 3, 6,
+4, and 6 random cases. That replay does not reproduce admission. The capture
+resolves the discrepancy: the actual admission identities expose a finite
+sampling gap. It provides no evidence of skipped validation for these
+events.
+
+The selected schedule retains all 1040 previous cases and appends 24:
+
+- Sixteen predicate cases use `n = 1` and exact typed lists `[zero, one]` for
+  Int, A, B, C, D, and Acc. One predicate-index residue modulo eight receives
+  equality with zero or one. Other predicates return True. This covers each
+  ordered pair with different residues, independently of variable names and
+  list indexes. It does not guarantee coverage when distinct indexes share
+  a residue. Unsupported types use their generators with separate seeds and
+  size zero.
+- Eight boundary cases use `maxBound div 2 + 1` and `minBound div 2 - 1`, each
+  at four list-presence slots. They expose both signs of wrapped triple
+  addition. They reuse the existing exact typed boundary-value policy.
+  Unsupported types use their generators at size zero in these eight cases.
+
+For laws 160, 167, 175, 178, and 208, the new 24 cases refute the original
+and final equations at their actual captured identities in both native
+modes. Full-schedule and tail-only decision trees distinguish all 20
+law/version/mode combinations. All old 1040 results remain True, and no new
+observation throws. Separate controls cover all six domains and all 56
+ordered index pairs from zero through seven. All 17 focused check groups
+pass. Typed sentinel generators confirm the old 1040 values and all seeds
+remain unchanged. They also confirm size zero for unsupported types in every
+new case. GHC physical alias probes reject the predicate and both half-range
+witnesses. The GHC Monad size 6, phase 4 control retains its exact nine-law
+sequence. These correctness probes compile the current HOME modules at `-O0`
+against audited `-O2` dependencies. They support no timing claim.
+
+The fresh 242-law output is exactly the old 248-law stream with laws 160,
+167, 175, 178, 185, and 208 removed. It has no added equations or changes to
+the remaining equation order. Law 185 has actual predicate indexes zero and
+one. `PredicateCase 0 1` supplies its stated witness. The focused check
+below uses its exact captured names.
+
+A fresh all-`-O2` capture reproduces the 242-law output exactly. The checker
+uses only its final Rules. All 12 typed original/final queries for the six
+refuted equations return `NOT-PROVED` within the two-second per-query bound.
+None throws or times out. The checker proves the append-empty identity by
+direct typed subsumption and does not prove the false concat/reverse
+control. It inserts no target and performs no extra completion.
+
+Actual-name replay checks 72 combinations of equation, version, evaluation
+mode, and schedule group. Every old 1040-case observation is True for all
+six equations, and each old-schedule decision tree returns `EqualTo`. Law
+185's old results are measured without an assumed pass. Both the new 24
+cases and the full 1064-case schedule give `Distinct` for all 24
+equation/version/mode combinations. Checked and unchecked counts agree. No
+observation throws. These replays expose a finite input gap. They do not
+identify the original search's exact admission path.
+
+A successful bounded negative check is not proof of non-derivability. These
+controls do not validate every equation in the previous 248-law basis. This
+is a correction to Specftacular's input policy, not a new paper erratum.
+
+The earlier 32 boundary cases remain unchanged. Selected concrete Int lists
+contain `[0,boundary]` at the extrema, including the innermost lists in the
+two supported nested Int-list types. Other direct boundary lists retain
+their single-zero or empty values. In those original cases, unsupported
+lists use their generators at size zero in inactive slots and size 100 in
+active slots. The 24 new cases request size zero for every unsupported type.
+A custom generator can ignore this request. A typed sentinel control returns
+a nonempty nested list at size zero. Thus, the size request does not
+establish emptiness or a memory bound. Presence slots use indexes modulo
+four.
+
+`SPECFTACULAR_TESTS` still counts only random cases. The default total is
+now 1064. Directed values can fall outside a custom generator's domain.
+Logical type lookup prevents concrete Int values from replacing abstract
+carrier values. Finite testing can still admit false laws that affect later
+pruning.
 
 ### Representative instances change the equation basis
 
-With the same nonnegative-integer gcd signature and term size 3, the original
-prints 22 laws. The current golden prints six. The paper describes
-generalizing discovered laws. The current search also tests instances of
-new representatives. These six laws include general commutativity,
-idempotence, the zero identity, and three constant reductions.
-The original gives commutativity only at the supplied constants 1029, 1071,
-and 21. Fewer laws give a more general result in this example.
+With the same nonnegative-integer gcd signature and term size 3, the
+original prints 22 laws. The current golden prints six. The paper describes
+generalizing discovered laws. The current search also tests instances of new
+representatives. These six laws include general commutativity, idempotence,
+the zero identity, and three constant reductions. The original gives
+commutativity only at the supplied constants 1029, 1071, and 21. Fewer laws
+give a more general result in this example.
 
-At Octonions size 7 through phase 2, the current run prints 15 laws. The
-original prints 8. The saved QuickSpec output has 15. Equal counts do not
-establish equivalent laws. Current equations include flexibility and three
-Moufang forms. The original output does not print these forms.
+The original Octonions size 7, phase 2 output prints eight laws. The saved
+QuickSpec output has 15. The established Specftacular controls include
+flexibility and three Moufang forms absent from the original output. Each
+completed fresh size-7 run prints the same 15 equations as `102965d3`.
+Flexibility is law 8. The middle, left, and right Moufang forms are laws 11,
+14, and 15. None of these four displayed forms occurs in the retained
+original eight-law basis. The saved QuickSpec artifact also has 15
+equations; equal counts do not establish equivalent bases.
 
 The paper already explains this kind of difference. Section IV-A,
-“Differences in Discovered Laws”, describes QuickSpec's schema heuristics and
-their effect on Octonion laws. A different basis or orientation is not itself
-an error. See QuickSpec 2's [schema layer][qs-schemas].
+“Differences in Discovered Laws”, describes QuickSpec's schema heuristics
+and their effect on Octonion laws. A different basis or orientation is not
+itself an error. See QuickSpec 2's [schema layer][qs-schemas].
 
 ## Enumeration and pruning
 
-The phase order follows paper section III-C. Each phase visits increasing
-program sizes, then type buckets ordered by type size. Among equal-sized
-types, abstract carriers precede concrete types.
-The search orders ties within a size/type bucket by Knuth-Bendix order.
-Smaller terms therefore supply rules before larger terms in that phase.
-The search shares rules between phases.
+Phase order follows paper section III-C. Each phase visits increasing
+program leaf sizes, then type buckets ordered by type size. Abstract
+carriers precede concrete types of equal size. Knuth-Bendix order resolves
+order within a bucket. Rules pass to later phases. Occurrence generalization
+remains in place as in section III-G: the grammar uses one variable per
+type, then tests independent assignments, with more general instances first.
+A repeated-variable schema is not proof of every renamed equation. New
+representatives through five leaves also receive instances, following
+[QuickSpec 2][qs-schemas]. Instance enumeration uses up to four names per
+type; the initial most general instance can use more.
 
-The current partial-term oracle follows section III-D. It suspends a match
-when a required subterm is unresolved. It resumes that match when the
-subterm expands. A proven match rejects the branch during enumeration,
-before the remaining choices expand. Rules are refreshed between size/type
-buckets, as section III-E describes. This retains enumeration pruning.
-It does not enumerate the complete language before applying templates.
+The partial-term oracle follows section III-D. It suspends a match at an
+unresolved subterm and resumes it when that subterm expands. A proven match
+rejects the branch before the remaining choices expand. The selected search
+therefore prunes during enumeration. It does not use the published node
+oracle that the artifact source marks as too strong.
 
-Early templates contain only linear, decreasing rules. A repeated term
-variable cannot become independent holes. An annotation can become a hole
-only when a principal-type check proves that the rule covers every type
-instance of that pattern. Other templates retain exact type annotations.
-Typed structural rewriting also checks complete candidates before value
-generation. That check can use nonlinear rules. The current search does
-not use the published node oracle that the source marks as too strong.
+Each size/type bucket takes a template snapshot. The final KBO sort demands
+the candidate bucket before its first test. Laws learned in that bucket can
+change complete-candidate checks, but they cannot change enumeration already
+performed under its snapshot. Paper section III-E describes size/type
+batching. A fully online ordered extractor is an extension to this strategy,
+not evidence that the paper's algorithm required a different implementation.
 
-Parametricity also permits reuse across type instances. This requires each
-signature constant to be parametric in the abstract carriers. It must not
-inspect their representations or capture class dictionaries. A law about
-parametric `map` does not need an independent test at every carrier type.
-Typed rewriting uses the shared type substitution to apply that law.
-This reuses an accepted scheme. Inferring stronger independent type binders
-requires the separate validation described below.
-Concrete arithmetic types remain rigid. Independently renaming the carriers
-of each candidate is insufficient: it can lose comparisons between terms
-that the grammar introduces in different phases.
+Early templates are linear, well typed, and decreasing. Repeated term
+variables cannot become independent holes. Type erasure requires
+principal-type coverage and a decrease independent of annotations.
+Otherwise, annotations stay exact. The template-head index skips only
+incompatible fixed heads and application counts. Wildcards and unknown heads
+retain the generic path. Template order, duplicates, and suspended checks
+remain intact. Empty pending sets avoid partial reconstruction only when the
+concrete root cannot start a match.
 
-Schema generalization remains in place, as section III-G describes. The
-grammar uses one variable of each type. Testing renames variable occurrences
-independently and tries more general instances first. A repeated-variable
-identity is a search schema, not proof of every renamed equation. Local
-checked and unchecked probes find addition commutativity and reject
-subtraction commutativity. New representative schemas of up to five leaves
-also get instances, following [QuickSpec 2][qs-schemas]. Instance enumeration
-uses up to four variable names of each type. The initial most general
-instance can use more names.
+Complete typed rewriting can use nonlinear rules before value generation.
+Schema and instance trees first check whether existing rules prove equality,
+as [QuickSpec 2][qs-terms] also does. New equalities still use the full test
+schedule. Ordinary equality exceptions discard a candidate; cancellation and
+timeouts propagate.
 
-Cost-centre profiles separated template graph construction, typed
-rewriting, input generation, and equality tests. The development runs used
-external dependencies at `-O2` and local libraries at `-O0`. Profiling adds
-substantial overhead. Completed uninstrumented runs determine which changes
-are retained. The selected search uses the suspended oracle. It does not
-build an exclusion product for every bucket. These template-index changes
-did not modify CFTA.
-
-The selected oracle also skips partial-term reconstruction when no checks
-are suspended and the concrete root cannot start a program match. An `app`
-root with four children or a `filter` root with two children retains the
-original path. A matched O2 control keeps the exact output prefix and
-reduces sampled allocation by 1.65% in the completed `Int` bucket. It does
-not establish a speed improvement. A pending-representative cache was
-rejected: counters found 0.31 pending variable occurrences per callback,
-and the matched control did not establish a fixed-work benefit.
-
-A development Lists size-7 profile stopped after 300 seconds. It recorded
-284,404,205 calls to `matchPartial` under newly started checks and 2,311,899
-under resumed checks. Newly started checks account for 99.2% of those calls.
-The current oracle indexes exact template heads
-and application counts. It skips only incompatible fixed heads. Wildcards,
-prefixes, and unknown heads retain the generic path. The index preserves
-template order and duplicates. It does not change suspended matches.
-
-A completed all-`-O2` control before the completion changes varied only
-this index. Lists size 7 through
-phase 4 allocates 140.93 GiB without it and 121.39 GiB with it, a 13.9%
-reduction. Both runs print the same 48 equations in the same order. Peak RSS
-is 193.2 and 192.4 MiB. Regex size 4 through phase 2 keeps the same 17 laws;
-allocation changes by less than 0.01%. All 88 finite language and order
-checks pass. These checks include generic templates, aliases, and duplicate
-templates. They support the filter contract; the larger completed run
-provides the allocation evidence.
-
-The oracle uses these assumptions. Its holes match independently. A repeated
-term variable therefore cannot become independent holes. A template must
-prove that every match rewrites to a smaller well-typed term. Type erasure
-also needs principal-type coverage and an order that is independent of the
-annotations. Equal-weight rules qualify only when function structure or
-constant names prove the decrease. These restrictions belong to
-Specftacular. They do not change CFTA's template language or formal contracts.
-
-The schema and instance trees check whether existing rules prove equality before they
-run the full validation schedule. [QuickSpec 2][qs-terms] makes a similar
-check before its tester. New equalities still use every test case.
-An ordinary equality exception discards the candidate. Cancellation and timeouts
-propagate to the caller.
-
-A separate diagnostic before the completion changes used 100 random cases
-plus the same 40 validation cases. It also reached the 60-second limit for
-Regex7P2. The `456123af` implementation completes the default-budget matrix cell.
+Parametricity permits reuse across type instances only when signature
+constants are parametric in the abstract carriers. They must not inspect
+their runtime representation or capture class dictionaries. Concrete
+arithmetic types stay rigid. Typed rewriting applies an accepted scheme
+through a shared substitution. Stronger independent binders need the
+separate validation described below.
 
 ## Completion improvements
 
 Completion rejects incompatible program shapes before typed matching. It
 caches normal forms while the rule set stays fixed. Each accepted equation
 starts a new cache. Cache keys include all annotations and use structural
-equality. The cache holds at most 256 entries. Each key and value has at most
-256 term nodes, including annotations. Larger terms normalize without cache
-insertion. The size check runs before hashing. It forces each accepted node
-and symbol to weak head normal form without forcing symbol payloads. Cache
-updates are forced between pairs. Keys and values contain at most 131,072
-expanded node occurrences; this does not bound heap bytes. These limits prevent the
-large retained terms seen with the rejected unbounded cache.
+equality. The cache holds at most 256 entries. Each key and value has at
+most 256 term nodes, including annotations. Larger terms normalize without
+cache insertion. The size check runs before hashing. It forces each accepted
+node and symbol to weak head normal form without forcing symbol payloads.
+Cache updates are forced between pairs. Keys and values contain at most
+131,072 expanded node occurrences; this does not bound heap bytes. These
+limits prevent the large retained terms seen with the rejected unbounded
+cache.
 
 Completion checks the normalized left-size bound before it normalizes the
 right side. Both optimizations require finite, total terms and terminating
@@ -693,16 +618,16 @@ ordered completion. This adds work relative to that artifact.
 
 ### Rule orientation must survive type substitution
 
-The selected rewriter fixes a defect in the port's rule classification.
-The previous classification used an order that could depend on symbolic
-type annotations. Renaming or instantiating those types could reverse the
-order. Keeping only the first direction then omitted a valid rewrite in
-another instance.
+The rewriter fixes a defect in the port's rule classification. The previous
+classification used an order that could depend on symbolic type annotations.
+Renaming or instantiating those types could reverse the order. Keeping only
+the first direction then omitted a valid rewrite in another instance.
 
 A captured HugeLists completion demonstrates the consequence. After 10,000
 critical-pair steps, 54 added index entries contain only nine distinct
-canonical typed equations. The first repeated equation is not subsumed in its forward direction,
-although an existing reverse rule proves it with the actual typed matcher. Canonical renaming then recreates a direction already
+canonical typed equations. The first repeated equation is not subsumed in
+its forward direction, although an existing reverse rule proves it with the
+actual typed matcher. Canonical renaming then recreates a direction already
 in the index. This repeats completion work.
 
 The corrected classification uses `annotationIndependentGreater`. A single
@@ -710,32 +635,32 @@ direction requires a decrease that survives shared term and type
 substitution. Otherwise, the index retains both directions. Each actual
 rewrite still checks the instantiated order. A direction with unbound
 right-side variables cannot invent bindings. The proof assumes finite,
-well-formed typed terms and separate term and type variable namespaces.
-The conservative fallback can create more critical pairs.
+well-formed typed terms and separate term and type variable namespaces. The
+conservative fallback can create more critical pairs.
 
 Completion must also preserve the type instances of a critical pair. Its
-normalization now uses only decreases that hold for every type instance.
-An order based on the current symbolic annotations can make a generic pair
-look redundant while another instance still needs its equation. Storing
-both directions does not repair a pair already discarded by normalization.
+normalization now uses only decreases that hold for every type instance. An
+order based on the current symbolic annotations can make a generic pair look
+redundant while another instance still needs its equation. Storing both
+directions does not repair a pair already discarded by normalization.
 
-The ground-joinability shortcut now requires closed type annotations.
-Its term-variable orderings do not cover changes to type-variable order.
-A pair with unresolved type variables keeps the ordinary typed checks
-and completion path. The existing program-size, annotation-depth, and
-term-variable-order budgets remain. These conservative conditions can
-retain more equations. They do not prove that completion finishes.
+The ground-joinability shortcut now requires closed type annotations. Its
+term-variable orderings do not cover changes to type-variable order. A pair
+with unresolved type variables keeps the ordinary typed checks and
+completion path. The existing program-size, annotation-depth, and
+term-variable-order budgets remain. These conservative conditions can retain
+more equations. They do not prove that completion finishes.
 
-A small typed witness compares `length (fst ([], []))` with
-`length (snd ([], []))`, with independent list element types. Both values are
-zero. Swapping the element types changes the old order. The corrected rules
-handle both orders. Fifteen initial and 44 additional checks cover alpha
-renaming, concrete `Int` and `Bool` instances, compound types, stable
-one-way rules, and unbound right-side variables. The false concat/reverse
-control remains unproved. These checks support the rule-classification
-contract. They do not prove completion or confluence for every signature.
-This is a correction to Specftacular's rewriter. The paper does not specify
-this annotation-sensitive classification, so it is not a new paper erratum.
+A small typed witness compares `length (fst ([], []))` with `length (snd
+([], []))`, with independent list element types. Both values are zero.
+Swapping the element types changes the old order. The corrected rules handle
+both orders. Fifteen initial and 44 additional checks cover alpha renaming,
+concrete `Int` and `Bool` instances, compound types, stable one-way rules,
+and unbound right-side variables. The false concat/reverse control remains
+unproved. These checks support the rule-classification contract. They do not
+prove completion or confluence for every signature. This is a correction to
+Specftacular's rewriter. The paper does not specify this
+annotation-sensitive classification, so it is not a new paper erratum.
 
 ### Share critical-pair inputs within each batch
 
@@ -745,147 +670,136 @@ rules. It keeps the original binder names, rule order, overlap order, and
 FIFO queue. The change adds no persistent cache.
 
 An all-O2 replay processes the same 10,000 critical pairs before and after
-this isolated sharing change. The interval still has pending pairs.
-Both runs produce the same 1,066-entry typed
-snapshot, with identical index classes, order, and binder names. Sampled
-allocation in that interval falls from 10,717,798,480 to 9,679,273,104 bytes,
-a reduction of 9.690%. Source inspection preserves the ordered pair stream;
-the replay directly checks its final snapshot and step count.
+this isolated sharing change. The interval still has pending pairs. Both
+runs produce the same 1,066-entry typed snapshot, with identical index
+classes, order, and binder names. Sampled allocation in that interval falls
+from 10,717,798,480 to 9,679,273,104 bytes, a reduction of 9.690%. Source
+inspection preserves the ordered pair stream; the replay directly checks its
+final snapshot and step count.
 
 A separate complete HugeLists5P3 control prints the same 204 laws in the
 same order. Its whole-process allocation falls by 0.394%. The host is noisy,
 and one pair does not establish a timing improvement. The larger replay
 reduction applies to its selected completion interval. It does not describe
-the whole search. The final matrix also includes the completion and input
-corrections described above.
+the whole search. These controls precede the current 1064-case policy. They
+do not measure the selected matrix or establish a whole-search timing
+improvement.
 
-## HugeLists reduction and equation generalization
+## Structural reduction and equation generalization
 
-A later optimized profile of `456123af` assigns 85.4% of application ticks
-to structural subsumption and its descendants, excluding GC and PROFILING.
-One captured query makes 13,551,744 recursive visits to only 29 distinct
-ordered node pairs. Its wider graph is deterministic by symbol and arity.
-The original traversal detects cycles on the current path. It repeats work
-when different paths reach a shared subgraph.
+A historical optimized profile of `456123af` assigned 85.4% of application
+ticks to structural subsumption, excluding GC and PROFILING. A captured
+query visited 13,551,744 node pairs recursively, but only 29 distinct
+ordered pairs. The [CFTA worklist][cfta-worklist] checks each mandatory pair
+once per query. One compatible unconstrained wider edge makes its child
+pairs mandatory. Zero compatible edges reject the query. Multiple edges
+restart the original traversal. Empty/equal-node shortcuts remain. This
+assumes finite, total, immutable closed graphs and valid node identities.
+The visited set can reach the product of graph sizes. It remains a
+sufficient structural test, not complete language inclusion.
 
-The [CFTA worklist][cfta-worklist] checks each mandatory pair once per query.
-For each narrow edge, it finds unconstrained wider edges with the same
-symbol and arity. One such edge makes its child pairs mandatory. Zero
-compatible edges reject the query. Multiple compatible edges restart the
-original traversal from the query roots.
-Empty-node and equal-node shortcuts remain. This requires finite, total,
-immutable closed graphs and valid node identities. The visited set can
-reach the product of reachable graph sizes. The test remains a sufficient
-structural predicate, not a complete language-inclusion procedure.
-
-The explicit-ID replay reproduces the original query result and visit
-counts. Both algorithms return `True`. It measures algorithms on a recorded
-graph, not native node cost.
-A separate O0 grammar control completes 100 reduction passes in 0.682
-seconds with the worklist; baseline does not finish within 120 seconds.
-The candidate does not reach a fixed point. Baseline has no completed
-snapshot, so this is not a completed-work speed ratio. Existing CFTA tests
-pass 741 examples. All eight standard cells keep their checksums and pass
-the 5% allocation/instruction budget. Their largest increases are 0.00250%
-and 0.00167%, respectively. Those checks use the full production manifest
-and O2 builds.
-
-The native search then passes the stalled `Int` reduction and reaches 214
-printed laws before the limit. An actual size-5 `[A]` bucket profile assigns
-96.0% of application ticks to completion. This denominator excludes GC and
-PROFILING but retains SYSTEM and IDLE. Allocation and entry counts still
-include the prefix. The capture for law 214 permits a fixed-work replay:
-checking the normalized left-size bound first avoids right normalization
-for 8,268 of 10,000 pairs. Both variants give the same 554-rule snapshot.
-Sampled interval allocation falls by 45.27%. Local replay code uses O0;
-CFTA and external libraries use O2. The argument requires finite, total
-terms and terminating normalization. A changed cache history changes work,
-not normal forms under fixed rules. It does not preserve demand behavior
-for partial or diverging inputs.
-
-All 178 rules added at that frontier specialize one program equation:
+A separate historical completion capture explains why independent type
+schemes matter. All 178 additions specialize one equation:
 
 ```haskell
 length (take (length xs) ys) == length (take (length ys) xs)
 -- xs :: [a], ys :: [b]
 ```
 
-The previous scheme requires the same element type for both lists. With
-independent binders, the validated scheme subsumes those 178 additions.
-The controlled queue then finishes after 73 steps with no new rules.
-This replay keeps the original queue. It does not add overlaps for the
-injected diagnostic rule, so it does not establish closure of that theory.
+The earlier scheme required the same element type for both lists. The
+validated independent scheme subsumes those additions. Injecting it into the
+captured queue lets that queue finish after 73 steps without new rules. The
+diagnostic adds no overlaps for the injected rule, so it does not establish
+theory closure. This motivates earlier generalization, rather than faster
+evaluation of every specialized consequence.
+
 [QuickSpec 2's regeneralise method][qs-regeneralise] supplies the inference
-approach. It retains concrete constructors and restores the constraints
-from applications, repeated variables, and both result types. Its unit-type
-counterexample explains why a whole variable type cannot become a fresh
-type variable.
+approach. Specftacular keeps variable identity across both sides and freshens
+constant occurrences while preserving shared binders within each occurrence.
+Given instances keep their declared types. One shared match must recover both
+original sides. Concrete constructors remain fixed; an entire variable type
+cannot simply become a fresh type variable.
 
-Specftacular's [`generalizeLaw`](../src/Specftacular/Rewriting.hs) retains
-original variable identity across both sides. It freshens each constant
-occurrence's declared scheme but keeps its shared binders. Given instances
-keep their declared types. One shared match must recover both original
-sides before canonical renaming. Typing alone does not accept a proposal.
-Independent binders get distinct carriers from `A` through `Acc`, and each
-term variable gets a fresh generator at its inferred type. Both sides must
-compile at the original result type. Validation uses the decision tree's
-actual equality function and the full shared schedule, 1040 cases by
-default. False, untestable, unsupported, or changed-result proposals retain
-the original law. Cancellation and type errors propagate. Generated values
-are not retagged.
+Typing alone does not accept a proposal. Independent binders receive
+distinct carriers from A through Acc. Each term variable receives a fresh
+generator at its inferred type. Both sides must compile at the original
+result type. Validation uses the actual supplied equality and the full
+1064-case schedule. False, untestable, unsupported, or changed-result
+proposals retain the original law. Cancellation and type errors propagate.
+Generated values are not retagged.
 
-The original HugeLists5P3 result has 144 laws and different `usort`
-semantics. Its output and workload differ from the current matrix.
-The measurements do not establish an equal-work speedup.
+## Validation costs and default API behavior
 
-Against `456123af`, the Lists4P1 control at `9be187a0` allocates 15.826%
-more and uses 17.002% more Cachegrind instructions. Both print the same ten program equations, but three selected
-schemes have independent carrier types. Setting `B = A` recovers the old
-schemes. This is not byte-identical output.
-These controls exceed the repository's 5% budget. We accept the measured
-Specftacular costs to learn independent type schemes earlier and retain
-the full validation schedule. The
-profile-guided prototype and production matrix support that tradeoff:
-HugeLists5P3 now completes, all twenty earlier completions remain, and
-several later phases allocate less. This is not a universal speedup or a
-passed 5% gate. The separate eight standard CFTA cells pass their budget.
+The optional cursor and the input policy are separate changes. Strict cursor
+controls pass. The existing CFTA suite passes 741 examples in both
+validation builds. All eight default allocation/instruction cells retain
+their checksums and pass the 5% budget. Their largest increases are
+0.000175% allocation and 0.000467% instructions. These controls check the
+existing default CFTA path. They do not show that the Specftacular cursor
+variants improve search.
 
-A fresh Lists4P1 control compares `102965d3` with `dd5da750`. Both print
-the same ten typed equations in the same order. Allocation rises by 0.01647%
-and Cachegrind instructions rise by 0.00408%. The input domain changed.
-This incremental control passes the 5% budget. It does not remove the
-earlier accepted cost increase relative to `456123af`.
+At d2e91fdf, the all-`-O2` Lists size 4, phase 1 control retains all 10
+laws. Allocation changes by +0.732441% and Cachegrind instructions by
++0.436728% against 102965d3. Both pass the 5% gate. The directed input
+domain differs; no timing or isolated engine-speed claim follows.
 
-## Current diagnostics after the longer trials
+Matched all-`-O2` Lists size 7, phase 4 controls isolate the larger
+allocation change. Every variant completes with the exact same 41-law
+sequence.
 
-A fresh diagnostic of `102965d3` records the actual phase and size/type
-boundaries. Its native driver uses the retained O2 runtime and libraries.
-It adds line buffering and phase/bucket logging. It keeps the search,
-1040-case schedule, N1, 6 GiB heap cap, and 16 GiB process-group cap.
-The 900-second size-5 trace agrees with all 281 complete numbered lines in
-the corresponding timing output. It captures 295 complete lines in total.
-Different interrupted prefix lengths do not establish equal work.
+| Variant | Allocated bytes | Change from the 1040-case baseline |
+| --- | ---: | ---: |
+| Original 1040-case runtime | 108,513,645,280 | — |
+| Optional CFTA API with the same 1040 cases | 108,553,232,800 | +0.0364816% |
+| Optional API with the initial 1064 cases | 135,131,945,336 | +24.52991% |
+| Selected 1064 cases with small unsupported inputs | 108,560,902,512 | +0.0435496% |
+
+The selected change retains every descriptor, seed, and direct typed value.
+It requests generator size zero only for unsupported types in the new 24
+cases. That change reduces allocation by 19.6630% against the initial
+1064-case implementation. The final increment over the API-only 1040 control
+is 0.0070654%. These controls identify the added fallback inputs as the
+source of the large allocation increase in this workload. They required no
+further CFTA change. Other Lean work ran on the host, so no elapsed-time or
+CPU-time ratio is selected from these allocation controls.
+
+The earlier generalization change at `9be187a0` remains a separate accepted
+exception against `456123af`: +15.826% allocation and +17.002% instructions
+on Lists size 4, phase 1. Its ten program equations include stronger
+independent carrier schemes; setting B = A recovers the earlier forms. That
+change exceeded the 5% gate. The smaller new increment does not remove that
+cost or establish a universal speedup.
+
+## Profiles of the 1040-case predecessor
+
+These diagnostics measure `102965d3`, not the selected 1064-case runtime. A
+native trace records the actual phase and size/type boundaries. Its native
+driver uses the retained O2 runtime and libraries. It adds line buffering
+and phase/bucket logging. It keeps the search, 1040-case schedule, N1, 6 GiB
+heap cap, and 16 GiB process-group cap. The 900-second size-5 trace agrees
+with all 281 complete numbered lines in the corresponding timing output. It
+captures 295 complete lines in total. Different interrupted prefix lengths
+do not establish equal work.
 
 | HugeLists maximum size | Phase 1 CPU s | Phase 2 CPU s | Phase 3 CPU s | Phase 4 CPU s | Actual terminal bucket |
 | --- | ---: | ---: | ---: | ---: | --- |
 | 5 | 5.86 | 0.82 | 29.92 | 864.80, interrupted | Phase 4, size 5 `[[Int]]` |
 | 6 | 9.72 | 1.52 | 890.28, interrupted | Not reached | Phase 3, size 6 `Int` |
 
-These CPU intervals include GC. The phase intervals do not overlap.
-Bucket intervals nest inside them and must not be added to phase totals.
-For maximum size 5, about 96% of observed CPU time is in phase 4.
-Its largest completed bucket is size 5 `[[B]]`, at 105.55 CPU seconds.
-That bucket starts after 588.88 elapsed seconds. The terminal `[[Int]]`
-bucket has 102.19 observed CPU seconds. Several earlier size-5 list buckets
-take 65 to 79 CPU seconds each.
-The cost is distributed over several type buckets. It is not one late
-operation whose removal would eliminate the whole phase.
+These CPU intervals include GC. The phase intervals do not overlap. Bucket
+intervals nest inside them and must not be added to phase totals. For
+maximum size 5, about 96% of observed CPU time is in phase 4. Its largest
+completed bucket is size 5 `[[B]]`, at 105.55 CPU seconds. That bucket
+starts after 588.88 elapsed seconds. The terminal `[[Int]]` bucket has
+102.19 observed CPU seconds. Several earlier size-5 list buckets take 65 to
+79 CPU seconds each. The cost is distributed over several type buckets. It
+is not one late operation whose removal would eliminate the whole phase.
 
-For maximum size 6, phases 1 and 2 finish in 11.240 CPU seconds. The
-phase-3 size-5 `Int` bucket completes in 20.674 CPU seconds. The later
-size-6 `Int` bucket uses 848.259 CPU seconds before interruption. Its
-sampled allocation is 5504.298 GiB. This is cumulative allocation, not RAM
-held at once. The requested phase 4 is never reached.
+For maximum size 6, phases 1 and 2 finish in 11.240 CPU seconds. The phase-3
+size-5 `Int` bucket completes in 20.674 CPU seconds. The later size-6 `Int`
+bucket uses 848.259 CPU seconds before interruption. Its sampled allocation
+is 5504.298 GiB. This is cumulative allocation, not RAM held at once. The
+requested phase 4 is never reached.
 
 The size-6 trace prints 223 complete laws. All 170 complete lines from the
 900-second size-6 phase-3 timing output match its ordered prefix. The timing
@@ -896,17 +810,17 @@ events. Their actual terminal buckets differ, so one explanation cannot be
 assumed for both.
 
 The diagnostic also records sampled allocation and GC endpoints. These
-measure cumulative traffic, not retained memory. Phase boundaries alone
-do not separate enumeration, completion, schema assignments, or test values.
+measure cumulative traffic, not retained memory. Phase boundaries alone do
+not separate enumeration, completion, schema assignments, or test values.
 Cost-centre observations must identify the window they actually reached.
 
-### Current profiling controls
+### Late cost-centre controls at `102965d3`
 
 Early automatic cost centres changed the search cost substantially. A
-600-second profile did not reach the selected phase-4 `[[B]]` bucket.
-It recorded zero gated CPU samples. Its earlier phase-3 size-5 `Int` bucket
-took 345.59 elapsed seconds, versus 18.09 seconds in the native trace.
-Its allocation totals cover the prefix that ran. They do not attribute the
+600-second profile did not reach the selected phase-4 `[[B]]` bucket. It
+recorded zero gated CPU samples. Its earlier phase-3 size-5 `Int` bucket
+took 345.59 elapsed seconds, versus 18.09 seconds in the native trace. Its
+allocation totals cover the prefix that ran. They do not attribute the
 unreached bucket. A brief second attempt was stopped and excluded.
 
 The replacement build uses GHC's
@@ -929,16 +843,16 @@ limit. A 900-second whole-run guard also includes the prefix. Only timer
 samples inside the reached window describe its CPU costs. Allocation and
 entry counts cover the whole process. Each raw cost-centre self cost is
 counted once. Inherited totals overlap and are not added. Source locations
-and stack context support the category assignments. Inlining can move
-costs to a caller or a compiler worker. Unclassified costs remain explicit.
+and stack context support the category assignments. Inlining can move costs
+to a caller or a compiler worker. Unclassified costs remain explicit.
 
 The maximum-size-5 window completes its phase-4 size-5 `Int` bucket. It
 records 156,508 samples and preserves the first 234 complete laws from the
-native trace. This completes one bucket, not the HugeLists5P4 search.
-The maximum-size-6 window reaches its 180-second limit inside phase 3,
-size 6, `Int`. It records 181,902 samples. It preserves the native trace's
-223 complete laws and prints no further law during this window. Its
-whole-run guard does not interrupt the selected window.
+native trace. This completes one bucket, not the HugeLists5P4 search. The
+maximum-size-6 window reaches its 180-second limit inside phase 3, size 6,
+`Int`. It records 181,902 samples. It preserves the native trace's 223
+complete laws and prints no further law during this window. Its whole-run
+guard does not interrupt the selected window.
 
 After excluding GC, PROFILING, SYSTEM, and IDLE, the size-5 window has
 135,525 application samples. The size-6 window has 129,097:
@@ -955,35 +869,36 @@ After excluding GC, PROFILING, SYSTEM, and IDLE, the size-5 window has
 | Other | 1280 | 0.94% | 1712 | 1.33% |
 
 GC accounts for 2.66% and 20.02% of all samples, respectively. PROFILING
-accounts for 10.01% and 8.37%. SYSTEM accounts for 0.74% and 0.64%.
-These shares describe instrumented windows, not native GC costs.
-The named `matchPartial` function alone accounts for 24.43% and 24.61%
-of application samples. Other hot centres are CFTA enumeration workers,
-UVar updates, partial-term expansion, and intersection. These observations
-support earlier template rejection and less repeated matching. They do
-not support completion or QuickCheck optimization as the first change for
-these two windows. Zero samples do not prove zero execution time.
+accounts for 10.01% and 8.37%. SYSTEM accounts for 0.74% and 0.64%. These
+shares describe instrumented windows, not native GC costs. The named
+`matchPartial` function alone accounts for 24.43% and 24.61% of application
+samples. Other hot centres are CFTA enumeration workers, UVar updates,
+partial-term expansion, and intersection. These observations support earlier
+template rejection and less repeated matching. They do not support
+completion or QuickCheck optimization as the first change for these two
+windows. Zero samples do not prove zero execution time.
 
-## Profiling that guided the selected changes
+### Earlier profiles that guided completion changes
 
 The first two profiles measure `9be187a0`, before the orientation and
 sharing changes. The third measures `dd5da750`, before type-uniform
-completion. They identify the work that led to the selected changes.
-They do not measure `102965d3`'s cost distribution. All local modules,
-CFTA, and external Cabal dependencies use O2.
+completion. They identify the work that led to the selected changes. They
+measure neither `102965d3` nor the selected 1064-case distribution. All
+local modules, CFTA, and external Cabal dependencies use O2.
 
-Native diagnostics record actual phase and size/type bucket boundaries.
-The through-phase setting only stops execution at a phase boundary. A later
+Native diagnostics record actual phase and size/type bucket boundaries. The
+through-phase setting only stops execution at a phase boundary. A later
 requested phase therefore shares the earlier ordered search prefix for the
-same size. This does not make separate timing samples interchangeable.
-Only complete, newline-terminated equations count as captured output.
-A timeout can leave buffered equations and a trailing fragment.
+same size. This does not make separate timing samples interchangeable. Only
+complete, newline-terminated equations count as captured output. A timeout
+can leave buffered equations and a trailing fragment.
 
-The [cost-centre timer][ghc-profile-timer] starts at the selected bucket. Each window lasts up
-to 180 seconds. The denominator below excludes GC and PROFILING self ticks.
-It retains SYSTEM and IDLE. Each self tick is assigned once. Attribution
-uses [source paths][ghc-costs] and explicit value-operation corrections for lazy
-construction ancestry. It remains a source-based interpretation.
+The [cost-centre timer][ghc-profile-timer] starts at the selected bucket.
+Each window lasts up to 180 seconds. The denominator below excludes GC and
+PROFILING self ticks. It retains SYSTEM and IDLE. Each self tick is assigned
+once. Attribution uses [source paths][ghc-costs] and explicit
+value-operation corrections for lazy construction ancestry. It remains a
+source-based interpretation.
 
 | Source | Requested size | Actual phase and bucket | Application/runtime ticks | Main cost |
 | --- | --- | --- | ---: | --- |
@@ -1003,11 +918,11 @@ paths. Renaming uses 10.81% inside critical-pair generation. The nested
 figures must not be added to their parent costs. These findings led to the
 captured completion, the orientation correction, and shared batch inputs.
 
-The size-6 profile reaches its 180-second limit in completion.
-Normalization uses 64.55% of application/runtime ticks, critical-pair
-generation 28.63%, and ground joinability 3.96%. Enumeration and pruning
-use 0.65%. A captured 10,000-step completion adds 226 distinct typed
-entries. Of these, 222 share this erased equation family:
+The size-6 profile reaches its 180-second limit in completion. Normalization
+uses 64.55% of application/runtime ticks, critical-pair generation 28.63%,
+and ground joinability 3.96%. Enumeration and pruning use 0.65%. A captured
+10,000-step completion adds 226 distinct typed entries. Of these, 222 share
+this erased equation family:
 
 ```haskell
 length (take (length xs) (sort ys)) == length (take (length xs) ys)
@@ -1016,8 +931,8 @@ length (take (length xs) (sort ys)) == length (take (length xs) ys)
 
 Joint renaming of term and type binders reveals no increase in duplicate
 entries. Exact duplicate suppression does not address this measured growth.
-A focused probe uses actual critical pairs from the captured rules. The
-old normalizer discards a generic pair as equal, but a closed type instance
+A focused probe uses actual critical pairs from the captured rules. The old
+normalizer discards a generic pair as equal, but a closed type instance
 still needs the equation under the same Rules. Uniform normalization retains
 the pair. The old ground-joinability shortcut would then discard it again.
 Both corrections are necessary for this witness. All 16 typed probe reports
@@ -1029,24 +944,132 @@ bucket. Their elapsed times cannot supply a completed-work speed ratio.
 Their differing costs also rule out one explanation for every HugeLists
 timeout.
 
+## Ordered enumeration controls
+
+These isolated controls use runtime `102965d3` with the previous 1040-case
+schedule and the stated enumeration changes. They do not supply the new
+current matrix columns. All reached CFTA and Specftacular modules and
+dependencies use `-O2`. Each run uses N1, a 6 GiB heap cap, and a verified
+16 GiB cgroup with no swap. Original Spectacular is not rerun.
+
+The complete reference is HugeLists size 5 through phase 3, with 197 laws.
+Both shallow variants produce that exact sequence. They allocate 77.3% and
+189.2% more than the paired eager control. Both are rejected.
+
+| Variant | Result | Laws or prefix | Wall s | CPU s | Allocation GiB | Peak RSS MiB |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Eager control | Complete | 197 | 39.45 | 39.50 | 210.476 | 522.1 |
+| Shallow children | Complete | 197 | 62.16 | 62.25 | 373.218 | 527.9 |
+| Shallow with program hints | Complete | 197 | 100.88 | 101.02 | 608.757 | 530.4 |
+| Ordered, weak program bound | Frontier limit | 133 | 50.32 | 50.39 | 242.597 | 424.5 |
+| Ordered, program-shape bound | Frontier limit | 133 | 116.59 | 116.75 | 528.672 | 991.0 |
+| Ordered, incremental key hints | Frontier limit | 133 | 41.07 | 41.12 | 191.324 | 889.1 |
+
+The ordered variants reach the 100,000-entry frontier limit in phase 3, size
+5, Int. All preserve the same 133-law prefix. None finishes the bucket. They
+stop with different pending work, so their ratios are not speedups for the
+same completed work. The cap stays fixed. No size 6 trial follows these
+failed size 5 controls. Specftacular keeps its existing enumeration path.
+
+The CFTA ordered cursor is an optional API. A caller must supply a fixed
+complete key, a valid lower bound for partial terms, monotone pruning
+callbacks, and a ready-hole preference. The cursor rechecks queued work
+against the current pruning state. Work and frontier limits retain pending
+work. Equal-key order can change. Residual obligations retain multiplicity,
+but their list order can change. The CFTA documentation states the callback,
+bound, and cyclic-truncation contracts. Queue capacity does not bound RSS or
+the memory retained by closures. Specftacular does not select this cursor.
+
+### Cost-centre evidence for the rejected ordered control
+
+A separate all-`-O2` late-SCC build profiles the program-shape-bound
+variant. The selected window samples 180.06 CPU seconds in phase 3, size 5,
+Int. All 133 preceding laws match the native control. No law appears in the
+window. Allocation and entry totals include the preceding search. They are
+not totals for this window.
+
+The application denominator is 160,646 ticks. It excludes GC, profiling,
+SYSTEM, and IDLE. Enumeration and pruning account for 160,294 ticks
+(99.78%). The main exclusive shares are 53.60% enumeration state, 25.77%
+exact or annotation keys, 10.33% queue operations, 6.50% scheduling, 3.02%
+pruning, and 0.41% shallow expansion. These subcategories are not an
+exhaustive list. Generated inputs, evaluation, value equality, decision-tree
+navigation, and completion each have zero sampled ticks. GC accounts for
+4.81% of all 180,058 samples. Profiling overhead accounts for 5.33% of that
+same total.
+
+The sampled `poly_go3` worker has no source location. Its exact operation
+remains unknown. Grouping does not show that every state tick traverses a
+partial root. A Lists size 4, phase 1 pilot retains all 10 laws. Native wall
+and CPU times are 0.05 and 0.04 seconds; profiled times are 0.25 and 0.25.
+This shows instrumentation cost. It gives no conversion factor for the large
+sampled bucket.
+
+A separate priority diagnostic records 3,162,483 hole selections in the Int
+bucket. Type-key hints account for 2,959,692 (93.59%). Pending type or other
+checks account for 168,069 (5.31%). Pending program checks account for
+34,720 (1.10%). There are two program-key selections and no fallback
+selections. The maximum hint list has 26 entries. These are demanded
+selections, not counts of invalid type instances. The selector can skip
+blocked hints, so zero fallbacks does not show that all earlier hints were
+ready. The priority change took effect but did not prevent the frontier
+limit.
+
+### Alternatives supported by these diagnostics
+
+1. **Share type witnesses for each program shape.** Join fresh constant type
+   schemes with rigid generated-variable types before creating annotation
+   branches. Retain the exact relation between each program and its annotated
+   runs. Preserve concrete types, residual obligations, recursion boundaries,
+   and raw multiplicities. A single principal instance cannot replace that
+   relation. KBO compares annotations before later arguments. Each witness
+   family therefore needs a certified minimum and a resumable remainder.
+   First count program shapes and their witnesses in the captured grammar.
+
+2. **Compile shared template exclusion before creating branches.** Use
+   `excludeAnywhere` as the exact-language reference. Its open patterns can
+   create exponential subset products. Build only reachable products for a
+   shared recognizer, with a state budget before global interning. Fall back
+   to the existing oracle at that limit. Retain typed template eligibility,
+   edge constraints, residual obligations, and kept-run multiplicities.
+   A repeated `Hole` is not a named equality binder. Measure compilation plus
+   enumeration on the actual bucket-entry templates. Keep the final KBO sort
+   for this experiment. Faster matching alone does not remove type branches.
+
+3. **Certify minima for annotations and remaining siblings.** Unresolved
+   annotation bounds remain below complete annotations. Sibling sources also
+   retain one conservative ancestor bound. First identify which bound keeps
+   each failed frontier entry early in the queue. Then use grammar sharing
+   to improve its certificate without sorting all complete siblings. Retain
+   `Unknown` when correlations prevent a tighter bound. Prove each bound
+   against canonical KBO, including annotation order. Raw node counts alone
+   are insufficient. Keep the same frontier cap and require complete-stream
+   agreement, ordered keys, and correct pause/resume behavior.
+
+These proposals preserve phase and type traversal, program-leaf size order,
+occurrence generalization, and the parametricity contract. They are not
+measured improvements. Stronger pruning requires valid equations under the
+selected comparator. A finite test schedule does not establish that
+validity.
+
 ## Memory and allocation
 
 QuickSpec 2's sparse [decision tree][qs-tree] retains counterexamples that
 separate representatives. The current engine follows that design. A leaf
 retains a term evaluator. A branch retains one discriminator case and its
-values. Test cases store seeds and boundary indexes. Each comparison generates
-only the variables used by either term. Both evaluators use the same valuation
-for that case. The tree retains a valuation only through discriminator values.
-It does not retain all generated
-nested lists and complete result vectors at every representative.
+values. Test cases store seeds and boundary indexes. Each comparison
+generates only the variables used by either term. Both evaluators use the
+same valuation for that case. The tree retains a valuation only through
+discriminator values. It does not retain all generated nested lists and
+complete result vectors at every representative.
 
-A local control before the completion changes restores shared input maps
-and retained result vectors. It also restores the legacy decision tree's prefix
+A local control before the completion changes restores shared input maps and
+retained result vectors. It also restores the legacy decision tree's prefix
 comparisons. It keeps the same pruning, proof shortcut, and available
-validation cases. The strategies compare cases in different orders.
-They can therefore treat partial values differently. This control compares
-evaluation strategies, including storage. It does not isolate storage alone.
-All variants produce the same 29 numbered Lists5P4 laws.
+validation cases. The strategies compare cases in different orders. They can
+therefore treat partial values differently. This control compares evaluation
+strategies, including storage. It does not isolate storage alone. All
+variants produce the same 29 numbered Lists5P4 laws.
 
 | Lists5P4 storage control before completion changes, 1000 + 40 cases | Peak RSS, MiB | Allocated, GiB |
 | --- | ---: | ---: |
@@ -1054,22 +1077,28 @@ All variants produce the same 29 numbered Lists5P4 laws.
 | Sparse evaluation | 51.4 | 20.59 |
 | Sparse evaluation with native runtime checks | 54.2 | 21.36 |
 
-Fresh `102965d3` controls have these peak RSS values. The GHC process
-includes the compiler and interpreter.
+Current selected-runtime memory controls:
 
 | Control | Native unchecked MiB | Native checked MiB | GHC MiB |
 | --- | ---: | ---: | ---: |
-| Lists5P4 | 49.2 | 54.5 | 528.9 |
-| ListMonad6P4 | 86.7 | 93.0 | 546.7 |
+| Lists5P4 | 49.7 | 55.7 | 533.0 |
+| ListMonad6P4 | 87.2 | 92.8 | 546.0 |
 
-All three modes produce the same ordered 24-law Lists5P4 output and
-nine-law ListMonad6P4 output. These are smaller bases than the historical
-storage-control outputs. Agreement does not prove coverage equivalence.
+The fresh selected native unchecked, native checked, and GHC controls retain
+the exact 24-law Lists and nine-law Monad sequences. The GHC process
+includes the compiler and interpreter. These smaller bases differ from the
+historical 29-law storage control. Agreement does not prove coverage
+equivalence. Across independently measured processes in both passes, peak
+RSS is 1078.4 MiB (HugeLists-5-p4, 900-second limit). The largest reported
+RTS allocation is 547.324 GiB (HugeLists-7-p2, 300-second limit). Missing
+timeout RTS totals remain unknown. Allocation is cumulative traffic, not
+simultaneous memory use.
 
-Sparse evaluation regenerates inputs to reduce retained memory.
-In the storage control, it uses 97.3% less peak RSS and allocates 1.6% less. Retaining the
-complete input maps and result vectors restores the large peak. These
-controls do not establish an isolated automaton speed improvement.
+Sparse evaluation regenerates inputs to reduce retained memory. In the
+storage control, it uses 97.3% less peak RSS and allocates 1.6% less.
+Retaining the complete input maps and result vectors restores the large
+peak. These controls do not establish an isolated automaton speed
+improvement.
 
 On Lists4P1, Cachegrind records 1,426,503,315 instructions for retained
 vectors and 445,870,706 for sparse evaluation. RTS allocation is 521,257,520
@@ -1079,27 +1108,30 @@ measured above.
 
 ## GHC frontend
 
-`specftacular-ghc` shares the type checks, rewrite rules, validation schedule,
-partial-term oracle, and sparse evaluator. It assigns distinct carriers to unconstrained type
-variables in binder order. Variables that occur in constraints remain
-concrete. Container class variables use lists. Other constrained variables
-use `Int`. An independent `HasCallStack` predicate does not prevent an
-unrelated variable from remaining abstract.
+`specftacular-ghc` shares the type checks, rewrite rules, validation
+schedule, partial-term oracle, and sparse evaluator. It assigns distinct
+carriers to unconstrained type variables in binder order. Variables that
+occur in constraints remain concrete. Container class variables use lists.
+Other constrained variables use `Int`. An independent `HasCallStack`
+predicate does not prevent an unrelated variable from remaining abstract.
 
 GHC resolves generators for required types. These include functions whose
-custom domains have `CoArbitrary` instances declared in the session.
-A signature function can have at most five unconstrained type variables.
+custom domains have `CoArbitrary` instances declared in the session. A
+signature function can have at most five unconstrained type variables.
 Generated source still needs unambiguous constructor names in the session.
-These probes do not cover qualified-only imports or constructor-name collisions.
-Focused probes cover distinct carriers, ordinary and nested class
-constraints, `HasCallStack`, custom function generation, and `usort`.
+These probes do not cover qualified-only imports or constructor-name
+collisions. Focused probes cover distinct carriers, ordinary and nested
+class constraints, `HasCallStack`, custom function generation, and `usort`.
 The native and GHC `usort` probes both remove duplicates.
 
 The session compiles carrier payloads at `Int`. Its resolver can reuse a
 generator or equality for a new logical type only when both types have the
-same physical type tree. It updates logical names and prefixes. Fresh
-`[B]` and `C -> D` generator probes pass. This fallback does not add runtime
-type checks.
+same physical type tree. It updates logical names and prefixes. Fresh `[B]`
+and `C -> D` generator probes pass. The 1064-case control also checks a
+fresh `B -> Bool` predicate and `[B]` list through GHC
+filter/takeWhile/drop, and both half-range overflow witnesses through GHC
+drop and Int addition. Each returns a false equality with the resolved
+logical `[B]` comparator. This fallback does not add runtime type checks.
 
 Session values have erased runtime types. Shared annotation checks apply.
 `SPECFTACULAR_CHECKED=1` does not add `Dynamic` application checks to those
@@ -1120,23 +1152,24 @@ contains 28 `examples/tests/*.output` files.
 
 These files are example regression outputs. They are not complete benchmark
 logs. The example runner fixes `QUICKCHECK_SEED=1234`. The Octonions example
-requests one test and pruning size 9. ListMonad limits test size to 20.
-The benchmark programs use separate settings.
+requests one test and pruning size 9. ListMonad limits test size to 20. The
+benchmark programs use separate settings.
 
 QuickSpec 2's [`arith`][qs-arith] supplies `0`, `1`, and `(+)` as background
-functions. Its [driver][qs-driver] first explores them. It retains their laws
-for pruning and suppresses output about only background functions. These
-are discovered laws, not a fixed list of arithmetic axioms. Section 3.6 of
-the [QuickSpec 2 paper][qs-paper] explains the procedure.
+functions. Its [driver][qs-driver] first explores them. It retains their
+laws for pruning and suppresses output about only background functions.
+These are discovered laws, not a fixed list of arithmetic axioms. Section
+3.6 of the [QuickSpec 2 paper][qs-paper] explains the procedure.
 
-Spectacular's and Specftacular's adapted `arith` supply only `0` and `1`.
-A missing equation with `(+)` does not establish a discovery regression in
-that workload. The fork's benchmark counts `length res` from `quickSpecResult`.
-Its driver includes hidden background laws in that result. Thus 25 printed
-Lists laws versus the paper's 28 benchmark laws can be an accounting
-difference. The saved file does not verify the hidden-law count. Compare
-foreground functions, background functions, generators, test settings, and
-count policy before attributing such differences to the engine.
+Spectacular's and Specftacular's adapted `arith` supply only `0` and `1`. A
+missing equation with `(+)` does not establish a discovery regression in
+that workload. The fork's benchmark counts `length res` from
+`quickSpecResult`. Its driver includes hidden background laws in that
+result. Thus 25 printed Lists laws versus the paper's 28 benchmark laws can
+be an accounting difference. The saved file does not verify the hidden-law
+count. Compare foreground functions, background functions, generators, test
+settings, and count policy before attributing such differences to the
+engine.
 
 # Amendments
 
@@ -1147,8 +1180,8 @@ retroactively repair the historical cross-tool comparison.
 
 1. **The example includes an invalid general law.** Figure 7, law 9, gives
    `f x == f (f (f x))`. Integer successor is a counterexample. The published
-   Boolean carriers explain the identity. Current integer carriers reject
-   that identity in the measured workloads.
+   Boolean carriers explain the identity. Integer-carrier controls reject
+   that identity in the recorded workloads.
 
 2. **Pruning must preserve repeated variables and types.** The published
    enumeration matcher accepts each template hole independently. Its node
@@ -1219,23 +1252,26 @@ retroactively repair the historical cross-tool comparison.
 
 Phases 2 to 4 remain experimental. `ftacularSpec` runs phase 1. This report
 calls `experimentalPhases` for later phases. The type-depth budget can omit
-completion consequences. The output is not proved minimal or complete.
-The five counterexamples from the longer HugeLists7P2 run remain open
-correctness problems. Finishing more configurations does not resolve them.
+completion consequences. The output is not proved minimal or complete. The
+new inputs reject all six counterexamples in actual-name replay. Fresh
+output omits all six equations. The six-target and broad coverage checks
+above state their exact scope. Neither more completed configurations nor
+finite tests prove all printed laws. Predicate indexes with the same residue
+modulo eight remain outside the new pairwise guarantee. Unsupported types
+retain generator-based testing.
 
-Validated generalization supports at most five independent type binders
-and keeps the original result type and equality function. Missing
-generators or failed validation retain the original equation. The checks
-depend on parametric signature constants. They neither prove a free theorem
-nor test every type. A finite test can still admit a false scheme that
-affects subsequent pruning. The reduction replay also reaches its existing
-100-pass limit without a fixed point; the worklist does not remove that
-budget.
+Validated generalization supports at most five independent type binders and
+keeps the original result type and equality function. Missing generators or
+failed validation retain the original equation. The checks depend on
+parametric signature constants. They neither prove a free theorem nor test
+every type. A finite test can still admit a false scheme that affects
+subsequent pruning. The reduction replay also reaches its existing 100-pass
+limit without a fixed point; the worklist does not remove that budget.
 
 A partial representative can block later candidates after an equality
-exception. The sparse evaluator does not fix partial-term discovery.
-Further work can study QuickSpec 2's observational results and totality
-checks without changing custom non-strict equality behavior.
+exception. The sparse evaluator does not fix partial-term discovery. Further
+work can study QuickSpec 2's observational results and totality checks
+without changing custom non-strict equality behavior.
 
 Regex equality compares acceptance on 100 fixed words, with seed 12345 and
 size 10. The current benchmark prints that policy. It remains sampled
@@ -1248,12 +1284,11 @@ settings must not be treated as the same experiment.
 
 Strict GHC builds pass for both packages and their benchmark executables.
 Existing golden tests pass in both native modes. Fourmolu and cabal-gild
-checks apply. Fourteen focused inference controls and native checked/untyped
+checks apply. Focused inference controls and native checked/unchecked
 proposal probes check independent carriers, missing instances, false laws,
-the actual equality policy, and cancellation. Raw measurements, CSVs,
-source checkouts, and local task notes
-remain outside this package. This report contains the results and the
-source references needed to interpret them.
+the actual equality policy, and cancellation. Raw measurements, CSVs, source
+checkouts, and local task notes remain outside this package. This report
+contains the results and the source references needed to interpret them.
 
 [original-matcher]: https://github.com/Tritlo/spectacular/blob/00621f4f0f03e5d0afea3c730434a8842e473546/src/Data/ECTA/Internal/ECTA/Enumeration.hs#L411
 [original-node-oracle]: https://github.com/Tritlo/spectacular/blob/00621f4f0f03e5d0afea3c730434a8842e473546/spectacular/src/Spectacular.hs#L330
