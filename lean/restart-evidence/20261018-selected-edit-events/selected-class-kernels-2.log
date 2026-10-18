@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-edit-events/selected-class-kernels-2.source.lean:87:31: warning: This simp argument is unused:
+  wide
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [expression, tau, SourceEqualityAnnotationConstruction.Allowed,
+    SourceEqualityAnnotationConstruction.EdgesAllowed, SourceEqualityAnnotationConstruction.ManyAllowed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-edit-events/selected-class-kernels-2.source.lean:183:4: error: Type mismatch: After simplification, term
+  same
+ has type
+  @Eq (SourceCurrentAllocatedSharedEditGraph.SharedState 16)
+    (SourceCurrentAllocatedSharedTargetState.initial (before 16) SelectedClassKernels.memo) start
+but is expected to have type
+  @Eq (SourceCurrentAllocatedSharedTargetState.State 16) initialShared start
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-edit-events/selected-class-kernels-2.source.lean:186:60: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.editAt` could not be determined
+
+Hint: Using `SourceEqualityEdits.Edits.editAt would be unambiguous:
+  [apply] `SourceEqualityEdits.Edits.editAt`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-edit-events/selected-class-kernels-2.source.lean:186:76: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.editAt` could not be determined
+
+Hint: Using `SourceEqualityEdits.Edits.editAt would be unambiguous:
+  [apply] `SourceEqualityEdits.Edits.editAt`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-edit-events/selected-class-kernels-2.source.lean:186:98: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.editAt` could not be determined
+
+Hint: Using `SourceEqualityEdits.Edits.editAt would be unambiguous:
+  [apply] `SourceEqualityEdits.Edits.editAt`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-edit-events/selected-class-kernels-2.source.lean:172:123: error: unsolved goals
+selected : results[0]? = some root
+shared finish : SourceCurrentAllocatedSharedTargetState.State 16
+checked : shared.checked = after
+memo : shared.memo = saved
+built :
+  SourceCurrentAllocatedClassEditPlan.compiled record =
+    SourceEqualityEdits.Edits.editBelow
+      [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])]
+later :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record values 2 4 16 64 16 128)
+      [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])] (0 + 1)
+      (List.drop (0 + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (0 + 1) results) shared
+input : values[0]? = some root
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children
+      (SourceCurrentAllocatedSharedEditWorker.edit record values 2 4 16 64 16 128)
+      [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])] 0 (List.take 0 values)
+      (SourceCurrentAllocatedSharedTargetState.initial (before 16) SelectedClassKernels.memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take 0 results) initialShared
+dispatch :
+  SourceEqualityNeededMap.lookup (Int.ofNat 0)
+          [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])] =
+        none ∧
+      root = root ∧ finish = initialShared ∨
+    SourceEqualityNeededMap.lookup (Int.ofNat 0)
+            [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])] =
+          some (SourceEqualityEdits.Edits.editAt [0]) ∧
+        [0] ∈ record.paths ∧
+          0 < 2 ∧
+            SourceCurrentAllocatedSharedEditWorker.leaf 4 16 64 16 128 record values [0] root initialShared =
+              SourceCurrentAllocatedSharedEditWorker.Outcome.done root finish ∨
+      ∃ childEntries,
+        SourceEqualityNeededMap.lookup (Int.ofNat 0)
+              [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])] =
+            some (SourceEqualityEdits.Edits.editBelow childEntries) ∧
+          0 < 2 ∧
+            SourceCurrentAllocatedSharedEditWorker.edit record values 2 4 16 64 16 128
+                (SourceEqualityEdits.Edits.editBelow childEntries) root initialShared =
+              SourceCurrentAllocatedSharedEditWorker.Outcome.done root finish
+⊢ ∃ shared,
+    shared.checked = after ∧
+      shared.memo = saved ∧
+        SourceCurrentAllocatedSharedEditWorker.children
+              (SourceCurrentAllocatedSharedEditWorker.edit record values 2 4 16 64 16 128)
+              [(0, SourceEqualityEdits.Edits.editAt [0]), (1, SourceEqualityEdits.Edits.editAt [1])] 1
+              (List.drop 1 values) middle =
+            SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop 1 results) shared ∧
+          [0] ∈ record.paths ∧
+            SourceCurrentAllocatedSharedEditWorker.leaf 4 16 64 16 128 record values [0] root initialShared =
+              SourceCurrentAllocatedSharedEditWorker.Outcome.done root middle

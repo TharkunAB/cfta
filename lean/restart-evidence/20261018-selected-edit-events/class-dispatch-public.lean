@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentActualClassDispatch
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentActualClassDispatch.compiled_leaf
+#print MicroCFTA.SourceCurrentActualClassDispatch.compiled_leaf
+#print axioms MicroCFTA.SourceCurrentActualClassDispatch.compiled_leaf
+
+#check @MicroCFTA.SourceCurrentActualClassDispatch.children_indexed
+#print MicroCFTA.SourceCurrentActualClassDispatch.children_indexed
+#print axioms MicroCFTA.SourceCurrentActualClassDispatch.children_indexed
+
+#check @MicroCFTA.SourceCurrentActualClassDispatch.class_dispatch
+#print MicroCFTA.SourceCurrentActualClassDispatch.class_dispatch
+#print axioms MicroCFTA.SourceCurrentActualClassDispatch.class_dispatch
