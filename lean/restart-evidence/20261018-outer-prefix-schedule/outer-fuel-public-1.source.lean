@@ -1,0 +1,70 @@
+import MicroCFTA.SourceCurrentOuterInitialFuel
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.parentNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.parentNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.parentNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.nodeNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.nodeNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.nodeNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.bodyNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.bodyNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.bodyNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.rowsNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.rowsNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.rowsNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.descendantsNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.descendantsNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.descendantsNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.childrenNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.childrenNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.childrenNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.walkNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.walkNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.walkNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.phaseNeed
+#print MicroCFTA.SourceCurrentOuterInitialFuel.phaseNeed
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.phaseNeed
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.rows_parent_le
+#print MicroCFTA.SourceCurrentOuterInitialFuel.rows_parent_le
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.rows_parent_le
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.rows_descendants_le
+#print MicroCFTA.SourceCurrentOuterInitialFuel.rows_descendants_le
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.rows_descendants_le
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.rows_tail_le
+#print MicroCFTA.SourceCurrentOuterInitialFuel.rows_tail_le
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.rows_tail_le
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.walk_node_le
+#print MicroCFTA.SourceCurrentOuterInitialFuel.walk_node_le
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.walk_node_le
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.walk_tail_le
+#print MicroCFTA.SourceCurrentOuterInitialFuel.walk_tail_le
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.walk_tail_le
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.rows_split
+#print MicroCFTA.SourceCurrentOuterInitialFuel.rows_split
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.rows_split
+
+#check @MicroCFTA.SourceCurrentOuterInitialFuel.walk_split
+#print MicroCFTA.SourceCurrentOuterInitialFuel.walk_split
+#print axioms MicroCFTA.SourceCurrentOuterInitialFuel.walk_split

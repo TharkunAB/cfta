@@ -1,0 +1,40 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:79:2: error: Type mismatch
+  Nat.le_max_left ?m.9 ?m.10
+has type
+  ?m.9 ≤ max ?m.9 ?m.10
+but is expected to have type
+  parentNeed budget seed ≤ rowsNeed (fuel + 1) budget seed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:84:24: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  Nat.le_max_left ?m.9 ?m.10
+of type `Nat.le ?m.9 (max ?m.9 ?m.10)`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:90:25: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  Nat.le_max_right ?m.9 ?m.10
+of type `Nat.le ?m.10 (max ?m.9 ?m.10)`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:95:2: error: Type mismatch
+  Nat.le_max_left ?m.9 ?m.10
+has type
+  ?m.9 ≤ max ?m.9 ?m.10
+but is expected to have type
+  nodeNeed fuel budget seed ≤ walkNeed (fuel + 1) budget seed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:100:2: error: Type mismatch
+  Nat.le_max_right ?m.9 ?m.10
+has type
+  ?m.10 ≤ max ?m.9 ?m.10
+but is expected to have type
+  walkNeed fuel budget (SourceCurrentOuterInitialSchedule.node fuel budget seed) ≤ walkNeed (fuel + 1) budget seed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:108:2: error: 'change' tactic failed, pattern
+  max ?m.18 (max ?m.21 ?m.22) ≤ ceiling ↔ ?m.25
+is not definitionally equal to target
+  rowsNeed (fuel + 1) budget seed ≤ ceiling ↔
+    parentNeed budget seed ≤ ceiling ∧
+      descendantsNeed fuel budget (SourceCurrentOuterInitialSchedule.parent budget seed) ≤ ceiling ∧
+        rowsNeed fuel budget
+            (SourceCurrentOuterInitialSchedule.descendants fuel budget
+              (SourceCurrentOuterInitialSchedule.parent budget seed)) ≤
+          ceiling
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-fuel-direct-1.source.lean:116:2: error: 'change' tactic failed, pattern
+  max ?m.16 ?m.17 ≤ ceiling ↔ ?m.20
+is not definitionally equal to target
+  walkNeed (fuel + 1) budget seed ≤ ceiling ↔
+    nodeNeed fuel budget seed ≤ ceiling ∧
+      walkNeed fuel budget (SourceCurrentOuterInitialSchedule.node fuel budget seed) ≤ ceiling

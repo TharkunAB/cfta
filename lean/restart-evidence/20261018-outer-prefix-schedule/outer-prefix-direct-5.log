@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-schedule/outer-prefix-direct-5.source.lean:260:87: error: don't know how to synthesize implicit argument `step`
+  @SeedTrace.snoc inst✝² inst✝¹ inst✝ g s r e p h m c n budget (bits + 2) first middle✝ final✝ earlier ?m.456 seed
+    middleSeed current trace change
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+bits : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+g s r e p h m c n budget : Nat
+first last middle✝ final✝ : Phase (bits + 2)
+earlier : Reached g s r e p h m c n budget first middle✝
+step : SourceCurrentOuterExecutionAncestry.Step g s r e p h m c n budget middle✝ final✝
+ih :
+  ∀ {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile),
+    Context formulas solver inventory (caller first) memos →
+      Frame formulas solver inventory (caller first).checked →
+        Fits seed.snd (caller first).checked →
+          Carrier (fun guard => guard ∈ seed.fst) (caller first).checked.native.machine.heap →
+            Inputs first →
+              Room bits (forecast budget first seed).snd →
+                ∃ next final current,
+                  Post formulas solver next (caller first) (caller middle✝) final ∧
+                    Frame formulas solver next (caller middle✝).checked ∧
+                      Fits current.snd (caller middle✝).checked ∧
+                        Carrier (fun guard => guard ∈ current.fst) (caller middle✝).checked.native.machine.heap ∧
+                          Inputs middle✝ ∧
+                            SeedTrace earlier seed current ∧
+                              Below (forecast budget middle✝ current) (forecast budget first seed)
+inventory : Inventory
+memos : Memos
+seed : List Guard × Profile
+initial : Context formulas solver inventory (caller first) memos
+frame : Frame formulas solver inventory (caller first).checked
+fits : Fits seed.snd (caller first).checked
+known : Carrier (fun guard => guard ∈ seed.fst) (caller first).checked.native.machine.heap
+inputs : Inputs first
+room : Room bits (forecast budget first seed).snd
+middleInventory : Inventory
+middleMemos : Memos
+middleSeed : List Guard × Profile
+past : Post formulas solver middleInventory (caller first) (caller middle✝) middleMemos
+middleFrame : Frame formulas solver middleInventory (caller middle✝).checked
+middleFits : Fits middleSeed.snd (caller middle✝).checked
+middleKnown : Carrier (fun guard => guard ∈ middleSeed.fst) (caller middle✝).checked.native.machine.heap
+middleInputs : Inputs middle✝
+trace : SeedTrace earlier seed middleSeed
+below : Below (forecast budget middle✝ middleSeed) (forecast budget first seed)
+next : Inventory
+final : Memos
+current : List Guard × Profile
+post : Post formulas solver next (caller middle✝) (caller final✝) final
+returned : Frame formulas solver next (caller final✝).checked
+numeric : Fits current.snd (caller final✝).checked
+carrier : Carrier (fun guard => guard ∈ current.fst) (caller final✝).checked.native.machine.heap
+currentInputs : Inputs final✝
+change : StepSeed budget middle✝ final✝ middleSeed current
+lastBelow : Below (forecast budget final✝ current) (forecast budget middle✝ middleSeed)
+⊢ SourceCurrentOuterExecutionAncestry.Step g s r e p h m c n budget middle✝ final✝
