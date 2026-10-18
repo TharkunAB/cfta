@@ -12,6 +12,8 @@ Before release, the package was called `microcfta`.
   of an automaton, and `checkLowering` checks a later grammar against an
   earlier one. `compose` makes one lowering of two. It reports an expansion
   that applies an earlier constructor to the wrong number of children.
+- `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
+  `mod` of SMT-LIB.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
