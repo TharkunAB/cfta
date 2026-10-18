@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 00:31 CEST. Proof checkpoint: `8985a90ac`.
+Open native union/reference calls and Mu source handoffs now retain exact
+historical child calls at their original reader. Opaque Mu sources retain
+actual publications and callbacks; initial operand ancestry remains open.
+Actual unfinished outer prefixes retain union normality. A checked closed
+used-Mu source with an active normalized two-path class changes from false
+to true at the primary gate after successful Required. The output endpoints
+remain closed. This refutes a proposed gate-transport proof rule. It does
+not establish a Haskell defect, language failure or nontermination.
+No Haskell repair request is added. No Haskell bytes change. Full Audit
+passes 3435 jobs and 73598 checks. Field-pool repair `b9219b9e` remains
+fixed in main `c0cc8a05`. Read `lean/notes-current-mu-source-handoff.md`.
+Keep this registry first. Record every repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve every entry.
+
 Current proof update: 2026-10-19 00:06 CEST. Proof checkpoint: `2364e745d`.
 Selected scans now derive exact final-heap false primary receipts. Actual
 nonempty projection, target and ordinary native calls retain source rows

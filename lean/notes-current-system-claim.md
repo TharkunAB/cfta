@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-native-renewal.md` for the latest checkpoint.
+Read `notes-current-mu-source-handoff.md` for the latest checkpoint.
 
 In simple technical English: completed modeled construction represents
 exactly the trees specified by its expression. A completed modeled root
@@ -32,9 +32,12 @@ Context, guard heap, Frame, root availability or desired result law.
 `InternedGuardedExecution.closed_language` identifies the input language
 with its independent least finite-tree syntax semantics.
 
-Both actual construction and root-call completion remain premises.
-The theorem does not prove a reset of Haskell global caches, a sufficient
-fixed host integer width, or that a successful call exists for every input.
+This endpoint takes actual construction and root-call completion as
+premises. The separate `InternedFreshOrdinaryClosedCompletion.closed_complete`
+theorem supplies a completed fresh build from empty captures and caches for
+each source expression in the model. General outer reduction completion
+remains open. These results do not prove concrete Haskell cache startup,
+host integer adequacy or whole-library termination.
 
 ## Broad reduction guarantee
 
@@ -120,6 +123,30 @@ sources and compose self, union, reference and Mu receipts. An unrestricted
 empty forest path has a checked constrained-Mu self-continuation example.
 Existing live precheck paths have a separate nonempty-path proof. Neither
 example proves nontermination or a Haskell defect.
+
+Open native union and reference writers now retain their exact child calls
+and complete row origins at the same reader. Each chosen union member has
+smaller mass than its union operand. Reference resolution makes no mass
+claim. A selected Mu writer retains its exact entered body query. A literal
+source row derives an observational Origin at the same reader. A row below
+the first opaque Mu instead derives that Mu's actual publication and raw
+callback. Publication-to-query-operand ancestry remains open. The nested
+used-Mu cold/warm check retains this disjunction. It does not force the
+opaque arm.
+
+Actual unfinished outer prefixes now preserve initial union normality.
+Every bounded stopping outcome at a reached phase preserves it as well.
+This invariant needs no future enclosing return or physical Good premise.
+It supplies no causal writer or language law by itself.
+
+A normalized active class with paths [[0,0],[0,1]] can change from a false
+to a true primary gate after actual Required. The source is the closed used
+Mu `mu x. outer[union[x,leaf],leaf]`, with plain row guards. The prepared
+endpoint union makes the gate true. Both selected endpoints remain closed.
+The next source producer must carry original row fields and ordered child
+origins through actual Required and subsequent projection. It cannot assume
+a false primary gate for the prepared forest. The existing full structural
+Required origin results remain valid. No Haskell defect is established.
 
 An accepted opaque-guard conjunction can lose an accessor equality pair
 while retaining its Same atom. Whole-operand effective coverage therefore
