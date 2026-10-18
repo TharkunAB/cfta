@@ -1,6 +1,22 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `43859cfd`. Source main is `c0cc8a05`,
+## Current causal Empty agreement and node simulation
+
+Checked on 2026-10-18 at proof checkpoint `20cd2d78`.
+Causal filtered Empty fusion now covers all source syntax. Actual histories
+derive the payload contract. The recursive Generated relation preserves
+physical Empty flags. Selected Mu readback constructs both calls with
+arbitrary common replacements. Historical node calls derive both local
+simulation clauses with full guards and ordered mutual child generators.
+No child result law or supplied semantic payload heap is assumed.
+Full Audit passes 3395 jobs and 73023 dependency checks. Six modules,
+13 public full proofs and exact construction fixtures are checked.
+Filtered union and used-Mu clauses at one fixed reader remain open.
+General source Directed, completion, convergence and Haskell correspondence
+remain open. No Haskell bytes change. The broad reduction law is unchanged.
+Read `notes-current-causal-empty-fusion.md` for exact scope and evidence.
+
+Checked at proof checkpoint `20cd2d78`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 

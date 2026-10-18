@@ -1,0 +1,15 @@
+# Stored profile Empty projection
+
+Frozen on 2026-10-18 at 20:55 CEST. Selected production SHA-256: `93bab1462ee6a38ec6809e027190a8f64550b73a58631383a8546f2f41c626c4`.
+
+The module exports one definition and four theorems. `canonical assignment name` returns `some []` when that assigned profile is Empty and `none` otherwise. `denote_empty value first second same` proves equal Empty bits for the full stored denotation when every assigned name has equal Empty bits. `deleted_empty cuts value first second same` proves the corresponding result for arbitrary fixed original-root cuts. `denote_canonical` and `deleted_canonical` specialize these laws to the canonical assignment.
+
+`denote_empty` unfolds only `StoredProfileFunction.denote`. Both sides evaluate the same `encode (leaves value) [] value`. The leaf-profile lists have equal Empty-bit lists: a reference uses the pointwise premise, and every other leaf uses the identical physical profile. The existing `SourceEmptyAbstraction.same_empty` therefore gives the result. No new Mu induction, semantic reader premise, or assumed execution result is needed. The original stored value and its full nested-binder encoding remain unchanged.
+
+`deleted_empty` follows the original value and root-union lists by mutual size induction. A cut original reference is Empty on both sides. An uncut reference uses the pointwise premise. A node or Mu uses `denote_empty` as one atomic root case. A union combines the original ordered alternatives, using the exact equation that the combined profile is Empty if and only if both profiles are Empty. Cuts do not enter profiles introduced by assignments or exposed by Mu reconstruction.
+
+These pure results hold for every stored value, including malformed metadata, because both sides use the same plan and the proof claims only a pure Empty decision. They do not establish metadata validity, input availability, actual execution, full profile equivalence, arbitrary-reader observation transport, or guarded-language equivalence. The root-owned causal fusion integration supplies the actual historical execution facts separately.
+
+The design follows the pinned `causal-next-consumer-review.md` in the earlier causal-source-comparison evidence directory. That report remains byte-identical. No earlier source or evidence was edited. No constructed pair is counted in this component.
+
+Selected strict attempt 2 returned 0 with a literal zero-byte log. Canonical build 1 returned 0 and completed 577 jobs without warnings. Public probe 1 returned 0, and the hardened checker verified all five full statement/proof/axiom pairs with all eight required options, no omissions, and only the standard permitted axioms. The public log has 39850 bytes. Every selected Lean execution records Lean 4.34.1, the heavy-management five-minute cap, effective maximum and high limits of 4 GiB, and zero swap. Attempt 1 is retained with its explicit-unfold elaboration errors; no premise or theorem statement changed to obtain the final proof.

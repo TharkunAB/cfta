@@ -1,0 +1,70 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:78:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Nonempty.casesOn` can only eliminate into `Prop`
+
+x✝ : Nonempty (History before (build expression [Value.reference q] before).state)
+⊢ History empty rawHeap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:77:0: error: type of theorem `_private.«restart-evidence».«20261018-causal-empty-fusion».«causal-empty-kernels-direct-1.source».0.MicroCFTA.CausalEmptyKernels.raw_history` is not a proposition
+  History empty rawHeap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:105:40: error: Application type mismatch: The argument
+  History empty reader
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Prop
+of sort `Type` in the application
+  And (History empty reader)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:111:70: error: unsolved goals
+first second : Value Nat Bool
+firstAvailable : Available rawHeap first
+secondAvailable : Available rawHeap second
+same :
+  (first.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    (second.referenceOf == InternedBinderProtocol.NodeRef.empty)
+left : Value Nat Bool
+middle : InternedConstructorTemplates.State Nat Bool
+firstDone : execute raw (replacement first) rawHeap = Outcome.done left middle
+firstKept : Keeps rawHeap middle
+leftAvailable : Available middle left
+firstHistory : History rawHeap middle
+right : Value Nat Bool
+reader : InternedConstructorTemplates.State Nat Bool
+secondDone : execute raw (replacement second) middle = Outcome.done right reader
+secondKept : Keeps middle reader
+rightAvailable : Available reader right
+secondHistory : History middle reader
+whole : Keeps rawHeap reader
+history : History empty reader
+firstWarm : execute raw (replacement first) reader = Outcome.done left reader
+secondWarm : execute raw (replacement second) reader = Outcome.done right reader
+filtered : run (withoutSelfReference own raw) reader = (raw, reader)
+⊢ ∃ reader left right,
+    Ready reader ∧
+      sorry ∧
+        Grows rawHeap reader ∧
+          Available reader raw ∧
+            Replacements reader (replacement first) ∧
+              Replacements reader (replacement second) ∧
+                run (withoutSelfReference own raw) reader = (raw, reader) ∧
+                  execute raw (replacement first) reader = Outcome.done left reader ∧
+                    execute raw (replacement second) reader = Outcome.done right reader ∧
+                      (left.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                        (right.referenceOf == InternedBinderProtocol.NodeRef.empty)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:102:16: error: (kernel) unknown constant '_private.«restart-evidence».«20261018-causal-empty-fusion».«causal-empty-kernels-direct-1.source».0.MicroCFTA.CausalEmptyKernels.raw_history'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:129:85: error: unexpected token '['; expected command
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:143:38: error: Application type mismatch: The argument
+  History empty reader
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Prop
+of sort `Type` in the application
+  And (History empty reader)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:153:81: error: Application type mismatch: The argument
+  History empty rawHeap
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Prop
+of sort `Type` in the application
+  And (History empty rawHeap)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/causal-empty-kernels-direct-1.source.lean:158:16: warning: declaration uses `sorry`

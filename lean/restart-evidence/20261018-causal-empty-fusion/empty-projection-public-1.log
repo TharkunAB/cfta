@@ -1,0 +1,491 @@
+MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical : (MicroCFTA.InternedBinderProtocol.Reference →
+    MicroCFTA.InternedRootProfile.Profile) →
+  MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile
+def MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical : (MicroCFTA.InternedBinderProtocol.Reference →
+    MicroCFTA.InternedRootProfile.Profile) →
+  MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile :=
+fun assignment name =>
+  @ite.{1} MicroCFTA.InternedRootProfile.Profile
+    (@Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (assignment name))
+      Bool.true)
+    (instDecidableEqBool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (assignment name))
+      Bool.true)
+    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+    (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+'MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (first second : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+      @Eq.{1} Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (first name))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (second name))) →
+    @Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value second))
+theorem MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (first second : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+      @Eq.{1} Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (first name))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (second name))) →
+    @Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value second)) :=
+fun {Symbol Guard} value first second same =>
+  @id.{0}
+    (@Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value second)))
+    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.same_empty Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+      MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)
+        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) value)
+      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+        (fun leaf =>
+          @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+            (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) leaf
+            (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+        (fun leaf =>
+          @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+            (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) leaf
+            (fun name => second name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+      (@Eq.mpr.{0}
+        (@Eq.{1} (List.{0} Bool)
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+            Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              (fun leaf =>
+                @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                  (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  leaf (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+            Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              (fun leaf =>
+                @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                  (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  leaf (fun name => second name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))))
+        (@Eq.{1} (List.{0} Bool)
+          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+            (fun x =>
+              @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                  (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) x
+                  (fun name => first name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+            (fun x =>
+              @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                  (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) x
+                  (fun name => second name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} (List.{0} Bool)
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun leaf =>
+                    @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      leaf (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun leaf =>
+                    @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      leaf (fun name => second name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))))
+            (@Eq.{1} (List.{0} Bool)
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                (fun x =>
+                  @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      x (fun name => first name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                (fun x =>
+                  @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      x (fun name => second name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))))
+          (@congr.{1, 1} (List.{0} Bool) Prop
+            (@Eq.{1} (List.{0} Bool)
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun leaf =>
+                    @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      leaf (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))))
+            (@Eq.{1} (List.{0} Bool)
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                (fun x =>
+                  @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      x (fun name => first name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+            (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                (fun leaf =>
+                  @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                    (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    leaf (fun name => second name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+              (fun x =>
+                @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                    (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    x (fun name => second name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+            (@congrArg.{1, 1} (List.{0} Bool) (List.{0} Bool → Prop)
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun leaf =>
+                    @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      leaf (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                (fun x =>
+                  @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      x (fun name => first name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+              (@Eq.{1} (List.{0} Bool))
+              (@List.map_map.{0, 0, 0}
+                (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                (fun leaf =>
+                  @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                    (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    leaf (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)))
+            (@List.map_map.{0, 0, 0}
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+              (fun leaf =>
+                @MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                  (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  leaf (fun name => second name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))))
+        (@List.map_congr_left.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) Bool
+          (fun x =>
+            @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) x
+                (fun name => first name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+          (fun x =>
+            @MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                (fun leaf => MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) x
+                (fun name => second name) fun x_1 => @MicroCFTA.InternedRootProfile.profile Symbol Guard x))
+          fun leaf a =>
+          @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+            (fun t =>
+              @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf t →
+                @Eq.{1} Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      leaf (fun name => first name) fun x => @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf))
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                      (fun leaf =>
+                        MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      leaf (fun name => second name) fun x =>
+                      @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)))
+            leaf
+            (fun h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                (fun leaf =>
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) leaf →
+                    @Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => first name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf))
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => second name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)))
+                (fun a =>
+                  @Eq.refl.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                        (fun leaf =>
+                          MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) (fun name => first name)
+                        fun x =>
+                        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))))
+                leaf
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                a)
+            (fun name h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                (fun leaf =>
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) leaf →
+                    @Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => first name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf))
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => second name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)))
+                (fun a => same name) leaf
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                a)
+            (fun entry edges depth free h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                (fun leaf =>
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) leaf →
+                    @Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => first name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf))
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => second name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)))
+                (fun a =>
+                  @Eq.refl.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                        (fun leaf =>
+                          MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                        (fun name => first name) fun x =>
+                        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))))
+                leaf
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h)
+                a)
+            (fun entry members depth free h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+                (fun leaf =>
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) leaf →
+                    @Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => first name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf))
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => second name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)))
+                (fun a =>
+                  @Eq.refl.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                        (fun leaf =>
+                          MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+                        (fun name => first name) fun x =>
+                        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))))
+                leaf
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h)
+                a)
+            (fun entry body depthShape ordinaryShape h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                (fun leaf =>
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value) leaf →
+                    @Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => first name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf))
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                          (fun leaf =>
+                            MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          leaf (fun name => second name) fun x =>
+                          @MicroCFTA.InternedRootProfile.profile Symbol Guard leaf)))
+                (fun a =>
+                  @Eq.refl.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote.match_1.{1} Symbol Guard
+                        (fun leaf =>
+                          MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape)
+                        (fun name => first name) fun x =>
+                        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))))
+                leaf
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape) h)
+                a)
+            (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf))))
+'MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty : ∀ {Symbol Guard : Type}
+  (cuts : MicroCFTA.InternedBinderProtocol.Reference → Bool)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (first second : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+      @Eq.{1} Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (first name))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (second name))) →
+    @Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value second))
+theorem MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty : ∀ {Symbol Guard : Type}
+  (cuts : MicroCFTA.InternedBinderProtocol.Reference → Bool)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (first second : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+      @Eq.{1} Bool (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (first name))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference (second name))) →
+    @Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value second)) :=
+fun {Symbol Guard} cuts value first second same =>
+  @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty._mutual Symbol Guard cuts first second same
+    (@PSum.inl.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) value)
+'MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_canonical : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  @Eq.{1} Bool
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value assignment))
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value
+        (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical assignment)))
+theorem MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_canonical : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  @Eq.{1} Bool
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value assignment))
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value
+        (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical assignment))) :=
+fun {Symbol Guard} value assignment =>
+  @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty Symbol Guard value assignment
+    (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical assignment)
+    (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical_empty✝ assignment)
+'MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_canonical' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_canonical : ∀ {Symbol Guard : Type}
+  (cuts : MicroCFTA.InternedBinderProtocol.Reference → Bool)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  @Eq.{1} Bool
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value assignment))
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value
+        (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical assignment)))
+theorem MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_canonical : ∀ {Symbol Guard : Type}
+  (cuts : MicroCFTA.InternedBinderProtocol.Reference → Bool)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile),
+  @Eq.{1} Bool
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value assignment))
+    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard cuts value
+        (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical assignment))) :=
+fun {Symbol Guard} cuts value assignment =>
+  @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty Symbol Guard cuts value assignment
+    (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical assignment)
+    (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical_empty✝ assignment)
+'MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_canonical' depends on axioms: [propext, Quot.sound.{u}]

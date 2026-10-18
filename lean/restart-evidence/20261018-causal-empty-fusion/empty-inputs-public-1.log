@@ -1,0 +1,186 @@
+@MicroCFTA.SourceCurrentEmptyProjectionInputs.compatible : ∀ {Symbol Guard Atom : Type}
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard reader →
+    ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+      (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+      (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+      (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard),
+      @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+          (fun a b =>
+            @Eq.{1} Bool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard a)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard b)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+          first second
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader first →
+          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader second →
+            @MicroCFTA.SourceCurrentScopedProfileInputs.Compatible Atom Symbol Guard expression inputs firstNames
+              secondNames
+              (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical fun name =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+              (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical fun name =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second name)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+theorem MicroCFTA.SourceCurrentEmptyProjectionInputs.compatible : ∀ {Symbol Guard Atom : Type}
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard reader →
+    ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+      (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+      (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+      (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard),
+      @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+          (fun a b =>
+            @Eq.{1} Bool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard a)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard b)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+          first second
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader first →
+          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader second →
+            @MicroCFTA.SourceCurrentScopedProfileInputs.Compatible Atom Symbol Guard expression inputs firstNames
+              secondNames
+              (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical fun name =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+              (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical fun name =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second name)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))) :=
+fun {Symbol Guard Atom} reader ready expression inputs firstNames secondNames first second paired firstReplacements
+    secondReplacements =>
+  @And.intro
+    (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+      @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+          (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+          (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+          (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs)
+          (@Sum.inl.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom name) →
+        @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+          (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+            (fun name =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+            name)
+          (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+            (fun name =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second name)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+            name))
+    (∀ (atom : Atom),
+      @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+          (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+          (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+          (@MicroCFTA.SourceCurrentNativeNormalizationInputs.support Atom Symbol Guard expression inputs)
+          (@Sum.inr.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom atom) →
+        @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+          (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+            (fun name =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+            (firstNames atom))
+          (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+            (fun name =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second name)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+            (secondNames atom)))
+    (fun name live =>
+      @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (fun value =>
+          And
+            (@Membership.mem.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+              (List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+              (@List.instMembership.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+              inputs (@Sum.inl.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom value))
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) name))
+        (fun x =>
+          @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+            (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+              (fun name =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+              name)
+            (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+              (fun name =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second name)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+              name))
+        (@MicroCFTA.SourceCurrentNativeNormalizationInputs.fixed_origin Atom Symbol Guard expression inputs name live)
+        fun value h =>
+        @And.casesOn.{0}
+          (@Membership.mem.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+            (@List.instMembership.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+            inputs (@Sum.inl.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom value))
+          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) name)
+          (fun x =>
+            @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+                (fun name =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+                name)
+              (MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+                (fun name =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second name)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+                name))
+          h fun present included =>
+          @MicroCFTA.SourceCurrentEmptyProjectionInputs.fixed_slot✝ Symbol Guard reader ready first second
+            firstReplacements secondReplacements value
+            (@MicroCFTA.SourceCurrentEmptyProjectionInputs.member_slot✝ Symbol Guard Atom inputs firstNames secondNames
+              first second paired
+              (@Sum.inl.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom value) present)
+            name included)
+    fun atom live =>
+    @MicroCFTA.SourceCurrentEmptyProjectionInputs.reference_slot✝ Symbol Guard reader ready first second
+      firstReplacements secondReplacements (firstNames atom) (secondNames atom)
+      (@MicroCFTA.SourceCurrentEmptyProjectionInputs.member_slot✝ Symbol Guard Atom inputs firstNames secondNames first
+        second paired (@Sum.inr.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom atom)
+        (@MicroCFTA.SourceCurrentEmptyProjectionInputs.varying_origin✝ Symbol Guard Atom expression inputs atom live))
+'MicroCFTA.SourceCurrentEmptyProjectionInputs.compatible' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

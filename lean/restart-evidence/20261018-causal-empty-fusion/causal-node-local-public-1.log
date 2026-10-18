@@ -1,0 +1,235 @@
+@MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.node : ∀ {Atom Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+  (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (reader before after later final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard reader →
+    ∀
+      (history :
+        @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) reader),
+      @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs) →
+        @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard later
+            (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+          @MicroCFTA.SourceCurrentUsedBinderAliasTransport.Aliases Atom Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions) inputs firstNames
+              secondNames →
+            @MicroCFTA.SourceCurrentRetainedMuDirectedCase.Inputs Symbol Guard inst reader first second
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+              @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader first →
+                @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader second →
+                  ∀ (rawFirst rawSecond left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                          (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)
+                          (@List.map.{0, 0}
+                            (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+                          before)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst after) →
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)
+                            (@List.map.{0, 0}
+                              (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames)
+                              inputs)
+                            later)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawSecond final) →
+                        @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after reader →
+                          @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final reader →
+                            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader rawFirst →
+                              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader rawSecond →
+                                @Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                      rawFirst first reader)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left reader) →
+                                  @Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        rawSecond second reader)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right reader) →
+                                    And
+                                      (@MicroCFTA.SourceCurrentSourceDirectedCases.Local Symbol Guard inst reader
+                                        (@MicroCFTA.SourceCurrentRetainedMuDirectedCase.Generated Symbol Guard inst
+                                          reader)
+                                        left right)
+                                      (@MicroCFTA.SourceCurrentSourceDirectedCases.Local Symbol Guard inst reader
+                                        (@MicroCFTA.SourceCurrentRetainedMuDirectedCase.Generated Symbol Guard inst
+                                          reader)
+                                        right left)
+theorem MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.node : ∀ {Atom Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+  (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (reader before after later final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard reader →
+    ∀
+      (history :
+        @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) reader),
+      @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs) →
+        @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard later
+            (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+          @MicroCFTA.SourceCurrentUsedBinderAliasTransport.Aliases Atom Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions) inputs firstNames
+              secondNames →
+            @MicroCFTA.SourceCurrentRetainedMuDirectedCase.Inputs Symbol Guard inst reader first second
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+              @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader first →
+                @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader second →
+                  ∀ (rawFirst rawSecond left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                          (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)
+                          (@List.map.{0, 0}
+                            (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+                          before)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawFirst after) →
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)
+                            (@List.map.{0, 0}
+                              (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames)
+                              inputs)
+                            later)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rawSecond final) →
+                        @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard after reader →
+                          @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard final reader →
+                            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader rawFirst →
+                              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader rawSecond →
+                                @Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                      rawFirst first reader)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left reader) →
+                                  @Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        rawSecond second reader)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right reader) →
+                                    And
+                                      (@MicroCFTA.SourceCurrentSourceDirectedCases.Local Symbol Guard inst reader
+                                        (@MicroCFTA.SourceCurrentRetainedMuDirectedCase.Generated Symbol Guard inst
+                                          reader)
+                                        left right)
+                                      (@MicroCFTA.SourceCurrentSourceDirectedCases.Local Symbol Guard inst reader
+                                        (@MicroCFTA.SourceCurrentRetainedMuDirectedCase.Generated Symbol Guard inst
+                                          reader)
+                                        right left) :=
+fun {Atom Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    expressions inputs firstNames secondNames first second reader before after later final ready history firstContext
+    secondContext aliases paired firstReplacements secondReplacements rawFirst rawSecond left right firstBuild
+    secondBuild firstGrowth secondGrowth firstAvailable secondAvailable firstDone secondDone =>
+  have firstPlain :=
+    @MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.raw_ordinary✝ Symbol Guard inst expressions
+      (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+      before after firstContext rawFirst firstBuild;
+  have secondPlain :=
+    @MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.raw_ordinary✝ Symbol Guard inst expressions
+      (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs)
+      later final secondContext rawSecond secondBuild;
+  have leftPlain :=
+    @MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.stored_ordinary✝ Symbol Guard inst rawFirst left first reader ready
+      firstPlain firstAvailable firstReplacements firstDone;
+  have rightPlain :=
+    @MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.stored_ordinary✝ Symbol Guard inst rawSecond right second reader
+      ready secondPlain secondAvailable secondReplacements secondDone;
+  @And.intro
+    (@MicroCFTA.SourceCurrentSourceDirectedCases.Local Symbol Guard inst reader
+      (@MicroCFTA.SourceCurrentRetainedMuDirectedCase.Generated Symbol Guard inst reader) left right)
+    (@MicroCFTA.SourceCurrentSourceDirectedCases.Local Symbol Guard inst reader
+      (@MicroCFTA.SourceCurrentRetainedMuDirectedCase.Generated Symbol Guard inst reader) right left)
+    (@MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.terminal_local✝ Symbol Guard inst reader left right leftPlain
+      (@MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.row✝ Atom Symbol Guard inst expressions inputs firstNames
+        secondNames first second reader before after later final ready history firstContext secondContext aliases paired
+        firstReplacements secondReplacements rawFirst rawSecond left right firstBuild secondBuild firstGrowth
+        secondGrowth firstAvailable secondAvailable firstDone secondDone))
+    (@MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.terminal_local✝ Symbol Guard inst reader right left rightPlain
+      (@MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.row✝ Atom Symbol Guard inst expressions inputs secondNames
+        firstNames second first reader later final before after ready history secondContext firstContext
+        (fun a ha b hb =>
+          @Iff.symm
+            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                firstNames a)
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                firstNames b))
+            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                secondNames a)
+              (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                MicroCFTA.InternedBinderProtocol.Reference (@id.{1} MicroCFTA.InternedBinderProtocol.Reference)
+                secondNames b))
+            (aliases a ha b hb))
+        (@MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.reverse_inputs✝ Symbol Guard inst reader first second
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+          (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs)
+          paired)
+        secondReplacements firstReplacements rawSecond rawFirst right left secondBuild firstBuild secondGrowth
+        firstGrowth secondAvailable firstAvailable secondDone firstDone))
+'MicroCFTA.SourceCurrentCausalGeneratedNodeLocal.node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

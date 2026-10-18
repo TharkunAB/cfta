@@ -13,6 +13,44 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current causal Empty agreement and guarded node clauses
+
+Updated: 2026-10-18 21:06 CEST. Proof checkpoint is `20cd2d78`.
+Earlier proof commit is `aee1422a`. Starting checkpoint is `e68f3089`.
+Source main remains `c0cc8a05`.
+Read `lean/notes-current-causal-empty-fusion.md` and
+`lean/notes-current-system-claim.md`.
+
+Causal filtered Empty fusion is proved for all source syntax. Actual
+reader history derives the payload contract. Canonical Empty assignments
+convert paired physical Empty tests to live profile compatibility.
+Original singleton cuts and the standalone-self exception remain exact.
+Empty replacements, fixed reference captures and unavailable fallback
+references are covered. No semantic heap or child Fusion law is supplied.
+
+Every pair in the existing recursive Generated relation now has equal
+physical Empty flags at a causal reader. Actual selected Mu readback
+constructs both sequential calls for one common arbitrary outer map and
+local replacement. It derives full root-profile and Empty agreement.
+Historical node calls now derive both Local Generated directions with
+full symbols, guards and ordered mutual child generators. No child
+result law or reader-wide lexical availability is assumed.
+
+Six modules pass empty-log strict checks and clean canonical builds.
+All 13 public heads pass full proof and standard-axiom checks.
+Full Audit passes 3395 jobs and 73023 dependency checks. Only its existing
+unused-input warning remains. Actual construction fixtures and independent
+reviews remain in `lean/restart-evidence/20261018-causal-empty-fusion/`.
+
+Next derive the filtered union Local clause from actual member schedules,
+then the used-Mu epsilon clause at the same fixed reader. A larger
+reconstruction reader is not the original reader. Complete source-generated
+Directed, general completion, repeated convergence and Haskell correspondence
+remain open. The broad reduction guarantee and exact size-query boundary
+remain unchanged. No Haskell bytes change. FINDINGS retains every repair.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
 ## Current full causal source comparison and payload initialization
 
 Updated: 2026-10-18 20:44 CEST. Proof checkpoint is `43859cfd`.

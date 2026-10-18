@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentStoredProfileEmptyProjection
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+#print MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+#print axioms MicroCFTA.SourceCurrentStoredProfileEmptyProjection.canonical
+
+#check @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty
+#print MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty
+#print axioms MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_empty
+
+#check @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty
+#print MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty
+#print axioms MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_empty
+
+#check @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_canonical
+#print MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_canonical
+#print axioms MicroCFTA.SourceCurrentStoredProfileEmptyProjection.denote_canonical
+
+#check @MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_canonical
+#print MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_canonical
+#print axioms MicroCFTA.SourceCurrentStoredProfileEmptyProjection.deleted_canonical
+

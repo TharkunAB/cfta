@@ -1,0 +1,157 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/empty-inputs-direct-3.source.lean:48:52: warning: This simp argument is unused:
+  beq_iff_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [profile, isEmpty, Value.referenceOf]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/empty-inputs-direct-3.source.lean:85:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if isEmpty (profile (_a.getD (Value.reference name))) = true then some [] else none) =
+      if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+Error: Application type mismatch: The argument
+  instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true
+has type
+  Decidable (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name) = true)
+but is expected to have type
+  Decidable (isEmpty (profile (_a.getD (Value.reference name))) = true)
+in the application
+  @ite Profile (isEmpty (profile (_a.getD (Value.reference name))) = true)
+    (instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case empty
+Symbol Guard : Type
+reader : State Symbol Guard
+ready : Ready reader
+first second : Environment Symbol Guard
+firstReplacements : Replacements reader first
+secondReplacements : Replacements reader second
+paired :
+  Slot
+    (fun a b =>
+      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) = (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+    first second Value.empty Value.empty
+name : Reference
+member : name ∈ Value.empty.free
+same : first name = second name
+⊢ (if isEmpty (profile ((first name).getD (Value.reference name))) = true then some [] else none) =
+    if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/empty-inputs-direct-3.source.lean:85:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if isEmpty (profile (_a.getD (Value.reference name))) = true then some [] else none) =
+      if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+Error: Application type mismatch: The argument
+  instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true
+has type
+  Decidable (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name) = true)
+but is expected to have type
+  Decidable (isEmpty (profile (_a.getD (Value.reference name))) = true)
+in the application
+  @ite Profile (isEmpty (profile (_a.getD (Value.reference name))) = true)
+    (instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case node
+Symbol Guard : Type
+reader : State Symbol Guard
+ready : Ready reader
+first second : Environment Symbol Guard
+firstReplacements : Replacements reader first
+secondReplacements : Replacements reader second
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+paired :
+  Slot
+    (fun a b =>
+      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) = (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+    first second (Value.node entry✝ edges✝ depth✝ free✝) (Value.node entry✝ edges✝ depth✝ free✝)
+name : Reference
+member : name ∈ (Value.node entry✝ edges✝ depth✝ free✝).free
+same : first name = second name
+⊢ (if isEmpty (profile ((first name).getD (Value.reference name))) = true then some [] else none) =
+    if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/empty-inputs-direct-3.source.lean:85:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if isEmpty (profile (_a.getD (Value.reference name))) = true then some [] else none) =
+      if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+Error: Application type mismatch: The argument
+  instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true
+has type
+  Decidable (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name) = true)
+but is expected to have type
+  Decidable (isEmpty (profile (_a.getD (Value.reference name))) = true)
+in the application
+  @ite Profile (isEmpty (profile (_a.getD (Value.reference name))) = true)
+    (instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case union
+Symbol Guard : Type
+reader : State Symbol Guard
+ready : Ready reader
+first second : Environment Symbol Guard
+firstReplacements : Replacements reader first
+secondReplacements : Replacements reader second
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+paired :
+  Slot
+    (fun a b =>
+      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) = (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+    first second (Value.union entry✝ members✝ depth✝ free✝) (Value.union entry✝ members✝ depth✝ free✝)
+name : Reference
+member : name ∈ (Value.union entry✝ members✝ depth✝ free✝).free
+same : first name = second name
+⊢ (if isEmpty (profile ((first name).getD (Value.reference name))) = true then some [] else none) =
+    if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-empty-fusion/empty-inputs-direct-3.source.lean:85:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if isEmpty (profile (_a.getD (Value.reference name))) = true then some [] else none) =
+      if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
+Error: Application type mismatch: The argument
+  instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true
+has type
+  Decidable (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name) = true)
+but is expected to have type
+  Decidable (isEmpty (profile (_a.getD (Value.reference name))) = true)
+in the application
+  @ite Profile (isEmpty (profile (_a.getD (Value.reference name))) = true)
+    (instDecidableEqBool (isEmpty ((fun name => profile ((first name).getD (Value.reference name))) name)) true)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case mu
+Symbol Guard : Type
+reader : State Symbol Guard
+ready : Ready reader
+first second : Environment Symbol Guard
+firstReplacements : Replacements reader first
+secondReplacements : Replacements reader second
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+paired :
+  Slot
+    (fun a b =>
+      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) = (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+    first second (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+name : Reference
+member : name ∈ (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).free
+same : first name = second name
+⊢ (if isEmpty (profile ((first name).getD (Value.reference name))) = true then some [] else none) =
+    if isEmpty (profile ((second name).getD (Value.reference name))) = true then some [] else none
