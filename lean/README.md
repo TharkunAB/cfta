@@ -1,5 +1,49 @@
 # cfta formal model
 
+## Current target-slot writers and initial native admission
+
+Updated: 2026-10-18 05:27 CEST. Proof checkpoint is `99a1ddb3`.
+Starting local checkpoint is `136989d9`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-selected-read-producers.md` for exact boundaries.
+
+Actual selected edits now derive target-table histories from their literal
+successful equations. An initially absent target slot recovers its earlier
+target call, complete captured class and forest, checked and merge states,
+and both surrounding target histories. Each class starts fresh local slots.
+Native and merge tables can already be warm. Target history alone asserts
+no physical reachability, heap growth or semantic target receipt.
+
+Initial exact native key validity, closed resident operands and original
+numeric headroom now derive a checked Trace from actual raw Steps. A literal
+completed request extracts its own steps. Initial causal native history
+then derives the exact returned node cell and earlier full request writer.
+No future Trace, WordRanges, InputsThrough or writer law is supplied.
+Weak physical cells do not supply the stronger initial key invariant.
+
+Source-built checks cover repeated target paths across actual ordered rows,
+a recursive source admission, and a cold distinct-operand recursive request
+with actual native node and edge work. Existing numeric semantic target
+producers can align their bounded returns with literal completed workers.
+Their Frame, Fits, domains, global validity and capacity must still be
+derived at the recovered historical writer entry.
+
+Full Audit passes 3230 jobs and 70896 checks. Three production and three
+constructed strict logs are empty. All 18 public and 3 constructed
+full pairs pass in 6 groups with all eight settings and standard axioms.
+Audit peak is 380 MiB under 4 GiB maximum/high and zero swap. Five component
+manifests pin 285 entries. Evidence is in
+`lean/restart-evidence/20261018-selected-read-producers/`.
+
+Next compose historical writer entry facts with semantic target receipts.
+Carry native admission and global validity through actual earlier class
+work. General recursive progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch is added. Field-pool
+repair b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
 ## Current selected class dispatch and literal native leaf events
 
 Updated: 2026-10-18 05:12 CEST. Proof checkpoint is `aed82624`.

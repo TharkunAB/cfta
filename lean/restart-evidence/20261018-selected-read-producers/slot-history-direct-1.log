@@ -1,0 +1,126 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:31:4: warning: missing doc string for public constructor History.refl
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:32:4: warning: missing doc string for public constructor History.retained
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:35:4: warning: missing doc string for public constructor History.stored
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:63:2: error: Too many variable names provided at alternative `stored`: 10 provided, but 9 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:65:18: error(lean.unknownIdentifier): Unknown identifier `ih`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:82:2: error: Too many variable names provided at alternative `retained`: 6 provided, but 5 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:83:64: error(lean.unknownIdentifier): Unknown identifier `ih`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:83:13: error: Tactic `rcases` failed: `x✝ : ?m.91` is not an inductive datatype
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:85:2: error: Too many variable names provided at alternative `stored`: 10 provided, but 9 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:86:30: error: Type mismatch
+  written
+has type
+  Node
+but is expected to have type
+  Path
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:87:8: error: Tactic `subst` failed: did not find equation for eliminating 'written'
+
+case pos
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h m s n : Nat
+record : Record
+originals : List Node
+before✝ after : Shared width
+path : Path
+value : Node
+missing : before✝.targets path = none
+before : Shared width
+middle : Path
+written : Node
+target : Checked width
+checked : Memo
+saved : History p h m s n record originals before✝ before
+earlier : before.targets middle = none
+absent :
+  SourceCurrentAllocatedTargetWorker.target p h m s n originals
+      (SourceEqualityClassTarget.operandPaths record.paths middle) before.checked before.memo =
+    SourceCurrentAllocatedTargetWorker.Outcome.done written target checked
+actual :
+  before.targets path = some value →
+    ∃ writer checked saved,
+      History p h m s n record originals before✝ writer ∧
+        writer.targets path = none ∧
+          SourceCurrentAllocatedTargetWorker.target p h m s n originals
+                (SourceEqualityClassTarget.operandPaths record.paths path) writer.checked writer.memo =
+              SourceCurrentAllocatedTargetWorker.Outcome.done value checked saved ∧
+            History p h m s n record originals (store writer path value checked saved) before
+present : (store before middle written target checked).targets path = some value
+equal : sorry
+⊢ ∃ writer checked_1 saved,
+    History p h m s n record originals before✝ writer ∧
+      writer.targets path = none ∧
+        SourceCurrentAllocatedTargetWorker.target p h m s n originals
+              (SourceEqualityClassTarget.operandPaths record.paths path) writer.checked writer.memo =
+            SourceCurrentAllocatedTargetWorker.Outcome.done value checked_1 saved ∧
+          History p h m s n record originals (store writer path value checked_1 saved)
+            (store before middle written target checked)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:91:31: error(lean.invalidField): Invalid field `targets`: The environment does not contain `List.targets`, so it is not possible to project the field `targets` from an expression
+  middle
+of type `List Nat`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:91:91: warning: `if_false` has been deprecated: Use `ite_false` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:92:80: error(lean.unknownIdentifier): Unknown identifier `ih`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:92:15: error: Tactic `rcases` failed: `x✝ : ?m.123` is not an inductive datatype
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:95:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261018-selected-read-producers».«slot-history-direct-1.source».0.MicroCFTA.SourceCurrentActualTargetSlotHistory.bind_done`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:95:0: warning: `bind_done` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#2)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:221:28: error: Application type mismatch: The argument
+  completed
+has type
+  editList (edit record values e p h m s n) (SourceCurrentAllocatedClassEditPlan.compiled record) values
+      (initial before memo) =
+    Outcome.done results shared
+but is expected to have type
+  Outcome.done results shared = Outcome.done results shared
+in the application
+  And.intro completed
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:238:27: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:238:4: error: unsolved goals
+case inr
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h m s n : Nat
+record : Record
+originals : List Node
+initialState before : Shared width
+path : Path
+value : Node
+earlier : History p h m s n record originals initialState before
+missing : initialState.targets path = none
+left✝¹ : before.targets path = none
+checked : Checked width
+saved : Memo
+left✝ :
+  SourceCurrentAllocatedTargetWorker.target p h m s n originals
+      (SourceEqualityClassTarget.operandPaths record.paths path) before.checked before.memo =
+    SourceCurrentAllocatedTargetWorker.Outcome.done value checked saved
+actual :
+  SourceCurrentAllocatedSharedTargetWorker.force p h m s n record originals path before =
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.done value (store before path value checked saved)
+⊢ (if True then some value else before.targets path) = some value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-direct-1.source.lean:238:27: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [store, put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

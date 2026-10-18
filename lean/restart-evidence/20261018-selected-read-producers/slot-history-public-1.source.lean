@@ -1,0 +1,71 @@
+import MicroCFTA.SourceCurrentActualTargetSlotHistory
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History.refl
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History.refl
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History.refl
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History.retained
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History.retained
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History.retained
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History.stored
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History.stored
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History.stored
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History.trans
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History.trans
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History.trans
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History.keeps
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History.keeps
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History.keeps
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.History.writer
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.History.writer
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.History.writer
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.force
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.force
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.force
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.leaf
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.leaf
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.leaf
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.children_history
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.children_history
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.children_history
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.rows_history
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.rows_history
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.rows_history
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.edit_history
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.edit_history
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.edit_history
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.edit_list
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.edit_list
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.edit_list
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.class_call
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.class_call
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.class_call
+
+#check @MicroCFTA.SourceCurrentActualTargetSlotHistory.force_writer
+#print MicroCFTA.SourceCurrentActualTargetSlotHistory.force_writer
+#print axioms MicroCFTA.SourceCurrentActualTargetSlotHistory.force_writer

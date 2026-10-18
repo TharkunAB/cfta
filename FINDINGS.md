@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 05:27 CEST. Proof checkpoint is `99a1ddb3`.
+Actual edits now construct target-table history and recover earlier literal
+target writers with their complete captured inputs and states. Initial
+closed native admission derives checked traces from raw execution and
+numeric headroom. Initial causal native history derives the exact returned
+cell and captured request writer. Target history does not transport physical
+or semantic entry facts. Weak cells do not supply exact native key validity.
+Historical semantic target receipts and general recursive progress remain
+open. Full Audit passes 3230 jobs and 70896 checks. No Haskell patch or new
+production defect is added. Field-pool repair `b9219b9e` remains fixed in
+`c0cc8a05`. Read `lean/notes-current-selected-read-producers.md`.
+Keep this registry first. Record each later repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve every earlier
+repair entry below.
+
 Current proof update: 2026-10-18 05:12 CEST. Proof checkpoint is `aed82624`.
 Actual selected class slots now derive exact prefix/call/suffix schedules
 without a guard footprint or future semantic read law. Whole-slot callbacks

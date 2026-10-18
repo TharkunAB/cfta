@@ -1,0 +1,22 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-read-producers/slot-history-kernels-2.source.lean:143:2: error: Tactic `decide` failed for proposition
+  row0.entry.key.symbol ≠ row1.entry.key.symbol
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decEq`, `instDecidableEqList`, `instDecidableEqProd`, `instDecidableEqString`, `instDecidableNot`, and `String.decEq`, reduction got stuck at the `Decidable` instance
+  match row0.entry.key.1.1.1.1.toList with
+  | [] =>
+    match row1.entry.key.1.1.1.1.toList with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: as =>
+    match row1.entry.key.1.1.1.1.toList with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match as.hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
