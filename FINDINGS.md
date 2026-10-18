@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 03:54 CEST. Proof checkpoint is `b4fcc918`.
+Actual successful lower, Parent and outer workers now retain causal Mu
+body/probe guard profiles from entry facts. Actual unfinished outer prefixes
+and node-busy dispatches retain them too. Positional Required/Edit survivors
+retain the exact unselected child. The Edit endpoint keeps explicit semantic
+read premises. A separate note corrects the earlier causal-heap interpretation.
+Full Audit passes 3210 jobs and 70736 checks. General recursive progress,
+fresh-call bounds, used-writer alignment, recursive language preservation,
+convergence and public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains fixed and validated in `c0cc8a05`.
+Read `lean/notes-current-outer-guard-transport.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 03:37 CEST. Proof checkpoint is `a400849c`.
 The full Audit passes 3208 jobs and 70665 dependency checks. Actual successful
 native calls now retain causal guard profiles without a supplied checked

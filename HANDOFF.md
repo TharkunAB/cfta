@@ -2,7 +2,7 @@
 
 ## Publication awaits direct approval
 
-Updated: 2026-10-18 03:22 CEST. The local verified checkpoint is `30cd81ae`.
+Updated: 2026-10-18 03:22 CEST. The earlier local verified checkpoint is `30cd81ae`.
 Its proof commit is `1324bb38`. The remote `formalize` was read back at
 `a1270b81`; remote `main` was read back at `c0cc8a05`.
 Automatic approval review rejected both direct checkpoint push attempts.
@@ -12,6 +12,43 @@ notes as trusted permission. A direct approval request is pending.
 Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
+
+## Current outer guard transport and positional rows
+
+Updated: 2026-10-18 03:54 CEST. Proof commit is `b4fcc918`.
+Starting local checkpoint is `827b6fd6`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-outer-guard-transport.md` for exact boundaries.
+
+Actual successful lower, Parent and outer calls now retain arbitrary
+causal Mu body/probe guard profiles from their entry facts. Actual unfinished
+outer prefixes and node-busy dispatches retain the same law. No future
+preservation callback, checked Trace or finite Cap is supplied. A given
+successful worker equation or actual finite prefix remains explicit.
+
+Surviving Required and ordinary Edit rows now retain an indexed source row,
+its full fields, and the exact child at each unselected child index.
+The Edit endpoint keeps explicit semantic reads and readiness premises.
+Compiler equalities check the exact fixed-own footprint below child 1.
+They do not prove global all-1 exclusion or proper initial-source lineage.
+A separate correction removes the earlier mistaken interpretation that
+causal GuardHeap Plain requires every raw edge guard to be plain. The old
+frozen review remains unchanged. Mixed positive heaps can satisfy this law.
+
+Full Audit passes 3210 jobs and 70736 dependency checks. Four production
+and four constructed strict logs are empty. All 34 public and 4 constructed
+full pairs pass in 8 groups with all eight settings and standard axioms.
+Audit peak is 361 MiB under effective 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-outer-guard-transport/`.
+
+Next compose positional provenance through Required, the class right fold,
+recursive Head exposure and native writers. Prove proper source occurrences,
+all-owner separation, and finite fresh-call bounds or a well-founded measure.
+General recursive completion, recursive global language preservation,
+used-writer alignment, convergence and public Haskell correspondence remain
+open. The complete outer-pass domain is unchanged. Keep the full goal active.
+No Haskell patch or new production defect is added. Repair `b9219b9e` stays
+fixed at source `c0cc8a05`. Keep the external FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
 
 ## Current fixed guard carriers and native guard heaps
 
