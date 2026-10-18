@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 15:23 CEST. Proof checkpoint is `89f0bfd3`.
+One full source expression now preserves physical Empty under equal
+ordered lexical Empty tests. Actual calls derive this law from initial
+Contexts. Full stored encodings have an exact pure Empty interpreter.
+The filtered variable case derives mutual membership and its selected
+reference Empty case. Historical node calls derive all indexed child
+source and stored schedules without reader-wide lexical availability.
+General stored row survival, source/filter/stored fusion and nested
+used-binder simulation remain open. Full Audit passes 3326 jobs and
+72311 checks. No Haskell patch or new executable defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-execution-empty-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 15:01 CEST. Proof checkpoint is `6fdc493e`.
 Actual lexical execution and live node-child calls now derive generated
 memberships without desired output observations. Actual union filtering

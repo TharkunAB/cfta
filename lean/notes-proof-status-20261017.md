@@ -1,8 +1,64 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `6fdc493e`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `89f0bfd3`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
+
+## Current source Empty abstraction and derived child schedules
+
+Updated: 2026-10-18 15:23 CEST. Proof checkpoint is `89f0bfd3`.
+Starting checkpoint is `58ab02d5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-execution-empty-fusion.md`.
+
+The physical Empty result of one full source expression now depends only
+on its ordered lexical Empty tests. A pure projection makes external roots
+opaque and retains every fresh binder local. Its proof covers all source
+constructors. Actual source calls derive returned Empty agreement from
+initial Contexts and matching input tests. No alias premise is needed.
+This law compares the same full source expression, not different encodings.
+
+A pure stored Empty interpreter now evaluates the complete encoded plan.
+Actual execution derives its exact physical Empty result. Closed literals,
+resolved references and open-Mu smart reconstruction have explicit rules.
+The checked equal-shape example has different predicted Empty results.
+Decoded original shape is not substituted for the full stored plan.
+
+The filtered variable case now derives both Generated memberships and
+physical Empty agreement. Its Empty hypothesis applies only to the
+selected resolved reference pair. Fixed unions and open Mu captures need
+no output-law hypothesis. Scoped self tests derive equal actual filters.
+
+Historical parent node calls now derive indexed source rows, opposite raw
+row survival, all warm child source calls, both stored row schedules and
+ordered mutual Generated child memberships. The proof derives fresh
+filter absence from available raw results and historical live support.
+It needs no reader-wide lexical availability or supplied child schedules.
+Survival of the opposite stored row still needs the general Empty proof.
+
+General source/filter/stored Empty fusion, union subgroup preparation and
+nested used-binder simulation remain open. The proof must retain the
+actual earlier writer's body and causal history. Membership alone is not
+Directed. Automatic arbitrary open-Mu reader support remains open.
+
+The strongest broad claim is unchanged: a supported successful top-level
+model traversal with empty inherited constraints, initial semantic facts
+and scheduled resources preserves exactly the accepted finite terms.
+General termination and complete public Haskell correspondence remain
+open. Initial query operands, active-owner exclusion, fresh bounds,
+repeated convergence, equality resources and host Int adequacy remain.
+
+Full Audit passes 3326 jobs and 72311 dependency checks.
+All 10 new public and 4 constructed heads pass complete
+statement, proof and standard-axiom checks. Eight selected strict logs
+are empty. All four canonical builds are warning-free. Audit retains
+only the existing ClosedCompletion warning. Five component manifests pin
+253 entries. Independent source-abstraction review finds no material
+issue. Evidence is in `lean/restart-evidence/20261018-execution-empty-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
 
 ## Current generated lexical, node and union cases
 
