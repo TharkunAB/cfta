@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 15:01 CEST. Proof checkpoint is `6fdc493e`.
+Actual lexical execution and live node-child calls now derive generated
+memberships without desired output observations. Actual union filtering
+and reconstruction preserve exact literal inclusion. Source-built examples
+show a warm parent with an allocating child filter and equal decoded Mu
+shapes with different physical Empty results after substitution. These
+are proof-contract boundaries, not executable Haskell defects or repair
+requests. General source/filter/stored Empty fusion, nested used-binder
+simulation and recursive completion remain open. Full Audit passes
+3322 jobs and 72240 checks. No Haskell patch or new executable
+defect is added. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-generated-local-rules.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 14:42 CEST. Proof checkpoint is `0ee80d3e`.
 Actual selected writer source calls now derive both reconstruction-generator
 directions. The relation assumes no desired output observation law. Both
