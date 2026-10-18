@@ -1,0 +1,234 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/class-rows-direct-4.source.lean:200:60: error: don't know how to synthesize implicit argument `built`
+  @NodeFlow.node inst✝¹ inst✝ width formulas solver base record originals entries edges before rebuilt✝ middle value
+    heap entry depth free rows ?m.771 original row rebuilt
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List (Value Symbol Guard)
+edits : Edits EqualityNormalize.Path
+input : Value Symbol Guard
+before✝ : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after
+reads✝ : NodeReads formulas solver base actual memos✝ final
+record : Record
+originals : List (Value Symbol Guard)
+memos saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+edges : List Edge
+before : SharedState width
+rebuilt✝ : List Edge
+middle : SharedState width
+value : Value Symbol Guard
+heap : Heap
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+rows : EditRows record originals entries edges before rebuilt✝ middle
+built : run (makeNode rebuilt✝) middle.checked.native.machine.heap = (value, heap)
+reads : RowsReads formulas solver base rows memos saved
+ih : True
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+row : Edge
+selected : row ∈ nodeEdges value
+facts : InternedNestedFacts.Facts before.checked.native.machine.heap
+index : Nat
+original : Edge
+start rowMiddle : SharedState width
+children : List (Value Symbol Guard)
+rowHeap : Heap
+startInventory middleInventory : Inventory
+rowMemos rowFinal : Memos
+earlier : EditRows record originals entries (List.take index edges) before (List.take index rebuilt✝) start
+call : EditChildren record originals entries 0 original.children start children rowMiddle
+rawIndex : rebuilt✝[index]? = some row
+sourceIndex : edges[index]? = some original
+prefixReads : RowsReads formulas solver base earlier memos rowMemos
+childReads : ChildrenReads formulas solver base call rowMemos rowFinal
+startValid : EndpointMemoGateTrace.Valid start.checked.native.machine.heap rowMemos
+edgeBuilt :
+  run (makeEdge original.entry.key.symbol original.entry.key.constraint children)
+      rowMiddle.checked.native.machine.heap =
+    (row, rowHeap)
+symbol : row.entry.key.symbol = original.entry.key.symbol
+field : row.entry.key.constraint = original.entry.key.constraint
+childrenSame : row.children = children
+startReady : SharedReady formulas solver startInventory record originals base start
+middleReady : SharedReady formulas solver middleInventory record originals base rowMiddle
+startGrowth : Grows start.checked.native.machine.heap heap
+middleGrowth : Grows rowMiddle.checked.native.machine.heap heap
+heapGrowth : Grows rowHeap heap
+live : EqualityLeafProjectionPhysical.dead row = false
+startHistory : History start.checked ∧ InternedConstructorTemplates.Valid start.checked.native.machine.heap
+middleHistory : History rowMiddle.checked ∧ InternedConstructorTemplates.Valid rowMiddle.checked.native.machine.heap
+rebuilt : Rebuild formulas solver base rows original row
+⊢ run (makeNode rebuilt✝) middle.checked.native.machine.heap = (value, heap)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/class-rows-direct-4.source.lean:341:117: error: don't know how to synthesize implicit argument `absent`
+  @ChildFlow.unselected inst✝¹ inst✝ width formulas solver base record originals entries original values before results
+    after index offset ?m.374 rest sourceRow row flow
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List (Value Symbol Guard)
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+offset✝ : Nat
+inputs : List (Value Symbol Guard)
+before✝ : SharedState width
+results✝ : List (Value Symbol Guard)
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditChildren record✝ originals✝ entries✝ offset✝ inputs before✝ results✝ after✝
+reads : ChildrenReads formulas solver base actual memos✝ final
+record : Record
+originals : List (Value Symbol Guard)
+memos saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+values : List (Value Symbol Guard)
+before : SharedState width
+results : List (Value Symbol Guard)
+after : SharedState width
+original : Value Symbol Guard
+offset : Nat
+absent : SourceEqualityNeededMap.lookup (↑offset) entries = none
+rest : EditChildren record originals entries (offset + 1) values before results after
+read : ChildrenReads formulas solver base rest memos saved
+ih : ChildrenLaw formulas solver base rest memos
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Values before.checked.native.machine.heap (original :: values)
+safe : ChildrenSafe entries offset (original :: values)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+value : Value Symbol Guard
+row : Edge
+member : row ∈ nodeEdges value
+index : Nat
+selected : (original :: results)[index + 1]? = some value
+source : Value Symbol Guard
+found : values[index]? = some source
+sourceRow : Edge
+origin : Original source sourceRow ∨ ChildEvent formulas solver sourceRow rest index
+flow : ChildFlow formulas solver base rest index sourceRow row
+⊢ SourceEqualityNeededMap.lookup (↑offset) entries = none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/class-rows-direct-4.source.lean:577:57: error: don't know how to synthesize implicit argument `tail`
+  @FoldFlow.head inst✝¹ inst✝ width formulas solver records inputs before memo middle step current record results after
+    saved index ?m.539 head sourceRow row flow
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+records✝ : List Record
+inputs✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+results✝ : List (Value Symbol Guard)
+after✝ : Checked width
+saved✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+memos✝ final✝ : Memos
+actual : SourceCurrentAllocatedClassPass.Fold records✝ inputs✝ before✝ memo✝ results✝ after✝ saved✝
+records : List Record
+inputs : List (Value Symbol Guard)
+before : Checked width
+memo : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+middle : List (Value Symbol Guard)
+step : Checked width
+current : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+record : Record
+results : List (Value Symbol Guard)
+after : Checked width
+saved : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+memos stepMemos final : Memos
+tail : SourceCurrentAllocatedClassPass.Fold records inputs before memo middle step current
+head : SourceCurrentAllocatedClassEdits.Class record middle step current results after saved
+tailReads : SourceCurrentAllocatedClassPass.FoldReads formulas solver tail memos stepMemos
+headReads : SourceCurrentAllocatedClassEdits.ClassReads formulas solver head stepMemos final
+ih :
+  ∀ (inventory : Inventory),
+    (∀ (record : Record), record ∈ records → SourceEqualityClassOrder.Coherent record) →
+      (∀ (record : Record), record ∈ records → EqualityNormalize.Nontrivial record.paths) →
+        SourceCurrentConjunctionClassScan.Ready before →
+          SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+            Values before.native.machine.heap inputs →
+              (∀ (record : Record),
+                  record ∈ records →
+                    ∀ (path : EqualityNormalize.Path),
+                      path ∈ record.paths →
+                        SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) inputs) →
+                SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                        memo) →
+                    EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      History before →
+                        ∀ (index : Nat) (value : Value Symbol Guard),
+                          middle[index]? = some value →
+                            ∀ (row : Edge),
+                              row ∈ nodeEdges value →
+                                ∃ source,
+                                  ((∃ original, inputs[index]? = some original ∧ Original original source) ∨
+                                      FoldEvent formulas solver source tail index) ∧
+                                    FoldFlow formulas solver tail index source row
+inventory : Inventory
+coherent : ∀ (record_1 : Record), record_1 ∈ record :: records → SourceEqualityClassOrder.Coherent record_1
+active : ∀ (record_1 : Record), record_1 ∈ record :: records → EqualityNormalize.Nontrivial record_1.paths
+ready : SourceCurrentConjunctionClassScan.Ready before
+admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before
+available : Values before.native.machine.heap inputs
+domains :
+  ∀ (record_1 : Record),
+    record_1 ∈ record :: records →
+      ∀ (path : EqualityNormalize.Path),
+        path ∈ record_1.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) inputs
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+history : History before
+index : Nat
+value : Value Symbol Guard
+selected : results[index]? = some value
+row : Edge
+member : row ∈ nodeEdges value
+tailCoherent : ∀ (own : Record), own ∈ records → SourceEqualityClassOrder.Coherent own
+tailActive : ∀ (own : Record), own ∈ records → EqualityNormalize.Nontrivial own.paths
+tailDomains :
+  ∀ (own : Record),
+    own ∈ records →
+      ∀ (path : EqualityNormalize.Path),
+        path ∈ own.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) inputs
+phaseInventory : Inventory
+receipt :
+  SourceCurrentAllocatedClassPass.Receipt formulas solver phaseInventory records inputs before memo middle step current
+    memos stepMemos
+phaseHistory : History step
+phaseInput : Value Symbol Guard
+phaseSelected : middle[index]? = some phaseInput
+sourceRow : Edge
+flow : ClassFlow formulas solver head index sourceRow row
+event : ClassEvent formulas solver sourceRow head index
+⊢ SourceCurrentAllocatedClassPass.Fold records inputs before memo middle step current

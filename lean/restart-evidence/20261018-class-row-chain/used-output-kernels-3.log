@@ -1,0 +1,109 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-kernels-3.source.lean:137:82: error: unsolved goals
+inputs : List (Value Nat Bool ⊕ PUnit) := List.map Sum.inl event.environment
+names : PUnit → Reference := fun x => Reference.depth
+localInputs : List (Value Nat Bool ⊕ PUnit ⊕ PUnit) := Sum.inr (Sum.inl PUnit.unit) :: List.map liftInput inputs
+firstNames : PUnit ⊕ PUnit → Reference := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) names
+secondNames : PUnit ⊕ PUnit → Reference := Sum.elim (fun x => Reference.interned event.entry.identity) names
+fixed : List.map (InternedFreshOrdinaryLiveInputs.input names) inputs = event.environment
+instantiated :
+  ∀ (own : Reference),
+    List.map (InternedFreshOrdinaryLiveInputs.input (Sum.elim (fun x => own) names)) localInputs =
+      Value.reference own :: event.environment
+rawFirst : Value Nat Bool
+rawHeap : InternedConstructorTemplates.State Nat Bool
+rawSecond : Value Nat Bool
+rawLater : InternedConstructorTemplates.State Nat Bool
+firstRaw :
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawFirst rawHeap
+left✝³ :
+  run (withoutSelfReference (Reference.uninterned (ordinaryLevel event.depth)) rawFirst) rawHeap =
+    (event.ordinary, event.cut)
+secondRaw :
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawSecond rawLater
+left✝² :
+  run (withoutSelfReference (Reference.interned event.entry.identity) rawSecond) rawLater =
+    (event.body, event.afterBody)
+left✝¹ : Grows rawHeap event.afterBody
+left✝ : Grows rawLater event.afterBody
+firstEntry : SourceCurrentConstrainedCapSourceHistory.Context event.afterDepth event.environment
+secondEntry : SourceCurrentConstrainedCapSourceHistory.Context event.allocated event.environment
+cutContext : SourceCurrentConstrainedCapSourceHistory.Context event.cut event.environment
+bodyArgument : Available event.allocated (Value.reference (Reference.interned event.entry.identity))
+firstContext :
+  InternedFreshOrdinaryContext.Context event.afterDepth
+    (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+secondContext :
+  InternedFreshOrdinaryContext.Context event.allocated
+    (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+firstInputContext :
+  InternedFreshOrdinaryContext.Context event.afterDepth
+    (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) localInputs)
+secondInputContext :
+  InternedFreshOrdinaryContext.Context event.allocated
+    (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) localInputs)
+firstActual :
+  build event.expression (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) localInputs) event.afterDepth =
+    Outcome.done rawFirst rawHeap
+secondActual :
+  build event.expression (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) localInputs) event.allocated =
+    Outcome.done rawSecond rawLater
+⊢ List.Mem (Sum.inr (Sum.inl PUnit.unit))
+    [Sum.inl Reference.depth, Sum.inr (Sum.inl PUnit.unit), Sum.inr (Sum.inl PUnit.unit), Sum.inr (Sum.inl PUnit.unit)]
+inputs : List (Value Nat Bool ⊕ PUnit) := List.map Sum.inl event.environment
+names : PUnit → Reference := fun x => Reference.depth
+localInputs : List (Value Nat Bool ⊕ PUnit ⊕ PUnit) := Sum.inr (Sum.inl PUnit.unit) :: List.map liftInput inputs
+firstNames : PUnit ⊕ PUnit → Reference := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) names
+secondNames : PUnit ⊕ PUnit → Reference := Sum.elim (fun x => Reference.interned event.entry.identity) names
+fixed : List.map (InternedFreshOrdinaryLiveInputs.input names) inputs = event.environment
+instantiated :
+  ∀ (own : Reference),
+    List.map (InternedFreshOrdinaryLiveInputs.input (Sum.elim (fun x => own) names)) localInputs =
+      Value.reference own :: event.environment
+rawFirst : Value Nat Bool
+rawHeap : InternedConstructorTemplates.State Nat Bool
+rawSecond : Value Nat Bool
+rawLater : InternedConstructorTemplates.State Nat Bool
+firstRaw :
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawFirst rawHeap
+left✝³ :
+  run (withoutSelfReference (Reference.uninterned (ordinaryLevel event.depth)) rawFirst) rawHeap =
+    (event.ordinary, event.cut)
+secondRaw :
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawSecond rawLater
+left✝² :
+  run (withoutSelfReference (Reference.interned event.entry.identity) rawSecond) rawLater =
+    (event.body, event.afterBody)
+left✝¹ : Grows rawHeap event.afterBody
+left✝ : Grows rawLater event.afterBody
+firstEntry : SourceCurrentConstrainedCapSourceHistory.Context event.afterDepth event.environment
+secondEntry : SourceCurrentConstrainedCapSourceHistory.Context event.allocated event.environment
+cutContext : SourceCurrentConstrainedCapSourceHistory.Context event.cut event.environment
+bodyArgument : Available event.allocated (Value.reference (Reference.interned event.entry.identity))
+firstContext :
+  InternedFreshOrdinaryContext.Context event.afterDepth
+    (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+secondContext :
+  InternedFreshOrdinaryContext.Context event.allocated
+    (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+firstInputContext :
+  InternedFreshOrdinaryContext.Context event.afterDepth
+    (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) localInputs)
+secondInputContext :
+  InternedFreshOrdinaryContext.Context event.allocated
+    (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) localInputs)
+firstActual :
+  build event.expression (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) localInputs) event.afterDepth =
+    Outcome.done rawFirst rawHeap
+secondActual :
+  build event.expression (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) localInputs) event.allocated =
+    Outcome.done rawSecond rawLater
+⊢ List.Mem (Sum.inr (Sum.inl PUnit.unit))
+    [Sum.inl Reference.depth, Sum.inr (Sum.inl PUnit.unit), Sum.inr (Sum.inl PUnit.unit), Sum.inr (Sum.inl PUnit.unit)]

@@ -1,0 +1,118 @@
+import MicroCFTA.SourceCurrentClassFoldRowOrigins
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.Original
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.Original
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.Original
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.LeafSource
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.LeafSource
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.LeafSource
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeEvent
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.leaf_source
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.leaf_source
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.leaf_source
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.rebuild
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.rebuild
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.rebuild
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeFlow
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeFlow
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeFlow
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.node
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.node
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.node
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildEvent
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildFlow
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildFlow
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildFlow
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.children
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.children
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.children
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ListEvent
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ListEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ListEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ListFlow
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ListFlow
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ListFlow
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.list
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.list
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.list
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassEvent
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassFlow
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassFlow
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassFlow
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.class_sources
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.class_sources
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.class_sources
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldEvent
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldFlow
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldFlow
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldFlow
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.fold
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.fold
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.fold
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.pass
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.pass
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.pass
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild.fields
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild.fields
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild.fields
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeFlow.fields
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeFlow.fields
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.NodeFlow.fields
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildFlow.fields
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildFlow.fields
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ChildFlow.fields
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ListFlow.fields
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ListFlow.fields
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ListFlow.fields
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassFlow.fields
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassFlow.fields
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.ClassFlow.fields
+
+#check @MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldFlow.fields
+#print MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldFlow.fields
+#print axioms MicroCFTA.SourceCurrentClassFoldRowOrigins.FoldFlow.fields

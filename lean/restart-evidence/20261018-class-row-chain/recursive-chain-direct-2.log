@@ -1,0 +1,114 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:71:2: error: Too many variable names provided at alternative `member`: 12 provided, but 10 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:72:43: error(lean.unknownIdentifier): Unknown identifier `found`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:85:2: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `MicroCFTA.SourceCurrentRecursiveHeadChainRows.Chain.casesOn` can only eliminate into `Prop`
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+x✝⁵ x✝⁴ : InternedConstructorTemplates.State Symbol Guard
+x✝³ x✝² : Value Symbol Guard
+x✝¹ : Chain x✝⁵ x✝³ x✝⁴ x✝²
+motive :
+  (x x_1 : InternedConstructorTemplates.State Symbol Guard) →
+    (x_2 x_3 : Value Symbol Guard) → Chain x x_2 x_1 x_3 → Sort ?u.31
+h_1 :
+  (before : InternedConstructorTemplates.State Symbol Guard) →
+    (value : Value Symbol Guard) →
+      (ready : Ready before) →
+        (available : Available before value) → (closed : value.free = []) → motive before before value value ⋯
+h_2 :
+  (before x : InternedConstructorTemplates.State Symbol Guard) →
+    (root x_1 : Value Symbol Guard) →
+      (entry : Interned NodeKey) →
+        (members : List (Value Symbol Guard)) →
+          (depth : Nat) →
+            (free : List Reference) →
+              (prior : Chain before root x (Value.union entry members depth free)) →
+                (index : Nat) → (found : members[index]? = some x_1) → motive before x root x_1 ⋯
+h_3 :
+  (before next : InternedConstructorTemplates.State Symbol Guard) →
+    (root value : Value Symbol Guard) →
+      (current : InternedConstructorTemplates.State Symbol Guard) →
+        (entry : Interned NodeKey) →
+          (body depth ordinary : Value Symbol Guard) →
+            (prior : Chain before root current (Value.mu entry body depth ordinary)) →
+              (actual : execute body (selfEnvironment entry body depth ordinary) current = Outcome.done value next) →
+                motive before next root value ⋯
+h_4 :
+  (before x : InternedConstructorTemplates.State Symbol Guard) →
+    (root x_1 : Value Symbol Guard) →
+      (current : InternedConstructorTemplates.State Symbol Guard) →
+        (prior : Chain before root current x_1) → (keeps : Keeps current x) → motive before x root x_1 ⋯
+a✝¹ : InternedConstructorTemplates.State Symbol Guard
+a✝ : Value Symbol Guard
+x✝ : Chain x✝⁵ x✝³ a✝¹ a✝
+⊢ x✝⁴ = a✝¹ → x✝² = a✝ → x✝¹ ≍ x✝ → motive x✝⁵ x✝⁴ x✝³ x✝² x✝¹ after processing
+  _, _, _, _, _
+the dependent pattern matcher can solve the following kinds of equations
+- <var> = <term> and <term> = <var>
+- <term> = <term> where the terms are definitionally equal
+- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:96:13: error: Tactic `assumption` failed
+
+case start
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before current reader : InternedConstructorTemplates.State Symbol Guard
+root value : Value Symbol Guard
+ready✝ : Ready before
+available✝ : Available before root
+closed✝ : root.free = []
+growth : Grows before reader
+⊢ Warm reader ⋯
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:98:2: error: Too many variable names provided at alternative `mu`: 12 provided, but 10 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:99:26: error(lean.invalidField): Invalid field `verified`: The environment does not contain `Function.verified`, so it is not possible to project the field `verified` from an expression
+  prior
+of type
+  Grows before reader → Warm reader value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:111:6: error: typeclass instance problem is stuck
+  GetElem? (List (EdgeValue Symbol Guard)) (?m.43 terminal entry originals depth free) (EdgeValue Symbol Guard)
+    (?m.44 terminal entry originals depth free index)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:113:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:181:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:271:51: error: typeclass instance problem is stuck
+  GetElem? (List (EdgeValue Symbol Guard)) (?m.70 index row terminal entry originals depth free)
+    (EdgeValue Symbol Guard) (?m.71 index row terminal entry originals depth free sourceIndex branch)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-2.source.lean:293:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case read
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Value Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+available : Available before value
+closed : value.free = []
+result : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+keeps : Keeps before after
+returned : Available after result
+noFree : result.free = []
+ordinary : SourceEqualityRequiredCache.Ordinary result
+fuel : Nat
+edges : List (EdgeValue Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+exposed : MergedFreshOrdinaryExposure.nodeEdges fuel value before = Result.done edges middle
+rebuilt : run (makeNode edges) middle = (result, after)
+source : Keeps before middle ∧ ∀ (row : EdgeValue Symbol Guard), row ∈ edges → Occurrence before value middle row
+physical : MergedFreshOrdinaryColdEffects.Verified before (MergedFreshOrdinaryExposure.nodeEdges fuel value before)
+resident : InternedNestedProvenance.Edges middle edges
+closedEdges : MergedColdReaderClosedInputs.ClosedEdges edges
+last :
+  Keeps middle (result, after).snd ∧
+    Available (result, after).snd (result, after).fst ∧
+      (result, after).fst.free = [] ∧ SourceEqualityRequiredCache.Ordinary (result, after).fst
+exactRows : nodeEdges (result, after).fst = canonicalEdges (surviving edges)
+⊢ Rows value before result after

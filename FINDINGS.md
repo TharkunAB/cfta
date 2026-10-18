@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 03:00 CEST. Proof checkpoint is `c6dd2c74`.
+Full pinned Audit passes 3203 jobs and 70592 dependency checks.
+Actual completed class reductions now retain individual full-row chains and
+ordered child reads. General recursive Head chains retain chronological
+terminal rows. A nonempty inherited full-key recurrence requires an actual
+own-field height gain. This does not exclude recurrence or prove termination.
+Used-binder output tags agree. The filtered callback induction step is proved;
+the general induction and earlier-writer alignment remain open.
+General recursive language preservation, finite fresh-call bounds, convergence,
+and public Haskell correspondence remain open. No Haskell patch or new
+production defect is added. Repair `b9219b9e` remains merged and validated in
+source `c0cc8a05`. The earlier field-pool issue is fixed. It is not an open
+item. Read `lean/notes-current-class-row-chain.md`. Keep this registry first.
+Record every later repair with its failure, executable reproducer, affected
+paths, commit, checks and upstream status for external work.
+
 Current proof update: 2026-10-18 02:42 CEST. Proof checkpoint is `e9430fe3`.
 Full pinned Audit passes 3199 jobs and 70491 dependency checks.
 Actual successful outer calls and unfinished execution prefixes now derive

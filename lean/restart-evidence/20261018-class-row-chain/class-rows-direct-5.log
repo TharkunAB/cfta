@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/class-rows-direct-5.source.lean:200:60: error: don't know how to synthesize implicit argument `built`
+  @NodeFlow.node inst✝¹ inst✝ width formulas solver base record originals entries edges before rebuilt✝ middle value
+    heap entry depth free rows ?m.771 original row rebuilt
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List (Value Symbol Guard)
+edits : Edits EqualityNormalize.Path
+input : Value Symbol Guard
+before✝ : SharedState width
+result : Value Symbol Guard
+after : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after
+reads✝ : NodeReads formulas solver base actual memos✝ final
+record : Record
+originals : List (Value Symbol Guard)
+memos saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+edges : List Edge
+before : SharedState width
+rebuilt✝ : List Edge
+middle : SharedState width
+value : Value Symbol Guard
+heap : Heap
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+rows : EditRows record originals entries edges before rebuilt✝ middle
+built : run (makeNode rebuilt✝) middle.checked.native.machine.heap = (value, heap)
+reads : RowsReads formulas solver base rows memos saved
+ih : True
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+row : Edge
+selected : row ∈ nodeEdges value
+facts : InternedNestedFacts.Facts before.checked.native.machine.heap
+index : Nat
+original : Edge
+start rowMiddle : SharedState width
+children : List (Value Symbol Guard)
+rowHeap : Heap
+startInventory middleInventory : Inventory
+rowMemos rowFinal : Memos
+earlier : EditRows record originals entries (List.take index edges) before (List.take index rebuilt✝) start
+call : EditChildren record originals entries 0 original.children start children rowMiddle
+rawIndex : rebuilt✝[index]? = some row
+sourceIndex : edges[index]? = some original
+prefixReads : RowsReads formulas solver base earlier memos rowMemos
+childReads : ChildrenReads formulas solver base call rowMemos rowFinal
+startValid : EndpointMemoGateTrace.Valid start.checked.native.machine.heap rowMemos
+edgeBuilt :
+  run (makeEdge original.entry.key.symbol original.entry.key.constraint children)
+      rowMiddle.checked.native.machine.heap =
+    (row, rowHeap)
+symbol : row.entry.key.symbol = original.entry.key.symbol
+field : row.entry.key.constraint = original.entry.key.constraint
+childrenSame : row.children = children
+startReady : SharedReady formulas solver startInventory record originals base start
+middleReady : SharedReady formulas solver middleInventory record originals base rowMiddle
+startGrowth : Grows start.checked.native.machine.heap heap
+middleGrowth : Grows rowMiddle.checked.native.machine.heap heap
+heapGrowth : Grows rowHeap heap
+live : EqualityLeafProjectionPhysical.dead row = false
+startHistory : History start.checked ∧ InternedConstructorTemplates.Valid start.checked.native.machine.heap
+middleHistory : History rowMiddle.checked ∧ InternedConstructorTemplates.Valid rowMiddle.checked.native.machine.heap
+rebuilt : Rebuild formulas solver base rows original row
+⊢ run (makeNode rebuilt✝) middle.checked.native.machine.heap = (value, heap)

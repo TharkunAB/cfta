@@ -1,0 +1,44 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/class-rows-direct-2.source.lean:182:84: error: don't know how to synthesize implicit argument `actual`
+  @NodeFlow.leaf inst✝¹ inst✝ width formulas solver base record originals path input before result after ?m.216 row
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List (Value Symbol Guard)
+edits : Edits EqualityNormalize.Path
+input✝ : Value Symbol Guard
+before✝ : SharedState width
+result✝ : Value Symbol Guard
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input✝ before✝ result✝ after✝
+reads : NodeReads formulas solver base actual memos✝ final
+next : Inventory
+record : Record
+originals : List (Value Symbol Guard)
+path : EqualityNormalize.Path
+input : Value Symbol Guard
+before : SourceCurrentAllocatedSharedTargetState.State width
+result : Value Symbol Guard
+after : SourceCurrentAllocatedSharedTargetState.State width
+memos saved : Memos
+receipt :
+  SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path input before result
+    after memos saved
+inventory : Inventory
+populated : Populated (Edits.editAt path)
+nonempty : HasLeaf (Edits.editAt path)
+allowed : Allowed record (Edits.editAt path)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap input
+safe : Safe (Edits.editAt path) input
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+row : Edge
+selected : row ∈ nodeEdges result
+closed : input.free = []
+⊢ SourceCurrentAllocatedSharedTargetLeaf.Leaf record originals path input before result after

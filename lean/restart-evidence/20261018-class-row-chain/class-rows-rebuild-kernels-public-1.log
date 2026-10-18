@@ -1,0 +1,644 @@
+MicroCFTA.ClassRowRebuildKernels.positive_rebuild : ∀ (width : Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+  And
+    (@Membership.mem.{0, 0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@List.instMembership.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.InternedEdgeResidency.nodeEdges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@Prod.fst.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (MicroCFTA.InternedConstructorTemplates.State
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (MicroCFTA.ClassRowRebuildKernels.finalNode width)))
+      (@Prod.fst.{0, 0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.ClassRowRebuildKernels.firstEdge))
+    (And
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+          MicroCFTA.ClassRowRebuildKernels.parentGuard)
+        (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+          (@List.cons.{0} (List.{0} (List.{0} Nat))
+            (@List.cons.{0} (List.{0} Nat)
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+              (@List.cons.{0} (List.{0} Nat)
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+                (@List.nil.{0} (List.{0} Nat))))
+            (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+      (And
+        (@Eq.{1} Nat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.sourceRows)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+        (@Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun source =>
+          And
+            (@Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows source)
+            (@MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              width formulas solver MicroCFTA.ClassRowRebuildKernels.heap MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.entries
+              MicroCFTA.ClassRowRebuildKernels.sourceRows (MicroCFTA.ClassRowRebuildKernels.sourceState width)
+              (MicroCFTA.ClassRowRebuildKernels.rawRows width) (MicroCFTA.ClassRowRebuildKernels.rawAfter width)
+              (MicroCFTA.ClassRowRebuildKernels.actual_rows width) MicroCFTA.EndpointMemoGateTrace.empty
+              MicroCFTA.EndpointMemoGateTrace.empty
+              (@Prod.snd.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.ClassRowRebuildKernels.finalNode width))
+              source
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.ClassRowRebuildKernels.firstEdge)))))
+theorem MicroCFTA.ClassRowRebuildKernels.positive_rebuild : ∀ (width : Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+  And
+    (@Membership.mem.{0, 0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@List.instMembership.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.InternedEdgeResidency.nodeEdges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@Prod.fst.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (MicroCFTA.InternedConstructorTemplates.State
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (MicroCFTA.ClassRowRebuildKernels.finalNode width)))
+      (@Prod.fst.{0, 0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.ClassRowRebuildKernels.firstEdge))
+    (And
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+          MicroCFTA.ClassRowRebuildKernels.parentGuard)
+        (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+          (@List.cons.{0} (List.{0} (List.{0} Nat))
+            (@List.cons.{0} (List.{0} Nat)
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+              (@List.cons.{0} (List.{0} Nat)
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+                (@List.nil.{0} (List.{0} Nat))))
+            (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+      (And
+        (@Eq.{1} Nat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.sourceRows)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+        (@Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun source =>
+          And
+            (@Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows source)
+            (@MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              width formulas solver MicroCFTA.ClassRowRebuildKernels.heap MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.entries
+              MicroCFTA.ClassRowRebuildKernels.sourceRows (MicroCFTA.ClassRowRebuildKernels.sourceState width)
+              (MicroCFTA.ClassRowRebuildKernels.rawRows width) (MicroCFTA.ClassRowRebuildKernels.rawAfter width)
+              (MicroCFTA.ClassRowRebuildKernels.actual_rows width) MicroCFTA.EndpointMemoGateTrace.empty
+              MicroCFTA.EndpointMemoGateTrace.empty
+              (@Prod.snd.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.ClassRowRebuildKernels.finalNode width))
+              source
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.ClassRowRebuildKernels.firstEdge))))) :=
+fun width formulas solver =>
+  @And.intro
+    (@Membership.mem.{0, 0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@List.instMembership.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.InternedEdgeResidency.nodeEdges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@Prod.fst.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (MicroCFTA.InternedConstructorTemplates.State
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (MicroCFTA.ClassRowRebuildKernels.finalNode width)))
+      (@Prod.fst.{0, 0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.ClassRowRebuildKernels.firstEdge))
+    (And
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+          MicroCFTA.ClassRowRebuildKernels.parentGuard)
+        (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+          (@List.cons.{0} (List.{0} (List.{0} Nat))
+            (@List.cons.{0} (List.{0} Nat)
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+              (@List.cons.{0} (List.{0} Nat)
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+                (@List.nil.{0} (List.{0} Nat))))
+            (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+      (And
+        (@Eq.{1} Nat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.sourceRows)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+        (@Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun source =>
+          And
+            (@Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows source)
+            (@MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              width formulas solver MicroCFTA.ClassRowRebuildKernels.heap MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.entries
+              MicroCFTA.ClassRowRebuildKernels.sourceRows (MicroCFTA.ClassRowRebuildKernels.sourceState width)
+              (MicroCFTA.ClassRowRebuildKernels.rawRows width) (MicroCFTA.ClassRowRebuildKernels.rawAfter width)
+              (MicroCFTA.ClassRowRebuildKernels.actual_rows width) MicroCFTA.EndpointMemoGateTrace.empty
+              MicroCFTA.EndpointMemoGateTrace.empty
+              (@Prod.snd.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.ClassRowRebuildKernels.finalNode width))
+              source
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.ClassRowRebuildKernels.firstEdge)))))
+    (MicroCFTA.ClassRowRebuildKernels.first_survives width formulas solver)
+    (@And.intro
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+          MicroCFTA.ClassRowRebuildKernels.parentGuard)
+        (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+          (@List.cons.{0} (List.{0} (List.{0} Nat))
+            (@List.cons.{0} (List.{0} Nat)
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+              (@List.cons.{0} (List.{0} Nat)
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+                (@List.nil.{0} (List.{0} Nat))))
+            (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+      (And
+        (@Eq.{1} Nat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.sourceRows)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+        (@Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun source =>
+          And
+            (@Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows source)
+            (@MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              width formulas solver MicroCFTA.ClassRowRebuildKernels.heap MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.entries
+              MicroCFTA.ClassRowRebuildKernels.sourceRows (MicroCFTA.ClassRowRebuildKernels.sourceState width)
+              (MicroCFTA.ClassRowRebuildKernels.rawRows width) (MicroCFTA.ClassRowRebuildKernels.rawAfter width)
+              (MicroCFTA.ClassRowRebuildKernels.actual_rows width) MicroCFTA.EndpointMemoGateTrace.empty
+              MicroCFTA.EndpointMemoGateTrace.empty
+              (@Prod.snd.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.ClassRowRebuildKernels.finalNode width))
+              source
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.ClassRowRebuildKernels.firstEdge))))
+      (@rfl.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+          MicroCFTA.ClassRowRebuildKernels.parentGuard))
+      (@And.intro
+        (@Eq.{1} Nat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.sourceRows)
+          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+        (@Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun source =>
+          And
+            (@Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows source)
+            (@MicroCFTA.SourceCurrentClassFoldRowOrigins.Rebuild
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              width formulas solver MicroCFTA.ClassRowRebuildKernels.heap MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.entries
+              MicroCFTA.ClassRowRebuildKernels.sourceRows (MicroCFTA.ClassRowRebuildKernels.sourceState width)
+              (MicroCFTA.ClassRowRebuildKernels.rawRows width) (MicroCFTA.ClassRowRebuildKernels.rawAfter width)
+              (MicroCFTA.ClassRowRebuildKernels.actual_rows width) MicroCFTA.EndpointMemoGateTrace.empty
+              MicroCFTA.EndpointMemoGateTrace.empty
+              (@Prod.snd.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.ClassRowRebuildKernels.finalNode width))
+              source
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.ClassRowRebuildKernels.firstEdge)))
+        (@rfl.{1} Nat
+          (@List.length.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.sourceRows))
+        (@MicroCFTA.SourceCurrentClassFoldRowOrigins.rebuild
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+          width formulas solver MicroCFTA.ClassRowRebuildKernels.heap MicroCFTA.ClassRowRebuildKernels.record
+          MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.entries
+          MicroCFTA.ClassRowRebuildKernels.sourceRows (MicroCFTA.ClassRowRebuildKernels.sourceState width)
+          (MicroCFTA.ClassRowRebuildKernels.rawRows width) (MicroCFTA.ClassRowRebuildKernels.rawAfter width)
+          MicroCFTA.EndpointMemoGateTrace.empty MicroCFTA.EndpointMemoGateTrace.empty
+          (@Prod.fst.{0, 0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.run
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              (@MicroCFTA.InternedConstructorTemplates.makeNode
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.ClassRowRebuildKernels.rawRows width))
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                      (MicroCFTA.ClassRowRebuildKernels.rawAfter width)))))))
+          (@Prod.snd.{0, 0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.run
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              (@MicroCFTA.InternedConstructorTemplates.makeNode
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.ClassRowRebuildKernels.rawRows width))
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                      (MicroCFTA.ClassRowRebuildKernels.rawAfter width)))))))
+          (MicroCFTA.ClassRowRebuildKernels.actual_rows width)
+          (MicroCFTA.ClassRowRebuildKernels.actual_reads width formulas solver)
+          (@rfl.{1}
+            (Prod.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@MicroCFTA.InternedConstructorTemplates.run
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              (@MicroCFTA.InternedConstructorTemplates.makeNode
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.ClassRowRebuildKernels.rawRows width))
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                      (MicroCFTA.ClassRowRebuildKernels.rawAfter width)))))))
+          MicroCFTA.ClassRowRebuildKernels.inventory MicroCFTA.ClassRowRebuildKernels.populated
+          MicroCFTA.ClassRowRebuildKernels.allowed
+          (@And.left
+            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready width
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              formulas solver MicroCFTA.ClassRowRebuildKernels.inventory MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.heap
+              (MicroCFTA.ClassRowRebuildKernels.sourceState width))
+            (@MicroCFTA.InternedNestedProvenance.Edges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                      (MicroCFTA.ClassRowRebuildKernels.sourceState width)))))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows)
+            (MicroCFTA.ClassRowRebuildKernels.source_ready width formulas solver))
+          (@And.right
+            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready width
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a b)
+              (fun a b =>
+                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                      b)
+                  MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+              formulas solver MicroCFTA.ClassRowRebuildKernels.inventory MicroCFTA.ClassRowRebuildKernels.record
+              MicroCFTA.ClassRowRebuildKernels.inputs MicroCFTA.ClassRowRebuildKernels.heap
+              (MicroCFTA.ClassRowRebuildKernels.sourceState width))
+            (@MicroCFTA.InternedNestedProvenance.Edges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                      (MicroCFTA.ClassRowRebuildKernels.sourceState width)))))
+              MicroCFTA.ClassRowRebuildKernels.sourceRows)
+            (MicroCFTA.ClassRowRebuildKernels.source_ready width formulas solver))
+          MicroCFTA.ClassRowRebuildKernels.rows_safe
+          (@MicroCFTA.EndpointMemoGateTrace.empty_valid
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun a b =>
+                  @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                    instDecidableEqString MicroCFTA.ClassRowRebuildKernels.«instDecidableEqFormula_restart-evidence» a
+                    b)
+                MicroCFTA.ClassRowRebuildKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                    (MicroCFTA.ClassRowRebuildKernels.sourceState width))))))
+          (MicroCFTA.ClassRowRebuildKernels.initial_history width formulas solver)
+          (@Prod.fst.{0, 0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (MicroCFTA.InternedConstructorTemplates.State (Prod.{0, 0} String MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.ClassRowRebuildKernels.firstEdge)
+          (MicroCFTA.ClassRowRebuildKernels.first_survives width formulas solver))))
+'MicroCFTA.ClassRowRebuildKernels.positive_rebuild' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]

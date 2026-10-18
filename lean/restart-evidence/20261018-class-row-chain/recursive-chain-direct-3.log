@@ -1,0 +1,110 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:87:12: error: Invalid pattern: Not enough arguments to `Chain.mu`; expected 14 arguments
+
+Hint: To ignore all remaining arguments, use the ellipsis notation `..`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:96:13: error: Tactic `assumption` failed
+
+case start
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before current reader : InternedConstructorTemplates.State Symbol Guard
+root value : Value Symbol Guard
+ready✝ : Ready before
+available✝ : Available before root
+closed✝ : root.free = []
+growth : Grows before reader
+⊢ Warm reader (start ready✝ available✝ closed✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:98:2: error: Too many variable names provided at alternative `mu`: 12 provided, but 10 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:99:26: error(lean.invalidField): Invalid field `verified`: The environment does not contain `Function.verified`, so it is not possible to project the field `verified` from an expression
+  prior
+of type
+  Grows before reader → Warm reader depth
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:111:4: error: Application type mismatch: The argument
+  Chain before root terminal (Value.node entry originals depth free)
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Prop
+of sort `Type` in the application
+  And (Chain before root terminal (Value.node entry originals depth free))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:160:54: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Or.casesOn` can only eliminate into `Prop`
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+root : Value Symbol Guard
+fuel : Nat
+ih :
+  ∀ (current : InternedConstructorTemplates.State Symbol Guard) (seen : List Nat) (pending : List (Value Symbol Guard)),
+    Ready current →
+      ∀ (tracked : (value : Value Symbol Guard) → value ∈ pending → Chain before root current value)
+        (rows : List (EdgeValue Symbol Guard)) (after : InternedConstructorTemplates.State Symbol Guard),
+        collect fuel current seen pending = Result.done rows after →
+          Keeps current after ∧ ∀ (row : EdgeValue Symbol Guard), row ∈ rows → Occurrence before root after row
+current : InternedConstructorTemplates.State Symbol Guard
+seen : List Nat
+ready : Ready current
+rows : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+rest : List (Value Symbol Guard)
+tail : (value : Value Symbol Guard) → value ∈ rest → Chain before root current value
+entry : Interned NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List Reference
+tracked :
+  (value : Value Symbol Guard) → value ∈ Value.union entry members depth free :: rest → Chain before root current value
+actual : collect (fuel + 1) current seen (Value.union entry members depth free :: rest) = Result.done rows after
+first : Chain before root current (Value.union entry members depth free)
+known :
+  Keeps before current ∧
+    Available current (Value.union entry members depth free) ∧ (Value.union entry members depth free).free = []
+visited : ¬entry.identity ∈ seen
+more : collect fuel current (entry.identity :: seen) (members ++ rest) = Result.done rows after
+value : Value Symbol Guard
+member : value ∈ members ++ rest
+x✝ : value ∈ members ∨ value ∈ rest
+⊢ Chain before root current value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:177:58: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Or.casesOn` can only eliminate into `Prop`
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+root : Value Symbol Guard
+fuel : Nat
+ih :
+  ∀ (current : InternedConstructorTemplates.State Symbol Guard) (seen : List Nat) (pending : List (Value Symbol Guard)),
+    Ready current →
+      ∀ (tracked : (value : Value Symbol Guard) → value ∈ pending → Chain before root current value)
+        (rows : List (EdgeValue Symbol Guard)) (after : InternedConstructorTemplates.State Symbol Guard),
+        collect fuel current seen pending = Result.done rows after →
+          Keeps current after ∧ ∀ (row : EdgeValue Symbol Guard), row ∈ rows → Occurrence before root after row
+current : InternedConstructorTemplates.State Symbol Guard
+seen : List Nat
+ready : Ready current
+rows : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+rest : List (Value Symbol Guard)
+tail : (value : Value Symbol Guard) → value ∈ rest → Chain before root current value
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+tracked :
+  (value : Value Symbol Guard) → value ∈ Value.mu entry body depth ordinary :: rest → Chain before root current value
+actual : collect (fuel + 1) current seen (Value.mu entry body depth ordinary :: rest) = Result.done rows after
+first : Chain before root current (Value.mu entry body depth ordinary)
+known :
+  Keeps before current ∧
+    Available current (Value.mu entry body depth ordinary) ∧ (Value.mu entry body depth ordinary).free = []
+visited : ¬entry.identity ∈ seen
+value : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+called : unfold (Value.mu entry body depth ordinary) current = Outcome.done value middle
+last : Keeps current middle ∧ Available middle value ∧ value.free = []
+more : collect fuel middle (entry.identity :: seen) (value :: rest) = Result.done rows after
+child : Value Symbol Guard
+member : child ∈ value :: rest
+x✝ : child = value ∨ child ∈ rest
+⊢ Chain before root middle child
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:209:26: error(lean.unknownIdentifier): Unknown identifier `originals`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/recursive-chain-direct-3.source.lean:301:11: error: failed to infer `have` declaration type

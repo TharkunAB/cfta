@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-6.source.lean:398:66: error: don't know how to synthesize placeholder for argument `name`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+event : SourceCurrentNativeMuPublication.Publication
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+referenceLocal :
+  ∀ (first second : Reference),
+    references first second →
+      (first = Reference.uninterned (ordinaryLevel event.depth) ↔ second = Reference.interned event.entry.identity)
+inputs : List (Value Symbol Guard ⊕ Unit) := ⋯
+names : Unit → Reference := ⋯
+localInputs : List (Value Symbol Guard ⊕ Unit ⊕ Unit) := ⋯
+firstNames : Unit ⊕ Unit → Reference := ⋯
+secondNames : Unit ⊕ Unit → Reference := ⋯
+strict : StrictBodyIH (Syntax.binder event.smart event.expression) localInputs firstNames secondNames references values
+fixed : List.map (input names) inputs = event.environment
+instantiated :
+  ∀ (own : Reference),
+    List.map (input (Sum.elim (fun x => own) names)) localInputs = Value.reference own :: event.environment
+rawFirst : Value Symbol Guard
+rawHeap : InternedConstructorTemplates.State Symbol Guard
+rawSecond : Value Symbol Guard
+rawLater : InternedConstructorTemplates.State Symbol Guard
+firstRaw :
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawFirst rawHeap
+firstFilter :
+  run (withoutSelfReference (Reference.uninterned (ordinaryLevel event.depth)) rawFirst) rawHeap =
+    (event.ordinary, event.cut)
+secondRaw :
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawSecond rawLater
+secondFilter :
+  run (withoutSelfReference (Reference.interned event.entry.identity) rawSecond) rawLater =
+    (event.body, event.afterBody)
+left✝¹ : Grows rawHeap event.afterBody
+left✝ : Grows rawLater event.afterBody
+firstEntry : SourceCurrentConstrainedCapSourceHistory.Context event.afterDepth event.environment
+secondEntry : SourceCurrentConstrainedCapSourceHistory.Context event.allocated event.environment
+cutContext : SourceCurrentConstrainedCapSourceHistory.Context event.cut event.environment
+bodyArgument : Available event.allocated (Value.reference (Reference.interned event.entry.identity))
+firstContext :
+  Context event.afterDepth (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+secondContext : Context event.allocated (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+rawMatch : SourceCurrentUsedBinderRootAlternatives.RootMatch references values rawFirst rawSecond
+firstReturned :
+  Context rawHeap (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment) ∧
+    Available rawHeap rawFirst
+secondReturned :
+  Context rawLater (Value.reference (Reference.interned event.entry.identity) :: event.environment) ∧
+    Available rawLater rawSecond
+⊢ Reference
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-6.source.lean:398:9: error: failed to infer `have` declaration type

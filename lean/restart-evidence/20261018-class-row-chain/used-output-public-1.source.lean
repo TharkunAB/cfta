@@ -1,0 +1,40 @@
+import MicroCFTA.SourceCurrentUsedBinderOutputTags
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 10000
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.bare
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.bare
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.bare
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.scoped_bare
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.scoped_bare
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.scoped_bare
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.depth_bare
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.depth_bare
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.depth_bare
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.empty
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.empty
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.empty
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.StrictBodyIH
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.StrictBodyIH
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.StrictBodyIH
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.callback_induction_step
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.callback_induction_step
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.callback_induction_step
+
+#check @MicroCFTA.SourceCurrentUsedBinderOutputTags.publication_induction_step
+#print MicroCFTA.SourceCurrentUsedBinderOutputTags.publication_induction_step
+#print axioms MicroCFTA.SourceCurrentUsedBinderOutputTags.publication_induction_step
+

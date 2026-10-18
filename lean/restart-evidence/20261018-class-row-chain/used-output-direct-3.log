@@ -1,0 +1,120 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:251:18: error(lean.unknownIdentifier): Unknown identifier `filter_verified`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:249:95: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+name : Reference
+value : Value Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready state
+available : Available state value
+facts : InternedNestedFacts.Facts state
+⊢ SourceEqualityRequiredCache.Keeps state (run (withoutSelfReference name value) state).snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:277:29: error(lean.unknownIdentifier): Unknown identifier `filter_verified`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:269:86: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+body : Syntax Symbol Guard
+environment : List (Value Symbol Guard)
+argument : Reference
+before : InternedConstructorTemplates.State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready before
+available : InternedNestedProvenance.Values before environment
+argumentAvailable : Available before (Value.reference argument)
+context : Context before environment
+localContext : Context before (Value.reference argument :: environment)
+raw : Value Symbol Guard
+rawHeap : InternedConstructorTemplates.State Symbol Guard
+done : build body (Value.reference argument :: environment) before = Outcome.done raw rawHeap
+rawKept : SourceEqualityRequiredCache.Keeps before rawHeap
+rawAvailable : Available rawHeap raw
+filtered : Value Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  run (withoutSelfReference argument raw) rawHeap
+filteredKept : SourceEqualityRequiredCache.Keeps rawHeap (run (withoutSelfReference argument raw) rawHeap).snd
+⊢ ∃ raw rawHeap value after,
+    build body (Value.reference argument :: environment) before = Outcome.done raw rawHeap ∧
+      run (withoutSelfReference argument raw) rawHeap = (value, after) ∧
+        callback body environment argument before = Outcome.done value after ∧
+          SourceEqualityRequiredCache.Keeps before after ∧
+            Available after value ∧
+              Nonempty (SourceCurrentNativeMuPublication.History before after) ∧
+                Context rawHeap (Value.reference argument :: environment) ∧ Available rawHeap raw
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:331:4: error: Type mismatch: After simplification, term
+  firstRaw
+ has type
+  build body (Value.reference firstOwn :: List.map (input firstNames) inputs) before = Outcome.done rawFirst rawHeap
+but is expected to have type
+  build body (List.map (input (Sum.elim (fun x => firstOwn) firstNames)) localInputs) before =
+    Outcome.done rawFirst rawHeap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:333:4: error: Type mismatch: After simplification, term
+  secondRaw
+ has type
+  build body (Value.reference secondOwn :: List.map (input secondNames) inputs) middle = Outcome.done rawSecond rawLater
+but is expected to have type
+  build body (List.map (input (Sum.elim (fun x => secondOwn) secondNames)) localInputs) middle =
+    Outcome.done rawSecond rawLater
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:338:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (first, middle).fst
+in the target expression
+  first = Value.reference firstOwn ↔ second = Value.reference secondOwn
+
+Atom Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+smart : Bool
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+firstOwn secondOwn : Reference
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+aliases : Aliases (Syntax.binder true body) inputs firstNames secondNames
+localAliases :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ Scope (Syntax.binder true body) inputs →
+      (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+referenceLocal : ∀ (first second : Reference), references first second → (first = firstOwn ↔ second = secondOwn)
+strict :
+  StrictBodyIH (Syntax.binder smart body) (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+    (Sum.elim (fun x => firstOwn) firstNames) (Sum.elim (fun x => secondOwn) secondNames) references values
+before : InternedConstructorTemplates.State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready before
+firstAvailable : InternedNestedProvenance.Values before (List.map (input firstNames) inputs)
+secondAvailable : InternedNestedProvenance.Values before (List.map (input secondNames) inputs)
+firstArgument : Available before (Value.reference firstOwn)
+secondArgument : Available before (Value.reference secondOwn)
+localInputs : List (Value Symbol Guard ⊕ Unit ⊕ Atom) := Sum.inr (Sum.inl ()) :: List.map liftInput inputs
+firstLabels : Unit ⊕ Atom → Reference := Sum.elim (fun x => firstOwn) firstNames
+secondLabels : Unit ⊕ Atom → Reference := Sum.elim (fun x => secondOwn) secondNames
+rawFirst : Value Symbol Guard
+rawHeap : InternedConstructorTemplates.State Symbol Guard
+first : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+firstRaw :
+  build body (Value.reference firstOwn :: List.map (input firstNames) inputs) before = Outcome.done rawFirst rawHeap
+firstFilter : run (withoutSelfReference firstOwn rawFirst) rawHeap = (first, middle)
+firstDone : callback body (List.map (input firstNames) inputs) firstOwn before = Outcome.done first middle
+firstKept : SourceEqualityRequiredCache.Keeps before middle
+firstKnown : Available middle first
+firstHistory : Nonempty (SourceCurrentNativeMuPublication.History before middle)
+firstRawContext : Context rawHeap (Value.reference firstOwn :: List.map (input firstNames) inputs)
+firstRawKnown : Available rawHeap rawFirst
+secondInputs : InternedNestedProvenance.Values middle (List.map (input secondNames) inputs)
+rawSecond : Value Symbol Guard
+rawLater : InternedConstructorTemplates.State Symbol Guard
+second : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+secondRaw :
+  build body (Value.reference secondOwn :: List.map (input secondNames) inputs) middle = Outcome.done rawSecond rawLater
+secondFilter : run (withoutSelfReference secondOwn rawSecond) rawLater = (second, after)
+secondDone : callback body (List.map (input secondNames) inputs) secondOwn middle = Outcome.done second after
+secondKept : SourceEqualityRequiredCache.Keeps middle after
+secondKnown : Available after second
+secondHistory : Nonempty (SourceCurrentNativeMuPublication.History middle after)
+secondRawContext : Context rawLater (Value.reference secondOwn :: List.map (input secondNames) inputs)
+secondRawKnown : Available rawLater rawSecond
+firstContext : Context before (List.map (input firstLabels) localInputs)
+secondContext : Context middle (List.map (input secondLabels) localInputs)
+firstActual : build body (List.map (input firstLabels) localInputs) before = Outcome.done rawFirst rawHeap
+secondActual : build body (List.map (input secondLabels) localInputs) middle = Outcome.done rawSecond rawLater
+rawBare : rawFirst = Value.reference firstOwn ↔ rawSecond = Value.reference secondOwn
+⊢ first = Value.reference firstOwn ↔ second = Value.reference secondOwn
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/used-output-direct-3.source.lean:342:41: error: No goals to be solved

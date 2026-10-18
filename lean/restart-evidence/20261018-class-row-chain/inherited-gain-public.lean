@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentOuterInheritedGain
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentOuterInheritedGain.inherited
+#print MicroCFTA.SourceCurrentOuterInheritedGain.inherited
+#print axioms MicroCFTA.SourceCurrentOuterInheritedGain.inherited
+#check @MicroCFTA.SourceCurrentOuterInheritedGain.child_fixed
+#print MicroCFTA.SourceCurrentOuterInheritedGain.child_fixed
+#print axioms MicroCFTA.SourceCurrentOuterInheritedGain.child_fixed
+#check @MicroCFTA.SourceCurrentOuterInheritedGain.HeightGain
+#print MicroCFTA.SourceCurrentOuterInheritedGain.HeightGain
+#print axioms MicroCFTA.SourceCurrentOuterInheritedGain.HeightGain
+#check @MicroCFTA.SourceCurrentOuterInheritedGain.collision
+#print MicroCFTA.SourceCurrentOuterInheritedGain.collision
+#print axioms MicroCFTA.SourceCurrentOuterInheritedGain.collision
+#check @MicroCFTA.SourceCurrentOuterInheritedGain.initial_busy
+#print MicroCFTA.SourceCurrentOuterInheritedGain.initial_busy
+#print axioms MicroCFTA.SourceCurrentOuterInheritedGain.initial_busy

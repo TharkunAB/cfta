@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-class-row-chain/inherited-gain-direct-3.source.lean:281:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }.inherited
+in the target expression
+  pathHeight (SourceCurrentAllocatedPartialGraph.descend before combined index).fst < pathHeight combined
+
+case snoc.walk_head.inr
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget fuel next : Nat
+owner : NodeRequest
+running : Caller width
+good : Good running
+inputs : NodeReady running owner
+nonempty :
+  ∃ identity records, owner.inherited = SourceEqualityConstraintAllocation.Value.live identity records ∧ records ≠ []
+fixed : FixedPayload owner.inherited.payload
+positive : 0 < pathHeight owner.inherited
+combined : EqValue
+index : Nat
+value : Node
+rest : List Node
+before : Caller width
+earlier :
+  Reached g s r e p h m c n budget (Phase.body fuel owner running)
+    (Phase.walk (next + 1) combined index (value :: rest) before)
+same :
+  owner.key =
+    { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }.key
+inheritedSame :
+  owner.inherited =
+    { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }.inherited
+requestPositive :
+  0 <
+    pathHeight
+      { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }.inherited
+ownerReady :
+  EqReady (SourceCurrentAllocatedPartialGraph.descend before combined index).snd.checked.operations.constraints
+    owner.inherited
+current :
+  Good
+      (caller
+        (Phase.node next
+          { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+          (SourceCurrentAllocatedPartialGraph.descend before combined index).snd)) ∧
+    Inputs
+      (Phase.node next
+        { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+        (SourceCurrentAllocatedPartialGraph.descend before combined index).snd)
+growth :
+  SourceEqualityConstraintMemoAllocation.Grows (caller (Phase.body fuel owner running)).checked.operations
+    (caller
+          (Phase.node next
+            { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+            (SourceCurrentAllocatedPartialGraph.descend before combined index).snd)).checked.operations
+atWalk :
+  Good (caller (Phase.walk (next + 1) combined index (value :: rest) before)) ∧
+    Inputs (Phase.walk (next + 1) combined index (value :: rest) before)
+strict : pathHeight (SourceCurrentAllocatedPartialGraph.descend before combined index).fst < pathHeight combined
+decreases : pathHeight combined ≤ pathHeight owner.inherited
+⊢ HeightGain g s r e p h m c n budget (Phase.body fuel owner running)
+    (Phase.node next
+      { inherited := (SourceCurrentAllocatedPartialGraph.descend before combined index).fst, value := value }
+      (SourceCurrentAllocatedPartialGraph.descend before combined index).snd)
