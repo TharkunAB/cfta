@@ -1,5 +1,52 @@
 # Full formalization coverage
 
+## Current class row chains and recursive inherited gain
+
+Updated: 2026-10-18 03:00 CEST. Starting checkpoint is `3f3890f9`.
+Proof commit is `c6dd2c74`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-class-row-chain.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual completed class edits now derive individual surviving-row chains.
+The chains retain the full symbol and guard, exact source row, ordered child
+reads, initial and final memos, and literal class right-fold order. They
+include final Empty propagation. Native query and recursive Head events
+remain explicit sources. General Head exposure now follows arbitrary Mu and
+union roots to chronological terminal ordinary rows. It does not identify
+every reconstructed row with an earlier nested stored body or original operand.
+
+A repeated full request below a nonempty inherited owner now requires an
+actual own-field event that strictly increases inherited path height.
+Initial physical facts and literal busy execution produce the ancestry.
+The event has a nonempty effective own equality accessor. A constructed
+example shows that height gain followed by inherited identity reuse is
+possible. Its node value is a proper child. It is not a full-key recurrence
+or a termination counterexample.
+
+Actual source outputs now agree on bare-reference and Empty tags under the
+stated lexical relations, including nested used binders. A strict source-body
+induction hypothesis constructs matching actual filtered callbacks. The
+induction step is proved. The general closed induction and alignment with an
+earlier retained writer remain open.
+
+Full pinned Audit passes 3203 jobs and 70592 dependency checks.
+Only the unchanged old warning remains. Four strict production logs are
+empty. All 54 public and 8 constructed full signature/proof/axiom pairs
+pass in 9 groups with all eight settings and only the standard axioms.
+Effective caps are 4 GiB maximum/high and zero swap. Audit peak is 355 MiB.
+Evidence is in `lean/restart-evidence/20261018-class-row-chain/`.
+
+The complete outer-pass domain remains finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive termination,
+all-ancestor collision exclusion, finite fresh-call bounds, recursive global
+language preservation, repeated convergence, and public Haskell correspondence
+remain open. Keep the full-library goal active. No Haskell patch or new
+production defect is added. Field-pool repair `b9219b9e` remains merged in
+`c0cc8a05`. Keep the root FINDINGS repair registry first. Record every later
+fix with failure, executable reproducer, paths, commit, checks and upstream
+status. Preserve all older sources, evidence, repairs and drafts. Keep the
+optimized interned core.
+
 ## Current outer prefix invariants and recursive probe preservation
 
 Updated: 2026-10-18 02:42 CEST. Starting checkpoint is `b49d8add`.
