@@ -13,6 +13,41 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current stored profiles and causal publication induction
+
+Updated: 2026-10-18 18:48 CEST. Proof checkpoint is `9a840a6c`.
+Starting checkpoint is `92fc8a02`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-causal-profile-invariant.md`.
+
+Three new modules connect actual stored substitution to a pure profile
+function, retain payload predicates through actual issued publication
+histories, and transfer a parametric body/probe contract to actual calls.
+The same local replacement and outer map can run in independently ready
+readers. The general semantic publication step remains explicit and unproved.
+
+The next step must derive that contract for each real source publication.
+Use surviving normalized input support, original aliases, and exact root
+filter control. Preserve raw and smart binders, open and closed recursive
+values, unused captures, and nested cache hits. The prior unrestricted
+Fusion and uniform raw-depth hypotheses remain refuted. Do not assume the
+missing candidate law as an initial fact. Read the independent pinned review.
+
+The strongest broad theorem remains conditional finite-tree preservation
+for a completed checked-model reduction. It adds no tree and retains every
+input tree that satisfies inherited constraints. Payload some [] gives
+exact finite-tree language equality. Initial semantic cache facts, recursive
+guard-profile agreement, and computed resource bounds remain explicit.
+General termination and full Haskell correspondence remain open.
+
+Full Audit passes 3360 jobs and 72733 dependency checks. Sixteen new public
+declarations pass full statement, proof, and standard-axiom checks. The
+three canonical module builds are warning-free. Audit retains only the
+existing ClosedCompletion warning. Evidence is in
+`lean/restart-evidence/20261018-causal-profile-invariant/`.
+No Haskell bytes change. FINDINGS retains the repair registry first.
+Field-pool repair b9219b9e remains fixed in c0cc8a05. Publication awaits the
+existing direct approval. No push is retried. The full-library goal is active.
+
 ## Current binder contract counterexample and derived marker premises
 
 Updated: 2026-10-18 18:28 CEST. Proof checkpoint is `eac5f260`.
