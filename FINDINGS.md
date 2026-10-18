@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 09:09 CEST. Proof checkpoint is `32ea01b1`.
+Actual open stored Mu substitution now supplies an exact original-body
+execution under sparse lexical shadowing. Each selected physical ordinary
+row occurs literally in that raw body result. Initial semantic inputs and
+publication history construct completion and final history. Original
+ordinary source-transition lineage and general recursive progress remain
+open. Full Audit passes 3275 jobs and 71366 checks.
+No Haskell patch or new executable defect is added. A proposed total-map
+replacement availability premise was false. The final partial shadow map
+preserves absent names and derives availability from actual initial facts.
+This is a proof contract correction, not an implementation repair.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-stored-mu-row-origins.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 08:54 CEST. Proof checkpoint is `ed544648`.
 Actual closed query Mu rows now derive their exact stored winner, current
 ordinary substitution and full row readback. Initial publication history

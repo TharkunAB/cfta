@@ -1,0 +1,30 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-mu-row-origins/stored-mu-rows-direct-2.source.lean:88:100: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+environment : Environment Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticHeap before
+available : Available before (Value.mu entry body depth ordinary)
+replacements : Replacements before environment
+value : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+actual : execute (Value.mu entry body depth ordinary) environment before = Outcome.done value after
+reader : InternedConstructorTemplates.State Symbol Guard
+history : History empty reader
+growth : Grows after reader
+rowIndex : Nat
+row : EdgeValue Symbol Guard
+selected : (nodeEdges value)[rowIndex]? = some row
+noFree : ¬(Value.mu entry body depth ordinary).free = []
+opened : (Value.mu entry body depth ordinary).free.isEmpty = false
+captures : List (Value Symbol Guard) := leaves (Value.mu entry body depth ordinary)
+expression : InternedNestedConstruction.Syntax Symbol Guard := encode captures [Reference.interned entry.identity] body
+inputs : List (Value Symbol Guard) := List.map (input environment) captures
+⊢ InternedNestedConstruction.Syntax.binder true (encode captures [Reference.interned entry.identity] body) =
+    InternedNestedConstruction.Syntax.binder true expression
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-stored-mu-row-origins/stored-mu-rows-direct-2.source.lean:106:6: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information

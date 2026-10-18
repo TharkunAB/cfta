@@ -13,6 +13,52 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current stored Mu rows from the original body execution
+
+Updated: 2026-10-18 09:09 CEST. Proof checkpoint is `32ea01b1`.
+Starting local checkpoint is `b91e4dd6`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-stored-mu-row-origins.md` for exact boundaries.
+
+A physical ordinary row returned by actual stored Mu substitution now
+occurs in the raw result of executing the original stored body. The local
+binding shadows the exact original binder name. The proof derives body
+availability and replacement availability at the actual post-depth heap.
+It retains the exact current callback, actual stored winner and full row.
+Initial semantic inputs and publication history construct the successful
+substitution and its final history. No future successful return is assumed.
+The input scope retains arbitrary nested Mu values, without BinderFree or
+finite ordinary Cap conditions.
+
+The row occurrence is literal. It follows root unions and does not unfold
+a retained Mu. It is an occurrence in the executed original body's result.
+It is not yet an occurrence of an original ordinary source transition.
+General source descent must compose ordinary, union, Mu and replacement
+origins. It then must pass through class folds, Parent and actual walks.
+All-ancestor node-key exclusion, a finite fresh-call bound, recursive outer
+completion, repeated convergence, equality-operation resources, host Int
+adequacy and public Haskell correspondence remain open.
+
+The strongest existing outer semantic claim remains conditional: a
+successful modeled normalization preserves accepted terms that satisfy
+its inherited constraints and adds no accepted terms. Empty inherited
+constraints give exact language equality. Initial semantic memo and heap
+conditions and scheduled capacity remain explicit. This does not establish
+general recursive termination or public Haskell execution correspondence.
+
+Full Audit passes 3275 jobs and 71366 checks. All eight new production
+public definitions and theorems pass full statement, proof and axiom checks.
+All three production strict logs and the integration strict log are empty.
+A source-built example reconstructs open outer and nested Mu values to an
+ordinary leaf. Its complete constructed proof passes the same full checks.
+Independent review finds no material issue. Evidence is in
+`lean/restart-evidence/20261018-stored-mu-row-origins/`.
+
+No Haskell patch or new executable defect is added. The corrected sparse
+replacement premise is a proof contract correction. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the repair registry first.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal stays active.
+
 ## Current Mu rows from actual binder readback
 
 Updated: 2026-10-18 08:54 CEST. Proof checkpoint is `ed544648`.
