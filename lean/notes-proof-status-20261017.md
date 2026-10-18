@@ -1,5 +1,33 @@
 # Proof status at 2026-10-18
 
+## Current selected and native source origins
+
+Updated: 2026-10-19 00:06 CEST. Proof checkpoint: `2364e745d`.
+Start: `741ae3c56`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-native-renewal.md` and the current system claim.
+Actual record scans now derive false primary certificates for their selected
+records at the exact final heap. Existing scan normality supplies the
+separate union invariant from initial normality. Nonempty forest projection
+and actual target operand returns retain exact source rows and smaller
+source children. An actual ordinary native result retains both source rows,
+a positive source side, smaller source children and its actual child query.
+Causal writer and physical input premises remain explicit.
+
+A source-built class example imports its positive continuation from the
+competing input. It refutes a positional anchor confined to the selected original.
+An empty forest path can expose a constrained Mu continuation equal to its
+source. This is an unrestricted forest boundary. Existing live-path facts
+remain available for actual precheck entries. Neither example establishes
+an infinite run or a Haskell defect. General renewal bounds, completion,
+empty-owner exclusion, convergence and Haskell correspondence remain open.
+The strongest constructed root language claim is unchanged and conditional
+on modeled completion. Full Audit passes 3431 jobs and 73492 dependency
+checks. All eight public and four constructed heads pass complete proof
+and standard-axiom checks. No Haskell bytes change or repair is added.
+FINDINGS retains all Haskell repairs first. Field-pool fix `b9219b9e`
+remains fixed in main `c0cc8a05`. No push or board write is attempted.
+The full-library goal remains active.
+
 ## Current actual outer Merge writer history
 
 Updated: 2026-10-18 23:38 CEST. Proof checkpoint: `5f5565efd`.

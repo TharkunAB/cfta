@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 00:06 CEST. Proof checkpoint: `2364e745d`.
+Selected scans now derive exact final-heap false primary receipts. Actual
+nonempty projection, target and ordinary native calls retain source rows
+and smaller source inputs. A source-built selected edit can import a
+positive continuation from the competing input. The selected-original positional
+anchor is therefore insufficient. An unrestricted empty forest path can
+expose a constrained Mu self continuation. Neither result establishes
+nontermination or a Haskell defect. No Haskell repair request is added.
+No Haskell bytes change. General completion and refinement remain open.
+Full Audit passes 3431 jobs and 73492 checks. Field-pool repair `b9219b9e`
+remains fixed in main `c0cc8a05`. Read `lean/notes-current-native-renewal.md`.
+Keep this registry first. Record every repair with its failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve every entry.
+
 Current proof update: 2026-10-18 23:38 CEST. Proof checkpoint: `5f5565efd`.
 Actual target, class, Parent and outer calls now derive causal Merge writer
 history. Unfinished outer phase prefixes need no future whole-call return.
