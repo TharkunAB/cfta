@@ -23,8 +23,11 @@ The d8986453 runtime completes 24 of 27 configurations within 300 seconds.
 
 HugeLists size 7, phase 2 has a substantial regression: the same 242 laws
 take 294.80 seconds, against 86.70 seconds at `d2e91fdf`. Allocation rises
-by 39.1049% and peak RSS by 21.8378%. The added cost has not yet been
-attributed. This limitation remains alongside the newly completed searches.
+by 39.1049% and peak RSS by 21.8378%. A fresh trace places 94.0769% of
+phase 2 CPU inside preparation. Its selected profile attributes 73.8352%
+of application ticks to Template equality and ordering subtrees. These
+measurements locate costly work; they do not isolate the full native
+regression or establish an implementation gain.
 
 All 22 configurations that completed under `d2e91fdf` retain their exact
 numbered law sequences. The current 300-second pass also completes HugeLists
@@ -33,9 +36,10 @@ runs were censored; they provide no complete old basis. The 900-second pass
 adds no completed basis. Printed agreement and additional completions do not
 prove validity, independence, or current typed-Rules coverage.
 
-Historical profiles and proof controls name their source revisions. The
-latest [cost-centre profile](#cost-centre-evidence-and-remaining-bottlenecks)
-measures the selected-bucket predecessor, not the new all-bucket runtime.
+Profiles and proof controls name their source revisions. The latest
+[cost-centre profiles](#cost-centre-evidence-and-remaining-bottlenecks)
+measure the current all-bucket `d8986453` runtime. Historical results retain
+their source labels.
 The optional ordered CFTA cursor passes its API controls, but its
 Specftacular variants fail their selection controls. The selected engine
 uses the existing enumerator and final bucket sort.
@@ -160,8 +164,9 @@ HugeLists7P2 has a substantial regression against the retained d2e91fdf
 runtime. The complete 242-law sequence is unchanged, but wall time rises
 from 86.70 to 294.80 seconds (+240.0231%), allocation from 587,684,817,808
 to 817,498,637,712 bytes (+39.1049%), and peak RSS from 926,300 to 1,128,584
-KiB (+21.8378%). The added cost has not yet been attributed. This regression
-must remain visible alongside the newly completed searches.
+KiB (+21.8378%). The current preparation trace and profile below locate
+costly Template comparisons. They do not partition the full native cost
+increase. This regression remains alongside the newly completed searches.
 
 RTS CPU rises from 86.772 to 295.127 seconds. GC CPU rises from 7.129 to
 13.628 seconds. The extra 6.499 GC seconds account for 3.12% of the total
@@ -577,39 +582,78 @@ against `456123af`. Current smaller increments do not remove that cost.
 
 ## Cost-centre evidence and remaining bottlenecks
 
-The latest completed profile measures the combined selected-bucket
-predecessor of d8986453, not the new all-bucket runtime. All 30 HOME modules
-use O2 and late SCCs with 134 audited profiling files. Its whole size 5
-search reproduces all 197 laws and all 40,814 stdout bytes. Profile wall
-time is 79.014 seconds against 21.740 seconds natively. That 3.6345 ratio
-measures profiling distortion, not native improvement.
+The current HugeLists size 7, phase 2 regression has new preparation and
+cost-centre measurements. The `d8986453` diagnostic replay reproduces every
+stdout byte of the packaged 197-law control and the completed 242-law run.
+Only Main adds a timed `compiled_prepare` boundary. Runtime modules and the
+1064-case schedule remain unchanged.
 
-| Profile scope | Application self ticks | Enumeration self | Pruning self | `matchPartial` self |
+| Size 7 phase | Phase CPU s | Preparation CPU s | Preparation share | Other bucket CPU s |
 | --- | ---: | ---: | ---: | ---: |
-| Whole size 5 combined control | 61,770 | 917 (1.4845%) | 618 (1.0005%) | 296 (0.4792%) |
-| Size 6 first demand, 60-second window | 51,611 | 21,676 (41.9988%) | 17,445 (33.8009%) | 9,329 (18.0756%) |
+| 1 | 135.889 | 60.295 | 44.3706% | 75.593 |
+| 2 | 130.034 | 122.332 | 94.0769% | 7.701 |
 
-Module self costs are disjoint. The matcher is part of Pruning. The whole
-profile has 78,925 total ticks; the window has 60,120. Application totals
-exclude GC, PROFILING, SYSTEM and IDLE. QuickCheck generation uses 21,593
-whole-run ticks (34.9571%), near the earlier full-oracle count of 21,849.
-Its larger share accompanies reduced pruning/enumeration, not demonstrated
-generator regression.
+The closed phases total 265.923 CPU seconds; preparation accounts for
+182.627 seconds. Preparation has no nested measured stage, so its inclusive
+and exclusive totals agree. Other bucket CPU excludes preparation. Phase
+work outside buckets is below 0.003 seconds. CPU timestamps use picoseconds;
+wall timestamps use nanoseconds. Phase and bucket inclusive totals overlap.
 
-The size 6 timer starts after compilation, reduction and pattern coverage.
-It preserves the exact 223-law prefix and stops during first candidate-list
-demand after 60.122 wall/60.762 CPU seconds. No target candidate reaches
-tests. The corresponding native demand completed in 29.651 CPU seconds.
-The whole size 5 generation share therefore does not describe this bucket.
-Generated workers without source locations remain unattributed. The
-fragment-expansion inclusive subtree contains the matching continuation;
-its 49.8557% is not removable lookup cost. Inclusive families overlap.
-Window allocation and entry totals include the preceding search.
+This boundary evaluates the returned pair to weak head normal form. It can
+demand graph and template work deferred from earlier bindings. Residual
+filtering can remain lazy and run later. These measurements do not isolate
+an eager compiler, or identify all of the 208.355-second CPU increase
+between the uninstrumented matrix runs.
 
-The new all-bucket Huge7P2 regression needs its own preparation boundary
-and cost-centre attribution. These older profile percentages do not identify
-its cause. Moving demand for diagnostics can change timing; semantic output
-gates and the uninstrumented matrix remain separate evidence.
+The profiles compile all 30 HOME modules with `-O2 -prof -fprof-late` and
+manual and automatic source SCC insertion disabled. No installed CFTA or
+Specftacular archive is linked. The 134 hash-bound provenance files include
+historical audit records, not 134 linked libraries. Source inverses preserve
+the runtime apart from Main's timing gates.
+
+The whole size 5 profile retains all 197 laws and all 40,814 stdout bytes.
+It has 91,448 total ticks and 71,869 application self ticks. QuickCheck Gen
+accounts for 33.3537%, CFTA Template for 2.8552%, Enumeration for 1.0060%,
+and Specftacular Pruning for 0.4912%. These module self costs are disjoint.
+Profile wall time is 91.572 seconds against native 22.590 seconds. The
+4.0536 ratio measures profiling distortion. These whole size 5 proportions
+do not describe the size 7 bottleneck.
+
+The selected window starts at phase 2, program size 7, result type `B`,
+after 13,001 examined terms and 238 laws. It preserves the exact native
+stdout prefix. Preparation completes before target enumeration or testing.
+The same native action took 15.293 CPU seconds. Its profile takes 52.022 CPU
+and 51.476 wall seconds, within the 60-second wall cap. The profile contains
+51,475 total ticks and 42,775 application self ticks. The application
+denominator excludes GC, PROFILING, SYSTEM and IDLE.
+
+| Selected preparation self cost | Ticks | Application share |
+| --- | ---: | ---: |
+| GHC.Internal.Classes | 25,130 | 58.7493% |
+| CFTA Template | 12,685 | 29.6552% |
+| CFTA Enumeration | 0 | 0% |
+| Specftacular Pruning | 0 | 0% |
+| QuickCheck Gen and decision tree | 0 | 0% |
+
+Derived Template equality and ordering subtrees contain 20,838 and 10,745
+ticks: 48.7154% and 25.1198%. Their disjoint union is 73.8352%. These
+subtrees include derived list and symbol comparisons. All sampled Template
+equality subtrees enter below `edgeCopies`. Ordering has 6,830 ticks below
+`refine`, 3,838 below the Template ordering dictionary, 76 below
+`edgeCopies`, and one below `pruningTemplates` deduplication. The source uses
+structural comparisons in duplicate guards and ordered sets. This ancestry
+does not isolate every call site or estimate removable cost.
+
+No target generation or testing occurs in this preparation window. Missing
+or inlined names are not zero-cost proofs. Other inclusive families overlap
+and must not be added. Profile allocation, entries and RTS resources include
+the whole preceding search and the selected action. These results establish
+no native speedup or implementation gain.
+
+An earlier selected-bucket predecessor had a different size 6 window:
+41.9988% Enumeration and 33.8009% Pruning self ticks after compilation and
+reduction. Those historical percentages do not identify the current size 7
+preparation cost.
 
 Earlier profiles explain the implemented fixes. At `102965d3`, long size 5
 and size 6 windows remained blocked before tests. At older port revisions,
