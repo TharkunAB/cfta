@@ -13,6 +13,10 @@ Before release, the package was called `microcfta`.
   replace only the changed rows and share the others.
 - Add `Data.CFTA.Language`: updates that combine with `<>` over a source
   document, and named exclusions that `restore` removes again.
+- Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
+  a language version to the version before it. `lift` gives the inverse image
+  of an automaton, and `checkLowering` checks a later grammar against an
+  earlier one.
 - `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
   `mod` of SMT-LIB.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
