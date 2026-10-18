@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `b82efb10`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `1f9c135c`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -118,7 +118,19 @@ initial entry facts. General rows_tail/walk_tail semantic transport and
 initial recursive resource schedules remain open. Mu cleanup is already
 unchanged. No finite ordinary domain or finite Cap is added. General
 recursive completion and the strongest complete outer domain are unchanged.
-Read [the current checkpoint](notes-current-parent-semantic-reads.md).
+Read [the earlier checkpoint](notes-current-parent-semantic-reads.md).
+
+The finite physical guard alphabet now derives initial flat raw bounds and
+actual precheck class/path/step bounds. Initial native queries construct
+their own receipts and returned guard bounds. Exact finite own-record and
+ambient-word reservations retain index-sensitive compiler syntax and derive
+the actual Parent reservation from current initial Context/Fits. No inherited
+size, hereditary domain, finite Cap or future-entry capacity callback is
+added. Single-Parent initial scheduling is checked. The general fixed-fuel
+outer resource/guard composition and semantic rows_tail/walk_tail summaries
+remain open. General recursive completion and the strongest complete outer
+domain are unchanged. Read
+[the current checkpoint](notes-current-native-guard-envelopes.md).
 
 ## Strongest current claim in plain technical English
 
