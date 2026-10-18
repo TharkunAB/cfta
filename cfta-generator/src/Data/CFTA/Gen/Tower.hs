@@ -74,7 +74,8 @@ abstract vocabulary (Term.Node symbol children) = do
             Just $ Term.Node (RefinedSymbol (Symbol $ symbolText symbol) cube) parts
 
 {- | Decide a predicate at a value of @v@. The fragment is integer literals,
-@v@, negation, sums, differences, products, remainders by a nonzero integer,
+@v@, negation, sums, differences, products, remainders by a nonzero integer
+(as the @mod@ of SMT-LIB, which is not negative),
 conditionals, the six relations, and the Boolean connectives. 'Nothing'
 outside that fragment.
 -}
@@ -98,7 +99,7 @@ evaluate value = formula
         F.Mul left right -> (*) <$> term left <*> term right
         F.Mod left right -> do
             divisor <- term right
-            if divisor == 0 then Nothing else (`mod` divisor) <$> term left
+            if divisor == 0 then Nothing else (`mod` abs divisor) <$> term left
         F.Ite condition yes no -> do
             truth <- formula condition
             term $ if truth then yes else no

@@ -5,14 +5,13 @@ module Data.CFTA.Gen.TowerSpec (spec) where
 
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
-import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Gen.Tower (Observation (..), Outcome (..), Result (..), Step (..), Verdict (..))
 import qualified Data.CFTA.Gen.Tower as Tower
-import Data.CFTA.Refinement.Expression (refinementFormula, (.==))
-import Data.CFTA.Symbol (Symbol (RefinedSymbol), valueName)
+import Data.CFTA.Refinement.Expression (modulo, refinementFormula, (.==), (.>))
+import Data.CFTA.Symbol (Symbol (RefinedSymbol))
 import Data.CFTA.Term (Term (Node))
 
 -- | The response of the toy model: is the first digit large, and is the second digit even.
@@ -102,18 +101,14 @@ observe first second = Observation (Node "pair" [digit first, digit second]) (mo
 digit :: Integer -> Term Symbol
 digit exact = Node (RefinedSymbol "lit" $ refinementFormula (.== fromInteger exact)) []
 
--- | The qualifier templates: @v > k@ and @v mod k == 0@.
+-- | The qualifier templates, in the expression syntax of refinements: @v > k@ and @v mod k == 0@.
 templates :: [Integer -> F.Formula]
 templates = [greaterThan, divisibleBy]
 
 -- | @v > k@.
 greaterThan :: Integer -> F.Formula
-greaterThan bound = F.Atom F.Gt leafValue (F.Lit bound)
+greaterThan bound = refinementFormula (.> fromInteger bound)
 
 -- | @v mod k == 0@.
 divisibleBy :: Integer -> F.Formula
-divisibleBy divisor = F.Atom F.Eq (F.Mod leafValue (F.Lit divisor)) (F.Lit 0)
-
--- | The value of a leaf.
-leafValue :: F.Term
-leafValue = F.Var $ F.Name $ Text.pack valueName
+divisibleBy divisor = refinementFormula $ \v -> modulo v (fromInteger divisor) .== 0

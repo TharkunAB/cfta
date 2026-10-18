@@ -4,6 +4,8 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
+  `mod` of SMT-LIB.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
   the input becomes, so that a caller can carry data about the edges of a
   graph through `refold`, whose new edges have new identities.
