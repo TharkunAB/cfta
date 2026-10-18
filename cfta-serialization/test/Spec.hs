@@ -121,6 +121,35 @@ spec = do
         it "keep the formats apart" $
             T.parseDocumentWith strings "language 1; start S; state S {}" `shouldSatisfy` either (const True) (const False)
 
+    describe "graph quotes" $ do
+        it "read like a graph without its first line" $
+            forM_ graphs $ \(_, graph) -> do
+                let printed = T.printGraphWith strings graph
+                    body = Text.unlines $ drop 1 $ Text.lines printed
+                T.parseGraphQuote Map.empty Map.empty body `shouldBe` T.parseGraphWith strings printed
+
+        it "list their names once each" $
+            T.graphQuoteNames "start S; state S { $a; $b(S) where $c; $a; }" `shouldBe` Right (["a", "b"], ["c"])
+
+        it "put the values in place of the names" $
+            T.parseGraphQuote
+                (Map.fromList [("p", "pair")])
+                (Map.fromList [("same", equal)])
+                "start S; state S { $p(A, A) where $same; } state A { a; }"
+                `shouldBe` Right (must $ FTA.mkFTA "S" [("S", [FTA.Transition "pair" ["A", "A"] equal]), ("A", [leaf "a"])])
+
+        it "report an unknown name at its position" $
+            case T.parseGraphQuote Map.empty Map.empty "start S;\nstate S { $a; }" of
+                Left (SyntaxError line _ message) -> (line, message) `shouldSatisfy` \(l, m) -> l == 2 && "unknown symbol $a" `Text.isInfixOf` Text.pack m
+                other -> expectationFailure $ show other
+
+        it "check the state rows before the values are known" $ do
+            T.graphQuoteNames "start T; state S {}"
+                `shouldBe` Left (InvalidDefinition $ D.InvalidGraph $ FTA.MissingInitialState "T")
+            T.graphQuoteNames "start S; state S { $a(T); }"
+                `shouldBe` Left (InvalidDefinition $ D.InvalidGraph $ FTA.DanglingState "T")
+            T.graphQuoteNames "start S; state S {} state S {}" `shouldBe` Left (InvalidDefinition $ D.DuplicateState "S")
+
     describe "ranks" $
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
