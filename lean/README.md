@@ -1,5 +1,57 @@
 # cfta formal model
 
+## Current finite guard carriers through complete Parent
+
+Updated: 2026-10-18 06:59 CEST. Proof checkpoint is `651cb065`.
+Starting local checkpoint is `666c15c3`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-full-guard-carrier.md` for exact boundaries.
+
+Finite raw guard carriers now compose through complete local Classes,
+Local reduction and Parent construction. Preparation, the actual selected
+class pass and the final constructor retain their original full receipts.
+The returned Frame/Fits, semantic reads, Post and carrier share the same
+result, complete Checked state and memo bundle. All nine lower fuels can
+increase independently at that same return.
+
+The class forecast enumerates initial ordered ambient guard words and
+positional selections of the original records. The uniform Parent carrier
+then enumerates exact own-record images and original counts through initial
+mass. It retains the entry alphabet and Top. Initial Context/Fits, raw
+carrier membership, inherited readiness and resident input derive the
+actual case. The existing common Parent output profile and fuel ceiling
+remain unchanged. Frame and the initial pure reservation stay explicit.
+
+Raw contradiction constructs the Top sentinel without child, stored-field,
+inherited-readiness or Room premises. The live constructor retains either
+its exact original full guard or the Top sentinel. No hereditary guard
+domain, whole-forest closure, finite Cap, future result or entry-capacity
+callback is supplied.
+
+The remaining outer bridge is a mutual successful-call proof through
+rows_tail and walk_tail. It must carry the returned semantic context,
+Frame, scheduled Fits and carrier into the next sibling. Prefix and descent
+adapters already supply their local facts. Parent-call counts still exclude
+other outer constructors. Separate equality-operation accounting is outside
+the four-field physical Profile. The Lean operations use unbounded Nat
+identities. The host Int equality supply needs its own adequacy argument.
+This is a refinement obligation, not evidence of a new Haskell defect.
+
+Full Audit passes 3252 jobs and 71136 checks.
+Four production and three constructed strict logs are empty. All
+15 public and 3 constructed full pairs pass in 7 groups.
+All eight settings and standard axioms pass. Audit peak is
+382 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 282 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-full-guard-carrier/`.
+
+General recursive outer progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current finite guard composition through edits and classes
 
 Updated: 2026-10-18 06:44 CEST. Proof checkpoint is `92ddd8ff`.

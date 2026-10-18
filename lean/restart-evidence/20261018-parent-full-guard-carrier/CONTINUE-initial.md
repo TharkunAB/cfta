@@ -1,0 +1,1 @@
+Continue from 666c15c3. Construct finite raw guard carriers through complete Classes, Local and Parent; derive a uniform initial Parent carrier. Keep actual full receipts, Frame/Fits and literal worker endpoints. Compose general outer resources and semantic context next. Preserve all prior proofs and evidence. No push or board write. Full-library goal stays active.

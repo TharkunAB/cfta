@@ -1,0 +1,35 @@
+import MicroCFTA.SourceCurrentParentUniformGuardAlphabet
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.forecast
+#print MicroCFTA.SourceCurrentParentUniformGuardAlphabet.forecast
+#print axioms MicroCFTA.SourceCurrentParentUniformGuardAlphabet.forecast
+
+#check @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.initial_mem
+#print MicroCFTA.SourceCurrentParentUniformGuardAlphabet.initial_mem
+#print axioms MicroCFTA.SourceCurrentParentUniformGuardAlphabet.initial_mem
+
+#check @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.top_mem
+#print MicroCFTA.SourceCurrentParentUniformGuardAlphabet.top_mem
+#print axioms MicroCFTA.SourceCurrentParentUniformGuardAlphabet.top_mem
+
+#check @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.case_subset
+#print MicroCFTA.SourceCurrentParentUniformGuardAlphabet.case_subset
+#print axioms MicroCFTA.SourceCurrentParentUniformGuardAlphabet.case_subset
+
+#check @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.resident_subset
+#print MicroCFTA.SourceCurrentParentUniformGuardAlphabet.resident_subset
+#print axioms MicroCFTA.SourceCurrentParentUniformGuardAlphabet.resident_subset
+
+#check @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.complete
+#print MicroCFTA.SourceCurrentParentUniformGuardAlphabet.complete
+#print axioms MicroCFTA.SourceCurrentParentUniformGuardAlphabet.complete
+
