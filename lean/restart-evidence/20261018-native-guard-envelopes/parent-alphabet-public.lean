@@ -1,0 +1,31 @@
+import MicroCFTA.SourceCurrentParentAlphabetReservation
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentParentAlphabetReservation.ownRecordImage
+#print MicroCFTA.SourceCurrentParentAlphabetReservation.ownRecordImage
+#print axioms MicroCFTA.SourceCurrentParentAlphabetReservation.ownRecordImage
+
+#check @MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough
+#print MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough
+#print axioms MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough
+
+#check @MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough_member
+#print MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough_member
+#print axioms MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough_member
+
+#check @MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved
+#print MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved
+#print axioms MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved
+
+#check @MicroCFTA.SourceCurrentParentAlphabetReservation.resident_reserved
+#print MicroCFTA.SourceCurrentParentAlphabetReservation.resident_reserved
+#print axioms MicroCFTA.SourceCurrentParentAlphabetReservation.resident_reserved
+

@@ -1,5 +1,50 @@
 # Constrained languages, indexing, and distributions
 
+## Current initial guard envelopes and finite Parent reservations
+
+Updated: 2026-10-18 06:09 CEST. Proof checkpoint is `1f9c135c`.
+Starting local checkpoint is `9964fe28`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-guard-envelopes.md` for exact boundaries.
+
+The finite physical guard alphabet now computes a common raw guard vector.
+Actual resident prechecks derive their own class, path and step bounds.
+Initial native query support constructs the actual receipt and transports
+the raw vector through its literal finite alphabet extension schedule.
+No hereditary ordinary domain, finite Cap or inherited-size premise is added.
+
+The four raw limits do not bound child-index values. Current Required/Edit
+forecasts include those values in sizeOf. A separate exact finite alphabet
+reservation now covers the complete own Record syntax, original child counts
+through the mass bound, and all ordered ambient words through the initial
+edge-counter bound. Context/Fits, flat membership, inherited readiness and
+residency derive the actual Parent reservation. No full Frame is needed for
+this numeric transfer. No future entry-state callback or result is assumed.
+
+A literal query on two distinct closed resident Mu operands produces a
+nonempty result and actual native node and edge work. Its initial facts and
+guard bounds are derived internally. The returned bounds align to the exact
+literal result and full Checked state. A separate live recursive Parent
+fixture derives its own finite UniformReserved and constructs the actual
+body. A raw rejection fixture uses zero lower fuel and no class Room.
+
+Full Audit passes 3237 jobs and 70923 checks. Three production and two
+constructed strict logs are empty. All 12 public and 3 constructed full
+pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 382 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 235 entries. Evidence is in
+`lean/restart-evidence/20261018-native-guard-envelopes/`.
+
+Next compose the single-Parent resource and guard schedules across the
+fixed outer fuel/phase call tree. Derive semantic Reads/Post/Frame through
+rows_tail and walk_tail. Initial recursive completion, all-owner separation,
+fresh-call bounds, recursive outer language preservation, used-writer
+alignment, repeated convergence and public Haskell correspondence remain
+open. The strongest complete ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
 ## Current semantic context at actual Parent and outer edge returns
 
 Updated: 2026-10-18 05:52 CEST. Proof checkpoint is `b82efb10`.
