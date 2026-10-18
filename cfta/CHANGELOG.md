@@ -4,6 +4,9 @@
 
 Before release, the package was called `microcfta`.
 
+- Add `Data.CFTA.Document`: editable source documents with named
+  productions and named facts, and patches that check the document they
+  were prepared on.
 - `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
   conditions a rule on a lattice value: the refinement of the e-class of a
   variable must imply a formula about its value. An analysis can meet the

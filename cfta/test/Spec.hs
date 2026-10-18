@@ -4,6 +4,7 @@ import System.Directory (findExecutable)
 import System.Exit (die)
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.DocumentSpec
 import qualified Data.CFTA.EGraphSpec
 import qualified Data.CFTA.Equality.ConstraintSpec
 import qualified Data.CFTA.Equality.FTASpec
@@ -50,3 +51,4 @@ main = do
         Data.CFTA.SymbolSpec.spec
         Data.CFTA.SimpleSpec.spec
         Data.CFTA.Refinement.SimpleSpec.spec
+        Data.CFTA.DocumentSpec.spec

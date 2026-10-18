@@ -92,6 +92,15 @@ Wilf, and Feat (ranking).
   matching** finds only the matches through e-classes with a stamp after the
   last run of the rule.
 
+## Editable documents
+
+- **Source document**: an editable language definition that retains named
+  transitions and their separate facts before compilation.
+- **Source fact**: one named constraint attached to a source transition.
+  Removing a fact removes that obligation. It does not negate the constraint.
+- **Patch**: an ordered batch of edits together with the source document it
+  expects. A valid patch produces a new source document.
+
 ## Transformations
 
 - **Exact transformation**: an operation on an automaton that keeps its
