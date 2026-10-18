@@ -23,7 +23,7 @@ import qualified Data.CFTA.Term as CT
 import qualified Data.IntMap.Strict as IntMap
 import Data.List (find)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes)
+import Data.Maybe (catMaybes, mapMaybe)
 import qualified Data.Set as Set
 
 -- | The remaining parts of one match, each waiting for an enumeration hole.
@@ -35,17 +35,30 @@ type PartialTerm = CT.Term (PartialSymbol Symbol)
 {- | Enumerate terms while rejecting branches that contain a template.
 The templates must describe redundant program applications. Type annotations
 are checked only where a template requires them.
+Every program application must use the fixed singleton arrow marker. The
+caller must disable pruning if a type constructor also has the app/4 shape.
+The early check omits the marker only under these encoding assumptions.
 -}
 prunedTerms :: [Template Symbol] -> Node Symbol -> [CT.Term Symbol]
 prunedTerms [] = map fst . runsInterned "Mu"
 prunedTerms templates = termsPruneWith "Mu" [] order oracle
   where
+    earlyTemplates = mapMaybe structuralTemplate templates
+    earlyCandidatesFor = indexTemplates earlyTemplates
+    rejectEarly fragment@(TermFragmentNode symbol children)
+        | (symbol, length children) `elem` [("app", 4), ("filter", 2)] =
+            any redundant (programs (fragmentTerm fragment))
+      where
+        redundant term = any (\template -> matchPartial template term == Just []) (earlyCandidatesFor term)
+    rejectEarly _ = False
     candidatesFor = indexTemplates templates
     order pending candidates =
         let waiting = Set.fromList (map snd (concat pending))
          in find (`Set.member` waiting) candidates
     oracle :: [Pending] -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, [Pending])
     oracle pending _ (Right _) = pure (False, pending)
+    oracle pending _ (Left fragment)
+        | rejectEarly fragment = pure (True, pending)
     -- This concrete root starts no program match, and no check waits.
     oracle [] _ (Left (TermFragmentNode symbol children))
         | (symbol, length children) `notElem` [("app", 4), ("filter", 2)] = pure (False, [])
@@ -131,3 +144,27 @@ programs :: PartialTerm -> [PartialTerm]
 programs (CT.Node (ConcreteSymbol "filter") [_, term]) = programs term
 programs term@(CT.Node (ConcreteSymbol "app") [_, _, f, x]) = term : programs f ++ programs x
 programs _ = []
+
+{- | Select application templates whose annotations are wildcards.
+Specftacular applications always have the fixed singleton arrow marker.
+Its equality endpoint can still be an unresolved UVar during eager descent.
+Ignore that marker only under this encoding invariant. The signature guard
+disables pruning when a type constructor also has the raw app/4 shape.
+-}
+structuralTemplate :: Template Symbol -> Maybe (Template Symbol)
+structuralTemplate template@(TemplateNode "app" [_, _, _, _]) = program template
+  where
+    program Hole = Just Hole
+    program (TemplateNode "app" [Hole, marker, function, argument])
+        | marker `elem` [Hole, TemplateNode "(->)" []] =
+            (\f x -> TemplateNode "app" [Hole, Hole, f, x]) <$> program function <*> program argument
+    program (TemplateNode symbol [Hole]) = Just (TemplateNode symbol [Hole])
+    program _ = Nothing
+structuralTemplate _ = Nothing
+
+{- | View the immutable fragment without reading or expanding any UVar.
+The existing lazy term children leave wildcard positions unevaluated.
+-}
+fragmentTerm :: TermFragment Symbol -> PartialTerm
+fragmentTerm (TermFragmentNode symbol children) = CT.Node (ConcreteSymbol symbol) (map fragmentTerm children)
+fragmentTerm (TermFragmentUVar uv) = CT.Node (UVarHole uv) []
