@@ -1,0 +1,83 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-rank-bounded-fusion/binder-self-direct-1.source.lean:41:12: error: unsolved goals
+case nil
+marker : Reference
+names : List (Unit ⊕ Reference)
+fresh : ∀ (name : Reference), Sum.inr name ∈ (some names).getD [] → name ≠ marker
+found :
+  List.filterMap
+      (fun label =>
+        match label with
+        | Sum.inl val => none
+        | Sum.inr name => some name)
+      names =
+    []
+⊢ (match
+      some
+        (List.filterMap
+          (fun name =>
+            match name with
+            | Sum.inl val => none
+            | Sum.inr value => some value)
+          names) with
+    | some [] => true
+    | x => false) =
+    true
+
+case cons
+marker : Reference
+names : List (Unit ⊕ Reference)
+fresh : ∀ (name : Reference), Sum.inr name ∈ (some names).getD [] → name ≠ marker
+head✝ : Reference
+tail✝ : List Reference
+found :
+  List.filterMap
+      (fun label =>
+        match label with
+        | Sum.inl val => none
+        | Sum.inr name => some name)
+      names =
+    head✝ :: tail✝
+⊢ (match
+      some
+        (List.filterMap
+          (fun name =>
+            match name with
+            | Sum.inl val => none
+            | Sum.inr value => some value)
+          names) with
+    | some [] => true
+    | x => false) =
+    false
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-rank-bounded-fusion/binder-self-direct-1.source.lean:61:12: error: unsolved goals
+case some.mp.cons.refine_2
+marker : Reference
+first : Unit ⊕ Reference
+rest : List (Unit ⊕ Reference)
+fresh : ∀ (name : Reference), Sum.inr name ∈ (some (first :: rest)).getD [] → name ≠ marker
+lowered :
+  isEmpty (lower (some (first :: rest))) = true ↔
+    ∀ (label : Unit ⊕ Reference), label ∈ first :: rest → label = Sum.inl ()
+all : ∀ (label : Unit ⊕ Reference), label ∈ first :: rest → label = Sum.inl ()
+label : Unit ⊕ Reference
+present : label ∈ first :: rest
+member : Sum.elim (fun x => marker) id label ∈ List.map (Sum.elim (fun x => marker) id) (first :: rest)
+⊢ Sum.elim (fun x => marker) id (Sum.inl ()) = marker
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-rank-bounded-fusion/binder-self-direct-1.source.lean:44:34: warning: This simp argument is unused:
+  found
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [lower, isEmpty]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-rank-bounded-fusion/binder-self-direct-1.source.lean:84:8: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-rank-bounded-fusion/binder-self-direct-1.source.lean:85:98: error: Application type mismatch: The argument
+  member
+has type
+  Sum.inr marker ∈
+    Option.getD
+      (if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment (Value.reference name))))
+      []
+but is expected to have type
+  ?m.189 ∈ Option.getD (mapNames Sum.inr ?m.188) []
+in the application
+  (InternedProfileOrigins.mapNames_member Sum.inr ?m.188 ?m.189).mp member

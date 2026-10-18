@@ -1,0 +1,53 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-rank-bounded-fusion/binder-self-direct-3.source.lean:44:12: error: Type mismatch
+  (have this := fun refs =>
+      List.casesOn (motive := fun t => refs = t → (isEmpty (some refs) = true ↔ refs = [])) refs
+        (fun h => Eq.symm h ▸ of_eq_true (Eq.trans (congr (congrArg Iff (eq_self true)) (eq_self [])) (iff_self True)))
+        (fun head tail h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congr (congrArg Iff Bool.false_eq_true)
+                  (eq_false' fun h => False.elim (noConfusion_of_Nat List.ctorIdx h)))
+                (iff_self False)))
+        (Eq.refl refs);
+    this)
+    (List.filterMap
+      (fun label =>
+        match label with
+        | Sum.inl val => none
+        | Sum.inr name => some name)
+      names)
+has type
+  isEmpty
+        (some
+          (List.filterMap
+            (fun label =>
+              match label with
+              | Sum.inl val => none
+              | Sum.inr name => some name)
+            names)) =
+      true ↔
+    List.filterMap
+        (fun label =>
+          match label with
+          | Sum.inl val => none
+          | Sum.inr name => some name)
+        names =
+      []
+but is expected to have type
+  isEmpty
+        (some
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr value => some value)
+            names)) =
+      true ↔
+    List.filterMap
+        (fun label =>
+          match label with
+          | Sum.inl val => none
+          | Sum.inr name => some name)
+        names =
+      []

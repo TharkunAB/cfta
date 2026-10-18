@@ -1,5 +1,61 @@
 # cfta formal model
 
+## Current bounded source fusion and actual recursive marker tests
+
+Updated: 2026-10-18 17:29 CEST. Proof checkpoint is `e739f66a`.
+Starting checkpoint is `9efb49c5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-rank-bounded-fusion.md`.
+
+Filtered Fusion now has a contract restricted by both original raw result
+depths. Replacement values and reconstructed outputs remain unrestricted.
+Node and union cases compose strict source child laws at that same bound.
+Actual surviving node rows derive each child bound. Actual union calls
+derive every original member bound, including normalized members. Source
+syntax can contain arbitrary binders under the explicit child hypotheses.
+
+An actual selected writer now applies source Fusion at a strictly smaller
+original depth to its body and ordinary callbacks. Historical verification
+and Keeps derive the full lexical reader Contexts and warm calls. A shared
+replacement map permits arbitrary outer replacements, including Empty.
+The uniform smaller-depth source induction hypothesis remains explicit.
+The proof compares unlowered callback Empty tests. It does not complete
+general source binder Fusion or remove the enclosing symbolic self.
+
+A fresh available marker now gives an actual strict original-body call.
+For an open stored Mu, its whole result is Empty exactly when that body
+result is Empty or the bare marker reference. Initial data constructs the
+body call and its Keeps. Marker freshness over finite resolved body leaves
+remains explicit. Checked nested used-Mu and ordinary f[marker] cases
+distinguish bare marker cleanup from a marker inside a node child.
+
+The next main obligation is bare-marker reflection between the selected
+writer body and ordinary probe, together with the Empty comparison. A
+stronger recursive relation must retain that information through nested
+source binders. Complete induction, changing-capture semantic observations
+and the initial recursive guard-profile certificate remain open.
+
+The strongest broad theorem remains conditional correctness of the
+checked Lean constraint-reduction model. Successful bounded reduction adds
+no finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], the input and output finite-tree languages
+are equal. Initial semantic cache facts, recursive guard-profile agreement
+and computed resource bounds remain explicit. General termination and
+full public Haskell correspondence remain open.
+
+Full Audit passes 3348 jobs and 72580 dependency checks.
+All 12 new public and 5 constructed heads pass complete statement, proof
+and standard-axiom checks. Ten selected strict logs are empty. All five
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Six manifests pin 287 entries. Independent
+writer review identified a redundant-instance linter warning. It was
+removed and rechecked. No mathematical issue remains in that review.
+Evidence is in `lean/restart-evidence/20261018-rank-bounded-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current recursive writer histories and symbolic Empty plans
 
 Updated: 2026-10-18 17:05 CEST. Proof checkpoint is `0ac270a2`.

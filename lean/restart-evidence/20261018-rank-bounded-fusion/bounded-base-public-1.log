@@ -1,0 +1,222 @@
+@MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat → MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Prop
+def MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat → MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Prop :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] bound
+    expression =>
+  ∀ {Atom : Type} (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+    @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard reader →
+      ∀ (inputs : List.{0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom))
+        (firstNames secondNames : Atom → MicroCFTA.InternedBinderProtocol.Reference)
+        (firstOwn secondOwn : MicroCFTA.InternedBinderProtocol.Reference)
+        (firstMap secondMap : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+        (firstBefore secondBefore firstRawHeap secondRawHeap :
+          MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+        (firstRaw secondRaw firstFiltered secondFiltered left right :
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @LE.le.{0} Nat instLENat (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard firstRaw) bound →
+          @LE.le.{0} Nat instLENat (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard secondRaw) bound →
+            @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard firstBefore
+                (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs) →
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard secondBefore
+                  (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+                @MicroCFTA.SourceCurrentUsedBinderAliasTransport.Aliases Atom Symbol Guard expression inputs firstNames
+                    secondNames →
+                  (∀ (label : Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom),
+                      @Membership.mem.{0, 0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom)
+                          (List.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                          (@List.instMembership.{0} (Sum.{0, 0} MicroCFTA.InternedBinderProtocol.Reference Atom))
+                          (@MicroCFTA.SourceCurrentUsedBinderAliasTransport.Scope Atom Symbol Guard expression inputs)
+                          label →
+                        Iff
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                              MicroCFTA.InternedBinderProtocol.Reference
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference) firstNames label)
+                            firstOwn)
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} MicroCFTA.InternedBinderProtocol.Reference Atom
+                              MicroCFTA.InternedBinderProtocol.Reference
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference) secondNames label)
+                            secondOwn)) →
+                    @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+                        (fun a b =>
+                          @Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard a)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard b)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+                        firstMap secondMap
+                        (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard firstNames) inputs)
+                        (@List.map.{0, 0} (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard secondNames) inputs) →
+                      @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader firstMap →
+                        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard reader secondMap →
+                          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader firstRaw →
+                            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader secondRaw →
+                              @Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+                                    (@List.map.{0, 0}
+                                      (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard
+                                        firstNames)
+                                      inputs)
+                                    firstBefore)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) firstRaw firstRawHeap) →
+                                @Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+                                      (@List.map.{0, 0}
+                                        (Sum.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Atom)
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                        (@MicroCFTA.InternedFreshOrdinaryLiveInputs.input.{0} Atom Symbol Guard
+                                          secondNames)
+                                        inputs)
+                                      secondBefore)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) secondRaw
+                                      secondRawHeap) →
+                                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard firstRawHeap reader →
+                                    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard secondRawHeap reader →
+                                      @Eq.{1}
+                                          (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+                                          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                                            (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard
+                                              firstOwn firstRaw)
+                                            reader)
+                                          (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) firstFiltered
+                                            reader) →
+                                        @Eq.{1}
+                                            (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+                                            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                                              (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard
+                                                secondOwn secondRaw)
+                                              reader)
+                                            (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) secondFiltered
+                                              reader) →
+                                          @Eq.{1}
+                                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard
+                                                inst firstFiltered firstMap reader)
+                                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                                                reader) →
+                                            @Eq.{1}
+                                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard
+                                                  inst secondFiltered secondMap reader)
+                                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                                                  reader) →
+                                              @Eq.{1} Bool
+                                                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol
+                                                    Guard left)
+                                                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                                                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol
+                                                    Guard right)
+                                                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+'MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentBoundedFilteredFusion.of_fusion : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (bound : Nat)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentFilteredSourceFusion.Fusion Symbol Guard inst expression →
+    @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst bound expression
+theorem MicroCFTA.SourceCurrentBoundedFilteredFusion.of_fusion : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (bound : Nat)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentFilteredSourceFusion.Fusion Symbol Guard inst expression →
+    @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst bound expression :=
+fun {Symbol Guard} [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] bound expression
+    original {Atom} reader ready inputs firstNames secondNames firstOwn secondOwn firstMap secondMap firstBefore
+    secondBefore firstRawHeap secondRawHeap firstRaw secondRaw firstFiltered secondFiltered left right _firstDepth
+    _secondDepth =>
+  @original Atom reader ready inputs firstNames secondNames firstOwn secondOwn firstMap secondMap firstBefore
+    secondBefore firstRawHeap secondRawHeap firstRaw secondRaw firstFiltered secondFiltered left right
+'MicroCFTA.SourceCurrentBoundedFilteredFusion.of_fusion' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentBoundedFilteredFusion.mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (smaller larger : Nat),
+  @LE.le.{0} Nat instLENat smaller larger →
+    ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+      @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst larger expression →
+        @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst smaller expression
+theorem MicroCFTA.SourceCurrentBoundedFilteredFusion.mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (smaller larger : Nat),
+  @LE.le.{0} Nat instLENat smaller larger →
+    ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+      @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst larger expression →
+        @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst smaller expression :=
+fun {Symbol Guard} [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] smaller larger within
+    expression original {Atom} reader ready inputs firstNames secondNames firstOwn secondOwn firstMap secondMap
+    firstBefore secondBefore firstRawHeap secondRawHeap firstRaw secondRaw firstFiltered secondFiltered left right
+    firstDepth secondDepth =>
+  @original Atom reader ready inputs firstNames secondNames firstOwn secondOwn firstMap secondMap firstBefore
+    secondBefore firstRawHeap secondRawHeap firstRaw secondRaw firstFiltered secondFiltered left right
+    (@Nat.le_trans (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard firstRaw) smaller larger firstDepth
+      within)
+    (@Nat.le_trans (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard secondRaw) smaller larger
+      secondDepth within)
+'MicroCFTA.SourceCurrentBoundedFilteredFusion.mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentBoundedFilteredFusion.empty : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (bound : Nat),
+  @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst bound
+    (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard)
+theorem MicroCFTA.SourceCurrentBoundedFilteredFusion.empty : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (bound : Nat),
+  @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst bound
+    (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] bound
+    {Atom} =>
+  @MicroCFTA.SourceCurrentBoundedFilteredFusion.of_fusion Symbol Guard inst bound
+    (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard)
+    (fun {Atom} => @MicroCFTA.SourceCurrentFilteredSourceFusion.empty Symbol Guard inst Atom) Atom
+'MicroCFTA.SourceCurrentBoundedFilteredFusion.empty' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentBoundedFilteredFusion.reference : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (bound index : Nat),
+  @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst bound
+    (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard index)
+theorem MicroCFTA.SourceCurrentBoundedFilteredFusion.reference : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (bound index : Nat),
+  @MicroCFTA.SourceCurrentBoundedFilteredFusion.Fusion Symbol Guard inst bound
+    (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard index) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] bound index
+    {Atom} =>
+  @MicroCFTA.SourceCurrentBoundedFilteredFusion.of_fusion Symbol Guard inst bound
+    (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard index)
+    (fun {Atom} => @MicroCFTA.SourceCurrentFilteredSourceFusion.reference Symbol Guard inst index Atom) Atom
+'MicroCFTA.SourceCurrentBoundedFilteredFusion.reference' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

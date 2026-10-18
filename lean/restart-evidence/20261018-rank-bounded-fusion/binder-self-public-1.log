@@ -1,0 +1,1926 @@
+@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.marker_test : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) →
+      @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+        @Eq.{1} Bool
+            (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            Bool.false →
+          ∀ (marker : MicroCFTA.InternedBinderProtocol.Reference),
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+              (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body) leaf →
+                    Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment leaf))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        marker)) →
+                ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        environment before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+                    ∀ (bodyResult : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (afterBody : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                            (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                            before)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody) →
+                        Iff
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                            Bool.true)
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))
+theorem MicroCFTA.SourceCurrentStoredMuMarkerEmpty.marker_test : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) →
+      @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+        @Eq.{1} Bool
+            (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            Bool.false →
+          ∀ (marker : MicroCFTA.InternedBinderProtocol.Reference),
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+              (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body) leaf →
+                    Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment leaf))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        marker)) →
+                ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        environment before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+                    ∀ (bodyResult : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (afterBody : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                            (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                            before)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody) →
+                        Iff
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                            Bool.true)
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] entry body
+    depth ordinary environment before ready available replacements opened marker markerAvailable fresh result after
+    actual bodyResult afterBody bodyDone =>
+  have bodyAvailable :=
+    @MicroCFTA.InternedProbeProvenance.Available.children Symbol Guard before
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) available body
+      (@of_eq_true
+        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))))
+          body)
+        (@Eq.trans.{1} Prop
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))))
+            body)
+          (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body)
+            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+              body))
+          True
+          (@List.mem_cons._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+            body)
+          (@Eq.trans.{1} Prop
+            (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body)
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                body))
+            (Or True
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)))
+            True
+            (@congr.{1, 1} Prop Prop
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body)) (Or True)
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                body)
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))
+              (@congrArg.{1, 1} Prop (Prop → Prop)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body) True Or
+                (@eq_self.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body))
+              (@Eq.trans.{1} Prop
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  body)
+                (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    body))
+                (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))
+                (@List.mem_cons._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  body)
+                (@congrArg.{1, 1} Prop Prop
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    body)
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                  (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth))
+                  (@Eq.trans.{1} Prop
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      body)
+                    (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                    (@List.mem_cons._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body)
+                    (@Eq.trans.{1} Prop
+                      (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body))
+                      (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary) False)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                      (@congrArg.{1, 1} Prop Prop
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body)
+                        False (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))
+                        (@List.not_mem_nil._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          body))
+                      (or_false
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)))))))
+            (true_or
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))))));
+  have mappedReplacements :=
+    @MicroCFTA.SourceCurrentStoredMuLexicalInputs.replacements Symbol Guard
+      (MicroCFTA.InternedBinderProtocol.Reference.interned
+        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment before before
+      replacements (@MicroCFTA.InternedConstructorTemplates.grows_refl Symbol Guard before)
+      (@MicroCFTA.Cache.extends_refl Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before)))
+      markerAvailable;
+  @And.casesOn.{0}
+    (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+      (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) body)
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+          (fun leaf =>
+            @MicroCFTA.InternedRootProfile.profile Symbol Guard
+              (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                leaf))
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body))))
+    (And (@MicroCFTA.InternedStoredMuOrigins.Normal Symbol Guard afterBody)
+      (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult))
+    (fun x =>
+      Iff
+        (@Eq.{1} Bool
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          Bool.true)
+        (Or
+          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+    (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.actual_profile✝ Symbol Guard inst body
+      (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+        (MicroCFTA.InternedBinderProtocol.Reference.interned
+          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+      before ready bodyAvailable mappedReplacements bodyResult afterBody bodyDone)
+    fun matched right =>
+    @And.casesOn.{0} (@MicroCFTA.InternedStoredMuOrigins.Normal Symbol Guard afterBody)
+      (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+      (fun x =>
+        Iff
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+            Bool.true)
+          (Or
+            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+      right fun normal output =>
+      have mapped :=
+        @MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic_mapped✝ Symbol Guard body
+          (MicroCFTA.InternedBinderProtocol.Reference.interned
+            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+          marker environment;
+      have same :=
+        @Eq.mpr.{0}
+          (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+            (@MicroCFTA.InternedProfileSemantics.mapNames (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+              MicroCFTA.InternedBinderProtocol.Reference
+              (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                environment)))
+          (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) body)
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                (fun leaf =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                      (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                      leaf))
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                (@MicroCFTA.InternedProfileSemantics.mapNames
+                  (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                  MicroCFTA.InternedBinderProtocol.Reference
+                  (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                    (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                  (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    environment)))
+              (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) body)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (fun leaf =>
+                      @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                          (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                          leaf))
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)))))
+            (@congrArg.{1, 1} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              Prop
+              (@MicroCFTA.InternedProfileSemantics.mapNames (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                MicroCFTA.InternedBinderProtocol.Reference
+                (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                  (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                  environment))
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) body)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun leaf =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                        (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                        leaf))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)))
+              (fun _a =>
+                MicroCFTA.InternedRootProfile.Equivalent
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult) _a)
+              mapped))
+          matched;
+      have whole :=
+        @MicroCFTA.SourceCurrentStoredMuEmptyPlan.open_execute Symbol Guard inst entry body depth ordinary environment
+          before ready available replacements opened result after actual;
+      @id.{0}
+        (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard
+                  (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) body)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract
+                      (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference))
+                    (fun leaf =>
+                      @MicroCFTA.SourceCurrentStoredMuEmptyPlan.rebind_profile.match_1.{1} Symbol Guard
+                        (fun leaf =>
+                          MicroCFTA.InternedProfileSemantics.Abstract
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference))
+                        leaf
+                        (fun name =>
+                          @ite.{1}
+                            (MicroCFTA.InternedProfileSemantics.Abstract
+                              (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference))
+                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              name)
+                            (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              name)
+                            (@Option.some.{0} (List.{0} (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference))
+                              (@List.cons.{0} (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                                (@Sum.inl.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference Unit.unit)
+                                (@List.nil.{0} (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference))))
+                            (@MicroCFTA.InternedProfileSemantics.mapNames MicroCFTA.InternedBinderProtocol.Reference
+                              (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                              (@Sum.inr.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment leaf))))
+                        fun x =>
+                        @MicroCFTA.InternedProfileSemantics.mapNames MicroCFTA.InternedBinderProtocol.Reference
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          (@Sum.inr.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment leaf)))
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body))))) →
+          Iff
+            (@Eq.{1} Bool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              Bool.true)
+            (Or
+              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+        (fun whole =>
+          @Eq.mpr.{0}
+            (Iff
+              (@Eq.{1} Bool
+                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                Bool.true)
+              (Or
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+            (Iff
+              (@Eq.{1} Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                      environment)))
+                Bool.true)
+              (Or
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (Iff
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    Bool.true)
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                (Iff
+                  (@Eq.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          environment)))
+                    Bool.true)
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+              (@congrArg.{1, 1} Bool Prop
+                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                      environment)))
+                (fun _a =>
+                  Iff (@Eq.{1} Bool _a Bool.true)
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                whole))
+            (@Eq.mpr.{0}
+              (Iff
+                (@Eq.{1} Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        environment)))
+                  Bool.true)
+                (Or
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+              (Iff
+                (Or
+                  (@Eq.{1} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedProfileSemantics.mapNames
+                      (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                      MicroCFTA.InternedBinderProtocol.Reference
+                      (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                        (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                      (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        environment))
+                    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                  (MicroCFTA.InternedRootProfile.Single marker
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedProfileSemantics.mapNames
+                        (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                        MicroCFTA.InternedBinderProtocol.Reference
+                        (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                          (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                        (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          environment))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                (Or
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+              (@id.{0}
+                (@Eq.{1} Prop
+                  (Iff
+                    (@Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment)))
+                      Bool.true)
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                  (Iff
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedProfileSemantics.mapNames
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          MicroCFTA.InternedBinderProtocol.Reference
+                          (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                            (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment))
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (MicroCFTA.InternedRootProfile.Single marker
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+                (@congrArg.{1, 1} Prop Prop
+                  (@Eq.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          environment)))
+                    Bool.true)
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedProfileSemantics.mapNames
+                        (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                        MicroCFTA.InternedBinderProtocol.Reference
+                        (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                          (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                        (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          environment))
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                    (MicroCFTA.InternedRootProfile.Single marker
+                      (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedProfileSemantics.mapNames
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          MicroCFTA.InternedBinderProtocol.Reference
+                          (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                            (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment))
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                  (fun _a =>
+                    Iff _a
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                  (@propext
+                    (@Eq.{1} Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                        (@MicroCFTA.InternedProfileSemantics.lower MicroCFTA.InternedBinderProtocol.Reference
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment)))
+                      Bool.true)
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedProfileSemantics.mapNames
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          MicroCFTA.InternedBinderProtocol.Reference
+                          (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                            (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment))
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (MicroCFTA.InternedRootProfile.Single marker
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                    (MicroCFTA.SourceCurrentStoredMuMarkerEmpty.lower_test✝
+                      (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        environment)
+                      marker
+                      (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic_fresh✝ Symbol Guard body
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        marker environment fresh)))))
+              (@Eq.mpr.{0}
+                (Iff
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedProfileSemantics.mapNames
+                        (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                        MicroCFTA.InternedBinderProtocol.Reference
+                        (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                          (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                        (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          environment))
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                    (MicroCFTA.InternedRootProfile.Single marker
+                      (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedProfileSemantics.mapNames
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          MicroCFTA.InternedBinderProtocol.Reference
+                          (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                            (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment))
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                (Iff
+                  (Or
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                    (MicroCFTA.InternedRootProfile.Single marker
+                      (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedProfileSemantics.mapNames
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          MicroCFTA.InternedBinderProtocol.Reference
+                          (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                            (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment))
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (Iff
+                      (Or
+                        (@Eq.{1}
+                          (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (MicroCFTA.InternedRootProfile.Single marker
+                          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedProfileSemantics.mapNames
+                              (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                              MicroCFTA.InternedBinderProtocol.Reference
+                              (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                              (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                environment))
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                    (Iff
+                      (Or
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (MicroCFTA.InternedRootProfile.Single marker
+                          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedProfileSemantics.mapNames
+                              (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                              MicroCFTA.InternedBinderProtocol.Reference
+                              (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                              (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                environment))
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+                  (@congrArg.{1, 1} Prop Prop
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@MicroCFTA.InternedProfileSemantics.mapNames
+                        (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                        MicroCFTA.InternedBinderProtocol.Reference
+                        (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                          (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                        (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          environment))
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                    (fun _a =>
+                      Iff
+                        (Or _a
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedProfileSemantics.mapNames
+                                (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                                MicroCFTA.InternedBinderProtocol.Reference
+                                (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                  (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                                (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                  environment))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                    (@Eq.symm.{1} Prop
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@MicroCFTA.InternedProfileSemantics.mapNames
+                          (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                          MicroCFTA.InternedBinderProtocol.Reference
+                          (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                            (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            environment))
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (@propext
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (@MicroCFTA.InternedProfileComposition.empty_same
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          same)))))
+                (@Eq.mpr.{0}
+                  (Iff
+                    (Or
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (MicroCFTA.InternedRootProfile.Single marker
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                  (Iff
+                    (Or
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (MicroCFTA.InternedRootProfile.Single marker
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                  (@id.{0}
+                    (@Eq.{1} Prop
+                      (Iff
+                        (Or
+                          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedProfileSemantics.mapNames
+                                (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                                MicroCFTA.InternedBinderProtocol.Reference
+                                (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                  (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                                (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                  environment))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                      (Iff
+                        (Or
+                          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+                    (@congrArg.{1, 1} Prop Prop
+                      (MicroCFTA.InternedRootProfile.Single marker
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedProfileSemantics.mapNames
+                            (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                            MicroCFTA.InternedBinderProtocol.Reference
+                            (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                              (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                            (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              environment))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (MicroCFTA.InternedRootProfile.Single marker
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (fun _a =>
+                        Iff
+                          (Or
+                            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                              (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                            _a)
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                      (@Eq.symm.{1} Prop
+                        (MicroCFTA.InternedRootProfile.Single marker
+                          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (MicroCFTA.InternedRootProfile.Single marker
+                          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedProfileSemantics.mapNames
+                              (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                              MicroCFTA.InternedBinderProtocol.Reference
+                              (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                              (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                environment))
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (@propext
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedProfileSemantics.mapNames
+                                (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                                MicroCFTA.InternedBinderProtocol.Reference
+                                (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                  (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                                (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                  environment))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                          (@MicroCFTA.InternedProfileRenaming.single_equivalent marker
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@MicroCFTA.InternedProfileSemantics.mapNames
+                              (Sum.{0, 0} Unit MicroCFTA.InternedBinderProtocol.Reference)
+                              MicroCFTA.InternedBinderProtocol.Reference
+                              (@Sum.elim.{0, 0, 1} Unit MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.Reference (fun x => marker)
+                                (@id.{1} MicroCFTA.InternedBinderProtocol.Reference))
+                              (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.symbolic✝ Symbol Guard body
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                environment))
+                            same)))))
+                  (@Eq.mpr.{0}
+                    (Iff
+                      (Or
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (MicroCFTA.InternedRootProfile.Single marker
+                          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                    (Iff
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedRootProfile.Single marker
+                          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                    (@id.{0}
+                      (@Eq.{1} Prop
+                        (Iff
+                          (Or
+                            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                              (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                            (MicroCFTA.InternedRootProfile.Single marker
+                              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                        (Iff
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (MicroCFTA.InternedRootProfile.Single marker
+                              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+                      (@congrArg.{1, 1} Prop Prop
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (fun _a =>
+                          Iff
+                            (Or _a
+                              (MicroCFTA.InternedRootProfile.Single marker
+                                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                            (Or
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                        (@propext
+                          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                            (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@MicroCFTA.InternedRootProfileNode.profile_empty_iff Symbol Guard bodyResult afterBody
+                            (@MicroCFTA.InternedStoredMuOrigins.Normal.proper Symbol Guard afterBody normal) output))))
+                    (@Eq.mpr.{0}
+                      (Iff
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                      (Iff
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                      (@id.{0}
+                        (@Eq.{1} Prop
+                          (Iff
+                            (Or
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              (MicroCFTA.InternedRootProfile.Single marker
+                                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+                            (Or
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                          (Iff
+                            (Or
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))
+                            (Or
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+                        (@congrArg.{1, 1} Prop Prop
+                          (MicroCFTA.InternedRootProfile.Single marker
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+                          (fun _a =>
+                            Iff
+                              (Or
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                                _a)
+                              (Or
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                          (@propext
+                            (MicroCFTA.InternedRootProfile.Single marker
+                              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedRootProfile.profile Symbol Guard bodyResult)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+                            (@MicroCFTA.InternedRootProfileReflection.profile_single_iff Symbol Guard bodyResult
+                              afterBody normal output marker))))
+                      (@Iff.rfl
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))))))))
+        whole
+'MicroCFTA.SourceCurrentStoredMuMarkerEmpty.marker_test' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) →
+      @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+        @Eq.{1} Bool
+            (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            Bool.false →
+          ∀ (marker : MicroCFTA.InternedBinderProtocol.Reference),
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+              (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body) leaf →
+                    Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment leaf))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        marker)) →
+                ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        environment before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                              (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)
+                                environment)
+                              before)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                              (Iff
+                                (@Eq.{1} Bool
+                                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                                    MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                                  Bool.true)
+                                (Or
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))))
+theorem MicroCFTA.SourceCurrentStoredMuMarkerEmpty.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard before →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) →
+      @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard before environment →
+        @Eq.{1} Bool
+            (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            Bool.false →
+          ∀ (marker : MicroCFTA.InternedBinderProtocol.Reference),
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+              (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard body) leaf →
+                    Not
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment leaf))
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        marker)) →
+                ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        environment before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                              (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)
+                                environment)
+                              before)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                              (Iff
+                                (@Eq.{1} Bool
+                                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                                    MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                                  Bool.true)
+                                (Or
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                                      marker)))))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] entry body
+    depth ordinary environment before ready available replacements opened marker markerAvailable fresh result after
+    actual =>
+  have bodyAvailable :=
+    @MicroCFTA.InternedProbeProvenance.Available.children Symbol Guard before
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) available body
+      (@of_eq_true
+        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))))
+          body)
+        (@Eq.trans.{1} Prop
+          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))))
+            body)
+          (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body)
+            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+              body))
+          True
+          (@List.mem_cons._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+            body)
+          (@Eq.trans.{1} Prop
+            (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body)
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                body))
+            (Or True
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)))
+            True
+            (@congr.{1, 1} Prop Prop
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body)) (Or True)
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                body)
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))
+              (@congrArg.{1, 1} Prop (Prop → Prop)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body body) True Or
+                (@eq_self.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body))
+              (@Eq.trans.{1} Prop
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  body)
+                (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    body))
+                (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))
+                (@List.mem_cons._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  body)
+                (@congrArg.{1, 1} Prop Prop
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    body)
+                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                  (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth))
+                  (@Eq.trans.{1} Prop
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      body)
+                    (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                    (@List.mem_cons._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body)
+                    (@Eq.trans.{1} Prop
+                      (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body))
+                      (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary) False)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)
+                      (@congrArg.{1, 1} Prop Prop
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) body)
+                        False (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))
+                        (@List.not_mem_nil._simp_1.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          body))
+                      (or_false
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary)))))))
+            (true_or
+              (Or (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body depth)
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body ordinary))))));
+  have mappedReplacements :=
+    @MicroCFTA.SourceCurrentStoredMuLexicalInputs.replacements Symbol Guard
+      (MicroCFTA.InternedBinderProtocol.Reference.interned
+        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment before before
+      replacements (@MicroCFTA.InternedConstructorTemplates.grows_refl Symbol Guard before)
+      (@MicroCFTA.Cache.extends_refl Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before)))
+      markerAvailable;
+  @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (fun result =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+              (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+              before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+              (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before after)))))
+    (fun x =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                before)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+            (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                (Iff
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    Bool.true)
+                  (Or
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+    (@MicroCFTA.SourceCurrentStoredReconstruction.execute Symbol Guard inst body
+      (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+        (MicroCFTA.InternedBinderProtocol.Reference.interned
+          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+      before ready bodyAvailable mappedReplacements)
+    fun bodyResult h =>
+    @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+              (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+              before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult after))
+          (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after bodyResult)
+              (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before after)))))
+      (fun x =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+            And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                  (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                  before)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+              (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                  (Iff
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                      Bool.true)
+                    (Or
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+      h fun afterBody h =>
+      @And.casesOn.{0}
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+            (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+            before)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+        (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before afterBody))))
+        (fun x =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+              And
+                (@Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                    (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                    before)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                  (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                    (Iff
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        Bool.true)
+                      (Or
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+        h fun bodyDone right =>
+        @And.casesOn.{0} (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+          (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before afterBody)))
+          (fun x =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+                And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                      (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                      before)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                      (Iff
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          Bool.true)
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+          right fun kept right =>
+          @And.casesOn.{0} (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+            (Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst before afterBody))
+            (fun x =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun bodyResult =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                        (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                        before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                        (Iff
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                            Bool.true)
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+            right fun output right =>
+            @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun bodyResult =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun afterBody =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                        (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                        before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                        (Iff
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                            Bool.true)
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+              bodyResult
+              (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (fun afterBody =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                        (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                        before)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                    (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                        (Iff
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                            Bool.true)
+                          (Or
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))))
+                afterBody
+                (@And.intro
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                      (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) environment)
+                      before)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult afterBody))
+                  (And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                      (Iff
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          Bool.true)
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))))
+                  bodyDone
+                  (@And.intro (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before afterBody)
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                      (Iff
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          Bool.true)
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)))))
+                    kept
+                    (@And.intro (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard afterBody bodyResult)
+                      (Iff
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          Bool.true)
+                        (Or
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) bodyResult
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))))
+                      output
+                      (@MicroCFTA.SourceCurrentStoredMuMarkerEmpty.marker_test Symbol Guard inst entry body depth
+                        ordinary environment before ready available replacements opened marker markerAvailable fresh
+                        result after actual bodyResult afterBody bodyDone)))))
+'MicroCFTA.SourceCurrentStoredMuMarkerEmpty.complete' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
