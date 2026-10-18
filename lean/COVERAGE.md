@@ -1,5 +1,46 @@
 # Full formalization coverage
 
+## Current Parent origins and finite positive continuation chains
+
+Updated: 2026-10-18 04:46 CEST. Proof checkpoint is `e1b8b58e`.
+Starting local checkpoint is `1145bcd0`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-native-lineage.md` for exact boundaries.
+
+The actual Parent worker now retains indexed complete source rows and exact
+unselected continuation children. Literal local returns derive intermediate
+physical facts. Both raw and checked rejection derive the Empty sentinel.
+Raw rejection needs no input child availability. Initial raw guard footprints
+and successful worker equations remain explicit. No future row law is supplied.
+
+A fixed-index positive continuation relation is now well-founded. Each next
+anchor is the exact preserved child of a positive linked row. Reconstructed
+results can differ arbitrarily from their anchors. Final anchor mass plus
+chain length is at most initial anchor mass. Such a chain cannot be infinite.
+This conditional result needs no initial-source occurrence map.
+
+Actual outer execution still needs a producer for those consecutive chain
+steps. It first dispatches the reconstructed node. A later Parent uses that
+node's row child at its actual slot. Source-built evidence proves that an
+enclosing guard footprint does not imply the nested row guard footprint.
+Other indexes, plain rows, sibling work and native reconstruction remain.
+This is a proof boundary, not a new Haskell defect or an infinite execution.
+
+Full Audit passes 3223 jobs and 70834 checks. Two production and three
+constructed strict logs are empty. All 8 public and 4 constructed
+full pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 392 MiB under 4 GiB maximum/high and zero swap. Four component
+manifests pin 208 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-native-lineage/`.
+
+Next derive actual consecutive anchor handoff and the needed row footprints,
+or establish another well-founded global rank. General recursive completion,
+all-owner separation, fresh-call bounds, recursive language preservation,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The strongest complete finite ordinary outer domain is unchanged.
+No Haskell patch is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep the FINDINGS repair registry first. The full-library goal stays active.
+Publication awaits the existing direct approval. No push is attempted.
+
 ## Current selected local row origins and immediate descent
 
 Updated: 2026-10-18 04:35 CEST. Proof checkpoint is `479741b4`.
