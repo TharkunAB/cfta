@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `92ddd8ff`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `651cb065`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -150,7 +150,17 @@ need their carrier composition. Non-Parent constructor bounds now retain
 the same carrier and physical profile at each local entry. Their whole
 outer schedule and equality-cache bounds remain open. General recursive
 completion and the strongest complete outer domain are unchanged. Read
-[the current checkpoint](notes-current-parent-guard-composition.md).
+[the earlier checkpoint](notes-current-parent-guard-composition.md).
+
+Finite raw guard carriers now compose through complete Classes, Local and
+Parent. Exact initial own-record and count cases determine a common Parent
+carrier at the same full receipt, output profile and nine-fuel replay.
+No future entry or guard-range callback is supplied. The remaining outer
+bridge must derive semantic Context, Frame, scheduled Fits and carriers
+through rows_tail and walk_tail. Equality-operation resources need a
+separate account from the physical Profile. General recursive completion
+and the strongest complete outer domain are unchanged. Read
+[the current checkpoint](notes-current-parent-full-guard-carrier.md).
 
 ## Strongest current claim in plain technical English
 

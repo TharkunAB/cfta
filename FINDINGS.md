@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 06:59 CEST. Proof checkpoint is `651cb065`.
+Complete Classes, Local and Parent now construct finite raw guard carriers
+with their original full receipts and exact returned states. A finite
+initial own-record/count image supplies one common Parent carrier together
+with the existing common output profile and nine-fuel replay. Raw rejection
+includes its actual Top sentinel. General outer composition remains open.
+The physical Profile does not bound equality-operation resources. Host Int
+equality identities need a separate refinement bound. This is an existing
+proof obligation; no executable failure or new runtime defect is claimed.
+Full Audit passes 3252 jobs and 71136 checks.
+No Haskell patch is added. Field-pool repair `b9219b9e` remains fixed in
+`c0cc8a05`. Read `lean/notes-current-parent-full-guard-carrier.md`.
+Keep this registry first. Record each later repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve all earlier entries.
+
 Current proof update: 2026-10-18 06:44 CEST. Proof checkpoint is `92ddd8ff`.
 Finite raw guard carriers now compose through actual Force, Leaf, complete
 node edits, compiled classes and their tail-first fold and pass. Supported
