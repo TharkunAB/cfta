@@ -1,0 +1,116 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:101:77: error: Application type mismatch: The last
+  reader
+argument has type
+  InternedConstructorTemplates.State Symbol Guard
+of sort `Type` but is expected to have type
+  Ready reader
+of sort `Prop` in the application
+  aligned reader leftInputs rightInputs first second paired reader
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:102:98: error: Application type mismatch: The argument
+  member
+has type
+  value ∈ rightInputs
+but is expected to have type
+  value ∈ leftInputs
+in the application
+  firstInputs value member
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:103:46: error: Application type mismatch: The argument
+  value
+has type
+  InternedBinderProtocol.Reference
+but is expected to have type
+  Value Symbol Guard
+in the application
+  Keeps.available secondKept value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:103:73: error: Application type mismatch: The argument
+  value
+has type
+  InternedBinderProtocol.Reference
+but is expected to have type
+  Value Symbol Guard
+in the application
+  Keeps.available firstKept value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:103:93: error: Application type mismatch: The argument
+  value
+has type
+  InternedBinderProtocol.Reference
+but is expected to have type
+  Value Symbol Guard
+in the application
+  secondInputs value
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:104:113: error: Application type mismatch: The argument
+  found
+has type
+  second name = some value
+but is expected to have type
+  first name = some value
+in the application
+  firstReplacements name value found
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:75:109: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+expression : Syntax Symbol Guard
+depth : Nat
+view : InternedConstructorTemplates.State Symbol Guard
+aligned : ∀ (common : InternedConstructorTemplates.State Symbol Guard), AlignedAt depth view common expression
+leftInputs rightInputs : List (Value Symbol Guard)
+first second : Environment Symbol Guard
+paired : Paired (RelatedAt depth view) first second leftInputs rightInputs
+before after later final common : InternedConstructorTemplates.State Symbol Guard
+firstContext : Context before leftInputs
+secondContext : Context later rightInputs
+rawFirst rawSecond : Value Symbol Guard
+firstRaw : build expression leftInputs before = Outcome.done rawFirst after
+secondRaw : build expression rightInputs later = Outcome.done rawSecond final
+firstGrowth : Grows after common
+secondGrowth : Grows final common
+ready : Ready common
+firstInputs : Values common leftInputs
+secondInputs : Values common rightInputs
+firstReplacements : Replacements common first
+secondReplacements : Replacements common second
+firstWarm : build expression leftInputs common = Outcome.done rawFirst common
+secondWarm : build expression rightInputs common = Outcome.done rawSecond common
+firstAvailable : Available common rawFirst
+secondAvailable : Available common rawSecond
+left : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+firstDone : execute rawFirst first common = Outcome.done left middle
+firstKept : Keeps common middle
+leftAvailable : Available middle left
+firstHistory : Nonempty (SourceCurrentNativeMuPublication.History common middle)
+right : Value Symbol Guard
+reader : InternedConstructorTemplates.State Symbol Guard
+secondDone : execute rawSecond second middle = Outcome.done right reader
+secondKept : Keeps middle reader
+rightAvailable : Available reader right
+secondHistory : Nonempty (SourceCurrentNativeMuPublication.History middle reader)
+firstReplay :
+  build (encode (leaves rawFirst) [] rawFirst) (List.map (input first) (leaves rawFirst)) reader =
+    Outcome.done left reader
+secondReplay :
+  build (encode (leaves rawSecond) [] rawSecond) (List.map (input second) (leaves rawSecond)) reader =
+    Outcome.done right reader
+growth : Grows common reader
+firstSource : build expression leftInputs reader = Outcome.done rawFirst reader
+secondSource : build expression rightInputs reader = Outcome.done rawSecond reader
+⊢ ∃ left middle right reader,
+    execute rawFirst first common = Outcome.done left middle ∧
+      execute rawSecond second middle = Outcome.done right reader ∧
+        execute rawFirst first reader = Outcome.done left reader ∧
+          execute rawSecond second reader = Outcome.done right reader ∧
+            Keeps common middle ∧
+              Keeps middle reader ∧
+                Available reader left ∧
+                  Available reader right ∧
+                    Nonempty (SourceCurrentNativeMuPublication.History common middle) ∧
+                      Nonempty (SourceCurrentNativeMuPublication.History middle reader) ∧
+                        RelatedAt depth view left right
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/finite-reconstruction-direct-1.source.lean:114:80: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.47 = ?m.47
+but is expected to have type
+  InternedNestedDependencies.inputs Syntax.empty = []
+in the application
+  SourceCurrentFiniteObservationExecution.closed_source Syntax.empty rfl

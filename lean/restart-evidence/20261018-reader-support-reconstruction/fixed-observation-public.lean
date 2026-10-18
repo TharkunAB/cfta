@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentFiniteObservationExecution
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentFiniteObservationExecution.AlignedAt
+#print MicroCFTA.SourceCurrentFiniteObservationExecution.AlignedAt
+#print axioms MicroCFTA.SourceCurrentFiniteObservationExecution.AlignedAt
+#check @MicroCFTA.SourceCurrentFiniteObservationExecution.reference
+#print MicroCFTA.SourceCurrentFiniteObservationExecution.reference
+#print axioms MicroCFTA.SourceCurrentFiniteObservationExecution.reference
+#check @MicroCFTA.SourceCurrentFiniteObservationExecution.ordinary
+#print MicroCFTA.SourceCurrentFiniteObservationExecution.ordinary
+#print axioms MicroCFTA.SourceCurrentFiniteObservationExecution.ordinary
+#check @MicroCFTA.SourceCurrentFiniteObservationExecution.closed_source
+#print MicroCFTA.SourceCurrentFiniteObservationExecution.closed_source
+#print axioms MicroCFTA.SourceCurrentFiniteObservationExecution.closed_source

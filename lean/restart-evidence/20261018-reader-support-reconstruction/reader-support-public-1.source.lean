@@ -1,0 +1,53 @@
+import MicroCFTA.SourceCurrentObservationReaderSupport
+
+set_option linter.all true
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.WarmSupport
+#print MicroCFTA.SourceCurrentObservationReaderSupport.WarmSupport
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.WarmSupport
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.WarmSupport.grows
+#print MicroCFTA.SourceCurrentObservationReaderSupport.WarmSupport.grows
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.WarmSupport.grows
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.origin_iff
+#print MicroCFTA.SourceCurrentObservationReaderSupport.origin_iff
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.origin_iff
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.reference_iff
+#print MicroCFTA.SourceCurrentObservationReaderSupport.reference_iff
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.reference_iff
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.same_iff
+#print MicroCFTA.SourceCurrentObservationReaderSupport.same_iff
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.same_iff
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.related
+#print MicroCFTA.SourceCurrentObservationReaderSupport.related
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.related
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.Preparation
+#print MicroCFTA.SourceCurrentObservationReaderSupport.Preparation
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.Preparation
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.Preparation.refl
+#print MicroCFTA.SourceCurrentObservationReaderSupport.Preparation.refl
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.Preparation.refl
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.Preparation.step
+#print MicroCFTA.SourceCurrentObservationReaderSupport.Preparation.step
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.Preparation.step
+
+#check @MicroCFTA.SourceCurrentObservationReaderSupport.prepare
+#print MicroCFTA.SourceCurrentObservationReaderSupport.prepare
+#print axioms MicroCFTA.SourceCurrentObservationReaderSupport.prepare

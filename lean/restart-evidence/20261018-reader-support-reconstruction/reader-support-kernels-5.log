@@ -1,0 +1,15 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-reader-support-reconstruction/reader-support-kernels-5.source.lean:96:96: error: Tactic `decide` failed for proposition
+  ¬coldRow.entry.identity ∈ List.map (fun row => row.entry.identity) (InternedEdgeResidency.nodeEdges shiftedResult)
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decidable_of_decidable_of_iff`, `instDecidableEqBool`, `instDecidableNot`, `Bool.decEq`, and `List.instDecidableMemOfLawfulBEq`, reduction got stuck at the `Decidable` instance
+  match
+    List.elem coldRow.entry.identity
+      (List.map (fun row => row.entry.identity) (InternedEdgeResidency.nodeEdges shiftedResult)),
+    true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯

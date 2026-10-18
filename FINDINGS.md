@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 12:21 CEST. Proof checkpoint is `03f0f57b`.
+Fixed-reader finite agreement now permits actual union member reconstruction
+at later execution heaps. An initial producer constructs both source and
+stored calls. An actual finite preparation produces closed-value reader
+support, including new lower-degree Mu records. Generic supported transport
+retains exact origins and every finite comparison after growth. Checked
+cold subgroup, nested used Mu availability and exact row-origin boundaries
+remain proof-contract evidence. They are not new Haskell defects.
+General active-binder filtering, recursive self alignment and completion
+remain open. Full Audit passes 3304 jobs and 71623 checks.
+No Haskell patch is added. Field-pool repair `b9219b9e` remains fixed in
+`c0cc8a05`. Read `lean/notes-current-reader-support-reconstruction.md`.
+Keep this registry first. Record later repairs with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve earlier entries.
+
 Current proof update: 2026-10-18 11:57 CEST. Proof checkpoint is `e012e2f7`.
 The actual selected node-body writer now constructs both stored calls and
 derives finite output agreement from indexed strict-child hypotheses.
