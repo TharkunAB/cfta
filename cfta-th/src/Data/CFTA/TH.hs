@@ -1,8 +1,8 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TemplateHaskellQuotes #-}
 
--- | Generate the scalar node views used by typing rules and refinements.
-module Data.CFTA.TH (deriveNode) where
+-- | Generate the scalar node views used by typing rules and refinements, and quote explicit graphs.
+module Data.CFTA.TH (deriveNode, automaton) where
 
 import Control.Monad (forM, unless, when)
 import Data.Char (isUpper)
@@ -11,6 +11,7 @@ import GHC.Generics (Generic)
 import Language.Haskell.TH
 
 import Data.CFTA.Gen.Refinement.Derive (NodeView)
+import Data.CFTA.TH.Automaton (automaton)
 
 {- | Generate a node view after a source datatype declaration:
 

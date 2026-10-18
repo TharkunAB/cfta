@@ -1,8 +1,9 @@
 # cfta-th
 
-Generate a scalar node view from a datatype. This removes the duplicate
-constructor and field declarations used by typing rules and refinement
-invariants. Template Haskell stays in this optional package.
+Generate a scalar node view from a datatype, or quote an explicit automaton.
+The node view removes the duplicate constructor and field declarations used by
+typing rules and refinement invariants. Template Haskell stays in this optional
+package.
 
 ```haskell
 {-# LANGUAGE DeriveAnyClass #-}
@@ -55,4 +56,40 @@ record of measures also remains manual. This package generates scalar views;
 it does not change term types, constraints, counts, or ranks.
 
 See the [design note](../docs/generated-node-views.md) for the boundary and
-validation plan. Quasiquoters are separate authoring work.
+validation plan.
+
+## Quote an automaton
+
+`automaton` quotes an explicit graph. The quote is the graph format of
+[cfta-serialization](../cfta-serialization/README.md) without its `graph 1;`
+line, so a quote and a saved graph use one syntax:
+
+```haskell
+{-# LANGUAGE QuasiQuotes #-}
+
+import Data.CFTA (PlainFTA)
+import Data.CFTA.Serialization.Text (TextError)
+import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.TH (automaton)
+
+-- equalChildren :: Constraint and zero :: Symbol are defined elsewhere.
+pairs :: Either (TextError String) (PlainFTA String Symbol)
+pairs =
+    [automaton|
+        start Pair;
+        state Pair { pair(Atom, Atom) where $equalChildren; }
+        state Atom { $zero; one @{ v == 1 }; }
+    |]
+```
+
+`$name` takes the place of a symbol, and `where $name` the place of a
+constraint. The name is a Haskell `Symbol` or `Constraint` in scope, and can be
+qualified. The quote checks its syntax, its names, and its state rows at
+compile time, and GHC checks the types of the named values. Two names can hold
+the same symbol, so `mkFTA` checks the symbol arities when the expression is
+evaluated, and the result is an `Either`.
+
+The quote is read again with the named values when the expression is
+evaluated. Without names, the result is the same as `parseGraph` of the text
+with the `graph 1;` line. `parseGraphQuote` in `cfta-serialization` reads a
+quote from a file, with the values of its names in two maps.
