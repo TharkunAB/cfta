@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `e1b8b58e`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `1fde7bb0`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -61,7 +61,18 @@ Its next anchor must be the exact retained child. The full outer worker
 still needs a producer for those exact consecutive steps and footprints.
 A source-built closed example proves that guard footprints are not
 hereditary over nested rows. No general recursive domain is enlarged.
-Read [the current checkpoint](notes-current-parent-native-lineage.md).
+Read [the earlier checkpoint](notes-current-parent-native-lineage.md).
+
+Actual cold and warm outer edge calls now retain indexed Parent origins
+for their exact captured request. Empty initial tables, completed node calls
+and unfinished prefixes produce that memo invariant. Literal walks identify
+the exact dispatched value, inherited descent, earlier siblings and suffix.
+A positive row of that input supplies a strict source-anchor continuation
+step under the original raw footprint. A general consecutive execution
+producer and global progress remain open. The checked raw conjunction
+counterexample has a rejected first input. No accepted-input closure claim
+or Haskell defect follows. Read
+[the current checkpoint](notes-current-outer-positional-dispatch.md).
 
 ## Strongest current claim in plain technical English
 
