@@ -1,0 +1,220 @@
+MicroCFTA.SourceCurrentPositiveAccessorBoundary.live_pair_lost : have first :=
+  @MicroCFTA.SourceSymbolicIndex.Constraint.mk MicroCFTA.FullSyntax.Formula
+    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceGuards.Guard.same MicroCFTA.FullSyntax.Formula
+      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat)));
+have second :=
+  @MicroCFTA.SourceSymbolicIndex.Constraint.mk MicroCFTA.FullSyntax.Formula
+    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceGuards.Guard.not MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceGuards.Guard.bottom MicroCFTA.FullSyntax.Formula));
+have joined :=
+  @MicroCFTA.SourceSymbolicIndex.Constraint.mk MicroCFTA.FullSyntax.Formula
+    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceGuards.Guard.and MicroCFTA.FullSyntax.Formula
+      (@List.cons.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceGuards.Guard.same MicroCFTA.FullSyntax.Formula
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat)))
+        (@List.cons.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceGuards.Guard.not MicroCFTA.FullSyntax.Formula
+            (@MicroCFTA.SourceGuards.Guard.bottom MicroCFTA.FullSyntax.Formula))
+          (@List.nil.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)))));
+And
+  (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceCompactGuards.positive MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula first))
+    (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+      (@List.cons.{0} (List.{0} (List.{0} Nat))
+        (@List.cons.{0} (List.{0} Nat)
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+          (@List.cons.{0} (List.{0} Nat)
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+            (@List.nil.{0} (List.{0} Nat))))
+        (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+  (And
+    (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula first)
+      (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+        (@List.cons.{0} (List.{0} (List.{0} Nat))
+          (@List.cons.{0} (List.{0} Nat)
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+            (@List.cons.{0} (List.{0} Nat)
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+              (@List.nil.{0} (List.{0} Nat))))
+          (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+    (And
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula second)
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+      (And
+        (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceEqualityPCSNativeEdge.conjoin first second) joined)
+        (And
+          (@Membership.mem.{0, 0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+            (List.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+            (@List.instMembership.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.GuardConjunction.atoms MicroCFTA.FullSyntax.Formula
+              (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula joined))
+            (@MicroCFTA.SourceGuards.Guard.same MicroCFTA.FullSyntax.Formula
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))))
+          (And
+            (@Membership.mem.{0, 0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+              (List.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+              (@List.instMembership.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.GuardConjunction.atoms MicroCFTA.FullSyntax.Formula
+                (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula joined))
+              (@MicroCFTA.SourceGuards.Guard.not MicroCFTA.FullSyntax.Formula
+                (@MicroCFTA.SourceGuards.Guard.bottom MicroCFTA.FullSyntax.Formula)))
+            (And
+              (@Eq.{1} (Option.{0} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                (@MicroCFTA.SourceCompactGuards.positiveNormalized MicroCFTA.FullSyntax.Formula
+                  (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula joined))
+                (@Option.none.{0} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))))
+              (And
+                (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula joined)
+                  (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                    (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                (And
+                  (Not
+                    (MicroCFTA.EqualityNormalize.Covers
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class
+                        (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))
+                          (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+                            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@List.nil.{0} Nat))
+                            (@List.nil.{0} MicroCFTA.EqualityNormalize.Path)))
+                        (@List.nil.{0} MicroCFTA.EqualityNormalize.Class))
+                      (@Option.getD.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula joined)
+                        (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))))
+                  (And
+                    (@Eq.{1} Bool
+                      (@MicroCFTA.SourceEqualityMkEdgeAllocation.accepted MicroCFTA.FullSyntax.Formula first
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      Bool.true)
+                    (@Eq.{1} Bool
+                      (@MicroCFTA.SourceEqualityMkEdgeAllocation.accepted MicroCFTA.FullSyntax.Formula joined
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      Bool.true))))))))))
+theorem MicroCFTA.SourceCurrentPositiveAccessorBoundary.live_pair_lost : have first :=
+  @MicroCFTA.SourceSymbolicIndex.Constraint.mk MicroCFTA.FullSyntax.Formula
+    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceGuards.Guard.same MicroCFTA.FullSyntax.Formula
+      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat)));
+have second :=
+  @MicroCFTA.SourceSymbolicIndex.Constraint.mk MicroCFTA.FullSyntax.Formula
+    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceGuards.Guard.not MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceGuards.Guard.bottom MicroCFTA.FullSyntax.Formula));
+have joined :=
+  @MicroCFTA.SourceSymbolicIndex.Constraint.mk MicroCFTA.FullSyntax.Formula
+    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceGuards.Guard.and MicroCFTA.FullSyntax.Formula
+      (@List.cons.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceGuards.Guard.same MicroCFTA.FullSyntax.Formula
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat)))
+        (@List.cons.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceGuards.Guard.not MicroCFTA.FullSyntax.Formula
+            (@MicroCFTA.SourceGuards.Guard.bottom MicroCFTA.FullSyntax.Formula))
+          (@List.nil.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)))));
+And
+  (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+    (@MicroCFTA.SourceCompactGuards.positive MicroCFTA.FullSyntax.Formula
+      (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula first))
+    (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+      (@List.cons.{0} (List.{0} (List.{0} Nat))
+        (@List.cons.{0} (List.{0} Nat)
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+          (@List.cons.{0} (List.{0} Nat)
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+            (@List.nil.{0} (List.{0} Nat))))
+        (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+  (And
+    (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+      (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula first)
+      (@Option.some.{0} (List.{0} (List.{0} (List.{0} Nat)))
+        (@List.cons.{0} (List.{0} (List.{0} Nat))
+          (@List.cons.{0} (List.{0} Nat)
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+            (@List.cons.{0} (List.{0} Nat)
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))
+              (@List.nil.{0} (List.{0} Nat))))
+          (@List.nil.{0} (List.{0} (List.{0} Nat))))))
+    (And
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+        (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula second)
+        (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+      (And
+        (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceEqualityPCSNativeEdge.conjoin first second) joined)
+        (And
+          (@Membership.mem.{0, 0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+            (List.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+            (@List.instMembership.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.GuardConjunction.atoms MicroCFTA.FullSyntax.Formula
+              (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula joined))
+            (@MicroCFTA.SourceGuards.Guard.same MicroCFTA.FullSyntax.Formula
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@List.nil.{0} Nat))))
+          (And
+            (@Membership.mem.{0, 0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)
+              (List.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+              (@List.instMembership.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.GuardConjunction.atoms MicroCFTA.FullSyntax.Formula
+                (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula joined))
+              (@MicroCFTA.SourceGuards.Guard.not MicroCFTA.FullSyntax.Formula
+                (@MicroCFTA.SourceGuards.Guard.bottom MicroCFTA.FullSyntax.Formula)))
+            (And
+              (@Eq.{1} (Option.{0} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                (@MicroCFTA.SourceCompactGuards.positiveNormalized MicroCFTA.FullSyntax.Formula
+                  (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula joined))
+                (@Option.none.{0} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))))
+              (And
+                (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                  (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula joined)
+                  (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                    (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                (And
+                  (Not
+                    (MicroCFTA.EqualityNormalize.Covers
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Class
+                        (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))
+                          (@List.cons.{0} MicroCFTA.EqualityNormalize.Path
+                            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@List.nil.{0} Nat))
+                            (@List.nil.{0} MicroCFTA.EqualityNormalize.Path)))
+                        (@List.nil.{0} MicroCFTA.EqualityNormalize.Class))
+                      (@Option.getD.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula joined)
+                        (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))))
+                  (And
+                    (@Eq.{1} Bool
+                      (@MicroCFTA.SourceEqualityMkEdgeAllocation.accepted MicroCFTA.FullSyntax.Formula first
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      Bool.true)
+                    (@Eq.{1} Bool
+                      (@MicroCFTA.SourceEqualityMkEdgeAllocation.accepted MicroCFTA.FullSyntax.Formula joined
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      Bool.true)))))))))) :=
+MicroCFTA.SourceCurrentPositiveAccessorBoundary.checked_witness✝
+'MicroCFTA.SourceCurrentPositiveAccessorBoundary.live_pair_lost' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

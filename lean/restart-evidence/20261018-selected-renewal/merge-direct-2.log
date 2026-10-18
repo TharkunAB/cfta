@@ -1,0 +1,112 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-renewal/merge-direct-2.source.lean:164:73: error: don't know how to synthesize placeholder for argument `guard`
+context:
+Symbol Guard : Type
+symbolEq : DecidableEq Symbol
+edgeEq : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+original : EdgeValue Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+stored : Stored before memo
+ready : EdgeReady before original
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+actual :
+  Run clear top (small original) before memo
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd saved
+children : Run clear top (map Code.request original.children) before memo values middle saved
+made :
+  Run clear top (Code.work (makeEdge original.entry.key.symbol original.entry.key.constraint values)) middle saved
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd saved
+inputs : ∀ (child : Value Symbol Guard), child ∈ original.children → Available before child
+certified :
+  Certified Contract clear (map Code.request original.children) before fun after values =>
+    ∀ (value : Value Symbol Guard), value ∈ values → ValueReady after value
+effect : Effect before middle
+_nextStored : Stored middle saved
+available : ∀ (value : Value Symbol Guard), value ∈ values → ValueReady middle value
+facts : InternedNestedFacts.Facts middle
+⊢ Guard
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-renewal/merge-direct-2.source.lean:164:71: error: don't know how to synthesize placeholder for argument `symbol`
+context:
+Symbol Guard : Type
+symbolEq : DecidableEq Symbol
+edgeEq : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+original : EdgeValue Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+stored : Stored before memo
+ready : EdgeReady before original
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+actual :
+  Run clear top (small original) before memo
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd saved
+children : Run clear top (map Code.request original.children) before memo values middle saved
+made :
+  Run clear top (Code.work (makeEdge original.entry.key.symbol original.entry.key.constraint values)) middle saved
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd saved
+inputs : ∀ (child : Value Symbol Guard), child ∈ original.children → Available before child
+certified :
+  Certified Contract clear (map Code.request original.children) before fun after values =>
+    ∀ (value : Value Symbol Guard), value ∈ values → ValueReady after value
+effect : Effect before middle
+_nextStored : Stored middle saved
+available : ∀ (value : Value Symbol Guard), value ∈ values → ValueReady middle value
+facts : InternedNestedFacts.Facts middle
+⊢ Symbol
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-renewal/merge-direct-2.source.lean:164:7: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-selected-renewal/merge-direct-2.source.lean:153:36: error: unsolved goals
+Symbol Guard : Type
+symbolEq : DecidableEq Symbol
+edgeEq : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+original : EdgeValue Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+stored : Stored before memo
+ready : EdgeReady before original
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+actual :
+  Run clear top (small original) before memo
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd saved
+children : Run clear top (map Code.request original.children) before memo values middle saved
+made :
+  Run clear top (Code.work (makeEdge original.entry.key.symbol original.entry.key.constraint values)) middle saved
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd saved
+inputs : ∀ (child : Value Symbol Guard), child ∈ original.children → Available before child
+certified :
+  Certified Contract clear (map Code.request original.children) before fun after values =>
+    ∀ (value : Value Symbol Guard), value ∈ values → ValueReady after value
+effect : Effect before middle
+_nextStored : Stored middle saved
+available : ∀ (value : Value Symbol Guard), value ∈ values → ValueReady middle value
+facts : InternedNestedFacts.Facts middle
+⊢ (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst.entry.key.symbol =
+      original.entry.key.symbol ∧
+    (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst.entry.key.constraint =
+        original.entry.key.constraint ∧
+      ∃ values_1 middle_1 current,
+        Run clear top (map Code.request original.children) before memo values_1 middle_1 current ∧
+          run (makeEdge original.entry.key.symbol original.entry.key.constraint values_1) middle_1 =
+              ((run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst,
+                (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).snd) ∧
+            (run (makeEdge original.entry.key.symbol original.entry.key.constraint values) middle).fst.children =
+              values_1

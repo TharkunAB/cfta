@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentProjectionIndexedOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentProjectionIndexedOrigins.rows_indexed
+#print MicroCFTA.SourceCurrentProjectionIndexedOrigins.rows_indexed
+#print axioms MicroCFTA.SourceCurrentProjectionIndexedOrigins.rows_indexed
+#check @MicroCFTA.SourceCurrentProjectionIndexedOrigins.union_row
+#print MicroCFTA.SourceCurrentProjectionIndexedOrigins.union_row
+#print axioms MicroCFTA.SourceCurrentProjectionIndexedOrigins.union_row

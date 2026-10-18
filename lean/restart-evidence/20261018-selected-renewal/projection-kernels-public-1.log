@@ -1,0 +1,614 @@
+MicroCFTA.ProjectionIndexedKernels.actual_skipped_rows_and_union : @Exists.{1}
+  (MicroCFTA.InternedNestedConstruction.Syntax Nat Unit) fun program =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun original =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit) fun initial =>
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)) fun sourceRows =>
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)) fun outputs =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun chosen =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun output =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit) fun final =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) fun survivor =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Nat Unit
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Unit
+                        (fun a b =>
+                          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Unit instDecidableEqNat
+                            instDecidableEqPUnit.{1} a b)
+                        program (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                        (@MicroCFTA.InternedConstructorTemplates.empty Nat Unit))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Unit
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) original initial))
+                    (And
+                      (@Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)) sourceRows
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Unit original))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.SourceEqualityRequiredWorker.Result Nat Unit
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)))
+                          (@MicroCFTA.SourceEqualityProjectionWorker.rows Nat Unit
+                            (@MicroCFTA.SourceEqualityProjectionWorker.project Nat Unit
+                              (fun a b =>
+                                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Unit
+                                  instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Int))
+                            (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) sourceRows initial)
+                          (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Nat Unit
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)) outputs initial))
+                        (And
+                          (@Eq.{1} Nat
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) sourceRows)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                          (And
+                            (@Eq.{1} Nat
+                              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) outputs)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (And
+                              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                (@GetElem?.getElem?.{0, 0, 0}
+                                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)) Nat
+                                  (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                  (fun as i =>
+                                    @LT.lt.{0} Nat instLTNat i
+                                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) as))
+                                  (@List.instGetElem?NatLtLength.{0}
+                                    (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                  outputs (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) chosen))
+                              (And
+                                (@Exists.{1} Nat fun sourceIndex =>
+                                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) fun source =>
+                                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun child =>
+                                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit) fun start =>
+                                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                          fun finish =>
+                                          And
+                                            (@Eq.{1}
+                                              (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                              (@GetElem?.getElem?.{0, 0, 0}
+                                                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                                Nat (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                                (fun as i =>
+                                                  @LT.lt.{0} Nat instLTNat i
+                                                    (@List.length.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) as))
+                                                (@List.instGetElem?NatLtLength.{0}
+                                                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                                sourceRows sourceIndex)
+                                              (@Option.some.{0}
+                                                (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) source))
+                                            (And
+                                              (@Eq.{1}
+                                                (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                (@MicroCFTA.SourceEqualityProjectionGraph.select.{0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Nat Unit
+                                                    source)
+                                                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                                                (@Option.some.{0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) child))
+                                              (And
+                                                (@MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Nat Unit
+                                                  (fun a b =>
+                                                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat
+                                                      Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                                  (@List.nil.{0} Int)
+                                                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                                  (@List.take.{0}
+                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                                    sourceIndex sourceRows)
+                                                  initial
+                                                  (@List.take.{0}
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                                    outputs)
+                                                  start)
+                                                (And
+                                                  (@MicroCFTA.SourceEqualityProjectionGraph.Project Nat Unit
+                                                    (fun a b =>
+                                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat
+                                                        Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                                    (@List.nil.{0} Int) child start chosen finish)
+                                                  (@MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Nat Unit
+                                                    (fun a b =>
+                                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat
+                                                        Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                                    (@List.nil.{0} Int)
+                                                    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                                    (@List.drop.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        sourceIndex
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                                      sourceRows)
+                                                    finish
+                                                    (@List.drop.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      outputs)
+                                                    initial)))))
+                                (And
+                                  (@MicroCFTA.SourceEqualityProjectionUnion.Union Nat Unit
+                                    (fun a b =>
+                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Unit
+                                        instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                    outputs initial output final)
+                                  (And
+                                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                      (@List.instMembership.{0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Unit output) survivor)
+                                    (@Exists.{1} Nat fun sourceIndex =>
+                                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun source =>
+                                        @Exists.{1}
+                                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                          fun earlierRows =>
+                                          @Exists.{1}
+                                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                            fun selectedRows =>
+                                            @Exists.{1}
+                                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                              fun laterRows =>
+                                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                                fun start =>
+                                                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                                  fun finish =>
+                                                  @Exists.{1}
+                                                    (List.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                                    fun raw =>
+                                                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                                      fun middle =>
+                                                      And
+                                                        (@Eq.{1}
+                                                          (Option.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                          (@GetElem?.getElem?.{0, 0, 0}
+                                                            (List.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                            Nat (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                            (fun as i =>
+                                                              @LT.lt.{0} Nat instLTNat i
+                                                                (@List.length.{0}
+                                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat
+                                                                    Unit)
+                                                                  as))
+                                                            (@List.instGetElem?NatLtLength.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                            outputs sourceIndex)
+                                                          (@Option.some.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                            source))
+                                                        (And
+                                                          (@MicroCFTA.SourceEqualityProjectionUnion.ReadAll Nat Unit
+                                                            (fun a b =>
+                                                              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a
+                                                                b)
+                                                            (@List.take.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                              sourceIndex outputs)
+                                                            initial earlierRows start)
+                                                          (And
+                                                            (@MicroCFTA.SourceEqualityProjectionRead.Read Nat Unit
+                                                              (fun a b =>
+                                                                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                  Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a
+                                                                  b)
+                                                              source start selectedRows finish)
+                                                            (And
+                                                              (@MicroCFTA.SourceEqualityProjectionUnion.ReadAll Nat Unit
+                                                                (fun a b =>
+                                                                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                    Nat Unit instDecidableEqNat instDecidableEqPUnit.{1}
+                                                                    a b)
+                                                                (@List.drop.{0}
+                                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat
+                                                                    Unit)
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) sourceIndex
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 1)
+                                                                      (instOfNatNat (nat_lit 1))))
+                                                                  outputs)
+                                                                finish laterRows middle)
+                                                              (And
+                                                                (@Eq.{1}
+                                                                  (List.{0}
+                                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                      Nat Unit))
+                                                                  raw
+                                                                  (@HAppend.hAppend.{0, 0, 0}
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (@instHAppendOfAppend.{0}
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (@List.instAppend.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit)))
+                                                                    (@HAppend.hAppend.{0, 0, 0}
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (@instHAppendOfAppend.{0}
+                                                                        (List.{0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                            Nat Unit))
+                                                                        (@List.instAppend.{0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                            Nat Unit)))
+                                                                      earlierRows selectedRows)
+                                                                    laterRows))
+                                                                (And
+                                                                  (@Membership.mem.{0, 0}
+                                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                      Nat Unit)
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (@List.instMembership.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    selectedRows survivor)
+                                                                  (And
+                                                                    (@MicroCFTA.SourceEqualityProjectionUnion.ReadAll
+                                                                      Nat Unit
+                                                                      (fun a b =>
+                                                                        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                          Nat Unit instDecidableEqNat
+                                                                          instDecidableEqPUnit.{1} a b)
+                                                                      outputs initial raw middle)
+                                                                    (And
+                                                                      (@Eq.{1}
+                                                                        (Prod.{0, 0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            Nat Unit)
+                                                                          (MicroCFTA.InternedConstructorTemplates.State
+                                                                            Nat Unit))
+                                                                        (@MicroCFTA.InternedConstructorTemplates.run Nat
+                                                                          Unit
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            Nat Unit)
+                                                                          (fun a b =>
+                                                                            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                              Nat Unit instDecidableEqNat
+                                                                              instDecidableEqPUnit.{1} a b)
+                                                                          (@MicroCFTA.InternedConstructorTemplates.makeNode
+                                                                            Nat Unit raw)
+                                                                          middle)
+                                                                        (@Prod.mk.{0, 0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            Nat Unit)
+                                                                          (MicroCFTA.InternedConstructorTemplates.State
+                                                                            Nat Unit)
+                                                                          output final))
+                                                                      (@Eq.{1} Bool
+                                                                        (@MicroCFTA.EqualityLeafProjectionPhysical.dead
+                                                                          Nat Unit survivor)
+                                                                        Bool.false)))))))))))))))))
+theorem MicroCFTA.ProjectionIndexedKernels.actual_skipped_rows_and_union : @Exists.{1}
+  (MicroCFTA.InternedNestedConstruction.Syntax Nat Unit) fun program =>
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun original =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit) fun initial =>
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)) fun sourceRows =>
+        @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)) fun outputs =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun chosen =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun output =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit) fun final =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) fun survivor =>
+                  And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Nat Unit
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Unit
+                        (fun a b =>
+                          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Unit instDecidableEqNat
+                            instDecidableEqPUnit.{1} a b)
+                        program (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                        (@MicroCFTA.InternedConstructorTemplates.empty Nat Unit))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Unit
+                        (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) original initial))
+                    (And
+                      (@Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)) sourceRows
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Unit original))
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.SourceEqualityRequiredWorker.Result Nat Unit
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)))
+                          (@MicroCFTA.SourceEqualityProjectionWorker.rows Nat Unit
+                            (@MicroCFTA.SourceEqualityProjectionWorker.project Nat Unit
+                              (fun a b =>
+                                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Unit
+                                  instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Int))
+                            (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) sourceRows initial)
+                          (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Nat Unit
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)) outputs initial))
+                        (And
+                          (@Eq.{1} Nat
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) sourceRows)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                          (And
+                            (@Eq.{1} Nat
+                              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) outputs)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (And
+                              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                (@GetElem?.getElem?.{0, 0, 0}
+                                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)) Nat
+                                  (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                  (fun as i =>
+                                    @LT.lt.{0} Nat instLTNat i
+                                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) as))
+                                  (@List.instGetElem?NatLtLength.{0}
+                                    (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                  outputs (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) chosen))
+                              (And
+                                (@Exists.{1} Nat fun sourceIndex =>
+                                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) fun source =>
+                                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun child =>
+                                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit) fun start =>
+                                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                          fun finish =>
+                                          And
+                                            (@Eq.{1}
+                                              (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                              (@GetElem?.getElem?.{0, 0, 0}
+                                                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                                Nat (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                                (fun as i =>
+                                                  @LT.lt.{0} Nat instLTNat i
+                                                    (@List.length.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) as))
+                                                (@List.instGetElem?NatLtLength.{0}
+                                                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                                sourceRows sourceIndex)
+                                              (@Option.some.{0}
+                                                (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit) source))
+                                            (And
+                                              (@Eq.{1}
+                                                (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                (@MicroCFTA.SourceEqualityProjectionGraph.select.{0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Nat Unit
+                                                    source)
+                                                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                                                (@Option.some.{0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) child))
+                                              (And
+                                                (@MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Nat Unit
+                                                  (fun a b =>
+                                                    @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat
+                                                      Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                                  (@List.nil.{0} Int)
+                                                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                                  (@List.take.{0}
+                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                                    sourceIndex sourceRows)
+                                                  initial
+                                                  (@List.take.{0}
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                                    outputs)
+                                                  start)
+                                                (And
+                                                  (@MicroCFTA.SourceEqualityProjectionGraph.Project Nat Unit
+                                                    (fun a b =>
+                                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat
+                                                        Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                                    (@List.nil.{0} Int) child start chosen finish)
+                                                  (@MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Nat Unit
+                                                    (fun a b =>
+                                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat
+                                                        Unit instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                                    (@List.nil.{0} Int)
+                                                    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                                                    (@List.drop.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        sourceIndex
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                                      sourceRows)
+                                                    finish
+                                                    (@List.drop.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      outputs)
+                                                    initial)))))
+                                (And
+                                  (@MicroCFTA.SourceEqualityProjectionUnion.Union Nat Unit
+                                    (fun a b =>
+                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Unit
+                                        instDecidableEqNat instDecidableEqPUnit.{1} a b)
+                                    outputs initial output final)
+                                  (And
+                                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit)
+                                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                      (@List.instMembership.{0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Nat Unit output) survivor)
+                                    (@Exists.{1} Nat fun sourceIndex =>
+                                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Unit) fun source =>
+                                        @Exists.{1}
+                                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                          fun earlierRows =>
+                                          @Exists.{1}
+                                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                            fun selectedRows =>
+                                            @Exists.{1}
+                                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                              fun laterRows =>
+                                              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                                fun start =>
+                                                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                                  fun finish =>
+                                                  @Exists.{1}
+                                                    (List.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Unit))
+                                                    fun raw =>
+                                                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Unit)
+                                                      fun middle =>
+                                                      And
+                                                        (@Eq.{1}
+                                                          (Option.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                          (@GetElem?.getElem?.{0, 0, 0}
+                                                            (List.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                            Nat (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                            (fun as i =>
+                                                              @LT.lt.{0} Nat instLTNat i
+                                                                (@List.length.{0}
+                                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat
+                                                                    Unit)
+                                                                  as))
+                                                            (@List.instGetElem?NatLtLength.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Nat Unit))
+                                                            outputs sourceIndex)
+                                                          (@Option.some.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                            source))
+                                                        (And
+                                                          (@MicroCFTA.SourceEqualityProjectionUnion.ReadAll Nat Unit
+                                                            (fun a b =>
+                                                              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a
+                                                                b)
+                                                            (@List.take.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Nat Unit)
+                                                              sourceIndex outputs)
+                                                            initial earlierRows start)
+                                                          (And
+                                                            (@MicroCFTA.SourceEqualityProjectionRead.Read Nat Unit
+                                                              (fun a b =>
+                                                                @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                  Nat Unit instDecidableEqNat instDecidableEqPUnit.{1} a
+                                                                  b)
+                                                              source start selectedRows finish)
+                                                            (And
+                                                              (@MicroCFTA.SourceEqualityProjectionUnion.ReadAll Nat Unit
+                                                                (fun a b =>
+                                                                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                    Nat Unit instDecidableEqNat instDecidableEqPUnit.{1}
+                                                                    a b)
+                                                                (@List.drop.{0}
+                                                                  (MicroCFTA.InternedConstructorTemplates.Value Nat
+                                                                    Unit)
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) sourceIndex
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 1)
+                                                                      (instOfNatNat (nat_lit 1))))
+                                                                  outputs)
+                                                                finish laterRows middle)
+                                                              (And
+                                                                (@Eq.{1}
+                                                                  (List.{0}
+                                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                      Nat Unit))
+                                                                  raw
+                                                                  (@HAppend.hAppend.{0, 0, 0}
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (@instHAppendOfAppend.{0}
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (@List.instAppend.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit)))
+                                                                    (@HAppend.hAppend.{0, 0, 0}
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (List.{0}
+                                                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                          Nat Unit))
+                                                                      (@instHAppendOfAppend.{0}
+                                                                        (List.{0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                            Nat Unit))
+                                                                        (@List.instAppend.{0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                            Nat Unit)))
+                                                                      earlierRows selectedRows)
+                                                                    laterRows))
+                                                                (And
+                                                                  (@Membership.mem.{0, 0}
+                                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                      Nat Unit)
+                                                                    (List.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    (@List.instMembership.{0}
+                                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                                        Nat Unit))
+                                                                    selectedRows survivor)
+                                                                  (And
+                                                                    (@MicroCFTA.SourceEqualityProjectionUnion.ReadAll
+                                                                      Nat Unit
+                                                                      (fun a b =>
+                                                                        @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                          Nat Unit instDecidableEqNat
+                                                                          instDecidableEqPUnit.{1} a b)
+                                                                      outputs initial raw middle)
+                                                                    (And
+                                                                      (@Eq.{1}
+                                                                        (Prod.{0, 0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            Nat Unit)
+                                                                          (MicroCFTA.InternedConstructorTemplates.State
+                                                                            Nat Unit))
+                                                                        (@MicroCFTA.InternedConstructorTemplates.run Nat
+                                                                          Unit
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            Nat Unit)
+                                                                          (fun a b =>
+                                                                            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                                                              Nat Unit instDecidableEqNat
+                                                                              instDecidableEqPUnit.{1} a b)
+                                                                          (@MicroCFTA.InternedConstructorTemplates.makeNode
+                                                                            Nat Unit raw)
+                                                                          middle)
+                                                                        (@Prod.mk.{0, 0}
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            Nat Unit)
+                                                                          (MicroCFTA.InternedConstructorTemplates.State
+                                                                            Nat Unit)
+                                                                          output final))
+                                                                      (@Eq.{1} Bool
+                                                                        (@MicroCFTA.EqualityLeafProjectionPhysical.dead
+                                                                          Nat Unit survivor)
+                                                                        Bool.false))))))))))))))))) :=
+failed to pretty print expression (use 'set_option pp.rawOnError true' for raw representation)
+'MicroCFTA.ProjectionIndexedKernels.actual_skipped_rows_and_union' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

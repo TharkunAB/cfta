@@ -1,0 +1,15 @@
+# Actual allocated merge operand origins
+
+Frozen production: `SourceCurrentActualMergeOperandOrigins.lean`, SHA256 `030159f0b8fe674275b67cb096f2e3689de86e095316932fdb4b3f9cc4348eef`.
+
+The public `operand` theorem starts from a literal successful allocated operand call. It derives the exact projection and merge equations at their captured checked states. Initial SemanticReady, CostHeap, Stored, and available inputs supply physical intermediate facts. The initial `Raw` certificate records actual earlier merge writers. Stored alone does not supply historical writer provenance.
+
+A selected positive output row yields an indexed physical row of the projected operand. The theorem preserves its full symbol and guard. It retains either exact row identity or the ordered recursive child Merge run with all captured states. It derives the final causal Raw certificate. It assumes no supplied projection graph, semantic Reads, future completion, or desired row law. The source anchor is the projected operand. It is not an original forest occurrence or a proof of positional source descent.
+
+The constructed `cold_warm` witness builds a positive ordinary pair with two source-built recursive children. Each raw Mu body has a local reference under a loop row. Initial semantic, cost, availability, empty Stored, and empty Raw facts are derived. The actual cold operand call computes a result and returned checked state. The fixture derives its final effects from the literal operand graph. It then calls the same original operand at that returned state with the saved memo. The warm call returns the extracted actual cold result. Both calls invoke the new theorem. No input/result identity is assumed.
+
+Validation selects `memo-direct-2` and `memo-kernels-6`; both logs contain exactly zero bytes. `memo-canonical-1` completes successfully and replays the unchanged unused-input warning in InternedFreshOrdinaryClosedCompletion. Both full public printer groups pass all eight required options, explicit checks, complete proof prints, and standard axiom checks. The public constructed theorem is an exact-signature alias of a private checked proof. The selected groups contain one production head and one constructed head, with no auxiliary heads.
+
+All eleven owned Lean jobs use the pinned Lean 4.34.1 toolchain and the copied capped runner. Inner receipts record memory.max=memory.high=4294967296 and memory.swap.max=0. The wrapper limits execution to five minutes. Six failed attempts remain immutable: direct1 had a local eliminated binder issue; kernels1 exposed insufficient fuel and fixture type issues; kernels2-4 assumed an unsupported exact result identity; kernels5 exposed dependent elimination over the computed checked state. The final fixture removes those assumptions and abstracts only the physical merge effect extraction.
+
+No production progress, termination, complete original-occurrence renewal, or runtime correspondence conclusion is added. Existing selected/native lineage APIs already cover the leaf/native path. The remaining projection-to-original occurrence and Mu Read ancestry boundaries remain explicit.

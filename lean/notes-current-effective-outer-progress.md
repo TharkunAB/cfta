@@ -1,5 +1,9 @@
 # Effective inherited gains and unfinished outer dispatches
 
+The selected-target extension is in `notes-current-selected-renewal.md`.
+It derives projected row sources and actual historical Merge writers.
+Strict renewal progress across successive outer calls remains open.
+
 Checked on 2026-10-18. Starting checkpoint: `9e11fad5`.
 Proof checkpoint: `4b6f581d`. Source main remains `c0cc8a05`.
 No Haskell bytes change. The full-library goal remains active.

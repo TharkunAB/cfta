@@ -2,6 +2,18 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 23:17 CEST. Proof checkpoint is `3739234c6`.
+Actual target operand rows now retain indexed projection sources and actual
+historical cold/warm Merge writers with ordered child requests. Whole-caller
+history and strict renewal progress remain open. A checked accepted guard
+example loses an accessor pair while retaining the Same atom in the full
+guard. It establishes no Haskell defect or repair request. No Haskell bytes
+change. Full Audit passes 3421 jobs and 73193 checks. General completion,
+convergence and Haskell refinement remain open. Field-pool repair `b9219b9e`
+remains fixed in `c0cc8a05`. Read `lean/notes-current-selected-renewal.md`.
+Keep this registry first. Record repairs with failure, executable reproducer,
+paths, commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 22:55 CEST. Proof checkpoint is `4b6f581d`.
 Actual height gains now derive an uncovered distinct own equality pair.
 Exact original row and active-owner receipts remain. Actual unfinished

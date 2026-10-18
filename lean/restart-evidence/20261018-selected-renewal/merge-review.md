@@ -1,0 +1,19 @@
+# Actual Merge positive row origins
+
+Reviewed and frozen: 2026-10-18 23:18 CEST.
+
+The additive module has four public declarations. `Writer` retains an actual historical memo-aware body `Run` and its entry `SemanticReady`, cost heap, physical `Stored`, and input availability. `Raw` attaches such a writer to each complete memo entry with its exact tagged physical key. `call` derives this invariant through actual mutually recursive instructions. It identifies a warm writer's original with the current requested input by coherent resident identity. The initial empty memo needs no writer premise.
+
+`positive` at SourceCurrentMergePositiveRowOrigins.lean:270 takes a selected physical returned row whose full guard is different from `top`. It derives an indexed row in the immediate Merge input, equal symbols and complete guards, and either an unchanged row or an actual ordered recursive child-request `Run` at exact historical heaps and memo tables. This is a full guard inequality theorem. It does not derive that inequality from a nonempty own equality accessor.
+
+The proof removes canonical duplicate/dead rows through the actual makeNode receipt. A group with more than four rows creates a `top` row, which the guard inequality excludes. A smaller group preserves the original full row fields and runs the actual recursive Merge calls before edge interning. Open ordinary inputs remain covered by the unchanged-row branch. Nested Mu and union values remain in scope.
+
+The theorem does not identify a transformed child with its input child. It does not recover an initial-source occurrence or prove selected-continuation renewal. Its historical Writer does not assert a forward reader-growth suffix. The next source step must trace actual target projection, Merge children, and native paired-operand row origins without replacing their calls by child equality. Mu/reference routes can resolve a literal reference back to a complete recursive value. Raw value mass and nonempty path length are therefore insufficient as general progress measures.
+
+The own-source fixture builds a closed Nat/Nat ordinary root with guard 9. Its child has five distinct nullary rows at one symbol. Actual cold Merge fuel 64 changes that child to one Top row. Actual warm Merge fuel 1 reuses the complete memo. The fixture derives initial physical facts and empty Raw internally, invokes `call` and `positive` for both results, proves the child changes, and thus excludes the unchanged-row alternative. Both ordered child schedules come from the production origin theorem. The public theorem is an exact full-statement alias to a private kernel-checked witness. There is one constructed head and no auxiliary pair.
+
+Selected checks: merge-direct-5 and merge-kernels-direct-2 have literal zero-byte logs. merge-canonical-1 terminates successfully with 1053 jobs. It replays only the existing ClosedCompletion:24:5 unused-input warning. merge-public-1 has four complete declaration/proof/axiom pairs; merge-kernels-public-1 has one. Every pair uses all eight required printer/linter options and only standard axioms. Every Lean check records memory.max=memory.high=4294967296 and memory.swap.max=0 under the five-minute capped runner.
+
+Attempts remain immutable. Production direct1 failed on dependent induction/index elimination; direct2 on constructor field placeholders; direct3 on local names and type inference; direct4 checked mathematically but emitted two unused-instance warnings. Direct5 is the selected literal-zero source. Fixture direct1 failed on concrete receipt normalization, explicit implicit-argument application, and statement binder inference. Direct2 is selected. No attempt was interrupted.
+
+No older source, Audit, Haskell, authority document, shared selection, or Git state was edited by this component. Dependency sources are pinned for review. Root-owned mutable fixtures and shared mutable selections are excluded from the allowlist.
