@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentPublicationSharedReplacements
+
+set_option linter.all true
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+
+#check @MicroCFTA.SourceCurrentPublicationSharedReplacements.shared
+#print MicroCFTA.SourceCurrentPublicationSharedReplacements.shared
+#print axioms MicroCFTA.SourceCurrentPublicationSharedReplacements.shared
+
+#check @MicroCFTA.SourceCurrentPublicationSharedReplacements.cross_absence
+#print MicroCFTA.SourceCurrentPublicationSharedReplacements.cross_absence
+#print axioms MicroCFTA.SourceCurrentPublicationSharedReplacements.cross_absence
+
+#check @MicroCFTA.SourceCurrentPublicationSharedReplacements.substitutions
+#print MicroCFTA.SourceCurrentPublicationSharedReplacements.substitutions
+#print axioms MicroCFTA.SourceCurrentPublicationSharedReplacements.substitutions
+
+#check @MicroCFTA.SourceCurrentPublicationSharedReplacements.paired
+#print MicroCFTA.SourceCurrentPublicationSharedReplacements.paired
+#print axioms MicroCFTA.SourceCurrentPublicationSharedReplacements.paired

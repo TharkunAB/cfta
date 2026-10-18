@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 11:57 CEST. Proof checkpoint is `e012e2f7`.
+The actual selected node-body writer now constructs both stored calls and
+derives finite output agreement from indexed strict-child hypotheses.
+Nested used Mu children remain in scope. A shared sparse replacement map
+handles unused captured aliases. Actual raw union/filter source calls also
+derive RootMatch from indexed strict members across their real heaps.
+A checked recursive integration reuses an earlier writer from different
+requester syntax and discharges all child hypotheses. General nested-binder
+alignment, reader support and recursive completion remain open.
+Full Audit passes 3298 jobs and 71564 checks. No Haskell patch or
+new executable defect is added. Field-pool repair `b9219b9e` remains fixed
+in `c0cc8a05`. Read `lean/notes-current-writer-source-induction.md`.
+Keep this registry first. Record each later repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve earlier entries.
+
 Current proof update: 2026-10-18 11:31 CEST. Proof checkpoint is `8b4f669f`.
 Actual row and reference origins now have strictly decreasing finite
 epsilon witnesses. Local simulation laws derive every finite observation.

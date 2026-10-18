@@ -1,0 +1,76 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-source-induction/writer-source-review-kernels-3.source.lean:100:34: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  child = nested ∨ child ∈ []
+
+case inl.refl.inr
+depth : Nat
+current : InternedConstructorTemplates.State Nat Bool
+rowIndex childIndex : Nat
+child : Syntax Nat Bool
+_smaller : sizeOf child < sizeOf (Syntax.node expressions)
+childFound : [Syntax.var 0, nested][childIndex]? = some child
+found : expressions[rowIndex]? = some (EdgeSyntax.mk 8 false [Syntax.var 0, nested])
+h✝ : child = nested ∨ child ∈ []
+⊢ AlignedAt depth current child
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-source-induction/writer-source-review-kernels-3.source.lean:103:2: error: unsolved goals
+case inr.inl.head
+depth : Nat
+current : InternedConstructorTemplates.State Nat Bool
+rowIndex symbol : Nat
+guard : Bool
+childIndex : Nat
+child : Syntax Nat Bool
+_smaller : sizeOf child < sizeOf (Syntax.node expressions)
+as✝ : List (Syntax Nat Bool)
+found : expressions[rowIndex]? = some (EdgeSyntax.mk symbol guard (child :: as✝))
+childFound : (child :: as✝)[childIndex]? = some child
+h✝ : EdgeSyntax.mk symbol guard (child :: as✝) = EdgeSyntax.mk 2 true []
+⊢ AlignedAt depth current child
+
+case inr.inl.tail
+depth : Nat
+current : InternedConstructorTemplates.State Nat Bool
+rowIndex symbol : Nat
+guard : Bool
+childIndex : Nat
+child : Syntax Nat Bool
+_smaller : sizeOf child < sizeOf (Syntax.node expressions)
+b✝ : Syntax Nat Bool
+as✝ : List (Syntax Nat Bool)
+a✝ : List.Mem child as✝
+found : expressions[rowIndex]? = some (EdgeSyntax.mk symbol guard (b✝ :: as✝))
+childFound : (b✝ :: as✝)[childIndex]? = some child
+h✝ : EdgeSyntax.mk symbol guard (b✝ :: as✝) = EdgeSyntax.mk 2 true []
+⊢ AlignedAt depth current child
+
+case inr.inr
+depth : Nat
+current : InternedConstructorTemplates.State Nat Bool
+rowIndex symbol : Nat
+guard : Bool
+originals : List (Syntax Nat Bool)
+found : expressions[rowIndex]? = some (EdgeSyntax.mk symbol guard originals)
+childIndex : Nat
+child : Syntax Nat Bool
+childFound : originals[childIndex]? = some child
+_smaller : sizeOf child < sizeOf (Syntax.node expressions)
+h✝ : EdgeSyntax.mk symbol guard originals ∈ []
+⊢ AlignedAt depth current child
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-source-induction/writer-source-review-kernels-3.source.lean:95:39: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [expressions, List.mem_cons] at rowMember
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-source-induction/writer-source-review-kernels-3.source.lean:99:29: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.mem_cons] at childMember
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-source-induction/writer-source-review-kernels-3.source.lean:148:2: error: unsolved goals
+case refine_2
+⊢ ¬[EdgeSyntax.mk 2 true [], EdgeSyntax.mk 8 false [Syntax.var 0, nested],
+        EdgeSyntax.mk 8 false [Syntax.var 0, nested]] =
+      expressions

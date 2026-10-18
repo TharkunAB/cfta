@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentWriterFiniteNodeAlignment
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.ReconstructionAt
+#print MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.ReconstructionAt
+#print axioms MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.ReconstructionAt
+#check @MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.raw_calls
+#print MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.raw_calls
+#print axioms MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.raw_calls
+#check @MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.warm
+#print MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.warm
+#print axioms MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.warm
+#check @MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.writer
+#print MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.writer
+#print axioms MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.writer
+#check @MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.retained
+#print MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.retained
+#print axioms MicroCFTA.SourceCurrentWriterFiniteNodeAlignment.retained

@@ -1,0 +1,19 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-source-induction/writer-source-review-kernels-5.source.lean:177:20: error: Type mismatch
+  children depth current
+has type
+  ∀ (rowIndex symbol : Nat) (guard : Bool) (originals : List (Syntax Nat Bool)),
+    expressions[rowIndex]? = some (EdgeSyntax.mk symbol guard originals) →
+      ∀ (childIndex : Nat) (child : Syntax Nat Bool),
+        originals[childIndex]? = some child →
+          @sizeOf (Syntax Nat Bool) (@Syntax._sizeOf_inst Nat Bool instSizeOfNat Bool._sizeOf_inst) child <
+              sizeOf (Syntax.node expressions) →
+            AlignedAt depth current child
+but is expected to have type
+  ∀ (rowIndex symbol : Nat) (guard : Bool) (originals : List (Syntax Nat Bool)),
+    expressions[rowIndex]? = some (EdgeSyntax.mk symbol guard originals) →
+      ∀ (childIndex : Nat) (child : Syntax Nat Bool),
+        originals[childIndex]? = some child →
+          @sizeOf (Syntax Nat Bool) (@Syntax._sizeOf_inst Nat Bool (instSizeOfDefault Nat) (instSizeOfDefault Bool))
+                child <
+              sizeOf (Syntax.node expressions) →
+            AlignedAt depth current child
