@@ -1,5 +1,21 @@
 # Full formalization coverage
 
+## Current full causal source comparison and payload initialization
+
+Updated: 2026-10-18 20:44 CEST. Proof checkpoint is `43859cfd`.
+Read `lean/notes-current-causal-source-comparison.md`.
+All source syntax now has assigned root-profile and original-cut comparison.
+Actual histories from empty tables derive both stored payload contracts,
+including exact bare tags. No supplied semantic payload heap remains in
+that history-only source endpoint. Eight actual nested cases cover changing
+captures and cold/warm calls. Full Audit passes 3389 jobs and 72984 checks.
+All 29 public and two constructed heads pass complete proof and axiom checks.
+Next prove causal filtered Empty fusion, then the actual source-generated
+Mu/row/ordered-child Directed certificate. Deeper guarded observations,
+general completion, convergence and full Haskell correspondence stay open.
+The broad reduction guarantee is unchanged. No Haskell bytes change.
+FINDINGS retains all repairs. The full-library goal remains active.
+
 ## Current original root deletion and actual unused binders
 
 Updated: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.

@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 20:44 CEST. Proof checkpoint is `43859cfd`.
+General source root-profile and original-cut comparison are now proved.
+Actual histories from empty tables derive both stored payload contracts,
+including exact bare tags. No assumed semantic payload heap or candidate
+law remains in the history-only endpoint. Actual nested changing-capture
+cold/warm cases are checked. Deeper guarded observations and recursive
+completion remain open. No Haskell defect or repair request is added.
+Full Audit passes 3389 jobs and 72984 checks. No Haskell bytes change.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-causal-source-comparison.md` and
+`lean/notes-current-system-claim.md`. Keep this repair registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.
 Original root deletion now has Normal-only actual constructor laws and a
 checked stronger payload interface. Actual smart-unused binders reduce to
