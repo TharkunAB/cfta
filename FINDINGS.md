@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 16:32 CEST. Proof checkpoint is `0744fbc7`.
+General reader-filtered Empty fusion now has empty, variable, node and
+union cases. Strong induction proves the full BinderFree source fragment.
+Fixed captured open Mu values remain permitted. The general source
+binder case and changing-capture observations remain open. Full Audit
+passes 3338 jobs and 72416 checks. Source-built integrations
+check distinct raw parents, resolved Empty row removal and cold subgroup
+preparation. Both adversarial searches timed out with zero completed
+paired cases. They establish no counterexample or Haskell defect.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-general-filtered-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 16:07 CEST. Proof checkpoint is `ac73c4cd`.
 Actual selected-writer binder reconstructions now derive physical Empty
 agreement. Node rows derive opposite survival and parent Empty from strict

@@ -1,5 +1,55 @@
 # Constrained languages, indexing, and distributions
 
+## Current general filtered source cases and binder-free composition
+
+Updated: 2026-10-18 16:32 CEST. Proof checkpoint is `0744fbc7`.
+Starting checkpoint is `6b7e1261`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-general-filtered-fusion.md`.
+
+One general Fusion contract now uses independent historical raw source
+Contexts and actual warm root filters and stored calls at the reader.
+Varying reference slots need only equal resolved physical Empty tests.
+Fixed captures retain equal replacement maps on their free names.
+Scoped aliases and self tests remain explicit. Empty and variable cases
+are proved. Nonempty replacement maps derive a separate full-source law.
+
+Node fusion now follows from strict source child Fusion under that same
+contract. Actual indexed rows derive both child schedules and opposite
+stored-row survival. Union fusion follows from strict source members.
+Finite actual preparation derives cold subgroup calls at a later reader.
+Exact bare-self parity gives equal retention decisions. No parent output
+law, lexical Generated-to-Empty law or reader-wide lexical availability
+is assumed. Original historical source Contexts remain unchanged.
+
+Strong induction composes all four cases for every BinderFree source
+expression. This restriction applies to source syntax. Fixed captured
+values can still contain arbitrary open nested Mu values. General new
+source binder fusion and changing-capture observations remain open.
+
+The strongest broad claim concerns the checked Lean model. Given the
+stated initial semantic cache and recursive-heap invariants and computed
+resource bounds, a successful constraint-reduction traversal adds no
+finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], its output accepts exactly the input
+finite-tree language. Payload none denotes contradiction. Initial cache
+soundness and guard-profile agreement are substantive remaining premises.
+General termination and full public Haskell correspondence remain open.
+
+Full Audit passes 3338 jobs and 72416 dependency checks.
+All 8 new public and 4 constructed heads pass complete statement, proof
+and standard-axiom checks. Eight selected strict logs are empty. All four
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Six manifests pin 295 entries. Independent
+node and binder-free review finds no material issue. Both adversarial
+searches timed out. Zero paired cases completed. No counterexample or
+general binder validation is claimed from those searches. Evidence is in
+`lean/restart-evidence/20261018-general-filtered-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current recursive Empty fusion and exact union coverage
 
 Updated: 2026-10-18 16:07 CEST. Proof checkpoint is `ac73c4cd`.
