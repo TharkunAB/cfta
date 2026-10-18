@@ -1,6 +1,6 @@
 # cfta
 
-Constrained finite tree automata for Haskell, in two packages:
+Constrained finite tree automata for Haskell, with two core packages:
 
 | Package | Purpose |
 | --- | --- |
@@ -16,6 +16,9 @@ flowchart BT
 holes with programs that Hectare's automaton proposes and GHC's typechecker
 checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
 is the only package that depends on the `ghc` library.
+
+[`cfta-th`](cfta-th/README.md) generates node views for typing rules and
+refinement invariants. It keeps Template Haskell out of the core packages.
 
 [`decision-model`](decision-model/README.md) asks a decision model on a
 server, such as Nimble v3 on Ollama, for a score for each option of a
