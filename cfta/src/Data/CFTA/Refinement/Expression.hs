@@ -19,6 +19,7 @@ module Data.CFTA.Refinement.Expression (
     fromExpr,
     toExpr,
     conditional,
+    modulo,
 
     -- * Formulas
     Formula,
@@ -66,6 +67,10 @@ instance Num Expr where
     abs term = conditional (term .>= 0) term (negate term)
     signum term = conditional (term .> 0) 1 (conditional (term .== 0) 0 (-1))
     fromInteger = Expr . Lit
+
+-- | The remainder of the first term by the second, as the @mod@ of SMT-LIB: not negative for a nonzero divisor.
+modulo :: Expr -> Expr -> Expr
+modulo (Expr dividend) (Expr divisor) = Expr $ Mod dividend divisor
 
 -- | The first term when the formula holds, and the second term when it does not.
 conditional :: Formula -> Expr -> Expr -> Expr
