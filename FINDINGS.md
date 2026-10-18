@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.
+Original root deletion now has Normal-only actual constructor laws and a
+checked stronger payload interface. Actual smart-unused binders reduce to
+the current strict source-body call without an assumed payload contract.
+A later-reader endpoint uses actual history and forward record retention.
+Actual publication induction carries the needed history prefixes.
+General source comparison, retained open-Mu comparison and semantic
+candidate preservation remain open. No Haskell defect or repair is added.
+Full Audit passes 3378 jobs and 72915 checks. No Haskell bytes change.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-root-deletion-observations.md` and
+`lean/notes-current-system-claim.md`. Keep this repair registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.
 Original root self filtering now has a pure assigned-profile function with
 checked support, absence and actual Ready-state execution laws. Equal

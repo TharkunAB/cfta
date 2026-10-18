@@ -1,5 +1,22 @@
 # cfta formal model
 
+## Current original root deletion and actual unused binders
+
+Updated: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.
+Read `lean/notes-current-root-deletion-observations.md`.
+Normal-only constructor laws preserve original root deletion. The stronger
+root payload interface is checked. Actual smart-unused return observations
+reduce to the current strict body without an assumed payload contract.
+The later-reader theorem uses forward record retention and actual reader
+history. Publication induction now supplies each actual history prefix.
+General fixed-reader source comparison, retained open-Mu comparison and
+semantic publication preservation remain open. Full Audit passes 3378 jobs
+and 72915 checks. All 31 public and seven constructed heads pass complete
+proof and standard-axiom checks. No Haskell bytes change. The broad claim
+remains conditional valid-input preservation and input-language inclusion.
+It does not establish returned-constraint satisfaction, general completion
+or full Haskell correspondence. The full-library goal remains active.
+
 ## Current original root filtering and source comparison
 
 Updated: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.

@@ -13,6 +13,41 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current original root deletion and actual unused binders
+
+Updated: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.
+Starting checkpoint is `8de10a50`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-root-deletion-observations.md` and
+`lean/notes-current-system-claim.md`.
+
+Original root deletion now composes actual node, union and self-filter
+normalization under Normal and available inputs. No Ready premise is
+needed for these constructor laws. A stronger root payload contract
+implies the earlier profile contract and rejects the preserved artificial
+cache. Actual source examples derive it. General preservation is open.
+Actual publication induction now carries the empty-table history prefix.
+
+Actual smart-unused binders reduce to their current strict source-body
+call with the local name added to root cuts. No parametric payload
+contract is assumed. The later-reader theorem needs only the source
+Context, completed call, forward result growth and History empty reader.
+It requires no earlier entry history. Four actual bodies cover cold and
+warm calls. General fixed-reader source comparison, retained open-Mu
+comparison and the actual semantic candidate proof remain open.
+
+Full Audit passes 3378 jobs and 72915 dependency checks. Thirty-one public
+and seven constructed heads pass full proof and standard-axiom checks.
+Ten strict module logs and seven strict fixture logs are empty.
+Ten canonical module builds are clean. Audit retains its existing warning.
+Evidence is in `lean/restart-evidence/20261018-root-deletion-observations/`.
+The broad guarantee remains valid-input preservation and input-language
+inclusion under explicit cache, guard and resource assumptions.
+It does not assert that every returned tree satisfies inherited constraints.
+General completion, convergence and full Haskell correspondence stay open.
+No Haskell bytes change. FINDINGS retains the external repair registry.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
 ## Current original root filtering and source comparison
 
 Updated: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.
