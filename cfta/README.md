@@ -428,6 +428,19 @@ unaryF = TemplateNode "f" [Hole] :: Template Symbol
 anyF = TemplatePrefix "f" [] :: Template Symbol
 ```
 
+Template exclusion removes structurally impossible split choices during
+construction. It intersects the positive requirements for each child. It also
+rejects choices that require the child to match and fail the same pattern.
+The other choices keep their original order and obligation lists.
+
+This argument assumes finite structural templates with independent holes.
+The private intersection matches exactly the conjunction of its inputs on
+complete finite terms. Equality constraints and residual guards cannot make
+an empty structural intersection nonempty. These checks preserve the complete
+finite-term language. They do not establish equality of every recursive
+`Mu`-cutoff stream or preservation of ambiguous run multiplicities. Distinct
+compatible patterns can still produce exponentially many choices.
+
 ### Visualize an equality automaton
 
 `toTree` retains the original nodes and edges in typed labels:

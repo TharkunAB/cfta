@@ -30,6 +30,7 @@ module Data.CFTA.Template (
     preorderPrefix,
 ) where
 
+import Control.Monad (foldM, zipWithM)
 import Control.Monad.State.Strict (evalState, gets, modify', runState)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
@@ -468,27 +469,77 @@ edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
         base = fits shapesHere (wantedHere <> map (!! index) forced)
         choices
             | null base = []
-            | otherwise =
-                [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _) <- splits base open]
-                    <> [ (forced <> group <> chosen, openDying <> notChosen)
-                       | (part, group) <- Map.toList groups
-                       , Set.notMember part dying
-                       , let narrowed = fits base [part]
-                       , not (null narrowed)
-                       , ((chosen, notChosen), _) <- splits narrowed open
-                       ]
-        -- The subsets of the templates that the child can match together
-        -- within the given shapes, each with the other templates and the
-        -- shapes that the subset fits, in the order of the subset split.
-        splits fitting [] = [(([], []), fitting)]
-        splits fitting (parts : others) =
+            | otherwise = case foldM meetTemplate Hole (wantedHere <> map (!! index) forced) of
+                Nothing -> []
+                Just required ->
+                    [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _, _) <- splits base required open]
+                        <> [ (forced <> group <> chosen, openDying <> notChosen)
+                           | (part, group) <- Map.toList groups
+                           , Set.notMember part dying
+                           , Just combined <- [meetTemplate required part]
+                           , let narrowed = fits base [part]
+                           , not (null narrowed)
+                           , ((chosen, notChosen), _, _) <- splits narrowed combined open
+                           ]
+        -- Carry the positive conjunction through the same tail-first split.
+        -- A failed meet removes only the impossible kept alternative.
+        -- A child cannot match and fail the same part. Remove only such
+        -- choices. Keep the order and obligation lists of the other choices.
+        -- This preserves the complete finite-term language. It does not prove
+        -- that every recursive cutoff stream remains equal.
+        splits fitting required [] = [(([], []), fitting, required)]
+        splits fitting required (parts : others) =
             concat
-                [ [((parts : chosen, notChosen), narrowed) | let narrowed = fits remaining [parts !! index], not (null narrowed)]
-                    <> [((chosen, parts : notChosen), remaining)]
-                | ((chosen, notChosen), remaining) <- splits fitting others
+                [ [ ((parts : chosen, notChosen), narrowed, combined)
+                  | parts !! index `notElem` map (!! index) notChosen
+                  , Just combined <- [meetTemplate remainingRequired (parts !! index)]
+                  , let narrowed = fits remaining [parts !! index]
+                  , not (null narrowed)
+                  ]
+                    <> [((chosen, parts : notChosen), remaining, remainingRequired) | parts !! index `notElem` map (!! index) chosen]
+                | ((chosen, notChosen), remaining, remainingRequired) <- splits fitting required others
                 ]
     -- The shapes whose root each of the parts fits.
     fits candidates parts = [(root, arity) | (root, arity) <- candidates, all (\part -> isJust (childTemplates part root (Arity arity))) parts]
+
+{- | Intersect two finite structural templates. Nothing means that no term
+matches both. A successful result matches exactly their conjunction.
+Holes are independent wildcards. This check does not read an automaton or
+interpret equality constraints or residual guards.
+-}
+meetTemplate :: (Eq symbol) => Template symbol -> Template symbol -> Maybe (Template symbol)
+meetTemplate Hole right = Just right
+meetTemplate left Hole = Just left
+meetTemplate left right = do
+    root <- case (leftRoot, rightRoot) of
+        (Just first, Just second)
+            | first /= second -> Nothing
+        (Just first, _) -> Just (Just first)
+        (_, other) -> Just other
+    if (leftExact && leftCount < rightCount) || (rightExact && rightCount < leftCount)
+        then Nothing
+        else do
+            children <-
+                zipWithM
+                    meetTemplate
+                    (leftChildren <> replicate (count - leftCount) Hole)
+                    (rightChildren <> replicate (count - rightCount) Hole)
+            pure $ case (root, leftExact || rightExact) of
+                (Nothing, True) -> AnyNode children
+                (Just symbol, True) -> TemplateNode symbol children
+                (Nothing, False) -> AnyPrefix children
+                (Just symbol, False) -> TemplatePrefix symbol children
+  where
+    (leftRoot, leftExact, leftChildren) = parts left
+    (rightRoot, rightExact, rightChildren) = parts right
+    leftCount = length leftChildren
+    rightCount = length rightChildren
+    count = max leftCount rightCount
+    parts Hole = (Nothing, False, [])
+    parts (AnyNode children) = (Nothing, True, children)
+    parts (TemplateNode symbol children) = (Just symbol, True, children)
+    parts (AnyPrefix children) = (Nothing, False, children)
+    parts (TemplatePrefix symbol children) = (Just symbol, False, children)
 
 -- | Whether a template has no holes, so that it matches one term only.
 ground :: Template symbol -> Bool
