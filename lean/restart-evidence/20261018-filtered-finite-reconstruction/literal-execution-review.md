@@ -1,0 +1,9 @@
+# Actual literal execution parts and indexed source rows
+
+StoredLiteralExecutionParts.parts characterizes every literal atom and ordinary row of an actual warm stored substitution. Its public LiteralOutput retains the exact original literal witness, actual selected atom execution, and its returned literal witness. RowOutput retains the actual source row, ordered child calls, full symbol and guard, edge result, and child survival. The atom and row producers construct actual selected calls from the warm parent call. They do not assume completion of those selected calls. Dead rows remain represented before the returned-part filter.
+
+FiniteRootSourceNode.node derives raw literal RootMatch for two actual source calls. The calls may start and return at different heaps. The original source row index pairs surviving physical rows. Captures remain the same and the local reference may differ. Each strict child hypothesis names its exact row and child index. Actual child calls replay at the common execution heap. RelatedAt uses a separate fixed observation reader. The result keeps the full symbol, guard, and ordered children. It does not assume a whole-parent RootMatch or parent stored result relation.
+
+All six public heads pass full explicit statement, proof, and axiom checks. The two selected strict logs have zero bytes. Both canonical module builds have no warnings. Each selected job uses Lean4.34.1, 4 GiB maximum and high limits, zero swap, and a five-minute cap. Failed earlier attempts remain. No Haskell code changes.
+
+These results supply literal extraction and the proper ordinary source clause. The general nested used-Mu clause with changing outer captures remains open. Exact root matching is stronger than finite epsilon observations alone. The current finite publication theorem retains a strict hypothesis about the actual binder body. It does not discharge that hypothesis or prove general recursive completion.

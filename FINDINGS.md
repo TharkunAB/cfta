@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 12:55 CEST. Proof checkpoint is `39a5a673`.
+Actual stored parent calls now construct all selected literal and row
+calls. Finite reconstruction derives physical Empty and finite observations
+from explicit atom and child cases. Actual ordinary source calls derive
+root matching from indexed strict children. Publication constructs both
+stored schedules from an induction premise about its actual binder body.
+The selected installed writer retains its exact record. General nested
+binder alignment with changing outer captures and recursive completion
+remain open. These are proof results, not executable Haskell repairs.
+Full Audit passes 3306 jobs and 71667 checks. No Haskell patch
+or new executable defect is added. Field-pool repair `b9219b9e` remains
+fixed in `c0cc8a05`. Read `lean/notes-current-filtered-finite-reconstruction.md`.
+Keep this registry first. Record later repairs with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve earlier entries.
+
 Current proof update: 2026-10-18 12:21 CEST. Proof checkpoint is `03f0f57b`.
 Fixed-reader finite agreement now permits actual union member reconstruction
 at later execution heaps. An initial producer constructs both source and

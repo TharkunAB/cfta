@@ -1,0 +1,2500 @@
+@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard →
+            MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard →
+              MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+                MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+def MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    Nat →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard →
+            MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard →
+              MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+                MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] depth view
+    common first second rawFirst rawSecond =>
+  ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+    @Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawFirst first common)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common) →
+      @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst rawSecond second common)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common) →
+        @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst depth view left right
+'MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentFiniteRootReconstruction.reconstruct : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (depth : Nat)
+  (view common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (references : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedBinderProtocol.Reference → Prop)
+  (values :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (rawFirst rawSecond : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard common →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common rawFirst →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common rawSecond →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common first →
+          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common second →
+            @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.RootMatch Symbol Guard references values rawFirst
+                rawSecond →
+              (∀ (a b : MicroCFTA.InternedBinderProtocol.Reference),
+                  references a b →
+                    @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      view
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first a)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard a))
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second b)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard b))) →
+                (∀ (a b : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+                      @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                        @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard (fun x x_1 => False)
+                            values a b →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second a b) →
+                  (∀ (a b : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      values a b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst depth view common
+                          first second a b) →
+                    @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      view common first second rawFirst rawSecond
+theorem MicroCFTA.SourceCurrentFiniteRootReconstruction.reconstruct : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (depth : Nat)
+  (view common : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (references : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedBinderProtocol.Reference → Prop)
+  (values :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (rawFirst rawSecond : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard common →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common rawFirst →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard common rawSecond →
+        @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common first →
+          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard common second →
+            @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.RootMatch Symbol Guard references values rawFirst
+                rawSecond →
+              (∀ (a b : MicroCFTA.InternedBinderProtocol.Reference),
+                  references a b →
+                    @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      view
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first a)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard a))
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (second b)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard b))) →
+                (∀ (a b : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+                      @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                        @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard (fun x x_1 => False)
+                            values a b →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second a b) →
+                  (∀ (a b : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      values a b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst depth view common
+                          first second a b) →
+                    @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      view common first second rawFirst rawSecond :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] depth view
+    common references values first second rawFirst rawSecond ready firstAvailable secondAvailable firstReplacements
+    secondReplacements matched resolved atoms children =>
+  have atomCalls := fun a b firstPart secondPart paired =>
+    @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+      (fun t =>
+        @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a t →
+          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            view common first second a b)
+      a
+      (fun h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+          (fun a =>
+            @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+              @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values a b →
+                @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second a b)
+          (fun firstPart paired =>
+            @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+              (fun t =>
+                @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                  @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+              b
+              (fun h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                  secondPart paired)
+              (fun name h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                  secondPart paired)
+              (fun entry edges depth_1 free h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1
+                                free))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) h)
+                  secondPart paired)
+              (fun entry members depth_1 free h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free) h)
+                  secondPart paired)
+              (fun entry body depthShape ordinaryShape h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    h)
+                  secondPart paired)
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+          a
+          (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+          firstPart paired)
+      (fun name h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+          (fun a =>
+            @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+              @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values a b →
+                @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second a b)
+          (fun firstPart paired =>
+            @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+              (fun t =>
+                @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                  @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                    b)
+              b
+              (fun h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                  secondPart paired)
+              (fun name_1 h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b)
+                  (fun secondPart paired left right called returned =>
+                    @And.casesOn.{0}
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        left)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) common common)
+                      (fun x =>
+                        @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view left right)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done.inj Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        common left common
+                        (@Eq.mp.{0}
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) first common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common))
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common))
+                          (@congrArg.{1, 1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            Prop
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) first common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              common)
+                            (fun _a =>
+                              @Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                _a
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common))
+                            (@MicroCFTA.SourceCurrentFiniteRootReconstruction.reference_execute✝ Symbol Guard inst name
+                              first common))
+                          called))
+                      fun left_1 right_1 =>
+                      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        (fun left =>
+                          @Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (first name)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                common)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common) →
+                            @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              view left right)
+                        (fun called =>
+                          @And.casesOn.{0}
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (second name_1)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                              right)
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) common common)
+                            (fun x =>
+                              @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                view
+                                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (first name)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                right)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done.inj Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (second name_1)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                              common right common
+                              (@Eq.mp.{0}
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) second
+                                    common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common))
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (second name_1)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                                    common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common))
+                                (@congrArg.{1, 1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  Prop
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) second
+                                    common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (second name_1)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                                    common)
+                                  (fun _a =>
+                                    @Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      _a
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common))
+                                  (@MicroCFTA.SourceCurrentFiniteRootReconstruction.reference_execute✝ Symbol Guard inst
+                                    name_1 second common))
+                                returned))
+                            fun left right_2 =>
+                            @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (second name_1)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                              (fun right =>
+                                @Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                        (second name_1)
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                                      common)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common) →
+                                  @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt Symbol Guard inst
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                    view
+                                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (first name)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                    right)
+                              (fun returned => resolved name name_1 paired) right left
+                              (@Eq.mp.{0}
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) second
+                                    common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common))
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (second name_1)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                                    common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common))
+                                (@congrArg.{1, 1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  Prop
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) second
+                                    common)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (second name_1)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                                    common)
+                                  (fun _a =>
+                                    @Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      _a
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right common))
+                                  (@MicroCFTA.SourceCurrentFiniteRootReconstruction.reference_execute✝ Symbol Guard inst
+                                    name_1 second common))
+                                returned))
+                        left left_1
+                        (@Eq.mp.{0}
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) first common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common))
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common))
+                          (@congrArg.{1, 1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            Prop
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) first common)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (first name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              common)
+                            (fun _a =>
+                              @Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                _a
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left common))
+                            (@MicroCFTA.SourceCurrentFiniteRootReconstruction.reference_execute✝ Symbol Guard inst name
+                              first common))
+                          called))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) h)
+                  secondPart paired)
+              (fun entry edges depth_1 free h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1
+                                free))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) h)
+                  secondPart paired)
+              (fun entry members depth_1 free h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free) h)
+                  secondPart paired)
+              (fun entry body depthShape ordinaryShape h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    h)
+                  secondPart paired)
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+          a
+          (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+          firstPart paired)
+      (fun entry edges depth_1 free h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+          (fun a =>
+            @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+              @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values a b →
+                @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second a b)
+          (fun firstPart paired =>
+            @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+              (fun t =>
+                @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                  @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b)
+              b
+              (fun h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                  secondPart paired)
+              (fun name h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                  secondPart paired)
+              (fun entry_1 edges_1 depth_2 free_1 h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_2 free_1)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_2
+                                free_1))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_2
+                              free_1))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_2
+                            free_1))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_2 free_1) h)
+                  secondPart paired)
+              (fun entry_1 members depth_2 free_1 h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_2 free_1)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_2
+                                free_1))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_2
+                              free_1))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_2
+                            free_1))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_2 free_1) h)
+                  secondPart paired)
+              (fun entry_1 body depthShape ordinaryShape h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape ordinaryShape)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                                ordinaryShape))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                              ordinaryShape))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                            ordinaryShape))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                      ordinaryShape)
+                    h)
+                  secondPart paired)
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+          a
+          (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth_1 free) h)
+          firstPart paired)
+      (fun entry members depth_1 free h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+          (fun a =>
+            @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+              @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values a b →
+                @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second a b)
+          (fun firstPart paired =>
+            @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+              (fun t =>
+                @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                  @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free) b)
+              b
+              (fun h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                  secondPart paired)
+              (fun name h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                  secondPart paired)
+              (fun entry_1 edges depth_2 free_1 h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_2 free_1)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_2
+                                free_1))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_2
+                              free_1))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_2
+                            free_1))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_2 free_1) h)
+                  secondPart paired)
+              (fun entry_1 members_1 depth_2 free_1 h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1 depth_2 free_1)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1
+                                depth_2 free_1))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1 depth_2
+                              free_1))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1 depth_2
+                            free_1))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1 depth_2 free_1)
+                    h)
+                  secondPart paired)
+              (fun entry_1 body depthShape ordinaryShape h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape ordinaryShape)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                                free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                                ordinaryShape))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1
+                              free)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                              ordinaryShape))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                            ordinaryShape))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                      ordinaryShape)
+                    h)
+                  secondPart paired)
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+          a
+          (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth_1 free) h)
+          firstPart paired)
+      (fun entry body depthShape ordinaryShape h =>
+        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+          (fun a =>
+            @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst a →
+              @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values a b →
+                @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second a b)
+          (fun firstPart paired =>
+            @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+              (fun t =>
+                @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                  @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    b)
+              b
+              (fun h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                  secondPart paired)
+              (fun name h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                  secondPart paired)
+              (fun entry_1 edges depth_1 free h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1 free)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1
+                                free))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1
+                              free))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1 free))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1 free) h)
+                  secondPart paired)
+              (fun entry_1 members depth_1 free h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1 free)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b)
+                  (fun secondPart paired =>
+                    False.casesOn.{0}
+                      (fun t =>
+                        @Eq.{0}
+                            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1
+                                free))
+                            paired t →
+                          @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            view common first second
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1
+                              free))
+                      paired
+                      (@Eq.refl.{0}
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1
+                            free))
+                        paired))
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1 free) h)
+                  secondPart paired)
+              (fun entry_1 body_1 depthShape_1 ordinaryShape_1 h =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body_1 depthShape_1
+                    ordinaryShape_1)
+                  (fun b =>
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond b →
+                      @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b →
+                        @MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          view common first second
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape)
+                          b)
+                  (fun secondPart paired =>
+                    atoms
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body_1 depthShape_1
+                        ordinaryShape_1)
+                      firstPart secondPart paired)
+                  b
+                  (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body_1 depthShape_1
+                      ordinaryShape_1)
+                    h)
+                  secondPart paired)
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+          a
+          (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape) h)
+          firstPart paired)
+      (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a);
+  fun result rebuilt actual returned =>
+  have forward :=
+    @MicroCFTA.SourceCurrentFiniteRootReconstruction.one_way✝ Symbol Guard inst depth view common values first second
+      rawFirst rawSecond result rebuilt ready firstAvailable secondAvailable firstReplacements secondReplacements actual
+      returned
+      (fun source part =>
+        @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun other =>
+            And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond other)
+              (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values source
+                other))
+          (fun x =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun target =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond target)
+                (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second source target))
+          (@And.left
+            (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst atom →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond other)
+                    (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values atom
+                      other))
+            (And
+              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                      (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values other
+                        atom))
+              (And
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))))
+            matched source part)
+          fun target h =>
+          @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond target)
+            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values source target)
+            (fun x =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun target =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond target)
+                  (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second source target))
+            h fun found pair =>
+            @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun target =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond target)
+                  (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common first second source target))
+              target
+              (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond target)
+                (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common first second source target)
+                found (atomCalls source target part found pair)))
+      (@And.left
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))
+        (@And.right
+          (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                  (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values other
+                    atom))
+          (And
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row)))
+          (@And.right
+            (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst atom →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond other)
+                    (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values atom
+                      other))
+            (And
+              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                      (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values other
+                        atom))
+              (And
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))))
+            matched)))
+      children;
+  have backward :=
+    @MicroCFTA.SourceCurrentFiniteRootReconstruction.one_way✝ Symbol Guard inst depth view common
+      (fun b a => values a b) second first rawSecond rawFirst rebuilt result ready secondAvailable firstAvailable
+      secondReplacements firstReplacements returned actual
+      (fun target part =>
+        @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun other =>
+            And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+              (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values other
+                target))
+          (fun x =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun target_1 =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst target_1)
+                (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common second first target target_1))
+          (@And.left
+            (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                    (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values other
+                      atom))
+            (And
+              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                      (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                      (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row)))
+            (@And.right
+              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst atom →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond other)
+                      (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values atom
+                        other))
+              (And
+                (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          other atom))
+                (And
+                  (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                          (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+                  (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                          (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))))
+              matched)
+            target part)
+          fun source h =>
+          @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst source)
+            (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values source target)
+            (fun x =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun target_1 =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst target_1)
+                  (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common second first target target_1))
+            h fun found pair =>
+            @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun target_1 =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst target_1)
+                  (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view common second first target target_1))
+              source
+              (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst source)
+                (@MicroCFTA.SourceCurrentFiniteRootReconstruction.Executions Symbol Guard inst
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  view common second first target source)
+                found fun right left done called =>
+                have related := atomCalls source target found part pair left right called done;
+                @And.intro
+                  (Iff
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+                  (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  (@Iff.symm
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    (@And.left
+                      (Iff
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+                      (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                      related))
+                  (@MicroCFTA.SourceCurrentOpenObservations.Same.symm Symbol Guard inst
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    (@And.right
+                      (Iff
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+                      (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                      related))))
+      (fun row part =>
+        @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (fun other =>
+            And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+              (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))
+          (fun x =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+              And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst target)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard (fun b a => values a b) row target))
+          (@And.right
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                  And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))
+            (@And.right
+              (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                    And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                      (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values other
+                        atom))
+              (And
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row)))
+              (@And.right
+                (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst atom →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                      And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond other)
+                        (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                          atom other))
+                (And
+                  (∀ (atom : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawSecond atom →
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun other =>
+                        And (@MicroCFTA.SourceCurrentLiteralRootParts.Literal Symbol Guard rawFirst other)
+                          (@MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch Symbol Guard references values
+                            other atom))
+                  (And
+                    (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                      @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst row →
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                          And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond other)
+                            (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values row other))
+                    (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                      @MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawSecond row →
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+                          And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                            (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row))))
+                matched))
+            row part)
+          fun other h =>
+          @And.casesOn.{0} (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+            (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard values other row)
+            (fun x =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst target)
+                  (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard (fun b a => values a b) row target))
+            h fun found pair =>
+            @Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (fun target =>
+                And (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst target)
+                  (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard (fun b a => values a b) row target))
+              other
+              (@And.intro (@MicroCFTA.SourceCurrentLiteralRootParts.Row Symbol Guard rawFirst other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard (fun b a => values a b) row other) found
+                (@And.intro
+                  (@Eq.{1} Symbol
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                      (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row)))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                      (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other))))
+                  (And
+                    (@Eq.{1} Guard
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row)))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other))))
+                    (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (fun b a => values a b)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)))
+                  (@Eq.symm.{1} Symbol
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                      (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                      (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row)))
+                    (@And.left
+                      (@Eq.{1} Symbol
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                          (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                          (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                      (And
+                        (@Eq.{1} Guard
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                        (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)))
+                      pair))
+                  (@And.intro
+                    (@Eq.{1} Guard
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row)))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other))))
+                    (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (fun b a => values a b)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other))
+                    (@Eq.symm.{1} Guard
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row)))
+                      (@And.left
+                        (@Eq.{1} Guard
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                        (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row))
+                        (@And.right
+                          (@Eq.{1} Symbol
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                          (And
+                            (@Eq.{1} Guard
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)))
+                          pair)))
+                    (@MicroCFTA.SourceCurrentFiniteRootReconstruction.flip_pairs✝
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)
+                      (@And.right
+                        (@Eq.{1} Guard
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                            (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                        (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row))
+                        (@And.right
+                          (@Eq.{1} Symbol
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                          (And
+                            (@Eq.{1} Guard
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard other)))
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+                            (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) values
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard other)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row)))
+                          pair)))))))
+      fun b a pair right left done called =>
+      have related := children a b pair left right called done;
+      @And.intro
+        (Iff
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+        (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+        (@Iff.symm
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (@And.left
+            (Iff
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+            (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+            related))
+        (@MicroCFTA.SourceCurrentOpenObservations.Same.symm Symbol Guard inst depth view
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          (@And.right
+            (Iff
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard left)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard right)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+            (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+            related));
+  @And.intro
+    (Iff
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+    (@MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) depth
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      view
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+    (@Iff.intro
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+      (fun empty =>
+        @Classical.byContradiction
+          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          fun other =>
+          @And.left
+            (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty →
+              @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+            (And
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    name →
+                  @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    name)
+              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    row →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                    And
+                      (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        target)
+                      (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                        (fun a b =>
+                          @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                        row target)))
+            backward other empty)
+      fun empty =>
+      @Classical.byContradiction
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        fun other =>
+        @And.left
+          (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty →
+            @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (And
+            (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+              @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  name →
+                @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  name)
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                  And
+                    (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      target)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                      (fun a b =>
+                        @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                      row target)))
+          forward other empty)
+    (@And.intro
+      (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+        Iff
+          (@MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            name)
+          (@MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            name))
+      (And
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              row →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+              And
+                (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                  (fun left right =>
+                    @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  row other))
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              row →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+              And
+                (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                  (fun left right =>
+                    @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  row other)))
+      (fun name =>
+        @Iff.intro
+          (@MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            name)
+          (@MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            name)
+          (@And.left
+            (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+              @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  name →
+                @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  name)
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                  And
+                    (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      target)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                      (fun a b =>
+                        @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                      row target))
+            (@And.right
+              (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty →
+                @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              (And
+                (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                  @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      name →
+                    @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      name)
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                      And
+                        (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          target)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                          (fun a b =>
+                            @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                          row target)))
+              forward)
+            name)
+          (@And.left
+            (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+              @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  name →
+                @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  name)
+            (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  row →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                  And
+                    (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      target)
+                    (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                      (fun a b =>
+                        @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                      row target))
+            (@And.right
+              (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty →
+                @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+              (And
+                (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                  @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      name →
+                    @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      name)
+                (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      row →
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                      And
+                        (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          target)
+                        (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                          (fun a b =>
+                            @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                          row target)))
+              backward)
+            name))
+      (@And.intro
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              row →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+              And
+                (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                  (fun left right =>
+                    @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  row other))
+        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              row →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun other =>
+              And
+                (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  other)
+                (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                  (fun left right =>
+                    @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right
+                        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                  row other))
+        (@And.right
+          (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+            @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                name →
+              @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                name)
+          (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                row →
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                And
+                  (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    target)
+                  (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                    (fun a b =>
+                      @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                    row target))
+          (@And.right
+            (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty →
+              @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+            (And
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    name →
+                  @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    name)
+              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    row →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                    And
+                      (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        target)
+                      (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                        (fun a b =>
+                          @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                        row target)))
+            forward))
+        (@And.right
+          (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+            @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                name →
+              @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                name)
+          (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                row →
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                And
+                  (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    target)
+                  (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                    (fun a b =>
+                      @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                    row target))
+          (@And.right
+            (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard rebuilt)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty →
+              @Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard result)
+                MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+            (And
+              (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+                @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    name →
+                  @MicroCFTA.SourceCurrentOpenObservations.ReferenceOrigin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    name)
+              (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rebuilt
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    row →
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun target =>
+                    And
+                      (@MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+                        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        target)
+                      (@MicroCFTA.SourceCurrentOpenObservations.RowMatch Symbol Guard
+                        (fun a b =>
+                          @MicroCFTA.SourceCurrentOpenObservations.Same Symbol Guard inst depth view
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))))
+                        row target)))
+            backward))))
+'MicroCFTA.SourceCurrentFiniteRootReconstruction.reconstruct' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

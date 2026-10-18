@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.BodyIH
+#print MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.BodyIH
+#print axioms MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.BodyIH
+
+#check @MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.publication
+#print MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.publication
+#print axioms MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.publication
+
+#check @MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.writer
+#print MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.writer
+#print axioms MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.writer

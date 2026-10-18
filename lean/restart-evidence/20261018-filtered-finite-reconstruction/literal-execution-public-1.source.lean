@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentStoredLiteralExecutionParts
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentStoredLiteralExecutionParts.LiteralOutput
+#print MicroCFTA.SourceCurrentStoredLiteralExecutionParts.LiteralOutput
+#print axioms MicroCFTA.SourceCurrentStoredLiteralExecutionParts.LiteralOutput
+#check @MicroCFTA.SourceCurrentStoredLiteralExecutionParts.RowOutput
+#print MicroCFTA.SourceCurrentStoredLiteralExecutionParts.RowOutput
+#print axioms MicroCFTA.SourceCurrentStoredLiteralExecutionParts.RowOutput
+#check @MicroCFTA.SourceCurrentStoredLiteralExecutionParts.parts
+#print MicroCFTA.SourceCurrentStoredLiteralExecutionParts.parts
+#print axioms MicroCFTA.SourceCurrentStoredLiteralExecutionParts.parts
+#check @MicroCFTA.SourceCurrentStoredLiteralExecutionParts.atom
+#print MicroCFTA.SourceCurrentStoredLiteralExecutionParts.atom
+#print axioms MicroCFTA.SourceCurrentStoredLiteralExecutionParts.atom
+#check @MicroCFTA.SourceCurrentStoredLiteralExecutionParts.row
+#print MicroCFTA.SourceCurrentStoredLiteralExecutionParts.row
+#print axioms MicroCFTA.SourceCurrentStoredLiteralExecutionParts.row

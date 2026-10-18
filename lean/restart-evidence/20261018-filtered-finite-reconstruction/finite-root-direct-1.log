@@ -1,0 +1,155 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/finite-root-direct-1.source.lean:195:3: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/finite-root-direct-1.source.lean:193:59: error: unsolved goals
+Symbol Guard : Type
+common : InternedConstructorTemplates.State Symbol Guard
+normal : Normal common
+value : Value Symbol Guard
+available : Available common value
+nonempty : value.referenceOf ≠ InternedBinderProtocol.NodeRef.empty
+⊢ (∃ atom, Literal value atom) ∨ ∃ row, Row value row
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/finite-root-direct-1.source.lean:426:7: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/finite-root-direct-1.source.lean:425:4: error: unsolved goals
+case refine_1.mp
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+view common : InternedConstructorTemplates.State Symbol Guard
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+first second : Environment Symbol Guard
+rawFirst rawSecond : Value Symbol Guard
+ready : Ready common
+firstAvailable : Available common rawFirst
+secondAvailable : Available common rawSecond
+firstReplacements : Replacements common first
+secondReplacements : Replacements common second
+matched : RootMatch references values rawFirst rawSecond
+resolved :
+  ∀ (a b : Reference),
+    references a b →
+      RelatedAt (depth + 1) view ((first a).getD (Value.reference a)) ((second b).getD (Value.reference b))
+atoms :
+  ∀ (a b : Value Symbol Guard),
+    Literal rawFirst a →
+      Literal rawSecond b →
+        AtomMatch (fun x x_1 => False) values a b → Executions (depth + 1) view common first second a b
+children : ∀ (a b : Value Symbol Guard), values a b → Executions depth view common first second a b
+atomCalls :
+  ∀ (a b : Value Symbol Guard),
+    Literal rawFirst a →
+      Literal rawSecond b → AtomMatch references values a b → Executions (depth + 1) view common first second a b
+result rebuilt : Value Symbol Guard
+actual : execute rawFirst first common = Outcome.done result common
+returned : execute rawSecond second common = Outcome.done rebuilt common
+forward :
+  (result.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      rebuilt.referenceOf ≠ InternedBinderProtocol.NodeRef.empty) ∧
+    (∀ (name : Reference), ReferenceOrigin view [result] name → ReferenceOrigin view [rebuilt] name) ∧
+      ∀ (row : EdgeValue Symbol Guard),
+        Origin view [result] row →
+          ∃ target, Origin view [rebuilt] target ∧ RowMatch (fun a b => Same depth view [a] [b]) row target
+backward :
+  (rebuilt.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      result.referenceOf ≠ InternedBinderProtocol.NodeRef.empty) ∧
+    (∀ (name : Reference), ReferenceOrigin view [rebuilt] name → ReferenceOrigin view [result] name) ∧
+      ∀ (row : EdgeValue Symbol Guard),
+        Origin view [rebuilt] row →
+          ∃ target, Origin view [result] target ∧ RowMatch (fun a b => Same depth view [a] [b]) row target
+empty : result.referenceOf = InternedBinderProtocol.NodeRef.empty
+⊢ rebuilt.referenceOf = InternedBinderProtocol.NodeRef.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/finite-root-direct-1.source.lean:424:2: error: unsolved goals
+case refine_1.mpr
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+view common : InternedConstructorTemplates.State Symbol Guard
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+first second : Environment Symbol Guard
+rawFirst rawSecond : Value Symbol Guard
+ready : Ready common
+firstAvailable : Available common rawFirst
+secondAvailable : Available common rawSecond
+firstReplacements : Replacements common first
+secondReplacements : Replacements common second
+matched : RootMatch references values rawFirst rawSecond
+resolved :
+  ∀ (a b : Reference),
+    references a b →
+      RelatedAt (depth + 1) view ((first a).getD (Value.reference a)) ((second b).getD (Value.reference b))
+atoms :
+  ∀ (a b : Value Symbol Guard),
+    Literal rawFirst a →
+      Literal rawSecond b →
+        AtomMatch (fun x x_1 => False) values a b → Executions (depth + 1) view common first second a b
+children : ∀ (a b : Value Symbol Guard), values a b → Executions depth view common first second a b
+atomCalls :
+  ∀ (a b : Value Symbol Guard),
+    Literal rawFirst a →
+      Literal rawSecond b → AtomMatch references values a b → Executions (depth + 1) view common first second a b
+result rebuilt : Value Symbol Guard
+actual : execute rawFirst first common = Outcome.done result common
+returned : execute rawSecond second common = Outcome.done rebuilt common
+forward :
+  (result.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      rebuilt.referenceOf ≠ InternedBinderProtocol.NodeRef.empty) ∧
+    (∀ (name : Reference), ReferenceOrigin view [result] name → ReferenceOrigin view [rebuilt] name) ∧
+      ∀ (row : EdgeValue Symbol Guard),
+        Origin view [result] row →
+          ∃ target, Origin view [rebuilt] target ∧ RowMatch (fun a b => Same depth view [a] [b]) row target
+backward :
+  (rebuilt.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      result.referenceOf ≠ InternedBinderProtocol.NodeRef.empty) ∧
+    (∀ (name : Reference), ReferenceOrigin view [rebuilt] name → ReferenceOrigin view [result] name) ∧
+      ∀ (row : EdgeValue Symbol Guard),
+        Origin view [rebuilt] row →
+          ∃ target, Origin view [result] target ∧ RowMatch (fun a b => Same depth view [a] [b]) row target
+⊢ rebuilt.referenceOf = InternedBinderProtocol.NodeRef.empty → result.referenceOf = InternedBinderProtocol.NodeRef.empty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/finite-root-direct-1.source.lean:390:72: error: unsolved goals
+case refine_2
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+view common : InternedConstructorTemplates.State Symbol Guard
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+first second : Environment Symbol Guard
+rawFirst rawSecond : Value Symbol Guard
+ready : Ready common
+firstAvailable : Available common rawFirst
+secondAvailable : Available common rawSecond
+firstReplacements : Replacements common first
+secondReplacements : Replacements common second
+matched : RootMatch references values rawFirst rawSecond
+resolved :
+  ∀ (a b : Reference),
+    references a b →
+      RelatedAt (depth + 1) view ((first a).getD (Value.reference a)) ((second b).getD (Value.reference b))
+atoms :
+  ∀ (a b : Value Symbol Guard),
+    Literal rawFirst a →
+      Literal rawSecond b →
+        AtomMatch (fun x x_1 => False) values a b → Executions (depth + 1) view common first second a b
+children : ∀ (a b : Value Symbol Guard), values a b → Executions depth view common first second a b
+atomCalls :
+  ∀ (a b : Value Symbol Guard),
+    Literal rawFirst a →
+      Literal rawSecond b → AtomMatch references values a b → Executions (depth + 1) view common first second a b
+result rebuilt : Value Symbol Guard
+actual : execute rawFirst first common = Outcome.done result common
+returned : execute rawSecond second common = Outcome.done rebuilt common
+forward :
+  (result.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      rebuilt.referenceOf ≠ InternedBinderProtocol.NodeRef.empty) ∧
+    (∀ (name : Reference), ReferenceOrigin view [result] name → ReferenceOrigin view [rebuilt] name) ∧
+      ∀ (row : EdgeValue Symbol Guard),
+        Origin view [result] row →
+          ∃ target, Origin view [rebuilt] target ∧ RowMatch (fun a b => Same depth view [a] [b]) row target
+backward :
+  (rebuilt.referenceOf ≠ InternedBinderProtocol.NodeRef.empty →
+      result.referenceOf ≠ InternedBinderProtocol.NodeRef.empty) ∧
+    (∀ (name : Reference), ReferenceOrigin view [rebuilt] name → ReferenceOrigin view [result] name) ∧
+      ∀ (row : EdgeValue Symbol Guard),
+        Origin view [rebuilt] row →
+          ∃ target, Origin view [result] target ∧ RowMatch (fun a b => Same depth view [a] [b]) row target
+⊢ ∀ (name : Reference), ReferenceOrigin view [result] name ↔ ReferenceOrigin view [rebuilt] name

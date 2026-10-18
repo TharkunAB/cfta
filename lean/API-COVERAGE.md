@@ -1,5 +1,64 @@
 # Public API and source correspondence
 
+## Current filtered finite source reconstruction
+
+Updated: 2026-10-18 12:55 CEST. Proof checkpoint is `39a5a673`.
+Starting checkpoint is `9f4d66f2`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-filtered-finite-reconstruction.md`.
+
+An actual warm stored parent now constructs every selected literal atom
+call and ordered ordinary-row call. Rejected rows remain available to the
+proof before survival filtering. Finite root reconstruction derives both
+physical Empty agreement and finite observations. It retains full symbols,
+guards and child order. Reference resolution and literal Mu execution at
+the full observation depth remain explicit induction obligations. Ordinary
+children use one lower observation depth.
+
+Actual ordinary source calls now derive raw RootMatch from strict indexed
+source-child cases. Both source calls may start and return at different
+heaps. Matching rows retain the same original source index. The local
+reference may differ; the captured values remain the same. Observation
+uses one fixed reader separate from the common execution heap.
+
+An actual publication now constructs both sequential stored calls, their
+final execution heap, warm replays, Keeps, availability and histories.
+The shared sparse map gives the original two callback outcomes. Both raw
+callback return heaps must grow into that execution heap. The
+induction premise covers only the actual immediate binder body. It does
+not quantify all smaller syntax. An earlier draft omitted the raw-return
+growth link. That draft remains as unselected historical evidence. The
+installed-writer theorem requires the actual selected record. It retains
+that record at the final heap.
+
+The general nested used binder with a changing outer capture remains open.
+The body hypothesis still needs a source proof for that case. Literal Mu
+atoms need full-depth agreement; lower-depth row-child agreement cannot
+discharge it. General self alignment also needs a noncircular epsilon
+argument. The prior rootErase counterexample and original-reader epsilon
+tails remain in force.
+
+The strongest broad claim concerns the checked implementation model.
+Initial semantic facts and scheduled resources, plus a supported successful
+top-level traversal with empty inherited constraints, give exact equality
+of the input and returned finite tree languages. This is partial
+correctness. General recursive termination and complete public Haskell
+correspondence remain open. Initial query-operand ancestry, all active
+node-owner exclusions, fresh-call bounds, repeated convergence, equality
+resources and host Int adequacy remain separate obligations.
+
+Full Audit passes 3306 jobs and 71667 dependency checks. Eleven new
+public heads and one constructed head pass complete statement,
+proof and axiom checks. All 5 selected strict logs are empty.
+All four canonical module builds have no warnings. Audit retains only
+the existing ClosedCompletion warning. Four component manifests pin
+213 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-filtered-finite-reconstruction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal remains active.
+
 ## Current fixed-reader reconstruction and actual support
 
 Updated: 2026-10-18 12:21 CEST. Proof checkpoint is `03f0f57b`.

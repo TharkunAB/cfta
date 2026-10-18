@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-3.source.lean:102:2: error: 'change' tactic failed, pattern
+  sizeOf event.expression < sizeOf (Syntax.binder event.smart event.expression) →
+    Aliases event.expression localInputs firstNames secondNames →
+      ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+        Context before (List.map (input firstNames) localInputs) →
+          Context later (List.map (input secondNames) localInputs) →
+            ∀ (rawFirst : Value Symbol Guard) (rawHeap : InternedConstructorTemplates.State Symbol Guard)
+              (rawSecond : Value Symbol Guard) (rawLater : InternedConstructorTemplates.State Symbol Guard),
+              build event.expression (List.map (input firstNames) localInputs) before = Outcome.done rawFirst rawHeap →
+                build event.expression (List.map (input secondNames) localInputs) later =
+                    Outcome.done rawSecond rawLater →
+                  RootMatch references values rawFirst rawSecond
+is not definitionally equal to target
+  let localInputs :=
+    Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment);
+  let firstNames := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth;
+  let secondNames := Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth;
+  sizeOf event.expression < sizeOf (Syntax.binder event.smart event.expression) →
+    Aliases event.expression localInputs firstNames secondNames →
+      ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+        Context before (List.map (input firstNames) localInputs) →
+          Context later (List.map (input secondNames) localInputs) →
+            ∀ (rawFirst : Value Symbol Guard) (rawHeap : InternedConstructorTemplates.State Symbol Guard)
+              (rawSecond : Value Symbol Guard) (rawLater : InternedConstructorTemplates.State Symbol Guard),
+              build event.expression (List.map (input firstNames) localInputs) before = Outcome.done rawFirst rawHeap →
+                build event.expression (List.map (input secondNames) localInputs) later =
+                    Outcome.done rawSecond rawLater →
+                  Grows rawHeap execution →
+                    Grows rawLater execution →
+                      Grows rawHeap execution →
+                        Grows rawLater execution → RootMatch references values rawFirst rawSecond
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-3.source.lean:219:75: error: Application type mismatch: The argument
+  strict final kept
+has type
+  have localInputs :=
+    Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment);
+  have firstNames := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth;
+  have secondNames := Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth;
+  sizeOf event.expression < sizeOf (Syntax.binder event.smart event.expression) →
+    Aliases event.expression localInputs firstNames secondNames →
+      ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+        Context before (List.map (input firstNames) localInputs) →
+          Context later (List.map (input secondNames) localInputs) →
+            ∀ (rawFirst : Value Symbol Guard) (rawHeap : InternedConstructorTemplates.State Symbol Guard)
+              (rawSecond : Value Symbol Guard) (rawLater : InternedConstructorTemplates.State Symbol Guard),
+              build event.expression (List.map (input firstNames) localInputs) before = Outcome.done rawFirst rawHeap →
+                build event.expression (List.map (input secondNames) localInputs) later =
+                    Outcome.done rawSecond rawLater →
+                  Grows rawHeap final →
+                    Grows rawLater final →
+                      RootMatch
+                        (NamePair (Reference.uninterned (ordinaryLevel event.depth))
+                          (Reference.interned event.entry.identity))
+                        (Executions (depth + 1) view final (shared event replacement replacement environment)
+                          (shared event replacement replacement environment))
+                        rawFirst rawSecond
+but is expected to have type
+  have localInputs :=
+    Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment);
+  have firstNames := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth;
+  have secondNames := Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth;
+  sizeOf event.expression < sizeOf (Syntax.binder event.smart event.expression) →
+    Aliases event.expression localInputs firstNames secondNames →
+      ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+        Context before (List.map (input firstNames) localInputs) →
+          Context later (List.map (input secondNames) localInputs) →
+            ∀ (rawFirst : Value Symbol Guard) (rawHeap : InternedConstructorTemplates.State Symbol Guard)
+              (rawSecond : Value Symbol Guard) (rawLater : InternedConstructorTemplates.State Symbol Guard),
+              build event.expression (List.map (input firstNames) localInputs) before = Outcome.done rawFirst rawHeap →
+                build event.expression (List.map (input secondNames) localInputs) later =
+                    Outcome.done rawSecond rawLater →
+                  Grows rawHeap final →
+                    Grows rawLater final →
+                      Grows rawHeap final →
+                        Grows rawLater final →
+                          RootMatch (NamePair ordinaryName bodyName)
+                            (Executions (depth + 1) view final commonMap commonMap) rawFirst rawSecond
+in the application
+  filtered event final finalCurrent.growth (NamePair ordinaryName bodyName)
+    (Executions (depth + 1) view final commonMap commonMap) referenceLocal (strict final kept)

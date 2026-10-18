@@ -1,0 +1,112 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:103:8: error: Type mismatch: After simplification, term
+  firstContext
+ has type
+  Context event.afterDepth (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+but is expected to have type
+  Context event.afterDepth
+    (List.map (input (Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth))
+      (Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment)))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:104:8: error: Type mismatch: After simplification, term
+  secondContext
+ has type
+  Context event.allocated (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+but is expected to have type
+  Context event.allocated
+    (List.map (input (Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth))
+      (Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment)))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:106:8: error: Type mismatch: After simplification, term
+  firstRaw
+ has type
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawFirst rawHeap
+but is expected to have type
+  build event.expression
+      (List.map (input (Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth))
+        (Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment)))
+      event.afterDepth =
+    Outcome.done rawFirst rawHeap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:107:8: error: Type mismatch: After simplification, term
+  secondRaw
+ has type
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawSecond rawLater
+but is expected to have type
+  build event.expression
+      (List.map (input (Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth))
+        (Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment)))
+      event.allocated =
+    Outcome.done rawSecond rawLater
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:149:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261018-filtered-finite-reconstruction».«publication-finite-root-direct-1.source».0.MicroCFTA.SourceCurrentPublicationFiniteRootReconstruction.bind_replacements`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:149:0: warning: `bind_replacements` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:202:6: error: Type mismatch
+  Iff.rfl
+has type
+  ?m.501 ↔ ?m.501
+but is expected to have type
+  ordinaryName = ordinaryName ↔ bodyName = bodyName
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-finite-reconstruction/publication-finite-root-direct-1.source.lean:212:75: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+view : InternedConstructorTemplates.State Symbol Guard
+event : Publication
+common : InternedConstructorTemplates.State Symbol Guard
+current : Keeps event.afterBody common
+replacement : Value Symbol Guard
+available : Available common replacement
+environment : Environment Symbol Guard
+replacements : Replacements common environment
+strict : BodyIH depth view event replacement environment common
+bodyName : Reference := Reference.interned event.entry.identity
+ordinaryName : Reference := Reference.uninterned (ordinaryLevel event.depth)
+bodyMap : Environment Symbol Guard := SourceCurrentStoredMuBinderChildLineage.bind bodyName replacement environment
+ordinaryMap : Environment Symbol Guard :=
+  SourceCurrentStoredMuBinderChildLineage.bind ordinaryName replacement environment
+commonMap : Environment Symbol Guard := shared event replacement replacement environment
+bodyAvailable : Available event.afterBody event.body
+ordinaryAvailable : Available event.afterBody event.ordinary
+bodyReplacements : Replacements common (SourceCurrentStoredMuBinderChildLineage.bind bodyName replacement environment)
+ordinaryReplacements :
+  Replacements common (SourceCurrentStoredMuBinderChildLineage.bind ordinaryName replacement environment)
+left : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+firstDone : execute event.body bodyMap common = Outcome.done left middle
+firstKept : Keeps common middle
+leftAvailable : Available middle left
+firstHistory : Nonempty (History common middle)
+right : Value Symbol Guard
+final : InternedConstructorTemplates.State Symbol Guard
+secondDone : execute event.ordinary ordinaryMap middle = Outcome.done right final
+secondKept : Keeps middle final
+rightAvailable : Available final right
+secondHistory : Nonempty (History middle final)
+kept : Keeps common final
+finalCurrent : Keeps event.afterBody final
+finalBody : Available final event.body
+finalOrdinary : Available final event.ordinary
+firstWarm :
+  build (encode (leaves event.body) [] event.body)
+      (List.map (InternedStoredSubstitution.input bodyMap) (leaves event.body)) final =
+    Outcome.done left final
+secondWarm :
+  build (encode (leaves event.ordinary) [] event.ordinary)
+      (List.map (InternedStoredSubstitution.input ordinaryMap) (leaves event.ordinary)) final =
+    Outcome.done right final
+referenceLocal :
+  ∀ (first second : Reference), NamePair ordinaryName bodyName first second → (first = ordinaryName ↔ second = bodyName)
+matched :
+  RootMatch (NamePair ordinaryName bodyName) (Executions (depth + 1) view final commonMap commonMap) event.ordinary
+    event.body
+⊢ True ∧ True
