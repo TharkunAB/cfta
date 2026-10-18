@@ -13,6 +13,38 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current original root filtering and source comparison
+
+Updated: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.
+Starting checkpoint is `c642e553`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-filtered-source-comparison.md` and
+`lean/notes-current-system-claim.md`.
+
+The new pure root-filter function retains original reference alternatives
+before substitution. Its support, absence, standalone-reference, Mu and
+actual Ready-state filter laws are checked. Equal complete assigned
+profiles alone do not preserve original root filtering. A checked local
+source-built witness establishes that obstruction. It does not establish
+a general source-history or Haskell defect. A second checked artificial
+cache has Context, Ready and the parametric contract for every resident Mu,
+yet an external root filter distinguishes its stored body and probe.
+The full same-source, two-history comparison law is not claimed refuted.
+The next cache contract must
+retain original root-reference alternatives for external and local names.
+General filtered source comparison and publication preservation stay open.
+
+The broad reduction guarantee is exactly
+`L(input) intersect Sat(inherited) <= L(result) <= L(input)`.
+It does not assert that all returned trees satisfy inherited constraints.
+Contradictory inherited constraints alone do not imply an Empty result.
+Actual valid closed construction separately gives exact size-query laws
+when a query API is returned. General recursive initialization,
+termination, convergence and full Haskell correspondence remain open.
+Full Audit passes 3368 jobs and 72824 dependency checks. Six new public
+heads pass full proof and standard-axiom checks. No Haskell bytes change.
+FINDINGS retains the repair registry first. Field-pool repair `b9219b9e`
+remains fixed in `c0cc8a05`. No push is retried. The full-library goal is active.
+
 ## Current scoped profiles and complete actual binder readback
 
 Updated: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.

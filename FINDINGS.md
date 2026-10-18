@@ -2,6 +2,23 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.
+Original root self filtering now has a pure assigned-profile function with
+checked support, absence and actual Ready-state execution laws. Equal
+complete assigned profiles alone do not preserve original root filtering.
+A checked source-built local witness establishes this proof-contract limit.
+It does not establish an actual publication-history or Haskell defect.
+The artificial Ready cache also has Context and the parametric contract
+for every resident Mu. That contract still does not determine an external
+original root filter. The full source comparison law remains unrefuted.
+General source comparison and causal publication preservation remain open.
+No Haskell repair is added or requested. Full Audit passes 3368 jobs and
+72824 checks. No Haskell bytes change. Field-pool repair `b9219b9e` remains
+fixed in `c0cc8a05`. Read `lean/notes-current-filtered-source-comparison.md`
+and `lean/notes-current-system-claim.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.
 Actual completed binders now have a complete current-probe profile formula
 under the final parametric payload invariant. It covers raw/smart,
