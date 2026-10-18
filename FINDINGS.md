@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 06:22 CEST. Proof checkpoint is `e43db322`.
+Finite initial cases now bound Parent output profiles and all nine fuels.
+A joined initial Room test derives its complete reservation. A computed
+mathematical width supplies Room, without a host64 capacity claim.
+Actual Target completion also constructs its finite guard carrier. The
+literal bounded outer replay retains entered Parent callers and bounds
+their count from supplied outer fuel on every outcome. It excludes other
+outer allocations. Full Parent carrier and outer scheduling remain open.
+Full Audit passes 3241 jobs and 71037 checks.
+No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-parent-uniform-envelope.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 06:09 CEST. Proof checkpoint is `1f9c135c`.
 Initial physical guards now derive raw Bounds and actual own-class limits.
 Native query completion carries those limits to its exact returned heap.
