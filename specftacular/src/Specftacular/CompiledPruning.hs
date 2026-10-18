@@ -73,6 +73,16 @@ eligible template@(TemplateNode "app" [_, _, _, _]) = program template
     program _ = False
 eligible _ = False
 
+{- | Count the least program leaves that can match an eligible template.
+Annotations and the arrow marker do not contribute. Unknown forms return zero,
+so the bound cannot remove a template that this function does not recognize.
+-}
+minimumLeaves :: Template Symbol -> Integer
+minimumLeaves Hole = 1
+minimumLeaves (TemplateNode "app" [_, _, f, x]) = minimumLeaves f + minimumLeaves x
+minimumLeaves (TemplateNode _ [_]) = 1
+minimumLeaves _ = 0
+
 -- | Classify raw program child positions. Annotation and marker nodes stay opaque.
 positions :: Edge Symbol -> Either String [Int]
 positions edge = case (edgeSymbol edge, edgeChildren edge) of
@@ -141,7 +151,7 @@ compileTemplates templates root
     | not (all eligible templates) = Left "SKIP template needs annotation matching"
     | otherwise = do
         (source, originalOpaque) <- graph True (256, 4096) root
-        let result = State.evalState (build source root) Map.empty
+        let result = fst (State.evalState (build source root) Map.empty)
         (finished, finalOpaque) <- graph True (4096, 65536) result
         if not (finalOpaque `Set.isSubsetOf` originalOpaque)
             then Left "UNKNOWN an opaque node changed"
@@ -150,10 +160,23 @@ compileTemplates templates root
                     then Left "UNKNOWN output graph cap"
                     else Right result
   where
-    excludeHere = exclude templates
+    -- A fixed ordered subset shares one template catalog across all nodes.
+    sizedTemplates = [(minimumLeaves template, template) | template <- templates]
+    exclusions =
+        Map.fromList
+            [ (bound, exclude [template | (needed, template) <- sizedTemplates, needed <= bound])
+            | bound <- Set.toAscList (Set.fromList (map fst sizedTemplates))
+            ]
+    excludeHere bound node = maybe node (\(_, prune) -> prune node) (Map.lookupLE bound exclusions)
+    -- Bounds describe the original graph without equality restrictions.
+    -- Exclusion can only reduce its language. Integer prevents DAG-size overflow.
+    -- Skipping an impossible template can retain more runs of the same term
+    -- in an ambiguous graph. The complete finite term language is unchanged.
     build ::
-        Map.Map NodeId (Node Symbol, [Edge Symbol]) -> Node Symbol -> State.State (Map.Map NodeId (Node Symbol)) (Node Symbol)
-    build _ EmptyNode = pure EmptyNode
+        Map.Map NodeId (Node Symbol, [Edge Symbol]) ->
+        Node Symbol ->
+        State.State (Map.Map NodeId (Node Symbol, Integer)) (Node Symbol, Integer)
+    build _ EmptyNode = pure (EmptyNode, 0)
     build source node = do
         known <- State.gets (Map.lookup (nodeIdentity node))
         case known of
@@ -161,19 +184,23 @@ compileTemplates templates root
             Nothing -> do
                 let (_, edges) = source Map.! nodeIdentity node
                 changed <- traverse (edge source) edges
-                let result = excludeHere (Node changed)
+                let bound = maximum (0 : map snd changed)
+                    result = (excludeHere bound (Node (map fst changed)), bound)
                 State.modify' (Map.insert (nodeIdentity node) result)
                 pure result
     edge ::
-        Map.Map NodeId (Node Symbol, [Edge Symbol]) -> Edge Symbol -> State.State (Map.Map NodeId (Node Symbol)) (Edge Symbol)
+        Map.Map NodeId (Node Symbol, [Edge Symbol]) ->
+        Edge Symbol ->
+        State.State (Map.Map NodeId (Node Symbol, Integer)) (Edge Symbol, Integer)
     edge source original = do
         let selected = either error id (positions original)
         children <-
             sequence
-                [ if index `elem` selected then build source child else pure child
+                [ if index `elem` selected then build source child else pure (child, 0)
                 | (index, child) <- zip [0 ..] (edgeChildren original)
                 ]
-        pure (setChildren original children)
+        let bound = if null selected then 1 else sum (map snd children)
+        pure (setChildren original (map fst children), bound)
 
 {- | Prove inclusion from exact template roots and wildcard children only.
 A failed check is not proof that the two template languages are disjoint.
