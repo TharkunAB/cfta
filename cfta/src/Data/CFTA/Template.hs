@@ -34,12 +34,14 @@ import Control.Monad (foldM, zipWithM)
 import Control.Monad.State.Strict (evalState, gets, modify', runState)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
+import Data.Foldable (toList)
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.List (partition, sort)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing, mapMaybe)
+import qualified Data.Sequence as Seq
 import qualified Data.Set as Set
 import Data.Typeable (Typeable)
 
@@ -555,7 +557,12 @@ edgeCopiesWith original childParts wanted unwanted symbol shapes = case traverse
         -- ID sets track the unchanged chosen/notChosen lists. They replace
         -- only membership checks. Keep the original templates and order.
         identifiedOpen = [(parts, (partIdentifiers !! index) Map.! (parts !! index)) | parts <- open]
-        groups = Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- fixed]
+        -- Append singleton rows without copying each accumulated prefix.
+        -- Convert each used group to a list once. For finite total input,
+        -- each group must fit in Int. Its order and duplicates are unchanged.
+        -- Keep conversion lazy
+        -- so a rejected group does not need its obligation list.
+        groups = Map.fromListWith (flip (<>)) [(parts !! index, Seq.singleton parts) | parts <- fixed]
         dying = Set.fromList (map (!! index) groundDying)
         -- The shapes that the parts which the child must match all fit.
         base = fits shapesHere (wantedHere <> map (!! index) forced)
@@ -568,8 +575,9 @@ edgeCopiesWith original childParts wanted unwanted symbol shapes = case traverse
                     | ((chosen, notChosen), _, _, _, _) <- splits base required identifiedOpen
                     ]
                         <> [ (forced <> group <> chosen, openDying <> notChosen)
-                           | (part, group) <- Map.toList groups
+                           | (part, rows) <- Map.toList groups
                            , Set.notMember part dying
+                           , let group = toList rows
                            , Just combined <- [meetTemplate required (original part)]
                            , let narrowed = fits base [part]
                            , not (null narrowed)
