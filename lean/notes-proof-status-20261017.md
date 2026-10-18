@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `445e5a73`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `e9430fe3`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -93,7 +93,8 @@ They do not require future reached checks or word ranges. Their native memo
 invariant is physical; semantic key correspondence remains separate. Indexed
 descent after that actual return constructs new payload Ready. Completed lower
 and Parent workers now derive physical invariants from initial inputs.
-Composition through actual unfinished outer prefixes remains open.
+Actual successful outer calls and unfinished execution prefixes now derive
+full physical invariants and input readiness from their entry facts.
 
 A separate nested-source branch now constructs full smart binder execution
 when the own lexical argument is absent from static live support. Arbitrary
@@ -113,8 +114,9 @@ not enlarge the complete outer-pass domain.
 Completed native/lower/Parent workers now produce full operation validity,
 heap readiness, allocated fields, probe and cost heaps, growth and available
 results from initial facts. Literal successful worker equations remain inputs.
-The result does not produce completion, numeric headroom, global memo language
-laws or a complete unfinished outer-prefix invariant.
+Actual unfinished outer prefixes now derive full physical invariants from
+entry facts. The result does not produce completion, numeric headroom,
+semantic native key correspondence or global memo language laws.
 
 A separate RootMatch relation preserves immediate atoms and complete ordinary
 rows through actual union construction and self filtering. It permits union
@@ -124,6 +126,21 @@ does not derive those relations for arbitrary retained source writers. General
 used-local source induction remains open. An unrestricted capture-alias example
 refutes a stronger structural relation, not actual fresh publication.
 Read [the current exact boundaries](notes-current-parent-invariants-head-origins.md).
+
+The current recursive execution proofs derive physical probe preservation
+from initial weak native Good and stored filtered probes. They compose through
+completed lower and Parent calls and actual outer execution prefixes. An
+actual busy failure gives exact full request equality with its active owner,
+plus readiness and activation growth for every active owner. Collision
+exclusion and a finite bound on fresh calls remain open.
+
+Resident Mu nodeBody reconstruction now constructs exact smart cleanup and
+retains the complete caller at every bound, including zero. This uses actual
+cached probes. It does not prove general source body/probe congruence. Literal
+node bodies now construct original Head row indices and full warm child calls
+at the final reader. Actual used publication inputs derive alias and filtered
+free-name transport. Full used-binder output RootMatch remains open. Read
+[the current exact boundaries](notes-current-outer-prefix-invariants.md).
 
 ## Observable contracts
 
@@ -158,10 +175,10 @@ interned core remains the construction and transformation path. Read
 | General reduction components | Initial resources construct supported readers, Merge, Target, Force, Leaf, editors, class passes, local reduction, parent edges, and edge memo calls. Actual primary certificates now construct complete Required returns with exact language and structural row origins. Initial Ready data and field availability derive exact normalization fixedness through the actual inherited prefix and indexed descent. Actual completed Parent reads now retain native writer history through Scan, Required, class passes, local reduction, and construction, with the existing explicit Parent range plan. Actual edited normalized rows retain indexed source prefixes, full fields, and derived writer histories at the same captured row states. Selected child calls now retain exact prefixes and suffixes with captured histories. Actual class right folds retain source-indexed tail, class, and head execution phases. Their selected leaf calls derive original-input closedness, historical target receipts, and exact native returned cells and writers. Actual suffixes now retain those exact cells and strong writers at the full class reader, and derive its native history. Captured ordinary writers supply conditional full row and ordered-child lineage at that reader. | General recursive outer-node progress and repeated-pass convergence remain open. Component support domains do not establish their composition for every recursive caller. |
 | Outer memo owners | Equal physical request keys identify complete ready request arguments. Bounded workers retain evaluating owners on busy faults. Initial edge-idle tables exclude outer edge-busy faults. A constructed copied-child case reaches a ready hit while ancestor node owners remain active. Actual descent of a Ready live nonempty inherited payload strictly lowers path height and changes its identity, including warm hits. An actual empty-own prefix retains normalized inherited values. Actual normalization and combination produce fixed payloads, and indexed descent preserves fixedness. Strict class dependencies remain exact among retained classes of one normalized payload. Initial fields and Ready operands now produce original-constituent containment and dependency preservation through actual accessor, combination, normalization, and retained indexed descent. A mirrored copied-child case reaches a fresh demand before its original sibling, then completes. Another source reaches the exact original node under a different inherited key while its root owner evaluates; the local precheck and both completed calls produce Empty. | General node-busy exclusion still needs a causal progress or owner-disjointness argument for nonempty local classes and all active ancestors. The constructed prefix and descent cases do not prove a general outer parent-and-child execution. See [actual row progress](notes-current-active-row-progress.md). |
 | Source input reconstruction | Initial Ready data constructs raw and stored schedules for every BinderFree source, including union roots and recursive captures. Actual source construction recovers each selected Mu record's first writer, callback histories, physical growth and issued-reference transport. Later warm requests keep that record. BinderFree of the recovered writer constructs both filtered reconstruction calls. | The condition applies to the recovered writer. Arbitrary nested writer bodies and full smart cleanup composition remain open. Writer metadata alone is not installed-record evidence. The complete outer-pass domain is unchanged. See [current lineage](notes-current-active-growth-lineage.md). |
-| Active owner ancestry | Actual node-busy failure constructs its dispatch, every active owner's exact enclosing activation, and actual operation growth into the reader. Literal lower and outer workers prove growth on every outcome without a graph, range, Ready or future-completion premise. Initial Ready values, full field loads and structural constraint-cache validity persist. Actual native writers derive raw stored-class coverage through full joined guards. Same-index splits separate computed child obligations from Top owner keys. | Full operation invariants for unfinished outer prefixes, general all-ancestor key exclusion, and fresh-call bounds remain open. Crossing classes can disappear at both children. Positive raw guards and complete field occurrences through class edits are covered. Causal row/child survival remains open. No general termination theorem follows. |
-| Completed lower and Parent physical invariants | Actual successful Target, Force, Leaf, editors, class folds, Scan, Required, local reduction and Parent construction derive full operation Valid, heap Ready, allocated fields, probe/cost heaps, growth and available results from initial facts. No Ranges, InputsThrough, Cap or future state invariant is supplied. | Completion is a premise. Global memo language laws, numeric headroom, unfinished outer-prefix composition and progress remain open. |
-| Recursive Head and class fields | Initial closed inputs construct actual Head and stored-body descriptors. Actual indexed edits and class right folds classify complete field occurrences, including final empty propagation. | Checked native Trace Inputs remain explicit. General retained-Mu lineage and individual row/child survival are not derived. |
-| Used binder root alternatives | Actual union normalization and self filtering preserve bidirectional root alternatives, complete ordinary fields and ordered child relations. The relation permits permutation and duplicates. | Explicit reference, Mu-atom and child input relations remain. General used-local source and retained-writer induction must derive them. This alone is not language equivalence. |
+| Active owner ancestry | Actual node-busy failure constructs its dispatch, every active owner's exact enclosing activation, and actual operation growth into the reader. Literal lower and outer workers prove growth on every outcome without a graph, range, Ready or future-completion premise. Initial Ready values, full field loads and structural constraint-cache validity persist. Actual native writers derive raw stored-class coverage through full joined guards. Same-index splits separate computed child obligations from Top owner keys. | Full physical operation invariants now reach actual unfinished outer prefixes. The complete captured busy request equals its active owner. General all-ancestor collision exclusion and fresh-call bounds remain open. Crossing classes can disappear at both children. Positive raw guards and complete field occurrences through class edits are covered. Causal row/child survival remains open. No general termination theorem follows. |
+| Completed lower and Parent physical invariants | Actual successful Target, Force, Leaf, editors, class folds, Scan, Required, local reduction and Parent construction derive full operation Valid, heap Ready, allocated fields, probe/cost heaps, growth and available results from initial facts. No Ranges, InputsThrough, Cap or future state invariant is supplied. | Completion is a premise. Physical filtered probes now compose through actual unfinished outer prefixes. Global memo language laws, numeric headroom and progress remain open. |
+| Recursive Head and class fields | Initial closed inputs construct actual Head and stored-body descriptors. Literal-node stored bodies derive indexed original rows and ordered warm child calls at the exact final reader. Nested Mu children are included. Actual indexed edits and class right folds classify complete field occurrences, including final empty propagation. | Checked native Trace Inputs remain explicit. General retained-Mu lineage and individual row/child survival are not derived. |
+| Used binder root alternatives | Actual union normalization and self filtering preserve bidirectional root alternatives, complete ordinary fields and ordered child relations. The relation permits permutation and duplicates. | Actual fresh publication inputs now derive alias and raw/filtered free-name transport, including the actual earlier retained writer. Complete output reference, Mu-atom and ordered child relations still need general used-local source induction. This alone is not language equivalence. |
 | Other library components | Checked language, equality, enumeration, arithmetic, union-find, memo, ranking, generation, and sampling results exist. Some source drivers and restricted adapters are complete. | Their remaining adapters and recursive callers do not yet form a complete current-library implementation theorem. See [API coverage](API-COVERAGE.md). |
 
 The finite ordinary result is in
@@ -220,9 +237,11 @@ origins. It assumes no future Required result. Read
    misses, cut contexts, and issued-reference facts. The paired reference
    base gives exact repaired execution equality. The ordinary induction step now accepts these unequal paired tails.
    Actual ordinary probes derive compatible replacement maps on live source
-   support. Unused captures can still alias a probe name. Depth extension
-   needs an explicit live-alias condition. Every publication with a
-   BinderFree source body now derives filtered body/probe reconstruction
+   support. General arbitrary captures can alias a probe name. Actual paired
+   publication inputs now derive the required freshness and live aliases,
+   including captured Depth aliases. Actual filtered free names correspond
+   under the fresh local-name pair, also at the recovered earlier writer.
+   Every publication with a BinderFree source body now derives filtered body/probe reconstruction
    agreement. The root-erasure proof handles union roots with exact literal
    parts. Actual repaired callback profiles derive bare-self parity. Derive
    the nested source binder case. Actual first-writer chronology and reader
@@ -246,8 +265,8 @@ origins. It assumes no future Required result. Read
    class coverage through their full joined guards. Positive syntax gives local
    raw-class origins. Actual class phases now compose full guard occurrences.
    Derive the stronger individual row-survival chain and complete retained-Mu
-   row/child lineage. Compose the completed Parent invariant through unfinished
-   outer prefixes.
+   row/child lineage. Physical completed Parent invariants now compose through
+   actual unfinished outer prefixes without future state premises.
    Selected same-index own paths already
    give a nonempty child payload and key separation from Ready Top owners.
    A normalized crossing class can disappear at both immediate children.

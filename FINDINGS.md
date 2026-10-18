@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 02:42 CEST. Proof checkpoint is `e9430fe3`.
+Full pinned Audit passes 3199 jobs and 70491 dependency checks.
+Actual successful outer calls and unfinished execution prefixes now derive
+full physical operation validity, probe preservation and request readiness
+from initial facts. Busy inversion identifies the exact complete request of
+its active owner. This does not exclude collisions or prove termination.
+General recursive language preservation, fresh-call bounds, used-binder output
+congruence, convergence and public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Repair `b9219b9e` remains
+merged and validated in source `c0cc8a05`. The earlier field-pool issue is
+fixed; it is not an open item. Read
+`lean/notes-current-outer-prefix-invariants.md`. Keep this registry first.
+Record every later repair with its failure, executable reproducer, affected
+paths, commit, checks and upstream status for external work.
+
 Current proof update: 2026-10-18 02:21 CEST. Proof checkpoint is `445e5a73`.
 Full pinned Audit passes 3190 jobs and 70310 dependency checks.
 Completed lower and Parent calls derive physical operation invariants from
