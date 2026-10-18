@@ -1,5 +1,36 @@
 # Proof status at 2026-10-18
 
+## Current effective inherited gains and untouched dispatch progress
+
+Updated: 2026-10-18 22:55 CEST. Proof checkpoint is `4b6f581d`.
+Starting checkpoint is `9e11fad5`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-effective-outer-progress.md` and the current
+system claim. Covered own classes now preserve the complete fixed
+inherited value in actual cold/warm operations. Every actual strict
+height gain has a distinct own pair absent from the inherited components.
+The exact original row, Parent call and active-owner receipts remain.
+The initial busy endpoint still requires a nonempty captured owner.
+
+An unfinished walk derives exact dispatch from completed earlier siblings.
+Untouched positive continuations have strict source-anchor mass descent.
+Finite chains can change child indices. The untouched footprint remains
+explicit. No enclosing walk or node return is assumed.
+
+The next primary producer is constraint-origin renewal through actual
+selected edits and native queries. Dropped classes can be reintroduced.
+Local absorption and a finite field alphabet do not bound these events.
+General completion, empty-owner exclusion, convergence and Haskell
+correspondence remain open. The broad root language and exact size-query
+claims remain unchanged. Full Audit passes 3417 jobs and 73140 checks.
+All twelve public heads pass complete proof and standard-axiom checks.
+Four production strict logs are empty. Three canonical targets replay only
+the known old unused-input warning. Actual checks cover covered nonempty
+own fields, new-pair production and source-built untouched dispatch.
+
+No Haskell bytes change or new repair is requested. FINDINGS retains all
+repairs first. Field-pool repair `b9219b9e` stays fixed in `c0cc8a05`.
+No push or board write is attempted. The full-library goal remains active.
+
 ## Current constructed root correctness and cross-local publication
 
 Updated: 2026-10-18 22:34 CEST. Proof checkpoint is `bf3014ae`.
