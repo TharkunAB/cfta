@@ -12,6 +12,7 @@ import qualified Data.CFTA.Gen.Equality.TypedExpressionGenSpec
 import qualified Data.CFTA.Gen.ReferenceSpec
 import qualified Data.CFTA.Gen.Synthesis.StatesSpec
 import qualified Data.CFTA.Gen.SynthesisSpec
+import qualified Data.CFTA.Gen.TowerSpec
 import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
 import qualified Data.CFTA.RankedSpec
@@ -31,6 +32,7 @@ main =
         Data.CFTA.Gen.Equality.TypedExpressionGenSpec.spec
         Data.CFTA.Gen.ReferenceSpec.spec
         Data.CFTA.Gen.SynthesisSpec.spec
+        Data.CFTA.Gen.TowerSpec.spec
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
         Data.CFTA.Gen.TypingSpec.spec
         Data.CFTA.SizedSpec.spec

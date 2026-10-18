@@ -7,6 +7,9 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `Data.CFTA.Gen.Tower`, a spike: the test log of a language tower and
+  the rule that tells a wrong spec from a vocabulary that is too coarse.
+
 - `Data.CFTA.Gen`: one generator type, `Gen symbol a`, for every kind of
   automaton. An ordinary generator is `FTAGen symbol a`, that is
   `Gen symbol a`; the equality and refinement facades fix the symbol in
