@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-2.source.lean:84:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.filterMap
+        (fun name =>
+          match name with
+          | Sum.inl val => none
+          | Sum.inr atom => some atom)
+        ?names).any
+    fun atom => Option.isNone (?function atom)
+in the target expression
+  lower
+      (if (names.any fun name => (lift function name).isNone) = true then none
+      else some (List.filterMap (lift function) names)) =
+    if
+        ((List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr atom => some atom)
+                names).any
+            fun atom => (function atom).isNone) =
+          true then
+      none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr atom => some atom)
+            names))
+
+case some
+Atom Other : Type
+function : Atom → Option Other
+names : List (Unit ⊕ Atom)
+⊢ lower
+      (if (names.any fun name => (lift function name).isNone) = true then none
+      else some (List.filterMap (lift function) names)) =
+    if
+        ((List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr atom => some atom)
+                names).any
+            fun atom => (function atom).isNone) =
+          true then
+      none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr atom => some atom)
+            names))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-2.source.lean:99:46: warning: This simp argument is unused:
+  Function.comp_def
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [lift, found]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

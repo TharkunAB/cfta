@@ -1,0 +1,1483 @@
+@MicroCFTA.SourceCurrentSourceEmptyAbstraction.same_empty : ∀ {Symbol Guard Atom Other : Type}
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (first : List.{0} (MicroCFTA.InternedProfileSemantics.Abstract Atom))
+  (second : List.{0} (MicroCFTA.InternedProfileSemantics.Abstract Other)),
+  @Eq.{1} (List.{0} Bool)
+      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first)
+      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second) →
+    @Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Atom
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))
+theorem MicroCFTA.SourceCurrentSourceEmptyAbstraction.same_empty : ∀ {Symbol Guard Atom Other : Type}
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (first : List.{0} (MicroCFTA.InternedProfileSemantics.Abstract Atom))
+  (second : List.{0} (MicroCFTA.InternedProfileSemantics.Abstract Other)),
+  @Eq.{1} (List.{0} Bool)
+      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first)
+      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second) →
+    @Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Atom
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)) :=
+fun {Symbol Guard Atom Other} expression first second inputs =>
+  have mapped :=
+    @Trans.trans.{0, 0, 0, 1, 1, 1} (List.{0} (Option.{0} (List.{0} Empty))) (List.{0} (Option.{0} (List.{0} Empty)))
+      (List.{0} (Option.{0} (List.{0} Empty))) (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty))))
+      (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))) (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty))))
+      (@instTransEq.{0, 1, 1} (List.{0} (Option.{0} (List.{0} Empty))) (List.{0} (Option.{0} (List.{0} Empty)))
+        (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))))
+      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty) first)
+      (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+        (fun empty =>
+          @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true) (instDecidableEqBool empty Bool.true)
+            (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty)) (@Option.none.{0} (List.{0} Empty)))
+        (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second))
+      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty) second)
+      (@Trans.trans.{0, 0, 0, 1, 1, 1} (List.{0} (Option.{0} (List.{0} Empty))) (List.{0} (Option.{0} (List.{0} Empty)))
+        (List.{0} (Option.{0} (List.{0} Empty))) (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty))))
+        (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))) (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty))))
+        (@instTransEq.{0, 1, 1} (List.{0} (Option.{0} (List.{0} Empty))) (List.{0} (Option.{0} (List.{0} Empty)))
+          (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))))
+        (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+          (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty) first)
+        (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+          (fun empty =>
+            @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true) (instDecidableEqBool empty Bool.true)
+              (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty)) (@Option.none.{0} (List.{0} Empty)))
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first))
+        (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+          (fun empty =>
+            @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true) (instDecidableEqBool empty Bool.true)
+              (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty)) (@Option.none.{0} (List.{0} Empty)))
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second))
+        (@Eq.mpr.{0}
+          (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+            (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+              (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+              first)
+            (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+              (fun empty =>
+                @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                  (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                  (@Option.none.{0} (List.{0} Empty)))
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first)))
+          (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+            (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+              (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+              first)
+            (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) (Option.{0} (List.{0} Empty))
+              (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+                (Option.{0} (List.{0} Empty))
+                (fun empty =>
+                  @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                    (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                    (@Option.none.{0} (List.{0} Empty)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Atom))
+              first))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                  first)
+                (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+                  (fun empty =>
+                    @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                      (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                      (@Option.none.{0} (List.{0} Empty)))
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first)))
+              (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                  first)
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) (Option.{0} (List.{0} Empty))
+                  (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+                    (Option.{0} (List.{0} Empty))
+                    (fun empty =>
+                      @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                        (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                        (@Option.none.{0} (List.{0} Empty)))
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty Atom))
+                  first)))
+            (@congrArg.{1, 1} (List.{0} (Option.{0} (List.{0} Empty))) Prop
+              (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+                (fun empty =>
+                  @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                    (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                    (@Option.none.{0} (List.{0} Empty)))
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first))
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) (Option.{0} (List.{0} Empty))
+                (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+                  (Option.{0} (List.{0} Empty))
+                  (fun empty =>
+                    @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                      (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                      (@Option.none.{0} (List.{0} Empty)))
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Atom))
+                first)
+              (fun _a =>
+                @Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                    first)
+                  _a)
+              (@List.map_map.{0, 0, 0} Bool (Option.{0} (List.{0} Empty))
+                (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                (fun empty =>
+                  @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                    (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                    (@Option.none.{0} (List.{0} Empty)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first)))
+          (@List.map_congr_left.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) first
+            (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+            (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+              (Option.{0} (List.{0} Empty))
+              (fun empty =>
+                @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                  (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                  (@Option.none.{0} (List.{0} Empty)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Atom))
+            fun value a => @MicroCFTA.SourceCurrentSourceEmptyAbstraction.project_all✝ Atom value))
+        (@congrArg.{1, 1} (List.{0} Bool) (List.{0} (Option.{0} (List.{0} Empty)))
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom) Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Atom) first)
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second)
+          (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty)) fun empty =>
+            @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true) (instDecidableEqBool empty Bool.true)
+              (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty)) (@Option.none.{0} (List.{0} Empty)))
+          inputs))
+      (@Eq.mpr.{0}
+        (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+          (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+            (fun empty =>
+              @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                (@Option.none.{0} (List.{0} Empty)))
+            (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second))
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+            (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+            second))
+        (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) (Option.{0} (List.{0} Empty))
+            (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+              (Option.{0} (List.{0} Empty))
+              (fun empty =>
+                @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                  (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                  (@Option.none.{0} (List.{0} Empty)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Other))
+            second)
+          (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+            (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+            second))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+              (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+                (fun empty =>
+                  @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                    (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                    (@Option.none.{0} (List.{0} Empty)))
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second))
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+                second))
+            (@Eq.{1} (List.{0} (Option.{0} (List.{0} Empty)))
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) (Option.{0} (List.{0} Empty))
+                (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+                  (Option.{0} (List.{0} Empty))
+                  (fun empty =>
+                    @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                      (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                      (@Option.none.{0} (List.{0} Empty)))
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Other))
+                second)
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+                second)))
+          (@congrArg.{1, 1} (List.{0} (Option.{0} (List.{0} Empty))) Prop
+            (@List.map.{0, 0} Bool (Option.{0} (List.{0} Empty))
+              (fun empty =>
+                @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                  (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                  (@Option.none.{0} (List.{0} Empty)))
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second))
+            (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) (Option.{0} (List.{0} Empty))
+              (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+                (Option.{0} (List.{0} Empty))
+                (fun empty =>
+                  @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                    (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                    (@Option.none.{0} (List.{0} Empty)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Other))
+              second)
+            (fun _a =>
+              @Eq.{1} (List.{0} (Option.{0} (List.{0} Empty))) _a
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+                  second))
+            (@List.map_map.{0, 0, 0} Bool (Option.{0} (List.{0} Empty))
+              (MicroCFTA.InternedProfileSemantics.Abstract Other)
+              (fun empty =>
+                @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                  (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                  (@Option.none.{0} (List.{0} Empty)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Other) second)))
+        (@List.map_congr_left.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other) second
+          (Option.{0} (List.{0} Empty))
+          (@Function.comp.{1, 1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Other) Bool
+            (Option.{0} (List.{0} Empty))
+            (fun empty =>
+              @ite.{1} (Option.{0} (List.{0} Empty)) (@Eq.{1} Bool empty Bool.true)
+                (instDecidableEqBool empty Bool.true) (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty))
+                (@Option.none.{0} (List.{0} Empty)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Other))
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+          fun value a =>
+          @Eq.symm.{1} (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+              value)
+            (@ite.{1} (Option.{0} (List.{0} Empty))
+              (@Eq.{1} Bool (@MicroCFTA.InternedProfileSemantics.isEmpty Other value) Bool.true)
+              (instDecidableEqBool (@MicroCFTA.InternedProfileSemantics.isEmpty Other value) Bool.true)
+              (@Option.some.{0} (List.{0} Empty) (@List.nil.{0} Empty)) (@Option.none.{0} (List.{0} Empty)))
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project_all✝ Other value)));
+  @Eq.mpr.{0}
+    (@Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Atom
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+    (@Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+          (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+      (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+        (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Atom
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+      (@congrArg.{1, 1} Bool Prop
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Atom
+          (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+        (fun _a =>
+          @Eq.{1} Bool _a
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+        (@Eq.symm.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Atom
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project_empty✝ Atom Empty (fun x => @Option.none.{0} Empty)
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))))
+    (@Eq.mpr.{0}
+      (@Eq.{1} Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+          (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+      (@Eq.{1} Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))))
+        (@congrArg.{1, 1} Bool Prop
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+          (fun _a =>
+            @Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+              _a)
+          (@Eq.symm.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Other
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project_empty✝ Other Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))))
+      (@Eq.mpr.{0}
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                first)))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+            (@Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                    first)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second)))))
+          (@congrArg.{1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Empty) Prop
+            (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+              (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                first))
+            (fun _a =>
+              @Eq.{1} Bool (@MicroCFTA.InternedProfileSemantics.isEmpty Empty _a)
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+            (@Eq.symm.{1} (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                  first))
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Atom expression first))
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.evaluate_project✝ Atom Empty Symbol Guard
+                (fun x => @Option.none.{0} Empty) expression first))))
+        (@Eq.mpr.{0}
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                  first)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                  first)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+                  second))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                    (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                      (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                      (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x =>
+                        @Option.none.{0} Empty)
+                      first)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))))
+              (@Eq.{1} Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                    (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                      (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                      (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x =>
+                        @Option.none.{0} Empty)
+                      first)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                    (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                      (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                      (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                        @Option.none.{0} Empty)
+                      second)))))
+            (@congrArg.{1, 1} (MicroCFTA.InternedProfileSemantics.Abstract Empty) Prop
+              (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+                  second))
+              (fun _a =>
+                @Eq.{1} Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x =>
+                          @Option.none.{0} Empty)
+                        first)))
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Empty _a))
+              (@Eq.symm.{1} (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                      @Option.none.{0} Empty)
+                    second))
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty (fun x => @Option.none.{0} Empty)
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Other expression second))
+                (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.evaluate_project✝ Other Empty Symbol Guard
+                  (fun x => @Option.none.{0} Empty) expression second))))
+          (@Eq.mpr.{0}
+            (@Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                    first)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                      @Option.none.{0} Empty)
+                    second))))
+            (@Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                      @Option.none.{0} Empty)
+                    second)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                      @Option.none.{0} Empty)
+                    second))))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x =>
+                          @Option.none.{0} Empty)
+                        first)))
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                          @Option.none.{0} Empty)
+                        second))))
+                (@Eq.{1} Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                          @Option.none.{0} Empty)
+                        second)))
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                      (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                        (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                        (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                          @Option.none.{0} Empty)
+                        second)))))
+              (@congrArg.{1, 1} (List.{0} (MicroCFTA.InternedProfileSemantics.Abstract Empty)) Prop
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Atom)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Atom Empty fun x => @Option.none.{0} Empty)
+                  first)
+                (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                  (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                  (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x => @Option.none.{0} Empty)
+                  second)
+                (fun _a =>
+                  @Eq.{1} Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                      (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression _a))
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                      (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                        (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                          (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                            @Option.none.{0} Empty)
+                          second))))
+                mapped))
+            (@Eq.refl.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty Empty
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard Empty expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedProfileSemantics.Abstract Other)
+                    (MicroCFTA.InternedProfileSemantics.Abstract Empty)
+                    (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.project✝ Other Empty fun x =>
+                      @Option.none.{0} Empty)
+                    second))))))))
+'MicroCFTA.SourceCurrentSourceEmptyAbstraction.same_empty' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentSourceEmptyAbstraction.source : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (firstInputs secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before after later final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard before firstInputs →
+    @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard later secondInputs →
+      ∀ (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) first after) →
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) second final) →
+            @Eq.{1} (List.{0} Bool)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  firstInputs)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  secondInputs) →
+              @Eq.{1} Bool
+                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard first)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+theorem MicroCFTA.SourceCurrentSourceEmptyAbstraction.source : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (firstInputs secondInputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before after later final : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard before firstInputs →
+    @MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard later secondInputs →
+      ∀ (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) first after) →
+          @Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) second final) →
+            @Eq.{1} (List.{0} Bool)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  firstInputs)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  secondInputs) →
+              @Eq.{1} Bool
+                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard first)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+                  MicroCFTA.InternedBinderProtocol.NodeRef.empty) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression
+    firstInputs secondInputs before after later final firstContext secondContext first second firstDone secondDone
+    inputs =>
+  have firstProfile :=
+    @MicroCFTA.InternedFreshOrdinaryProfileExecutionFacts.Checked.result Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before)
+      (fun value =>
+        MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+          (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+            expression
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+      (@MicroCFTA.InternedFreshOrdinaryProfiles.build_profile Symbol Guard inst expression firstInputs before
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard before firstInputs firstContext)
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard before firstInputs firstContext)
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.profiles Symbol Guard before firstInputs firstContext))
+      first after firstDone;
+  have secondProfile :=
+    @MicroCFTA.InternedFreshOrdinaryProfileExecutionFacts.Checked.result Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later)
+      (fun value =>
+        MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+          (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+            expression
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+      (@MicroCFTA.InternedFreshOrdinaryProfiles.build_profile Symbol Guard inst expression secondInputs later
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard later secondInputs secondContext)
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard later secondInputs secondContext)
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.profiles Symbol Guard later secondInputs secondContext))
+      second final secondDone;
+  have firstReturned :=
+    @Eq.mp.{0}
+      (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before))
+        firstInputs)
+      (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard after firstInputs)
+      (@congrFun'.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Prop
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before)))
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard after)
+        (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before))
+          after (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard)
+          (@congrArg.{1, 1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) first after)
+            (fun x =>
+              @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                fun key state => state)
+            firstDone))
+        firstInputs)
+      (@MicroCFTA.InternedFreshOrdinaryContext.Context.build Symbol Guard before firstInputs inst firstContext
+        expression);
+  have secondReturned :=
+    @Eq.mp.{0}
+      (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later))
+        secondInputs)
+      (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard final secondInputs)
+      (@congrFun'.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Prop
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later)))
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard final)
+        (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later))
+          final (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard)
+          (@congrArg.{1, 1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) second final)
+            (fun x =>
+              @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                fun key state => state)
+            secondDone))
+        secondInputs)
+      (@MicroCFTA.InternedFreshOrdinaryContext.Context.build Symbol Guard later secondInputs inst secondContext
+        expression);
+  have firstAvailable :=
+    @MicroCFTA.InternedNestedFacts.Verified.result Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) before
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression firstInputs before)
+      (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryFacts.build_verified Symbol Guard inst expression firstInputs before
+        (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard before
+          (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard before firstInputs firstContext))
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard before firstInputs firstContext))
+      first after firstDone;
+  have secondAvailable :=
+    @MicroCFTA.InternedNestedFacts.Verified.result Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) later
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression secondInputs later)
+      (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryFacts.build_verified Symbol Guard inst expression secondInputs later
+        (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard later
+          (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard later secondInputs secondContext))
+        (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard later secondInputs secondContext))
+      second final secondDone;
+  @Eq.mpr.{0}
+    (@Eq.{1} Bool
+      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard first)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+    (@Eq.{1} Bool
+      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+        (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+        MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@Eq.{1} Bool
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard first)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)))
+      (@congrArg.{1, 1} Bool Prop
+        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard first)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+        (fun _a =>
+          @Eq.{1} Bool _a
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+        (@Eq.symm.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard first)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (@MicroCFTA.InternedRootProfileNode.isEmpty_profile Symbol Guard first after
+            (@MicroCFTA.InternedStoredMuOrigins.Normal.proper Symbol Guard after
+              (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard after firstInputs firstReturned))
+            firstAvailable))))
+    (@Eq.mpr.{0}
+      (@Eq.{1} Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+          MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+      (@Eq.{1} Bool
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty))
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+        (@congrArg.{1, 1} Bool Prop
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))
+          (fun _a =>
+            @Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              _a)
+          (@Eq.symm.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard second)
+              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+            (@MicroCFTA.InternedRootProfileNode.isEmpty_profile Symbol Guard second final
+              (@MicroCFTA.InternedStoredMuOrigins.Normal.proper Symbol Guard final
+                (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard final secondInputs secondReturned))
+              secondAvailable))))
+      (@Eq.mpr.{0}
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+        (@Eq.{1} Bool
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+              expression
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+            (@Eq.{1} Bool
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                  expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+          (@congrArg.{1, 1} Bool Prop
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                expression
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+            (fun _a =>
+              @Eq.{1} Bool _a
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+            (@MicroCFTA.InternedProfileComposition.isEmpty_same
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first)
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                expression
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs))
+              firstProfile)))
+        (@Eq.mpr.{0}
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                expression
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+          (@Eq.{1} Bool
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                expression
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+            (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+              (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                expression
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                    expression
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+              (@Eq.{1} Bool
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                    expression
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+                (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                  (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                    expression
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))))
+            (@congrArg.{1, 1} Bool Prop
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))
+              (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                  expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+              (fun _a =>
+                @Eq.{1} Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard
+                      MicroCFTA.InternedBinderProtocol.Reference expression
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+                  _a)
+              (@MicroCFTA.InternedProfileComposition.isEmpty_same
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)
+                (@MicroCFTA.InternedProfileSemantics.evaluate Symbol Guard MicroCFTA.InternedBinderProtocol.Reference
+                  expression
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs))
+                secondProfile)))
+          (@MicroCFTA.SourceCurrentSourceEmptyAbstraction.same_empty Symbol Guard
+            MicroCFTA.InternedBinderProtocol.Reference MicroCFTA.InternedBinderProtocol.Reference expression
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)
+            (have firstTags :=
+              @Eq.mpr.{0}
+                (@Eq.{1} (List.{0} Bool)
+                  (@List.map.{0, 0}
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard)
+                      firstInputs))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    firstInputs))
+                (@Eq.{1} (List.{0} Bool)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                    firstInputs)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    firstInputs))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{1} (List.{0} Bool)
+                      (@List.map.{0, 0}
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard)
+                          firstInputs))
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        firstInputs))
+                    (@Eq.{1} (List.{0} Bool)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                        firstInputs)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        firstInputs)))
+                  (@congrArg.{1, 1} (List.{0} Bool) Prop
+                    (@List.map.{0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs))
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                      (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                      firstInputs)
+                    (fun _a =>
+                      @Eq.{1} (List.{0} Bool) _a
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                          (fun value =>
+                            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          firstInputs))
+                    (@List.map_map.{0, 0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs)))
+                (@List.map_congr_left.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) firstInputs
+                  Bool
+                  (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  fun value member =>
+                  @MicroCFTA.InternedRootProfileNode.isEmpty_profile Symbol Guard value before
+                    (@MicroCFTA.InternedStoredMuOrigins.Normal.proper Symbol Guard before
+                      (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard before firstInputs
+                        firstContext))
+                    (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard before firstInputs firstContext
+                      value member));
+            have secondTags :=
+              @Eq.mpr.{0}
+                (@Eq.{1} (List.{0} Bool)
+                  (@List.map.{0, 0}
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard)
+                      secondInputs))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    secondInputs))
+                (@Eq.{1} (List.{0} Bool)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                    secondInputs)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    secondInputs))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{1} (List.{0} Bool)
+                      (@List.map.{0, 0}
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard)
+                          secondInputs))
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        secondInputs))
+                    (@Eq.{1} (List.{0} Bool)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                          (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                        secondInputs)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        secondInputs)))
+                  (@congrArg.{1, 1} (List.{0} Bool) Prop
+                    (@List.map.{0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs))
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                      (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                      secondInputs)
+                    (fun _a =>
+                      @Eq.{1} (List.{0} Bool) _a
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                          (fun value =>
+                            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          secondInputs))
+                    (@List.map_map.{0, 0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+                (@List.map_congr_left.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) secondInputs
+                  Bool
+                  (@Function.comp.{1, 1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard))
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  fun value member =>
+                  @MicroCFTA.InternedRootProfileNode.isEmpty_profile Symbol Guard value later
+                    (@MicroCFTA.InternedStoredMuOrigins.Normal.proper Symbol Guard later
+                      (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard later secondInputs
+                        secondContext))
+                    (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard later secondInputs
+                      secondContext value member));
+            @Eq.mpr.{0}
+              (@Eq.{1} (List.{0} Bool)
+                (@List.map.{0, 0}
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs))
+                (@List.map.{0, 0}
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+              (@Eq.{1} (List.{0} Bool)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                  (fun value =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                  firstInputs)
+                (@List.map.{0, 0}
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                  (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+              (@id.{0}
+                (@Eq.{1} Prop
+                  (@Eq.{1} (List.{0} Bool)
+                    (@List.map.{0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard) firstInputs))
+                    (@List.map.{0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+                  (@Eq.{1} (List.{0} Bool)
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                      (fun value =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                      firstInputs)
+                    (@List.map.{0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs))))
+                (@congrArg.{1, 1} (List.{0} Bool) Prop
+                  (@List.map.{0, 0}
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard)
+                      firstInputs))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    firstInputs)
+                  (fun _a =>
+                    @Eq.{1} (List.{0} Bool) _a
+                      (@List.map.{0, 0}
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+                  firstTags))
+              (@Eq.mpr.{0}
+                (@Eq.{1} (List.{0} Bool)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    firstInputs)
+                  (@List.map.{0, 0}
+                    (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                    (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+                (@Eq.{1} (List.{0} Bool)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    firstInputs)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                    (fun value =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                    secondInputs))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{1} (List.{0} Bool)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        firstInputs)
+                      (@List.map.{0, 0}
+                        (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                        (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedRootProfile.profile Symbol Guard) secondInputs)))
+                    (@Eq.{1} (List.{0} Bool)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        firstInputs)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                        (fun value =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                        secondInputs)))
+                  (@congrArg.{1, 1} (List.{0} Bool) Prop
+                    (@List.map.{0, 0}
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference) Bool
+                      (@MicroCFTA.InternedProfileSemantics.isEmpty MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard)
+                        secondInputs))
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                      (fun value =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                      secondInputs)
+                    (fun _a =>
+                      @Eq.{1} (List.{0} Bool)
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) Bool
+                          (fun value =>
+                            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                              MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          firstInputs)
+                        _a)
+                    secondTags))
+                inputs))))))
+'MicroCFTA.SourceCurrentSourceEmptyAbstraction.source' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

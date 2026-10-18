@@ -1,0 +1,58 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-3.source.lean:84:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.filterMap
+        (fun name =>
+          match name with
+          | Sum.inl val => none
+          | Sum.inr atom => some atom)
+        names).any
+    fun atom => (function atom).isNone
+in the target expression
+  lower
+      (if (names.any fun name => (lift function name).isNone) = true then none
+      else some (List.filterMap (lift function) names)) =
+    if
+        ((List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr atom => some atom)
+                names).any
+            fun atom => (function atom).isNone) =
+          true then
+      none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr atom => some atom)
+            names))
+
+case some
+Atom Other : Type
+function : Atom → Option Other
+names : List (Unit ⊕ Atom)
+⊢ lower
+      (if (names.any fun name => (lift function name).isNone) = true then none
+      else some (List.filterMap (lift function) names)) =
+    if
+        ((List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr atom => some atom)
+                names).any
+            fun atom => (function atom).isNone) =
+          true then
+      none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr atom => some atom)
+            names))

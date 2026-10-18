@@ -1,0 +1,31 @@
+import MicroCFTA.SourceCurrentStoredEmptyInterpreter
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentStoredEmptyInterpreter.test
+#print MicroCFTA.SourceCurrentStoredEmptyInterpreter.test
+#print axioms MicroCFTA.SourceCurrentStoredEmptyInterpreter.test
+
+#check @MicroCFTA.SourceCurrentStoredEmptyInterpreter.closed
+#print MicroCFTA.SourceCurrentStoredEmptyInterpreter.closed
+#print axioms MicroCFTA.SourceCurrentStoredEmptyInterpreter.closed
+
+#check @MicroCFTA.SourceCurrentStoredEmptyInterpreter.reference
+#print MicroCFTA.SourceCurrentStoredEmptyInterpreter.reference
+#print axioms MicroCFTA.SourceCurrentStoredEmptyInterpreter.reference
+
+#check @MicroCFTA.SourceCurrentStoredEmptyInterpreter.open_mu
+#print MicroCFTA.SourceCurrentStoredEmptyInterpreter.open_mu
+#print axioms MicroCFTA.SourceCurrentStoredEmptyInterpreter.open_mu
+
+#check @MicroCFTA.SourceCurrentStoredEmptyInterpreter.execute_test
+#print MicroCFTA.SourceCurrentStoredEmptyInterpreter.execute_test
+#print axioms MicroCFTA.SourceCurrentStoredEmptyInterpreter.execute_test

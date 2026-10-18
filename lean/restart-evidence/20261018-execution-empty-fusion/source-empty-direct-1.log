@@ -1,0 +1,215 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:21:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:32:65: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [project, isEmpty, found]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:40:40: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:44:80: warning: This simp argument is unused:
+  a
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [b, combine]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:44:82: warning: This simp argument is unused:
+  b
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [a, combine]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:44:84: warning: This simp argument is unused:
+  combine
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [a, b]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:60:12: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:71:12: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:81:8: error: Tactic `rfl` failed: The left-hand side
+  none
+is not definitionally equal to the right-hand side
+  if
+      ((List.filterMap
+              (fun name =>
+                match name with
+                | Sum.inl val => none
+                | Sum.inr value => some value)
+              names).any
+          fun name => (function name).isNone) =
+        true then
+    none
+  else
+    some
+      (List.filterMap function
+        (List.filterMap
+          (fun name =>
+            match name with
+            | Sum.inl val => none
+            | Sum.inr value => some value)
+          names))
+
+case h_1
+Atom Other : Type
+function : Atom → Option Other
+names : List (Unit ⊕ Atom)
+x✝ : Abstract (Unit ⊕ Other)
+heq✝ :
+  (if (names.any fun name => (lift function name).isNone) = true then none
+    else some (List.filterMap (lift function) names)) =
+    none
+⊢ none =
+    if
+        ((List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr value => some value)
+                names).any
+            fun name => (function name).isNone) =
+          true then
+      none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr value => some value)
+            names))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:82:8: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:79:31: warning: This simp argument is unused:
+  lower_any
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [project, lower]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:93:29: error: unsolved goals
+case cons.some
+Atom Other : Type
+function : Atom → Option Other
+first : Atom
+rest : List Atom
+ih : ((List.map Sum.inr rest).any fun name => (lift function name).isNone) = rest.any fun name => (function name).isNone
+val✝ : Other
+found : function first = some val✝
+⊢ rest.any
+      ((fun name =>
+          (match name with
+            | Sum.inl unit => some (Sum.inl unit)
+            | Sum.inr atom => Option.map Sum.inr (function atom)).isNone) ∘
+        Sum.inr) =
+    rest.any fun name => (function name).isNone
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:97:29: error: unsolved goals
+case cons.none
+Atom Other : Type
+function : Atom → Option Other
+first : Atom
+rest : List Atom
+ih :
+  (((List.map Sum.inr rest).any fun name => (lift function name).isNone) =
+      rest.any fun name => (function name).isNone) →
+    List.filterMap (lift function) (List.map Sum.inr rest) = List.map Sum.inr (List.filterMap function rest)
+tests :
+  ((List.map Sum.inr (first :: rest)).any fun name => (lift function name).isNone) =
+    (first :: rest).any fun name => (function name).isNone
+found : function first = none
+⊢ List.filterMap (lift function ∘ Sum.inr) rest = List.map Sum.inr (List.filterMap function rest)
+
+case cons.some
+Atom Other : Type
+function : Atom → Option Other
+first : Atom
+rest : List Atom
+ih :
+  (((List.map Sum.inr rest).any fun name => (lift function name).isNone) =
+      rest.any fun name => (function name).isNone) →
+    List.filterMap (lift function) (List.map Sum.inr rest) = List.map Sum.inr (List.filterMap function rest)
+tests :
+  ((List.map Sum.inr (first :: rest)).any fun name => (lift function name).isNone) =
+    (first :: rest).any fun name => (function name).isNone
+val✝ : Other
+found : function first = some val✝
+⊢ List.filterMap (lift function ∘ Sum.inr) rest = List.map Sum.inr (List.filterMap function rest)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:93:82: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [lift, found]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:97:82: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [lift, found]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:99:22: warning: This simp argument is unused:
+  mapNames
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [mapped]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:112:13: error: Tactic `rfl` failed: The left-hand side
+  evaluate Syntax.empty (List.map (project function) environment)
+is not definitionally equal to the right-hand side
+  project function (evaluate Syntax.empty environment)
+
+case empty
+Atom Other Symbol Guard : Type
+function : Atom → Option Other
+environment : List (Abstract Atom)
+⊢ evaluate Syntax.empty (List.map (project function) environment) = project function (evaluate Syntax.empty environment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:123:17: error: Tactic `rfl` failed: The left-hand side
+  evaluate (Syntax.binder false body) (List.map (project function) environment)
+is not definitionally equal to the right-hand side
+  project function (evaluate (Syntax.binder false body) environment)
+
+case binder.false
+Atom Other Symbol Guard : Type
+function : Atom → Option Other
+environment : List (Abstract Atom)
+body : Syntax Symbol Guard
+⊢ evaluate (Syntax.binder false body) (List.map (project function) environment) =
+    project function (evaluate (Syntax.binder false body) environment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:134:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateMany [] (List.map (project function) environment)
+is not definitionally equal to the right-hand side
+  List.map (project function) (evaluateMany [] environment)
+
+case nil
+Atom Other Symbol Guard : Type
+function : Atom → Option Other
+environment : List (Abstract Atom)
+⊢ evaluateMany [] (List.map (project function) environment) = List.map (project function) (evaluateMany [] environment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:144:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateEdges [] (List.map (project function) environment)
+is not definitionally equal to the right-hand side
+  evaluateEdges [] environment
+
+case nil
+Atom Other Symbol Guard : Type
+function : Atom → Option Other
+environment : List (Abstract Atom)
+⊢ evaluateEdges [] (List.map (project function) environment) = evaluateEdges [] environment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-1.source.lean:167:4: error: Type mismatch: After simplification, term
+  congrArg (List.map fun empty => if empty = true then some [] else none) inputs
+ has type
+  List.map (fun x => if isEmpty x = true then some [] else none) first =
+    List.map (fun x => if isEmpty x = true then some [] else none) second
+but is expected to have type
+  List.map (project fun x => none) first = List.map (project fun x => none) second

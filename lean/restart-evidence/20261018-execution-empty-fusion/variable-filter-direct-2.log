@@ -1,0 +1,64 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/variable-filter-direct-2.source.lean:92:69: error: Application type mismatch: The argument
+  member
+has type
+  ∃ value,
+    value ∈ List.filter (fun value => value.referenceOf != InternedBinderProtocol.NodeRef.ref own) members ∧
+      name ∈ value.free
+but is expected to have type
+  name ∈ childFree ?m.180
+in the application
+  (childFree_member ?m.180 name).mp member
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/variable-filter-direct-2.source.lean:177:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run (withoutSelfReference secondOwn ((List.map (input secondNames) inputs)[index]?.getD Value.empty)) reader
+in the target expression
+  (firstFiltered, reader) = run (withoutSelfReference secondOwn firstRaw) reader
+
+case neg
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type
+reader : InternedConstructorTemplates.State Symbol Guard
+ready : Ready reader
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+firstOwn secondOwn : Reference
+firstMap secondMap : Environment Symbol Guard
+paired : Inputs reader firstMap secondMap (List.map (input firstNames) inputs) (List.map (input secondNames) inputs)
+index : Nat
+firstRaw firstFiltered secondFiltered left right : Value Symbol Guard
+available : Available reader firstRaw
+tests :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ Scope (Syntax.var index) inputs →
+      (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+firstBuild : build (Syntax.var index) (List.map (input firstNames) inputs) reader = Outcome.done firstRaw reader
+firstFilter : run (withoutSelfReference firstOwn firstRaw) reader = (firstFiltered, reader)
+firstDone : execute firstFiltered firstMap reader = Outcome.done left reader
+secondDone : execute secondFiltered secondMap reader = Outcome.done right reader
+slots :
+  Paired (fun a b => Generated reader a b ∧ Generated reader b a) firstMap secondMap
+    (List.map (input firstNames) inputs) (List.map (input secondNames) inputs)
+firstSelected : (List.map (input firstNames) inputs)[index]?.getD Value.empty = firstRaw
+bare : ¬∃ name, firstRaw = Value.reference name
+nonreference : ∀ (name : Reference), firstRaw ≠ Value.reference name
+agree : ∀ (name : Reference), name ∈ firstRaw.free → firstMap name = secondMap name
+secondBuild :
+  build (Syntax.var index) (List.map (input secondNames) inputs) reader =
+    Outcome.done ((List.map (input secondNames) inputs)[index]?.getD Value.empty) reader
+secondFilter :
+  run (withoutSelfReference secondOwn ((List.map (input secondNames) inputs)[index]?.getD Value.empty)) reader =
+    (secondFiltered, reader)
+referenceEmpty :
+  ∀ (a b : Reference),
+    firstRaw = Value.reference a →
+      (List.map (input secondNames) inputs)[index]?.getD Value.empty = Value.reference b →
+        (((firstMap a).getD (Value.reference a)).referenceOf = InternedBinderProtocol.NodeRef.empty ↔
+          ((secondMap b).getD (Value.reference b)).referenceOf = InternedBinderProtocol.NodeRef.empty)
+slot :
+  Slot (fun a b => Generated reader a b ∧ Generated reader b a) firstMap secondMap firstRaw
+    ((List.map (input secondNames) inputs)[index]?.getD Value.empty)
+same : firstRaw = (List.map (input secondNames) inputs)[index]?.getD Value.empty
+ownTests : ∀ (name : Reference), name ∈ firstRaw.free → (name = firstOwn ↔ name = secondOwn)
+filtered : (firstFiltered, reader) = run (withoutSelfReference secondOwn firstRaw) reader
+⊢ (Generated reader left right ∧ Generated reader right left) ∧
+    (left.referenceOf = InternedBinderProtocol.NodeRef.empty ↔ right.referenceOf = InternedBinderProtocol.NodeRef.empty)

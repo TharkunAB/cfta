@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/node-schedules-direct-2.source.lean:245:20: error(lean.unknownIdentifier): Unknown identifier `inputNames`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/node-schedules-direct-2.source.lean:286:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  InternedDepthSemantics.evaluate ?expression
+    (List.map InternedRecordDepthShape.shape (List.map (input ?names) ?inputs))
+in the target expression
+  (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape (List.map (input firstNames) inputs))).isEmpty =
+    (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape (List.map (input secondNames) inputs))).isEmpty
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type u_1
+expression : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+before after later final : InternedConstructorTemplates.State Symbol Guard
+firstContext : InternedFreshOrdinaryContext.Context before (List.map (input firstNames) inputs)
+secondContext : InternedFreshOrdinaryContext.Context later (List.map (input secondNames) inputs)
+first second : Value Symbol Guard
+called : build expression (List.map (input firstNames) inputs) before = Outcome.done first after
+other : build expression (List.map (input secondNames) inputs) later = Outcome.done second final
+⊢ (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape (List.map (input firstNames) inputs))).isEmpty =
+    (InternedDepthSemantics.evaluate expression
+        (List.map InternedRecordDepthShape.shape (List.map (input secondNames) inputs))).isEmpty
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/node-schedules-direct-2.source.lean:321:79: error: don't know how to synthesize placeholder for argument `environment`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type u_1
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+expression : Syntax Symbol Guard
+expressions : List (Syntax Symbol Guard)
+before later : InternedConstructorTemplates.State Symbol Guard
+firstContext : InternedFreshOrdinaryContext.Context before (List.map (input firstNames) inputs)
+secondContext : InternedFreshOrdinaryContext.Context later (List.map (input secondNames) inputs)
+value : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+one : build expression (List.map (input firstNames) inputs) before = Outcome.done value middle
+next : Value Symbol Guard
+nextHeap : InternedConstructorTemplates.State Symbol Guard
+two : build expression (List.map (input secondNames) inputs) later = Outcome.done next nextHeap
+values : List (Value Symbol Guard)
+last : InternedConstructorTemplates.State Symbol Guard
+tail : buildMany expressions (List.map (input firstNames) inputs) middle = Outcome.done values last
+results : List (Value Symbol Guard)
+lastHeap : InternedConstructorTemplates.State Symbol Guard
+rest : buildMany expressions (List.map (input secondNames) inputs) nextHeap = Outcome.done results lastHeap
+ih :
+  ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+    InternedFreshOrdinaryContext.Context before (List.map (input firstNames) inputs) →
+      InternedFreshOrdinaryContext.Context later (List.map (input secondNames) inputs) →
+        ∀ (first second : List (Value Symbol Guard)),
+          buildMany expressions (List.map (input firstNames) inputs) before = Outcome.done first last →
+            buildMany expressions (List.map (input secondNames) inputs) later = Outcome.done second lastHeap →
+              (first.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                second.any fun value => value.referenceOf == InternedBinderProtocol.NodeRef.empty
+⊢ List (Value Symbol Guard)

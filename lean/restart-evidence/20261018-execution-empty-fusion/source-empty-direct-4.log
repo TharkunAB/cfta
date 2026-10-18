@@ -1,0 +1,91 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-4.source.lean:85:6: error: unsolved goals
+case pos
+Atom Other : Type
+function : Atom → Option Other
+names : List (Unit ⊕ Atom)
+missing : (names.any fun name => (lift function name).isNone) = true
+other :
+  ((List.filterMap
+          (fun name =>
+            match name with
+            | Sum.inl val => none
+            | Sum.inr atom => some atom)
+          names).any
+      fun atom => (function atom).isNone) =
+    true
+⊢ none =
+    if
+        ((List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr atom => some atom)
+                names).any
+            fun atom => (function atom).isNone) =
+          true then
+      none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr atom => some atom)
+            names))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-4.source.lean:87:6: error: unsolved goals
+case neg
+Atom Other : Type
+function : Atom → Option Other
+names : List (Unit ⊕ Atom)
+missing : ¬(names.any fun name => (lift function name).isNone) = true
+other :
+  ((List.filterMap
+          (fun name =>
+            match name with
+            | Sum.inl val => none
+            | Sum.inr atom => some atom)
+          names).any
+      fun atom => (function atom).isNone) ≠
+    true
+⊢ (match if false = true then none else some (List.filterMap (lift function) names) with
+    | none => none
+    | some names =>
+      some
+        (List.filterMap
+          (fun name =>
+            match name with
+            | Sum.inl val => none
+            | Sum.inr value => some value)
+          names)) =
+    if false = true then none
+    else
+      some
+        (List.filterMap function
+          (List.filterMap
+            (fun name =>
+              match name with
+              | Sum.inl val => none
+              | Sum.inr atom => some atom)
+            names))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-4.source.lean:86:44: warning: This simp argument is unused:
+  other
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [missing, ↓reduceIte, lower]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-4.source.lean:92:27: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [missing, lower, other, lower_names]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-execution-empty-fusion/source-empty-direct-4.source.lean:92:50: warning: This simp argument is unused:
+  lower_names
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [missing, ↓reduceIte, lower, other]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
