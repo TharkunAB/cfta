@@ -1,0 +1,1739 @@
+@MicroCFTA.SourceCurrentTrackedSlotExtension.related : ∀ {Symbol Guard : Type}
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Not
+      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard first)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        marker) →
+    Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          marker) →
+      Iff
+        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first second)
+        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers first second)
+theorem MicroCFTA.SourceCurrentTrackedSlotExtension.related : ∀ {Symbol Guard : Type}
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  Not
+      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard first)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        marker) →
+    Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          marker) →
+      Iff
+        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first second)
+        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers first second) :=
+fun {Symbol Guard} marker markers first second firstFresh secondFresh =>
+  @id.{0}
+    (Iff
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first second)
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers first second))
+    (@id.{0}
+      (Iff
+        (MicroCFTA.InternedRootProfile.Equivalent
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first)
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second))
+        (MicroCFTA.InternedRootProfile.Equivalent
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard markers first)
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard markers second)))
+      (@Eq.mpr.{0}
+        (Iff
+          (MicroCFTA.InternedRootProfile.Equivalent
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+          (MicroCFTA.InternedRootProfile.Equivalent
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+        (Iff
+          (MicroCFTA.InternedRootProfile.Equivalent
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+          (MicroCFTA.InternedRootProfile.Equivalent
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (Iff
+              (MicroCFTA.InternedRootProfile.Equivalent
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+              (MicroCFTA.InternedRootProfile.Equivalent
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+            (Iff
+              (MicroCFTA.InternedRootProfile.Equivalent
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+              (MicroCFTA.InternedRootProfile.Equivalent
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))))
+          (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+            (fun _a =>
+              Iff
+                (MicroCFTA.InternedRootProfile.Equivalent _a
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+                (MicroCFTA.InternedRootProfile.Equivalent
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask_cons_fresh marker markers
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard first) firstFresh)))
+        (@Eq.mpr.{0}
+          (Iff
+            (MicroCFTA.InternedRootProfile.Equivalent
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+            (MicroCFTA.InternedRootProfile.Equivalent
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+          (Iff
+            (MicroCFTA.InternedRootProfile.Equivalent
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+            (MicroCFTA.InternedRootProfile.Equivalent
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (Iff
+                (MicroCFTA.InternedRootProfile.Equivalent
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+                (MicroCFTA.InternedRootProfile.Equivalent
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+              (Iff
+                (MicroCFTA.InternedRootProfile.Equivalent
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))
+                (MicroCFTA.InternedRootProfile.Equivalent
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))))
+            (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))
+              (fun _a =>
+                Iff
+                  (MicroCFTA.InternedRootProfile.Equivalent
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                    _a)
+                  (MicroCFTA.InternedRootProfile.Equivalent
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard second))))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask_cons_fresh marker markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second) secondFresh)))
+          (@Iff.rfl
+            (MicroCFTA.InternedRootProfile.Equivalent
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard first))
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard second)))))))
+'MicroCFTA.SourceCurrentTrackedSlotExtension.related' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentTrackedSlotExtension.paired : ∀ {Symbol Guard : Type}
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (left right : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second left right →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              marker)) →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker)) →
+        @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+          first second left right
+theorem MicroCFTA.SourceCurrentTrackedSlotExtension.paired : ∀ {Symbol Guard : Type}
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (left right : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second left right →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              marker)) →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker)) →
+        @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+          first second left right :=
+fun {Symbol Guard} marker markers first second left right slots firstFresh secondFresh =>
+  @MicroCFTA.Language.All₂.rec (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second)
+    (fun left right slots =>
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker)) →
+        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+              Not
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  marker)) →
+          @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+            (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+            first second left right)
+    (fun firstFresh secondFresh =>
+      @MicroCFTA.Language.All₂.nil (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+          first second))
+    (fun {a b} {left right} slot tail ih firstFresh secondFresh =>
+      @MicroCFTA.Language.All₂.cons (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+          (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+          first second)
+        a b left right
+        (@MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+          (fun t =>
+            @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a t →
+              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                first second a b)
+          a
+          (fun h =>
+            @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+              (fun {a} =>
+                @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second a b →
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a left) value →
+                        Not
+                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            marker)) →
+                    @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                      first second a b)
+              (fun slot firstFresh =>
+                @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+                  (fun t =>
+                    @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                      @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                        first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                  b
+                  (fun h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                      secondFresh slot)
+                  (fun name h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                      secondFresh slot)
+                  (fun entry edges depth free h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h)
+                      secondFresh slot)
+                  (fun entry members depth free h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h)
+                      secondFresh slot)
+                  (fun entry body depthShape ordinaryShape h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape)
+                        h)
+                      secondFresh slot)
+                  (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+              a
+              (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+              slot firstFresh)
+          (fun name h =>
+            @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+              (fun {a} =>
+                @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second a b →
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a left) value →
+                        Not
+                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            marker)) →
+                    @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                      first second a b)
+              (fun slot firstFresh =>
+                @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+                  (fun t =>
+                    @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                      @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                        first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b)
+                  b
+                  (fun h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                      secondFresh slot)
+                  (fun name_1 h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              b)
+                      (fun secondFresh slot =>
+                        @Iff.mpr
+                          (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1)))
+                          (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1)))
+                          (@MicroCFTA.SourceCurrentTrackedSlotExtension.related Symbol Guard marker markers
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1))
+                            (firstFresh (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@List.mem_cons_self.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) left))
+                            (secondFresh (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1)
+                              (@List.mem_cons_self.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) right)))
+                          slot)
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name_1) h)
+                      secondFresh slot)
+                  (fun entry edges depth free h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth
+                                    free))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth
+                                  free))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h)
+                      secondFresh slot)
+                  (fun entry members depth free h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                    free))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                  free))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h)
+                      secondFresh slot)
+                  (fun entry body depthShape ordinaryShape h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                    ordinaryShape))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                  ordinaryShape))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape)
+                        h)
+                      secondFresh slot)
+                  (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+              a
+              (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+              slot firstFresh)
+          (fun entry edges depth free h =>
+            @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+              (fun {a} =>
+                @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second a b →
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a left) value →
+                        Not
+                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            marker)) →
+                    @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                      first second a b)
+              (fun slot firstFresh =>
+                @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+                  (fun t =>
+                    @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                      @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                        first second
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) b)
+                  b
+                  (fun h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                      secondFresh slot)
+                  (fun name h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth
+                                    free)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second
+                                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                      secondFresh slot)
+                  (fun entry_1 edges_1 depth_1 free_1 h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_1 free_1)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges_1 depth_1 free_1)
+                        h)
+                      secondFresh slot)
+                  (fun entry_1 members depth_1 free_1 h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1 free_1)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth_1
+                          free_1)
+                        h)
+                      secondFresh slot)
+                  (fun entry_1 body depthShape ordinaryShape h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                        ordinaryShape)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                          ordinaryShape)
+                        h)
+                      secondFresh slot)
+                  (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+              a
+              (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h)
+              slot firstFresh)
+          (fun entry members depth free h =>
+            @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+              (fun {a} =>
+                @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second a b →
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a left) value →
+                        Not
+                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            marker)) →
+                    @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                      first second a b)
+              (fun slot firstFresh =>
+                @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+                  (fun t =>
+                    @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                      @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                        first second
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) b)
+                  b
+                  (fun h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                      secondFresh slot)
+                  (fun name h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                    free)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second
+                                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                  free)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                      secondFresh slot)
+                  (fun entry_1 edges depth_1 free_1 h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1 free_1)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth_1 free_1)
+                        h)
+                      secondFresh slot)
+                  (fun entry_1 members_1 depth_1 free_1 h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1 depth_1
+                        free_1)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members_1 depth_1
+                          free_1)
+                        h)
+                      secondFresh slot)
+                  (fun entry_1 body depthShape ordinaryShape h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                        ordinaryShape)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                free)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body depthShape
+                          ordinaryShape)
+                        h)
+                      secondFresh slot)
+                  (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+              a
+              (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h)
+              slot firstFresh)
+          (fun entry body depthShape ordinaryShape h =>
+            @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+              (fun {a} =>
+                @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second a b →
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a left) value →
+                        Not
+                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            marker)) →
+                    @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                      first second a b)
+              (fun slot firstFresh =>
+                @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+                  (fun t =>
+                    @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b t →
+                      @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                        (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                        first second
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape)
+                        b)
+                  b
+                  (fun h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                      secondFresh slot)
+                  (fun name h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b)
+                      (fun secondFresh slot =>
+                        False.casesOn.{0}
+                          (fun t =>
+                            @Eq.{0}
+                                (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                  (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                    ordinaryShape)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                                slot t →
+                              @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                first second
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                  ordinaryShape)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          slot
+                          (@Eq.refl.{0}
+                            (@MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            slot))
+                      b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                      secondFresh slot)
+                  (fun entry_1 edges depth free h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth free)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry_1 edges depth free) h)
+                      secondFresh slot)
+                  (fun entry_1 members depth free h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth free)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry_1 members depth free) h)
+                      secondFresh slot)
+                  (fun entry_1 body_1 depthShape_1 ordinaryShape_1 h =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body_1 depthShape_1
+                        ordinaryShape_1)
+                      (fun {b} =>
+                        (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b right)
+                                value →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b →
+                            @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot Symbol Guard
+                              (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              first second
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                ordinaryShape)
+                              b)
+                      (fun secondFresh slot => slot) b
+                      (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry_1 body_1 depthShape_1
+                          ordinaryShape_1)
+                        h)
+                      secondFresh slot)
+                  (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b))
+              a
+              (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape) h)
+              slot firstFresh)
+          (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a))
+        (ih
+          (fun value member =>
+            firstFresh value
+              (@List.mem_cons_of_mem.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) a value left
+                member))
+          fun value member =>
+          secondFresh value
+            (@List.mem_cons_of_mem.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) b value right
+              member)))
+    left right slots firstFresh secondFresh
+'MicroCFTA.SourceCurrentTrackedSlotExtension.paired' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentTrackedSlotExtension.bind_marker : ∀ {Symbol Guard : Type}
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (left right : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second left right →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              marker)) →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker)) →
+        ∀ (firstName secondName : MicroCFTA.InternedBinderProtocol.Reference),
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) firstName)) →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+                  Not
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) secondName)) →
+              @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard firstName
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) first)
+                (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard secondName
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) second)
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard firstName) left)
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard secondName) right)
+theorem MicroCFTA.SourceCurrentTrackedSlotExtension.bind_marker : ∀ {Symbol Guard : Type}
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (left right : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers) first second left right →
+    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard first value))
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              marker)) →
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard second value))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker)) →
+        ∀ (firstName secondName : MicroCFTA.InternedBinderProtocol.Reference),
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) left value →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) firstName)) →
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) right value →
+                  Not
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value) secondName)) →
+              @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired Symbol Guard
+                (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard firstName
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) first)
+                (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard secondName
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) second)
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard firstName) left)
+                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard secondName) right) :=
+fun {Symbol Guard} marker markers first second left right slots firstFresh secondFresh firstName secondName
+    firstLocalFresh secondLocalFresh =>
+  @MicroCFTA.SourceCurrentReaderReplacementSlots.extend Symbol Guard
+    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+    first second left right
+    (@MicroCFTA.SourceCurrentTrackedSlotExtension.paired Symbol Guard marker markers first second left right slots
+      firstFresh secondFresh)
+    firstName secondName (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)
+    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)
+    (@MicroCFTA.SourceCurrentTrackedRootProfile.Related.refl Symbol Guard
+      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+    firstLocalFresh secondLocalFresh
+'MicroCFTA.SourceCurrentTrackedSlotExtension.bind_marker' depends on axioms: [propext, Quot.sound.{u}]

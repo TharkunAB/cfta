@@ -1,0 +1,1944 @@
+MicroCFTA.SourceCurrentTrackedProfileErasure.mask_erase : ∀ (marker : MicroCFTA.InternedBinderProtocol.Reference)
+  (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference) (value : MicroCFTA.InternedRootProfile.Profile),
+  @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker value))
+    (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) value))
+theorem MicroCFTA.SourceCurrentTrackedProfileErasure.mask_erase : ∀
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (value : MicroCFTA.InternedRootProfile.Profile),
+  @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker value))
+    (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) value)) :=
+fun marker markers value =>
+  @Option.casesOn.{0, 0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+    (fun t =>
+      @Eq.{1} MicroCFTA.InternedRootProfile.Profile value t →
+        @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker value))
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) value)))
+    value
+    (fun h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.InternedRootProfile.Profile
+        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        (fun value =>
+          @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker value))
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) value)))
+        (@Eq.refl.{1} MicroCFTA.InternedRootProfile.Profile
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+              (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))))
+        value
+        (@Eq.symm.{1} MicroCFTA.InternedRootProfile.Profile value
+          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)) h))
+    (fun names h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.InternedRootProfile.Profile
+        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)
+        (fun value =>
+          @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker value))
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) value)))
+        (have all :=
+          @List.rec.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (fun names =>
+              @Eq.{1} Bool
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (fun x =>
+                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        x marker)
+                    names)
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    markers))
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+            (@Eq.refl.{1} Bool
+              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (fun x =>
+                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      x marker)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                  markers)))
+            (fun name names ih =>
+              @dite.{0}
+                (@Eq.{1} Bool
+                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (fun x =>
+                        @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          x marker)
+                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                    (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      markers))
+                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names)
+                    (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker)
+                (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name marker)
+                (fun same =>
+                  @Eq.ndrec.{0, 1} MicroCFTA.InternedBinderProtocol.Reference marker
+                    (fun name =>
+                      @Eq.{1} Bool
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (fun x =>
+                              @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                x marker)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            markers))
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names)
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                    (@of_eq_true
+                      (@Eq.{1} Bool
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (fun x =>
+                              @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                x marker)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names))
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            markers))
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names)
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                      (@Eq.trans.{1} Prop
+                        (@Eq.{1} Bool
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (fun x =>
+                                @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  x marker)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names))
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              markers))
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names)
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                        (@Eq.{1} Bool
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                        True
+                        (@congr.{1, 1} Bool Prop
+                          (@Eq.{1} Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names))
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers)))
+                          (@Eq.{1} Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names)
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                          (@congrArg.{1, 1} Bool (Bool → Prop)
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names))
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers))
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            (@Eq.{1} Bool)
+                            (@Eq.trans.{1} Bool
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (fun x =>
+                                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      x marker)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names))
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  markers))
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (fun x =>
+                                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      x marker)
+                                  names)
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  markers))
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                              (@congrFun'.{1, 1} (MicroCFTA.InternedBinderProtocol.Reference → Bool) Bool
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names)))
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    names))
+                                (@congrArg.{1, 1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  ((MicroCFTA.InternedBinderProtocol.Reference → Bool) → Bool)
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker names))
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    names)
+                                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.filter_cons_of_neg.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    marker names
+                                    (@of_eq_true
+                                      (Not
+                                        (@Eq.{1} Bool
+                                          (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                            marker marker)
+                                          Bool.true))
+                                      (@Eq.trans.{1} Prop
+                                        (Not
+                                          (@Eq.{1} Bool
+                                            (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                              marker marker)
+                                            Bool.true))
+                                        (Not False) True
+                                        (@congrArg.{1, 1} Prop Prop
+                                          (@Eq.{1} Bool
+                                            (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                              marker marker)
+                                            Bool.true)
+                                          False Not
+                                          (@Eq.trans.{1} Prop
+                                            (@Eq.{1} Bool
+                                              (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                                marker marker)
+                                              Bool.true)
+                                            (@Eq.{1} Bool Bool.false Bool.true) False
+                                            (@congrFun'.{1, 1} Bool Prop
+                                              (@Eq.{1} Bool
+                                                (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                                  marker marker))
+                                              (@Eq.{1} Bool Bool.false)
+                                              (@congrArg.{1, 1} Bool (Bool → Prop)
+                                                (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                                  marker marker)
+                                                Bool.false (@Eq.{1} Bool)
+                                                (@bne_self_eq_false.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                                  (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                                  marker))
+                                              Bool.true)
+                                            Bool.false_eq_true))
+                                        not_false_eq_true))))
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  markers))
+                              ih))
+                          (@Eq.trans.{1} Bool
+                            ((@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) marker).and
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                            (Bool.true.and
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            (@congrFun'.{1, 1} Bool Bool
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) marker).and
+                              Bool.true.and
+                              (@congrArg.{1, 1} Bool (Bool → Bool)
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) marker)
+                                Bool.true Bool.and
+                                (@Eq.trans.{1} Bool
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) marker)
+                                  (@Decidable.decide
+                                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) marker)
+                                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      marker
+                                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                                  Bool.true
+                                  (@List.contains_eq_mem.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    marker (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                  (@Eq.trans.{1} Bool
+                                    (@Decidable.decide
+                                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                                        marker)
+                                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        marker
+                                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                                    (@Decidable.decide True instDecidableTrue) Bool.true
+                                    (@Decidable.decide.congr_simp
+                                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                                        marker)
+                                      True
+                                      (@Eq.trans.{1} Prop
+                                        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                                          marker)
+                                        (Or (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference marker marker)
+                                          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                            markers marker))
+                                        True
+                                        (@List.mem_cons._simp_1.{0} MicroCFTA.InternedBinderProtocol.Reference marker
+                                          markers marker)
+                                        (@Eq.trans.{1} Prop
+                                          (Or (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference marker marker)
+                                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              markers marker))
+                                          (Or True
+                                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              markers marker))
+                                          True
+                                          (@congrFun'.{1, 1} Prop Prop
+                                            (Or (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference marker marker))
+                                            (Or True)
+                                            (@congrArg.{1, 1} Prop (Prop → Prop)
+                                              (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference marker marker) True Or
+                                              (@eq_self.{1} MicroCFTA.InternedBinderProtocol.Reference marker))
+                                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              markers marker))
+                                          (true_or
+                                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                              markers marker))))
+                                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        marker
+                                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                                      instDecidableTrue)
+                                    (decide_true instDecidableTrue))))
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                            (Bool.true_and
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))))
+                        (@eq_self.{1} Bool
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))))
+                    name (@Eq.symm.{1} MicroCFTA.InternedBinderProtocol.Reference name marker same))
+                fun same =>
+                @of_eq_true
+                  (@Eq.{1} Bool
+                    (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (fun x =>
+                          @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            x marker)
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                      (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        markers))
+                    (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names)
+                      (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                  (@Eq.trans.{1} Prop
+                    (@Eq.{1} Bool
+                      (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker)
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                        (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          markers))
+                      (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names)
+                        (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                    (@Eq.{1} Bool
+                      ((@Decidable.decide
+                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                            (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name markers)).and
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                      ((@Decidable.decide
+                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                            (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name markers)).and
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))
+                    True
+                    (@congr.{1, 1} Bool Prop
+                      (@Eq.{1} Bool
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (fun x =>
+                              @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                x marker)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            markers)))
+                      (@Eq.{1} Bool
+                        ((@Decidable.decide
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name markers)).and
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))
+                      (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names)
+                        (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                      ((@Decidable.decide
+                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                            (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name markers)).and
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                      (@congrArg.{1, 1} Bool (Bool → Prop)
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (fun x =>
+                              @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                x marker)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            markers))
+                        ((@Decidable.decide
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name markers)).and
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                        (@Eq.{1} Bool)
+                        (@Eq.trans.{1} Bool
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (fun x =>
+                                @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  x marker)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              markers))
+                          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                names))
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              markers))
+                          ((@Decidable.decide
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                                (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  name markers)).and
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                          (@congrFun'.{1, 1} (MicroCFTA.InternedBinderProtocol.Reference → Bool) Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names)))
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name
+                                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (fun x =>
+                                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      x marker)
+                                  names)))
+                            (@congrArg.{1, 1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              ((MicroCFTA.InternedBinderProtocol.Reference → Bool) → Bool)
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name names))
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference name
+                                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (fun x =>
+                                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      x marker)
+                                  names))
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.filter_cons_of_pos.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                name names
+                                (@of_eq_true
+                                  (@Eq.{1} Bool
+                                    (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      name marker)
+                                    Bool.true)
+                                  (@Eq.trans.{1} Prop
+                                    (@Eq.{1} Bool
+                                      (@bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        name marker)
+                                      Bool.true)
+                                    (@Ne.{1} MicroCFTA.InternedBinderProtocol.Reference name marker) True
+                                    (@bne_iff_ne._simp_1.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      name marker)
+                                    (@Eq.trans.{1} Prop
+                                      (Not (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker)) (Not False)
+                                      True
+                                      (@congrArg.{1, 1} Prop Prop
+                                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker) False Not
+                                        (@eq_false (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker)
+                                          same))
+                                      not_false_eq_true)))))
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              markers))
+                          (@congr.{1, 1} Bool Bool
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers name).and
+                            (@Decidable.decide
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                                (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  name markers)).and
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                names)
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers))
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            (@congrArg.{1, 1} Bool (Bool → Bool)
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers name)
+                              (@Decidable.decide
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                                (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  name markers))
+                              Bool.and
+                              (@List.contains_eq_mem.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name markers))
+                            ih)))
+                      (@congrFun'.{1, 1} Bool Bool
+                        (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) name).and
+                        (@Decidable.decide
+                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                            (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name markers)).and
+                        (@congrArg.{1, 1} Bool (Bool → Bool)
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) name)
+                          (@Decidable.decide
+                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                            (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name markers))
+                          Bool.and
+                          (@Eq.trans.{1} Bool
+                            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) name)
+                            (@Decidable.decide
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) name)
+                              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            (@Decidable.decide
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name markers))
+                            (@List.contains_eq_mem.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                            (@Decidable.decide.congr_simp
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) name)
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                              (@Eq.trans.{1} Prop
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) name)
+                                (Or (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker)
+                                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name))
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                                (@List.mem_cons._simp_1.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers
+                                  name)
+                                (@Eq.trans.{1} Prop
+                                  (Or (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker)
+                                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+                                      name))
+                                  (Or False
+                                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+                                      name))
+                                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                                  (@congrFun'.{1, 1} Prop Prop
+                                    (Or (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker)) (Or False)
+                                    (@congrArg.{1, 1} Prop (Prop → Prop)
+                                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker) False Or
+                                      (@eq_false (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name marker) same))
+                                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+                                      name))
+                                  (false_or
+                                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+                                      name))))
+                              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))
+                              (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name markers))))
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))
+                    (@eq_self.{1} Bool
+                      ((@Decidable.decide
+                            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers name)
+                            (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name markers)).and
+                        (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                          (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))))
+            names;
+        @Bool.casesOn.{0}
+          (fun t =>
+            @Eq.{1} Bool
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                t →
+              @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                  (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                  (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+          (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+            (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+          (fun h =>
+            @Eq.ndrec.{0, 1} Bool Bool.false
+              (fun x =>
+                @Eq.{1} Bool
+                    (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                      (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                    x →
+                  @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                    (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+              (fun selected =>
+                @of_eq_true
+                  (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                    (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+                  (@Eq.trans.{1} Prop
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                      (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                    True
+                    (@congr.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                      (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                      (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile
+                        (MicroCFTA.InternedRootProfile.Profile → Prop)
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile)
+                        (@ite_eq_right_of_eq_false.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                names)
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                names)
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers))
+                            Bool.true)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (fun x =>
+                                @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  x marker)
+                              names))
+                          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@Eq.trans.{1} Prop
+                            (@Eq.{1} Bool
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (fun x =>
+                                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      x marker)
+                                  names)
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  markers))
+                              Bool.true)
+                            (@Eq.{1} Bool Bool.false Bool.true) False
+                            (@congrFun'.{1, 1} Bool Prop
+                              (@Eq.{1} Bool
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    names)
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    markers)))
+                              (@Eq.{1} Bool Bool.false)
+                              (@congrArg.{1, 1} Bool (Bool → Prop)
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    names)
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    markers))
+                                Bool.false (@Eq.{1} Bool)
+                                (@Eq.trans.{1} Bool
+                                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (fun x =>
+                                        @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                          x marker)
+                                      names)
+                                    (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      markers))
+                                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                    (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                                  Bool.false all selected))
+                              Bool.true)
+                            Bool.false_eq_true)))
+                      (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile
+                        (Option.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))
+                        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        (@Option.map.{0, 0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker))
+                        (@ite_eq_right_of_eq_false.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            Bool.true)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)
+                          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@Eq.trans.{1} Prop
+                            (@Eq.{1} Bool
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                              Bool.true)
+                            (@Eq.{1} Bool Bool.false Bool.true) False
+                            (@congrFun'.{1, 1} Bool Prop
+                              (@Eq.{1} Bool
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                              (@Eq.{1} Bool Bool.false)
+                              (@congrArg.{1, 1} Bool (Bool → Prop)
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                                Bool.false (@Eq.{1} Bool) selected)
+                              Bool.true)
+                            Bool.false_eq_true))))
+                    (@eq_self.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))))
+              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+              (@Eq.symm.{1} Bool
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                Bool.false h)
+              (@Eq.refl.{1} Bool
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))
+          (fun h =>
+            @Eq.ndrec.{0, 1} Bool Bool.true
+              (fun x =>
+                @Eq.{1} Bool
+                    (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                      (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                    x →
+                  @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                    (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+              (fun selected =>
+                @of_eq_true
+                  (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                    (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+                  (@Eq.trans.{1} Prop
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker)
+                          names))
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker)
+                          names)))
+                    True
+                    (@congr.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))))
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (fun x =>
+                              @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                x marker)
+                            names)))
+                      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker)
+                          names))
+                      (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile
+                        (MicroCFTA.InternedRootProfile.Profile → Prop)
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+                          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                            (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)))
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (fun x =>
+                              @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                x marker)
+                            names))
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile)
+                        (@ite_eq_left_of_eq_true.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                names)
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (fun x =>
+                                  @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    x marker)
+                                names)
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                markers))
+                            Bool.true)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                            (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (fun x =>
+                                @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  x marker)
+                              names))
+                          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@Eq.trans.{1} Prop
+                            (@Eq.{1} Bool
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (fun x =>
+                                    @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      x marker)
+                                  names)
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  markers))
+                              Bool.true)
+                            (@Eq.{1} Bool Bool.true Bool.true) True
+                            (@congrFun'.{1, 1} Bool Prop
+                              (@Eq.{1} Bool
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    names)
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    markers)))
+                              (@Eq.{1} Bool Bool.true)
+                              (@congrArg.{1, 1} Bool (Bool → Prop)
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (fun x =>
+                                      @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                        x marker)
+                                    names)
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    markers))
+                                Bool.true (@Eq.{1} Bool)
+                                (@Eq.trans.{1} Bool
+                                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (fun x =>
+                                        @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                          x marker)
+                                      names)
+                                    (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      markers))
+                                  (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                    (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                                  Bool.true all selected))
+                              Bool.true)
+                            (@eq_self.{1} Bool Bool.true))))
+                      (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile
+                        (Option.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names))
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)
+                        (@Option.map.{0, 0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker))
+                        (@ite_eq_left_of_eq_true.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                            Bool.true)
+                          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names)
+                          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                          (@Eq.trans.{1} Prop
+                            (@Eq.{1} Bool
+                              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                              Bool.true)
+                            (@Eq.{1} Bool Bool.true Bool.true) True
+                            (@congrFun'.{1, 1} Bool Prop
+                              (@Eq.{1} Bool
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers))))
+                              (@Eq.{1} Bool Bool.true)
+                              (@congrArg.{1, 1} Bool (Bool → Prop)
+                                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                                Bool.true (@Eq.{1} Bool) selected)
+                              Bool.true)
+                            (@eq_self.{1} Bool Bool.true)))))
+                    (@eq_self.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.filter.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (fun x =>
+                            @bne.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              x marker)
+                          names)))))
+              (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+              (@Eq.symm.{1} Bool
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))
+                Bool.true h)
+              (@Eq.refl.{1} Bool
+                (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+                  (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))
+          (@Eq.refl.{1} Bool
+            (@List.all.{0} MicroCFTA.InternedBinderProtocol.Reference names
+              (@List.contains.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)))))
+        value
+        (@Eq.symm.{1} MicroCFTA.InternedRootProfile.Profile value
+          (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) names) h))
+    (@Eq.refl.{1} MicroCFTA.InternedRootProfile.Profile value)
+'MicroCFTA.SourceCurrentTrackedProfileErasure.mask_erase' depends on axioms: [propext]
+MicroCFTA.SourceCurrentTrackedProfileErasure.equivalent : ∀ (marker : MicroCFTA.InternedBinderProtocol.Reference)
+  (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  {first second : MicroCFTA.InternedRootProfile.Profile},
+  MicroCFTA.InternedRootProfile.Equivalent
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first)
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second) →
+    MicroCFTA.InternedRootProfile.Equivalent
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker first))
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second))
+theorem MicroCFTA.SourceCurrentTrackedProfileErasure.equivalent : ∀
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  {first second : MicroCFTA.InternedRootProfile.Profile},
+  MicroCFTA.InternedRootProfile.Equivalent
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first)
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+        (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second) →
+    MicroCFTA.InternedRootProfile.Equivalent
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker first))
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)) :=
+fun marker markers {first second} same =>
+  @Eq.mpr.{0}
+    (MicroCFTA.InternedRootProfile.Equivalent
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker first))
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)))
+    (MicroCFTA.InternedRootProfile.Equivalent
+      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (MicroCFTA.InternedRootProfile.Equivalent
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker first))
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)))
+        (MicroCFTA.InternedRootProfile.Equivalent
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second))))
+      (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker first))
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+        (fun _a =>
+          MicroCFTA.InternedRootProfile.Equivalent _a
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)))
+        (MicroCFTA.SourceCurrentTrackedProfileErasure.mask_erase marker markers first)))
+    (@Eq.mpr.{0}
+      (MicroCFTA.InternedRootProfile.Equivalent
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)))
+      (MicroCFTA.InternedRootProfile.Equivalent
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+            (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second)))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (MicroCFTA.InternedRootProfile.Equivalent
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+              (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second)))
+          (MicroCFTA.InternedRootProfile.Equivalent
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+              (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second))))
+        (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+          (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+            (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker second))
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+            (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second))
+          (fun _a =>
+            MicroCFTA.InternedRootProfile.Equivalent
+              (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+                (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first))
+              _a)
+          (MicroCFTA.SourceCurrentTrackedProfileErasure.mask_erase marker markers second)))
+      (@MicroCFTA.SourceCurrentTrackedProfileErasure.erase_equivalent✝ marker
+        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) first)
+        (MicroCFTA.SourceCurrentTrackedRootProfile.mask
+          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers) second)
+        same))
+'MicroCFTA.SourceCurrentTrackedProfileErasure.equivalent' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentTrackedProfileErasure.open_execute : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (firstEntry secondEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (firstBody firstDepth firstOrdinary secondBody secondDepth secondOrdinary :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (firstMap secondMap : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (firstBefore secondBefore : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard firstBefore →
+    @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard secondBefore →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard firstBefore
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard firstEntry firstBody firstDepth
+            firstOrdinary) →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard secondBefore
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard secondEntry secondBody secondDepth
+              secondOrdinary) →
+          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard firstBefore firstMap →
+            @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard secondBefore secondMap →
+              @Eq.{1} Bool
+                  (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard firstEntry firstBody firstDepth
+                        firstOrdinary)))
+                  Bool.false →
+                @Eq.{1} Bool
+                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard secondEntry secondBody
+                          secondDepth secondOrdinary)))
+                    Bool.false →
+                  @MicroCFTA.InternedProbeProvenance.Available Symbol Guard firstBefore
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard secondBefore
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+                      (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard firstBody) leaf →
+                            Not
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstMap leaf))
+                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                marker)) →
+                        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard secondBody) leaf →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondMap leaf))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (firstAfter secondAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                            @Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard firstEntry firstBody
+                                    firstDepth firstOrdinary)
+                                  firstMap firstBefore)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left firstAfter) →
+                              @Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard secondEntry
+                                      secondBody secondDepth secondOrdinary)
+                                    secondMap secondBefore)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right secondAfter) →
+                                ∀ (firstResult secondResult : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (firstBodyHeap secondBodyHeap :
+                                    MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                                  @Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        firstBody
+                                        (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                              firstEntry))
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)
+                                          firstMap)
+                                        firstBefore)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) firstResult
+                                        firstBodyHeap) →
+                                    @Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          secondBody
+                                          (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                              (@MicroCFTA.Cache.Interned.identity
+                                                MicroCFTA.InternedBinderProtocol.NodeKey secondEntry))
+                                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                                              marker)
+                                            secondMap)
+                                          secondBefore)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) secondResult
+                                          secondBodyHeap) →
+                                      @MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                                          firstResult secondResult →
+                                        @MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers left
+                                          right
+theorem MicroCFTA.SourceCurrentTrackedProfileErasure.open_execute : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (marker : MicroCFTA.InternedBinderProtocol.Reference) (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (firstEntry secondEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (firstBody firstDepth firstOrdinary secondBody secondDepth secondOrdinary :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (firstMap secondMap : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (firstBefore secondBefore : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard firstBefore →
+    @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard secondBefore →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard firstBefore
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard firstEntry firstBody firstDepth
+            firstOrdinary) →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard secondBefore
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard secondEntry secondBody secondDepth
+              secondOrdinary) →
+          @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard firstBefore firstMap →
+            @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard secondBefore secondMap →
+              @Eq.{1} Bool
+                  (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard firstEntry firstBody firstDepth
+                        firstOrdinary)))
+                  Bool.false →
+                @Eq.{1} Bool
+                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard secondEntry secondBody
+                          secondDepth secondOrdinary)))
+                    Bool.false →
+                  @MicroCFTA.InternedProbeProvenance.Available Symbol Guard firstBefore
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard secondBefore
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker) →
+                      (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard firstBody) leaf →
+                            Not
+                              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstMap leaf))
+                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                marker)) →
+                        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                            @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard secondBody) leaf →
+                              Not
+                                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondMap leaf))
+                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                  marker)) →
+                          ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (firstAfter secondAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                            @Eq.{1}
+                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard firstEntry firstBody
+                                    firstDepth firstOrdinary)
+                                  firstMap firstBefore)
+                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left firstAfter) →
+                              @Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard secondEntry
+                                      secondBody secondDepth secondOrdinary)
+                                    secondMap secondBefore)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right secondAfter) →
+                                ∀ (firstResult secondResult : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (firstBodyHeap secondBodyHeap :
+                                    MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                                  @Eq.{1}
+                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                        firstBody
+                                        (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                              firstEntry))
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker)
+                                          firstMap)
+                                        firstBefore)
+                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) firstResult
+                                        firstBodyHeap) →
+                                    @Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst
+                                          secondBody
+                                          (@MicroCFTA.SourceCurrentStoredMuLexicalInputs.shadow Symbol Guard
+                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                              (@MicroCFTA.Cache.Interned.identity
+                                                MicroCFTA.InternedBinderProtocol.NodeKey secondEntry))
+                                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                                              marker)
+                                            secondMap)
+                                          secondBefore)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) secondResult
+                                          secondBodyHeap) →
+                                      @MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard
+                                          (@List.cons.{0} MicroCFTA.InternedBinderProtocol.Reference marker markers)
+                                          firstResult secondResult →
+                                        @MicroCFTA.SourceCurrentTrackedRootProfile.Related Symbol Guard markers left
+                                          right :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] marker markers
+    firstEntry secondEntry firstBody firstDepth firstOrdinary secondBody secondDepth secondOrdinary firstMap secondMap
+    firstBefore secondBefore firstReady secondReady firstAvailable secondAvailable firstReplacements secondReplacements
+    firstOpen secondOpen firstMarker secondMarker firstFresh secondFresh left right firstAfter secondAfter firstActual
+    secondActual firstResult secondResult firstBodyHeap secondBodyHeap firstDone secondDone bodies =>
+  have first :=
+    @MicroCFTA.SourceCurrentStoredMuTrackedProfile.open_execute Symbol Guard inst firstEntry firstBody firstDepth
+      firstOrdinary firstMap firstBefore firstReady firstAvailable firstReplacements firstOpen marker firstMarker
+      firstFresh left firstAfter firstActual firstResult firstBodyHeap firstDone;
+  have second :=
+    @MicroCFTA.SourceCurrentStoredMuTrackedProfile.open_execute Symbol Guard inst secondEntry secondBody secondDepth
+      secondOrdinary secondMap secondBefore secondReady secondAvailable secondReplacements secondOpen marker
+      secondMarker secondFresh right secondAfter secondActual secondResult secondBodyHeap secondDone;
+  have removed :=
+    @MicroCFTA.SourceCurrentTrackedProfileErasure.equivalent marker markers
+      (@MicroCFTA.InternedRootProfile.profile Symbol Guard firstResult)
+      (@MicroCFTA.InternedRootProfile.profile Symbol Guard secondResult) bodies;
+  @MicroCFTA.InternedProfileEquivalence.trans
+    (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard markers left)
+    (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+        (@MicroCFTA.InternedRootProfile.profile Symbol Guard firstResult)))
+    (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard markers right)
+    (@MicroCFTA.SourceCurrentTrackedRootProfile.mask_equiv markers
+      (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+      (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+        (@MicroCFTA.InternedRootProfile.profile Symbol Guard firstResult))
+      first)
+    (@MicroCFTA.InternedProfileEquivalence.trans
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard firstResult)))
+      (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+        (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard secondResult)))
+      (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard markers right) removed
+      (@MicroCFTA.InternedProfileEquivalence.symm
+        (@MicroCFTA.SourceCurrentTrackedRootProfile.observe Symbol Guard markers right)
+        (MicroCFTA.SourceCurrentTrackedRootProfile.mask markers
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard secondResult)))
+        (@MicroCFTA.SourceCurrentTrackedRootProfile.mask_equiv markers
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+          (MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase marker
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard secondResult))
+          second)))
+'MicroCFTA.SourceCurrentTrackedProfileErasure.open_execute' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

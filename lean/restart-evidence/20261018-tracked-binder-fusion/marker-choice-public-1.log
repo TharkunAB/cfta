@@ -1,0 +1,935 @@
+@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose : {Symbol Guard : Type} →
+  List.{0} MicroCFTA.InternedBinderProtocol.Reference →
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → MicroCFTA.InternedBinderProtocol.Reference
+def MicroCFTA.SourceCurrentTrackedMarkerChoice.choose : {Symbol Guard : Type} →
+  List.{0} MicroCFTA.InternedBinderProtocol.Reference →
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → MicroCFTA.InternedBinderProtocol.Reference :=
+fun {Symbol Guard} markers values =>
+  MicroCFTA.InternedBinderProtocol.Reference.uninterned
+    (MicroCFTA.InternedFreshOrdinaryConstruction.freeBound
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference) (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instAppend.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        markers
+        (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          MicroCFTA.InternedBinderProtocol.Reference
+          (fun value =>
+            @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          values)))
+'MicroCFTA.SourceCurrentTrackedMarkerChoice.choose' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentTrackedMarkerChoice.fresh : ∀ {Symbol Guard : Type}
+  (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+        (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+    (And
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values))))
+theorem MicroCFTA.SourceCurrentTrackedMarkerChoice.fresh : ∀ {Symbol Guard : Type}
+  (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+        (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+    (And
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))) :=
+fun {Symbol Guard} markers values reader =>
+  let names :=
+    @HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+      (List.{0} MicroCFTA.InternedBinderProtocol.Reference) (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+      (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instAppend.{0} MicroCFTA.InternedBinderProtocol.Reference))
+      markers
+      (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        MicroCFTA.InternedBinderProtocol.Reference
+        (fun value =>
+          @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        values);
+  have absent := fun member =>
+    Nat.lt_irrefl (MicroCFTA.InternedFreshOrdinaryConstruction.freeBound names)
+      (MicroCFTA.InternedFreshOrdinaryConstruction.freeBound_lt names
+        (MicroCFTA.InternedFreshOrdinaryConstruction.freeBound names) member);
+  @And.intro
+    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+        (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+    (And
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values))))
+    (@MicroCFTA.InternedNestedProvenance.ordinary_available Symbol Guard reader
+      (MicroCFTA.InternedFreshOrdinaryConstruction.freeBound
+        (@HAppend.hAppend.{0, 0, 0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference) (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@instHAppendOfAppend.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instAppend.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          markers
+          (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            MicroCFTA.InternedBinderProtocol.Reference
+            (fun value =>
+              @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+            values))))
+    (@And.intro
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+      (fun member =>
+        absent
+          (@List.mem_append_left.{0} MicroCFTA.InternedBinderProtocol.Reference
+            (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values) markers
+            (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              MicroCFTA.InternedBinderProtocol.Reference
+              (fun value =>
+                @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              values)
+            member))
+      fun value included member =>
+      absent
+        (@List.mem_append_right.{0} MicroCFTA.InternedBinderProtocol.Reference
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values) markers
+          (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            MicroCFTA.InternedBinderProtocol.Reference
+            (fun value =>
+              @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+            values)
+          (@Iff.mpr
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                MicroCFTA.InternedBinderProtocol.Reference
+                (fun value =>
+                  @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                values)
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values))
+            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun a =>
+              And
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values a)
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard a)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+            (@List.mem_flatMap.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              MicroCFTA.InternedBinderProtocol.Reference
+              (fun value =>
+                @Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values) values)
+            (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun a =>
+                And
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values a)
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard a)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values)))
+              value
+              (@And.intro
+                (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value)
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers values))
+                included member)))))
+'MicroCFTA.SourceCurrentTrackedMarkerChoice.fresh' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentTrackedMarkerChoice.bodies : ∀ {Symbol Guard : Type}
+  (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (firstEnvironment secondEnvironment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  have marker :=
+    @MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)));
+  And
+    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+    (And
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers marker))
+      (And
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker))
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker))))
+theorem MicroCFTA.SourceCurrentTrackedMarkerChoice.bodies : ∀ {Symbol Guard : Type}
+  (markers : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (first second : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (firstEnvironment secondEnvironment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  have marker :=
+    @MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)));
+  And
+    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+    (And
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers marker))
+      (And
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker))
+        (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+            Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                marker)))) :=
+fun {Symbol Guard} markers first second firstEnvironment secondEnvironment reader =>
+  @And.casesOn.{0}
+    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+        (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+    (And
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)))
+            value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)))))))
+    (fun x =>
+      let marker :=
+        @MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+            (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)));
+      And
+        (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+        (And
+          (Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers marker))
+          (And
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    marker))
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    marker)))))
+    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.fresh Symbol Guard markers
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)))
+      reader)
+    fun available right =>
+    @And.casesOn.{0}
+      (Not
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+          (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+      (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)))
+            value →
+          Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard value)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+      (fun x =>
+        let marker :=
+          @MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)));
+        And
+          (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard marker))
+          (And
+            (Not
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers marker))
+            (And
+              (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+                  Not
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                      marker))
+              (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+                  Not
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                      marker)))))
+      right fun untracked absent =>
+      @And.intro
+        (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard reader
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+            (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+        (And
+          (Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+          (And
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))))
+        available
+        (@And.intro
+          (Not
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference) markers
+              (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+          (And
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second)))))))
+          untracked
+          (@And.intro
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+            (∀ (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf →
+                Not
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentTrackedMarkerChoice.choose Symbol Guard markers
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                        (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))))))
+            (fun leaf member =>
+              absent (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)
+                (@List.mem_append_left.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))
+                  (@Iff.mpr
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun a =>
+                      And
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) a)
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment a)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)))
+                    (@List.mem_map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)
+                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                    (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun a =>
+                        And
+                          (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) a)
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment a)
+                            (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)))
+                      leaf
+                      (@And.intro
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first) leaf)
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf))
+                        member
+                        (@rfl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment leaf)))))))
+            fun leaf member =>
+            absent (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf)
+              (@List.mem_append_right.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf)
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard firstEnvironment)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard first))
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))
+                (@Iff.mpr
+                  (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                  (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun a =>
+                    And
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) a)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment a)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf)))
+                  (@List.mem_map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf)
+                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment)
+                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second))
+                  (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun a =>
+                      And
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) a)
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment a)
+                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf)))
+                    leaf
+                    (@And.intro
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard second) leaf)
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))
+                      member
+                      (@rfl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard secondEnvironment leaf))))))))
+'MicroCFTA.SourceCurrentTrackedMarkerChoice.bodies' depends on axioms: [propext, Quot.sound.{u}]
