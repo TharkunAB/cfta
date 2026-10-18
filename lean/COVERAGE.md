@@ -1,5 +1,62 @@
 # Full formalization coverage
 
+## Current binder contract counterexample and derived marker premises
+
+Updated: 2026-10-18 18:28 CEST. Proof checkpoint is `eac5f260`.
+Starting checkpoint is `c81461ba`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-tracked-binder-fusion.md`.
+
+A checked counterexample refutes both unrestricted bounded and tracked
+binder Fusion at original raw depth0. Its strict ordinary source body law
+is proved. One artificial resident Mu has the actual probes node7[x,y]
+but a stored body with rows node7[x] and node7[y]. All stated Context,
+Ready, aliases, slot, availability, growth and warm-call premises hold.
+Replacing x with Empty and y with bare30 retains one row on the artificial
+side and returns Empty on the genuine side. The cache is admitted by the
+summary invariants. No actual source-history or Haskell defect is proved.
+
+The checked no_uniform consequence rules out the current uniform all-source
+Fusion hypothesis at every positive bound. Thus the existing uniform writer
+endpoint cannot be instantiated under that contract. Its particular-body
+publication lemma remains useful. All earlier checked theorems remain.
+A second obstruction concerns the induction measure: smart-unused finish
+can return depth0 while the selected Mu has depth1 and its body has depth0.
+Actual causal support alone does not give the missing strict raw-depth bound.
+
+The next main step needs actual publication provenance and a different
+induction route. Derive a body/probe substitution invariant through real
+source construction, or use a chronological writer induction that covers
+smart-unused hits. Preserve every source form and arbitrary nested Mu.
+Do not silently add provenance to the refuted old definitions. Do not
+assume the missing comparison as an initial fact without deriving it.
+
+Three new modules derive finite fresh markers from actual resolved input
+profiles, extend tracked paired lexical slots and fresh local bindings,
+and transport actual strict-body comparisons through root marker erasure.
+They add no future-result freshness premise. Actual fixtures retain visible
+outer markers, opaque node bodies and literal local reference executions.
+These valid input and erasure laws do not repair the refuted binder contract.
+
+The strongest broad theorem remains conditional finite-tree preservation
+for successful checked-model constraint reduction. It adds no input-external
+tree and retains each input tree that satisfies inherited constraints.
+Inherited payload some [] gives exact language equality. Initial semantic
+cache facts, recursive guard-profile agreement and computed resource bounds
+remain explicit. General termination and full Haskell correspondence stay open.
+
+Full Audit passes 3357 jobs and 72708 dependency checks.
+Nine new public heads, three integration fixtures, the exact counterexample
+and its uniform-bound consequence pass complete proof/standard-axiom checks.
+Eight selected strict logs are empty. Three canonical builds are warning-free.
+Audit retains only its existing ClosedCompletion warning. Seven manifests
+pin 281 entries. Independent slot and contract review finds no proof issue.
+Evidence is in `lean/restart-evidence/20261018-tracked-binder-fusion/`.
+
+No Haskell patch or executable defect is added. FINDINGS retains the repair
+registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication still awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current finite tracked profiles and recursive marker removal
 
 Updated: 2026-10-18 18:01 CEST. Proof checkpoint is `c1426cf2`.

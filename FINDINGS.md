@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 18:28 CEST. Proof checkpoint is `eac5f260`.
+A checked artificial cache refutes the current unrestricted bounded and
+tracked binder Fusion contracts at raw depth0. All their stated premises
+hold, including Ready and a proved strict source-body law. The stored body
+combines different source callbacks under one probe key. This is a proof
+contract counterexample. It establishes no actual source-history or Haskell
+defect and requests no Haskell repair. The old uniform all-source writer
+hypothesis is impossible at every positive bound. Actual publication
+provenance and a new induction route are required. Particular-body writer,
+fresh-marker and erasure laws remain checked. Full Audit passes
+3357 jobs and 72708 checks. No Haskell bytes change.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-tracked-binder-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 18:01 CEST. Proof checkpoint is `c1426cf2`.
 Finite tracked root profiles now preserve Empty and bare tracked names.
 The exact prior bounded Empty contract follows under its original Paired
