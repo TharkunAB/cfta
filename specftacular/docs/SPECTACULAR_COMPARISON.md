@@ -1,7 +1,16 @@
 # Spectacular and Specftacular
 
-The matrix compares the published ICST 2023 Spectacular artifact with
-Specftacular at `d8986453`. It reports elapsed
+The latest code is `f4ec36bd`. It replaces repeated structural membership
+checks in CFTA template splitting with local child-part identifiers. Its
+focused native controls retain all 197 and 242 laws, including every stdout
+byte. HugeLists size 7, phase 2 completes in 168.11 seconds, with 10.1065%
+less allocation than the retained `d8986453` run. Peak RSS is slightly higher.
+The [focused controls](#child-part-identifiers) describe the scope and limits.
+A full matrix refresh for this revision is pending.
+
+The matrix below retains the preceding all-bucket `d8986453` measurements.
+It compares that revision with the published ICST 2023 Spectacular artifact.
+It reports elapsed
 time, allocation, GC, peak RSS, and differences in discovered laws. A larger
 law count is not a better result by itself. False and redundant equations
 increase the count.
@@ -26,8 +35,10 @@ take 294.80 seconds, against 86.70 seconds at `d2e91fdf`. Allocation rises
 by 39.1049% and peak RSS by 21.8378%. A fresh trace places 94.0769% of
 phase 2 CPU inside preparation. Its selected profile attributes 73.8352%
 of application ticks to Template equality and ordering subtrees. These
-measurements locate costly work; they do not isolate the full native
-regression or establish an implementation gain.
+measurements located the repeated comparisons addressed by `f4ec36bd`.
+They do not isolate the full native regression. The new focused control
+reduces this cost, but its 168.11-second run still exceeds the earlier
+86.70-second result.
 
 All 22 configurations that completed under `d2e91fdf` retain their exact
 numbered law sequences. The current 300-second pass also completes HugeLists
@@ -38,7 +49,8 @@ prove validity, independence, or current typed-Rules coverage.
 
 Profiles and proof controls name their source revisions. The latest
 [cost-centre profiles](#cost-centre-evidence-and-remaining-bottlenecks)
-measure the current all-bucket `d8986453` runtime. Historical results retain
+measure the preceding all-bucket `d8986453` runtime. They have not been
+replaced with attribution from the new code. Historical results retain
 their source labels.
 The optional ordered CFTA cursor passes its API controls, but its
 Specftacular variants fail their selection controls. The selected engine
@@ -47,7 +59,7 @@ uses the existing enumerator and final bucket sort.
 ## Sources and method
 
 The original columns retain the earlier all-`-O2` measurements. Original
-Spectacular and QuickSpec 2 are not rerun. The current matrix uses fresh
+Spectacular and QuickSpec 2 are not rerun. The matrix uses the completed
 2026-10-18 measurements of `d8986453` with the
 1064-case schedule. Both passes use the same packaged binaries and source
 manifest. The current columns do not reuse measurements from `d2e91fdf` or
@@ -56,6 +68,7 @@ from the earlier selected-bucket experiments.
 | Input | Revision |
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
+| [Latest child-part identifier change](https://github.com/TharkunAB/cfta/commit/f4ec36bd7b05c3478c92fbcb7e2e763bdad39e6b) | `f4ec36bd` |
 | [Measured all-bucket Specftacular matrix](https://github.com/TharkunAB/cfta/tree/d898645376ae5f1e9b8e5c7b5e0b7dcfa5bfd9e8/specftacular) | `d8986453` |
 | [Historical 1064-case matrix and typed coverage](https://github.com/TharkunAB/cfta/tree/d2e91fdf297659382329e8d9375082024439dc8c/specftacular) | `d2e91fdf` |
 | [Spec-only fragment check](https://github.com/TharkunAB/cfta/commit/09caaec396a0e1f761a40cd7e218ecc6e8b5a518) | `09caaec3` |
@@ -119,6 +132,10 @@ buffered output can omit laws. Prefix counts include only newline-terminated
 equations. A trailing fragment is not another law.
 
 ## Results
+
+These tables describe `d8986453`. They are not a full-matrix measurement of
+`f4ec36bd`. In these tables, “current” means the measured Specftacular
+revision, in contrast with original Spectacular.
 
 The original `T` means a 60-second timeout. A current `T` means a timeout at
 the stated current limit. A dash means no final law count. HugeLists uses
@@ -536,7 +553,42 @@ neither proves a free theorem nor checks every type.
 
 ## Validation and current resource tradeoffs
 
-### Selected packaged controls
+### Child-part identifiers
+
+The published `f4ec36bd` change assigns local identifiers to structurally
+identical child templates. `IntSet` membership replaces repeated `notElem`
+checks. It retains the original split order, obligation lists, duplicates,
+and `meetTemplate`/`fits` guard order. It adds no automaton traversal.
+The output-list argument assumes finite, total templates and lawful
+`Eq`/`Ord` instances. It does not prove unchanged strictness for partial
+inputs or universal equivalence of recursive enumeration cutoffs.
+
+The direct control compares 16,560 complete ordered `edgeCopies` lists
+against the predecessor. These controls pass, as do the finite language,
+residual, constraint, and actual `preparePruning` controls. The change also
+passes all 741 existing examples and all eight allocation/Cachegrind
+controls. Checksums agree. The largest increases are 0.0005386% allocation
+and 0.0010502% instructions against the retained CFTA baseline.
+
+| Focused native control | Laws | Wall s | CPU s | Allocated bytes | Peak RSS MiB |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| HugeLists size 5, phase 3 | 197 | 21.92 | 21.916 | 107,292,734,568 | 546.1 |
+| HugeLists size 7, phase 2 | 242 | 168.11 | 168.302 | 734,878,423,008 | 1102.9 |
+
+Both outputs match every byte of the retained `d8986453` outputs, including
+examined-term counters. Size 7 CPU falls by 42.9730% and allocation by
+10.1065%; peak RSS rises by 0.0702%. Size 5 allocation falls by 0.4505%,
+while peak RSS rises by 0.2244%. These are two focused controls, not a new
+matrix or evidence of a general RSS reduction.
+
+Each control is one fresh all-`-O2` run with 21 CFTA modules, eight Specftacular
+modules, and Main compiled together. No archived CFTA or Specftacular library
+is linked. The reference runs use the retained packaged `d8986453` build.
+The source delta is the template change, but the build context differs.
+Neither the baseline nor original Spectacular is rerun. The measurements
+do not estimate timing variance or isolate a matched-binary speed ratio.
+
+### Preceding packaged controls
 
 The `d8986453` packaged build passes the existing checked and unchecked
 goldens. Native unchecked, native checked and GHC retain the same 24-law
@@ -549,8 +601,8 @@ control makes no timing claim and does not remove the older generalization
 cost exception.
 
 The completed rows below retain their exact numbered `d2e91fdf` law
-sequences, but their resource changes differ. These are current packaged
-measurements against retained packaged measurements. Allocation and RSS
+sequences, but their resource changes differ. These are `d8986453` packaged
+measurements against retained `d2e91fdf` packaged measurements. Allocation and RSS
 measure different costs.
 
 | Completed configuration | Allocation change from `d2e91fdf` | Peak RSS change from `d2e91fdf` |
@@ -582,8 +634,8 @@ against `456123af`. Current smaller increments do not remove that cost.
 
 ## Cost-centre evidence and remaining bottlenecks
 
-The current HugeLists size 7, phase 2 regression has new preparation and
-cost-centre measurements. The `d8986453` diagnostic replay reproduces every
+The `d8986453` HugeLists size 7, phase 2 regression has preparation and
+cost-centre measurements. These profiles precede `f4ec36bd`. The `d8986453` diagnostic replay reproduces every
 stdout byte of the packaged 197-law control and the completed 242-law run.
 Only Main adds a timed `compiled_prepare` boundary. Runtime modules and the
 1064-case schedule remain unchanged.
