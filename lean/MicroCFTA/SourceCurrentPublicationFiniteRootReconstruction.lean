@@ -6,6 +6,7 @@ import MicroCFTA.SourceCurrentRetainedMuWriterAlignment
 # Finite reconstruction of actual publication roots
 
 The induction hypothesis applies only to the actual immediate binder body.
+Both raw callback return heaps must grow into the execution heap.
 The two filtered callbacks use one sparse replacement map. Actual stored
 calls run in sequence and replay at their final execution heap. Finite
 observations use a fixed, separate reader. A literal Mu atom retains the
@@ -41,7 +42,7 @@ private theorem bind_replacements (state : State Symbol Guard) (name : Reference
 
 variable [DecidableEq (EdgeKey Symbol Guard)]
 
-/-- The actual immediate source body supplies root matches at each later execution heap. -/
+/-- The actual body supplies root matches when both raw returns grow into the execution heap. -/
 def BodyIH (depth : Nat) (view : State Symbol Guard)
     (event : Publication (Symbol := Symbol) (Guard := Guard))
     (replacement : Value Symbol Guard) (environment : Environment Symbol Guard)
@@ -58,6 +59,7 @@ def BodyIH (depth : Nat) (view : State Symbol Guard)
   ∀ rawFirst rawHeap rawSecond rawLater,
     build event.expression (localInputs.map (input firstNames)) before = .done rawFirst rawHeap →
     build event.expression (localInputs.map (input secondNames)) later = .done rawSecond rawLater →
+    Grows rawHeap execution → Grows rawLater execution →
     RootMatch (NamePair (.uninterned (ordinaryLevel event.depth)) (.interned event.entry.identity))
       (Executions (depth + 1) view execution (shared event replacement replacement environment)
         (shared event replacement replacement environment)) rawFirst rawSecond
@@ -72,6 +74,7 @@ private theorem output_context
 
 private theorem filtered
     (event : Publication (Symbol := Symbol) (Guard := Guard))
+    (execution : State Symbol Guard) (growth : Grows event.afterBody execution)
     (references : Reference → Reference → Prop) (values : Value Symbol Guard → Value Symbol Guard → Prop)
     (referenceLocal : ∀ first second, references first second →
       (first = .uninterned (ordinaryLevel event.depth) ↔ second = .interned event.entry.identity))
@@ -87,6 +90,7 @@ private theorem filtered
       ∀ rawFirst rawHeap rawSecond rawLater,
         build event.expression (localInputs.map (input firstNames)) before = .done rawFirst rawHeap →
         build event.expression (localInputs.map (input secondNames)) later = .done rawSecond rawLater →
+        Grows rawHeap execution → Grows rawLater execution →
         RootMatch references values rawFirst rawSecond) :
     RootMatch references values event.ordinary event.body := by
   let inputs : List (Sum (Value Symbol Guard) Unit) := event.environment.map Sum.inl
@@ -101,13 +105,14 @@ private theorem filtered
     ∀ rawFirst rawHeap rawSecond rawLater,
       build event.expression (localInputs.map (input firstNames)) before = .done rawFirst rawHeap →
       build event.expression (localInputs.map (input secondNames)) later = .done rawSecond rawLater →
+      Grows rawHeap execution → Grows rawLater execution →
       RootMatch references values rawFirst rawSecond at strict
   have fixed : inputs.map (input names) = event.environment := by
     simp [inputs,input,List.map_map,Function.comp_def]
   have instantiated (own : Reference) :
       localInputs.map (input (Sum.elim (fun _ : Unit => own) names)) = .reference own :: event.environment := by
     rw [local_inputs,fixed]
-  obtain ⟨rawFirst,rawHeap,rawSecond,rawLater,firstRaw,firstFilter,secondRaw,secondFilter,_,_,firstEntry,secondEntry⟩ :=
+  obtain ⟨rawFirst,rawHeap,rawSecond,rawLater,firstRaw,firstFilter,secondRaw,secondFilter,firstGrowth,secondGrowth,firstEntry,secondEntry⟩ :=
     SourceCurrentNativeMuPublicationCallbacks.raw_callbacks event
   have cutContext := (SourceCurrentNativeMuPublicationCallbacks.contexts event).2.1
   have bodyArgument : Available event.allocated (.reference (.interned event.entry.identity)) :=
@@ -123,6 +128,7 @@ private theorem filtered
     rawFirst rawHeap rawSecond rawLater
     (by simpa only [firstNames,instantiated] using firstRaw)
     (by simpa only [secondNames,instantiated] using secondRaw)
+    (grows_trans firstGrowth growth) (grows_trans secondGrowth growth)
   have firstReturned := output_context event.expression _ event.afterDepth rawHeap firstContext rawFirst firstRaw
   have secondReturned := output_context event.expression _ event.allocated rawLater secondContext rawSecond secondRaw
   have rawBare : rawFirst = .reference (.uninterned (ordinaryLevel event.depth)) ↔
@@ -209,7 +215,7 @@ theorem publication (depth : Nat) (view : State Symbol Guard)
     rcases paired with ⟨rfl,rfl⟩ | ⟨_,different,other⟩
     · exact ⟨fun _ => rfl,fun _ => rfl⟩
     · exact iff_of_false different other
-  have matched := filtered event (NamePair ordinaryName bodyName)
+  have matched := filtered event final finalCurrent.growth (NamePair ordinaryName bodyName)
     (Executions (depth + 1) view final commonMap commonMap) referenceLocal (strict final kept)
   have resolved : ∀ first second, NamePair ordinaryName bodyName first second →
       RelatedAt (depth + 1) view ((commonMap first).getD (.reference first))
