@@ -1,11 +1,13 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-required-projection.md` for the latest checkpoint.
+Read `notes-current-class-fold-structural.md` for the latest checkpoint.
 
-In simple technical English: completed modeled construction represents
-exactly the trees specified by its expression. A completed modeled root
-reduction with empty inherited constraints preserves that exact language.
+In simple technical English: fresh construction always finishes in the
+Lean model. Under the stated guard conditions, its result represents
+exactly the finite trees specified by its expression. A completed supported
+modeled root reduction with empty inherited constraints preserves that
+exact language.
 The root theorem derives the logical startup cache and guard facts.
 Field allocation, validity, guard coverage and numeric resources remain
 explicit. General termination and Haskell correspondence remain open.
@@ -150,14 +152,19 @@ heap. Any recursive Merge Run uses actual prepared children. Only original
 source children have the stated source mass bound. No false prepared gate
 is assumed. Initial Merge writer history remains explicit.
 
-A completed class node edit now retains descendant structural RowAt sources
-or actual native/Head events with residual structural occurrences. Indexed
-ordinary event lifts retain separate canonical output and raw row indices
-and exact child slices. This does not yet cover whole-fold provenance or
-observational Mu reads. Earlier class phases can change their forests, and
-their native joins do not satisfy the Required Origin grammar in general.
-The root-row FoldFlow must be reused in that remaining composition. No
-Haskell defect is established.
+A completed class fold now retains descendant structural RowAt sources in
+the same initial forest slot, or actual native/Head events in earlier class
+phases. Indexed ordinary event lifts retain separate canonical output and
+raw row indices and exact child slices. Each phase derives its physical
+support and writer history from its actual completed tail. A literal
+bounded-worker return derives this graph from initial Frame, Fits and
+numeric reservations. Its support and memo premises remain explicit.
+The earlier root-only FoldFlow cannot consume arbitrary descendant RowAt.
+The new structural result does not yet explain observational Mu reads or
+the actual remaining edit/projection/read continuation after an event.
+Earlier class phases can change their forests. Their native joins do not
+satisfy the Required Origin grammar in general. No Haskell defect is
+established.
 
 An accepted opaque-guard conjunction can lose an accessor equality pair
 while retaining its Same atom. Whole-operand effective coverage therefore

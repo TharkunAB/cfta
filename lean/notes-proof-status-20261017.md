@@ -1,5 +1,35 @@
 # Proof status at 2026-10-18
 
+## Current structural class fold and actual worker sources
+
+Updated: 2026-10-19 01:14 CEST. Proof checkpoint: `55873f7f9`.
+Start: `69e2d9c9`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-class-fold-structural.md` and the current system claim.
+Every descendant structural output row in a completed class fold now
+retains an initial source in the same forest slot, or an actual native/Head
+event in an earlier class phase. Sources retain full row fields. Events
+retain residual structural occurrences, exact child slices and actual
+chronology. Each phase derives physical support and native writer history
+from its actual completed tail. Child identity is not asserted.
+
+A literal bounded-worker return now derives this read graph from initial
+Frame, Fits and numeric reservations. It also retains the final Frame,
+Fits and forest length. The theorem applies to a completed tail without
+a future enclosing traversal return. Initial physical memo support,
+coverage, global validity and native history remain explicit.
+
+Full default library build passes 3442 jobs. Audit checks 73634 axiom
+dependencies. Eight public declarations pass full proof checks. Three are
+event types; five are theorems. Both selected production strict logs are
+empty. Structural sources do not yet explain observational Mu reads or
+bound renewed recursive requests. General outer completion, empty-owner
+exclusion, convergence and Haskell refinement remain open. Fresh modeled
+construction already always finishes. The conditional root-language
+claim is unchanged. No Haskell bytes change or repair request is added.
+FINDINGS retains every repair first. Field-pool fix `b9219b9e` remains in
+main `c0cc8a05`. Publication awaits direct approval. No push or board write
+is attempted. The full-library objective remains active.
+
 ## Current Required projection and structural class sources
 
 Updated: 2026-10-19 00:58 CEST. Proof checkpoint: `fb6abfd9a`.
