@@ -17,6 +17,12 @@ module Data.CFTA.Serialization.Text (
     parseLanguage,
     printLanguageWith,
     parseLanguageWith,
+
+    -- * Updates
+    printUpdate,
+    parseUpdate,
+    printUpdateWith,
+    parseUpdateWith,
 ) where
 
 import Control.Applicative ((<|>))
@@ -123,6 +129,22 @@ parseLanguage = readLanguage (readEither . Text.unpack)
 parseLanguageWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (L.Language state)
 parseLanguageWith = readLanguage . decodeState
 
+-- | Print an update with state labels from its 'Show' instance.
+printUpdate :: (Show state) => L.Update state -> Text
+printUpdate = renderUpdate (Text.pack . show)
+
+-- | Print an update with an explicit typed state codec.
+printUpdateWith :: StateCodec state -> L.Update state -> Text
+printUpdateWith codec = renderUpdate (encodeState codec)
+
+-- | Read an update with state labels from their 'Read' instance.
+parseUpdate :: (Read state) => Text -> Either (TextError state) (L.Update state)
+parseUpdate = readUpdate (readEither . Text.unpack)
+
+-- | Read an update with an explicit typed state codec.
+parseUpdateWith :: StateCodec state -> Text -> Either (TextError state) (L.Update state)
+parseUpdateWith codec = readUpdate (decodeState codec)
+
 -- | Render graph rows with their complete transition constraints.
 renderGraph :: (state -> Text) -> FTA.PlainFTA state Symbol -> Text
 renderGraph encode = built . graphText "graph" encode transition
@@ -141,12 +163,40 @@ renderLanguage :: (state -> Text) -> L.Language state -> Text
 renderLanguage encode language =
     built $
         graphText "language" encode (sourceTransitionText encode) (D.sourceGraph $ L.source language)
-            <> foldMap exclusionText (Map.toAscList $ L.exclusions language)
+            <> foldMap (uncurry exclusionText) (Map.toAscList $ L.exclusions language)
+
+-- | Render a named exclusion.
+exclusionText :: L.ExclusionName -> L.Exclusion -> Builder
+exclusionText name exclusion =
+    "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
+        L.AtRoot template -> "root " <> templateText template <> ";\n"
+        L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+
+-- | Render the operations of an update in order, one statement each.
+renderUpdate :: (state -> Text) -> L.Update state -> Text
+renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap operation operations
   where
-    exclusionText (name, exclusion) =
-        "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
-            L.AtRoot template -> "root " <> templateText template <> ";\n"
-            L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+    state = nameText . encode
+    operation change = case change of
+        L.EditSource edit -> case edit of
+            D.DefineTransition at name symbol children ->
+                "define "
+                    <> state at
+                    <> " "
+                    <> nameText name
+                    <> " = "
+                    <> symbolText' symbol
+                    <> childrenText (map state children)
+                    <> ";\n"
+            D.DeleteTransition at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
+            D.SetFact at name fact constraint ->
+                "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
+            D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
+            D.PutTransition at transition -> "put production " <> state at <> " " <> productionText "" encode transition
+            D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode) transitions <> "}\n"
+            D.DeleteRow at -> "delete row " <> state at <> ";\n"
+        L.Exclude name exclusion -> exclusionText name exclusion
+        L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
 
 -- | Render the shared version, initial state, and finite row table.
 graphText ::
@@ -164,18 +214,21 @@ graphText format encode transition graph =
   where
     row (state, edges) = "state " <> nameText (encode state) <> " {\n" <> foldMap transition edges <> "}\n\n"
 
--- | Render one named production and its individual facts.
+-- | Render one named production and its individual facts in a state row.
 sourceTransitionText :: (state -> Text) -> FTA.Transition state Symbol D.Annotation -> Builder
-sourceTransitionText encode edge =
-    "  "
-        <> nameText (D.annotationName annotation)
+sourceTransitionText encode edge = "  " <> productionText "  " encode edge
+
+-- | Render one named production and its individual facts, with the given indentation for its closing line.
+productionText :: Builder -> (state -> Text) -> FTA.Transition state Symbol D.Annotation -> Builder
+productionText indent encode edge =
+    nameText (D.annotationName annotation)
         <> " = "
         <> edgeText encode edge
-        <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> "  };\n"
+        <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> indent <> "};\n"
   where
     annotation = FTA.transitionConstraint edge
     facts = D.annotationFacts annotation
-    fact (name, constraint) = "    " <> nameText name <> " = " <> constraintText constraint <> ";\n"
+    fact (name, constraint) = indent <> "  " <> nameText name <> " = " <> constraintText constraint <> ";\n"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -368,6 +421,54 @@ readLanguage decode input = do
         exclusions <- untilEnd exclusionParser >>= namedMap "exclusion"
         pure (initial, rows, Map.mapKeys L.ExclusionName exclusions)
 
+-- | Read the header and the operations of an update, in order.
+readUpdate :: (Text -> Either String state) -> Text -> Either (TextError state) (L.Update state)
+readUpdate decode = runParser $ do
+    keyword "update"
+    version <- integerParser
+    unless (version == 1) $ fail "unsupported update version; expected 1"
+    token ";"
+    L.Update <$> untilEnd operation
+  where
+    state = stateParser decode
+    end = token ";"
+    source = pure . L.EditSource
+    operation = do
+        word <- nameParser
+        case word of
+            "define" -> do
+                at <- state
+                name <- nameParser
+                token "="
+                (symbol, children) <- edgeParser decode
+                end
+                source $ D.DefineTransition at name symbol children
+            "remove" -> (D.DeleteTransition <$> state <*> nameParser <* end) >>= source
+            "require" -> do
+                at <- state
+                name <- nameParser
+                fact <- nameParser
+                token "="
+                constraint <- constraintParser
+                end
+                source $ D.SetFact at name fact constraint
+            "relax" -> (D.RemoveFact <$> state <*> nameParser <*> nameParser <* end) >>= source
+            "put" -> do
+                target <- nameParser
+                case target of
+                    "production" -> (D.PutTransition <$> state <*> sourceTransitionParser decode) >>= source
+                    "row" -> do
+                        at <- state
+                        token "{"
+                        transitions <- untilClose '}' (sourceTransitionParser decode)
+                        token "}"
+                        source $ D.PutRow at transitions
+                    _ -> fail "expected put production or put row"
+            "delete" -> keyword "row" *> ((D.DeleteRow <$> state <* end) >>= source)
+            "exclude" -> uncurry L.Exclude . first L.ExclusionName <$> exclusionBody
+            "restore" -> L.Restore . L.ExclusionName <$> nameParser <* end
+            _ -> fail $ "expected an update operation, not " <> show word
+
 -- | Parse one complete input and retain Unicode-aware syntax locations.
 runParser :: A.Parser value -> Text -> Either (TextError state) value
 runParser parser input = finish $ A.parse (spaces *> parser <* A.endOfInput) input
@@ -453,8 +554,11 @@ symbolParser = do
 
 -- | Read a named whole-term or subtree exclusion.
 exclusionParser :: A.Parser (Text, L.Exclusion)
-exclusionParser = do
-    keyword "exclude"
+exclusionParser = keyword "exclude" *> exclusionBody
+
+-- | Read the name, the scope, and the template of an exclusion.
+exclusionBody :: A.Parser (Text, L.Exclusion)
+exclusionBody = do
     name <- nameParser
     token "="
     scope <- nameParser
