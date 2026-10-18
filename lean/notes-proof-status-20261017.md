@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `99a1ddb3`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `af9a413d`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -95,7 +95,18 @@ produces the exact returned node cell and earlier complete request writer.
 Historical semantic target receipts and the stronger initial key invariant
 still need transport through the full class schedule. General recursive
 completion and the complete ordinary outer domain are unchanged. Read
-[the current checkpoint](notes-current-selected-read-producers.md).
+[the earlier checkpoint](notes-current-selected-read-producers.md).
+
+Initial numeric completion now produces target/class/fold semantic Reads
+at literal successful worker endpoints. Complete value, Checked and Merge
+uniqueness aligns all states without a forecast lower-bound premise on the
+observed fuels. Historical semantic SlotReceipt and actual class-selected
+reads/histories then follow from initial supported contexts. Selected path
+closure permits open untouched roots; no finite input Cap is added. Frame,
+semantic caches, valid globals and numeric reservations remain explicit.
+The next general bridge is that context at the actual outer class entry.
+General recursive completion and the complete ordinary outer domain are
+unchanged. Read [the current checkpoint](notes-current-actual-semantic-reads.md).
 
 ## Strongest current claim in plain technical English
 

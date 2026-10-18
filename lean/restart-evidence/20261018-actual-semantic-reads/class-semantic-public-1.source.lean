@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentActualClassSemanticReads
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentActualClassSemanticReads.class_reads
+#print MicroCFTA.SourceCurrentActualClassSemanticReads.class_reads
+#print axioms MicroCFTA.SourceCurrentActualClassSemanticReads.class_reads
+
+#check @MicroCFTA.SourceCurrentActualClassSemanticReads.fold_reads
+#print MicroCFTA.SourceCurrentActualClassSemanticReads.fold_reads
+#print axioms MicroCFTA.SourceCurrentActualClassSemanticReads.fold_reads
+
+#check @MicroCFTA.SourceCurrentActualClassSemanticReads.class_selected
+#print MicroCFTA.SourceCurrentActualClassSemanticReads.class_selected
+#print axioms MicroCFTA.SourceCurrentActualClassSemanticReads.class_selected
+
