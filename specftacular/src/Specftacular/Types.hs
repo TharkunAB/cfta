@@ -780,6 +780,7 @@ data TestCase
     = RandomCase Int Int
     | ValidationCase Int Int
     | BoundaryCase Int Int Int
+    | PredicateCase Int Int
     deriving (Show)
 
 -- | Keep the random schedule and add independent and boundary cases.
@@ -789,6 +790,11 @@ testSchedule n =
         ++ zipWith ValidationCase [0 ..] (testSizes 8)
         ++ [ BoundaryCase k boundary active
            | (k, boundary) <- zip [0 ..] [minBound, minBound + 1, -1, 0, 1, 2, maxBound - 1, maxBound]
+           , active <- [0 .. 3]
+           ]
+        ++ [PredicateCase active target | active <- [0 .. 7], target <- [0, 1]]
+        ++ [ BoundaryCase k boundary active
+           | (k, boundary) <- zip [8 ..] [maxBound `div` 2 + 1, minBound `div` 2 - 1]
            , active <- [0 .. 3]
            ]
 
@@ -803,6 +809,11 @@ testCaseValues sig testcase =
     value v _ (Generator g) _ | RandomCase k size <- testcase = g (hash (k, v)) size
     value v _ (Generator g) _ | ValidationCase k size <- testcase = g (hash ("validation" :: String, k, v)) size
     value v i (Generator g) t
+        | PredicateCase active target <- testcase =
+            fromMaybe
+                (g (hash ("validation" :: String, 8 + 2 * active + target, v)) 100)
+                (lookup t (predicateValues target (i `mod` 8 == active)))
+    value v i (Generator g) t
         | BoundaryCase k boundary active <- testcase =
             let selected = i `mod` 4 == active
                 size = case t of
@@ -811,6 +822,32 @@ testCaseValues sig testcase =
              in fromMaybe
                     (g (hash ("boundary" :: String, k, active, v)) size)
                     (lookup t (boundaryValues boundary selected))
+
+{- | Two-element lists and predicates for Int and the abstract carriers.
+One variable index modulo eight has a predicate that selects zero or one.
+Other predicates return True. Int variables are one. Every value has its exact type.
+-}
+predicateValues :: Int -> Bool -> [(TypeSkeleton, Value)]
+predicateValues target selected =
+    entry (1 :: Int)
+        : concat
+            [ domain (0 :: Int) 1
+            , domain (A 0) (A 1)
+            , domain (B 0) (B 1)
+            , domain (C 0) (C 1)
+            , domain (D 0) (D 1)
+            , domain (Acc 0) (Acc 1)
+            ]
+  where
+    entry :: (Typeable a) => a -> (TypeSkeleton, Value)
+    entry value = (typeRepToTypeSkeleton (typeOf value), toValue value)
+    domain :: forall a. (Typeable a, Eq a) => a -> a -> [(TypeSkeleton, Value)]
+    domain zero one = [entry [zero, one], entry predicate]
+      where
+        predicate :: a -> Bool
+        predicate
+            | selected = (== (if target == 0 then zero else one))
+            | otherwise = const True
 
 -- | The valuations of the complete test schedule.
 testCases :: Int -> Sig -> [VarVals]
