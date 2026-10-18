@@ -33,6 +33,7 @@ jobs:
             decision-model/**/*.hs
             specftacular/**/*.hs
             specftacular-ghc/**/*.hs
+            cfta-serialization/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -42,7 +43,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-th", "decision-model", "specftacular", "specftacular-ghc"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-th", "decision-model", "cfta-serialization", "specftacular", "specftacular-ghc"]'
           fail-on: warning
 
   build-test-bench:
@@ -99,6 +100,7 @@ jobs:
           (cd decision-model && cabal check)
           (cd specftacular && cabal check)
           (cd specftacular-ghc && cabal check)
+          (cd cfta-serialization && cabal check)
 
       - name: Build with strict warnings
         run: cabal v2-build all --enable-tests --enable-benchmarks --ghc-options=-Werror
