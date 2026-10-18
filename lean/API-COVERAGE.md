@@ -1,5 +1,60 @@
 # Public API and source correspondence
 
+## Current supported source simulation
+
+Updated: 2026-10-18 14:09 CEST. Proof checkpoint is `faca56de`.
+Starting checkpoint is `4ac2365d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-supported-source-simulation.md`.
+
+The strongest broad result is conditional partial correctness of the
+checked implementation model. A supported successful top-level traversal,
+empty inherited constraints, initial semantic facts and scheduled
+resources give exact equality of the input and returned finite tree
+languages. This does not prove general termination or full public Haskell
+correspondence. The required source semantic instances remain explicit.
+
+Actual closed-Mu preparation now also supports all available values with
+zero stored-plan binder depth. These include open ordinary nodes, unions
+and references with closed recursive Mu components. A source-built example
+has a cold closed Mu in an open node and union. Actual preparation changes
+the heap, retains both open values and makes the recursive unfold warm.
+This does not prepare arbitrary open Mu values or transport observations
+from the cold reader.
+
+Actual source execution and causal reader history now derive the selected
+writer, exact current probes and both reconstruction schedules. The seed
+assumes no Same, Directed, BodyIH, selected writer or output endpoint.
+Earlier writer syntax remains separate from requester syntax. Literal
+normalization inclusion has an actual Directed instance. Actual source
+node calls derive both local directions from indexed strict-child cases.
+These results do not yet construct the general source relation or its
+changing-capture used-binder local clause.
+
+A source-built counterexample strengthens the reader boundary. Both heaps
+are Ready. Inputs and replacement values are available at both heaps.
+The returned Mu pair still fails depth-one agreement at the separate
+reader. One compared output is explicitly unavailable there. The two heaps
+allocate independently. This does not refute a common later reader,
+output availability or WarmSupport. It is not a Haskell defect.
+
+Full Audit passes 3315 jobs and 72078 dependency checks.
+All 15 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. All seven selected strict logs
+are empty. Three canonical builds have no warnings. The boundary canonical
+build and Audit retain only the existing ClosedCompletion warning.
+Seven component manifests pin 298 entries. Independent review finds
+no material issue. Evidence is in
+`lean/restart-evidence/20261018-supported-source-simulation/`.
+
+General changing-capture used-binder simulation and reader support remain
+the main source gap. Initial query-operand ancestry, all active node-owner
+exclusions, fresh-call bounds, recursive completion, repeated convergence,
+equality resources and host Int adequacy remain separate obligations.
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current recursive unfolding and finite-tree language
 
 Updated: 2026-10-18 13:38 CEST. Proof checkpoint is `49ffeaef`.
