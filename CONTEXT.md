@@ -62,6 +62,15 @@ Wilf, and Feat (ranking).
   refines the second (the **supertype**); the LTA paper writes `δi ≲ δj`.
   Minimization keeps the **representative** and removes the supertype.
 
+## Editable documents
+
+- **Source document**: an editable language definition that retains named
+  transitions and their separate facts before compilation.
+- **Source fact**: one named constraint attached to a source transition.
+  Removing a fact removes that obligation. It does not negate the constraint.
+- **Patch**: an ordered batch of edits together with the source document it
+  expects. A valid patch produces a new source document.
+
 ## Transformations
 
 - **Exact transformation**: an operation on an automaton that keeps its
