@@ -13,6 +13,37 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current fixed guard carriers and native guard heaps
+
+Updated: 2026-10-18 03:37 CEST. Proof commit is `a400849c`.
+Starting local checkpoint is `9c3442e5`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-global-guard-progress.md` for exact boundaries.
+
+Actual successful native calls now retain arbitrary-predicate causal Mu
+guard profiles from initial physical facts. A checked Trace, InputsThrough
+or final result law is not supplied. Successful return remains a premise.
+Actual checked native prefixes also retain a fixed finite original alphabet
+of derived edge constraints without an instruction-count ceiling. Their
+checked Trace and initial field checks remain explicit. The two theorems
+retain different invariants. Neither bounds inherited payloads or fresh calls.
+
+Full Audit passes 3208 jobs and 70665 dependency checks. Two production and
+two constructed strict logs are empty. All 11 public and 2 constructed full
+pairs pass under all eight settings and standard axioms. Audit peak is
+355 MiB under effective 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-global-progress-review/`.
+
+Next compose causal guard retention through current lower, Parent and
+unfinished outer calls. Derive positional original-row lineage through
+Required, edits, Mu exposure and native writers. Prove all-owner separation
+and a finite fresh-call bound or a well-founded measure. The fixed-own
+path-growth example is not an actual infinite outer trace.
+General recursive progress, used-writer alignment, convergence and public
+Haskell correspondence remain open. Keep the full-library goal active.
+No Haskell patch or new production defect is added. The field-pool repair
+`b9219b9e` remains fixed. Keep the external FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
 ## Current actual outer row fields and initial path domains
 
 Updated: 2026-10-18 03:20 CEST. Starting checkpoint is `a1270b81`.

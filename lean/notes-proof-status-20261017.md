@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `1324bb38`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `a400849c`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -185,6 +185,17 @@ review also requires a recursive value lift that permits unordered root
 alternatives and retains ordered children, lexical Mu bodies, and exact
 closed captures. A source-size induction alone cannot cover an older writer.
 Read [the current exact boundaries](notes-current-parent-row-trace.md).
+
+Actual successful native node and edge calls now preserve causal Mu
+guard profiles from initial physical Good and ready operands. They do not
+need a supplied checked Trace or future result law. Successful return is
+still a premise. A separate actual-prefix theorem retains a fixed finite
+alphabet of original derived edge constraints without an instruction-count
+ceiling. That theorem retains its checked Trace and initial code checks.
+These are distinct invariants. Neither bounds inherited payload growth,
+fresh recursive calls or source-row movement. The complete outer-pass
+domain and strongest complete claim are unchanged. Read
+[the current boundaries](notes-current-global-guard-progress.md).
 
 ## Observable contracts
 
