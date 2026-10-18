@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 10:52 CEST. Proof checkpoint is `c265edc4`.
+Selected stored node-body rows now retain both actual callback schedules,
+full fields and ordered child Empty-test agreement. Nested Mu children
+need no BinderFree premise. Full epsilon origins also derive actual query
+writers and retained-Mu stored unfolding at the reader. The tail keeps its
+original reader view. General nonempty-child alignment, initial source
+ancestry and recursive completion remain open. A checked nested-binder
+example refutes removal of BinderFree from the rootErase proof rule.
+This is a proof-contract boundary, not an executable Haskell defect.
+Full Audit passes 3290 jobs and 71462 checks. No Haskell patch is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-used-mu-row-alignment.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 10:30 CEST. Proof checkpoint is `80e7b363`.
 Successful native queries with selected physical ordinary rows now derive
 all terminal writer branches, including actual open reference calls.

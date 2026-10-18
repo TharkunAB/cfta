@@ -1,0 +1,176 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:28:67: error: unexpected token '('; expected ','
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:72:57: error: Application type mismatch: The argument
+  rest
+has type
+  buildEdges expressions environment edge.snd = Outcome.done tail final
+but is expected to have type
+  buildEdges expressions environment middle = Outcome.done tail final
+in the application
+  ih middle tail rest
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:67:28: error: unsolved goals
+case cons.mk.done.done
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+environment : List (Value Symbol Guard)
+expressions : List (EdgeSyntax Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+symbol : Symbol
+guard : Guard
+children : List (Syntax Symbol Guard)
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+child : buildMany children environment before = Outcome.done values middle
+edge : EdgeValue Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  run (makeEdge symbol guard values) middle
+tail : List (EdgeValue Symbol Guard)
+final : InternedConstructorTemplates.State Symbol Guard
+rest : buildEdges expressions environment edge.snd = Outcome.done tail final
+ih :
+  ∀ (before : InternedConstructorTemplates.State Symbol Guard) (outputs : List (EdgeValue Symbol Guard)),
+    buildEdges expressions environment before = Outcome.done outputs final → expressions.length = outputs.length
+⊢ expressions.length + 1 = tail.length + 1
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:98:23: error: Ambiguous term
+  buildEdges_verified
+Possible interpretations:
+  InternedFreshOrdinaryFacts.buildEdges_verified expressions (Value.reference firstName :: captures) before
+    firstContext.normal.facts
+    firstContext.inputs : Verified before (buildEdges expressions (Value.reference firstName :: captures) before) Edges
+  
+  InternedNestedProvenance.buildEdges_verified expressions (Value.reference firstName :: captures) before
+    firstContext.normal.facts
+    firstContext.inputs : Verified before
+    (InternedNestedConstruction.buildEdges expressions (Value.reference firstName :: captures) before) Edges
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:99:24: error: Ambiguous term
+  buildEdges_verified
+Possible interpretations:
+  InternedFreshOrdinaryFacts.buildEdges_verified expressions (Value.reference secondName :: captures) later
+    secondContext.normal.facts
+    secondContext.inputs : Verified later (buildEdges expressions (Value.reference secondName :: captures) later) Edges
+  
+  InternedNestedProvenance.buildEdges_verified expressions (Value.reference secondName :: captures) later
+    secondContext.normal.facts
+    secondContext.inputs : Verified later
+    (InternedNestedConstruction.buildEdges expressions (Value.reference secondName :: captures) later) Edges
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:100:43: error: Type mismatch: After simplification, term
+  firstChecked.facts
+ has type
+  Facts
+    (match InternedNestedConstruction.buildEdges expressions (Value.reference firstName :: captures) before with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+but is expected to have type
+  Facts firstAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:101:45: error: Type mismatch: After simplification, term
+  secondChecked.facts
+ has type
+  Facts
+    (match InternedNestedConstruction.buildEdges expressions (Value.reference secondName :: captures) later with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+but is expected to have type
+  Facts secondAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:102:58: error: Application type mismatch: The argument
+  firstDone
+has type
+  buildEdges expressions (Value.reference firstName :: captures) before = Outcome.done first firstAfter
+but is expected to have type
+  InternedNestedConstruction.buildEdges expressions (Value.reference firstName :: captures) before =
+    Outcome.done first firstAfter
+in the application
+  firstChecked.result first firstAfter firstDone
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:103:62: error: Application type mismatch: The argument
+  secondDone
+has type
+  buildEdges expressions (Value.reference secondName :: captures) later = Outcome.done second secondAfter
+but is expected to have type
+  InternedNestedConstruction.buildEdges expressions (Value.reference secondName :: captures) later =
+    Outcome.done second secondAfter
+in the application
+  secondChecked.result second secondAfter secondDone
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:116:10: error(lean.unknownIdentifier): Unknown constant `List.lt_length_of_getElem?`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:117:9: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  some expressions[index] = expressions.get?Internal index
+at case `Eq.refl`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:159:23: error: Ambiguous term
+  buildEdges_verified
+Possible interpretations:
+  InternedFreshOrdinaryFacts.buildEdges_verified expressions
+    (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment) event.afterDepth
+    ordinaryInputs.normal.facts
+    ordinaryInputs.inputs : Verified event.afterDepth
+    (buildEdges expressions (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth)
+    Edges
+  
+  InternedNestedProvenance.buildEdges_verified expressions
+    (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment) event.afterDepth
+    ordinaryInputs.normal.facts
+    ordinaryInputs.inputs : Verified event.afterDepth
+    (InternedNestedConstruction.buildEdges expressions
+      (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment) event.afterDepth)
+    Edges
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:160:24: error: Ambiguous term
+  buildEdges_verified
+Possible interpretations:
+  InternedFreshOrdinaryFacts.buildEdges_verified expressions
+    (Value.reference (Reference.interned event.entry.identity) :: event.environment) event.allocated
+    bodyInputs.normal.facts
+    bodyInputs.inputs : Verified event.allocated
+    (buildEdges expressions (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated)
+    Edges
+  
+  InternedNestedProvenance.buildEdges_verified expressions
+    (Value.reference (Reference.interned event.entry.identity) :: event.environment) event.allocated
+    bodyInputs.normal.facts
+    bodyInputs.inputs : Verified event.allocated
+    (InternedNestedConstruction.buildEdges expressions
+      (Value.reference (Reference.interned event.entry.identity) :: event.environment) event.allocated)
+    Edges
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:161:43: error: Type mismatch: After simplification, term
+  firstChecked.facts
+ has type
+  Facts
+    (match
+      InternedNestedConstruction.buildEdges expressions
+        (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment) event.afterDepth with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+but is expected to have type
+  Facts firstAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:162:45: error: Type mismatch: After simplification, term
+  secondChecked.facts
+ has type
+  Facts
+    (match
+      InternedNestedConstruction.buildEdges expressions
+        (Value.reference (Reference.interned event.entry.identity) :: event.environment) event.allocated with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+but is expected to have type
+  Facts secondAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:164:97: error: Application type mismatch: The argument
+  firstDone
+has type
+  buildEdges expressions (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done first firstAfter
+but is expected to have type
+  InternedNestedConstruction.buildEdges expressions
+      (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment) event.afterDepth =
+    Outcome.done first firstAfter
+in the application
+  firstChecked.result first firstAfter firstDone
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-used-mu-row-alignment/node-survival-direct-1.source.lean:166:104: error: Application type mismatch: The argument
+  secondDone
+has type
+  buildEdges expressions (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done second secondAfter
+but is expected to have type
+  InternedNestedConstruction.buildEdges expressions
+      (Value.reference (Reference.interned event.entry.identity) :: event.environment) event.allocated =
+    Outcome.done second secondAfter
+in the application
+  secondChecked.result second secondAfter secondDone
