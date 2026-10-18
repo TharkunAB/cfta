@@ -1,0 +1,85 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-4.source.lean:174:45: error(lean.unknownIdentifier): Unknown identifier `InternedEdgeResidency.canonicalEdges_member`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-4.source.lean:182:39: error(lean.unknownIdentifier): Unknown identifier `InternedEdgeResidency.canonicalEdges_member`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-4.source.lean:193:8: error: unsolved goals
+case nil
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+edges : List (EdgeValue Symbol Guard)
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready state
+resident : Edges state edges
+normal : Normal state
+selectedResident : Edges state (canonicalEdges (surviving edges))
+same :
+  ((canonicalEdges (surviving edges)).any fun edge =>
+      edge.children.all fun child => !isEmpty (denote child assignment)) =
+    edges.any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)
+checked :
+  InternedNestedFacts.Verified state
+    (InternedNestedConstruction.work (InternedConstructorTemplates.makeNode edges) state) Available
+output :
+  Available (run (InternedConstructorTemplates.makeNode edges) state).snd
+    (run (InternedConstructorTemplates.makeNode edges) state).fst
+afterNormal : Normal (run (InternedConstructorTemplates.makeNode edges) state).snd
+normalized : canonicalEdges (surviving edges) = []
+noRows : (edges.any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)) = false
+⊢ some [] = if false = true then none else some []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-4.source.lean:199:54: error: Type mismatch: After simplification, term
+  selectedResident
+ has type
+  Edges state (first :: rest)
+but is expected to have type
+  ∀ (edge : EdgeValue Symbol Guard), edge ∈ first :: rest → InternedEdgeResidency.EdgeResident state edge
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-4.source.lean:203:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  denote
+    (Value.node entry (first :: rest) (maximumDepth (List.flatMap EdgeValue.children (first :: rest)))
+      (childFree (List.flatMap EdgeValue.children (first :: rest))))
+    assignment
+in the target expression
+  denote (identifyNode (first :: rest) entry) assignment =
+    if (edges.any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)) = true then none
+    else some []
+
+case cons
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+edges : List (EdgeValue Symbol Guard)
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready state
+resident : Edges state edges
+normal : Normal state
+selectedResident : Edges state (canonicalEdges (surviving edges))
+same :
+  ((canonicalEdges (surviving edges)).any fun edge =>
+      edge.children.all fun child => !isEmpty (denote child assignment)) =
+    edges.any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)
+checked :
+  InternedNestedFacts.Verified state
+    (InternedNestedConstruction.work (InternedConstructorTemplates.makeNode edges) state) Available
+output :
+  Available (run (InternedConstructorTemplates.makeNode edges) state).snd
+    (run (InternedConstructorTemplates.makeNode edges) state).fst
+afterNormal : Normal (run (InternedConstructorTemplates.makeNode edges) state).snd
+first : EdgeValue Symbol Guard
+rest : List (EdgeValue Symbol Guard)
+normalized : canonicalEdges (surviving edges) = first :: rest
+entry : Interned InternedBinderProtocol.NodeKey
+exactValue :
+  (nodeStep (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) state).fst =
+    identifyNode (first :: rest) entry
+shape : (run (InternedConstructorTemplates.makeNode edges) state).fst = identifyNode (first :: rest) entry
+available : Available (run (InternedConstructorTemplates.makeNode edges) state).snd (identifyNode (first :: rest) entry)
+⊢ denote (identifyNode (first :: rest) entry) assignment =
+    if (edges.any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)) = true then none
+    else some []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-4.source.lean:196:118: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [InternedConstructorTemplates.makeNode, normalized, run, SourceCurrentStoredProfileFunction.empty,
+    noRows]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

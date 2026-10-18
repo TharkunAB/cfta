@@ -1,0 +1,47 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/mu-profile-direct-2.source.lean:129:2: error: Type mismatch: After simplification, term
+  rebound
+ has type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map
+          (fun leaf =>
+            mapNames Sum.inr
+              (match leaf with
+              | Value.reference name => assignment name
+              | x => profile leaf))
+          (leaves body)) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [Sum.inl ()]
+            else
+              mapNames Sum.inr
+                (match leaf with
+                | Value.reference name => assignment name
+                | x => profile leaf)
+          | x =>
+            mapNames Sum.inr
+              (match leaf with
+              | Value.reference name => assignment name
+              | x => profile leaf))
+        (leaves body))
+but is expected to have type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map
+          (fun x =>
+            mapNames Sum.inr
+              (match x with
+              | Value.reference name => assignment name
+              | x_1 => profile x))
+          (leaves body)) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [Sum.inl ()] else mapNames Sum.inr (assignment name)
+          | x => mapNames Sum.inr (profile leaf))
+        (leaves body))

@@ -1,0 +1,74 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-6.source.lean:86:2: error: Type mismatch
+  SourceCurrentNativeBinderProfile.build_profile smart (expression used) [] (entryHeap smart used warm)
+    (context smart used warm) (result smart used) (reader smart used) (done smart used warm) (heap smart used)
+    assignment
+has type
+  ∃ depth afterDepth ordinary cut entry body marker,
+    callback (expression used) [] Reference.depth (entryHeap smart used warm) = Outcome.done depth afterDepth ∧
+      callback (expression used) [] (Reference.uninterned (ordinaryLevel depth)) afterDepth =
+          Outcome.done ordinary cut ∧
+        (reader smart used).nodeRecords (muKey depth ordinary) = some (Value.mu entry body depth ordinary) ∧
+          result smart used = finish smart (Value.mu entry body depth ordinary) ∧
+            Correct entry body depth ordinary ∧
+              (∀ (leaf : Value Nat Bool),
+                  leaf ∈ leaves body →
+                    ¬marker ∈
+                        Option.getD
+                          (match leaf with
+                          | Value.reference name => assignment name
+                          | x => profile leaf)
+                          []) ∧
+                Equivalent (denote (result smart used) assignment)
+                  (if (!smart || usesLocal depth ordinary) = true then
+                    if (Value.mu entry body depth ordinary).free.isEmpty = true then none
+                    else
+                      erase marker
+                        (denote ordinary
+                          (shadow (Reference.uninterned (ordinaryLevel depth)) (some [marker]) assignment))
+                  else denote ordinary (shadow (Reference.uninterned (ordinaryLevel depth)) (some []) assignment))
+but is expected to have type
+  ∃ depth afterDepth ordinary cut chosen original marker,
+    callback (expression used) [] Reference.depth (entryHeap smart used warm) = Outcome.done depth afterDepth ∧
+      callback (expression used) [] (Reference.uninterned (ordinaryLevel depth)) afterDepth =
+          Outcome.done ordinary cut ∧
+        (reader smart used).nodeRecords (muKey depth ordinary) = some (Value.mu chosen original depth ordinary) ∧
+          result smart used = finish smart (Value.mu chosen original depth ordinary) ∧
+            Correct chosen original depth ordinary ∧
+              (∀ (leaf : Value Nat Bool),
+                  leaf ∈ leaves original →
+                    ¬marker ∈
+                        Option.getD
+                          (match leaf with
+                          | Value.reference name => assignment name
+                          | x => profile leaf)
+                          []) ∧
+                Equivalent (denote (result smart used) assignment)
+                  (if (!smart || usesLocal depth ordinary) = true then
+                    if (Value.mu chosen original depth ordinary).free.isEmpty = true then none
+                    else
+                      erase marker
+                        (denote ordinary
+                          (shadow (Reference.uninterned (ordinaryLevel depth)) (some [marker]) assignment))
+                  else denote ordinary (shadow (Reference.uninterned (ordinaryLevel depth)) (some []) assignment))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-6.source.lean:104:17: error: Application type mismatch: The argument
+  fresh
+has type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves (body smart used) →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+but is expected to have type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves (body smart used) →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+in the application
+  And.intro fresh

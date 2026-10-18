@@ -1,0 +1,95 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:66:11: error: unsolved goals
+case false.false.none
+assignment : Reference → Option (List Reference)
+⊢ (True ↔ True) ∧ ∀ (name : Reference), name ∈ none.getD [] ↔ name ∈ none.getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:67:17: error: unsolved goals
+case false.false.some.nil
+assignment : Reference → Option (List Reference)
+⊢ (some [] = none ↔ some [] = none) ∧ ∀ (name : Reference), name ∈ (some []).getD [] ↔ name ∈ (some []).getD []
+
+case false.false.some.cons
+assignment : Reference → Option (List Reference)
+head✝ : Reference
+tail✝ : List Reference
+⊢ (some (head✝ :: tail✝) = none ↔ some (head✝ :: tail✝) = none) ∧
+    ∀ (name : Reference), name ∈ (some (head✝ :: tail✝)).getD [] ↔ name ∈ (some (head✝ :: tail✝)).getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:66:11: error: unsolved goals
+case false.true.none
+assignment : Reference → Option (List Reference)
+⊢ (True ↔ True) ∧ ∀ (name : Reference), name ∈ none.getD [] ↔ name ∈ none.getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:67:17: error: unsolved goals
+case false.true.some.nil
+assignment : Reference → Option (List Reference)
+⊢ (some [] = none ↔ some [] = none) ∧ ∀ (name : Reference), name ∈ (some []).getD [] ↔ name ∈ (some []).getD []
+
+case false.true.some.cons
+assignment : Reference → Option (List Reference)
+head✝ : Reference
+tail✝ : List Reference
+⊢ (True ↔ True) ∧ ∀ (name : Reference), name ∈ none.getD [] ↔ name ∈ none.getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:66:11: error: unsolved goals
+case true.false.none
+assignment : Reference → Option (List Reference)
+⊢ (True ↔ True) ∧ ∀ (name : Reference), name ∈ none.getD [] ↔ name ∈ none.getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:67:17: error: unsolved goals
+case true.false.some.nil
+assignment : Reference → Option (List Reference)
+⊢ (some [] = none ↔ some [] = none) ∧ ∀ (name : Reference), name ∈ (some []).getD [] ↔ name ∈ (some []).getD []
+
+case true.false.some.cons
+assignment : Reference → Option (List Reference)
+head✝ : Reference
+tail✝ : List Reference
+⊢ (some (head✝ :: tail✝) = none ↔ some (head✝ :: tail✝) = none) ∧
+    ∀ (name : Reference), name ∈ (some (head✝ :: tail✝)).getD [] ↔ name ∈ (some (head✝ :: tail✝)).getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:66:11: error: unsolved goals
+case true.true.none
+assignment : Reference → Option (List Reference)
+⊢ (True ↔ True) ∧ ∀ (name : Reference), name ∈ none.getD [] ↔ name ∈ none.getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:67:17: error: unsolved goals
+case true.true.some.nil
+assignment : Reference → Option (List Reference)
+⊢ (some [] = none ↔ some [] = none) ∧ ∀ (name : Reference), name ∈ (some []).getD [] ↔ name ∈ (some []).getD []
+
+case true.true.some.cons
+assignment : Reference → Option (List Reference)
+head✝ : Reference
+tail✝ : List Reference
+⊢ (True ↔ True) ∧ ∀ (name : Reference), name ∈ none.getD [] ↔ name ∈ none.getD []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:68:79: error: unsolved goals
+case false.false
+other : NodeKey
+actualEntry : Interned NodeKey
+actualBody actualDepth actualOrdinary : Value Nat Bool
+installed : (reader false false).nodeRecords other = some (Value.mu actualEntry actualBody actualDepth actualOrdinary)
+⊢ ∀ (assignment : Reference → Option (List Reference)) (replacement : Option (List Reference)),
+    Equivalent (denote actualBody (shadow (Reference.interned actualEntry.identity) replacement assignment))
+      (denote actualOrdinary (shadow (Reference.uninterned (ordinaryLevel actualDepth)) replacement assignment))
+
+case false.true
+other : NodeKey
+actualEntry : Interned NodeKey
+actualBody actualDepth actualOrdinary : Value Nat Bool
+installed : (reader false true).nodeRecords other = some (Value.mu actualEntry actualBody actualDepth actualOrdinary)
+⊢ ∀ (assignment : Reference → Option (List Reference)) (replacement : Option (List Reference)),
+    Equivalent (denote actualBody (shadow (Reference.interned actualEntry.identity) replacement assignment))
+      (denote actualOrdinary (shadow (Reference.uninterned (ordinaryLevel actualDepth)) replacement assignment))
+
+case true.false
+other : NodeKey
+actualEntry : Interned NodeKey
+actualBody actualDepth actualOrdinary : Value Nat Bool
+installed : (reader true false).nodeRecords other = some (Value.mu actualEntry actualBody actualDepth actualOrdinary)
+⊢ ∀ (assignment : Reference → Option (List Reference)) (replacement : Option (List Reference)),
+    Equivalent (denote actualBody (shadow (Reference.interned actualEntry.identity) replacement assignment))
+      (denote actualOrdinary (shadow (Reference.uninterned (ordinaryLevel actualDepth)) replacement assignment))
+
+case true.true
+other : NodeKey
+actualEntry : Interned NodeKey
+actualBody actualDepth actualOrdinary : Value Nat Bool
+installed : (reader true true).nodeRecords other = some (Value.mu actualEntry actualBody actualDepth actualOrdinary)
+⊢ ∀ (assignment : Reference → Option (List Reference)) (replacement : Option (List Reference)),
+    Equivalent (denote actualBody (shadow (Reference.interned actualEntry.identity) replacement assignment))
+      (denote actualOrdinary (shadow (Reference.uninterned (ordinaryLevel actualDepth)) replacement assignment))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/native-profile-integration-direct-1.source.lean:70:37: error: unexpected token '['; expected command

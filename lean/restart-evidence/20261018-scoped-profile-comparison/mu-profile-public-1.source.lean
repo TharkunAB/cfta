@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentStoredMuProfileReduction
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredMuProfileReduction.fresh_marker
+#print MicroCFTA.SourceCurrentStoredMuProfileReduction.fresh_marker
+#print axioms MicroCFTA.SourceCurrentStoredMuProfileReduction.fresh_marker
+#check @MicroCFTA.SourceCurrentStoredMuProfileReduction.open_denote
+#print MicroCFTA.SourceCurrentStoredMuProfileReduction.open_denote
+#print axioms MicroCFTA.SourceCurrentStoredMuProfileReduction.open_denote
+#check @MicroCFTA.SourceCurrentStoredMuProfileReduction.open_correct
+#print MicroCFTA.SourceCurrentStoredMuProfileReduction.open_correct
+#print axioms MicroCFTA.SourceCurrentStoredMuProfileReduction.open_correct

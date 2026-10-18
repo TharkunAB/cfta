@@ -1,0 +1,15 @@
+# Actual stored profile composition
+
+Recorded: 2026-10-18 19:12 CEST.
+
+The selected source is `SourceCurrentStoredProfileComposition.lean`. Its four public theorems are `node`, `union`, `makeNode`, and `makeUnion`. The source has no placeholder proof. The selected direct check has a zero-byte log. The canonical build is warning-free. The public group prints all four complete signatures, proofs, and axiom reports with all eight required options.
+
+`node` and `union` interpret actual resident literal values. `Normal` and `Available` supply exact metadata and captured child availability. The closed shortcut uses the actual free-name field: every child is closed, and its stored interpretation is its literal profile. The open case recaptures every child plan into the parent's exact leaf context with `StoredProfilePlan.recapture`. Arbitrary assigned reference profiles remain allowed. In particular, the proof does not treat an open raw Mu source as an opaque captured value.
+
+`makeNode` starts at a Ready heap with resident complete edge payloads. Its result profile is exactly the future live-row test on the original input edges and ordered children. Every future live row is initially live. Canonical sorting and deduplication retain that row. `makeUnion` starts at a Ready heap with available input values. Literal union flattening has an exact fold equation. Reference deduplication retains the available exact value. The ordinary-only merge uses the actual node constructor theorem. The general union branch uses the actual resident result and its complete member list. Its conclusion is `Equivalent`, so order and duplicate root references do not become false literal list equalities.
+
+The constructed witness builds a closed used Mu from source. Its ordinary body has an open child `node7[self]` and a closed nullary child `node8[]`. Actual `makeNode` on two copies of the first child's row retains one physical nonempty row. The all-Empty reference assignment makes that result's stored profile Empty. Actual `makeUnion` on the first child, the second child, a repeated first child, and Empty merges to two ordinary rows. The nullary row retains the opaque profile. Ready, child availability, edge residency, source success, used-self membership, and exact row counts are derived in the witness. It has no supplied future call or output-profile premise.
+
+This component proves profile composition for actual ordinary constructors. It does not prove general source reconstruction commutation at a binder, the publication step of a causal Mu profile invariant, a universal resident-Mu Correct contract, recursive outer termination, or Haskell correspondence. Full guards and ordered children are used by the actual resident constructor inputs. The resulting root profile is an abstraction and is not a language-equivalence conclusion.
+
+All earlier snapshots and execution logs remain in the component. Successful smaller subsets are marked superseded. Failed drafts are not selected. No earlier frozen source or evidence was changed.

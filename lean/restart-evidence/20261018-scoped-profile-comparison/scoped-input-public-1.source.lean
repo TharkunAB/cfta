@@ -1,0 +1,36 @@
+import MicroCFTA.SourceCurrentScopedProfileInputs
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.Compatible
+#print MicroCFTA.SourceCurrentScopedProfileInputs.Compatible
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.Compatible
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.variable_input
+#print MicroCFTA.SourceCurrentScopedProfileInputs.variable_input
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.variable_input
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.union_member
+#print MicroCFTA.SourceCurrentScopedProfileInputs.union_member
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.union_member
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.node_child
+#print MicroCFTA.SourceCurrentScopedProfileInputs.node_child
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.node_child
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.extend
+#print MicroCFTA.SourceCurrentScopedProfileInputs.extend
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.extend
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.extend_depth
+#print MicroCFTA.SourceCurrentScopedProfileInputs.extend_depth
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.extend_depth
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.publication_ordinary
+#print MicroCFTA.SourceCurrentScopedProfileInputs.publication_ordinary
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.publication_ordinary
+#check @MicroCFTA.SourceCurrentScopedProfileInputs.publication
+#print MicroCFTA.SourceCurrentScopedProfileInputs.publication
+#print axioms MicroCFTA.SourceCurrentScopedProfileInputs.publication

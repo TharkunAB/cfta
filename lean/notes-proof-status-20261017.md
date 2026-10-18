@@ -1,8 +1,24 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `9a840a6c`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `d2c57674`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
+
+## Current scoped profiles and complete actual binder readback
+
+Updated: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.
+Read `lean/notes-current-scoped-profile-comparison.md`.
+Seven new modules give support-scoped input extensions, independent pure
+capture contexts, actual node/union profile composition, all Mu finish
+branches, and actual current-probe readback for completed binders.
+The final parametric payload invariant remains explicit. The new contract
+rejects the exact earlier artificial cache. General filtered source
+comparison and actual publication preservation remain open.
+Full Audit passes 3367 jobs and 72814 dependency checks. All 25 public and
+six integration/exclusion heads pass full proof and standard-axiom checks.
+No Haskell bytes change. The strongest broad theorem remains conditional
+finite-tree preservation. General termination, semantic initialization,
+and full Haskell correspondence remain open. FINDINGS keeps repairs first.
 
 ## Current stored profiles and causal publication induction
 

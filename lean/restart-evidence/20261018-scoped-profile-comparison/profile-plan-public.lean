@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentStoredProfilePlan
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredProfilePlan.resolve
+#print MicroCFTA.SourceCurrentStoredProfilePlan.resolve
+#print axioms MicroCFTA.SourceCurrentStoredProfilePlan.resolve
+#check @MicroCFTA.SourceCurrentStoredProfilePlan.encode_evaluate
+#print MicroCFTA.SourceCurrentStoredProfilePlan.encode_evaluate
+#print axioms MicroCFTA.SourceCurrentStoredProfilePlan.encode_evaluate
+#check @MicroCFTA.SourceCurrentStoredProfilePlan.encodeMany_evaluate
+#print MicroCFTA.SourceCurrentStoredProfilePlan.encodeMany_evaluate
+#print axioms MicroCFTA.SourceCurrentStoredProfilePlan.encodeMany_evaluate
+#check @MicroCFTA.SourceCurrentStoredProfilePlan.encodeEdges_evaluate
+#print MicroCFTA.SourceCurrentStoredProfilePlan.encodeEdges_evaluate
+#print axioms MicroCFTA.SourceCurrentStoredProfilePlan.encodeEdges_evaluate
+#check @MicroCFTA.SourceCurrentStoredProfilePlan.recapture
+#print MicroCFTA.SourceCurrentStoredProfilePlan.recapture
+#print axioms MicroCFTA.SourceCurrentStoredProfilePlan.recapture
+#check @MicroCFTA.SourceCurrentStoredProfilePlan.rebind
+#print MicroCFTA.SourceCurrentStoredProfilePlan.rebind
+#print axioms MicroCFTA.SourceCurrentStoredProfilePlan.rebind

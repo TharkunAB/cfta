@@ -1,0 +1,92 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-2.source.lean:74:2: error: Type mismatch: After simplification, term
+  SourceCurrentStoredProfilePlan.recapture context body assigned reader ready.semantic.left.normal.facts.coherent
+    context_available body_available fun x member => List.mem_cons_of_mem Value.empty member
+ has type
+  evaluate (encode context [] body) (List.map assigned context) =
+    evaluate (encode (leaves body) [] body) (List.map assigned (leaves body))
+but is expected to have type
+  evaluate (encode context [] body) (List.map assigned context) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name => assignment name
+          | x => profile leaf)
+        (leaves body))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-2.source.lean:81:2: error: Type mismatch: After simplification, term
+  SourceCurrentStoredProfilePlan.rebind context body (Reference.interned entry.identity) (some [marker]) assigned reader
+    ready.semantic.left.normal.facts.coherent context_available fun x member => List.mem_cons_of_mem Value.empty member
+ has type
+  evaluate (encode context [Reference.interned entry.identity] body) (some [marker] :: List.map assigned context) =
+    evaluate (encode context [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [marker]
+            else
+              match leaf with
+              | Value.reference name => assignment name
+              | x => profile leaf
+          | x =>
+            match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+        context)
+but is expected to have type
+  evaluate (encode context [Reference.interned entry.identity] body) (some [marker] :: List.map assigned context) =
+    evaluate (encode context [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [marker]
+            else
+              match leaf with
+              | Value.reference name => assignment name
+              | x => profile leaf
+          | x =>
+            match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+        context)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-2.source.lean:106:100: error: Type mismatch: After simplification, term
+  freshLeaves
+ has type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves body →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+but is expected to have type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves body →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-2.source.lean:108:118: error: Type mismatch: After simplification, term
+  freshLeaves
+ has type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves body →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+but is expected to have type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves body →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []

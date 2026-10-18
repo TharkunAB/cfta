@@ -1,0 +1,70 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:52:73: error: unsolved goals
+rho : Reference → Profile
+⊢ ∀ (replacement : Profile),
+    Equivalent (denote body (shadow (Reference.interned entry.identity) replacement rho))
+      (denote ordinary (shadow (Reference.uninterned (ordinaryLevel depth)) replacement rho))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:53:17: error: unexpected identifier; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:56:59: error: unexpected identifier; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:56:114: error: unexpected identifier; expected 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:74:2: error: Type mismatch
+  SourceCurrentStoredProfilePlan.recapture context body assigned reader ready.semantic.left.normal.facts.coherent
+    context_available body_available fun x member => List.mem_cons_of_mem Value.empty member
+has type
+  evaluate (encode context [] body) (List.map assigned context) =
+    evaluate (encode (leaves body) [] body) (List.map assigned (leaves body))
+but is expected to have type
+  evaluate (encode context [] body) (List.map assigned context) = denote body assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:81:2: error: Type mismatch
+  SourceCurrentStoredProfilePlan.rebind context body (Reference.interned entry.identity) (some [marker]) assigned reader
+    ready.semantic.left.normal.facts.coherent context_available fun x member => List.mem_cons_of_mem Value.empty member
+has type
+  evaluate (encode context [Reference.interned entry.identity] body) (some [marker] :: List.map assigned context) =
+    evaluate (encode context [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name => if Reference.interned entry.identity = name then some [marker] else assigned leaf
+          | x => assigned leaf)
+        context)
+but is expected to have type
+  evaluate (encode context [Reference.interned entry.identity] body) (some [marker] :: List.map assigned context) =
+    evaluate (encode context [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name => if Reference.interned entry.identity = name then some [marker] else assigned leaf
+          | x => assigned leaf)
+        context)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:106:96: error: Application type mismatch: The argument
+  freshLeaves
+has type
+  ∀ (leaf : Value Nat Bool), leaf ∈ leaves body → ¬marker ∈ Option.getD (assigned leaf) []
+but is expected to have type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves body →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+in the application
+  SourceCurrentStoredMuProfileReduction.open_denote entry body depth ordinary assignment reader
+    ready.semantic.left.normal.facts.coherent (shape ▸ target_available) (shape ▸ opened) marker freshLeaves
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/pure-mu-integration-direct-1.source.lean:108:114: error: Application type mismatch: The argument
+  freshLeaves
+has type
+  ∀ (leaf : Value Nat Bool), leaf ∈ leaves body → ¬marker ∈ Option.getD (assigned leaf) []
+but is expected to have type
+  ∀ (leaf : Value Nat Bool),
+    leaf ∈ leaves body →
+      ¬marker ∈
+          Option.getD
+            (match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+            []
+in the application
+  SourceCurrentStoredMuProfileReduction.open_correct entry body depth ordinary assignment reader
+    ready.semantic.left.normal.facts.coherent (shape ▸ target_available) candidate_correct (shape ▸ opened) marker
+    freshLeaves

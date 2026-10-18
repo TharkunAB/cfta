@@ -1,0 +1,34 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/mu-profile-direct-1.source.lean:105:21: warning: This simp argument is unused:
+  profile
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [shadow, mapNames]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/mu-profile-direct-1.source.lean:126:2: error: Type mismatch
+  SourceCurrentStoredProfilePlan.rebind (leaves body) body (Reference.interned entry.identity) (some [Sum.inl ()])
+    (fun leaf => mapNames Sum.inr (assigned assignment leaf)) state coherent
+    (InternedStoredSubstitution.leaves_available body state bodyAvailable) fun x member => member
+has type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] :: List.map (fun leaf => mapNames Sum.inr (assigned assignment leaf)) (leaves body)) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [Sum.inl ()]
+            else mapNames Sum.inr (assigned assignment leaf)
+          | x => mapNames Sum.inr (assigned assignment leaf))
+        (leaves body))
+but is expected to have type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map
+          (fun x =>
+            mapNames Sum.inr
+              (match x with
+              | Value.reference name => assignment name
+              | x_1 => profile x))
+          (leaves body)) =
+    symbolic body (Reference.interned entry.identity) assignment

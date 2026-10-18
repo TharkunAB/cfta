@@ -1,0 +1,28 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/scoped-input-direct-1.source.lean:101:4: error: unsolved goals
+case pos
+Atom Symbol Guard : Type
+body : Syntax Symbol Guard
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+first second : Reference → Profile
+compatible : Compatible (Syntax.binder true body) inputs firstNames secondNames first second
+firstArgument secondArgument : Reference
+replacement : Profile
+aliases :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ support (Syntax.binder true body) inputs →
+      (Sum.elim id firstNames label = firstArgument ↔ Sum.elim id secondNames label = secondArgument)
+name : Reference
+member : Sum.inl name ∈ support body (Sum.inr (Sum.inl ()) :: List.map liftInput inputs)
+captured : Sum.inl name ∈ support (Syntax.binder true body) inputs
+alias : name = firstArgument ↔ name = secondArgument
+left : name = firstArgument
+right : name = secondArgument
+⊢ replacement = if firstArgument = secondArgument then replacement else second firstArgument
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/scoped-input-direct-1.source.lean:102:29: warning: This simp argument is unused:
+  right
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [shadow, left, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

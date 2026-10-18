@@ -1,0 +1,204 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:39:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateMany (encodeMany context [] []) (List.map (meaning assignment) context)
+is not definitionally equal to the right-hand side
+  List.map (fun value => denote value assignment) []
+
+case nil
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+contextAvailable : Values state context
+available : Values state []
+covered : ∀ (leaf : Value Symbol Guard), leaf ∈ manyLeaves [] → leaf ∈ context
+⊢ evaluateMany (encodeMany context [] []) (List.map (meaning assignment) context) =
+    List.map (fun value => denote value assignment) []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:43:43: error: Application type mismatch: The argument
+  List.mem_append_left ?m.84 member
+has type
+  leaf ∈ leaves first ++ ?m.84
+but is expected to have type
+  leaf ∈ manyLeaves (first :: rest)
+in the application
+  covered leaf (List.mem_append_left ?m.84 member)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:55:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateEdges (encodeEdges context [] []) (List.map (meaning assignment) context)
+is not definitionally equal to the right-hand side
+  [].any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)
+
+case nil
+Symbol Guard : Type
+context : List (Value Symbol Guard)
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+contextAvailable : Values state context
+available : Values state (List.flatMap EdgeValue.children [])
+covered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves [] → leaf ∈ context
+⊢ evaluateEdges (encodeEdges context [] []) (List.map (meaning assignment) context) =
+    [].any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:62:47: error: Application type mismatch: The argument
+  List.mem_append_left ?m.118 member
+has type
+  leaf ∈ manyLeaves children ++ ?m.118
+but is expected to have type
+  leaf ∈ edgeLeaves (EdgeValue.mk entry children :: rest)
+in the application
+  covered leaf (List.mem_append_left ?m.118 member)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:72:49: error(lean.unknownIdentifier): Unknown identifier `InternedFreshProbeKeys.childFree_member`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:104:65: error: Application type mismatch: The argument
+  emptyTrue
+has type
+  (child.referenceOf == InternedBinderProtocol.NodeRef.empty) = true
+but is expected to have type
+  ?m.234 child = true
+in the application
+  ⟨member, emptyTrue⟩
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:111:4: error: Tactic `rfl` failed: The left-hand side
+  profile (Value.node entry edges depth free)
+is not definitionally equal to the right-hand side
+  if true = true then none else some []
+
+case pos
+Symbol Guard : Type
+entry : Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List Reference
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+available : Available state (Value.node entry edges depth free)
+closed : (Value.node entry edges depth free).free = []
+allClosed : ∀ (child : Value Symbol Guard), child ∈ List.flatMap EdgeValue.children edges → child.free = []
+nonempty : InternedNonemptyRecords.StoredNonempty (Value.node entry edges depth free)
+live : InternedLiveEdges.ValueLive (Value.node entry edges depth free)
+positive : (edges.any fun edge => edge.children.all fun child => !isEmpty (denote child assignment)) = true
+⊢ profile (Value.node entry edges depth free) = if true = true then none else some []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:113:12: error(lean.unknownIdentifier): Unknown constant `List.isEmpty_eq_false.mpr`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:119:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  evaluateEdges (encodeEdges (leaves (Value.node entry edges depth free)) [] edges)
+    (List.map (meaning assignment) (leaves (Value.node entry edges depth free)))
+in the target expression
+  (if
+        evaluateEdges (encodeEdges (leaves (Value.node entry edges depth free)) [] edges)
+            (List.map
+              (fun leaf =>
+                match leaf with
+                | Value.reference name => assignment name
+                | x => profile leaf)
+              (leaves (Value.node entry edges depth free))) =
+          true then
+      none
+    else some []) =
+    if
+        (edges.any fun edge =>
+            edge.children.all fun child =>
+              !isEmpty
+                  (evaluate (encode (leaves child) [] child)
+                    (List.map
+                      (fun leaf =>
+                        match leaf with
+                        | Value.reference name => assignment name
+                        | x => profile leaf)
+                      (leaves child)))) =
+          true then
+      none
+    else some []
+
+case neg
+Symbol Guard : Type
+entry : Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List Reference
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+available : Available state (Value.node entry edges depth free)
+closed : ¬(Value.node entry edges depth free).free = []
+opened : (Value.node entry edges depth free).free.isEmpty = false
+collected : leaves (Value.node entry edges depth free) = edgeLeaves edges
+⊢ (if
+        evaluateEdges (encodeEdges (leaves (Value.node entry edges depth free)) [] edges)
+            (List.map
+              (fun leaf =>
+                match leaf with
+                | Value.reference name => assignment name
+                | x => profile leaf)
+              (leaves (Value.node entry edges depth free))) =
+          true then
+      none
+    else some []) =
+    if
+        (edges.any fun edge =>
+            edge.children.all fun child =>
+              !isEmpty
+                  (evaluate (encode (leaves child) [] child)
+                    (List.map
+                      (fun leaf =>
+                        match leaf with
+                        | Value.reference name => assignment name
+                        | x => profile leaf)
+                      (leaves child)))) =
+          true then
+      none
+    else some []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:139:81: error(lean.unknownIdentifier): Unknown constant `List.isEmpty_eq_false.mpr`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-scoped-profile-comparison/stored-composition-direct-1.source.lean:145:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  evaluateMany (encodeMany (leaves (Value.union entry members depth free)) [] members)
+    (List.map (meaning assignment) (leaves (Value.union entry members depth free)))
+in the target expression
+  combineMany
+      (evaluateMany (encodeMany (leaves (Value.union entry members depth free)) [] members)
+        (List.map
+          (fun leaf =>
+            match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+          (leaves (Value.union entry members depth free)))) =
+    combineMany
+      (List.map
+        (fun value =>
+          evaluate (encode (leaves value) [] value)
+            (List.map
+              (fun leaf =>
+                match leaf with
+                | Value.reference name => assignment name
+                | x => profile leaf)
+              (leaves value)))
+        members)
+
+case neg
+Symbol Guard : Type
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List Reference
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+available : Available state (Value.union entry members depth free)
+closed : ¬(Value.union entry members depth free).free = []
+opened : (Value.union entry members depth free).free.isEmpty = false
+collected : leaves (Value.union entry members depth free) = manyLeaves members
+⊢ combineMany
+      (evaluateMany (encodeMany (leaves (Value.union entry members depth free)) [] members)
+        (List.map
+          (fun leaf =>
+            match leaf with
+            | Value.reference name => assignment name
+            | x => profile leaf)
+          (leaves (Value.union entry members depth free)))) =
+    combineMany
+      (List.map
+        (fun value =>
+          evaluate (encode (leaves value) [] value)
+            (List.map
+              (fun leaf =>
+                match leaf with
+                | Value.reference name => assignment name
+                | x => profile leaf)
+              (leaves value)))
+        members)

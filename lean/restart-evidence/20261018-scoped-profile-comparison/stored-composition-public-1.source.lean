@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentStoredProfileComposition
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredProfileComposition.node
+#print MicroCFTA.SourceCurrentStoredProfileComposition.node
+#print axioms MicroCFTA.SourceCurrentStoredProfileComposition.node
+#check @MicroCFTA.SourceCurrentStoredProfileComposition.union
+#print MicroCFTA.SourceCurrentStoredProfileComposition.union
+#print axioms MicroCFTA.SourceCurrentStoredProfileComposition.union
+#check @MicroCFTA.SourceCurrentStoredProfileComposition.makeNode
+#print MicroCFTA.SourceCurrentStoredProfileComposition.makeNode
+#print axioms MicroCFTA.SourceCurrentStoredProfileComposition.makeNode
+#check @MicroCFTA.SourceCurrentStoredProfileComposition.makeUnion
+#print MicroCFTA.SourceCurrentStoredProfileComposition.makeUnion
+#print axioms MicroCFTA.SourceCurrentStoredProfileComposition.makeUnion
