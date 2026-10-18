@@ -38,16 +38,26 @@ module Data.CFTA.Gen.Tower (
 
     -- * The measure
     descriptionLength,
+
+    -- * The outer loop
+    Exploration (..),
+    explore,
+    abstractGrammar,
+    concretizations,
 ) where
 
-import Data.List (maximumBy, minimumBy)
+import Data.Containers.ListUtils (nubOrd, nubOrdOn)
+import Data.List (mapAccumL, maximumBy, minimumBy)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Ord (comparing)
 import qualified Data.Set as Set
 import qualified Data.Text as Text
 
+import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Formula as F
+import Data.CFTA.Index (Size)
+import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -64,14 +74,16 @@ without an exact value stays. 'Nothing' if a predicate is outside the fragment
 that 'evaluate' decides.
 -}
 abstract :: [F.Formula] -> Term Symbol -> Maybe (Term Symbol)
-abstract vocabulary (Term.Node symbol children) = do
-    parts <- traverse (abstract vocabulary) children
-    case exactValue symbol of
-        Nothing -> Just $ Term.Node symbol parts
-        Just value -> do
-            truths <- traverse (evaluate value) vocabulary
-            let cube = F.conjunction [if truth then predicate else F.Not predicate | (predicate, truth) <- zip vocabulary truths]
-            Just $ Term.Node (RefinedSymbol (Symbol $ symbolText symbol) cube) parts
+abstract vocabulary (Term.Node symbol children) = Term.Node <$> abstractSymbol vocabulary symbol <*> traverse (abstract vocabulary) children
+
+-- | The cube of a symbol with an exact value; any other symbol stays.
+abstractSymbol :: [F.Formula] -> Symbol -> Maybe Symbol
+abstractSymbol vocabulary symbol = case exactValue symbol of
+    Nothing -> Just symbol
+    Just value -> do
+        truths <- traverse (evaluate value) vocabulary
+        let cube = F.conjunction [if truth then predicate else F.Not predicate | (predicate, truth) <- zip vocabulary truths]
+        Just $ RefinedSymbol (Symbol $ symbolText symbol) cube
 
 {- | Decide a predicate at a value of @v@. The fragment is integer literals,
 @v@, negation, sums, differences, products, remainders by a nonzero integer
@@ -215,10 +227,11 @@ data Step response
     | Update !(Term Symbol) !response
     deriving (Eq, Show)
 
--- | How 'refine' ended: the spec agrees with every test, or no candidate separates a conflict.
+-- | How 'refine' or 'explore' ended: the spec agrees with every test, no candidate separates a conflict, or a predicate is outside the fragment of 'evaluate'.
 data Outcome response
     = Agreed
     | Stuck !(Term Symbol) ![Observation response]
+    | OutsideFragment
     deriving (Eq, Show)
 
 -- | The vocabulary and the spec at the end of 'refine', the steps in order, and how the loop ended.
@@ -309,3 +322,107 @@ formulaSize formula = case formula of
         F.Ite condition yes no -> 1 + formulaSize condition + valueSize yes + valueSize no
         F.Cast part _ -> 1 + valueSize part
         _ -> 1
+
+{- | The automaton of the abstract terms of a language: each leaf with an
+exact value becomes its cube, and each row keeps one transition for each
+symbol and children. 'Nothing' if a predicate is outside the fragment.
+-}
+abstractGrammar :: (Ord state) => [F.Formula] -> FTA.PlainFTA state Symbol -> Maybe (FTA.PlainFTA state Symbol)
+abstractGrammar vocabulary base = do
+    rows <- traverse (traverse $ traverse abstractTransition) $ Map.toList $ FTA.transitionTable base
+    either (const Nothing) Just $
+        FTA.mkFTA (FTA.initialState base) [(state, nubOrdOn edge transitions) | (state, transitions) <- rows]
+  where
+    abstractTransition transition =
+        (\symbol -> transition{FTA.transitionSymbol = symbol}) <$> abstractSymbol vocabulary (FTA.transitionSymbol transition)
+    edge transition = (FTA.transitionSymbol transition, FTA.transitionChildren transition)
+
+{- | Up to the given number of concrete tests for an abstract term. Each cube
+leaf becomes one of its witnesses: the concrete leaves of the base language
+with that cube. Concretization @j@ takes, at leaf @i@, the witness with index
+@j * (i + 1) + i@, modulo the number of witnesses, so that different
+concretizations make different leaves fresh. Duplicates are removed.
+-}
+concretizations :: Int -> Map.Map Symbol [Symbol] -> Term Symbol -> [Term Symbol]
+concretizations count witnesses term = take count $ nubOrd [snd $ build index 0 term | index <- [0 .. 4 * count]]
+  where
+    build index leaf (Term.Node symbol []) = case Map.lookup symbol witnesses of
+        Just choices@(_ : _) -> (leaf + 1, Term.Node (choices !! ((index * (leaf + 1) + leaf) `mod` length choices)) [])
+        _ -> (leaf, Term.Node symbol [])
+    build index leaf (Term.Node symbol children) = Term.Node symbol <$> mapAccumL (build index) leaf children
+
+-- | The end of 'explore': the vocabulary, the spec, each new vocabulary with the bound at which it was chosen, the model calls, the log, and the outcome.
+data Exploration response = Exploration
+    { exploredVocabulary :: ![F.Formula]
+    , exploredSpec :: !(Map.Map (Term Symbol) response)
+    , exploredChanges :: ![(Size, [F.Formula])]
+    , exploredCalls :: !Int
+    , exploredLog :: ![Observation response]
+    , exploredOutcome :: !(Outcome response)
+    }
+    deriving (Eq, Show)
+
+{- | The outer loop. Start with no predicates and the size bound 1. At each
+step, take every abstract term of the base language up to the bound, make up
+to @samples@ concrete tests for it ('concretizations'), and ask the model
+about each test that it has not answered. If two answers of one abstract
+term differ, the vocabulary is too coarse: run 'refine' from no predicates on
+all answers so far, so that a predicate chosen on few answers can be dropped.
+Otherwise run 'refine' with the vocabulary, which then only updates the spec.
+A different vocabulary keeps the bound, with the new abstraction; the same
+vocabulary raises the bound, until the given bound. The
+model is asked once for each test. A concrete test that the base language
+rejects is not asked. The loop stops, because the answers only grow and the
+tests up to the bound are finite.
+-}
+explore ::
+    (Monad m, Ord state, Ord response) =>
+    [Integer -> F.Formula] ->
+    response ->
+    Size ->
+    Int ->
+    FTA.PlainFTA state Symbol ->
+    (Term Symbol -> m response) ->
+    m (Exploration response)
+explore templates fallback bound samples base model = go [] [] Map.empty 1
+  where
+    leaves =
+        [ FTA.transitionSymbol transition
+        | transitions <- Map.elems $ FTA.transitionTable base
+        , transition <- transitions
+        , null $ FTA.transitionChildren transition
+        ]
+    go vocabulary changes answers size = case abstractGrammar vocabulary base >>= either (const Nothing) Just . Sized.sized of
+        Nothing -> pure $ finish vocabulary Map.empty changes answers OutsideFragment
+        Just grammar -> do
+            let witnesses = Map.fromListWith (flip (<>)) [(cube, [leaf]) | leaf <- leaves, Just cube <- [abstractSymbol vocabulary leaf]]
+                tests =
+                    nubOrd
+                        [ test
+                        | current <- [1 .. size]
+                        , term <- Sized.termsOfSize grammar current
+                        , test <- concretizations samples witnesses term
+                        , FTA.accepts base test
+                        ]
+                fresh = filter (`Map.notMember` answers) tests
+            responses <- traverse model fresh
+            let answers' = Map.union answers $ Map.fromList $ zip fresh responses
+                observations = [Observation test response | (test, response) <- Map.toList answers']
+                start = if null (conflicts vocabulary observations) then vocabulary else []
+                result = refine templates fallback start Map.empty observations
+                chosen = resultVocabulary result
+                changed = chosen /= vocabulary
+                changes' = if changed then changes <> [(size, chosen)] else changes
+            case resultOutcome result of
+                Agreed
+                    | changed -> go chosen changes' answers' size
+                    | size >= bound -> pure $ finish vocabulary (resultSpec result) changes' answers' Agreed
+                    | otherwise -> go vocabulary changes' answers' (size + 1)
+                outcome -> pure $ finish chosen (resultSpec result) changes' answers' outcome
+    finish vocabulary spec changes answers =
+        Exploration
+            vocabulary
+            spec
+            changes
+            (Map.size answers)
+            [Observation test response | (test, response) <- Map.toList answers]
