@@ -1,5 +1,66 @@
 # Constrained languages, indexing, and distributions
 
+## Current source-generated binder pairs
+
+Updated: 2026-10-18 14:42 CEST. Proof checkpoint is `0ee80d3e`.
+Starting checkpoint is `9f6230d5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-source-binder-generators.md`.
+
+An actual source binder and causal reader history now derive both
+comparison-generator directions for the selected earlier writer's body
+and ordinary reconstruction. Generated contains equality and genuine
+filtered source calls. It assumes no desired output Same, Directed or
+BodyIH law. Its lexical reference slots retain both generated directions.
+Historical contexts, live aliases, self-filter tests, actual calls,
+availability, forward growth and warm replay remain explicit. The earlier
+writer can have different syntax from the requester.
+
+An actual node-body Mu unfold now extends WarmSupport from indexed strict
+original stored-child support. Each child must return old support or the
+same recursive Mu. The producer constructs the unfolding, final Keeps,
+availability and warm replay. A checked source-built open used Mu with
+positive stored-plan depth grows the node cache and gains this support.
+This does not prepare arbitrary open Mu records or solve all child cases.
+
+Finite reflexive transitive closure and disjunction preserve genuine
+Directed simulations. Complete guards and ordered mutual child relations
+remain present. These closure laws do not prove an unproved generator.
+
+A productive source-built example uses two distinct equivalent captures.
+The same open binder source returns distinct used outer Mu values at one
+Ready reader. Each nested used Mu captures its own distinct outer Mu.
+A finite actual simulation proves all finite observations for both input
+captures and returned values. It gives exact finite language for every
+guard interpretation. A nullary accepted tree proves productivity. This
+is one example, not a general changing-capture source theorem.
+
+The main remaining proof must establish local source and self-filter
+simulation rules for Generated, including physical row-survival alignment
+and nested used binders. Membership extraction alone is not Directed.
+Automatic arbitrary open-Mu support remains open. General termination,
+initial query operands, active-owner exclusion, fresh-call bounds,
+repeated convergence, equality resources, host Int adequacy and complete
+public Haskell correspondence remain separate obligations.
+
+The strongest broad claim remains conditional partial correctness of the
+checked implementation model. A supported successful traversal with
+empty inherited constraints, initial semantic facts and scheduled
+resources preserves exactly the accepted finite trees. The required
+source semantic instances remain explicit.
+
+Full Audit passes 3319 jobs and 72224 dependency checks.
+All 18 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. Seven selected strict logs
+are empty. All four canonical builds are warning-free. Audit replays only
+the existing ClosedCompletion warning. Six component manifests pin
+288 entries. Independent review finds no material issue. Evidence is
+in `lean/restart-evidence/20261018-source-binder-generators/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current supported source simulation
 
 Updated: 2026-10-18 14:09 CEST. Proof checkpoint is `faca56de`.

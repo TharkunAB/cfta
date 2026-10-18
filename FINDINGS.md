@@ -2,6 +2,24 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 14:42 CEST. Proof checkpoint is `0ee80d3e`.
+Actual selected writer source calls now derive both reconstruction-generator
+directions. The relation assumes no desired output observation law. Both
+lexical reference directions, live aliases and exact self-filter tests
+remain explicit. Actual node-Mu unfoldings gain reader support from strict
+original-child support. A source-built open positive-depth used Mu checks
+this producer. A productive nested example with distinct equivalent
+captures has all finite observations and exact guarded finite language.
+Finite closure preserves genuine Directed simulations. General generated
+local rules, row-survival alignment, changing-capture binder congruence
+and arbitrary open-Mu preparation remain open. These are proof results,
+not executable Haskell repair requests. Full Audit passes 3319 jobs and
+72224 checks. No Haskell patch or new executable defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-source-binder-generators.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 14:09 CEST. Proof checkpoint is `faca56de`.
 Actual preparation now supports open zero-depth ordinary values with
 closed recursive Mu components. Actual source and causal history derive
