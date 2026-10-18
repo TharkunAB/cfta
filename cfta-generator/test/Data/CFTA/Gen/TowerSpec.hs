@@ -3,14 +3,18 @@
 -- | The rule for an abstraction extension, on a toy model of pairs of digits.
 module Data.CFTA.Gen.TowerSpec (spec) where
 
+import Data.Functor.Identity (Identity (..))
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Gen.Tower (Observation (..), Outcome (..), Result (..), Step (..), Verdict (..))
+import Data.CFTA.Gen.Tower (Exploration (..), Observation (..), Outcome (..), Result (..), Step (..), Verdict (..))
 import qualified Data.CFTA.Gen.Tower as Tower
 import Data.CFTA.Refinement.Expression (modulo, refinementFormula, (.==), (.>))
+import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Symbol (Symbol (RefinedSymbol))
 import Data.CFTA.Term (Term (Node))
 
@@ -54,7 +58,7 @@ spec = describe "Data.CFTA.Gen.Tower" $ do
         [() | Extend _ <- steps] `shouldBe` []
         case outcome of
             Stuck _ tests -> length tests `shouldBe` length observations
-            Agreed -> fail "expected a stop"
+            other -> fail $ "expected a stop, not " <> show other
 
     it "only updates a spec that is wrong for one term" $ do
         let Result vocabulary final _ _ = Tower.refine templates fallback [] Map.empty observations
@@ -85,6 +89,20 @@ spec = describe "Data.CFTA.Gen.Tower" $ do
         Set.fromList vocabulary `shouldBe` Set.fromList [greaterThan 4, divisibleBy 2]
         take 2 steps `shouldBe` map Extend vocabulary
         Tower.descriptionLength vocabulary final `shouldSatisfy` (< Tower.descriptionLength [] concrete)
+    it "explores with a growing bound and few model calls" $ do
+        -- The base language: digits and their sums. The model accepts an even sum of digits that are at most 4.
+        let accepts term = even (sum values) && all (<= 4) values where values = digitsOf term
+            explored = runIdentity $ Tower.explore templates False 5 2 sums (Identity . accepts)
+            vocabulary = exploredVocabulary explored
+            concrete = concatMap (Sized.termsOfSize $ either (error . show) id $ Sized.sized sums) [1 .. 5]
+            predicted test = maybe False (\term -> Map.findWithDefault False term $ exploredSpec explored) (Tower.abstract vocabulary test)
+        exploredOutcome explored `shouldBe` Agreed
+        -- A predicate chosen on the first few answers is dropped later.
+        map snd (exploredChanges explored) `shouldSatisfy` (\changes -> length changes > 1 && last changes == vocabulary)
+        Set.fromList vocabulary `shouldBe` Set.fromList [greaterThan 4, divisibleBy 2]
+        length concrete `shouldBe` 10 + 100 + 2000
+        filter (\test -> predicted test /= accepts test) concrete `shouldBe` []
+        exploredCalls explored `shouldSatisfy` (< length concrete `div` 4)
   where
     agrees vocabulary final =
         and
@@ -108,6 +126,22 @@ observations = [observe first second | first <- [0 .. 9], second <- [0 .. 9]]
 -- | The test of one pair, with the response of the model.
 observe :: Integer -> Integer -> Observation Response
 observe first second = Observation (Node "pair" [digit first, digit second]) (model first second)
+
+-- | Digits and their sums.
+sums :: FTA.PlainFTA () Symbol
+sums =
+    either (error . show) id $
+        FTA.mkFTA
+            ()
+            [
+                ( ()
+                , [FTA.Transition (digitSymbol value) [] noConstraint | value <- [0 .. 9]] <> [FTA.Transition "add" [(), ()] noConstraint]
+                )
+            ]
+
+-- | The symbol of a digit leaf.
+digitSymbol :: Integer -> Symbol
+digitSymbol exact = RefinedSymbol "lit" $ refinementFormula (.== fromInteger exact)
 
 -- | A digit leaf as a term.
 lit :: Integer -> Term Symbol
