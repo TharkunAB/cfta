@@ -4,6 +4,8 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
+  `mod` of SMT-LIB.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
