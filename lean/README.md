@@ -1,5 +1,55 @@
 # cfta formal model
 
+## Current generated lexical, node and union cases
+
+Updated: 2026-10-18 15:01 CEST. Proof checkpoint is `6fdc493e`.
+Starting checkpoint is `c1346edb`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-generated-local-rules.md`.
+
+The generated lexical spine now supplies the ordered resolved slot
+relation. Actual variable reconstruction derives both Generated directions
+and equal output heaps. It does not include root self filtering.
+
+Actual warm source and stored calls now derive both Generated directions
+with fresh absent root filters. An actual live source-node row derives
+each selected child's aliases and membership from its own actual calls.
+No child observation or parent output relation is assumed. General row
+survival and the complete node Local law remain open.
+
+Actual union selection, exact bare-self retention and warm stored calls
+preserve literal inclusion. A source-built counterexample has a warm
+parent filter and a child union whose filter still allocates at the same
+Ready reader. A separate source-built example has two available used Mu
+values with equal decoded shapes. One substitution returns Empty; the
+other does not. These are proof-contract boundaries. They do not refute
+Generated or establish a Haskell defect.
+
+The main recursive obligation remains source/filter/stored Empty fusion
+and the local reference, row and epsilon rules, including nested used
+binders and changing captures. Raw shape equality does not supply this
+fusion. Earlier writer provenance and common reader support remain
+necessary proof work. No general Generated simulation is claimed.
+
+The strongest broad claim remains conditional partial correctness of the
+checked implementation model. A supported successful top-level traversal
+with empty inherited constraints, initial semantic facts and scheduled
+resources preserves exactly the accepted finite terms. General termination
+and complete public Haskell correspondence remain open. The required
+source semantic instances remain explicit.
+
+Full Audit passes 3322 jobs and 72240 dependency checks.
+All 7 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. All 6 selected strict
+logs are empty. All three canonical builds are warning-free. Audit
+retains only the existing ClosedCompletion warning. 5 component
+manifests pin 183 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-generated-local-rules/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
 ## Current source-generated binder pairs
 
 Updated: 2026-10-18 14:42 CEST. Proof checkpoint is `0ee80d3e`.
