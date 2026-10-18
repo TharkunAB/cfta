@@ -1,5 +1,58 @@
 # Full formalization coverage
 
+## Current recursive outer correctness at successful returns
+
+Updated: 2026-10-18 07:24 CEST. Proof checkpoint is `fdd5c553`.
+Starting local checkpoint is `2c7c9f14`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-initial-schedule.md` for exact boundaries.
+
+Successful supported outer runs now derive their complete semantic and
+physical return from initial facts. One mutual proof covers node calls,
+node bodies, rows, descendants, children and indexed walks. The returned
+graph, strict semantic Reads, Post, Frame, physical Fits, raw guard carrier
+and available result use the same actual returned state and memo bundle.
+
+The pure phase schedule follows the source order. It feeds each predicted
+Parent return into descendants and the original row suffix. It feeds each
+predicted child return into the original walk suffix. One Room condition
+at the final scheduled profile derives each reached Parent reservation.
+Skipped, empty, terminal and warm branches use retained bounds. The proof
+does not assume monotonicity of Parent forecasts.
+
+Initial Context, Frame, Fits, finite raw guard carrier, inherited readiness
+and resident inputs remain explicit. The literal successful bounded worker
+equation also remains explicit. Future semantic reads, WorkerRanges,
+WorkerChecks, returned invariants and reached-entry capacity callbacks are
+not inputs. Each suffix receives the preceding actual returned context.
+
+The node law always excludes new accepted terms. Its reverse implication
+applies to terms that satisfy the inherited constraints. Empty inherited
+constraints therefore give exact language equality at the top-level call.
+This is recursive partial correctness. It does not prove that an arbitrary
+recursive call reaches a successful return.
+
+The physical Profile bounds four allocation quantities. It does not bound
+equality-operation tables or establish adequacy of host Int identities.
+These remain separate refinement obligations. No new Haskell defect follows.
+
+Full Audit passes 3256 jobs and 71215 checks.
+Four production and three constructed strict logs are empty. All
+27 public and 3 constructed full pairs pass in 8 groups.
+The extra private pair prints the complete recursive example statement.
+All eight settings and standard axioms pass. Audit peak is
+361 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 342 entries. Evidence is in
+`lean/restart-evidence/20261018-outer-initial-schedule/`.
+
+General recursive outer completion, all-owner separation, fresh-call bounds,
+unfinished-prefix semantic transport, used-writer alignment, repeated
+convergence and public Haskell correspondence remain open. The strongest
+complete ordinary outer domain is unchanged. Recursive language preservation
+is now derived at supported successful returns. No Haskell patch or new
+production defect is added. Field-pool repair b9219b9e remains fixed in
+c0cc8a05. Keep FINDINGS first. The full-library goal stays active.
+Publication awaits the existing direct approval. No push is attempted or retried.
+
 ## Current finite guard carriers through complete Parent
 
 Updated: 2026-10-18 06:59 CEST. Proof checkpoint is `651cb065`.
