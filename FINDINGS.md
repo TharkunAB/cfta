@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 10:04 CEST. Proof checkpoint is `cf2dc597`.
+Actual open reference calls now derive exact domain reads and ordered child
+traces at unchanged checked entries. Actual Mu writers derive their open
+body entry and return invariants, with direct or returned child provenance
+at the final reader. No internal history or closed operands are assumed.
+General query ancestry, retained used-Mu alignment and recursive completion
+remain open. Full Audit passes 3283 jobs and 71419 checks.
+No Haskell patch or new executable defect is added. Earlier proof linter
+warnings were removed by placing a pure helper before typeclass variables.
+This is a proof-source change, not an implementation repair.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-open-domain-reference-origins.md`. Keep this registry
+first. Record each later repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 09:47 CEST. Proof checkpoint is `68d6afe7`.
 Actual closed query Mu writers now retain a transition anchor in the same
 writer's generated input body, with full fields and actual lexical child

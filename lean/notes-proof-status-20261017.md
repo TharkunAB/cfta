@@ -1,8 +1,50 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `68d6afe7`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `cf2dc597`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
+
+## Current actual open Mu body and reference origins
+
+Updated: 2026-10-18 10:04 CEST. Proof checkpoint is `cf2dc597`.
+Starting checkpoint is `5d321e71`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-open-domain-reference-origins.md`.
+
+Successful reference compiler traces now derive actual domain membership,
+the exact binding read and the ordered child request at the unchanged
+checked entry. Final reader history supplies the actual earlier child
+writer. Unresolved direct calls keep their actual compiler trace instead.
+No internal active-owner history or closed-operands premise is assumed.
+
+Actual Mu traces now derive full Good at the entered open body state and
+its actual return. The same body receipt keeps the entered domain, exact
+child call, optional binder result and final reader provenance. The Mu
+query theorem derives a memo key from its selected branch without closed
+operands. Its body preserves the direct-or-returned split.
+
+General query ancestry still needs composition across all actual branches.
+Ordinary joins must keep paired operand rows, actual guard conjunction
+and ordered child pair calls. Earlier retained used-Mu alignment and Mu
+exposure remain open. The strongest general outer claim remains language
+preservation at supported successful returns with empty inherited
+constraints. General termination, all active node-owner exclusions,
+fresh-call bounds, repeated convergence, equality-operation resources,
+host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3283 jobs and 71419 checks. All nine production public
+pairs pass complete statement, proof and axiom checks. Both selected
+production strict logs are empty. Two constructed examples pass the same
+full checks in three groups. One closed Mu call enters an actual open
+reference lookup. One unresolved placeholder call executes directly.
+Both return Empty. Their integration strict log is empty. Canonical builds
+and Audit retain only the existing ClosedCompletion warning. Independent
+review finds no issue.
+Evidence is in `lean/restart-evidence/20261018-open-domain-reference-origins/`.
+
+No Haskell patch or new executable defect is added. FINDINGS preserves the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
 
 ## Current generated-body source rows at actual native Mu writers
 
