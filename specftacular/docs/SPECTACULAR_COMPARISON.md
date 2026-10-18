@@ -1,8 +1,9 @@
 # Spectacular and Specftacular
 
-This report compares the published ICST 2023 Spectacular artifact with
-Specftacular at `d2e91fdf`. It covers elapsed time, allocation, GC, peak
-RSS, and differences in the discovered laws. A larger law count is not a
+The matrix compares the published ICST 2023 Spectacular artifact with
+Specftacular at `d2e91fdf`. Separate controls and profiles cover the later
+`09caaec3` fragment check. The report covers elapsed time, allocation, GC,
+peak RSS, and differences in the discovered laws. A larger law count is not a
 better result by itself. False and redundant equations increase the count.
 
 The engine retains pruning during enumeration, increasing program size
@@ -16,11 +17,12 @@ same input policy.
 The optional ordered CFTA cursor passes its API and default CFTA cost
 controls. The Specftacular cursor variants fail their selection controls, so
 the selected engine keeps its existing enumeration path. Those small default
-controls do not establish the cost of larger Specftacular runs. The profiles
-guide the proposed alternatives below. They are not measurements of the
-current default engine.
+controls do not establish the cost of larger Specftacular runs. Separate
+profiles below identify the source of each run. Historical profiles and
+rejected candidates retain their source labels.
 
-The selected runtime completes 22 of 27 configurations within 300 seconds.
+The measured `d2e91fdf` runtime completes 22 of 27 configurations within
+300 seconds.
 The completed HugeLists size 7, phase 2 run has 242 laws. It omits six
 concretely refuted equations from the earlier 248-law output. Printed
 absence and bounded derivability checks have separate roles below.
@@ -29,12 +31,15 @@ absence and bounded derivability checks have separate roles below.
 
 The original columns retain the earlier all-`-O2` measurements. Original
 Spectacular and QuickSpec 2 are not rerun. The current matrix runs on
-2026-10-18 with the selected source and the 1064-case schedule.
+2026-10-18 with `d2e91fdf` and the 1064-case schedule. The matrix retains
+those measurements. The later Spec-only callback controls do not replace
+its timing, resource, or law-count rows.
 
 | Input | Revision |
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
-| [Current Specftacular](https://github.com/TharkunAB/cfta/tree/d2e91fdf297659382329e8d9375082024439dc8c/specftacular) | `d2e91fdf` |
+| [Measured Specftacular matrix](https://github.com/TharkunAB/cfta/tree/d2e91fdf297659382329e8d9375082024439dc8c/specftacular) | `d2e91fdf` |
+| [Spec-only fragment check](https://github.com/TharkunAB/cfta/commit/09caaec396a0e1f761a40cd7e218ecc6e8b5a518) | `09caaec3` |
 | [Initial 1064-case input policy](https://github.com/TharkunAB/cfta/commit/54b17ac82e87e5ae6a15e640658058cf4d26bd6b) | `54b17ac8` |
 | [Optional CFTA cursor](https://github.com/TharkunAB/cfta/commit/3cfd0ae71e92974640f6a386e91a9452735cd825) | `3cfd0ae7` |
 | [Profiled 1040-case predecessor](https://github.com/TharkunAB/cfta/tree/102965d3bbffc564b79cb718b73b9f589f95f2ce/specftacular) | `102965d3` |
@@ -1015,7 +1020,7 @@ blocked hints, so zero fallbacks does not show that all earlier hints were
 ready. The priority change took effect but did not prevent the frontier
 limit.
 
-### Current HugeLists bucket statistics
+### HugeLists bucket statistics for `d2e91fdf`
 
 A separate all-`-O2` diagnostic uses `d2e91fdf` at actual phase 3,
 program-leaf size 5, and result type `Int`. It preserves the earlier search.
@@ -1070,7 +1075,7 @@ also omits `seen` and complete-candidate reducibility checks. A full
 optimization decision needs counts of failed partial type choices and
 annotation-state work. The next diagnostics measure those events.
 
-### Current default-pruner demand counts
+### Default-pruner demand counts for `d2e91fdf`
 
 Two diagnostics use `d2e91fdf`, the full 1064-case schedule, and one O2
 counter binary. Counters start after reduction and refold. They stop after
@@ -1103,6 +1108,12 @@ of distinct invalid programs or logical type contradictions. The counters
 observe executed guards. They do not scan unchosen alternatives or infer
 failures by subtracting callback totals.
 
+Both windows record only one program ready-slot expansion. Ordinary program
+children are constructed recursively inside that expansion, before its Left
+oracle callback. They do not each receive a ready-slot callback. The oracle
+still sees alternative fragments and later annotation or marker expansions.
+These counts do not mean that only one program branch was explored.
+
 All partial-UVar visits have annotation or marker roles. Nodes without a
 program role account for 69.44% and 68.81% of partial traversal visits.
 Class merges can retain several roles. These observations do not identify
@@ -1118,6 +1129,55 @@ wildcard can then omit child reads. Repeated reads across templates can offset
 that saving. Exact pending IDs, finite languages, residuals, and the full
 197-law sequence must agree before any speed claim.
 
+### Cost-centre profiles before and after the fragment check
+
+Profiles compare `d2e91fdf` with the executable body of `09caaec3`; the latter
+source differs only in one Haddock sentence. Both use 29 HOME modules, the
+same `-O2` late-SCC flags, audited profiling dependencies, and 1064 cases.
+Both whole size 5, phase 3 runs reproduce all 197 laws and all 40,814 stdout
+bytes. The windows sample the first candidate-list demand in phase 3, size 6,
+`Int`, after 8,369 examined terms and 223 laws. Both stop before testing any
+candidate from that bucket.
+
+| Source and scope | Application ticks | Pruning self | Enumeration self | `matchPartial` self |
+| --- | ---: | ---: | ---: | ---: |
+| `d2e91fdf`, whole size 5 | 118,138 | 10,578 (8.9539%) | 24,676 (20.8874%) | 7,104 (6.0133%) |
+| `09caaec3`, whole size 5 | 96,639 | 11,951 (12.3666%) | 14,719 (15.2309%) | 6,935 (7.1762%) |
+| `d2e91fdf`, size 6 window | 54,409 | 25,472 (46.8158%) | 19,716 (36.2367%) | 19,424 (35.7000%) |
+| `09caaec3`, size 6 window | 55,784 | 34,997 (62.7366%) | 12,629 (22.6391%) | 23,931 (42.8994%) |
+
+Denominators exclude GC, profiling, system, and idle ticks. The module self
+columns are disjoint; `matchPartial` is part of Pruning. Whole runs include
+testing and completion. `QuickCheck.Gen` has 22,062 self ticks (22.8293%) in
+the new whole run. That fraction does not apply to the later demand window.
+The censored windows do not complete equal amounts of work. Their percentages
+do not measure native speed or allocation changes.
+
+The new window lasts 60.685 seconds wall and 61.338 seconds CPU under its
+60-second guard. Its sampled allocation delta is 256,932,169,784 bytes
+(239.287 GiB). The earlier window lasts 61.193 seconds wall and 61.845 seconds
+CPU, with a 217.923 GiB sampled delta. Only profile ticks belong to each window;
+profile allocation and entry totals still include the preceding search.
+All 28,995 new stdout bytes match the closed 300-second native trial, including
+223 complete laws. The older 24,576-byte output is also an exact prefix.
+Neither observation establishes complete size-6 output agreement.
+
+Matching remains the largest named self cost in the new window. Its total
+includes structural and full typed checks. `programs`, `indexTemplates`, and
+`fragmentTerm` have 1,031, 1,005, and 356 self ticks. The index serves both
+sets of templates. `rejectEarly` and the early-index bindings have no separate
+surviving labels. Anonymous `Pruning.go2` has 6,545 self ticks without a source
+location. These facts do not assign a cost to an inlined helper.
+`prunedTerms` contains 55,514 inclusive ticks (99.5160%). The partial expander
+contains 25,872 (46.3789%), including matching continuations. These inclusive
+figures overlap and do not measure removable getter cost. Profiler entries
+are not independent read counts.
+
+The new whole profile takes 118.929 seconds versus 34.785 seconds native:
+3.4189 times as long. The corresponding earlier observation is 142.012
+versus 36.248 seconds, or 3.9178 times. These ratios measure instrumentation
+distortion on two whole runs. They are not speedups or window corrections.
+
 ### Completed pruning controls
 
 Two local candidates preserve the exact current 197-law HugeLists size 5,
@@ -1126,7 +1186,7 @@ The root-view candidate reads fragments during monadic template matching.
 The lazy snapshot candidate keeps the old pure matcher and captures immutable
 union-find and value maps.
 
-| Measurement | Current pruning | Root view | Lazy snapshot |
+| Measurement | `d2e91fdf` pruning | Root view | Lazy snapshot |
 | --- | ---: | ---: | ---: |
 | Allocated bytes | 229,664,980,896 | 253,776,344,696 | 221,111,957,160 |
 | Allocation change | reference | +10.4985% | −3.7241% |
@@ -1151,7 +1211,7 @@ for every recursive state or establish a residency bound.
 
 The root view increases allocation. The snapshot saves modest allocation but
 has higher observed CPU time. Neither fragment-view API is selected. The
-production runtime and current matrix remain unchanged.
+comparison matrix retains its `d2e91fdf` measurements.
 
 A whole-run late-SCC profile of the rejected root view also reproduces the
 full 197-law stdout. Its 29 HOME modules use `-O2`. Matcher self costs total
@@ -1169,6 +1229,98 @@ Profile wall time is 132.883 seconds, versus 39.233 seconds for the native
 candidate, or 3.387 times as long. Profiling also changes allocation and RSS.
 Without a matched baseline profile, these percentages do not attribute the
 native regression or predict a speedup from another implementation.
+
+### Compiled template controls
+
+An arity-aware census identifies 163 of the 173 entry templates whose
+program patterns do not inspect annotations. Ten still require annotation
+checks. The earlier count of 161 confused the `filter` constant with the
+program wrapper: their arities are one and two. The two added templates have
+no hits in the incomplete 512-run sample. This correction is not a speedup.
+
+A local control applies public `exclude` at program positions for the fixed
+pattern `((+) 0) x`. All 197 laws and all stdout bytes match. Allocation is
+229,727,802,864 bytes versus 229,664,980,896 bytes in the retained baseline,
+an increase of 0.02735%. One run per variant cannot estimate timing noise.
+The finite controls pass 32 applied checks and explicitly skip 12. The nested
+`+0` case keeps the same 320 annotated/residual records from 640 raw runs.
+A separate ambiguity control reduces two surviving runs to one while keeping
+the same term set. Generic exclusion therefore does not preserve raw-run
+multiplicity. This experiment does not select a production transformation.
+
+The all-163 finite control completes 63 applied groups and skips 27. It then
+hits its 90-second guard in a nested case. Total allocation is
+240,076,346,056 bytes; maximum residency is 8,363,416 bytes. The unfinished
+case has no internal stage markers. Its cost cannot be assigned to exclusion
+construction, either enumeration, or the final comparison. The remaining
+correctness gate is unknown, and no native run follows it.
+
+A separate actual-entry construction profile preserves the exact 133-law
+prefix, then hits its 60-second transform guard. Its 30 HOME modules use
+`-O2` and late SCCs. The whole process has 87,062 application ticks, including
+the prefix. The `compileTemplates`/`refine` ancestry contains 54,133 ticks
+(62.1775%). Within that ancestry, `edgeCopies` has 17,306 self ticks,
+or 31.9694% of those construction ticks. These are distinct from the
+whole-process denominator. The transform does not finish. This profile
+identifies construction work but gives no correctness result or native cost.
+
+A separate private conjunction shortcut in `Template` keeps its public API.
+Its finite intersection, split-order, and construction controls pass. The
+finite process completes in 0.453 seconds, with 72 applied groups and 27 skips.
+The earlier unmodified finite attempt stopped at 90 seconds; these results
+do not give a matched completed-work timing ratio. The new 13-module native
+build uses `-O2`. Its actual-entry pilot preserves the exact 133-law prefix
+but hits the 60-second transform guard. No transformed graph is reported,
+and no full 197-law run follows. The whole prefix-plus-transform process uses
+69.210 seconds wall, 69.274 seconds CPU, and 306,341,183,760 allocated bytes.
+Maximum residency is 92,051,104 bytes and peak RSS is 222,020 KiB. These totals
+are not transform-only costs. Finite success does not establish a real-bucket
+gain. This CFTA change remains unselected.
+
+Two further controls reproduce all 197 laws and all stdout bytes. One adds
+checks during CFTA child construction. The other changes only Specftacular,
+using the existing Left callback. Both retain all 173 entry templates and add
+163 pure structural checks. These checks omit the fixed arrow marker without
+resolving its UVar. The fixed-marker and program/type encoding assumptions
+remain explicit. Both arms pass nine finite grammars with 36 template sets.
+These controls are not a general raw-language equivalence proof.
+
+| Measurement | Retained baseline | Spec-only callback | CFTA subterm check |
+| --- | ---: | ---: | ---: |
+| Allocated bytes | 229,664,980,896 | 209,715,175,160 | 207,057,677,992 |
+| RTS total CPU time, s | 36.237 | 34.794 | 34.117 |
+| Peak RSS, KiB | 533,840 | 530,820 | 537,888 |
+
+The Spec-only arm reduces allocation by 8.6865%. The CFTA arm saves a further
+1.2672%, with 1.9457% lower observed CPU time and 1.3315% higher RSS. Each arm
+runs once against the same retained baseline; timing noise is not estimated.
+The CFTA extension is not selected for this small additional saving.
+
+The committed Spec-only guard also passes fresh native and GHC checks. Its
+seven core HOME modules and the GHC adapter compile at `-O2` against the
+retained audited libraries. Existing checked and unchecked goldens pass.
+All three frontends retain the exact 24-law Lists and 9-law Monad sequences.
+Fresh carrier and function-generator alias probes pass. The Lists size 4,
+phase 1 control keeps all ten laws. It allocates 201,181,832 bytes and uses
+507,230,261 Cachegrind instructions, decreases of 0.2123% and 0.1188% against
+the retained `d2e91fdf` counters. The new core is a HOME build; the retained
+small control used packaged modules. This build-context difference remains
+explicit. No baseline is rerun. CFTA sources and archives remain unchanged.
+
+The Spec-only arm still times out on size 6, phase 3 after 300.157 seconds
+wall and 300.529 seconds CPU. The actual phase 3, size 6, `Int` bucket starts
+after 52.537 CPU seconds, with 8,369 examined terms and 223 laws. It remains
+unfinished after another 247.615 seconds wall and 247.955 seconds CPU.
+Whole-process allocation is 1,885,469,660,616 bytes, maximum residency is
+203,768,576 bytes, and peak RSS is 613,936 KiB. These phase-only events do not
+identify demand, testing, or completion costs within the bucket.
+
+All 223 printed laws are complete lines. The earlier 24,576-byte native
+output is an exact prefix, including its unfinished equation 171. This does
+not establish complete size-6 output agreement. There is no matched timing
+ratio against the older 900-second trial. No baseline or original run is
+repeated. The Spec-only change is committed as `09caaec3`. The full matrix continues
+to report the measured `d2e91fdf` reference.
 
 ### Alternatives supported by these diagnostics
 
@@ -1188,8 +1340,10 @@ native regression or predict a speedup from another implementation.
    create exponential subset products. Build only reachable products for a
    shared recognizer, with a state budget before global interning. Fall back
    to the existing oracle at that limit. Retain typed template eligibility,
-   edge constraints, residual obligations, and kept-run multiplicities.
-   A repeated `Hole` is not a named equality binder. Measure compilation plus
+   edge constraints and residual obligations. Generic exclusion can merge
+   ambiguous surviving runs. Exact raw multiplicity needs a separate argument;
+   term-language equality alone is insufficient. A repeated `Hole` is not a
+   named equality binder. Measure compilation plus
    enumeration on the actual bucket-entry templates. Keep the final KBO sort
    for this experiment. Faster matching alone does not remove type branches.
 
