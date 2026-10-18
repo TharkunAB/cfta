@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 22:34 CEST. Proof checkpoint is `bf3014ae`.
+The new modeled constructed-root theorem derives startup facts and proves
+exact original-expression language at a completed empty-inherited return.
+Actual field-allocation history, validity, guard coverage and numerical
+resources remain explicit. Existing intrinsic construction correctness
+already covers nested Mu and cache hits. All-Generated simulation is an
+auxiliary open observation contract, not a missing premise of that theorem.
+General completion, convergence and running Haskell correspondence remain
+open. The actual nested cold-Mu witness shows new allocation and successful
+old-reader unfolding. It establishes no language failure or Haskell defect.
+No Haskell bytes change. No Haskell repair request is added. Full Audit
+passes 3413 jobs and 73115 checks. Field-pool repair `b9219b9e` remains
+fixed in `c0cc8a05`. Read `lean/notes-current-constructed-root-and-cross-local.md`.
+Keep this registry first. Record later repairs with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve every entry.
+
 Current proof update: 2026-10-18 22:11 CEST. Proof checkpoint is `aed9deb8`.
 Actual row fragments now derive full guarded matching, ordered mutual
 child generators and exact row-survival parity at the original reader.

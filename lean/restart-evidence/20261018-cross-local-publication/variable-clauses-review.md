@@ -1,0 +1,17 @@
+# Same-reader semantic variable clauses
+
+Frozen on 2026-10-18 at 22:25 CEST.
+
+`GeneratedVariableClauses.variable_call` is one general variable source theorem. Its relation is arbitrary and reflexive. Its explicit lexical induction certificate is ReaderReplacementSlots.Paired (Clauses reader relation) for the two lexical lists and maps. It takes actual variable builds, scoped own-name tests, first raw availability at a Ready reader, and actual warm filters and stored calls there. The two variable source before/after heaps are arbitrary implicit parameters. No source Context, historical growth, publication History, reader-wide Values or desired parent output clause is added.
+
+The selected slot is derived from both literal variable equations and the indexed Paired list. If the selected value is a reference, the filters leave that bare reference unchanged. Exact reference execution identifies the actual results with the resolved lexical values, and the selected semantic slot certificate applies. This includes an inl capture that is itself a reference; it is not treated as a fixed opaque slot.
+
+A nonreference fixed slot derives equality of the raw captures and map agreement on all its original free names. Scoped self tests derive the same filter result under both own names. The exact filter-free lemma shows that the filter adds no free name. Therefore execute_congr equates the two actual returned values. Literal clauses for this equal value follow from Below.refl and the supplied relation reflexivity. Opaque Mu captures are allowed. A missing index is the same fixed Empty case. No physical Empty child law or global Generated-to-Clause claim is used.
+
+The copied private filter helpers come from the unchanged GeneratedVariableFilter source. This module retains their full normalization and availability requirements. It changes only the semantic slot relation and the final result. The resulting certificate is directional; it need not assert the reverse clause or all-depth observational equality.
+
+The constructed theorem builds a closed source from empty with leaves 0 and 1, their merged ordinary node, and an actual USED raw Mu. Its Reader Ready follows from the actual build. Reference maps at names 10 and 20 resolve to physically distinct leaf0 and merged(leaf0,leaf1). Actual makeUnion and literal Below derive the lexical clause under relation Eq. The certificate is not assumed. A fixed capture of the source-built used Mu has no free bindings to disagree on, and actual executions return it. Index 9 is absent and returns Empty. All three cases invoke variable_call with literal warm source, filter and stored equations.
+
+Selected direct-1 and kernels-2 have genuine zero-byte logs. Canonical-1 is warning-free. Public-1 and kernels-public-1 print exact signatures, complete proofs and axiom reports with all eight options, only standard axioms and no elision. Counts are one production and one constructed pair, with zero auxiliary pairs. Six owned jobs used 4 GiB memory.max/high, zero swap and five minutes. Failed kernels-1 is preserved. Its initial seed contained the merged node but not a standalone leaf1 node identity; the corrected fixture explicitly constructs that identity. This is an actual cache-demand distinction, not a production theorem failure.
+
+The semantic lexical certificate remains an induction premise. This module does not derive it for every Generated pair, prove all-source Law, or establish global Directed or general completion.

@@ -1,0 +1,49 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-cross-local-publication/constructed-root-call-strict-1.source.lean:67:101: error: unsolved goals
+inst✝² : DecidableEq (EdgeKey Symbol Guard)
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq Node
+bits : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+initial final : Cache.State Key
+originals : List Guard
+history : SourceEqualityOriginalAllocationHistory.History initial final originals
+valid : Cache.Valid initial
+expression : Syntax Symbol Guard
+covered : ∀ (original : Guard), original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals
+root : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+constructed : build expression [] empty = InternedNestedConstruction.Outcome.done root heap
+seed : List Guard × Profile
+fits : Fits seed.snd (caller (bits + 2) final heap).checked
+carrier : Carrier (fun guard => guard ∈ seed.fst) heap
+fuel g s r e p h m c n budget : Nat
+room : Room bits (SourceCurrentOuterInitialSchedule.node fuel budget seed).snd
+result : Node
+after : Caller (bits + 2)
+called :
+  nodeCall fuel g s r e p h m c n budget { inherited := emptyValue final, value := root }
+      (caller (bits + 2) final heap) =
+    SourceCurrentAllocatedPartialWorker.Outcome.done result after
+context :
+  SourceCurrentAllocatedPartialInvariant.Context formulas solver (inventory expression root heap constructed)
+    (caller (bits + 2) final heap) globals
+identity : Nat
+emptySame : emptyValue final = SourceEqualityConstraintAllocation.Value.live identity []
+inherited :
+  SourceEqualityConstraintAllocation.Ready (caller (bits + 2) final heap).checked.operations.constraints
+    (SourceEqualityConstraintAllocation.Value.live identity [])
+available : Available heap root
+_closed : root.free = []
+_original : SourceRecursiveIntersectionInputView.Original root
+inheritedReady :
+  SourceEqualityConstraintAllocation.Ready (caller (bits + 2) final heap).checked.operations.constraints
+    (emptyValue final)
+resultAvailable : Available after.checked.native.machine.heap result
+law :
+  SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver { inherited := emptyValue final, value := root } result
+ambient : InternedGuardedLanguage.Env Symbol
+term : Term Symbol
+⊢ match (SourceEqualityConstraintAllocation.Value.live identity []).payload with
+  | none => False
+  | some records => ∀ (a : SourceEqualityClassOrder.Record), a ∈ records → EqualityNormalize.ClassSat term a.paths

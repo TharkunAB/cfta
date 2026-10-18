@@ -13,6 +13,55 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current constructed root correctness and cross-local publication
+
+Updated: 2026-10-18 22:34 CEST. Proof checkpoint is `bf3014ae`.
+Starting checkpoint is `bf12022d`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-constructed-root-and-cross-local.md` and
+`lean/notes-current-system-claim.md`. This assessment supersedes the
+older statements that name Generated simulation or guard initialization
+as a missing premise of intrinsic construction and reduction correctness.
+
+Actual completed closed FreshOrdinary construction already has its exact
+independent least finite-tree language, including nested Mu and cache hits.
+The new constructed root endpoint derives logical initial Context, the
+recursive guard certificate, root availability and empty inheritance.
+A completed root call then accepts exactly the trees specified by the
+original expression. Actual field-allocation history, valid interning,
+source guard coverage, Fits, carrier, scheduled Room and both completed
+calls remain explicit. No global Generated/Directed premise is needed.
+The logical empty cache state does not assert a reset of Haskell CAFs.
+
+For nonempty inheritance, the broad reduction guarantee remains
+`L(input) intersect Sat(inherited) <= L(result) <= L(input)`.
+It does not assert that every returned tree satisfies inherited constraints.
+The exact returned size-query laws retain their separate construction and
+annotation assumptions. General recursive completion, active-owner
+exclusion, fresh-call bounds, repeated-pass convergence and Haskell
+correspondence remain open. The next primary proof target is general
+outer progress, as described in `lean/notes-current-outer-progress.md`.
+An initial-input measure must survive actual native edits and same-key
+memo-owner reuse. Do not assume a future successful call to prove progress.
+
+The auxiliary observation route gains actual cross-local writer generators,
+sequential completed reconstructions and a variable clause theorem.
+The latter still consumes semantic lexical clauses for reference slots.
+A source-built open used Mu exercises ordered recursive children.
+A second nested Mu witness allocates a value unavailable in the original
+reader. Its next old-reader unfold still completes. Neither witness proves
+language failure, unequal causal Generated endpoints or a Haskell defect.
+All-Generated fixed-reader simulation remains an open auxiliary contract.
+
+Full Audit passes 3413 jobs and 73115 dependency checks. Five production
+strict logs and three constructed strict logs are empty. All seven new
+public heads and three constructed heads pass full proof and standard-axiom
+checks. All five canonical builds pass. The two constructed-entry builds
+replay only the known old unused-input warning. Evidence is in
+`lean/restart-evidence/20261018-cross-local-publication/`.
+No Haskell bytes change or new repair is requested. FINDINGS retains every
+repair first. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
 ## Current fixed-reader row alignment and union clauses
 
 Updated: 2026-10-18 22:11 CEST. Proof checkpoint is `aed9deb8`.
