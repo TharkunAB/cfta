@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 04:17 CEST. Proof checkpoint is `fe68c2e9`.
+Actual Required preparation and the class right fold now compose exact
+indexed row origins and unchanged continuation children from entry facts.
+Actual false primary selection supplies the selected original Root premise.
+Public smart Mu does not imply the plain gate. This is a proof-support
+boundary, not a Haskell defect. General recursive completion, fresh-call
+bounds, original-source descent, used-writer alignment, recursive language
+preservation, convergence and public Haskell correspondence remain open.
+Full Audit passes 3216 jobs and 70791 checks. No Haskell patch or new
+production defect is added. Field-pool repair `b9219b9e` remains fixed and
+validated in `c0cc8a05`. Read
+`lean/notes-current-actual-positional-lineage.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 03:54 CEST. Proof checkpoint is `b4fcc918`.
 Actual successful lower, Parent and outer workers now retain causal Mu
 body/probe guard profiles from entry facts. Actual unfinished outer prefixes

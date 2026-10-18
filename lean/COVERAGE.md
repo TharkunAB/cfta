@@ -1,5 +1,44 @@
 # Full formalization coverage
 
+## Current actual positional lineage and primary support
+
+Updated: 2026-10-18 04:17 CEST. Proof checkpoint is `fe68c2e9`.
+Starting local checkpoint is `57ac518c`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-actual-positional-lineage.md` for exact boundaries.
+
+Actual Required preparation and the subsequent literal class right fold now
+compose indexed row origins from entry facts. A surviving row with a nonempty
+own field retains a complete indexed input row and the exact child at each
+unselected continuation index. The proof includes final Empty propagation.
+The ordinary Edit law derives intermediate physical facts from actual calls.
+It no longer needs supplied semantic row reads or future preservation laws.
+Accepted recursive Head produces empty-own rows in a causal Plain heap.
+
+Actual false primary selection now supplies the selected original value's
+Root condition. Ordinary roots permit arbitrary constraints. Recursive roots
+must pass the actual plain gate. Public smart Mu can contain constraints;
+Root is not unconditional for all public inputs. The class law retains Root
+through later selected below edits. Original selection and later edited
+values remain distinct. Compiler coherence and the unselected footprint,
+initial physical facts, and actual successful worker equations stay explicit.
+
+Full Audit passes 3216 jobs and 70791 dependency checks. All 6
+production and 6 constructed strict logs are empty. All 31
+public and 6 constructed full pairs pass in 12 groups with
+all eight settings and standard axioms. Audit peak is 541 MiB under
+4 GiB maximum/high and zero swap. Evidence is in
+`lean/restart-evidence/20261018-actual-positional-lineage/`.
+
+The origins refer to the immediate input forest. Proper initial-source
+occurrences through recursive reconstruction and native writers remain open.
+All-owner separation and a bound on fresh calls or a well-founded measure
+remain open. General recursive completion, recursive outer language
+preservation, repeated convergence and full public Haskell correspondence
+remain open. The complete finite ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Keep the FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
 ## Current outer guard transport and positional rows
 
 Updated: 2026-10-18 03:54 CEST. Proof commit is `b4fcc918`.

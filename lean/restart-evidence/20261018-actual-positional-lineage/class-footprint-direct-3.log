@@ -1,0 +1,21 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-footprint-direct-3.source.lean:85:44: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lookup (Int.ofNat forestIndex) entries
+in the target expression
+  some child = some child
+
+record : Record
+coherent : SourceEqualityClassOrder.Coherent record
+forestIndex childIndex : Nat
+unselected : Unselected record forestIndex childIndex
+entries : List (Int × Edits EqualityNormalize.Path)
+detached : Detached (Edits.editBelow entries) [Int.ofNat forestIndex, Int.ofNat childIndex]
+built : compiled record = Edits.editBelow entries
+child : Edits EqualityNormalize.Path
+found : lookup (Int.ofNat forestIndex) entries = some child
+children : List (Int × Edits EqualityNormalize.Path)
+next : Detached (Edits.editBelow children) [Int.ofNat childIndex]
+shape : child = Edits.editBelow children
+populated :
+  ∀ (index : Int) (child : Edits EqualityNormalize.Path), (index, child) ∈ entries → Populated child ∧ HasLeaf child
+childPopulated : Populated (Edits.editBelow children)
+⊢ some child = some child

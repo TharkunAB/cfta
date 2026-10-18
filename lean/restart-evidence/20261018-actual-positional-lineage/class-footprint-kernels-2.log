@@ -1,0 +1,41 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-footprint-kernels-2.source.lean:124:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceEqualityNeededMap.lookup (Int.ofNat 1) entries
+in the target expression
+  SourceEqualityNeededMap.lookup 1 entries = some child
+
+case inl
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared 10
+original : Node
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+checked : shared.checked = head.state
+memo : shared.memo = head.memo
+source : middleValues[1]? = some original
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (edit record middleValues 8 16 32 16 16 256) entries 0
+      (List.take 1 middleValues) (SourceCurrentAllocatedSharedTargetState.initial tail.state tail.memo) =
+    Outcome.done (List.take 1 finalValues) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (edit record middleValues 8 16 32 16 16 256) entries (1 + 1)
+      (List.drop (1 + 1) middleValues) finish =
+    Outcome.done (List.drop (1 + 1) finalValues) shared
+absent : SourceEqualityNeededMap.lookup (Int.ofNat 1) entries = none ∧ selected = original ∧ finish = start
+child : SourceEqualityEdits.Edits EqualityNormalize.Path
+found : SourceEqualityNeededMap.lookup 1 entries = some child
+⊢ ∃ entries shared start finish original childEntries,
+    SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries ∧
+      shared.checked = head.state ∧
+        shared.memo = head.memo ∧
+          middleValues[1]? = some original ∧
+            SourceCurrentAllocatedSharedEditWorker.children (edit record middleValues 8 16 32 16 16 256) entries 0
+                  (List.take 1 middleValues) (SourceCurrentAllocatedSharedTargetState.initial tail.state tail.memo) =
+                Outcome.done (List.take 1 finalValues) start ∧
+              SourceCurrentAllocatedSharedEditWorker.children (edit record middleValues 8 16 32 16 16 256) entries 2
+                    (List.drop 2 middleValues) finish =
+                  Outcome.done (List.drop 2 finalValues) shared ∧
+                SourceEqualityNeededMap.lookup 1 entries = some (SourceEqualityEdits.Edits.editBelow childEntries) ∧
+                  SourceEqualityNeededMap.lookup 1 childEntries = none ∧
+                    edit record middleValues 8 16 32 16 16 256 (SourceEqualityEdits.Edits.editBelow childEntries)
+                          original start =
+                        Outcome.done selected finish ∧
+                      0 < start.checked.native.nodes.next

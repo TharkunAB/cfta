@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentActualPlainHeadOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentActualPlainHeadOrigins.head
+#print MicroCFTA.SourceCurrentActualPlainHeadOrigins.head
+#print axioms MicroCFTA.SourceCurrentActualPlainHeadOrigins.head
+#check @MicroCFTA.SourceCurrentActualPlainHeadOrigins.shared_head
+#print MicroCFTA.SourceCurrentActualPlainHeadOrigins.shared_head
+#print axioms MicroCFTA.SourceCurrentActualPlainHeadOrigins.shared_head
+#check @MicroCFTA.SourceCurrentActualPlainHeadOrigins.required
+#print MicroCFTA.SourceCurrentActualPlainHeadOrigins.required
+#print axioms MicroCFTA.SourceCurrentActualPlainHeadOrigins.required
+#check @MicroCFTA.SourceCurrentActualPlainHeadOrigins.positive_ordinary
+#print MicroCFTA.SourceCurrentActualPlainHeadOrigins.positive_ordinary
+#print axioms MicroCFTA.SourceCurrentActualPlainHeadOrigins.positive_ordinary
+#check @MicroCFTA.SourceCurrentActualPlainHeadOrigins.reached_head
+#print MicroCFTA.SourceCurrentActualPlainHeadOrigins.reached_head
+#print axioms MicroCFTA.SourceCurrentActualPlainHeadOrigins.reached_head

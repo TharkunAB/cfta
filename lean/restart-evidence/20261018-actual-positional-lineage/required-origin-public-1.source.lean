@@ -1,0 +1,49 @@
+import MicroCFTA.SourceCurrentActualRequiredRowOrigins
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.Root
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.Root
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.Root
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.refl
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.refl
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.refl
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.trans
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.trans
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.trans
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.positive
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.positive
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.Link.positive
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.node
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.node
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.node
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.children
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.children
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.children
+
+#check @MicroCFTA.SourceCurrentActualRequiredRowOrigins.prepare
+#print MicroCFTA.SourceCurrentActualRequiredRowOrigins.prepare
+#print axioms MicroCFTA.SourceCurrentActualRequiredRowOrigins.prepare
+

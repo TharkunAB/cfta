@@ -1,0 +1,870 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `after`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ SourceCurrentAllocatedSharedEditGraph.SharedState ?m.312
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `results`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ List Node
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `before`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ SourceCurrentAllocatedSharedEditGraph.SharedState ?m.312
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `values`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ List Node
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `edits`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ SourceEqualityEdits.Edits EqualityNormalize.Path
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `n`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `s`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `m`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `h`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `p`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `e`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `originals`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ List Node
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `record`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ SourceEqualityClassOrder.Record
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:26: error: don't know how to synthesize implicit argument `width`
+  @SourceCurrentLowerGuardHeapReturns.edit_list ?m.312 inst✝¹ inst✝ (fun guard => SourceMemoGate.plain guard = true)
+    ?m.316 ?m.317 ?m.318 ?m.319 ?m.320 ?m.321 ?m.322 ?m.323 ?m.324 ?m.325 ?m.326 ?m.327 ?m.328
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : SourceEqualityClassOrder.Record
+values : List Node
+before : Checked width
+memo : Memo
+results : List Node
+after : Checked width
+saved : Memo
+actual :
+  SourceCurrentAllocatedClassWorker.runClass e p h m s n record values before memo =
+    SourceCurrentAllocatedClassWorker.Outcome.done results after saved
+good : Good before
+stored : Stored before.native.machine.heap memo
+available : Values before.native.machine.heap values
+guards :
+  SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before.native.machine.heap
+coherent : SourceEqualityClassOrder.Coherent record
+index childIndex : Nat
+unselected : Unselected record index childIndex
+source result : Node
+input : values[index]? = some source
+output : results[index]? = some result
+root : Root source
+entries : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+shared start finish : Shared width
+built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+sameState : shared.checked = after
+sameMemo : shared.memo = saved
+earlier :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries 0 (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+later :
+  SourceCurrentAllocatedSharedEditWorker.children (Worker record values e p h m s n) entries (index + 1)
+      (List.drop (index + 1) values) finish =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.drop (index + 1) results) shared
+found : values[index]? = some source
+children : List (Int × SourceEqualityEdits.Edits EqualityNormalize.Path)
+selected :
+  SourceEqualityNeededMap.lookup (Int.ofNat index) entries = some (SourceEqualityEdits.Edits.editBelow children)
+absent : SourceEqualityNeededMap.lookup (Int.ofNat childIndex) children = none
+call :
+  Worker record values e p h m s n (SourceEqualityEdits.Edits.editBelow children) source start =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done result finish
+earlierCall :
+  SourceCurrentAllocatedSharedEditWorker.editList (Worker record values e p h m s n)
+      (SourceEqualityEdits.Edits.editBelow entries) (List.take index values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    SourceCurrentAllocatedSharedEditWorker.Outcome.done (List.take index results) start
+prefixAvailable : Values before.native.machine.heap (List.take index values)
+initial : SharedGood (SourceCurrentAllocatedSharedTargetState.initial before memo)
+effect : Effect (SourceCurrentAllocatedSharedTargetState.initial before memo).checked start.checked
+current : SharedGood start
+known : Values start.checked.native.machine.heap (List.take index results)
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:9: error: failed to infer `have` declaration type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-origin-direct-2.source.lean:157:83: error: unexpected identifier; expected ':'

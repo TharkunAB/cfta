@@ -1,0 +1,54 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-footprint-direct-1.source.lean:85:32: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-footprint-direct-1.source.lean:128:16: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-footprint-direct-1.source.lean:145:16: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-actual-positional-lineage/class-footprint-direct-1.source.lean:185:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lookup (Int.ofNat forestIndex) entries
+in the target expression
+  lookup (↑forestIndex) entries = some edits
+
+case done.refl.inr.inl
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+e p h m s n : Nat
+record : Record
+values results : List (Value Symbol Guard)
+before : Checked width
+memo : Memo
+coherent : SourceEqualityClassOrder.Coherent record
+forestIndex childIndex : Nat
+unselected : Unselected record forestIndex childIndex
+result : Value Symbol Guard
+selected : results[forestIndex]? = some result
+entries : List (Int × Edits EqualityNormalize.Path)
+built : compiled record = Edits.editBelow entries
+shared : SourceCurrentAllocatedSharedEditGraph.SharedState width
+executed :
+  children (edit record values e p h m s n) entries 0 values
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    Outcome.done results shared
+original : Value Symbol Guard
+start finish : SourceCurrentAllocatedSharedEditGraph.SharedState width
+source : values[forestIndex]? = some original
+earlier :
+  children (edit record values e p h m s n) entries 0 (List.take forestIndex values)
+      (SourceCurrentAllocatedSharedTargetState.initial before memo) =
+    Outcome.done (List.take forestIndex results) start
+later :
+  children (edit record values e p h m s n) entries (0 + forestIndex + 1) (List.drop (forestIndex + 1) values) finish =
+    Outcome.done (List.drop (forestIndex + 1) results) shared
+edits : Edits EqualityNormalize.Path
+done : edit record values e p h m s n edits original start = Outcome.done result finish
+absent : lookup (Int.ofNat forestIndex) entries = none
+found : lookup (↑forestIndex) entries = some edits
+⊢ lookup (Int.ofNat forestIndex) entries = none ∧ result = original ∧ finish = start ∨
+    ∃ childEntries,
+      lookup (Int.ofNat forestIndex) entries = some (Edits.editBelow childEntries) ∧
+        lookup (Int.ofNat childIndex) childEntries = none ∧
+          edit record values e p h m s n (Edits.editBelow childEntries) original start = Outcome.done result finish

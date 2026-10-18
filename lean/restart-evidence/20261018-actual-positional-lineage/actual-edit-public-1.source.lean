@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentActualEditRowOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentActualEditRowOrigins.children_length
+#print MicroCFTA.SourceCurrentActualEditRowOrigins.children_length
+#print axioms MicroCFTA.SourceCurrentActualEditRowOrigins.children_length
+
+#check @MicroCFTA.SourceCurrentActualEditRowOrigins.children_unselected
+#print MicroCFTA.SourceCurrentActualEditRowOrigins.children_unselected
+#print axioms MicroCFTA.SourceCurrentActualEditRowOrigins.children_unselected
+
+#check @MicroCFTA.SourceCurrentActualEditRowOrigins.rows_indexed
+#print MicroCFTA.SourceCurrentActualEditRowOrigins.rows_indexed
+#print axioms MicroCFTA.SourceCurrentActualEditRowOrigins.rows_indexed
+
+#check @MicroCFTA.SourceCurrentActualEditRowOrigins.edit_node
+#print MicroCFTA.SourceCurrentActualEditRowOrigins.edit_node
+#print axioms MicroCFTA.SourceCurrentActualEditRowOrigins.edit_node
+
+#check @MicroCFTA.SourceCurrentActualEditRowOrigins.edit_node_ordinary
+#print MicroCFTA.SourceCurrentActualEditRowOrigins.edit_node_ordinary
+#print axioms MicroCFTA.SourceCurrentActualEditRowOrigins.edit_node_ordinary
+

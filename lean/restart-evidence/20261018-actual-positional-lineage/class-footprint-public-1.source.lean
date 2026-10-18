@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentClassPositionalFootprints
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentClassPositionalFootprints.Unselected
+#print MicroCFTA.SourceCurrentClassPositionalFootprints.Unselected
+#print axioms MicroCFTA.SourceCurrentClassPositionalFootprints.Unselected
+
+#check @MicroCFTA.SourceCurrentClassPositionalFootprints.compiled_unselected
+#print MicroCFTA.SourceCurrentClassPositionalFootprints.compiled_unselected
+#print axioms MicroCFTA.SourceCurrentClassPositionalFootprints.compiled_unselected
+
+#check @MicroCFTA.SourceCurrentClassPositionalFootprints.class_dispatch
+#print MicroCFTA.SourceCurrentClassPositionalFootprints.class_dispatch
+#print axioms MicroCFTA.SourceCurrentClassPositionalFootprints.class_dispatch
+
