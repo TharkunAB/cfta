@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `aed82624`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `99a1ddb3`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -83,7 +83,19 @@ Semantic traces and historical writer origins remain open at this boundary.
 An accepted source-built operation also refutes ordinary height and positive
 count measures that treat unions as opaque. General recursive completion
 and the complete ordinary outer domain are unchanged. Read
-[the current checkpoint](notes-current-selected-edit-events.md).
+[the earlier checkpoint](notes-current-selected-edit-events.md).
+
+Actual selected edits now recover the literal earlier target writers of
+warm class slots. Their target-table histories fix the class, captured
+forest, target path and complete worker states. They assert no physical
+or semantic transport to those historical entries. Initial exact native
+key validity, closed resident operands and numeric headroom now produce
+checked traces from raw execution. An initial causal native history then
+produces the exact returned node cell and earlier complete request writer.
+Historical semantic target receipts and the stronger initial key invariant
+still need transport through the full class schedule. General recursive
+completion and the complete ordinary outer domain are unchanged. Read
+[the current checkpoint](notes-current-selected-read-producers.md).
 
 ## Strongest current claim in plain technical English
 
