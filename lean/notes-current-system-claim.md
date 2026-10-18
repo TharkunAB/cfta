@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-The causal writer and original-reader fragment proof checkpoint is `f312f254`.
+The fixed-reader row and union-clause proof checkpoint is `aed9deb8`.
 
 In simple technical English: a completed modeled reduction adds no tree
 outside the input language. It retains every input tree that satisfies its
@@ -80,6 +80,14 @@ establishes the full source Law for all syntax.
 A sound normalization rule permits literal inclusion before and after
 at most one source pair. It requires the genuine full literal clauses
 for that source relation. Arbitrary chains of source pairs remain excluded.
+
+Actual node-source row fragments now derive full row matches and equal
+survival tests from their actual RowCalls at the original reader. Whole
+ordinary subgroup calls need not be warm. Actual union assembly derives
+its literal clauses at that same reader from explicit strict-member atom
+and row obligations. Each obligation retains the exact source index and
+historical calls. These obligations have not been proved for all syntax.
+See `notes-current-fixed-reader-row-clauses.md`.
 
 The main current gap is the complete source-generated guarded simulation.
 The used-Mu clause must match actual unfolding with a reached related

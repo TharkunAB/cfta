@@ -1,0 +1,13 @@
+# Actual parent fragments consumed by causal row alignment
+
+Frozen on 2026-10-18 at 22:09 CEST.
+
+This separate constructed component leaves the row-alignment production source and its frozen 26-pin manifest unchanged. It copies the previous checked source for the fixed-reader union boundary into a new namespace. The source is one actual closed raw binder over union[[Depth,leaf0,leaf1],leaf2]. The actual completed build derives Ready, the joint Context and the empty-to-reader publication History. No History, Ready, output comparison or actual-call premise is supplied to the public theorem.
+
+FixedReaderUnionFragments.source is invoked on the actual parent union call. Its original member index 0 is the proper subgroup. Its full row-call producer gives actual row-0 RowCalls at the ORIGINAL reader, and its coverage theorem gives the corresponding full row of the parent result. The subgroup filter and its Depth-to-Empty stored reconstruction both increase the node counter. The parent filter and parent stored result remain warm.
+
+The actual leaf0 source call supplies the raw node whose only row is that same original row. The opposite-call family is derived from the fixed-reader producer's actual row-call receipt because the opposite raw node has exactly that one row. It is not a supplied desired relation or a hypothetical subgroup call. Inputs uses a fixed Depth reference with identical null maps. All aliases are reflexive. Source contexts, raw availability, replacements and growth are derived.
+
+The constructed proof invokes CausalRowFragmentAlignment.node with these actual calls and its derived publication History. It retains an opposite original raw row, the actual opposite RowCalls, full RowMatch Mutual Generated, exact child-empty-any equality and survival iff. The source index histories are constructed by the general producer. This fixture uses a nullary row: it checks the actual cache-demand interface and full guard fields, while the ordered child-vector assertions are empty. It does not claim a nontrivial recursive child observation comparison or all-source simulation.
+
+Selected integration-direct-1 is terminal zero with a genuine zero-byte log. Integration-public-1 prints the exact public statement, complete private-witness alias proof and axiom report with all eight options, only the standard three axioms and no elision. Two owned checks use a separate 4 GiB max/high, zero-swap, five-minute runner and peaks file. There are no failed attempts. Counts are one new constructed pair, zero new production or auxiliary pairs. The canonical module receipt is reused, without a new canonical build.
