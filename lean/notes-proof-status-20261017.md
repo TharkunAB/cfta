@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `e43db322`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `92ddd8ff`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -141,7 +141,16 @@ supplied outer fuel on every outcome. Other outer allocations remain outside
 that count. Full Parent carrier, outer resource scheduling and semantic
 rows_tail/walk_tail composition remain open. General recursive completion
 and the strongest complete outer domain are unchanged. Read
-[the current checkpoint](notes-current-parent-uniform-envelope.md).
+[the earlier checkpoint](notes-current-parent-uniform-envelope.md).
+
+Finite raw guard carriers now accompany actual complete node edits and
+class folds and passes, including supported recursive Head exposure.
+Preparation returns its own carrier. FullClasses, Local and Parent still
+need their carrier composition. Non-Parent constructor bounds now retain
+the same carrier and physical profile at each local entry. Their whole
+outer schedule and equality-cache bounds remain open. General recursive
+completion and the strongest complete outer domain are unchanged. Read
+[the current checkpoint](notes-current-parent-guard-composition.md).
 
 ## Strongest current claim in plain technical English
 

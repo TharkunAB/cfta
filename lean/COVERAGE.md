@@ -1,5 +1,53 @@
 # Full formalization coverage
 
+## Current finite guard composition through edits and classes
+
+Updated: 2026-10-18 06:44 CEST. Proof checkpoint is `92ddd8ff`.
+Starting local checkpoint is `adcca3af`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-guard-composition.md` for exact boundaries.
+
+Finite guard carriers now compose through actual Force, Leaf, whole node
+edits, compiled equality classes and their tail-first fold and pass. Each
+producer constructs its own graph, semantic reads, full receipt, returned
+Frame/Fits and worker equation at the same result and complete state.
+Recursive Mu and union Head exposure is included in the supported editor
+domain. Only selected subtrees need closure. Unselected siblings can be open.
+
+The new pure edit budget uses one initial final-profile ceiling. Strict
+edit-trie descent discharges the internal node induction hypothesis. No
+future execution, result, guard range or capacity callback is supplied.
+Initial semantic cache laws, supported selected domains, Frame/Fits and
+sufficient Room remain explicit. This is a raw physical guard carrier.
+It does not assert hereditary guard ancestry or exact source occurrences.
+
+Preparation also constructs its finite returned carrier. It enumerates
+ordered initial guard words for Scan and aligns the complete actual state.
+Required preserves that raw carrier. FullClasses, Local and Parent still
+need the composition of preparation with the selected class pass.
+
+Separate local bounds cover raw outer edge and node reconstruction, descent,
+prefix state and resident Mu cleanup. Original widths follow from stored
+mass and literal worker lengths. Raw reconstruction adds at most one record
+and retains the original full guard. These are constructor-entry bounds.
+Whole outer execution still needs their chronological composition. The
+physical profile does not bound equality-operation caches.
+
+Full Audit passes 3248 jobs and 71103 checks.
+Seven production and five constructed strict logs are empty. All
+37 public and 5 constructed full pairs pass in 12 groups.
+All eight settings and standard axioms pass. Audit peak is
+390 MiB under 4 GiB maximum/high and zero swap.
+Seven component manifests pin 375 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-guard-composition/`.
+
+General recursive outer progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current finite Parent envelopes and outer Parent call budgets
 
 Updated: 2026-10-18 06:22 CEST. Proof checkpoint is `e43db322`.
