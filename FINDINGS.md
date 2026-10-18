@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 05:38 CEST. Proof checkpoint is `af9a413d`.
+Initial numeric completion now derives target, class and fold semantic
+Reads at literal successful worker endpoints. Full Value/forest, Checked
+and Merge equality aligns all states without an observed-fuel lower bound.
+A historical target yields its full semantic SlotReceipt. Initial class
+context also derives selected-call Reads and histories. Initial semantic
+Frame/global/selected-domain/reservation facts remain explicit. The whole
+class route derives historical target contexts internally. General outer
+entry context transport and recursive progress remain open. Full selected
+Audit passes 3232 jobs and 70901 checks. No Haskell patch or new production
+defect is added. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-actual-semantic-reads.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 05:27 CEST. Proof checkpoint is `99a1ddb3`.
 Actual edits now construct target-table history and recover earlier literal
 target writers with their complete captured inputs and states. Initial
