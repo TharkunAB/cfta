@@ -1,0 +1,31 @@
+import MicroCFTA.SourceCurrentNativeMuIssuedWriters
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.prepend
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.prepend
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.prepend
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.later
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.later
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.later
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.forget
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.forget
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.forget
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.writers
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.writers
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.writers
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.from_empty
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.from_empty
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.from_empty
+#check @MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.raw_contexts
+#print MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.raw_contexts
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedWriters.Written.raw_contexts

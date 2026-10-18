@@ -1,8 +1,61 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `0744fbc7`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `0ac270a2`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
+
+## Current recursive writer histories and symbolic Empty plans
+
+Updated: 2026-10-18 17:05 CEST. Proof checkpoint is `0ac270a2`.
+Starting checkpoint is `cda0d9e5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-binder-empty-fusion.md`.
+
+Actual source paths now retain every issued node name at every stopping
+state, including pending calls. Selected first writers retain their exact
+callback paths and a forward issued-name suffix. At a Ready reader, those
+histories derive both complete original lexical Contexts and literal warm
+raw source/filter calls. Unused lexical captures are included. Existing
+four-table Grows and older history contracts remain unchanged.
+
+Actual selected-writer raw callbacks have equal original physical depth.
+Both depths are strictly below the selected Mu record. Actual source node
+calls bound children of surviving rows by the raw parent depth. Actual
+union calls bound every original member, including normalized members.
+These bounds concern original values, not later reconstructed outputs.
+
+Open stored Mu execution now has an exact symbolic-self body plan. Its
+final lower operation removes the local self. A checked used/open nested
+Mu has a nonempty unlowered body profile but returns Empty after lower.
+The proof must retain this distinction when comparing the original writer
+body with its ordinary probe. That general comparison remains open.
+
+One focused earlier-writer changing-capture case now passes kernel checks
+for completed computations, exact probe reference keys, retained handles
+and two Empty results. The complete historical Context/Aliases/final-warm
+fixture remains incomplete. This case proves no general Fusion law and
+establishes no counterexample. General binder Fusion and changing-capture
+semantic observations remain the main local obligations.
+
+The strongest broad theorem is conditional correctness of the checked
+Lean constraint-reduction model. A successful bounded traversal adds no
+finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], the input and output finite-tree languages
+are equal. Initial semantic cache facts, recursive guard-profile agreement
+and computed resource bounds remain explicit assumptions. General
+termination and full public Haskell correspondence remain open.
+
+Full Audit passes 3343 jobs and 72509 dependency checks.
+All 21 new public and 6 constructed heads pass complete statement, proof
+and standard-axiom checks. Eleven selected strict logs are empty. All five
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Seven manifests pin 345 entries. Independent
+issued-history review finds no material issue. Evidence is in
+`lean/restart-evidence/20261018-binder-empty-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
 
 ## Current general filtered source cases and binder-free composition
 

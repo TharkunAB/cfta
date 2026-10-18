@@ -1,0 +1,152 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-direct-1.source.lean:69:6: error: Tactic `rfl` failed: The left-hand side
+  (some (global (Value.reference name))).getD (some [])
+is not definitionally equal to the right-hand side
+  resolve locals values global name
+
+case none
+Symbol Guard Atom : Type
+context : List (Value Symbol Guard)
+locals : List Reference
+values : List (Abstract Atom)
+global : Value Symbol Guard → Abstract Atom
+name : Reference
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+available : Values state context
+member : Value.reference name ∈ context
+length : values.length = locals.length
+found : List.findIdx? (fun x => x == name) locals = none
+⊢ (some (global (Value.reference name))).getD (some []) = resolve locals values global name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-direct-1.source.lean:76:10: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-direct-1.source.lean:141:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateMany (encodeMany context firstLocals []) (firstValues ++ List.map first context)
+is not definitionally equal to the right-hand side
+  evaluateMany (encodeMany context secondLocals []) (secondValues ++ List.map second context)
+
+case nil
+Symbol Guard Atom : Type
+context : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Abstract Atom)
+first second : Value Symbol Guard → Abstract Atom
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+available : Values state context
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+closed : ∀ (captured : Value Symbol Guard), captured ∈ context → captured.free = [] → first captured = second captured
+agree : ∀ (name : Reference), resolve firstLocals firstValues first name = resolve secondLocals secondValues second name
+covered : ∀ (leaf : Value Symbol Guard), leaf ∈ manyLeaves [] → leaf ∈ context
+⊢ evaluateMany (encodeMany context firstLocals []) (firstValues ++ List.map first context) =
+    evaluateMany (encodeMany context secondLocals []) (secondValues ++ List.map second context)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-direct-1.source.lean:160:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateEdges (encodeEdges context firstLocals []) (firstValues ++ List.map first context)
+is not definitionally equal to the right-hand side
+  evaluateEdges (encodeEdges context secondLocals []) (secondValues ++ List.map second context)
+
+case nil
+Symbol Guard Atom : Type
+context : List (Value Symbol Guard)
+firstLocals secondLocals : List Reference
+firstValues secondValues : List (Abstract Atom)
+first second : Value Symbol Guard → Abstract Atom
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+available : Values state context
+firstLength : firstValues.length = firstLocals.length
+secondLength : secondValues.length = secondLocals.length
+closed : ∀ (captured : Value Symbol Guard), captured ∈ context → captured.free = [] → first captured = second captured
+agree : ∀ (name : Reference), resolve firstLocals firstValues first name = resolve secondLocals secondValues second name
+covered : ∀ (leaf : Value Symbol Guard), leaf ∈ edgeLeaves [] → leaf ∈ context
+⊢ evaluateEdges (encodeEdges context firstLocals []) (firstValues ++ List.map first context) =
+    evaluateEdges (encodeEdges context secondLocals []) (secondValues ++ List.map second context)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-direct-1.source.lean:181:2: error: Tactic `apply` failed: could not unify the conclusion of `encode_evaluate (leaves body) body [own] []
+  [some [Sum.inl ()]] [] (fun leaf => mapNames Sum.inr (profile (input environment leaf)))
+  (fun leaf =>
+    match leaf with
+    | Value.reference name =>
+      if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+    | x => mapNames Sum.inr (profile (input environment leaf)))
+  source coherent (InternedStoredSubstitution.leaves_available body source available) (fun x member => member) rfl rfl`
+  evaluate (encode (leaves body) [own] body)
+      ([some [Sum.inl ()]] ++
+        List.map (fun leaf => mapNames Sum.inr (profile (input environment leaf))) (leaves body)) =
+    evaluate (encode (leaves body) [] body)
+      ([] ++
+        List.map
+          (fun leaf =>
+            match leaf with
+            | Value.reference name =>
+              if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+            | x => mapNames Sum.inr (profile (input environment leaf)))
+          (leaves body))
+with the goal
+  evaluate (encode (leaves body) [own] body)
+      (some [Sum.inl ()] ::
+        List.map (mapNames Sum.inr) (List.map (fun leaf => profile (input environment leaf)) (leaves body))) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+          | x => mapNames Sum.inr (profile (input environment leaf)))
+        (leaves body))
+
+Note: The full type of `encode_evaluate (leaves body) body [own] [] [some [Sum.inl ()]] []
+  (fun leaf => mapNames Sum.inr (profile (input environment leaf)))
+  (fun leaf =>
+    match leaf with
+    | Value.reference name =>
+      if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+    | x => mapNames Sum.inr (profile (input environment leaf)))
+  source coherent (InternedStoredSubstitution.leaves_available body source available) (fun x member => member) rfl
+  rfl` is
+  (∀ (captured : Value Symbol Guard),
+      captured ∈ leaves body →
+        captured.free = [] →
+          mapNames Sum.inr (profile (input environment captured)) =
+            match captured with
+            | Value.reference name =>
+              if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment captured))
+            | x => mapNames Sum.inr (profile (input environment captured))) →
+    (∀ (name : Reference),
+        resolve [own] [some [Sum.inl ()]] (fun leaf => mapNames Sum.inr (profile (input environment leaf))) name =
+          resolve [] []
+            (fun leaf =>
+              match leaf with
+              | Value.reference name =>
+                if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+              | x => mapNames Sum.inr (profile (input environment leaf)))
+            name) →
+      evaluate (encode (leaves body) [own] body)
+          ([some [Sum.inl ()]] ++
+            List.map (fun leaf => mapNames Sum.inr (profile (input environment leaf))) (leaves body)) =
+        evaluate (encode (leaves body) [] body)
+          ([] ++
+            List.map
+              (fun leaf =>
+                match leaf with
+                | Value.reference name =>
+                  if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+                | x => mapNames Sum.inr (profile (input environment leaf)))
+              (leaves body))
+
+Symbol Guard : Type
+body : Value Symbol Guard
+own : Reference
+environment : Environment Symbol Guard
+source : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent source
+available : Available source body
+⊢ evaluate (encode (leaves body) [own] body)
+      (some [Sum.inl ()] ::
+        List.map (mapNames Sum.inr) (List.map (fun leaf => profile (input environment leaf)) (leaves body))) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if own = name then some [Sum.inl ()] else mapNames Sum.inr (profile (input environment leaf))
+          | x => mapNames Sum.inr (profile (input environment leaf)))
+        (leaves body))

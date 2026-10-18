@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-2.source.lean:57:71: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-2.source.lean:78:7: error: Type mismatch: After simplification, term
+  bound
+ has type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map (mapNames Sum.inr) (List.map (fun leaf => profile (input environment leaf)) (leaves body))) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [Sum.inl ()]
+            else mapNames Sum.inr (profile (input environment leaf))
+          | x => mapNames Sum.inr (profile (input environment leaf)))
+        (leaves body))
+but is expected to have type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map (mapNames Sum.inr) (List.map (fun leaf => profile (input environment leaf)) (leaves body))) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [Sum.inl ()]
+            else mapNames Sum.inr (profile (input environment leaf))
+          | x => mapNames Sum.inr (profile (input environment leaf)))
+        (leaves body))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-2.source.lean:79:51: error: Type mismatch: After simplification, term
+  current
+ has type
+  (Value.empty.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    isEmpty
+      (lower
+        (evaluate (encode (leaves body) [] body)
+          (List.map
+            (fun leaf =>
+              match leaf with
+              | Value.reference name =>
+                if Reference.interned entry.identity = name then some [Sum.inl ()]
+                else mapNames Sum.inr (profile (input environment leaf))
+              | x => mapNames Sum.inr (profile (input environment leaf)))
+            (leaves body))))
+but is expected to have type
+  (Value.empty.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    isEmpty
+      (lower
+        (evaluate (encode (leaves body) [] body)
+          (List.map
+            (fun leaf =>
+              match leaf with
+              | Value.reference name =>
+                if Reference.interned entry.identity = name then some [Sum.inl ()]
+                else mapNames Sum.inr (profile (input environment leaf))
+              | x => mapNames Sum.inr (profile (input environment leaf)))
+            (leaves body))))

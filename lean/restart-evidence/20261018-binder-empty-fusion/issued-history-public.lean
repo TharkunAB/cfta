@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentNativeMuIssuedHistory
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.growth
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.growth
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.growth
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.issued
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.issued
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.issued
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildMany_path
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildMany_path
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildMany_path
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildEdges_path
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildEdges_path
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildEdges_path
+#check @MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path
+#print MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path
+#print axioms MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path

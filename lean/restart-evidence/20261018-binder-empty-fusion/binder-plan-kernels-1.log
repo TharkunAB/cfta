@@ -1,0 +1,53 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-1.source.lean:28:12: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.NodeKey.ordinary`
+
+Note: Inferred this name from the expected resulting type of `.ordinary`:
+  InternedBinderProtocol.NodeKey
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-1.source.lean:45:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-1.source.lean:57:71: error: Type mismatch
+  List.mem_cons_self
+has type
+  ?m.12 ∈ ?m.12 :: ?m.13
+but is expected to have type
+  List.Mem (Reference.interned 18) [Reference.interned 13, Reference.interned 18]
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-1.source.lean:58:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-1.source.lean:77:75: error: Application type mismatch: The argument
+  bound
+has type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map (mapNames Sum.inr) (List.map (fun leaf => profile (input environment leaf)) (leaves body))) =
+    evaluate (encode (leaves body) [] body)
+      (List.map
+        (fun leaf =>
+          match leaf with
+          | Value.reference name =>
+            if Reference.interned entry.identity = name then some [Sum.inl ()]
+            else mapNames Sum.inr (profile (input environment leaf))
+          | x => mapNames Sum.inr (profile (input environment leaf)))
+        (leaves body))
+but is expected to have type
+  evaluate (encode (leaves body) [Reference.interned entry.identity] body)
+      (some [Sum.inl ()] ::
+        List.map (mapNames Sum.inr) (List.map (fun leaf => profile (input environment leaf)) (leaves body))) =
+    unlowered
+in the application
+  And.intro bound
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-binder-empty-fusion/binder-plan-kernels-1.source.lean:78:48: error: Application type mismatch: The argument
+  current
+has type
+  (Value.empty.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    isEmpty
+      (lower
+        (evaluate (encode (leaves body) [] body)
+          (List.map
+            (fun leaf =>
+              match leaf with
+              | Value.reference name =>
+                if Reference.interned entry.identity = name then some [Sum.inl ()]
+                else mapNames Sum.inr (profile (input environment leaf))
+              | x => mapNames Sum.inr (profile (input environment leaf)))
+            (leaves body))))
+but is expected to have type
+  (Value.empty.referenceOf == InternedBinderProtocol.NodeRef.empty) = isEmpty (lower unlowered)
+in the application
+  ⟨?m.157, current⟩

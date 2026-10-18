@@ -1,0 +1,376 @@
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Type
+inductive MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Type
+number of parameters: 3
+constructors:
+MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.refl : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state state
+MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.retain : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) →
+      @MicroCFTA.InternedShallowHeap.NoNewMu Symbol Guard before after →
+        @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after →
+          @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) →
+            @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after
+MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.trans : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before middle →
+        @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst middle after →
+          @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after
+MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.publication : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+        @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+          @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event)
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after →
+        @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path Symbol Guard inst before after
+def MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after →
+        @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path Symbol Guard inst before after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {before after}
+    path =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.brecOn.{1} Symbol Guard inst
+    (fun {before after} path => @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path Symbol Guard inst before after)
+    before after path (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget._f Symbol Guard inst)
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.growth : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after
+theorem MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.growth : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after),
+  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {before after}
+    path =>
+  @MicroCFTA.SourceCurrentNativeMuGrowthHistory.Path.growth Symbol Guard inst before after
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.forget Symbol Guard inst before after path)
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.growth' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.issued : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after),
+  @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+theorem MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.issued : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after),
+  @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {before after}
+    path =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.rec.{0} Symbol Guard inst
+    (fun {before after} path =>
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))
+    (fun state =>
+      @MicroCFTA.Cache.extends_refl Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+    (fun before after old growth issued => issued)
+    (fun {before middle after} first next first_1 next_1 =>
+      @MicroCFTA.Cache.extends_trans Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard middle))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+        first_1 next_1)
+    (fun event depth ordinary body depth_1 ordinary_1 body_1 =>
+      @MicroCFTA.Cache.extends_trans Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)))
+        depth_1
+        (@MicroCFTA.Cache.extends_trans Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)))
+          ordinary_1
+          (@MicroCFTA.Cache.extends_trans Nat MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)))
+            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event)))
+            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)))
+            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.reserve_issued✝ Symbol Guard inst event) body_1)))
+    before after path
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.issued' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    Nonempty.{1}
+      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)))
+theorem MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    Nonempty.{1}
+      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression
+    environment state context =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path._mutual Symbol Guard inst
+    (@PSum.inl.{1, 1}
+      (@PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun expression =>
+        @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+          @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+            @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment))
+      (@PSigma.mk.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+        (fun expression =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        expression
+        (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+          environment
+          (@PSigma.mk.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (fun state => @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+            state context))))
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildMany_path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    Nonempty.{1}
+      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state)))
+theorem MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildMany_path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    Nonempty.{1}
+      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expressions
+    environment state context =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path._mutual Symbol Guard inst
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun expression =>
+        @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+          @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+            @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment))
+      (@PSum.inl.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+          (fun expressions =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+              @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+                @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+          expressions
+          (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (fun environment =>
+              @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+                @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+            environment
+            (@PSigma.mk.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (fun state => @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+              state context)))))
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildMany_path' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildEdges_path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    Nonempty.{1}
+      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state)))
+theorem MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildEdges_path : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    Nonempty.{1}
+      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expressions
+    environment state context =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path._mutual Symbol Guard inst
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) fun expression =>
+        @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+          @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+            @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment))
+      (@PSum.inr.{1, 1}
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)) fun expressions =>
+          @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+            @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+              @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+        (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+          (fun expressions =>
+            @PSigma.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun environment =>
+              @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+                @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+          expressions
+          (@PSigma.mk.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (fun environment =>
+              @PSigma.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+                @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+            environment
+            (@PSigma.mk.{1, 0} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (fun state => @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment)
+              state context)))))
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.buildEdges_path' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)))
+def MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression =>
+  @Classical.choice.{1}
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))))
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path._proof_1 Symbol Guard inst expression)
+'MicroCFTA.SourceCurrentNativeMuIssuedHistory.closed_path' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
