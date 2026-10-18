@@ -36,6 +36,7 @@ import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntSet as IntSet
 import Data.List (partition, sort)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing, mapMaybe)
@@ -442,11 +443,18 @@ edgeCopies ::
     [[([Template symbol], [Template symbol])]]
 edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
     Nothing -> []
-    Just wantedChildren -> copies (zip3 [0 ..] (transposed wantedChildren) shapes) (mapMaybe childrenOf unwanted)
+    Just wantedChildren -> copies (zip3 [0 ..] (transposed wantedChildren) shapes) unwantedChildren
   where
     count = length shapes
     childrenOf template = childTemplates template symbol (Arity count)
     transposed rows = [[row !! index | row <- rows] | index <- [0 .. count - 1]]
+    unwantedChildren = mapMaybe childrenOf unwanted
+    -- For finite templates and lawful symbol Ord, IDs agree if and only if
+    -- the child parts are equal. Each map is demanded only when needed.
+    partIdentifiers =
+        [ Map.fromList [(parts !! index, identifier) | (identifier, parts) <- zip [0 ..] unwantedChildren]
+        | index <- [0 .. count - 1]
+        ]
     copies [] alive = [[] | null alive]
     copies ((index, wantedHere, shapesHere) : rest) alive =
         [ (wantedHere <> map (!! index) kept, filter (\part -> not (null (fits shapesHere [part]))) (map (!! index) killed))
@@ -463,6 +471,9 @@ edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
         -- template which must die has too cannot stay alive.
         (fixed, open) = partition (ground . (!! index)) mayLive
         (groundDying, openDying) = partition (ground . (!! index)) mustDie
+        -- ID sets track the unchanged chosen/notChosen lists. They replace
+        -- only membership checks. Keep the original templates and order.
+        identifiedOpen = [(parts, (partIdentifiers !! index) Map.! (parts !! index)) | parts <- open]
         groups = Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- fixed]
         dying = Set.fromList (map (!! index) groundDying)
         -- The shapes that the parts which the child must match all fit.
@@ -472,14 +483,16 @@ edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
             | otherwise = case foldM meetTemplate Hole (wantedHere <> map (!! index) forced) of
                 Nothing -> []
                 Just required ->
-                    [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _, _) <- splits base required open]
+                    [ (forced <> chosen, mustDie <> fixed <> notChosen)
+                    | ((chosen, notChosen), _, _, _, _) <- splits base required identifiedOpen
+                    ]
                         <> [ (forced <> group <> chosen, openDying <> notChosen)
                            | (part, group) <- Map.toList groups
                            , Set.notMember part dying
                            , Just combined <- [meetTemplate required part]
                            , let narrowed = fits base [part]
                            , not (null narrowed)
-                           , ((chosen, notChosen), _, _) <- splits narrowed combined open
+                           , ((chosen, notChosen), _, _, _, _) <- splits narrowed combined identifiedOpen
                            ]
         -- Carry the positive conjunction through the same tail-first split.
         -- A failed meet removes only the impossible kept alternative.
@@ -487,17 +500,19 @@ edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
         -- choices. Keep the order and obligation lists of the other choices.
         -- This preserves the complete finite-term language. It does not prove
         -- that every recursive cutoff stream remains equal.
-        splits fitting required [] = [(([], []), fitting, required)]
-        splits fitting required (parts : others) =
+        splits fitting required [] = [(([], []), fitting, required, IntSet.empty, IntSet.empty)]
+        splits fitting required ((parts, identifier) : others) =
             concat
-                [ [ ((parts : chosen, notChosen), narrowed, combined)
-                  | parts !! index `notElem` map (!! index) notChosen
+                [ [ ((parts : chosen, notChosen), narrowed, combined, IntSet.insert identifier chosenIds, notChosenIds)
+                  | IntSet.null notChosenIds || IntSet.notMember identifier notChosenIds
                   , Just combined <- [meetTemplate remainingRequired (parts !! index)]
                   , let narrowed = fits remaining [parts !! index]
                   , not (null narrowed)
                   ]
-                    <> [((chosen, parts : notChosen), remaining, remainingRequired) | parts !! index `notElem` map (!! index) chosen]
-                | ((chosen, notChosen), remaining, remainingRequired) <- splits fitting required others
+                    <> [ ((chosen, parts : notChosen), remaining, remainingRequired, chosenIds, IntSet.insert identifier notChosenIds)
+                       | IntSet.null chosenIds || IntSet.notMember identifier chosenIds
+                       ]
+                | ((chosen, notChosen), remaining, remainingRequired, chosenIds, notChosenIds) <- splits fitting required others
                 ]
     -- The shapes whose root each of the parts fits.
     fits candidates parts = [(root, arity) | (root, arity) <- candidates, all (\part -> isJust (childTemplates part root (Arity arity))) parts]
