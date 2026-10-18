@@ -13,6 +13,8 @@ module Data.CFTA.Lowering (
     ExpansionError (..),
     LoweringError (..),
     mkLowering,
+    identity,
+    compose,
     lower,
     lift,
     checkLowering,
@@ -66,6 +68,27 @@ mkLowering entries = do
   where
     children (Child index) = [index]
     children (Apply _ arguments) = concatMap children arguments
+
+-- | The lowering that keeps every constructor.
+identity :: Lowering symbol
+identity = Lowering Map.empty
+
+{- | One lowering from the later language to the language two versions down:
+first @later@, then @earlier@. An expansion of @later@ has the constructors of
+@earlier@ in it replaced by their expansions. A constructor that only
+@earlier@ lowers keeps its expansion. Lowering with the result is lowering with
+@later@ and then with @earlier@.
+-}
+compose :: (Ord symbol) => Lowering symbol -> Lowering symbol -> Lowering symbol
+compose (Lowering later) (Lowering earlier) =
+    Lowering $ Map.union (Map.map (fmap substitute) later) earlier
+  where
+    substitute (Child index) = Child index
+    substitute (Apply symbol parts) = case Map.lookup symbol earlier of
+        Nothing -> Apply symbol (map substitute parts)
+        Just (_, expansion) -> instantiate (map substitute parts) expansion
+    instantiate arguments (Child index) = arguments !! index
+    instantiate arguments (Apply symbol parts) = Apply symbol (map (instantiate arguments) parts)
 
 {- | Lower a term: lower the children, then put them in the expansion of a new
 constructor. 'Nothing' if a new constructor has a different number of children
