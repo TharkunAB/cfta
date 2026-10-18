@@ -1264,18 +1264,91 @@ or 31.9694% of those construction ticks. These are distinct from the
 whole-process denominator. The transform does not finish. This profile
 identifies construction work but gives no correctness result or native cost.
 
-A separate private conjunction shortcut in `Template` keeps its public API.
-Its finite intersection, split-order, and construction controls pass. The
-finite process completes in 0.453 seconds, with 72 applied groups and 27 skips.
-The earlier unmodified finite attempt stopped at 90 seconds; these results
-do not give a matched completed-work timing ratio. The new 13-module native
-build uses `-O2`. Its actual-entry pilot preserves the exact 133-law prefix
-but hits the 60-second transform guard. No transformed graph is reported,
-and no full 197-law run follows. The whole prefix-plus-transform process uses
-69.210 seconds wall, 69.274 seconds CPU, and 306,341,183,760 allocated bytes.
-Maximum residency is 92,051,104 bytes and peak RSS is 222,020 KiB. These totals
-are not transform-only costs. Finite success does not establish a real-bucket
-gain. This CFTA change remains unselected.
+Two changes address distinct impossible splits. A private structural
+intersection combines the positive child patterns. It rejects incompatible
+patterns below their root. A second guard rejects a split that requires the
+same child pattern to match and not match. The static captured family has
+46 open function parts but only four distinct parts. This count does not
+measure executed splits. The combined implementation keeps the order and
+obligation lists of each surviving choice. Its public API does not change.
+
+| Positive intersection | Duplicate contradiction guard | Finite controls | Native actual-entry construction |
+| --- | --- | --- | --- |
+| No | No | Unknown at 90 seconds | Not run after the finite gate |
+| Yes | No | Pass, 0.453 seconds | Unknown at the 60-second guard |
+| No | Yes | Unknown at 90 seconds | Not run after the finite gate |
+| Yes | Yes | Pass, 0.402 seconds | Complete, 0.106 seconds |
+
+Each successful finite arm passes 72 applied groups and skips 27 unsupported
+groups. The incomplete arms finish 63 groups and the same 27 skips before
+the nested case. These observations are not matched completed-work timing
+ratios. Constructor-intersection, split-order, and captured-family controls
+also pass. The ambiguity control still exposes the raw-run limitation above.
+The complete finite-term argument does not prove equivalence for every
+recursive cutoff stream. Compatible pattern families can still require
+exponential work.
+
+The combined pilot preserves all 133 prefix laws and all 20,558 stdout bytes.
+It transforms the actual 163-pattern program graph from 47 states and 379
+edges to 224 states and 1,422 edges. The transform and forced graph validation
+take 0.106209 seconds wall and 0.106366 seconds CPU. A full run repeats that
+construction in 0.098561 seconds wall and 0.098700 seconds CPU. All 173
+original templates remain in the outer oracle. All 197 laws and all 40,814
+stdout bytes match the retained baseline.
+
+| Whole-run measurement | Retained baseline | Combined structural control |
+| --- | ---: | ---: |
+| Allocated bytes | 229,664,980,896 | 189,112,828,624 |
+| RTS total CPU time, s | 36.237 | 33.043 |
+| Wall time, s | 36.248 | 33.048 |
+| Peak RSS, KiB | 533,840 | 532,988 |
+| Maximum residency, bytes | 175,902,216 | 176,885,912 |
+
+Allocation decreases by 17.6571% and observed CPU time by 8.8142%. The new
+build has 13 HOME modules; the retained baseline has 11. The additional
+modules are the compilation helper and `Data.CFTA.Template`. Both builds use
+`-O2` and the same audited dependencies. These are whole-pipeline differences,
+not isolated Template CPU costs. Each arm has one observation; no variance
+estimate or original rerun is available. This control uses the earlier
+`d2e91fdf` Pruning code, without the selected Spec-only fragment guard.
+
+A fresh control uses committed `8551f70d` and the selected `09caaec3`
+Spec-only guard. The exact 13-module `-O2` build, fresh finite controls,
+133-law entry, transformed graph, and all 197 laws/full stdout pass.
+Construction takes 0.097559 seconds wall and 0.097716 seconds CPU.
+Whole-process allocation is 203,700,048,000 bytes, CPU time is 33.481 seconds,
+and peak RSS is 530,036 KiB. Against the retained guard-only control, these
+are decreases of 2.8682%, 3.7736%, and 0.1477%. This is the current guard's
+incremental comparison. The earlier 17.6571% allocation decrease uses the
+pre-guard baseline. Each comparison has one observation and different
+11- versus 13-HOME build contexts; timing noise is not estimated.
+
+The same binary still times out on size 6, phase 3. It preserves the exact
+223-law, 28,995-byte prefix of the guard-only run. At that entry, 568 of 624
+templates compile. Construction changes 103 states/714 edges to 710 states/
+5,240 edges in 4.370326 seconds wall and 4.377202 seconds CPU. The first
+candidate-list demand then remains unfinished for 249.184 seconds wall and
+249.549 seconds CPU. No candidate reaches schema or instance testing in
+that bucket. The whole run uses 300.211 seconds wall, 300.576 seconds CPU,
+2,055,884,117,704 allocated bytes, 235,809,344 bytes maximum residency, and
+632,588 KiB peak RSS. The equal printed frontier does not establish equal
+internal work or a speedup. Construction now completes; candidate demand
+remains the observed limit.
+
+The committed library patch passes all 741 existing examples in each of
+the baseline and candidate builds: 321 unit, 240 generator, and 180 refinement
+examples. All eight default allocation and Cachegrind controls pass. Their
+deterministic checksums agree across all four processes per cell. The largest
+allocation increase is 0.0014961%; the largest instruction increase is
+0.0015353%. Both builds have 12 fresh local `-O2` components and the same 102
+external `-O2` units, including the `hsc2hs` build tool. Only Template runtime
+code changes. These checks validate default library costs; they do not prove
+equivalence for every recursive cutoff stream.
+
+Compiled pruning remains a local bucket-specific control; it is not the
+default Specftacular path. The published matrix retains its measured
+`d2e91fdf` source. No Specftacular baseline or original Spectacular run is
+repeated for these controls.
 
 Two further controls reproduce all 197 laws and all stdout bytes. One adds
 checks during CFTA child construction. The other changes only Specftacular,
@@ -1295,6 +1368,16 @@ The Spec-only arm reduces allocation by 8.6865%. The CFTA arm saves a further
 1.2672%, with 1.9457% lower observed CPU time and 1.3315% higher RSS. Each arm
 runs once against the same retained baseline; timing noise is not estimated.
 The CFTA extension is not selected for this small additional saving.
+
+A separate control skips starting structural matches that the earlier
+guard has ruled out on a complete program shape. Existing pending matches
+remain unchanged. All nine × 36 language controls, two targeted grammars,
+and actual callback checks pass. All 197 laws and all stdout bytes match.
+Against the Spec-only arm, allocation falls from 209,715,175,160 to
+197,716,450,808 bytes (5.7214%), but observed CPU time rises from 34.794 to
+35.705 seconds (2.6183%). Peak RSS rises from 530,820 to 535,652 KiB.
+This extra helper remains unselected. One observation does not estimate
+timing noise. The selected Spec-only code remains `09caaec3`.
 
 The committed Spec-only guard also passes fresh native and GHC checks. Its
 seven core HOME modules and the GHC adapter compile at `-O2` against the
