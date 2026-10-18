@@ -15,6 +15,7 @@ import qualified Data.Bifunctor as Bi
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
+import qualified Specftacular.CompiledPruning as Compile
 import qualified Specftacular.DecisionTree as DT
 import Specftacular.Pruning (prunedTerms)
 import Specftacular.Rewriting
@@ -447,11 +448,12 @@ runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. 
         -- The oracle rejects partial branches before their remaining type
         -- choices expand. The bucket has one program size. KBO orders its
         -- ties before testing; smaller sizes have already supplied rules.
-        let terms =
+        let (pruningRoot, oracleTemplates) = Compile.preparePruning templates folded
+            terms =
                 sortBy
                     (kboCompare (isGivenVar compl_sig))
                     [ candidate
-                    | t <- prunedTerms templates folded
+                    | t <- prunedTerms oracleTemplates pruningRoot
                     , let candidate = canonicalTypes (npTerm' t)
                     , eligible candidate
                     ]
