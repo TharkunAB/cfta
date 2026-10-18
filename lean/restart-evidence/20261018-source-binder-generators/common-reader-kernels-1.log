@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-source-binder-generators/common-reader-kernels-1.source.lean:54:85: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.36 = ?m.36
+but is expected to have type
+  build Syntax.empty [] empty = Outcome.done Value.empty empty
+in the application
+  SourceEqualityRequiredCache.constructed Syntax.empty Value.empty empty rfl
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-source-binder-generators/common-reader-kernels-1.source.lean:64:37: error: Application type mismatch: The argument
+  member
+has type
+  row ∈ nodeParts.snd.fst
+but is expected to have type
+  ?m.36 ∈ [?m.37]
+in the application
+  List.mem_singleton.mp member
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-source-binder-generators/common-reader-kernels-1.source.lean:114:12: error: Type mismatch: After simplification, term
+  Eq.symm (Outcome.done.inj called).left
+ has type
+  @Eq (Value Nat Bool) output
+    (Value.mu (fields mu).fst (Value.node nodeParts.fst nodeParts.snd.fst nodeParts.snd.snd.fst nodeParts.snd.snd.snd)
+      (fields mu).snd.snd.fst (fields mu).snd.snd.snd)
+but is expected to have type
+  @Eq (Value Nat Bool) output recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-source-binder-generators/common-reader-kernels-1.source.lean:121:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  recursive
+in the target expression
+  unfold
+      (Value.mu (fields mu).fst (Value.node nodeParts.fst nodeParts.snd.fst nodeParts.snd.snd.fst nodeParts.snd.snd.snd)
+        (fields mu).snd.snd.fst (fields mu).snd.snd.snd)
+      before =
+    Outcome.done result after
+
+available : Available before recursive
+result : Value Nat Bool
+after : InternedConstructorTemplates.State Nat Bool
+actual :
+  unfold
+      (Value.mu (fields mu).fst (Value.node nodeParts.fst nodeParts.snd.fst nodeParts.snd.snd.fst nodeParts.snd.snd.snd)
+        (fields mu).snd.snd.fst (fields mu).snd.snd.snd)
+      before =
+    Outcome.done result after
+kept : Keeps before after
+output : Available after result
+repeated :
+  unfold
+      (Value.mu (fields mu).fst (Value.node nodeParts.fst nodeParts.snd.fst nodeParts.snd.snd.fst nodeParts.snd.snd.snd)
+        (fields mu).snd.snd.fst (fields mu).snd.snd.snd)
+      after =
+    Outcome.done result after
+ordinary : SourceEqualityRequiredCache.Ordinary result
+supported :
+  WarmSupport after fun value =>
+    support value ∨
+      value =
+          Value.mu (fields mu).fst
+            (Value.node nodeParts.fst nodeParts.snd.fst nodeParts.snd.snd.fst nodeParts.snd.snd.snd)
+            (fields mu).snd.snd.fst (fields mu).snd.snd.snd ∨
+        value = result
+⊢ ∃ before after root result entry nodeEntry rows level free depth ordinary,
+    build
+          (Syntax.binder true
+            (Syntax.node [InternedNestedConstruction.EdgeSyntax.mk 0 false [Syntax.var 0, Syntax.var 1]]))
+          [Value.reference (Reference.uninterned 9)] empty =
+        Outcome.done root before ∧
+      Ready before ∧
+        Available before root ∧
+          root = Value.mu entry (Value.node nodeEntry rows level free) depth ordinary ∧
+            root.free ≠ [] ∧
+              InternedStoredPlanBinderDepth.valueDepth root > 0 ∧
+                InternedFreshOrdinaryDepthHeap.usesLocal depth ordinary = true ∧
+                  (WarmSupport before fun value => value = Value.reference (Reference.uninterned 9)) ∧
+                    unfold root before = Outcome.done result after ∧
+                      Keeps before after ∧
+                        Available after result ∧
+                          unfold root after = Outcome.done result after ∧
+                            SourceEqualityRequiredCache.Ordinary result ∧
+                              before.nodes.next < after.nodes.next ∧
+                                WarmSupport after fun value =>
+                                  value = Value.reference (Reference.uninterned 9) ∨ value = root ∨ value = result
