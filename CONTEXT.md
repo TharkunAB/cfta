@@ -128,14 +128,23 @@ Three kinds, never called only "variable":
   restriction.
 - **Extension**: a step that makes a language more expressive. It adds
   constructors, states, or predicates. Do not call it a refinement: a
-  refinement is the predicate of a symbol (see Constraints).
+  refinement is the predicate of a symbol (see Constraints). An extension is
+  an abstraction extension or a definitional extension.
+- **Abstraction extension**: an extension that tells more concrete tests
+  apart, for example a new predicate in the vocabulary of the refinements. A
+  term of the new version means a set of concrete tests: its
+  **concretization**.
+- **Definitional extension**: an extension that adds a named constructor for
+  a pattern of the earlier version. A term of the new version means one term
+  of the earlier version: its lowering.
 - **Restriction**: a step that removes terms. It removes productions, adds
   facts, or adds named exclusions.
 - **Lowering**: a translation of the terms of one language version to terms of
   the version before it. A **template lowering** gives each new constructor a
   template in the earlier version, and keeps each old constructor.
-- **Language tower**: a language chain in which each extension has a lowering,
-  so that each version has a meaning in L0.
+- **Language tower**: a language chain in which each abstraction extension
+  has a concretization and each definitional extension has a lowering, so
+  that each version has a meaning in L0.
 - **Representation level**: one form of one language version: an editable
   definition, a graph, a prepared query, or a checkpoint. Do not call the
   levels a tower.
