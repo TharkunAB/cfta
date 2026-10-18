@@ -1,0 +1,494 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:446:15: error: unexpected token 'opaque'; expected '[', '{', '|', '⦃' or term
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:446:12: error: Missing cases:
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:436:81: error: unsolved goals
+case mpr
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+bound : Nat
+expressions : List (Syntax Symbol Guard)
+ih : ∀ (child : Syntax Symbol Guard), child ∈ expressions → Fusion bound child
+markers : List Reference
+Atom : Type
+reader : InternedConstructorTemplates.State Symbol Guard
+ready : Ready reader
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+firstOwn secondOwn : Reference
+firstMap secondMap : Environment Symbol Guard
+firstBefore secondBefore firstRawHeap secondRawHeap : InternedConstructorTemplates.State Symbol Guard
+firstRaw secondRaw firstFiltered secondFiltered left right : Value Symbol Guard
+firstDepth : firstRaw.depth ≤ bound
+secondDepth : secondRaw.depth ≤ bound
+firstContext : Context firstBefore (List.map (input firstNames) inputs)
+secondContext : Context secondBefore (List.map (input secondNames) inputs)
+aliases : Aliases (Syntax.union expressions) inputs firstNames secondNames
+tests :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ Scope (Syntax.union expressions) inputs →
+      (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+paired :
+  SourceCurrentReaderReplacementSlots.Paired (Related markers) firstMap secondMap (List.map (input firstNames) inputs)
+    (List.map (input secondNames) inputs)
+firstReplacements : Replacements reader firstMap
+secondReplacements : Replacements reader secondMap
+firstAvailable : Available reader firstRaw
+secondAvailable : Available reader secondRaw
+firstBuild :
+  build (Syntax.union expressions) (List.map (input firstNames) inputs) firstBefore = Outcome.done firstRaw firstRawHeap
+secondBuild :
+  build (Syntax.union expressions) (List.map (input secondNames) inputs) secondBefore =
+    Outcome.done secondRaw secondRawHeap
+firstGrowth : Grows firstRawHeap reader
+secondGrowth : Grows secondRawHeap reader
+firstFilter : run (withoutSelfReference firstOwn firstRaw) reader = (firstFiltered, reader)
+secondFilter : run (withoutSelfReference secondOwn secondRaw) reader = (secondFiltered, reader)
+firstDone : execute firstFiltered firstMap reader = Outcome.done left reader
+secondDone : execute secondFiltered secondMap reader = Outcome.done right reader
+parentBare : firstRaw = Value.reference firstOwn ↔ secondRaw = Value.reference secondOwn
+firstRaws : List (Value Symbol Guard)
+firstRawEntry : InternedConstructorTemplates.State Symbol Guard
+firstFilters firstOutputs : List (Value Symbol Guard)
+firstMiddle : InternedConstructorTemplates.State Symbol Guard
+firstCut : Value Symbol Guard
+firstFilterHeap : InternedConstructorTemplates.State Symbol Guard
+firstResult : Value Symbol Guard
+firstFinal : InternedConstructorTemplates.State Symbol Guard
+firstMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input firstNames) inputs) firstBefore =
+    Outcome.done firstRaws firstRawEntry
+firstRawContext : Context firstRawEntry (List.map (input firstNames) inputs)
+firstMade : run (makeUnion firstRaws) firstRawEntry = (firstRaw, firstRawHeap)
+firstValues : Values reader firstRaws
+firstCalls :
+  SourceCurrentGeneratedUnionPreparation.FilteredCalls firstOwn firstMap firstRaws reader firstFilters firstOutputs
+    firstMiddle
+firstParentFilter : run (withoutSelfReference firstOwn firstRaw) firstMiddle = (firstCut, firstFilterHeap)
+firstParentDone : execute firstCut firstMap firstFilterHeap = Outcome.done firstResult firstFinal
+firstKept : Keeps reader firstMiddle
+firstCutKept : Keeps firstMiddle firstFilterHeap
+firstResultKept : Keeps firstFilterHeap firstFinal
+firstCutAvailable : Available firstFinal firstCut
+firstResultAvailable : Available firstFinal firstResult
+firstMembersAvailable : Values firstFinal firstRaws
+firstFiltersAvailable : Values firstFinal firstFilters
+firstOutputsAvailable : Values firstFinal firstOutputs
+firstParentWarm : run (withoutSelfReference firstOwn firstRaw) firstFinal = (firstCut, firstFinal)
+firstParentStored : execute firstCut firstMap firstFinal = Outcome.done firstResult firstFinal
+firstFiltersWarm :
+  All₂ (fun raw filtered => run (withoutSelfReference firstOwn raw) firstFinal = (filtered, firstFinal)) firstRaws
+    firstFilters
+firstStoredWarm :
+  All₂ (fun filtered output => execute filtered firstMap firstFinal = Outcome.done output firstFinal) firstFilters
+    firstOutputs
+firstSourceWarm :
+  build (Syntax.union expressions) (List.map (input firstNames) inputs) firstFinal = Outcome.done firstRaw firstFinal
+firstManyWarm :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input firstNames) inputs) firstFinal =
+    Outcome.done firstRaws firstFinal
+firstMadeWarm : run (makeUnion firstRaws) firstFinal = (firstRaw, firstFinal)
+firstSources :
+  All₂
+    (fun expression value =>
+      ∃ current returned,
+        Context current (List.map (input firstNames) inputs) ∧
+          build expression (List.map (input firstNames) inputs) current = Outcome.done value returned ∧
+            Grows returned firstFinal ∧
+              build expression (List.map (input firstNames) inputs) firstFinal = Outcome.done value firstFinal)
+    expressions firstRaws
+firstWhole : Keeps reader firstFinal
+secondRaws : List (Value Symbol Guard)
+secondRawEntry : InternedConstructorTemplates.State Symbol Guard
+secondFilters secondOutputs : List (Value Symbol Guard)
+secondMiddle : InternedConstructorTemplates.State Symbol Guard
+secondCut : Value Symbol Guard
+secondFilterHeap : InternedConstructorTemplates.State Symbol Guard
+secondResult : Value Symbol Guard
+secondFinal : InternedConstructorTemplates.State Symbol Guard
+secondMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input secondNames) inputs) secondBefore =
+    Outcome.done secondRaws secondRawEntry
+secondRawContext : Context secondRawEntry (List.map (input secondNames) inputs)
+secondMade : run (makeUnion secondRaws) secondRawEntry = (secondRaw, secondRawHeap)
+secondValues : Values firstFinal secondRaws
+secondCalls :
+  SourceCurrentGeneratedUnionPreparation.FilteredCalls secondOwn secondMap secondRaws firstFinal secondFilters
+    secondOutputs secondMiddle
+secondParentFilter : run (withoutSelfReference secondOwn secondRaw) secondMiddle = (secondCut, secondFilterHeap)
+secondParentDone : execute secondCut secondMap secondFilterHeap = Outcome.done secondResult secondFinal
+secondKept : Keeps firstFinal secondMiddle
+secondCutKept : Keeps secondMiddle secondFilterHeap
+secondResultKept : Keeps secondFilterHeap secondFinal
+secondCutAvailable : Available secondFinal secondCut
+secondResultAvailable : Available secondFinal secondResult
+secondMembersAvailable : Values secondFinal secondRaws
+secondFiltersAvailable : Values secondFinal secondFilters
+secondOutputsAvailable : Values secondFinal secondOutputs
+secondParentWarm : run (withoutSelfReference secondOwn secondRaw) secondFinal = (secondCut, secondFinal)
+secondParentStored : execute secondCut secondMap secondFinal = Outcome.done secondResult secondFinal
+secondFiltersWarm :
+  All₂ (fun raw filtered => run (withoutSelfReference secondOwn raw) secondFinal = (filtered, secondFinal)) secondRaws
+    secondFilters
+secondStoredWarm :
+  All₂ (fun filtered output => execute filtered secondMap secondFinal = Outcome.done output secondFinal) secondFilters
+    secondOutputs
+secondSourceWarm :
+  build (Syntax.union expressions) (List.map (input secondNames) inputs) secondFinal =
+    Outcome.done secondRaw secondFinal
+secondManyWarm :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input secondNames) inputs) secondFinal =
+    Outcome.done secondRaws secondFinal
+secondMadeWarm : run (makeUnion secondRaws) secondFinal = (secondRaw, secondFinal)
+secondSources :
+  All₂
+    (fun expression value =>
+      ∃ current returned,
+        Context current (List.map (input secondNames) inputs) ∧
+          build expression (List.map (input secondNames) inputs) current = Outcome.done value returned ∧
+            Grows returned secondFinal ∧
+              build expression (List.map (input secondNames) inputs) secondFinal = Outcome.done value secondFinal)
+    expressions secondRaws
+secondWhole : Keeps firstFinal secondFinal
+whole : Keeps reader secondFinal
+finalReady : Ready secondFinal
+finalFirstReplacements : Replacements secondFinal firstMap
+finalSecondReplacements : Replacements secondFinal secondMap
+firstOldFilter : run (withoutSelfReference firstOwn firstRaw) secondFinal = (firstFiltered, secondFinal)
+secondOldFilter : run (withoutSelfReference secondOwn secondRaw) secondFinal = (secondFiltered, secondFinal)
+firstOldDone : execute firstFiltered firstMap secondFinal = Outcome.done left secondFinal
+secondOldDone : execute secondFiltered secondMap secondFinal = Outcome.done right secondFinal
+firstFinalMade : run (makeUnion firstRaws) secondFinal = ((run (makeUnion firstRaws) firstFinal).fst, secondFinal)
+firstFinalFilter :
+  All₂ (fun raw filtered => run (withoutSelfReference firstOwn raw) secondFinal = (filtered, secondFinal)) firstRaws
+    firstFilters
+firstFinalStored :
+  All₂ (fun filtered output => execute filtered firstMap secondFinal = Outcome.done output secondFinal) firstFilters
+    firstOutputs
+firstMemberCalls :
+  ∀ (raw : Value Symbol Guard),
+    raw ∈ firstRaws →
+      ∃ filtered output,
+        run (withoutSelfReference firstOwn raw) secondFinal = (filtered, secondFinal) ∧
+          execute filtered firstMap secondFinal = Outcome.done output secondFinal
+secondMemberCalls :
+  ∀ (raw : Value Symbol Guard),
+    raw ∈ secondRaws →
+      ∃ filtered output,
+        run (withoutSelfReference secondOwn raw) secondFinal = (filtered, secondFinal) ∧
+          execute filtered secondMap secondFinal = Outcome.done output secondFinal
+firstFinalSource :
+  All₂ (fun expression raw => SourceCall expression (List.map (input firstNames) inputs) secondFinal raw) expressions
+    firstRaws
+secondFinalSource :
+  All₂ (fun expression raw => SourceCall expression (List.map (input secondNames) inputs) secondFinal raw) expressions
+    secondRaws
+firstOriginals : List (Value Symbol Guard)
+firstOriginalHeap : InternedConstructorTemplates.State Symbol Guard
+firstOriginalMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input firstNames) inputs) firstBefore =
+    Outcome.done firstOriginals firstOriginalHeap
+_firstOriginalMade : run (makeUnion firstOriginals) firstOriginalHeap = (firstRaw, firstRawHeap)
+_firstOriginalContext : Context firstOriginalHeap (List.map (input firstNames) inputs)
+firstOriginalBounds : ∀ (member : Value Symbol Guard), member ∈ firstRaws → member.depth ≤ firstRaw.depth
+firstOriginalSame : firstOriginals = firstRaws
+secondOriginals : List (Value Symbol Guard)
+secondOriginalHeap : InternedConstructorTemplates.State Symbol Guard
+secondOriginalMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input secondNames) inputs) secondBefore =
+    Outcome.done secondOriginals secondOriginalHeap
+_secondOriginalMade : run (makeUnion secondOriginals) secondOriginalHeap = (secondRaw, secondRawHeap)
+_secondOriginalContext : Context secondOriginalHeap (List.map (input secondNames) inputs)
+secondOriginalBounds : ∀ (member : Value Symbol Guard), member ∈ secondRaws → member.depth ≤ secondRaw.depth
+secondOriginalSame : secondOriginals = secondRaws
+childAliases : ∀ (child : Syntax Symbol Guard), child ∈ expressions → Aliases child inputs firstNames secondNames
+childTests :
+  ∀ (child : Syntax Symbol Guard),
+    child ∈ expressions →
+      ∀ (label : Reference ⊕ Atom),
+        label ∈ Scope child inputs →
+          (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+matched :
+  All₂
+    (fun a b =>
+      (a = Value.reference firstOwn ↔ b = Value.reference secondOwn) ∧
+        ∀ (firstFiltered secondFiltered left right : Value Symbol Guard),
+          run (withoutSelfReference firstOwn a) secondFinal = (firstFiltered, secondFinal) →
+            run (withoutSelfReference secondOwn b) secondFinal = (secondFiltered, secondFinal) →
+              execute firstFiltered firstMap secondFinal = Outcome.done left secondFinal →
+                execute secondFiltered secondMap secondFinal = Outcome.done right secondFinal →
+                  Related markers left right)
+    firstRaws secondRaws
+firstFinalAvailable : Values secondFinal firstRaws
+leftAvailable : Available secondFinal left
+rightAvailable : Available secondFinal right
+firstMadeFinal : run (makeUnion firstRaws) secondFinal = (firstRaw, secondFinal)
+firstCriterion :
+  observe markers left ≠ none ↔
+    ∀ (raw : Value Symbol Guard),
+      raw ∈ firstRaws →
+        raw ≠ Value.reference firstOwn ∨ firstRaw = Value.reference firstOwn →
+          ∀ (cut output : Value Symbol Guard),
+            run (withoutSelfReference firstOwn raw) secondFinal = (cut, secondFinal) →
+              execute cut firstMap secondFinal = Outcome.done output secondFinal → observe markers output ≠ none
+secondCriterion :
+  observe markers right ≠ none ↔
+    ∀ (raw : Value Symbol Guard),
+      raw ∈ secondRaws →
+        raw ≠ Value.reference secondOwn ∨ secondRaw = Value.reference secondOwn →
+          ∀ (cut output : Value Symbol Guard),
+            run (withoutSelfReference secondOwn raw) secondFinal = (cut, secondFinal) →
+              execute cut secondMap secondFinal = Outcome.done output secondFinal → observe markers output ≠ none
+⊢ observe markers right ≠ none → observe markers left ≠ none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:350:92: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+bound : Nat
+expressions : List (Syntax Symbol Guard)
+ih : ∀ (child : Syntax Symbol Guard), child ∈ expressions → Fusion bound child
+markers : List Reference
+Atom : Type
+reader : InternedConstructorTemplates.State Symbol Guard
+ready : Ready reader
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+firstOwn secondOwn : Reference
+firstMap secondMap : Environment Symbol Guard
+firstBefore secondBefore firstRawHeap secondRawHeap : InternedConstructorTemplates.State Symbol Guard
+firstRaw secondRaw firstFiltered secondFiltered left right : Value Symbol Guard
+firstDepth : firstRaw.depth ≤ bound
+secondDepth : secondRaw.depth ≤ bound
+firstContext : Context firstBefore (List.map (input firstNames) inputs)
+secondContext : Context secondBefore (List.map (input secondNames) inputs)
+aliases : Aliases (Syntax.union expressions) inputs firstNames secondNames
+tests :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ Scope (Syntax.union expressions) inputs →
+      (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+paired :
+  SourceCurrentReaderReplacementSlots.Paired (Related markers) firstMap secondMap (List.map (input firstNames) inputs)
+    (List.map (input secondNames) inputs)
+firstReplacements : Replacements reader firstMap
+secondReplacements : Replacements reader secondMap
+firstAvailable : Available reader firstRaw
+secondAvailable : Available reader secondRaw
+firstBuild :
+  build (Syntax.union expressions) (List.map (input firstNames) inputs) firstBefore = Outcome.done firstRaw firstRawHeap
+secondBuild :
+  build (Syntax.union expressions) (List.map (input secondNames) inputs) secondBefore =
+    Outcome.done secondRaw secondRawHeap
+firstGrowth : Grows firstRawHeap reader
+secondGrowth : Grows secondRawHeap reader
+firstFilter : run (withoutSelfReference firstOwn firstRaw) reader = (firstFiltered, reader)
+secondFilter : run (withoutSelfReference secondOwn secondRaw) reader = (secondFiltered, reader)
+firstDone : execute firstFiltered firstMap reader = Outcome.done left reader
+secondDone : execute secondFiltered secondMap reader = Outcome.done right reader
+parentBare : firstRaw = Value.reference firstOwn ↔ secondRaw = Value.reference secondOwn
+firstRaws : List (Value Symbol Guard)
+firstRawEntry : InternedConstructorTemplates.State Symbol Guard
+firstFilters firstOutputs : List (Value Symbol Guard)
+firstMiddle : InternedConstructorTemplates.State Symbol Guard
+firstCut : Value Symbol Guard
+firstFilterHeap : InternedConstructorTemplates.State Symbol Guard
+firstResult : Value Symbol Guard
+firstFinal : InternedConstructorTemplates.State Symbol Guard
+firstMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input firstNames) inputs) firstBefore =
+    Outcome.done firstRaws firstRawEntry
+firstRawContext : Context firstRawEntry (List.map (input firstNames) inputs)
+firstMade : run (makeUnion firstRaws) firstRawEntry = (firstRaw, firstRawHeap)
+firstValues : Values reader firstRaws
+firstCalls :
+  SourceCurrentGeneratedUnionPreparation.FilteredCalls firstOwn firstMap firstRaws reader firstFilters firstOutputs
+    firstMiddle
+firstParentFilter : run (withoutSelfReference firstOwn firstRaw) firstMiddle = (firstCut, firstFilterHeap)
+firstParentDone : execute firstCut firstMap firstFilterHeap = Outcome.done firstResult firstFinal
+firstKept : Keeps reader firstMiddle
+firstCutKept : Keeps firstMiddle firstFilterHeap
+firstResultKept : Keeps firstFilterHeap firstFinal
+firstCutAvailable : Available firstFinal firstCut
+firstResultAvailable : Available firstFinal firstResult
+firstMembersAvailable : Values firstFinal firstRaws
+firstFiltersAvailable : Values firstFinal firstFilters
+firstOutputsAvailable : Values firstFinal firstOutputs
+firstParentWarm : run (withoutSelfReference firstOwn firstRaw) firstFinal = (firstCut, firstFinal)
+firstParentStored : execute firstCut firstMap firstFinal = Outcome.done firstResult firstFinal
+firstFiltersWarm :
+  All₂ (fun raw filtered => run (withoutSelfReference firstOwn raw) firstFinal = (filtered, firstFinal)) firstRaws
+    firstFilters
+firstStoredWarm :
+  All₂ (fun filtered output => execute filtered firstMap firstFinal = Outcome.done output firstFinal) firstFilters
+    firstOutputs
+firstSourceWarm :
+  build (Syntax.union expressions) (List.map (input firstNames) inputs) firstFinal = Outcome.done firstRaw firstFinal
+firstManyWarm :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input firstNames) inputs) firstFinal =
+    Outcome.done firstRaws firstFinal
+firstMadeWarm : run (makeUnion firstRaws) firstFinal = (firstRaw, firstFinal)
+firstSources :
+  All₂
+    (fun expression value =>
+      ∃ current returned,
+        Context current (List.map (input firstNames) inputs) ∧
+          build expression (List.map (input firstNames) inputs) current = Outcome.done value returned ∧
+            Grows returned firstFinal ∧
+              build expression (List.map (input firstNames) inputs) firstFinal = Outcome.done value firstFinal)
+    expressions firstRaws
+firstWhole : Keeps reader firstFinal
+secondRaws : List (Value Symbol Guard)
+secondRawEntry : InternedConstructorTemplates.State Symbol Guard
+secondFilters secondOutputs : List (Value Symbol Guard)
+secondMiddle : InternedConstructorTemplates.State Symbol Guard
+secondCut : Value Symbol Guard
+secondFilterHeap : InternedConstructorTemplates.State Symbol Guard
+secondResult : Value Symbol Guard
+secondFinal : InternedConstructorTemplates.State Symbol Guard
+secondMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input secondNames) inputs) secondBefore =
+    Outcome.done secondRaws secondRawEntry
+secondRawContext : Context secondRawEntry (List.map (input secondNames) inputs)
+secondMade : run (makeUnion secondRaws) secondRawEntry = (secondRaw, secondRawHeap)
+secondValues : Values firstFinal secondRaws
+secondCalls :
+  SourceCurrentGeneratedUnionPreparation.FilteredCalls secondOwn secondMap secondRaws firstFinal secondFilters
+    secondOutputs secondMiddle
+secondParentFilter : run (withoutSelfReference secondOwn secondRaw) secondMiddle = (secondCut, secondFilterHeap)
+secondParentDone : execute secondCut secondMap secondFilterHeap = Outcome.done secondResult secondFinal
+secondKept : Keeps firstFinal secondMiddle
+secondCutKept : Keeps secondMiddle secondFilterHeap
+secondResultKept : Keeps secondFilterHeap secondFinal
+secondCutAvailable : Available secondFinal secondCut
+secondResultAvailable : Available secondFinal secondResult
+secondMembersAvailable : Values secondFinal secondRaws
+secondFiltersAvailable : Values secondFinal secondFilters
+secondOutputsAvailable : Values secondFinal secondOutputs
+secondParentWarm : run (withoutSelfReference secondOwn secondRaw) secondFinal = (secondCut, secondFinal)
+secondParentStored : execute secondCut secondMap secondFinal = Outcome.done secondResult secondFinal
+secondFiltersWarm :
+  All₂ (fun raw filtered => run (withoutSelfReference secondOwn raw) secondFinal = (filtered, secondFinal)) secondRaws
+    secondFilters
+secondStoredWarm :
+  All₂ (fun filtered output => execute filtered secondMap secondFinal = Outcome.done output secondFinal) secondFilters
+    secondOutputs
+secondSourceWarm :
+  build (Syntax.union expressions) (List.map (input secondNames) inputs) secondFinal =
+    Outcome.done secondRaw secondFinal
+secondManyWarm :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input secondNames) inputs) secondFinal =
+    Outcome.done secondRaws secondFinal
+secondMadeWarm : run (makeUnion secondRaws) secondFinal = (secondRaw, secondFinal)
+secondSources :
+  All₂
+    (fun expression value =>
+      ∃ current returned,
+        Context current (List.map (input secondNames) inputs) ∧
+          build expression (List.map (input secondNames) inputs) current = Outcome.done value returned ∧
+            Grows returned secondFinal ∧
+              build expression (List.map (input secondNames) inputs) secondFinal = Outcome.done value secondFinal)
+    expressions secondRaws
+secondWhole : Keeps firstFinal secondFinal
+whole : Keeps reader secondFinal
+finalReady : Ready secondFinal
+finalFirstReplacements : Replacements secondFinal firstMap
+finalSecondReplacements : Replacements secondFinal secondMap
+firstOldFilter : run (withoutSelfReference firstOwn firstRaw) secondFinal = (firstFiltered, secondFinal)
+secondOldFilter : run (withoutSelfReference secondOwn secondRaw) secondFinal = (secondFiltered, secondFinal)
+firstOldDone : execute firstFiltered firstMap secondFinal = Outcome.done left secondFinal
+secondOldDone : execute secondFiltered secondMap secondFinal = Outcome.done right secondFinal
+firstFinalMade : run (makeUnion firstRaws) secondFinal = ((run (makeUnion firstRaws) firstFinal).fst, secondFinal)
+firstFinalFilter :
+  All₂ (fun raw filtered => run (withoutSelfReference firstOwn raw) secondFinal = (filtered, secondFinal)) firstRaws
+    firstFilters
+firstFinalStored :
+  All₂ (fun filtered output => execute filtered firstMap secondFinal = Outcome.done output secondFinal) firstFilters
+    firstOutputs
+firstMemberCalls :
+  ∀ (raw : Value Symbol Guard),
+    raw ∈ firstRaws →
+      ∃ filtered output,
+        run (withoutSelfReference firstOwn raw) secondFinal = (filtered, secondFinal) ∧
+          execute filtered firstMap secondFinal = Outcome.done output secondFinal
+secondMemberCalls :
+  ∀ (raw : Value Symbol Guard),
+    raw ∈ secondRaws →
+      ∃ filtered output,
+        run (withoutSelfReference secondOwn raw) secondFinal = (filtered, secondFinal) ∧
+          execute filtered secondMap secondFinal = Outcome.done output secondFinal
+firstFinalSource :
+  All₂ (fun expression raw => SourceCall expression (List.map (input firstNames) inputs) secondFinal raw) expressions
+    firstRaws
+secondFinalSource :
+  All₂ (fun expression raw => SourceCall expression (List.map (input secondNames) inputs) secondFinal raw) expressions
+    secondRaws
+firstOriginals : List (Value Symbol Guard)
+firstOriginalHeap : InternedConstructorTemplates.State Symbol Guard
+firstOriginalMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input firstNames) inputs) firstBefore =
+    Outcome.done firstOriginals firstOriginalHeap
+_firstOriginalMade : run (makeUnion firstOriginals) firstOriginalHeap = (firstRaw, firstRawHeap)
+_firstOriginalContext : Context firstOriginalHeap (List.map (input firstNames) inputs)
+firstOriginalBounds : ∀ (member : Value Symbol Guard), member ∈ firstRaws → member.depth ≤ firstRaw.depth
+firstOriginalSame : firstOriginals = firstRaws
+secondOriginals : List (Value Symbol Guard)
+secondOriginalHeap : InternedConstructorTemplates.State Symbol Guard
+secondOriginalMany :
+  InternedFreshOrdinaryConstruction.buildMany expressions (List.map (input secondNames) inputs) secondBefore =
+    Outcome.done secondOriginals secondOriginalHeap
+_secondOriginalMade : run (makeUnion secondOriginals) secondOriginalHeap = (secondRaw, secondRawHeap)
+_secondOriginalContext : Context secondOriginalHeap (List.map (input secondNames) inputs)
+secondOriginalBounds : ∀ (member : Value Symbol Guard), member ∈ secondRaws → member.depth ≤ secondRaw.depth
+secondOriginalSame : secondOriginals = secondRaws
+childAliases : ∀ (child : Syntax Symbol Guard), child ∈ expressions → Aliases child inputs firstNames secondNames
+childTests :
+  ∀ (child : Syntax Symbol Guard),
+    child ∈ expressions →
+      ∀ (label : Reference ⊕ Atom),
+        label ∈ Scope child inputs →
+          (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+matched :
+  All₂
+    (fun a b =>
+      (a = Value.reference firstOwn ↔ b = Value.reference secondOwn) ∧
+        ∀ (firstFiltered secondFiltered left right : Value Symbol Guard),
+          run (withoutSelfReference firstOwn a) secondFinal = (firstFiltered, secondFinal) →
+            run (withoutSelfReference secondOwn b) secondFinal = (secondFiltered, secondFinal) →
+              execute firstFiltered firstMap secondFinal = Outcome.done left secondFinal →
+                execute secondFiltered secondMap secondFinal = Outcome.done right secondFinal →
+                  Related markers left right)
+    firstRaws secondRaws
+firstFinalAvailable : Values secondFinal firstRaws
+leftAvailable : Available secondFinal left
+rightAvailable : Available secondFinal right
+firstMadeFinal : run (makeUnion firstRaws) secondFinal = (firstRaw, secondFinal)
+firstCriterion :
+  observe markers left ≠ none ↔
+    ∀ (raw : Value Symbol Guard),
+      raw ∈ firstRaws →
+        raw ≠ Value.reference firstOwn ∨ firstRaw = Value.reference firstOwn →
+          ∀ (cut output : Value Symbol Guard),
+            run (withoutSelfReference firstOwn raw) secondFinal = (cut, secondFinal) →
+              execute cut firstMap secondFinal = Outcome.done output secondFinal → observe markers output ≠ none
+secondCriterion :
+  observe markers right ≠ none ↔
+    ∀ (raw : Value Symbol Guard),
+      raw ∈ secondRaws →
+        raw ≠ Value.reference secondOwn ∨ secondRaw = Value.reference secondOwn →
+          ∀ (cut output : Value Symbol Guard),
+            run (withoutSelfReference secondOwn raw) secondFinal = (cut, secondFinal) →
+              execute cut secondMap secondFinal = Outcome.done output secondFinal → observe markers output ≠ none
+equalPure : observe markers left ≠ none ↔ observe markers right ≠ none
+⊢ Related markers left right
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:446:22: error: unexpected token '=>'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:446:37: error: unexpected token '('; expected '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:446:145: error: unexpected token ')'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:446:145: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:455:22: error: unexpected token '=>'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:455:38: error: unexpected token '('; expected '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:455:149: error: unexpected token ')'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:455:149: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:481:72: error: unexpected token '=>'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:481:86: error: unexpected token '.'; expected ')'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:481:99: error: unexpected token ')'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:481:99: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:499:71: error: unexpected token '=>'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:499:85: error: unexpected token '.'; expected ')'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:499:97: error: unexpected token ')'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-union-direct-5.source.lean:499:97: error: unexpected token ')'; expected ':'

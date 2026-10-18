@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentStoredMuTrackedProfile
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase
+#print MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase
+#print axioms MicroCFTA.SourceCurrentStoredMuTrackedProfile.erase
+#check @MicroCFTA.SourceCurrentStoredMuTrackedProfile.open_execute
+#print MicroCFTA.SourceCurrentStoredMuTrackedProfile.open_execute
+#print axioms MicroCFTA.SourceCurrentStoredMuTrackedProfile.open_execute
+#check @MicroCFTA.SourceCurrentStoredMuTrackedProfile.complete
+#print MicroCFTA.SourceCurrentStoredMuTrackedProfile.complete
+#print axioms MicroCFTA.SourceCurrentStoredMuTrackedProfile.complete

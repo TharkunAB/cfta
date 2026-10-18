@@ -1,0 +1,30 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-node-kernels-1.source.lean:136:4: error: 'change' tactic failed, pattern
+  InternedRootProfile.Equivalent none none
+is not definitionally equal to target
+  Related markers (Value.reference (Reference.uninterned 98)) leaf
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-node-kernels-1.source.lean:173:28: error(lean.unknownIdentifier): Unknown constant `_private.«restart-evidence».«20261018-tracked-profile-fusion».«tracked-node-kernels-1.source».0.MicroCFTA.TrackedNodeKernels.second_replacements.grows`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-tracked-profile-fusion/tracked-node-kernels-1.source.lean:156:109: error: unsolved goals
+aliases : SourceCurrentUsedBinderAliasTransport.Aliases source lexical firstNames secondNames
+tests :
+  ∀ (label : Reference ⊕ Nat),
+    label ∈ SourceCurrentUsedBinderAliasTransport.Scope source lexical →
+      (Sum.elim id firstNames label = Reference.depth ↔ Sum.elim id secondNames label = Reference.depth)
+firstStored : execute firstRaw firstMap reader = Outcome.done left reader
+secondStored : execute secondRaw secondMap reader = Outcome.done right reader
+firstReplacement : Replacements reader firstMap
+⊢ Ready reader ∧
+    firstRaw ≠ secondRaw ∧
+      left ≠ right ∧
+        execute firstRaw firstMap reader = Outcome.done left reader ∧
+          execute secondRaw secondMap reader = Outcome.done right reader ∧
+            Related markers (Value.reference (Reference.uninterned 98)) leaf ∧
+              Related markers left right ∧
+                ∃ other,
+                  other ∈ nodeEdges right ∧
+                    row.entry.key.symbol = other.entry.key.symbol ∧
+                      row.entry.key.constraint = other.entry.key.constraint ∧
+                        All₂
+                          (fun a b =>
+                            (a.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                              (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+                          row.children other.children

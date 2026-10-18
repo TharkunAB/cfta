@@ -1,0 +1,53 @@
+import MicroCFTA.SourceCurrentTrackedRootProfile
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.mask
+#print MicroCFTA.SourceCurrentTrackedRootProfile.mask
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.mask
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.observe
+#print MicroCFTA.SourceCurrentTrackedRootProfile.observe
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.observe
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.Related
+#print MicroCFTA.SourceCurrentTrackedRootProfile.Related
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.Related
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.Related.refl
+#print MicroCFTA.SourceCurrentTrackedRootProfile.Related.refl
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.Related.refl
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.Related.symm
+#print MicroCFTA.SourceCurrentTrackedRootProfile.Related.symm
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.Related.symm
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.mask_empty
+#print MicroCFTA.SourceCurrentTrackedRootProfile.mask_empty
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.mask_empty
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.mask_equiv
+#print MicroCFTA.SourceCurrentTrackedRootProfile.mask_equiv
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.mask_equiv
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.mask_combine
+#print MicroCFTA.SourceCurrentTrackedRootProfile.mask_combine
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.mask_combine
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.Related.empty
+#print MicroCFTA.SourceCurrentTrackedRootProfile.Related.empty
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.Related.empty
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.ordinary_of_empty
+#print MicroCFTA.SourceCurrentTrackedRootProfile.ordinary_of_empty
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.ordinary_of_empty
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.nil_equiv
+#print MicroCFTA.SourceCurrentTrackedRootProfile.nil_equiv
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.nil_equiv
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.mask_single
+#print MicroCFTA.SourceCurrentTrackedRootProfile.mask_single
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.mask_single
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.Related.bare
+#print MicroCFTA.SourceCurrentTrackedRootProfile.Related.bare
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.Related.bare
+#check @MicroCFTA.SourceCurrentTrackedRootProfile.mask_cons_fresh
+#print MicroCFTA.SourceCurrentTrackedRootProfile.mask_cons_fresh
+#print axioms MicroCFTA.SourceCurrentTrackedRootProfile.mask_cons_fresh
