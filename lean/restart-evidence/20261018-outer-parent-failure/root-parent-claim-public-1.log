@@ -1,0 +1,125 @@
+MicroCFTA.OuterParentKernels.Claim : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+  MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula → Prop
+private def MicroCFTA.OuterParentKernels.Claim : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+  MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula → Prop :=
+fun formulas solver =>
+  And
+    (@Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      MicroCFTA.OuterParentKernels.built
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.OuterParentKernels.value MicroCFTA.OuterParentKernels.heap))
+    (And
+      (∀ (depth : Nat),
+        Not
+          (@MicroCFTA.SourceCurrentConstrainedCap.Cap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.SourceCurrentConstrainedCapCheckedJointClosed.Plain depth MicroCFTA.OuterParentKernels.recursive))
+      (And
+        (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context
+          (fun a b =>
+            @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.OuterParentKernels.«instDecidableEqFormula_restart-evidence» a b)
+              MicroCFTA.OuterParentKernels.«instDecidableEqConstraintFormula_restart-evidence» a b)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          formulas solver MicroCFTA.OuterParentKernels.inventory
+          (MicroCFTA.OuterParentKernels.caller
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          MicroCFTA.EndpointMemoGateTrace.empty)
+        (And
+          (@Eq.{2}
+            (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            (MicroCFTA.OuterParentKernels.low
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (MicroCFTA.OuterParentKernels.lowFault
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    MicroCFTA.OuterParentKernels.widthBits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+              (MicroCFTA.OuterParentKernels.lowAfter
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) MicroCFTA.OuterParentKernels.widthBits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+          (∀ (g s r e p h m c n : Nat),
+            @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound g →
+              @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound s →
+                @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound r →
+                  @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound e →
+                    @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound p →
+                      @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound h →
+                        @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound m →
+                          @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound c →
+                            @LE.le.{0} Nat instLENat MicroCFTA.OuterParentKernels.bound n →
+                              ∀
+                                (observation :
+                                  MicroCFTA.SourceCurrentAllocatedParentWorker.Fault
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      MicroCFTA.OuterParentKernels.widthBits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                (after :
+                                  MicroCFTA.SourceCurrentAllocatedPartialState.State
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      MicroCFTA.OuterParentKernels.widthBits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+                                @Ne.{2}
+                                  (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      MicroCFTA.OuterParentKernels.widthBits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                  (@MicroCFTA.SourceCurrentOuterActiveAncestry.run
+                                    (fun a b =>
+                                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name
+                                        MicroCFTA.FullSyntax.Formula instDecidableEqString
+                                        MicroCFTA.OuterParentKernels.«instDecidableEqFormula_restart-evidence» a b)
+                                    (fun a b =>
+                                      @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (fun a b =>
+                                          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name
+                                            MicroCFTA.FullSyntax.Formula instDecidableEqString
+                                            MicroCFTA.OuterParentKernels.«instDecidableEqFormula_restart-evidence» a b)
+                                        MicroCFTA.OuterParentKernels.«instDecidableEqConstraintFormula_restart-evidence»
+                                        a b)
+                                    MicroCFTA.OuterParentKernels.«instDecidableEqValueLabelFormulaConstraint_restart-evidence»
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      MicroCFTA.OuterParentKernels.widthBits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                    g s r e p h m c n (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                    (MicroCFTA.OuterParentKernels.start
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        MicroCFTA.OuterParentKernels.widthBits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      MicroCFTA.OuterParentKernels.widthBits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        MicroCFTA.OuterParentKernels.widthBits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                      observation)
+                                    after)))))
+'_private.«restart-evidence».«20261018-outer-parent-failure».«root-parent-claim-public-1.source».0.MicroCFTA.OuterParentKernels.Claim' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

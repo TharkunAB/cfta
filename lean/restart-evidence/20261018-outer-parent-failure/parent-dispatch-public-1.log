@@ -1,0 +1,663 @@
+@MicroCFTA.SourceCurrentOuterParentFailure.failed : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s r e p h m c n budget : Nat} {phase : MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width}
+  {observation : MicroCFTA.SourceCurrentAllocatedParentWorker.Fault width}
+  {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width},
+  @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+      (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+        (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+    @Exists.{1} Nat fun fuel =>
+      @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+        @Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun original =>
+          @Exists.{1}
+            (List.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            fun rest =>
+            @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+              And
+                (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n
+                  budget phase
+                  (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    inherited
+                    (@List.cons.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original rest)
+                    before))
+                (@Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e p h m c
+                    n budget { inherited := inherited, value := original } before)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after))
+theorem MicroCFTA.SourceCurrentOuterParentFailure.failed : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s r e p h m c n budget : Nat} {phase : MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width}
+  {observation : MicroCFTA.SourceCurrentAllocatedParentWorker.Fault width}
+  {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width},
+  @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+      (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+        (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+    @Exists.{1} Nat fun fuel =>
+      @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+        @Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          fun original =>
+          @Exists.{1}
+            (List.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            fun rest =>
+            @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+              And
+                (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n
+                  budget phase
+                  (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    inherited
+                    (@List.cons.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original rest)
+                    before))
+                (@Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e p h m c
+                    n budget { inherited := inherited, value := original } before)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after)) :=
+fun [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [inst_1 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [inst_2 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {width g s r e p h m c n budget} {phase} {observation} {after} actual =>
+  @MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.casesOn.{0} width
+    (fun t =>
+      @Eq.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase t →
+        @Exists.{1} Nat fun fuel =>
+          @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+            @Exists.{1}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              fun original =>
+              @Exists.{1}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                fun rest =>
+                @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                  And
+                    (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n
+                      budget phase
+                      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        inherited
+                        (@List.cons.{0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          original rest)
+                        before))
+                    (@Eq.{2}
+                      (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e p h
+                        m c n budget { inherited := inherited, value := original } before)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after)))
+    phase
+    (fun fuel request before h_1 =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel request before)
+        (fun {phase} =>
+          @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+            @Exists.{1} Nat fun fuel =>
+              @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun original =>
+                  @Exists.{1}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    fun rest =>
+                    @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                      And
+                        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c
+                          n budget phase
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            inherited
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              original rest)
+                            before))
+                        (@Eq.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e
+                            p h m c n budget { inherited := inherited, value := original } before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation)
+                            after)))
+        (fun actual =>
+          @And.left (@MicroCFTA.SourceCurrentOuterParentFailure.NodeFailureAt✝ inst inst_1 inst_2 width fuel)
+            (And (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))))
+            (@MicroCFTA.SourceCurrentOuterParentFailure.all_failures✝ inst inst_1 inst_2 width fuel) g s r e p h m c n
+            budget request before observation after
+            (@MicroCFTA.SourceCurrentOuterParentFailure.erase_failed✝
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall inst inst_1 inst_2 width fuel g s r e p h m c n
+                budget request before)
+              actual))
+        phase
+        (@Eq.symm.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel request before) h_1)
+        actual)
+    (fun fuel request before h_1 =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width fuel request before)
+        (fun {phase} =>
+          @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+            @Exists.{1} Nat fun fuel =>
+              @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun original =>
+                  @Exists.{1}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    fun rest =>
+                    @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                      And
+                        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c
+                          n budget phase
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            inherited
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              original rest)
+                            before))
+                        (@Eq.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e
+                            p h m c n budget { inherited := inherited, value := original } before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation)
+                            after)))
+        (fun actual =>
+          @And.left (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+            (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))))
+            (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.NodeFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))))
+              (@MicroCFTA.SourceCurrentOuterParentFailure.all_failures✝ inst inst_1 inst_2 width fuel))
+            g s r e p h m c n budget request before observation after
+            (@MicroCFTA.SourceCurrentOuterParentFailure.erase_failed✝
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeBody inst inst_1 inst_2 width fuel g s r e p h m c n
+                budget request before)
+              actual))
+        phase
+        (@Eq.symm.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width fuel request before) h_1)
+        actual)
+    (fun fuel inherited values before h_1 =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width fuel inherited values before)
+        (fun {phase} =>
+          @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+            @Exists.{1} Nat fun fuel =>
+              @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun original =>
+                  @Exists.{1}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    fun rest =>
+                    @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                      And
+                        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c
+                          n budget phase
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            inherited
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              original rest)
+                            before))
+                        (@Eq.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e
+                            p h m c n budget { inherited := inherited, value := original } before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation)
+                            after)))
+        (fun actual =>
+          @And.left (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+            (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))
+            (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))))
+              (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.NodeFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And
+                      (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                        (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))))
+                (@MicroCFTA.SourceCurrentOuterParentFailure.all_failures✝ inst inst_1 inst_2 width fuel)))
+            g s r e p h m c n budget inherited values before observation after
+            (@MicroCFTA.SourceCurrentOuterParentFailure.erase_failed✝
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.rows inst inst_1 inst_2 width fuel g s r e p h m c n
+                budget inherited values before)
+              actual))
+        phase
+        (@Eq.symm.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width fuel inherited values before) h_1)
+        actual)
+    (fun fuel inherited value before h_1 =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants width fuel inherited value before)
+        (fun {phase} =>
+          @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+            @Exists.{1} Nat fun fuel =>
+              @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun original =>
+                  @Exists.{1}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    fun rest =>
+                    @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                      And
+                        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c
+                          n budget phase
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            inherited
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              original rest)
+                            before))
+                        (@Eq.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e
+                            p h m c n budget { inherited := inherited, value := original } before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation)
+                            after)))
+        (fun actual =>
+          @And.left (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+            (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+              (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))
+            (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))
+              (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))))
+                (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.NodeFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (And
+                        (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                        (And
+                          (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                          (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))))
+                  (@MicroCFTA.SourceCurrentOuterParentFailure.all_failures✝ inst inst_1 inst_2 width fuel))))
+            g s r e p h m c n budget inherited value before observation after
+            (@MicroCFTA.SourceCurrentOuterParentFailure.erase_failed✝
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.descendants inst inst_1 inst_2 width fuel g s r e p h m c
+                n budget inherited value before)
+              actual))
+        phase
+        (@Eq.symm.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants width fuel inherited value before) h_1)
+        actual)
+    (fun fuel combined values before h_1 =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children width fuel combined values before)
+        (fun {phase} =>
+          @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+            @Exists.{1} Nat fun fuel =>
+              @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun original =>
+                  @Exists.{1}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    fun rest =>
+                    @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                      And
+                        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c
+                          n budget phase
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            inherited
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              original rest)
+                            before))
+                        (@Eq.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e
+                            p h m c n budget { inherited := inherited, value := original } before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation)
+                            after)))
+        (fun actual =>
+          @And.left (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+            (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)
+            (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))
+              (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))
+                (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And
+                      (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                        (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))))
+                  (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.NodeFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                        (And
+                          (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width
+                            fuel)
+                          (And
+                            (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width
+                              fuel)
+                            (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width
+                              fuel)))))
+                    (@MicroCFTA.SourceCurrentOuterParentFailure.all_failures✝ inst inst_1 inst_2 width fuel)))))
+            g s r e p h m c n budget combined values before observation after
+            (@MicroCFTA.SourceCurrentOuterParentFailure.erase_failed✝
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.children inst inst_1 inst_2 width fuel g s r e p h m c n
+                budget combined values before)
+              actual))
+        phase
+        (@Eq.symm.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children width fuel combined values before) h_1)
+        actual)
+    (fun fuel combined index values before h_1 =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width fuel combined index values before)
+        (fun {phase} =>
+          @Eq.{2} (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome Unit width)
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.run inst inst_1 inst_2 width g s r e p h m c n budget phase)
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed Unit width
+                (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after) →
+            @Exists.{1} Nat fun fuel =>
+              @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun inherited =>
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun original =>
+                  @Exists.{1}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    fun rest =>
+                    @Exists.{2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width) fun before =>
+                      And
+                        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c
+                          n budget phase
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            inherited
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              original rest)
+                            before))
+                        (@Eq.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width fuel g s r e
+                            p h m c n budget { inherited := inherited, value := original } before)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.failed
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation)
+                            after)))
+        (fun actual =>
+          @And.right (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+            (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)
+            (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+              (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))
+              (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                (And (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel)))
+                (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                  (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And
+                      (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (And (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width fuel)
+                        (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width fuel))))
+                  (@And.right (@MicroCFTA.SourceCurrentOuterParentFailure.NodeFailureAt✝ inst inst_1 inst_2 width fuel)
+                    (And (@MicroCFTA.SourceCurrentOuterParentFailure.BodyFailureAt✝ inst inst_1 inst_2 width fuel)
+                      (And (@MicroCFTA.SourceCurrentOuterParentFailure.RowsFailureAt✝ inst inst_1 inst_2 width fuel)
+                        (And
+                          (@MicroCFTA.SourceCurrentOuterParentFailure.DescendantsFailureAt✝ inst inst_1 inst_2 width
+                            fuel)
+                          (And
+                            (@MicroCFTA.SourceCurrentOuterParentFailure.ChildrenFailureAt✝ inst inst_1 inst_2 width
+                              fuel)
+                            (@MicroCFTA.SourceCurrentOuterParentFailure.WalkFailureAt✝ inst inst_1 inst_2 width
+                              fuel)))))
+                    (@MicroCFTA.SourceCurrentOuterParentFailure.all_failures✝ inst inst_1 inst_2 width fuel)))))
+            g s r e p h m c n budget combined index values before observation after
+            (@MicroCFTA.SourceCurrentOuterParentFailure.erase_failed✝
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              width (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Fault.parent width observation) after
+              (@MicroCFTA.SourceCurrentAllocatedPartialWorker.walk inst inst_1 inst_2 width fuel g s r e p h m c n
+                budget combined index values before)
+              actual))
+        phase
+        (@Eq.symm.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width fuel combined index values before) h_1)
+        actual)
+    (@Eq.refl.{2} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) phase)
+'MicroCFTA.SourceCurrentOuterParentFailure.failed' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
