@@ -1,0 +1,126 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-domain-reference-origins/reference-origins-direct-1.source.lean:55:42: error: Application type mismatch: The argument
+  found
+has type
+  SourcePreparedSharedRows.read before.native.machine.heap name = some bound
+but is expected to have type
+  some bound = some bound
+in the application
+  And.intro found
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-domain-reference-origins/reference-origins-direct-1.source.lean:89:4: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        SourceRecursiveIntersectionControl.decision request.domain.key
+          (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain
+          (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | SourceRecursiveIntersectionControl.Branch.self =>
+        Code.pure (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain request.right (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+            request.right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        compileReference request.domain name request.right true
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name_1) =>
+          compileReference request.domain name_1 (Value.reference (InternedBinderProtocol.Reference.interned name))
+            false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+            request.right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (compileReference request.domain name request.right true)) before
+    (Control.code (Code.pure result)) after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-domain-reference-origins/reference-origins-direct-1.source.lean:123:4: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        SourceRecursiveIntersectionControl.decision request.domain.key request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name)) with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain member (Value.reference (InternedBinderProtocol.Reference.interned name)))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name_1) =>
+          compileReference request.domain name_1 (Value.reference (InternedBinderProtocol.Reference.interned name)) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        compileReference request.domain name request.left false
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match request.left, Value.reference (InternedBinderProtocol.Reference.interned name) with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name))))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (compileReference request.domain name request.left false)) before
+    (Control.code (Code.pure result)) after
