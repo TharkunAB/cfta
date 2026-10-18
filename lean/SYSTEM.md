@@ -1,5 +1,45 @@
 # Constrained languages, indexing, and distributions
 
+## Current fixed-reader row alignment and union clauses
+
+Updated: 2026-10-18 22:11 CEST. Proof checkpoint is `aed9deb8`.
+Starting checkpoint is `4af95a7b`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-fixed-reader-row-clauses.md` and
+`lean/notes-current-system-claim.md`.
+
+Actual row calls now derive the same historical source row index, complete
+symbol and guard equality, and ordered mutual Generated children. Causal
+history derives equal child Empty tests and exact row-survival parity.
+Neither whole ordinary subgroup needs a warm stored call.
+
+An actual union theorem now assembles its literal clauses at the original
+reader. Each strict-member obligation receives its exact expression index
+and both historical source calls. The atom obligation returns an actual
+opposite retained atom call and endpoint clauses. The row obligation
+returns actual opposite RowCalls, survival and a full row match.
+These semantic fragment obligations remain premises. No all-source Law or
+global Directed instance is claimed. No arbitrary source chain is used.
+
+Full Audit passes 3408 jobs and 73092 dependency checks. Three production
+modules have empty strict logs and clean canonical builds. Four public
+heads and two constructed heads pass complete proof and standard-axiom
+checks. The actual integrations cover a warm parent with cold subgroup
+calls and a union with a retained reference and a full false-guard row.
+Both fixtures use nullary rows. Evidence is in
+`lean/restart-evidence/20261018-fixed-reader-row-clauses/`.
+
+Next prove a source-fragment law from the actual parent call families.
+Pass the outer parent's exact bare-self selector into every strict member.
+The node-row case is now available. Reference slots still need semantic
+lexical induction. Used and smart-unused binders need actual writer and
+unfolding clauses with a justified progress argument at the same reader.
+The requester source size does not bound an older selected writer.
+General completion, convergence and Haskell correspondence remain open.
+The broad reduction and exact size-query guarantees are unchanged.
+No Haskell bytes change and no repair request is added. FINDINGS retains
+every repair first. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
 ## Current causal Mu generators and original-reader union fragments
 
 Checked on 2026-10-18 at proof checkpoint `f312f254`.

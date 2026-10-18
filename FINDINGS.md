@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 22:11 CEST. Proof checkpoint is `aed9deb8`.
+Actual row fragments now derive full guarded matching, ordered mutual
+child generators and exact row-survival parity at the original reader.
+Actual fixed-reader union assembly is proved with explicit strict-member
+atom and row obligations. Full source clauses and binder progress remain
+open. Actual warm-parent/cold-subgroup behavior remains expected cache
+behavior. No Haskell defect or repair request is added. Full Audit passes
+3408 jobs and 73092 checks. No Haskell bytes change. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-fixed-reader-row-clauses.md`. Keep this registry
+first. Record later repairs with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 21:54 CEST. Proof checkpoint is `f312f254`.
 Actual selected Mu readback now constructs both source generators with
 arbitrary common outer/local replacements and complete issued paths.
