@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 11:14 CEST. Proof checkpoint is `9594afff`.
+Reader-relative observations and generic replacement slots now support
+distinct related recursive values. Actual fresh publication bindings keep
+both body calls and filters. Actual variable calls give related results
+and equal output heaps. A constructed integration derives all finite
+observations for two distinct used Mu values at its own Ready reader.
+General binder output alignment, root-filter matching, reader support,
+initial source ancestry and recursive completion remain open.
+Full Audit passes 3292 jobs and 71488 checks. No Haskell patch or new
+executable defect is added. Field-pool repair `b9219b9e` remains fixed
+in `c0cc8a05`. Read `lean/notes-current-reader-relative-replacements.md`.
+Keep this registry first. Record each later repair with failure,
+executable reproducer, paths, commit, checks and upstream status.
+Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 10:52 CEST. Proof checkpoint is `c265edc4`.
 Selected stored node-body rows now retain both actual callback schedules,
 full fields and ordered child Empty-test agreement. Nested Mu children

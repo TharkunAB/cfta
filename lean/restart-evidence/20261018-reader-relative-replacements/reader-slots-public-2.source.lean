@@ -1,0 +1,31 @@
+import MicroCFTA.SourceCurrentReaderReplacementSlots
+
+set_option linter.all true
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentReaderReplacementSlots.Slot
+#print MicroCFTA.SourceCurrentReaderReplacementSlots.Slot
+#print axioms MicroCFTA.SourceCurrentReaderReplacementSlots.Slot
+#check @MicroCFTA.SourceCurrentReaderReplacementSlots.Paired
+#print MicroCFTA.SourceCurrentReaderReplacementSlots.Paired
+#print axioms MicroCFTA.SourceCurrentReaderReplacementSlots.Paired
+#check @MicroCFTA.SourceCurrentReaderReplacementSlots.of_equal
+#print MicroCFTA.SourceCurrentReaderReplacementSlots.of_equal
+#print axioms MicroCFTA.SourceCurrentReaderReplacementSlots.of_equal
+#check @MicroCFTA.SourceCurrentReaderReplacementSlots.reference
+#print MicroCFTA.SourceCurrentReaderReplacementSlots.reference
+#print axioms MicroCFTA.SourceCurrentReaderReplacementSlots.reference
+#check @MicroCFTA.SourceCurrentReaderReplacementSlots.extend
+#print MicroCFTA.SourceCurrentReaderReplacementSlots.extend
+#print axioms MicroCFTA.SourceCurrentReaderReplacementSlots.extend
+#check @MicroCFTA.SourceCurrentReaderReplacementSlots.publication_extend
+#print MicroCFTA.SourceCurrentReaderReplacementSlots.publication_extend
+#print axioms MicroCFTA.SourceCurrentReaderReplacementSlots.publication_extend

@@ -13,6 +13,61 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current distinct recursive replacements at one reader
+
+Updated: 2026-10-18 11:14 CEST. Proof checkpoint is `9594afff`.
+Starting checkpoint is `a9bf1fe3`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-reader-relative-replacements.md`.
+
+The new relation compares physical Empty tests and every finite row
+observation at one fixed reader heap. Actual node and union construction
+preserve it when their input rows or members match. The slot interface
+accepts a supplied relation between distinct resolved reference values.
+It supports finite observation approximations. Opaque captures still keep
+their exact value and equal bindings on their free names.
+
+Actual publications now derive fresh local bindings for two distinct
+related replacements. The result keeps both literal raw body callbacks,
+both filters and their own growth receipts. Actual variable reconstruction
+preserves the supplied reflexive relation and returns equal output heaps.
+Neither law compares the completed binder outputs.
+
+A constructed integration derives matching observations at every finite
+depth for two actual distinct used Mu values: mu x. f[x] and mu y. f[f[y]].
+It uses simultaneous depth induction at its own Ready reader. It then
+uses those distinct values in the actual publication and variable laws.
+The relation is derived from actual unfold calls. It is not a supplied
+output law. This example does not prove finite language inhabitation.
+
+General retained used-Mu alignment still needs source-derived matching
+through nested binders, literal root filtering and the selected earlier
+writer. A relation at one reader does not supply support at a later reader.
+A finite epsilon-witness measure is a proposed proof method only.
+Initial query-operand ancestry and general recursive completion remain
+open. All active node-owner exclusions, fresh-call bounds, repeated
+convergence, equality-operation resources, host Int adequacy and public
+Haskell correspondence remain open.
+
+The strongest general outer claim remains conditional language preservation:
+a supported successful run preserves exactly the accepted finite terms
+at the top level, with empty inherited constraints and the stated initial
+semantic and scheduled resource assumptions. It does not establish that
+every recursive run finishes. The complete ordinary completion domain
+still excludes Mu, references and explicit unions in every descendant.
+
+Full Audit passes 3292 jobs and 71488 checks. All 13 production public
+declarations and the constructed integration pass complete statement,
+proof and axiom checks in three groups. All three selected strict logs
+are empty. Both new canonical builds have no warnings. Audit retains
+only the existing ClosedCompletion warning. Four component manifests
+pin 163 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-reader-relative-replacements/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
 ## Current retained Mu row survival and epsilon exposure
 
 Updated: 2026-10-18 10:52 CEST. Proof checkpoint is `c265edc4`.
