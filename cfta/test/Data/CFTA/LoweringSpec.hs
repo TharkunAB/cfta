@@ -3,6 +3,7 @@
 -- | Template lowerings: lowered terms, the inverse image of a spec, and the check of a later grammar.
 module Data.CFTA.LoweringSpec (spec) where
 
+import Control.Monad ((>=>))
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
@@ -31,6 +32,22 @@ spec = describe "template lowerings" $ do
             expected = Set.filter (maybe False (FTA.accepts evenValue) . Lowering.lower lowering) bounded
         Set.fromList (FTA.terms $ FTA.boundDepth 3 within) `shouldBe` expected
         Set.size expected `shouldSatisfy` (> 10)
+
+    it "compose: lowering with a composite is lowering twice" $ do
+        -- quad(x) lowers to double(double(x)), which lowers to sums.
+        let upper = either (error . show) id $ Lowering.mkLowering [("quad", 1, Apply "double" [Apply "double" [Child 0]])]
+            composite = Lowering.compose upper lowering
+            terms = FTA.terms $ FTA.boundDepth 3 $ grammar [("double", 1), ("succ", 1), ("quad", 1)]
+        length terms `shouldSatisfy` (> 10)
+        map (Lowering.lower composite) terms
+            `shouldBe` map (Lowering.lower upper >=> Lowering.lower lowering) terms
+        map (Lowering.lower (Lowering.compose Lowering.identity lowering)) terms `shouldBe` map (Lowering.lower lowering) terms
+        map (Lowering.lower (Lowering.compose lowering Lowering.identity)) terms `shouldBe` map (Lowering.lower lowering) terms
+        let top = grammar [("double", 1), ("succ", 1), ("quad", 1)]
+            within lifted = Set.fromList $ FTA.terms $ FTA.boundDepth 3 $ either (error . show) FTA.dropConstraints $ FTA.intersect top lifted
+            once = either (error . show) id $ Lowering.lift composite evenValue
+            twice = either (error . show) id $ Lowering.lift lowering evenValue >>= Lowering.lift upper
+        within once `shouldBe` within twice
 
     it "accept a later grammar whose productions lower into the earlier grammar" $
         Lowering.checkLowering lowering earlier later `shouldBe` []
