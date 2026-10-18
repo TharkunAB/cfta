@@ -150,6 +150,21 @@ spec = do
                 `shouldBe` Left (InvalidDefinition $ D.InvalidGraph $ FTA.DanglingState "T")
             T.graphQuoteNames "start S; state S {} state S {}" `shouldBe` Left (InvalidDefinition $ D.DuplicateState "S")
 
+    describe "updates" $ do
+        it "keep every operation" $
+            roundTrip (T.printUpdateWith strings) (T.parseUpdateWith strings) everyOperation
+
+        it "give the same language when they are applied after reopening" $ do
+            let language = withForms $ document liquid
+                reopened = must $ T.parseUpdateWith strings $ T.printUpdateWith strings everyOperation
+            L.update language reopened `shouldBe` L.update language everyOperation
+            L.update language everyOperation `shouldSatisfy` either (const False) (const True)
+
+        it "give the position of an error" $
+            case T.parseUpdateWith strings "update 1;\ndefine pair t0 = pair(atom, atom);\nrequire pair t0;" of
+                Left (SyntaxError line _ _) -> line `shouldBe` 3
+                other -> expectationFailure $ show other
+
     describe "ranks" $
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
@@ -175,6 +190,25 @@ sameRanks before after = withZ3 [] $ \solver -> do
         forM_ (zip [0 ..] $ Sized.termsOfSize old size) $ \(rank, term) -> do
             Sized.unrankOfSize new size (ClassRank rank) `shouldBe` Just term
             Sized.rankOfSize new term `shouldBe` Just (size, ClassRank rank)
+
+-- | An update with every operation, valid on the language of 'liquid' with every template form.
+everyOperation :: L.Update String
+everyOperation =
+    L.define (L.at "atom" "two") (RefinedSymbol "two" $ refinementFormula (.== 2)) []
+        <> L.require (L.at "pair" "t0") "same" equal
+        <> L.relax (L.at "pair" "t0") "imported"
+        <> L.remove (L.at "atom" "t1")
+        <> L.editSource
+            ( D.PutTransition "atom"
+                $ FTA.Transition "three" []
+                $ D.Annotation "three"
+                $ Map.singleton "never"
+                $ Constraint (EqConstraints []) Bottom
+            )
+        <> L.editSource (D.PutRow "extra" [production "leaf" []])
+        <> L.editSource (D.DeleteRow "extra")
+        <> L.without "pairs" (L.AtRoot $ TemplateNode "pair" [Hole, Hole])
+        <> L.restore "0"
 
 -- | State labels as plain text.
 strings :: StateCodec String

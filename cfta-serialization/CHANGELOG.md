@@ -8,3 +8,5 @@
   it again gives the same text.
 - Add `parseGraphQuote` and `graphQuoteNames`: graph quotes, the graph format
   without its first line, with `$name` for a Haskell symbol or constraint.
+- Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
+  `Language.Update`, one statement for each operation.
