@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `b4fcc918`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `fe68c2e9`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -27,10 +27,22 @@ Mu body/probe guard heap for any predicate. Actual unfinished prefixes and
 node-busy dispatches retain it from initial physical facts. This is separate
 from an annotation law over every raw edge. Positional ordinary Required and
 Edit survivors retain the exact unselected child and an indexed full source
-row. The Edit theorem still needs explicit semantic reads. A separate note
+row. The earlier Edit law needs explicit semantic reads. A separate note
 corrects the older mixed-heap interpretation. These supporting results do not
 produce general recursive completion or enlarge the complete outer domain.
-Read [the current checkpoint](notes-current-outer-guard-transport.md).
+Read [the earlier checkpoint](notes-current-outer-guard-transport.md).
+
+Actual Required preparation and the subsequent class right fold now
+compose same-index full-row origins and exact unselected children from
+initial physical facts. The ordinary Edit origin no longer requires
+supplied semantic row reads. Accepted recursive Head yields empty-own rows.
+Actual false primary selection supplies the selected original Root premise;
+public smart Mu does not supply it for arbitrary values. The tracked Root
+condition then survives the literal class fold. Compiler footprints and
+successful worker equations remain explicit. These are immediate input
+origins. Proper initial-source descent, all-owner separation and fresh-call
+bounds remain open. Read
+[the current checkpoint](notes-current-actual-positional-lineage.md).
 
 ## Strongest current claim in plain technical English
 
