@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 13:38 CEST. Proof checkpoint is `49ffeaef`.
+Actual source node and union cases derive strict publication body cases.
+Selected Mu writers construct actual finite unfolding equations at the
+original reader. All finite observations now imply exact guarded finite-tree
+language. The checked nested writer example derives that language equation.
+Actual canonical unions refute the old two-way simulation interface and
+admit the new directional rule. A separate Valid but explicitly incoherent
+reader refutes unrestricted reader alignment. These are proof-interface
+limits, not Haskell defects. General changing-capture binder alignment,
+source simulation, reader support and recursive completion remain open.
+Full Audit passes 3311 jobs and 71863 checks. No Haskell patch
+or new executable defect is added. Field-pool repair `b9219b9e` remains
+fixed in `c0cc8a05`. Read `lean/notes-current-open-binder-source-induction.md`.
+Keep this registry first. Record each later repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve earlier entries.
+
 Current proof update: 2026-10-18 12:55 CEST. Proof checkpoint is `39a5a673`.
 Actual stored parent calls now construct all selected literal and row
 calls. Finite reconstruction derives physical Empty and finite observations
