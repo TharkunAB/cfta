@@ -40,7 +40,7 @@ module Data.CFTA.Gen.Tower (
     descriptionLength,
 ) where
 
-import Data.List (minimumBy)
+import Data.List (maximumBy, minimumBy)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Ord (comparing)
@@ -139,20 +139,58 @@ conflicts vocabulary observations =
     , Set.size (Set.fromList $ map observedResponse members) > 1
     ]
 
-{- | The candidate predicate that leaves the fewest tests outside the majority
-response of their class: the templates applied to every value in the log.
-'Nothing' if no candidate makes fewer such tests than the vocabulary alone.
+{- | The predicates to add: one or two candidates that leave fewer tests
+outside the majority response of their class, with the smallest two-part
+description length ('totalLength'). Two candidates are also tried together,
+because a pattern such as an even sum of small digits needs two predicates
+before either one makes the spec shorter. The candidates are the templates
+applied to every value in the log. 'Nothing' if no candidate set leaves fewer
+such tests.
 -}
-separate :: (Ord response) => [Integer -> F.Formula] -> [F.Formula] -> [Observation response] -> Maybe F.Formula
-separate templates vocabulary observations
+separate ::
+    (Ord response) => [Integer -> F.Formula] -> response -> [F.Formula] -> [Observation response] -> Maybe [F.Formula]
+separate templates fallback vocabulary observations
     | null improving = Nothing
     | otherwise = Just $ fst $ minimumBy (comparing snd) improving
   where
     values = Set.toAscList $ Set.fromList $ concatMap (leafValues . observedTest) observations
     candidates = [template value | template <- templates, value <- values]
-    scored = [(candidate, cost) | candidate <- candidates, Just cost <- [misclassified (vocabulary <> [candidate]) observations]]
-    improving = [(candidate, cost) | (candidate, cost) <- scored, Just cost < misclassified vocabulary observations]
+    sets =
+        [[candidate] | candidate <- candidates]
+            <> [[first, second] | (index, first) <- zip [1 :: Int ..] candidates, second <- drop index candidates]
+    current = misclassified vocabulary observations
+    improving =
+        [ (set, (size, length set))
+        | set <- sets
+        , Just errors <- [misclassified (vocabulary <> set) observations]
+        , Just errors < current
+        , Just size <- [totalLength fallback (vocabulary <> set) observations]
+        ]
     leafValues (Term.Node symbol children) = maybe id (:) (exactValue symbol) $ concatMap leafValues children
+
+{- | The two-part description length of a vocabulary on a log: the spec that
+gives each abstract term the majority response of its tests, and the
+concrete tests that the spec gets wrong. A term whose majority response is
+the default has no entry. 'Nothing' if the vocabulary is outside the fragment.
+-}
+totalLength :: (Ord response) => response -> [F.Formula] -> [Observation response] -> Maybe Int
+totalLength fallback vocabulary observations = do
+    abstracted <-
+        traverse
+            (\observation -> (,observation) <$> abstract vocabulary (observedTest observation))
+            observations
+    let counts =
+            Map.fromListWith
+                (Map.unionWith (+))
+                [(term, Map.singleton (observedResponse observation) (1 :: Int)) | (term, observation) <- abstracted]
+        majority = Map.map (\responses -> fst $ maximumBy (comparing snd) $ Map.toList responses) counts
+        spec = Map.filter (/= fallback) majority
+        wrong =
+            [ observedTest observation
+            | (term, observation) <- abstracted
+            , Map.lookup term majority /= Just (observedResponse observation)
+            ]
+    Just $ descriptionLength vocabulary spec + sum (map termLength wrong)
 
 -- | The tests outside the majority response of their class. 'Nothing' if the vocabulary is outside the fragment.
 misclassified :: (Ord response) => [F.Formula] -> [Observation response] -> Maybe Int
@@ -196,8 +234,8 @@ data Result response = Result
 the steps. The spec maps abstract terms to responses; a term without an entry
 has the default response. For each test that the spec mispredicts, the
 experiment uses another test of the log with the same abstract term. If the
-vocabulary is too coarse, add the predicate from 'separate', and start the
-spec again, because the new predicate splits the terms. Otherwise give the
+vocabulary is too coarse, add the predicates from 'separate', and start the
+spec again, because the new predicates split the terms. Otherwise give the
 term the response of the model. If no candidate separates a conflict, stop
 with 'Stuck' and the tests of that abstract term.
 -}
@@ -217,8 +255,8 @@ refine templates fallback = go []
             let others = filter (/= mispredicted) $ Map.findWithDefault [] term grouped
                 coarse = any ((== TooCoarse) . classify mispredicted) others
              in if coarse
-                    then case separate templates vocabulary observations of
-                        Just predicate -> go (Extend predicate : steps) (vocabulary <> [predicate]) Map.empty observations
+                    then case separate templates fallback vocabulary observations of
+                        Just predicates -> go (reverse (map Extend predicates) <> steps) (vocabulary <> predicates) Map.empty observations
                         Nothing -> Result vocabulary spec (reverse steps) $ Stuck term $ Map.findWithDefault [] term grouped
                     else
                         let response = observedResponse mispredicted
@@ -239,20 +277,27 @@ a node also counts the nodes of the refinement of its symbol. A smaller length
 means a shorter spec, as in the minimum description length of DreamCoder.
 -}
 descriptionLength :: [F.Formula] -> Map.Map (Term Symbol) response -> Int
-descriptionLength vocabulary spec = sum (map formulaSize vocabulary) + sum (map termSize $ Map.keys spec)
+descriptionLength vocabulary spec = sum (map formulaSize vocabulary) + sum (map termLength $ Map.keys spec)
+
+-- | The nodes of a term; a node also counts the nodes of the refinement of its symbol.
+termLength :: Term Symbol -> Int
+termLength (Term.Node symbol children) = 1 + refinementSize + sum (map termLength children)
   where
-    termSize (Term.Node symbol children) = 1 + refinementSize symbol + sum (map termSize children)
-    refinementSize symbol = case symbolRefinement symbol of
+    refinementSize = case symbolRefinement symbol of
         F.Top -> 0
         refinement -> formulaSize refinement
-    formulaSize formula = case formula of
-        F.And parts -> 1 + sum (map formulaSize parts)
-        F.Or parts -> 1 + sum (map formulaSize parts)
-        F.Not part -> 1 + formulaSize part
-        F.Atom _ left right -> 1 + valueSize left + valueSize right
-        F.Forall _ part -> 1 + formulaSize part
-        F.Exists _ part -> 1 + formulaSize part
-        _ -> 1
+
+-- | The nodes of a formula.
+formulaSize :: F.Formula -> Int
+formulaSize formula = case formula of
+    F.And parts -> 1 + sum (map formulaSize parts)
+    F.Or parts -> 1 + sum (map formulaSize parts)
+    F.Not part -> 1 + formulaSize part
+    F.Atom _ left right -> 1 + valueSize left + valueSize right
+    F.Forall _ part -> 1 + formulaSize part
+    F.Exists _ part -> 1 + formulaSize part
+    _ -> 1
+  where
     valueSize value = case value of
         F.App _ arguments -> 1 + sum (map valueSize arguments)
         F.Neg part -> 1 + valueSize part
