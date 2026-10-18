@@ -1,0 +1,46 @@
+import MicroCFTA.SourceCurrentLowerGuardHeapReturns
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.operand
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.operand
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.operand
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.target
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.target
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.target
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.force
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.force
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.force
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.leaf
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.leaf
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.leaf
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.edit
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.edit
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.edit
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.edit_list
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.edit_list
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.edit_list
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.run_class
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.run_class
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.run_class
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.class_fold
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.class_fold
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.class_fold
+
+#check @MicroCFTA.SourceCurrentLowerGuardHeapReturns.class_pass
+#print MicroCFTA.SourceCurrentLowerGuardHeapReturns.class_pass
+#print axioms MicroCFTA.SourceCurrentLowerGuardHeapReturns.class_pass
+

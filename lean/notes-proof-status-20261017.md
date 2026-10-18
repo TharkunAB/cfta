@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `a400849c`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `b4fcc918`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -21,6 +21,16 @@ Concrete public Haskell correspondence is a separate remaining obligation.
 Excluding active memo-key collisions is one part of progress. A complete
 termination proof must also bound fresh recursive requests or give a
 well-founded measure. Parent reduction can construct new values.
+
+Actual successful lower, Parent and outer workers now retain the causal
+Mu body/probe guard heap for any predicate. Actual unfinished prefixes and
+node-busy dispatches retain it from initial physical facts. This is separate
+from an annotation law over every raw edge. Positional ordinary Required and
+Edit survivors retain the exact unselected child and an indexed full source
+row. The Edit theorem still needs explicit semantic reads. A separate note
+corrects the older mixed-heap interpretation. These supporting results do not
+produce general recursive completion or enlarge the complete outer domain.
+Read [the current checkpoint](notes-current-outer-guard-transport.md).
 
 ## Strongest current claim in plain technical English
 

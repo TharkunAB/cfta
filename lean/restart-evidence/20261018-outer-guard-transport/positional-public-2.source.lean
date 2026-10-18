@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentPositionalRowOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.required_children
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.required_children
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.required_children
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.required_rows
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.required_rows
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.required_rows
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.required_node
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.required_node
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.required_node
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.edit_children
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.edit_children
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.edit_children
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.edit_node
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.edit_node
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.edit_node
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_required_footprint
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_required_footprint
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_required_footprint
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_first_edit
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_first_edit
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_first_edit
+#check @MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_second_edit
+#print MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_second_edit
+#print axioms MicroCFTA.SourceCurrentPositionalRowOrigins.fixed_second_edit

@@ -1,0 +1,53 @@
+import MicroCFTA.SourceCurrentOuterGuardHeapReturns
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.edge_body_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.edge_body_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.edge_body_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.edge_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.edge_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.edge_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.node_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.node_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.node_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.body_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.body_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.body_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.rows_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.rows_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.rows_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.descendants_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.descendants_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.descendants_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.children_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.children_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.children_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.walk_done
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.walk_done
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.walk_done
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.reached
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.reached
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.reached
+
+#check @MicroCFTA.SourceCurrentOuterGuardHeapReturns.busy
+#print MicroCFTA.SourceCurrentOuterGuardHeapReturns.busy
+#print axioms MicroCFTA.SourceCurrentOuterGuardHeapReturns.busy
+
