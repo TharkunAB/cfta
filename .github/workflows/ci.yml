@@ -30,6 +30,7 @@ jobs:
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
             decision-model/**/*.hs
+            cfta-serialization/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -39,7 +40,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model", "cfta-serialization"]'
           fail-on: warning
 
   build-test-bench:
@@ -93,6 +94,7 @@ jobs:
           (cd cfta-generator && cabal check)
           (cd cfta-ghc && cabal check)
           (cd decision-model && cabal check)
+          (cd cfta-serialization && cabal check)
 
       - name: Build with strict warnings
         run: cabal v2-build all --enable-tests --enable-benchmarks --ghc-options=-Werror
