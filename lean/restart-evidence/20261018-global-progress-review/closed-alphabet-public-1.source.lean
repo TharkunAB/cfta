@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentNativeClosedGuardAlphabet
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.Closed
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.Closed
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.Closed
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.step_subset
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.step_subset
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.step_subset
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.retained
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.retained
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.retained
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.originalAlphabet
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.originalAlphabet
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.originalAlphabet
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.mem_originalAlphabet
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.mem_originalAlphabet
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.mem_originalAlphabet
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_closed
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_closed
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_closed
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_heap
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_heap
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_heap
+#check @MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_retained
+#print MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_retained
+#print axioms MicroCFTA.SourceCurrentNativeClosedGuardAlphabet.original_retained

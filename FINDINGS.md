@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 03:37 CEST. Proof checkpoint is `a400849c`.
+The full Audit passes 3208 jobs and 70665 dependency checks. Actual successful
+native calls now retain causal guard profiles without a supplied checked
+Trace. Actual checked native prefixes retain a fixed finite original guard
+alphabet without an instruction-count ceiling. These are distinct invariants.
+Neither proves general recursive termination or a global inherited carrier.
+The path-growth review establishes no actual infinite outer trace or Haskell
+defect. General row lineage, fresh-call bounds, convergence, used-writer
+alignment and complete public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Repair `b9219b9e` remains
+merged and validated in source `c0cc8a05`. The field-pool issue is fixed.
+Read `lean/notes-current-global-guard-progress.md`. Keep this registry first.
+Record each later repair with its failure, executable reproducer, paths,
+commit, checks and upstream status for external work.
+
 Current proof update: 2026-10-18 03:20 CEST. Proof checkpoint is `1324bb38`.
 Full pinned Audit passes 3206 jobs and 70634 dependency checks.
 Actual cold and warm outer requests retain captured full row fields.
