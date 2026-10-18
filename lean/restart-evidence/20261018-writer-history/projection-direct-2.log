@@ -1,0 +1,37 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-direct-2.source.lean:267:52: error: don't know how to synthesize placeholder for argument `edges`
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+accept : Row → Prop
+values : List Node
+before : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+available : Values before values
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before
+accepted : ∀ (value : Node), value ∈ values → Accepted accept value
+readsAccepted :
+  ∀ {values : List Node} {before : InternedConstructorTemplates.State Symbol Guard} {rows : List Row}
+    {after : InternedConstructorTemplates.State Symbol Guard},
+    ReadAll values before rows after →
+      SemanticReady before →
+        CostHeap before →
+          Values before values →
+            SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before →
+              (∀ (value : Node), value ∈ values → Accepted accept value) →
+                ∀ (row : Row),
+                  row ∈ rows → ¬(fun guard => SourceMemoGate.plain guard = true) row.entry.key.constraint → accept row
+edges✝ : List Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+reads : ReadAll values before edges✝ middle✝
+built : run (makeNode edges✝) middle✝ = (result, after)
+effects : Keeps before middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Edges middle✝ edges✝
+fields : nodeEdges (run (makeNode edges✝) middle✝).fst = canonicalEdges (surviving edges✝)
+ordinary : SourceEqualityRequiredCache.Ordinary result
+row : Row
+member : row ∈ nodeEdges result
+positive : ¬(fun guard => SourceMemoGate.plain guard = true) row.entry.key.constraint
+⊢ List Row
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-direct-2.source.lean:272:33: error: unexpected token ':='; expected ')', ',' or ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-direct-2.source.lean:323:7: error(lean.unknownIdentifier): Unknown identifier `rows_guards`

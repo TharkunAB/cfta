@@ -1,0 +1,16 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-2.source.lean:80:2: error: Tactic `apply` failed: could not unify the conclusion of `@NodeTrace.branches`
+  NodeTrace ?unconstrained ?«reaches» (?index :: ?rest) (Value.node ?entry ?edges ?depth ?free) ?state ?answer ?final
+with the goal
+  NodeTrace source reaches [0] root heap false heap
+
+Note: The full type of `@NodeTrace.branches` is
+  ∀ {«Symbol» «Guard» : Type} [inst : DecidableEq (EdgeKey «Symbol» «Guard»)]
+    {unconstrained «reaches» : Value «Symbol» «Guard» → Bool} {depth index : Nat} {rest : EqualityNormalize.Path}
+    {edges : List (EdgeValue «Symbol» «Guard»)} {state : InternedConstructorTemplates.State «Symbol» «Guard»}
+    {answer : Bool} {final : InternedConstructorTemplates.State «Symbol» «Guard»}
+    {entry : Interned InternedBinderProtocol.NodeKey} {free : List InternedBinderProtocol.Reference},
+    (depth == 0 && free.isEmpty) = false →
+      EdgesTrace unconstrained «reaches» index rest edges state answer final →
+        NodeTrace unconstrained «reaches» (index :: rest) (Value.node entry edges depth free) state answer final
+
+⊢ NodeTrace source reaches [0] root heap false heap

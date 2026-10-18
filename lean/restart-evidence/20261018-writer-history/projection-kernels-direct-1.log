@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-1.source.lean:80:19: error: unsolved goals
+⊢ Bool.rec false
+      (match ?m.24 with
+      | [] => true
+      | head :: tail => false)
+      (decide (?m.16 = 0)) =
+    false
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-1.source.lean:81:22: error: unsolved goals
+⊢ (match
+      match ?m.38 with
+      | EdgeValue.mk entry children => children,
+      ?m.108 with
+    | a :: tail, 0 => some a
+    | head :: as, i.succ => as.get?Internal i
+    | x, x_1 => none) =
+    some (Value.mu ?m.57 ?m.58 ?m.59 ?m.60)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-1.source.lean:81:49: error: unsolved goals
+⊢ (match
+      match
+        match ?m.58 with
+        | Value.empty => []
+        | Value.reference name => [name]
+        | Value.node entry edges depth free => free
+        | Value.union entry members depth free => free
+        | Value.mu entry body depthShape ordinaryShape =>
+          List.filter (fun x => x != InternedBinderProtocol.Reference.interned entry.identity) body.free with
+      | [] => []
+      | a :: as =>
+        match a != InternedBinderProtocol.Reference.interned (Interned.identity ?m.57) with
+        | true =>
+          a :: List.filter (fun x => x != InternedBinderProtocol.Reference.interned (Interned.identity ?m.57)) as
+        | false =>
+          List.filter (fun x => x != InternedBinderProtocol.Reference.interned (Interned.identity ?m.57)) as with
+    | [] => true
+    | head :: tail => false) =
+    true
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-1.source.lean:82:24: error: unsolved goals
+⊢ (match
+      match ?m.77 with
+      | EdgeValue.mk entry children => children,
+      ?m.108 with
+    | a :: tail, 0 => some a
+    | head :: as, i.succ => as.get?Internal i
+    | x, x_1 => none) =
+    some (Value.node ?m.98 ?m.99 ?m.96 ?m.100)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-1.source.lean:82:42: error: unsolved goals
+⊢ Bool.rec false
+      (match ?m.100 with
+      | [] => true
+      | head :: tail => false)
+      (decide (?m.96 = 0)) =
+    true
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-writer-history/projection-kernels-direct-1.source.lean:81:39: error: Application type mismatch: The argument
+  accepted
+has type
+  source mu = true
+but is expected to have type
+  ?m.106 (Value.mu ?m.57 ?m.58 ?m.59 ?m.60) = true
+in the application
+  NodeTrace.closed accepted

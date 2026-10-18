@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-Read `notes-current-selected-renewal.md` for the latest checkpoint.
+Read `notes-current-writer-history.md` for the latest checkpoint.
 
 In simple technical English: completed modeled construction represents
 exactly the trees specified by its expression. A completed modeled root
@@ -96,8 +96,14 @@ completed earlier siblings. A finite chain can use different child indices.
 Actual target operands now supply indexed projected row sources and their
 historical cold or warm Merge writers. The returned children retain actual
 ordered recursive requests. They need not equal the input children.
-The whole outer caller must still derive the writer history and compose
-these projected sources through native edits and Mu row reconstruction.
+Actual target, class, Parent and outer calls now derive writer history
+through successful calls and actual unfinished phase prefixes. Logical
+empty Merge initialization supplies its initial history. Initial physical
+Good, probe and input-readiness facts remain explicit. Arbitrary initial
+warm Merge tables still require their causal history. This does not cover
+every terminal lower-operation failure state. The remaining progress
+argument must compose projected sources through native edits and Mu row
+reconstruction.
 An accepted opaque-guard conjunction can lose an accessor equality pair
 while retaining its Same atom. Whole-operand effective coverage therefore
 needs additional conditions. No Haskell defect is established.

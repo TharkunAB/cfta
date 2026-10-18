@@ -1,5 +1,27 @@
 # Current proof and the general outer progress boundary
 
+## Current actual outer Merge writer history
+
+Updated: 2026-10-18 23:38 CEST. Proof checkpoint: `5f5565efd`.
+Start: `8795abdf9`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-writer-history.md` and the current system claim.
+Actual target, class and Parent returns now retain causal Merge writers.
+Actual outer returns, unfinished phase prefixes and busy node dispatches
+retain the same history. Logical empty Merge initialization supplies it.
+Initial physical Good, probe and input-readiness facts remain explicit.
+No future whole traversal return is used for the prefix endpoint.
+Arbitrary initial warm Merge tables still require their causal history.
+No claim covers every terminal lower-operation failure state.
+
+The strongest root language claim remains conditional on modeled completion.
+The main mathematical gap remains a bound on renewed constraint origins
+through actual selected edits, native queries and Mu reconstruction.
+General completion, empty-owner exclusion, convergence and Haskell
+correspondence remain open. No Haskell bytes change or repair is added.
+FINDINGS keeps every existing Haskell repair first. The field-pool fix
+`b9219b9e` remains present in main `c0cc8a05`. No push or board write is
+attempted. The full-library goal remains active.
+
 ## Current selected target row provenance
 
 Updated: 2026-10-18 23:17 CEST. Proof checkpoint is `3739234c6`.

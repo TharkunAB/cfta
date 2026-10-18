@@ -1,0 +1,47 @@
+import MicroCFTA.SourceCurrentOuterMergeHistory
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.edge_body_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.edge_body_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.edge_body_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.edge_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.edge_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.edge_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.node_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.node_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.node_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.body_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.body_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.body_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.rows_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.rows_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.rows_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.descendants_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.descendants_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.descendants_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.children_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.children_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.children_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.walk_done
+#print MicroCFTA.SourceCurrentOuterMergeHistory.walk_done
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.walk_done
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.reached
+#print MicroCFTA.SourceCurrentOuterMergeHistory.reached
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.reached
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.busy
+#print MicroCFTA.SourceCurrentOuterMergeHistory.busy
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.busy
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.initial_node
+#print MicroCFTA.SourceCurrentOuterMergeHistory.initial_node
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.initial_node
+#check @MicroCFTA.SourceCurrentOuterMergeHistory.initial_reached
+#print MicroCFTA.SourceCurrentOuterMergeHistory.initial_reached
+#print axioms MicroCFTA.SourceCurrentOuterMergeHistory.initial_reached
