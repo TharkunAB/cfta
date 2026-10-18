@@ -13,6 +13,31 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current selected target row provenance
+
+Updated: 2026-10-18 23:17 CEST. Proof checkpoint is `3739234c6`.
+Starting checkpoint is `e11607d4`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-selected-renewal.md` and the current system claim.
+Actual projection scans retain exact indexed source rows and causal union
+reads. Actual cold and warm Merge calls derive historical physical writers.
+Returned non-Top rows retain original full fields and ordered recursive
+child Merge calls. Literal allocated target operands supply these sources
+at their exact projected values. Arbitrary initial warm tables still need
+the causal writer certificate. The whole outer caller does not yet derive it.
+
+An accepted joined-guard example loses a live accessor equality pair when
+its whole guard is outside the positive parser. The Same atom remains.
+No Haskell defect is established. Existing positive-class coverage is reused.
+The remaining primary producer must compose these projected sources with
+native queries and selected edits to bound renewal of dropped origins.
+General completion, empty-owner exclusion, convergence and Haskell
+correspondence remain open. Root language and exact size-query claims
+remain unchanged. Full Audit passes 3421 jobs and 73193 checks.
+
+No Haskell bytes change or new repair is requested. FINDINGS retains all
+repairs first. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push or board write is attempted. The full-library goal remains active.
+
 ## Current effective inherited gains and untouched dispatch progress
 
 Updated: 2026-10-18 22:55 CEST. Proof checkpoint is `4b6f581d`.

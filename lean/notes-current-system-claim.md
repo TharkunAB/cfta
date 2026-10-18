@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-Read `notes-current-effective-outer-progress.md` for the latest checkpoint.
+Read `notes-current-selected-renewal.md` for the latest checkpoint.
 
 In simple technical English: completed modeled construction represents
 exactly the trees specified by its expression. A completed modeled root
@@ -92,6 +92,15 @@ inherited components. The proof retains the exact original row and the
 active owner's actual prefix. Untouched positive continuations also have
 strict source-anchor mass descent, with exact dispatch derived from only
 completed earlier siblings. A finite chain can use different child indices.
+
+Actual target operands now supply indexed projected row sources and their
+historical cold or warm Merge writers. The returned children retain actual
+ordered recursive requests. They need not equal the input children.
+The whole outer caller must still derive the writer history and compose
+these projected sources through native edits and Mu row reconstruction.
+An accepted opaque-guard conjunction can lose an accessor equality pair
+while retaining its Same atom. Whole-operand effective coverage therefore
+needs additional conditions. No Haskell defect is established.
 
 These are local progress facts. Descent can discard a class before a copied
 own field introduces it again. The remaining producer must connect that
