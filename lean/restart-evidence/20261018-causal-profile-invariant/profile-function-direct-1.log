@@ -1,0 +1,107 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:40:13: error: Tactic `rfl` failed: The left-hand side
+  evaluate Syntax.empty first
+is not definitionally equal to the right-hand side
+  evaluate Syntax.empty second
+
+case empty
+Symbol Guard Atom : Type
+first second : List (Abstract Atom)
+agree : ∀ (index : Nat), Uses Syntax.empty index → first[index]?.getD (some []) = second[index]?.getD (some [])
+⊢ evaluate Syntax.empty first = evaluate Syntax.empty second
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:41:35: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.131 = ?m.131
+but is expected to have type
+  Uses (Syntax.var index) index
+in the application
+  agree index rfl
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:43:69: error: Application type mismatch: The argument
+  agree
+has type
+  ∀ (index : Nat), Uses (Syntax.node edges) index → first[index]?.getD (some []) = second[index]?.getD (some [])
+but is expected to have type
+  ∀ (index : Nat), UsesEdges edges index → first[index]?.getD (some []) = second[index]?.getD (some [])
+in the application
+  evaluateEdges_congr edges first second agree
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:45:70: error: Application type mismatch: The argument
+  agree
+has type
+  ∀ (index : Nat), Uses (Syntax.union members) index → first[index]?.getD (some []) = second[index]?.getD (some [])
+but is expected to have type
+  ∀ (index : Nat), UsesMany members index → first[index]?.getD (some []) = second[index]?.getD (some [])
+in the application
+  evaluateMany_congr members first second agree
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:48:17: error: Tactic `rfl` failed: The left-hand side
+  evaluate (Syntax.binder false body) first
+is not definitionally equal to the right-hand side
+  evaluate (Syntax.binder false body) second
+
+case binder.false
+Symbol Guard Atom : Type
+first second : List (Abstract Atom)
+body : Syntax Symbol Guard
+agree :
+  ∀ (index : Nat), Uses (Syntax.binder false body) index → first[index]?.getD (some []) = second[index]?.getD (some [])
+⊢ evaluate (Syntax.binder false body) first = evaluate (Syntax.binder false body) second
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:50:10: error: Tactic `apply` failed: could not unify the conclusion of `congrArg InternedProfileSemantics.lower`
+  InternedProfileSemantics.lower ?m.231 = InternedProfileSemantics.lower ?m.232
+with the goal
+  evaluate (Syntax.binder true body) first = evaluate (Syntax.binder true body) second
+
+Note: The full type of `congrArg InternedProfileSemantics.lower` is
+  ?m.231 = ?m.232 → InternedProfileSemantics.lower ?m.231 = InternedProfileSemantics.lower ?m.232
+
+case binder.true
+Symbol Guard Atom : Type
+first second : List (Abstract Atom)
+body : Syntax Symbol Guard
+agree :
+  ∀ (index : Nat), Uses (Syntax.binder true body) index → first[index]?.getD (some []) = second[index]?.getD (some [])
+⊢ evaluate (Syntax.binder true body) first = evaluate (Syntax.binder true body) second
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:65:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateMany [] first
+is not definitionally equal to the right-hand side
+  evaluateMany [] second
+
+case nil
+Symbol Guard Atom : Type
+first second : List (Abstract Atom)
+agree : ∀ (index : Nat), UsesMany [] index → first[index]?.getD (some []) = second[index]?.getD (some [])
+⊢ evaluateMany [] first = evaluateMany [] second
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:69:84: error: Application type mismatch: The argument
+  Or.inl used
+has type
+  Uses expression index ∨ ?m.301
+but is expected to have type
+  UsesMany (expression :: rest) index
+in the application
+  agree index (Or.inl used)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:70:82: error: Application type mismatch: The argument
+  Or.inr used
+has type
+  ?m.307 ∨ UsesMany rest index
+but is expected to have type
+  UsesMany (expression :: rest) index
+in the application
+  agree index (Or.inr used)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:78:11: error: Tactic `rfl` failed: The left-hand side
+  evaluateEdges [] first
+is not definitionally equal to the right-hand side
+  evaluateEdges [] second
+
+case nil
+Symbol Guard Atom : Type
+first second : List (Abstract Atom)
+agree : ∀ (index : Nat), UsesEdges [] index → first[index]?.getD (some []) = second[index]?.getD (some [])
+⊢ evaluateEdges [] first = evaluateEdges [] second
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:83:84: error: Application type mismatch: The argument
+  Or.inl used
+has type
+  UsesMany children index ∨ ?m.390
+but is expected to have type
+  UsesEdges (EdgeSyntax.mk symbol guard children :: rest) index
+in the application
+  agree index (Or.inl used)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:58:0: warning: unused `termination_by`, function is not recursive
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-profile-invariant/profile-function-direct-1.source.lean:85:0: warning: unused `termination_by`, function is not recursive

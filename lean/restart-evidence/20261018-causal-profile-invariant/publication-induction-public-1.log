@@ -1,0 +1,621 @@
+@MicroCFTA.SourceCurrentPublicationHeapInduction.Heap : {Symbol Guard : Type} →
+  (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+def MicroCFTA.SourceCurrentPublicationHeapInduction.Heap : {Symbol Guard : Type} →
+  (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop :=
+fun {Symbol Guard} predicate state =>
+  ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+    (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+    (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+    @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state key)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+      predicate entry body depth ordinary
+'MicroCFTA.SourceCurrentPublicationHeapInduction.Heap' does not depend on any axioms
+@MicroCFTA.SourceCurrentPublicationHeapInduction.empty : ∀ {Symbol Guard : Type}
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+    (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+theorem MicroCFTA.SourceCurrentPublicationHeapInduction.empty : ∀ {Symbol Guard : Type}
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+    (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) :=
+fun {Symbol Guard} predicate key entry body depth ordinary impossible =>
+  @Eq.casesOn.{0, 1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)
+    (fun a t =>
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+          a →
+        @HEq.{0}
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            impossible
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)
+              a)
+            t →
+          predicate entry body depth ordinary)
+    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+    impossible
+    (fun h =>
+      @False.elim.{0}
+        (@HEq.{0}
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            impossible
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key))
+            (@Eq.refl.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)) →
+          predicate entry body depth ordinary)
+        (@noConfusion_of_Nat.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@Option.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+          (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) h))
+    (@Eq.refl.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+    (@HEq.refl.{0}
+      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) key)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+      impossible)
+'MicroCFTA.SourceCurrentPublicationHeapInduction.empty' does not depend on any axioms
+@MicroCFTA.SourceCurrentPublicationHeapInduction.retain : ∀ {Symbol Guard : Type}
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate before →
+    @MicroCFTA.InternedShallowHeap.NoNewMu Symbol Guard before after →
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate after
+theorem MicroCFTA.SourceCurrentPublicationHeapInduction.retain : ∀ {Symbol Guard : Type}
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate before →
+    @MicroCFTA.InternedShallowHeap.NoNewMu Symbol Guard before after →
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate after :=
+fun {Symbol Guard} predicate {before after} initial old key entry body depth ordinary present =>
+  initial key entry body depth ordinary (old key entry body depth ordinary present)
+'MicroCFTA.SourceCurrentPublicationHeapInduction.retain' does not depend on any axioms
+@MicroCFTA.SourceCurrentPublicationHeapInduction.complete : ∀ {Symbol Guard : Type}
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (smart : Bool) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate state →
+    predicate entry body depth ordinary →
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedNestedRequestFacts.complete Symbol Guard smart entry body depth ordinary state))
+theorem MicroCFTA.SourceCurrentPublicationHeapInduction.complete : ∀ {Symbol Guard : Type}
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (smart : Bool) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate state →
+    predicate entry body depth ordinary →
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedNestedRequestFacts.complete Symbol Guard smart entry body depth ordinary state)) :=
+fun {Symbol Guard} predicate smart entry body depth ordinary state initial candidate key actual actualBody actualDepth
+    actualOrdinary present =>
+  @Or.casesOn
+    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state key)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth actualOrdinary)))
+    (And
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+        (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth actualOrdinary)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+    (fun x => predicate actual actualBody actualDepth actualOrdinary)
+    (@MicroCFTA.InternedRecordCoherence.record_cases MicroCFTA.InternedBinderProtocol.NodeKey
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard state)
+      (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary) key
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth actualOrdinary)
+      present)
+    (fun old => initial key actual actualBody actualDepth actualOrdinary old) fun h =>
+    @And.casesOn.{0}
+      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+        (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth actualOrdinary)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+      (fun x => predicate actual actualBody actualDepth actualOrdinary) h fun left same =>
+      @Eq.casesOn.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth actualOrdinary)
+        (fun a t =>
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) a →
+            @HEq.{0}
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                    actualOrdinary)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+                same
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                    actualOrdinary)
+                  a)
+                t →
+              predicate actual actualBody actualDepth actualOrdinary)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) same
+        (fun h =>
+          @MicroCFTA.InternedConstructorTemplates.Value.mu.noConfusion.{0} Symbol Guard
+            (@HEq.{0}
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                    actualOrdinary)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+                same
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                    actualOrdinary)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                    actualOrdinary))
+                (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                    actualOrdinary)) →
+              predicate actual actualBody actualDepth actualOrdinary)
+            entry body depth ordinary actual actualBody actualDepth actualOrdinary h fun entry_eq =>
+            @Eq.ndrec.{0, 1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) entry
+              (fun actual =>
+                @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedNestedRequestFacts.complete Symbol Guard smart entry body depth ordinary
+                          state))
+                      key)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                        actualOrdinary)) →
+                  ∀
+                    (same :
+                      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth
+                          actualOrdinary)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)),
+                    @HEq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actualBody →
+                      @HEq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actualDepth →
+                        @HEq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actualOrdinary →
+                          @HEq.{0}
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody
+                                  actualDepth actualOrdinary)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                  ordinary))
+                              same
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody
+                                  actualDepth actualOrdinary)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody
+                                  actualDepth actualOrdinary))
+                              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody
+                                  actualDepth actualOrdinary)) →
+                            predicate actual actualBody actualDepth actualOrdinary)
+              (fun present same body_eq =>
+                @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body
+                  (fun actualBody =>
+                    @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedNestedRequestFacts.complete Symbol Guard smart entry body depth ordinary
+                              state))
+                          key)
+                        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry actualBody actualDepth
+                            actualOrdinary)) →
+                      ∀
+                        (same :
+                          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry actualBody actualDepth
+                              actualOrdinary)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)),
+                        @HEq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actualDepth →
+                          @HEq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actualOrdinary →
+                            @HEq.{0}
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry actualBody
+                                    actualDepth actualOrdinary)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                    ordinary))
+                                same
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry actualBody
+                                    actualDepth actualOrdinary)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry actualBody
+                                    actualDepth actualOrdinary))
+                                (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry actualBody
+                                    actualDepth actualOrdinary)) →
+                              predicate entry actualBody actualDepth actualOrdinary)
+                  (fun present same depthShape_eq =>
+                    @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth
+                      (fun actualDepth =>
+                        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedNestedRequestFacts.complete Symbol Guard smart entry body depth
+                                  ordinary state))
+                              key)
+                            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body actualDepth
+                                actualOrdinary)) →
+                          ∀
+                            (same :
+                              @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body actualDepth
+                                  actualOrdinary)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                  ordinary)),
+                            @HEq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) actualOrdinary →
+                              @HEq.{0}
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                      actualDepth actualOrdinary)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                      ordinary))
+                                  same
+                                  (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                      actualDepth actualOrdinary)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                      actualDepth actualOrdinary))
+                                  (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                      actualDepth actualOrdinary)) →
+                                predicate entry body actualDepth actualOrdinary)
+                      (fun present same ordinaryShape_eq =>
+                        @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                          (fun actualOrdinary =>
+                            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedNestedRequestFacts.complete Symbol Guard smart entry body depth
+                                      ordinary state))
+                                  key)
+                                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                    actualOrdinary)) →
+                              ∀
+                                (same :
+                                  @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                      actualOrdinary)
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                      ordinary)),
+                                @HEq.{0}
+                                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                        actualOrdinary)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                        ordinary))
+                                    same
+                                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                        actualOrdinary)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                        actualOrdinary))
+                                    (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                        actualOrdinary)) →
+                                  predicate entry body depth actualOrdinary)
+                          (fun present same h => candidate) actualOrdinary
+                          (@eq_of_heq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary
+                            actualOrdinary ordinaryShape_eq)
+                          present same)
+                      actualDepth
+                      (@eq_of_heq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth actualDepth
+                        depthShape_eq)
+                      present same)
+                  actualBody
+                  (@eq_of_heq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body actualBody body_eq)
+                  present same)
+              actual entry_eq present same)
+        (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+        (@HEq.refl.{0}
+          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard actual actualBody actualDepth actualOrdinary)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+          same)
+'MicroCFTA.SourceCurrentPublicationHeapInduction.complete' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate before →
+    (∀ (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event) →
+          @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+              @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event) →
+                @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+                  predicate (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)) →
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate after
+theorem MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate before →
+    (∀ (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event) →
+          @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+              @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event) →
+                @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+                  predicate (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)) →
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] predicate
+    {before after} path initial publication =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.rec.{0} Symbol Guard inst
+    (fun {before after} path =>
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate before →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate after)
+    (fun state initial => initial)
+    (fun before after old growth issued initial =>
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.retain Symbol Guard predicate before after initial old)
+    (fun {before middle after} first next first_1 next_1 initial => next_1 (first_1 initial))
+    (fun event depth ordinary body depth_1 ordinary_1 body_1 initial =>
+      have afterDepth := depth_1 initial;
+      have cut := ordinary_1 afterDepth;
+      have allocated :=
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.reserve✝ Symbol Guard predicate
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event) cut;
+      have afterBody := body_1 allocated;
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.complete Symbol Guard predicate
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.smart Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) afterBody
+        (publication event initial afterDepth cut allocated afterBody))
+    before after path initial
+'MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentPublicationHeapInduction.build : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate state →
+      (∀ (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+          @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+              @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+                @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event) →
+                  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+                    predicate (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)) →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))
+theorem MicroCFTA.SourceCurrentPublicationHeapInduction.build : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate state →
+      (∀ (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+          @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+              @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+                @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event) →
+                  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+                    predicate (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)) →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] predicate
+    expression environment state context initial publication =>
+  @Nonempty.casesOn.{1}
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst state
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)))
+    (fun x =>
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)))
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.build_path Symbol Guard inst expression environment state context)
+    fun path =>
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap Symbol Guard inst predicate state
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))
+      path initial publication
+'MicroCFTA.SourceCurrentPublicationHeapInduction.build' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentPublicationHeapInduction.closed : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  (∀ (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event) →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+          @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event) →
+              @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+                predicate (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)) →
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)))
+theorem MicroCFTA.SourceCurrentPublicationHeapInduction.closed : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (predicate :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  (∀ (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event) →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event) →
+          @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event) →
+            @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event) →
+              @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+                predicate (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)) →
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard predicate
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] predicate
+    expression publication =>
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.build Symbol Guard inst predicate expression
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+    (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+    (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.empty_context Symbol Guard)
+    (@MicroCFTA.SourceCurrentPublicationHeapInduction.empty Symbol Guard predicate) publication
+'MicroCFTA.SourceCurrentPublicationHeapInduction.closed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

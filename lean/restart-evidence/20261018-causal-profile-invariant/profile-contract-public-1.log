@@ -1,0 +1,763 @@
+MicroCFTA.SourceCurrentStoredMuProfileContract.shadow : MicroCFTA.InternedBinderProtocol.Reference →
+  MicroCFTA.InternedRootProfile.Profile →
+    (MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile) →
+      MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile
+def MicroCFTA.SourceCurrentStoredMuProfileContract.shadow : MicroCFTA.InternedBinderProtocol.Reference →
+  MicroCFTA.InternedRootProfile.Profile →
+    (MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile) →
+      MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile :=
+fun name replacement assignment queried =>
+  @ite.{1} MicroCFTA.InternedRootProfile.Profile (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference queried name)
+    (MicroCFTA.InternedBinderProtocol.instDecidableEqReference queried name) replacement (assignment queried)
+'MicroCFTA.SourceCurrentStoredMuProfileContract.shadow' does not depend on any axioms
+@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct : {Symbol Guard : Type} →
+  MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+def MicroCFTA.SourceCurrentStoredMuProfileContract.Correct : {Symbol Guard : Type} →
+  MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop :=
+fun {Symbol Guard} entry body depth ordinary =>
+  ∀ (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+    (replacement : MicroCFTA.InternedRootProfile.Profile),
+    MicroCFTA.InternedRootProfile.Equivalent
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+        (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+          (MicroCFTA.InternedBinderProtocol.Reference.interned
+            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+          replacement assignment))
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+        (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+          (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+          replacement assignment))
+'MicroCFTA.SourceCurrentStoredMuProfileContract.Correct' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredMuProfileContract.execute : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard entry body depth ordinary →
+    ∀ (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+      (replacement : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (first second : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard first →
+        @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard second →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard first body →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard second ordinary →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard first replacement →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard second replacement →
+                  @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard first environment →
+                    @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard second environment →
+                      ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (afterLeft afterRight : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                        @Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                              (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                replacement environment)
+                              first)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left afterLeft) →
+                          @Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst ordinary
+                                (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                                  replacement environment)
+                                second)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right afterRight) →
+                            MicroCFTA.InternedRootProfile.Equivalent
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+theorem MicroCFTA.SourceCurrentStoredMuProfileContract.execute : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard entry body depth ordinary →
+    ∀ (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+      (replacement : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (first second : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard first →
+        @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard second →
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard first body →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard second ordinary →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard first replacement →
+                @MicroCFTA.InternedProbeProvenance.Available Symbol Guard second replacement →
+                  @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard first environment →
+                    @MicroCFTA.InternedStoredSubstitution.Replacements Symbol Guard second environment →
+                      ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (afterLeft afterRight : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                        @Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst body
+                              (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                                replacement environment)
+                              first)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) left afterLeft) →
+                          @Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst ordinary
+                                (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                                  replacement environment)
+                                second)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) right afterRight) →
+                            MicroCFTA.InternedRootProfile.Equivalent
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+                              (@MicroCFTA.InternedRootProfile.profile Symbol Guard right) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] entry body
+    depth ordinary correct environment replacement first second firstReady secondReady bodyAvailable ordinaryAvailable
+    firstLocal secondLocal firstReplacements secondReplacements left right afterLeft afterRight bodyDone ordinaryDone =>
+  have leftProfile :=
+    @MicroCFTA.SourceCurrentStoredProfileFunction.execute Symbol Guard inst body
+      (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+        (MicroCFTA.InternedBinderProtocol.Reference.interned
+          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+        replacement environment)
+      first firstReady bodyAvailable
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.bound_replacements✝ Symbol Guard
+        (MicroCFTA.InternedBinderProtocol.Reference.interned
+          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+        replacement environment first firstLocal firstReplacements)
+      left afterLeft bodyDone;
+  have rightProfile :=
+    @MicroCFTA.SourceCurrentStoredProfileFunction.execute Symbol Guard inst ordinary
+      (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+        replacement environment)
+      second secondReady ordinaryAvailable
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.bound_replacements✝ Symbol Guard
+        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+        replacement environment second secondLocal secondReplacements)
+      right afterRight ordinaryDone;
+  have middle :=
+    correct
+      (fun queried =>
+        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+          (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+      (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement);
+  @And.intro
+    (Iff
+      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+    (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+      Iff
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          name)
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          name))
+    (@Iff.trans
+      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+          (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+            (MicroCFTA.InternedBinderProtocol.Reference.interned
+              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+            @MicroCFTA.InternedRootProfile.profile Symbol Guard
+              (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+        (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+      (@And.left
+        (Iff
+          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+            (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+        (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+          Iff
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              name)
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+                  (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (environment queried)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              name))
+        (@Eq.mp.{0}
+          (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    replacement environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+          (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))))
+          (@congrArg.{1, 1} (MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile) Prop
+            (fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    replacement environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+            (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+            (fun _a =>
+              MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body _a))
+            (@MicroCFTA.SourceCurrentStoredMuProfileContract.bound_profile✝ Symbol Guard
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              replacement environment))
+          leftProfile))
+      (@Iff.trans
+        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+          (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+            (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+          (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+            (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+              (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+          (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+        (@And.left
+          (Iff
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+          (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+            Iff
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+                    (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                      @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (environment queried)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                name)
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                    (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                      (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                      @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (environment queried)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                name))
+          middle)
+        (@Iff.symm
+          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+            (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                  (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+            (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+          (@And.left
+            (Iff
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                  (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (environment queried)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+            (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+              Iff
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  name)
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                      (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (environment queried)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  name))
+            (@Eq.mp.{0}
+              (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        replacement environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                  (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (environment queried)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))))
+              (@congrArg.{1, 1} (MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+                Prop
+                (fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        replacement environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+                (fun _a =>
+                  MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary _a))
+                (@MicroCFTA.SourceCurrentStoredMuProfileContract.bound_profile✝ Symbol Guard
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  replacement environment))
+              rightProfile)))))
+    fun name =>
+    @Iff.trans
+      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        name)
+      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+            (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        name)
+      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+        name)
+      (@And.right
+        (Iff
+          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+          (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+            (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+        (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+          Iff
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              name)
+            (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+              (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+                  (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (environment queried)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+              name))
+        (@Eq.mp.{0}
+          (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    replacement environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+          (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))))
+          (@congrArg.{1, 1} (MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile) Prop
+            (fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                    replacement environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+            (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+              @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+            (fun _a =>
+              MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard left)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body _a))
+            (@MicroCFTA.SourceCurrentStoredMuProfileContract.bound_profile✝ Symbol Guard
+              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+              replacement environment))
+          leftProfile)
+        name)
+      (@Iff.trans
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          name)
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+              (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                  (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                  (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          name)
+        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+          (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+            (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          name)
+        (@And.right
+          (Iff
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned
+                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+          (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+            Iff
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard body
+                    (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                        (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                      @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (environment queried)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                name)
+              (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                    (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                      (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                      (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                      @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                        (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (environment queried)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                name))
+          middle name)
+        (@Iff.symm
+          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+            name)
+          (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+            (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+            (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+            name)
+          (@And.right
+            (Iff
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                  (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (environment queried)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                (@Option.none.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+            (∀ (name : MicroCFTA.InternedBinderProtocol.Reference),
+              Iff
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  name)
+                (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                  (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@Option.getD.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                      (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                        @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                          (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (environment queried)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  name))
+            (@Eq.mp.{0}
+              (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        replacement environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried))))
+              (MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary
+                  (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                    (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                    (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                    @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                      (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (environment queried)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))))
+              (@congrArg.{1, 1} (MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+                Prop
+                (fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.SourceCurrentStoredMuBinderChildLineage.bind Symbol Guard
+                        (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                        replacement environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+                (MicroCFTA.SourceCurrentStoredMuProfileContract.shadow
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  (@MicroCFTA.InternedRootProfile.profile Symbol Guard replacement) fun queried =>
+                  @MicroCFTA.InternedRootProfile.profile Symbol Guard
+                    (@Option.getD.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (environment queried)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard queried)))
+                (fun _a =>
+                  MicroCFTA.InternedRootProfile.Equivalent (@MicroCFTA.InternedRootProfile.profile Symbol Guard right)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard ordinary _a))
+                (@MicroCFTA.SourceCurrentStoredMuProfileContract.bound_profile✝ Symbol Guard
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  replacement environment))
+              rightProfile)
+            name)))
+'MicroCFTA.SourceCurrentStoredMuProfileContract.execute' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
