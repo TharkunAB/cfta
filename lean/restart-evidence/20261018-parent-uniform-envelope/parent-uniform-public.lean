@@ -1,0 +1,35 @@
+import MicroCFTA.SourceCurrentParentUniformEnvelope
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile
+#print MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile
+#print axioms MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile
+
+#check @MicroCFTA.SourceCurrentParentUniformEnvelope.profile
+#print MicroCFTA.SourceCurrentParentUniformEnvelope.profile
+#print axioms MicroCFTA.SourceCurrentParentUniformEnvelope.profile
+
+#check @MicroCFTA.SourceCurrentParentUniformEnvelope.fuel
+#print MicroCFTA.SourceCurrentParentUniformEnvelope.fuel
+#print axioms MicroCFTA.SourceCurrentParentUniformEnvelope.fuel
+
+#check @MicroCFTA.SourceCurrentParentUniformEnvelope.case_bounds
+#print MicroCFTA.SourceCurrentParentUniformEnvelope.case_bounds
+#print axioms MicroCFTA.SourceCurrentParentUniformEnvelope.case_bounds
+
+#check @MicroCFTA.SourceCurrentParentUniformEnvelope.resident_bounds
+#print MicroCFTA.SourceCurrentParentUniformEnvelope.resident_bounds
+#print axioms MicroCFTA.SourceCurrentParentUniformEnvelope.resident_bounds
+
+#check @MicroCFTA.SourceCurrentParentUniformEnvelope.complete
+#print MicroCFTA.SourceCurrentParentUniformEnvelope.complete
+#print axioms MicroCFTA.SourceCurrentParentUniformEnvelope.complete
+

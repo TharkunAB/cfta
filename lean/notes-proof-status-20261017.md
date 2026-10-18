@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `1f9c135c`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `e43db322`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -130,7 +130,18 @@ added. Single-Parent initial scheduling is checked. The general fixed-fuel
 outer resource/guard composition and semantic rows_tail/walk_tail summaries
 remain open. General recursive completion and the strongest complete outer
 domain are unchanged. Read
-[the current checkpoint](notes-current-native-guard-envelopes.md).
+[the earlier checkpoint](notes-current-native-guard-envelopes.md).
+
+Initial exact finite cases now bound the complete Parent output profile
+and all nine lower fuels. One joined Room test derives UniformReserved;
+a computed mathematical width supplies that test. This asserts no host64
+capacity. Actual Target completion constructs a finite returned guard
+carrier. A separate literal outer replay bounds entered Parent calls from
+supplied outer fuel on every outcome. Other outer allocations remain outside
+that count. Full Parent carrier, outer resource scheduling and semantic
+rows_tail/walk_tail composition remain open. General recursive completion
+and the strongest complete outer domain are unchanged. Read
+[the current checkpoint](notes-current-parent-uniform-envelope.md).
 
 ## Strongest current claim in plain technical English
 

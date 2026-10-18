@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentParentInitialRoom
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room
+#print MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room
+#print axioms MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room
+#check @MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room
+#print MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room
+#print axioms MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room
+#check @MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+#print MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+#print axioms MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+#check @MicroCFTA.SourceCurrentParentInitialRoom.room_computed
+#print MicroCFTA.SourceCurrentParentInitialRoom.room_computed
+#print axioms MicroCFTA.SourceCurrentParentInitialRoom.room_computed
+#check @MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room
+#print MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room
+#print axioms MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room
+#check @MicroCFTA.SourceCurrentParentInitialRoom.uniform_computed
+#print MicroCFTA.SourceCurrentParentInitialRoom.uniform_computed
+#print axioms MicroCFTA.SourceCurrentParentInitialRoom.uniform_computed

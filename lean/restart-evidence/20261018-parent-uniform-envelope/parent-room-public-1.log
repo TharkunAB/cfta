@@ -1,0 +1,580 @@
+MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room : ∀ (bits budget count : Nat)
+  (classes : MicroCFTA.EqualityNormalize.Constraints)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentScanNumericForecast.schedule budget count classes alphabet profile)) →
+    MicroCFTA.SourceCurrentScanNumericForecast.Reserved bits budget count classes alphabet profile
+theorem MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room : ∀ (bits budget count : Nat)
+  (classes : MicroCFTA.EqualityNormalize.Constraints)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentScanNumericForecast.schedule budget count classes alphabet profile)) →
+    MicroCFTA.SourceCurrentScanNumericForecast.Reserved bits budget count classes alphabet profile :=
+fun bits budget count classes alphabet profile room =>
+  @List.rec.{0, 0} MicroCFTA.EqualityNormalize.Class
+    (fun classes =>
+      ∀ (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+            (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (MicroCFTA.SourceCurrentScanNumericForecast.schedule budget count classes alphabet profile)) →
+          MicroCFTA.SourceCurrentScanNumericForecast.Reserved bits budget count classes alphabet profile)
+    (fun alphabet profile room => True.intro)
+    (fun paths classes ih alphabet profile room =>
+      have firstRoom :=
+        @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+            (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile))
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+            (MicroCFTA.SourceCurrentScanNumericForecast.schedule budget count
+              (@List.cons.{0} MicroCFTA.EqualityNormalize.Class paths classes) alphabet profile))
+          room
+          (MicroCFTA.SourceCurrentScanNumericForecast.schedule_profile_ge budget count classes
+            (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile))
+            (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile)));
+      have queryRoom :=
+        @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+          (MicroCFTA.SourceCurrentConstrainedCapSeededForecast.finalProfile count
+            (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+            (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+              (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile)))
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+            (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile))
+          firstRoom
+          (MicroCFTA.SourceCurrentConjunctionAlphabetBounds.callerForecast_ge
+            (MicroCFTA.SourceCurrentSeededGuardForecast.finalAlphabet alphabet count
+              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+              (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile)))
+            budget
+            (MicroCFTA.SourceCurrentConstrainedCapSeededForecast.finalProfile count
+              (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+              (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile))));
+      @And.intro
+        (MicroCFTA.SourceCurrentConstrainedCapSeededForecast.SeededReserved bits count
+          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+          (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+            (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile)))
+        (have next := MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile;
+        MicroCFTA.SourceCurrentScanNumericForecast.Reserved bits budget count classes
+          (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile next)
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile next))
+        (@List.casesOn.{0, 0} MicroCFTA.EqualityNormalize.Path
+          (fun t =>
+            @Eq.{1} MicroCFTA.EqualityNormalize.Class paths t →
+              MicroCFTA.SourceCurrentConstrainedCapSeededForecast.SeededReserved bits count
+                (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                  (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile)))
+          paths
+          (fun h =>
+            @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Class (@List.nil.{0} MicroCFTA.EqualityNormalize.Path)
+              (fun paths =>
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                    (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                      (MicroCFTA.SourceCurrentScanNumericForecast.schedule budget count
+                        (@List.cons.{0} MicroCFTA.EqualityNormalize.Class paths classes) alphabet profile)) →
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                      (@Prod.snd.{0, 0}
+                        (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                        (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile)) →
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                        (MicroCFTA.SourceCurrentConstrainedCapSeededForecast.finalProfile count
+                          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                          (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                            (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile))) →
+                      MicroCFTA.SourceCurrentConstrainedCapSeededForecast.SeededReserved bits count
+                        (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                        (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                          (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile)))
+              (fun room firstRoom queryRoom => True.intro) paths
+              (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Class paths (@List.nil.{0} MicroCFTA.EqualityNormalize.Path) h)
+              room firstRoom queryRoom)
+          (fun seed rest h =>
+            @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Class
+              (@List.cons.{0} MicroCFTA.EqualityNormalize.Path seed rest)
+              (fun paths =>
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                    (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                      (MicroCFTA.SourceCurrentScanNumericForecast.schedule budget count
+                        (@List.cons.{0} MicroCFTA.EqualityNormalize.Class paths classes) alphabet profile)) →
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                      (@Prod.snd.{0, 0}
+                        (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                        (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile)) →
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                        (MicroCFTA.SourceCurrentConstrainedCapSeededForecast.finalProfile count
+                          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                          (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                            (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile))) →
+                      MicroCFTA.SourceCurrentConstrainedCapSeededForecast.SeededReserved bits count
+                        (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) paths)
+                        (MicroCFTA.SourceCurrentGateFrameResources.forecast paths
+                          (MicroCFTA.SourceCurrentGateFrameResources.forecast paths profile)))
+              (fun room firstRoom queryRoom =>
+                MicroCFTA.SourceCurrentConstrainedCapSeededForecast.reserved_of_final_room bits count
+                  (@List.map.{0, 0} Nat Int Int.ofNat seed)
+                  (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat) rest)
+                  (MicroCFTA.SourceCurrentGateFrameResources.forecast
+                    (@List.cons.{0} MicroCFTA.EqualityNormalize.Path seed rest)
+                    (MicroCFTA.SourceCurrentGateFrameResources.forecast
+                      (@List.cons.{0} MicroCFTA.EqualityNormalize.Path seed rest) profile))
+                  queryRoom)
+              paths
+              (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Class paths
+                (@List.cons.{0} MicroCFTA.EqualityNormalize.Path seed rest) h)
+              room firstRoom queryRoom)
+          (@Eq.refl.{1} MicroCFTA.EqualityNormalize.Class paths))
+        (ih
+          (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+            (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile))
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+            (MicroCFTA.SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile))
+          room))
+    classes alphabet profile room
+'MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room : ∀ (bits budget count : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records alphabet profile) →
+    MicroCFTA.SourceCurrentClassesForecast.Reserved bits budget count records alphabet profile
+theorem MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room : ∀ (bits budget count : Nat)
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records alphabet profile) →
+    MicroCFTA.SourceCurrentClassesForecast.Reserved bits budget count records alphabet profile :=
+fun bits budget count records alphabet profile room =>
+  have preparation :=
+    @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+      (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile)
+      (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records alphabet profile) room
+      (MicroCFTA.SourceCurrentClassesForecast.preparation_le budget count records alphabet profile);
+  have scanRoom :=
+    @MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+      (MicroCFTA.SourceCurrentScanRequiredForecast.scanProfile budget count records alphabet profile)
+      (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile) preparation
+      (MicroCFTA.SourceCurrentScanRequiredForecast.scan_le budget count records alphabet profile);
+  @And.intro
+    (MicroCFTA.SourceCurrentScanNumericForecast.Reserved bits budget count
+      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+        MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+      alphabet profile)
+    (MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count
+      (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile))
+    (MicroCFTA.SourceCurrentParentInitialRoom.scan_reserved_of_room bits budget count
+      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+        MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+      alphabet profile scanRoom)
+    (@List.casesOn.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+      (fun t =>
+        @Eq.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records t →
+          MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count
+            (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile))
+      records
+      (fun h =>
+        @Eq.ndrec.{0, 1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (fun records =>
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records alphabet profile) →
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile) →
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                    (MicroCFTA.SourceCurrentScanRequiredForecast.scanProfile budget count records alphabet profile) →
+                  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count
+                    (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile))
+          (fun room preparation scanRoom => True.intro) records
+          (@Eq.symm.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+            (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record) h)
+          room preparation scanRoom)
+      (fun record records_1 h =>
+        @Eq.ndrec.{0, 1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records_1)
+          (fun records =>
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records alphabet profile) →
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                  (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile) →
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                    (MicroCFTA.SourceCurrentScanRequiredForecast.scanProfile budget count records alphabet profile) →
+                  MicroCFTA.SourceCurrentConstrainedCapClassForecast.Reserved bits records count
+                    (MicroCFTA.SourceCurrentScanRequiredForecast.finalProfile budget count records alphabet profile))
+          (fun room preparation scanRoom => room) records
+          (@Eq.symm.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+            (@List.cons.{0} MicroCFTA.SourceEqualityClassOrder.Record record records_1) h)
+          room preparation scanRoom)
+      (@Eq.refl.{1} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record) records))
+'MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentParentInitialRoom.roomBits : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+def MicroCFTA.SourceCurrentParentInitialRoom.roomBits : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Nat :=
+fun profile =>
+  @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges) profile.domains)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes))))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'MicroCFTA.SourceCurrentParentInitialRoom.roomBits' does not depend on any axioms
+MicroCFTA.SourceCurrentParentInitialRoom.room_computed : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits profile) profile
+theorem MicroCFTA.SourceCurrentParentInitialRoom.room_computed : ∀
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits profile) profile :=
+fun profile =>
+  let total :=
+    @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges) profile.domains)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes)));
+  have large := MicroCFTA.SourceCurrentParentInitialRoom.power_large✝ total;
+  have one :=
+    @Nat.pow_le_pow_right (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@of_decide_eq_true
+        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (@id.{0}
+          (@Eq.{1} Bool
+            (@Decidable.decide
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            Bool.true)
+          (@Eq.refl.{1} Bool Bool.true)))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (have this :=
+        @Decidable.byContradiction
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          ((@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).decLe
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          fun a => MicroCFTA.SourceCurrentParentInitialRoom.room_computed._proof_1_1 profile a;
+      this);
+  have two :=
+    @Nat.pow_le_pow_right (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@of_decide_eq_true
+        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (@id.{0}
+          (@Eq.{1} Bool
+            (@Decidable.decide
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            Bool.true)
+          (@Eq.refl.{1} Bool Bool.true)))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      (have this :=
+        @Decidable.byContradiction
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          ((@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).decLe
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          fun a => MicroCFTA.SourceCurrentParentInitialRoom.room_computed._proof_1_2 profile a;
+      this);
+  @id.{0}
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room
+      (MicroCFTA.SourceCurrentParentInitialRoom.roomBits profile) profile)
+    (have nodes :=
+      @Nat.le_trans profile.nodes
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges) profile.domains)
+        total
+        (@Nat.le_trans profile.nodes
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+            profile.domains)
+          (Nat.le_add_right profile.nodes profile.edges)
+          (Nat.le_add_right
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+            profile.domains))
+        (Nat.le_add_right
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+            profile.domains)
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes))));
+    have edges :=
+      @Nat.le_trans profile.edges
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges) profile.domains)
+        total
+        (@Nat.le_trans profile.edges
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+            profile.domains)
+          (Nat.le_add_left profile.edges profile.nodes)
+          (Nat.le_add_right
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+            profile.domains))
+        (Nat.le_add_right
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges)
+            profile.domains)
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes))));
+    have domains :=
+      @Nat.add_le_add_right profile.domains
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges) profile.domains)
+        (Nat.le_add_left profile.domains
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes profile.edges))
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes)));
+    @And.intro
+      (@LT.lt.{0} Nat instLTNat profile.nodes
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+      (And
+        (@LE.le.{0} Nat instLENat profile.edges
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+        (@LT.lt.{0} Nat instLTNat
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.domains
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes))))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+      (@Nat.lt_of_le_of_lt profile.nodes total
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+        nodes large)
+      (@And.intro
+        (@LE.le.{0} Nat instLENat profile.edges
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+        (@LT.lt.{0} Nat instLTNat
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.domains
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes))))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (@Nat.le_trans profile.edges total
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          edges
+          (@Nat.le_trans total
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            (@Nat.le_of_lt total
+              (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              large)
+            two))
+        (@Nat.lt_of_le_of_lt
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.domains
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.nodes
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) profile.nodes profile.nodes))))
+          total
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          domains
+          (@Nat.lt_of_lt_of_le total
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) total
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            large one))))
+'MicroCFTA.SourceCurrentParentInitialRoom.room_computed' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room : ∀ (bits budget : Nat)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile) →
+    MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved bits budget alphabet profile
+theorem MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room : ∀ (bits budget : Nat)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile) →
+    MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved bits budget alphabet profile :=
+fun bits budget alphabet profile room records selected count included ambient present =>
+  have bounds :=
+    MicroCFTA.SourceCurrentParentUniformEnvelope.case_bounds budget alphabet profile records selected count
+      (have less :=
+        @Iff.mp
+          (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+            (List.range
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.mass
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            count)
+          (@LT.lt.{0} Nat instLTNat count
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.mass
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@List.mem_range count
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) profile.mass
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          included;
+      @Decidable.byContradiction (@LE.le.{0} Nat instLENat count profile.mass) (count.decLe profile.mass) fun a =>
+        MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room._proof_1_1 profile count less a)
+      ambient present;
+  MicroCFTA.SourceCurrentParentInitialRoom.classes_reserved_of_room bits budget count records ambient profile
+    (@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+      (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records ambient profile)
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile) room
+      (@And.left
+        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+          (MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records ambient profile)
+          (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile))
+        (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentClassesForecast.fuel budget count records ambient profile)
+          (MicroCFTA.SourceCurrentParentUniformEnvelope.fuel budget alphabet profile))
+        bounds))
+'MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentParentInitialRoom.uniform_computed : ∀ (budget : Nat)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile))
+    budget alphabet profile
+theorem MicroCFTA.SourceCurrentParentInitialRoom.uniform_computed : ∀ (budget : Nat)
+  (alphabet : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile))
+    budget alphabet profile :=
+fun budget alphabet profile =>
+  MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile))
+    budget alphabet profile
+    (MicroCFTA.SourceCurrentParentInitialRoom.room_computed
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget alphabet profile))
+'MicroCFTA.SourceCurrentParentInitialRoom.uniform_computed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

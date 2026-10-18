@@ -1,0 +1,143 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:150:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261018-parent-uniform-envelope».«outer-budget-direct-1.source».0.MicroCFTA.SourceCurrentOuterCallBudget.pure_checked`:
+  [DecidableEq Symbol]
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [DecidableEq Node]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq
+  Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq Node] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:150:0: warning: `pure_checked` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] (#2)
+  • [DecidableEq Node] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:155:24: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  checked.right
+of type `replay.calls.length.le first`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:165:86: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Nat.le.trans`, so it is not possible to project the field `trans` from an expression
+  bounded
+of type
+  { outcome := Outcome.failed fault after, calls := calls }.calls.length.le one
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:169:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261018-parent-uniform-envelope».«outer-budget-direct-1.source».0.MicroCFTA.SourceCurrentOuterCallBudget.positive`:
+  [DecidableEq Symbol]
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [DecidableEq Node]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq
+  Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq Node] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:169:0: warning: `positive` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] (#2)
+  • [DecidableEq Node] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:172:0: warning: `post_checked` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] (#2)
+  • [DecidableEq Node] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:272:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑?m.690
+ b := ↑(budget fuel)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:273:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑?m.715
+ b := ↑(budget fuel)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:275:8: error: Type mismatch
+  post_checked (children fuel g s r e p h m c n limit combined value.children ?m.746) ?m.741
+    (SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n limit combined value.children ?m.746)
+    (budget fuel) (childrenAt g s r e p h m c n limit combined value.children ?m.746)
+has type
+  Checked
+    (bind (children fuel g s r e p h m c n limit combined value.children ?m.746) fun value after =>
+      pure (?m.741 value after))
+    ((SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n limit combined value.children ?m.746).bind
+      ?m.741)
+    (budget fuel)
+but is expected to have type
+  Checked
+    (bind
+      (children fuel g s r e p h m c n limit combined value.children
+        (advance before
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+            { heap := before.checked.native.machine.heap,
+              equality :=
+                (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                    before.checked.operations).snd })
+          before.fourth before.merge))
+      fun results after =>
+      pure
+        (Outcome.done (SourceCurrentAllocatedRawRebuild.edge value results after.checked).fst
+          (advance after (SourceCurrentAllocatedRawRebuild.edge value results after.checked).snd after.fourth
+            after.merge)))
+    (match
+      (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+          before.checked.operations).fst with
+    | Except.error message =>
+      Outcome.failed (SourceCurrentAllocatedPartialWorker.Fault.inherited message)
+        (advance before
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+            { heap := before.checked.native.machine.heap,
+              equality :=
+                (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                    before.checked.operations).snd })
+          before.fourth before.merge)
+    | Except.ok none =>
+      Outcome.failed SourceCurrentAllocatedPartialWorker.Fault.missingInherited
+        (advance before
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+            { heap := before.checked.native.machine.heap,
+              equality :=
+                (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                    before.checked.operations).snd })
+          before.fourth before.merge)
+    | Except.ok (some combined) =>
+      (SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n limit combined value.children
+            (advance before
+              (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+                { heap := before.checked.native.machine.heap,
+                  equality :=
+                    (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                        before.checked.operations).snd })
+              before.fourth before.merge)).bind
+        fun results after =>
+        Outcome.done (SourceCurrentAllocatedRawRebuild.edge value results after.checked).fst
+          (advance after (SourceCurrentAllocatedRawRebuild.edge value results after.checked).snd after.fourth
+            after.merge))
+    (budget fuel)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:307:51: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑?m.1212
+ b := ↑(budget fuel)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-uniform-envelope/outer-budget-direct-1.source.lean:307:51: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑?m.1212
+ b := ↑(budget fuel)

@@ -13,6 +13,53 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current finite Parent envelopes and outer Parent call budgets
+
+Updated: 2026-10-18 06:22 CEST. Proof checkpoint is `e43db322`.
+Starting local checkpoint is `b05e4891`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-uniform-envelope.md` for exact boundaries.
+
+The exact finite initial guard alphabet now determines a common Parent
+output profile and one ceiling for all nine lower worker fuels. Initial
+Context/Fits and resident input facts bound the actual selected forecast.
+The completion theorem constructs the full Parent receipt and returns
+Fits at that common profile. No future entry-state callback is supplied.
+
+One Room test at the finite joined class profile derives UniformReserved.
+A mathematical width also computes sufficient Room for every finite
+profile. A source-built constrained recursive Parent uses that computed
+width, common output profile and common lower fuel. This proves no capacity
+claim at a fixed host width. Fixed-width calls still need sufficient Room.
+
+A separate producer constructs the actual Target return and a finite guard
+carrier together. It includes Operand Top, recursive tail order and each
+predicted native instruction bound. Full edit/class/Scan/Parent guard-carrier
+composition remains open. A source-built Target includes repeated paths and
+an unrelated open sibling. No whole-forest closure or finite Cap is added.
+
+The bounded outer replay now retains the ordered entered Parent requests
+and complete entry callers. Its outcome equals the literal worker on every
+outcome. The Parent count is at most B(0)=1, B(f+1)=3*B(f)+1. This bound needs
+no semantic domain or successful-completion premise. It excludes other
+reconstruction and descent allocations. Whole bounded outer numeric and
+semantic scheduling therefore remains open.
+
+Full Audit passes 3241 jobs and 71037 checks.
+Four production and three constructed strict logs are empty. All
+25 public and 3 constructed full pairs pass in 7 groups.
+All eight settings and standard axioms pass. Audit peak is
+401 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 264 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-uniform-envelope/`.
+
+General recursive outer progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current initial guard envelopes and finite Parent reservations
 
 Updated: 2026-10-18 06:09 CEST. Proof checkpoint is `1f9c135c`.
