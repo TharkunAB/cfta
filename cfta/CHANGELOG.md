@@ -7,6 +7,9 @@
 
 Before release, the package was called `microcfta`.
 
+- Add `Data.CFTA.Document`: editable source documents with named
+  productions and named facts, and patches that check the document they
+  were prepared on.
 - `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
   `mod` of SMT-LIB.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
