@@ -1,0 +1,1250 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:76:72: error: Application type mismatch: The argument
+  selected
+has type
+  request.left = Value.union entry members depth free
+but is expected to have type
+  Value.union entry members depth free = Value.union entry members depth free
+in the application
+  Exists.intro free selected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:80:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case empty
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+selected : request.left = Value.empty
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.empty = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:80:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case reference
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+name✝ : InternedBinderProtocol.Reference
+selected : request.left = Value.reference name✝
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.reference name✝ = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:80:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case node
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+selected : request.left = Value.node entry✝ edges✝ depth✝ free✝
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.node entry✝ edges✝ depth✝ free✝ = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:80:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case mu
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+selected : request.left = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:95:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  (have domain := request.domain;
+    have left := request.left;
+    have right := request.right;
+    match SourceRecursiveIntersectionControl.decision domain.key left right with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match left with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind fun values =>
+          Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match left, right with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported => SourceRecursiveIntersectionCode.unsupported left right) =
+    (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right) members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+shape : request.left = Value.union entry members depth free
+originals : Original request.left
+otherOriginal : Original request.right
+memberOriginals : ∀ (member : Value Symbol Guard), member ∈ members → Original member
+⊢ (have domain := request.domain;
+    have left := request.left;
+    have right := request.right;
+    match SourceRecursiveIntersectionControl.decision domain.key left right with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match left with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind fun values =>
+          Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match left, right with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported => SourceRecursiveIntersectionCode.unsupported left right) =
+    (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right) members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:151:72: error: Application type mismatch: The argument
+  selected
+has type
+  request.right = Value.union entry members depth free
+but is expected to have type
+  Value.union entry members depth free = Value.union entry members depth free
+in the application
+  Exists.intro free selected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:155:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case empty
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+selected : request.right = Value.empty
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.empty = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:155:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case reference
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+name✝ : InternedBinderProtocol.Reference
+selected : request.right = Value.reference name✝
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.reference name✝ = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:155:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case node
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+selected : request.right = Value.node entry✝ edges✝ depth✝ free✝
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.node entry✝ edges✝ depth✝ free✝ = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:155:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+
+case mu
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+selected : request.right = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+impossible :
+  Trace fuel
+    (Control.code
+      (have domain := request.domain;
+      have left := request.left;
+      have right := request.right;
+      match SourceRecursiveIntersectionControl.decision domain.key left right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+        | x => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match left, right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported left right))
+    before (Control.code (Code.pure result)) after
+⊢ ∃ entry members depth free, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ = Value.union entry members depth free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-2.source.lean:170:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right
+in the target expression
+  (have domain := request.domain;
+    have left := request.left;
+    have right := request.right;
+    match SourceRecursiveIntersectionControl.decision domain.key left right with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match left with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind fun values =>
+          Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match left, right with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported => SourceRecursiveIntersectionCode.unsupported left right) =
+    (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member) members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+shape : request.right = Value.union entry members depth free
+originals : Original request.right
+otherOriginal : Original request.left
+memberOriginals : ∀ (member : Value Symbol Guard), member ∈ members → Original member
+⊢ (have domain := request.domain;
+    have left := request.left;
+    have right := request.right;
+    match SourceRecursiveIntersectionControl.decision domain.key left right with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode domain right left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu domain left right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match left with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind fun values =>
+          Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name right true
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference domain name left false
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match left, right with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 => compileRows domain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported => SourceRecursiveIntersectionCode.unsupported left right) =
+    (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member) members).bind
+      fun values => Code.work (makeUnion values) Code.pure

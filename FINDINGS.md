@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 08:36 CEST. Proof checkpoint is `e66b49b7`.
+Completed closed native queries now derive explicit terminal origins from
+their actual captured writers. Closed forwarding excludes reference roots.
+Union origins retain the same full row and ordered member call. Mu origins
+retain the actual body and binder schedule, without a row/body occurrence
+claim. General used-Mu alignment, node-owner exclusion and fresh-call bounds
+remain open. Full Audit passes 3269 jobs and 71342 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-native-terminal-origins.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 08:14 CEST. Proof checkpoint is `dce1e970`.
 Initial semantic facts, scheduled capacity and edge idle now exclude all
 edge memo diagnostics in every outer phase. Actual reached entries retain

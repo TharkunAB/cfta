@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentNativeQueryTerminalOrigins
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+
+#check @MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Mu
+#print MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Mu
+#print axioms MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Mu
+#check @MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Union
+#print MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Union
+#print axioms MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Union
+#check @MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Resolved
+#print MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Resolved
+#print axioms MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.Resolved
+#check @MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.returned
+#print MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.returned
+#print axioms MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.returned
+#check @MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.request
+#print MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.request
+#print axioms MicroCFTA.SourceCurrentNativeQueryTerminalOrigins.request

@@ -1,0 +1,721 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:76:72: error: Application type mismatch: The argument
+  selected
+has type
+  request.left = Value.union entry members depth free
+but is expected to have type
+  Value.union entry members depth free = Value.union entry members depth free
+in the application
+  Exists.intro free selected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:80:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match SourceRecursiveIntersectionControl.decision request.domain.key Value.empty request.right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode request.domain request.right Value.empty
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu request.domain Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu request.domain Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu request.domain Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain Value.empty member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty false
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported Value.empty request.right))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.461)) ?m.459 (Control.code (Code.pure result)) ?m.460
+in the application
+  failed_body fuel ?m.461 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:80:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match SourceRecursiveIntersectionControl.decision request.domain.key (Value.reference name✝) request.right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain request.right (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.reference name✝) member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match Value.reference name✝ with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name request.right true
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference name✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.487)) ?m.485 (Control.code (Code.pure result)) ?m.486
+in the application
+  failed_body fuel ?m.487 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:80:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match
+        SourceRecursiveIntersectionControl.decision request.domain.key (Value.node entry✝ edges✝ depth✝ free✝)
+          request.right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain request.right (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.node entry✝ edges✝ depth✝ free✝) member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node entry✝ edges✝ depth✝ free✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match Value.node entry✝ edges✝ depth✝ free✝, request.right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.513)) ?m.511 (Control.code (Code.pure result)) ?m.512
+in the application
+  failed_body fuel ?m.513 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:80:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match
+        SourceRecursiveIntersectionControl.decision request.domain.key
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain request.right (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.539)) ?m.537 (Control.code (Code.pure result)) ?m.538
+in the application
+  failed_body fuel ?m.539 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:92:58: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.leftUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+shape : request.left = Value.union entry members depth free
+originals : Original request.left
+otherOriginal : Original request.right
+memberOriginals : ∀ (member : Value Symbol Guard), member ∈ members → Original member
+⊢ (match
+      SourceRecursiveIntersectionControl.decision request.domain.key (Value.union entry members depth free)
+        request.right with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode request.domain request.right (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu request.domain (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu request.domain (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu request.domain (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+            members).bind
+        fun values => Code.work (makeUnion values) Code.pure
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match request.right with
+      | Value.union entry_1 members_1 depth_1 free_1 =>
+        (SourceRecursiveIntersectionCode.walk
+              (fun member => requestNode request.domain (Value.union entry members depth free) member) members_1).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match request.right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+        compileReference request.domain name (Value.union entry members depth free) false
+      | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right) =
+    (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right) members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:100:75: error: Type mismatch: After simplification, term
+  actual
+ has type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+            members).bind
+        fun values => Code.work (makeUnion values) Code.pure))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk
+            (fun member =>
+              if True then requestNode request.domain member request.right
+              else requestNode request.domain request.right member)
+            members).bind
+        fun values => Code.work (makeUnion values) Code.pure))
+    before (Control.code (Code.pure result)) after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:104:47: error: Type mismatch: After simplification, term
+  walked
+ has type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member =>
+      if True then requestNode request.domain member request.right else requestNode request.domain request.right member)
+    members before values middle count
+but is expected to have type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member => requestNode request.domain member request.right) members before values middle count
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:106:7: error: Type mismatch: After simplification, term
+  prefixTrace
+ has type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member =>
+      if True then requestNode request.domain member request.right else requestNode request.domain request.right member)
+    (List.take index members) before (List.take index values) current prefixFuel
+but is expected to have type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member => requestNode request.domain member request.right) (List.take index members) before
+    (List.take index values) current prefixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:107:7: error: Type mismatch: After simplification, term
+  called
+ has type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ childFuel
+    (Control.code
+      (if True then requestNode request.domain member request.right
+      else requestNode request.domain request.right member))
+    current (Control.code (Code.pure value)) next
+but is expected to have type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ childFuel
+    (Control.code (requestNode request.domain member request.right)) current (Control.code (Code.pure value)) next
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:108:7: error: Type mismatch: After simplification, term
+  suffixTrace
+ has type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member =>
+      if True then requestNode request.domain member request.right else requestNode request.domain request.right member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) values) middle suffixFuel
+but is expected to have type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member => requestNode request.domain member request.right) (List.drop (index + 1) members) next
+    (List.drop (index + 1) values) middle suffixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:79:31: warning: This simp argument is unused:
+  branch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, selected] at impossible
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:93:27: warning: This simp argument is unused:
+  branch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, shape]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:149:72: error: Application type mismatch: The argument
+  selected
+has type
+  request.right = Value.union entry members depth free
+but is expected to have type
+  Value.union entry members depth free = Value.union entry members depth free
+in the application
+  Exists.intro free selected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:153:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match SourceRecursiveIntersectionControl.decision request.domain.key request.left Value.empty with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+      | SourceRecursiveIntersectionControl.Branch.swap => requestNode request.domain Value.empty request.left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu request.domain request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu request.domain request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu request.domain request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member Value.empty)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match request.left, Value.empty with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left Value.empty))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.461)) ?m.459 (Control.code (Code.pure result)) ?m.460
+in the application
+  failed_body fuel ?m.461 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:153:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match SourceRecursiveIntersectionControl.decision request.domain.key request.left (Value.reference name✝) with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain (Value.reference name✝) request.left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.reference name✝)) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference name✝) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        match Value.reference name✝ with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name request.left false
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match request.left, Value.reference name✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.487)) ?m.485 (Control.code (Code.pure result)) ?m.486
+in the application
+  failed_body fuel ?m.487 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:153:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match
+        SourceRecursiveIntersectionControl.decision request.domain.key request.left
+          (Value.node entry✝ edges✝ depth✝ free✝) with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.node entry✝ edges✝ depth✝ free✝)) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node entry✝ edges✝ depth✝ free✝) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match request.left, Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.513)) ?m.511 (Control.code (Code.pure result)) ?m.512
+in the application
+  failed_body fuel ?m.513 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:153:41: error: Application type mismatch: The argument
+  impossible
+has type
+  Trace fuel
+    (Control.code
+      (match
+        SourceRecursiveIntersectionControl.decision request.domain.key request.left
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) with
+      | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+      | SourceRecursiveIntersectionControl.Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+      | SourceRecursiveIntersectionControl.Branch.swap =>
+        requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.left
+      | SourceRecursiveIntersectionControl.Branch.repeated key =>
+        Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+      | SourceRecursiveIntersectionControl.Branch.bothMu =>
+        compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.leftMu =>
+        compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.rightMu =>
+        compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.ordinary =>
+        match request.left, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | SourceRecursiveIntersectionControl.Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.539)) ?m.537 (Control.code (Code.pure result)) ?m.538
+in the application
+  failed_body fuel ?m.539 result impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:165:58: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+returned :
+  reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+leftClosed : request.left.free = []
+rightClosed : request.right.free = []
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    SourceRecursiveIntersectionControl.Branch.rightUnion
+row : EdgeValue Symbol Guard
+origin : MergedFreshOrdinaryGraph.Origin reader.native.machine.heap [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+ready : NodeReady before.native.machine request
+owner : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+ownerKept : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+finish :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+shape : request.right = Value.union entry members depth free
+originals : Original request.right
+otherOriginal : Original request.left
+memberOriginals : ∀ (member : Value Symbol Guard), member ∈ members → Original member
+⊢ (match
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left
+        (Value.union entry members depth free) with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode request.domain (Value.union entry members depth free) request.left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu request.domain request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu request.domain request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu request.domain request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match request.left with
+      | Value.union entry_1 members_1 depth_1 free_1 =>
+        (SourceRecursiveIntersectionCode.walk
+              (fun member => requestNode request.domain member (Value.union entry members depth free)) members_1).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member) members).bind
+        fun values => Code.work (makeUnion values) Code.pure
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match request.left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+        compileReference request.domain name (Value.union entry members depth free) true
+      | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match request.left, Value.union entry members depth free with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+        compileRows request.domain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)) =
+    (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member) members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:173:75: error: Type mismatch: After simplification, term
+  actual
+ has type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member)
+            members).bind
+        fun values => Code.work (makeUnion values) Code.pure))
+    before (Control.code (Code.pure result)) after
+but is expected to have type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk
+            (fun member =>
+              if true = false then requestNode request.domain member request.left
+              else requestNode request.domain request.left member)
+            members).bind
+        fun values => Code.work (makeUnion values) Code.pure))
+    before (Control.code (Code.pure result)) after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:177:47: error: Type mismatch: After simplification, term
+  walked
+ has type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member =>
+      if true = false then requestNode request.domain member request.left
+      else requestNode request.domain request.left member)
+    members before values middle count
+but is expected to have type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member => requestNode request.domain request.left member) members before values middle count
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:179:7: error: Type mismatch: After simplification, term
+  prefixTrace
+ has type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member =>
+      if true = false then requestNode request.domain member request.left
+      else requestNode request.domain request.left member)
+    (List.take index members) before (List.take index values) current prefixFuel
+but is expected to have type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member => requestNode request.domain request.left member) (List.take index members) before
+    (List.take index values) current prefixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:180:7: error: Type mismatch: After simplification, term
+  called
+ has type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ childFuel
+    (Control.code
+      (if true = false then requestNode request.domain member request.left
+      else requestNode request.domain request.left member))
+    current (Control.code (Code.pure value)) next
+but is expected to have type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ childFuel
+    (Control.code (requestNode request.domain request.left member)) current (Control.code (Code.pure value)) next
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:181:7: error: Type mismatch: After simplification, term
+  suffixTrace
+ has type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member =>
+      if true = false then requestNode request.domain member request.left
+      else requestNode request.domain request.left member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) values) middle suffixFuel
+but is expected to have type
+  @Walk (Value Symbol Guard) (Value Symbol Guard) width inst✝¹ inst✝
+    (fun member => requestNode request.domain request.left member) (List.drop (index + 1) members) next
+    (List.drop (index + 1) values) middle suffixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:152:31: warning: This simp argument is unused:
+  branch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, selected] at impossible
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-terminal-origins/union-writer-direct-1.source.lean:166:27: warning: This simp argument is unused:
+  branch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, shape]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
