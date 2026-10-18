@@ -636,6 +636,43 @@ at which enumeration stopped as `TruncatedRecursion`. A recursive node whose
 equality constraints are still pending is a hole, not truncated recursion,
 because it may still be expanded.
 
+`Data.CFTA.Enumeration` also provides an optional ordered cursor.
+`startOrdered` takes an `OrderedConfig` with an exact term key, a lower bound
+for partial terms, pruning callbacks, and an `ExpansionOrder`.
+`nextOrdered` returns a run, exhaustion, a detected invalid bound, or an
+explicit work or frontier limit. Limits retain the cursor. They do not mean
+exhaustion. Work fuel counts queue jobs. It does not bound the cost of one
+callback or raw sibling step. `strengthenOrdered` installs stronger shared
+pruning state.
+Queued branches and complete runs check that state before they continue.
+The default enumeration functions keep their existing behavior.
+
+The bound must be no greater than every complete key below the partial root.
+An unknown bound retains the work. Weak bounds can require most of a
+language before the first result. Equal keys use deterministic queue serials.
+Their order can differ from eager enumeration. The caller must decide the
+residual obligations returned with each run. Each obligation and its
+multiplicity remain present. Their list order can differ from eager expansion.
+
+Each queue entry represents a branch, remaining siblings, or a complete run.
+Its priority bounds every run it represents. Children and sibling tails keep
+the parent bound. A complete run leaves only when no smaller bound remains.
+These invariants justify the order when the callback contracts hold.
+
+Callbacks must be pure and deterministic. They may read nodes and compress
+aliases. They must not allocate UVars, merge classes, or enumerate choices.
+Pruning must remain valid after every completion and shared-state update.
+Refresh must install new checks on prepared sources as well as complete
+runs. A prepared source does not repeat its `Right` callback. Saved UVar
+references must resolve against the current branch before a check uses them.
+
+The cursor defers ordinary child choices. It keeps the existing equality
+and recursion machinery. Use closed automata with finite, total node data
+and valid interned identities. Equivalence of all constrained cyclic truncations
+under a new expansion order remains a separate proof obligation. Queue
+capacity counts entries, not closure bytes or RSS. Use a process memory cap.
+The `OrderedConfig` Haddock states the full callback and ordering contracts.
+
 For repeated reduction, downstream code usually wants:
 
 ```haskell
