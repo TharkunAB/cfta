@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 17:29 CEST. Proof checkpoint is `e739f66a`.
+Node and union fusion now compose strict child laws at the same original
+raw depth bound. Actual writer callbacks apply a strictly smaller-depth
+source law under arbitrary outer replacements, including Empty. That
+uniform induction hypothesis remains unproved. An actual fresh-marker
+body call characterizes whole open-Mu Empty as body Empty or bare marker.
+Finite marker freshness remains explicit. General writer body/probe bare
+marker reflection and source binder Fusion remain open. These are proof
+results, not Haskell repair requests. Full Audit passes 3348 jobs and
+72580 checks. No Haskell patch or new executable defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-rank-bounded-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 17:05 CEST. Proof checkpoint is `0ac270a2`.
 Actual issued-name paths now retain earlier writer suffixes and derive
 complete lexical reader Contexts, including unused captures. Strict
