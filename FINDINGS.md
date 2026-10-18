@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 18:01 CEST. Proof checkpoint is `c1426cf2`.
+Finite tracked root profiles now preserve Empty and bare tracked names.
+The exact prior bounded Empty contract follows under its original Paired
+Empty premise. Actual node and union clauses compose strict child laws.
+An actual earlier writer compares tracked callbacks under an explicit
+uniform smaller-source induction hypothesis. The open-Mu bridge removes
+only the fresh root marker. A mixed local/outer-marker case retains the
+outer marker. General binder Fusion, its uniform induction and semantic
+initialization remain open. These are proof results, not Haskell repair
+requests. Full Audit passes 3354 jobs and 72699 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-tracked-profile-fusion.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 17:29 CEST. Proof checkpoint is `e739f66a`.
 Node and union fusion now compose strict child laws at the same original
 raw depth bound. Actual writer callbacks apply a strictly smaller-depth

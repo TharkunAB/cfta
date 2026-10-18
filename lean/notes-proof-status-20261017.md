@@ -1,8 +1,64 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `e739f66a`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `c1426cf2`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
+
+## Current finite tracked profiles and recursive marker removal
+
+Updated: 2026-10-18 18:01 CEST. Proof checkpoint is `c1426cf2`.
+Starting checkpoint is `cf787b1b`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-tracked-profile-fusion.md`.
+
+Filtered Fusion now compares finite tracked root profiles. A pure root
+reference set is visible only when all its names are tracked. Every other
+nonempty root is opaque. The relation preserves Empty and bare tracked
+names for actual available normalized results. With no tracked names,
+to_empty recovers the exact prior bounded Empty contract under its original
+Paired Empty premise. No lexical availability assumption is added.
+
+Node and union cases compose strict source child laws at the same original
+raw depth bound. Union composition retains root opacity and the exact
+tracked name set. Actual earlier writers compare tracked callback outputs
+under arbitrary outer maps, including Empty. Their uniform smaller-depth
+source induction hypothesis remains explicit and unproved.
+
+The actual open-Mu bridge now gives the complete unmasked root profile:
+the whole result equals the strict marker-body profile after removing the
+fresh local marker, up to reference-set equivalence. complete constructs
+that body call. A checked nested used-Mu body has both a local marker and
+an outer marker at its root. Removing the local marker retains the outer
+marker. An ordinary node containing the local marker remains opaque.
+Finite freshness over actual resolved original leaves remains explicit.
+
+The next main obligation is the complete source binder clause and its
+uniform depth induction. Derive fresh-marker absence and extended Paired
+slots from the actual inputs, apply the earlier-writer step at strict body
+depth, and retain exact finish/lower behavior. The new profile rules do
+not establish these remaining obligations. Changing-capture semantic
+observations and the initial recursive guard-profile certificate stay open.
+
+The strongest broad theorem remains conditional correctness of the
+checked Lean constraint-reduction model. Successful bounded reduction adds
+no finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], the input and output finite-tree languages
+are equal. Initial semantic cache facts, recursive guard-profile agreement
+and computed resource bounds remain explicit. General termination and
+full public Haskell correspondence remain open.
+
+Full Audit passes 3354 jobs and 72699 dependency checks.
+All 26 new public and 6 constructed heads pass complete statement, proof
+and standard-axiom checks. Twelve selected strict logs are empty. All six
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Seven manifests pin 391 entries. Independent
+root/base/writer review finds no material issue. It reuses existing checks
+and adds no proof pairs. Earlier failed and warning-bearing attempts remain.
+Evidence is in `lean/restart-evidence/20261018-tracked-profile-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
 
 ## Current bounded source fusion and actual recursive marker tests
 
