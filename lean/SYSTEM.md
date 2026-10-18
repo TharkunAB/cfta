@@ -1,5 +1,50 @@
 # Constrained languages, indexing, and distributions
 
+## Current Mu rows from actual binder readback
+
+Updated: 2026-10-18 08:54 CEST. Proof checkpoint is `ed544648`.
+Starting local checkpoint is `2a1c488f`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-mu-row-readback.md` for exact boundaries.
+
+A selected physical ordinary Mu result now derives its actual full row
+readback. The absent-pair branch retains the literal body and heap. The
+constructed branch retains current probes, raw ordinary substitution,
+root filtering, the exact stored winner and the same indexed body row.
+It derives unused-local cleanup and full raw row origins at every view.
+
+The proof carries that stored winner forward to the final reader. The
+reader's causal publication history supplies the cleanup law. An actual
+query trace derives this history from initial history. No publication
+history is inferred backwards at an earlier optional-binder entry.
+
+The selected-row split needs the actual probe invariant Correct. The
+constructor derives it for its exact stored winner. The implication is
+false for arbitrary unrelated body and probe fields. No new Haskell defect
+follows. This is a corrected proof premise, not an implementation repair.
+
+The composed terminal theorem retains all closed recursive inputs. It
+adds no BinderFree or finite ordinary Cap condition. Its selected root row
+is physical. It does not cover epsilon exposure of a retained used Mu.
+Arbitrary stored-Mu substitution still needs row-to-original-source lineage.
+Then compose the actual source anchors through class folds, Parent and
+walk dispatch. All-ancestor node-key exclusion, a finite fresh-call bound,
+recursive outer completion, repeated convergence, equality-operation
+resources, host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3272 jobs and 71349 checks. Three production strict logs
+and both integration strict logs are empty. All nine public, three
+constructed and one private full pairs pass in six groups with all eight
+settings and standard axioms. Actual native Mu/union queries and a present
+pair constructor with changed reader and warm replay supply the integration.
+Independent production review finds no material issue. Jobs use 4 GiB
+maximum/high and zero swap. Successful root peaks are at most 391 MiB.
+Evidence is in `lean/restart-evidence/20261018-native-mu-row-readback/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the external repair
+registry first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current native terminal origins from actual captured writers
 
 Updated: 2026-10-18 08:36 CEST. Proof checkpoint is `e66b49b7`.

@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 08:54 CEST. Proof checkpoint is `ed544648`.
+Actual closed query Mu rows now derive their exact stored winner, current
+ordinary substitution and full row readback. Initial publication history
+and the executed trace construct the reader history. The proof transports
+the winner forward. It does not infer history backwards. The selected-row
+split uses Correct from the actual constructor; arbitrary unrelated body
+and probe fields do not imply unused-local cleanup. General stored-Mu
+source lineage and recursive progress remain open. Full Audit passes 3272
+jobs and 71349 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-native-mu-row-readback.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 08:36 CEST. Proof checkpoint is `e66b49b7`.
 Completed closed native queries now derive explicit terminal origins from
 their actual captured writers. Closed forwarding excludes reference roots.

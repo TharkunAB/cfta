@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentNativeQueryMuRowOrigins
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+
+#check @MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.OptionalOrigin
+#print MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.OptionalOrigin
+#print axioms MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.OptionalOrigin
+#check @MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.MuRow
+#print MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.MuRow
+#print axioms MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.MuRow
+#check @MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.returned_mu
+#print MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.returned_mu
+#print axioms MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.returned_mu
+#check @MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.Resolved
+#print MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.Resolved
+#print axioms MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.Resolved
+#check @MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.returned
+#print MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.returned
+#print axioms MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.returned
+#check @MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.request
+#print MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.request
+#print axioms MicroCFTA.SourceCurrentNativeQueryMuRowOrigins.request
