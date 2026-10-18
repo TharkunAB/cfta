@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentRecursiveHeadRowOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.BodyRows
+#print MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.BodyRows
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.BodyRows
+
+#check @MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.selfEnvironment
+#print MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.selfEnvironment
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.selfEnvironment
+
+#check @MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.MuRows
+#print MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.MuRows
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.MuRows
+
+#check @MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.HeadRows
+#print MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.HeadRows
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.HeadRows
+
+#check @MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.complete
+#print MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.complete
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.complete
+
+#check @MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.query
+#print MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.query
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadRowOrigins.query
+

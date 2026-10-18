@@ -1,0 +1,107 @@
+import MicroCFTA.SourceCurrentClassFoldGuardOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 4000000
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.Original
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.Original
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.Original
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.LeafSource
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.LeafSource
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.LeafSource
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.leaf
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.leaf
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.leaf
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.exposed
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.exposed
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.exposed
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.recursive
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.recursive
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.NodeEvent.recursive
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.leaf_source
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.leaf_source
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.leaf_source
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.node
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.node
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.node
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.here
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.here
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.here
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.unselected
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.unselected
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.unselected
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.selected
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.selected
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ChildEvent.selected
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.children
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.children
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.children
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ListEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ListEvent
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ListEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ListEvent.children
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ListEvent.children
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ListEvent.children
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.list
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.list
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.list
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ClassEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ClassEvent
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ClassEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.ClassEvent.edit
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.ClassEvent.edit
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.ClassEvent.edit
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.class_sources
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.class_sources
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.class_sources
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent.head
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent.head
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent.head
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent.tail
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent.tail
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.FoldEvent.tail
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.fold
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.fold
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.fold
+
+#check @MicroCFTA.SourceCurrentClassFoldGuardOrigins.pass
+#print axioms MicroCFTA.SourceCurrentClassFoldGuardOrigins.pass
+#print MicroCFTA.SourceCurrentClassFoldGuardOrigins.pass

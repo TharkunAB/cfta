@@ -1,0 +1,20 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-explore-5.source.lean:62:2: error: 'change' tactic failed, pattern
+  SourceCurrentStoredNormalizedPlans.RowsRelated ?m.103 ?m.104 ?m.105 ?m.106 ?m.107 ?m.108 ?m.109 ?m.110
+is not definitionally equal to target
+  match firstBody, secondBody with
+  | Value.reference a, Value.reference b =>
+    InternedStoredSubstitutionRebind.resolve [Reference.interned firstEntry.identity] [Value.empty] environment a =
+      InternedStoredSubstitutionRebind.resolve [Reference.interned secondEntry.identity] [Value.empty] environment b
+  | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+    SourceCurrentStoredNormalizedPlans.RowsRelated [Reference.interned firstEntry.identity]
+      [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment edges other
+  | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+    SourceCurrentStoredNormalizedPlans.ManyRelated [Reference.interned firstEntry.identity]
+      [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment members other
+  | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+    ∀ (argument : Value Nat Bool),
+      SourceCurrentStoredNormalizedPlans.Related
+        [Reference.interned entry.identity, Reference.interned firstEntry.identity]
+        [Reference.interned other.identity, Reference.interned secondEntry.identity] [argument, Value.empty]
+        [argument, Value.empty] environment environment body later
+  | x, x_1 => False

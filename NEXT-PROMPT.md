@@ -1,5 +1,42 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current Parent invariants and class guard origins
+
+Updated: 2026-10-18 02:21 CEST. Starting checkpoint is `55b2e1f3`.
+Proof commit is `445e5a73`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-parent-invariants-head-origins.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual completed lower and Parent workers now derive physical heap, field,
+probe, cost and full equality-operation invariants from initial facts. No
+Ranges, InputsThrough, Cap or future state invariant is a premise. Completion
+is still an explicit premise. Outer-prefix invariant composition stays open.
+
+Initial closed inputs construct actual recursive Head exposure and stored-body
+row descriptors. Full guard occurrences now compose through actual indexed
+edits, class right folds and final empty propagation. This does not derive an
+individual row-survival chain. Checked native query Inputs and retained-Mu
+body reconstruction residuals remain explicit. A general root-alternative
+relation is preserved by actual union normalization and self filtering.
+General used-local source binder and retained-writer induction stay open.
+
+Full pinned Audit passes 3190 jobs and 70310 dependency checks.
+Only the unchanged old warning remains. Seven strict production logs are
+empty. All 86 public declaration and 9 constructed signature/proof/axiom
+pairs pass with all eight settings and only the three standard axioms.
+Actual caps are 4 GiB maximum/high and zero swap. Audit peak is 402 MiB.
+Evidence is in `lean/restart-evidence/20261018-parent-invariants-head-origins/`.
+
+The complete outer-pass domain is still finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive progress,
+all-ancestor key exclusion, fresh-call bounds, repeated convergence and
+complete public Haskell correspondence remain open. Keep the whole goal active.
+No Haskell behavior patch or new production defect is added. Keep the root
+FINDINGS repair registry first. Repair `b9219b9e` stays merged and validated.
+Record each later fix with its failure, reproducer, paths, commit, checks and
+upstream status. Preserve all earlier sources, evidence, repairs and drafts.
+Keep the optimized interned core.
+
 ## Current native invariants and nested inert binders
 
 Updated: 2026-10-18 01:56 CEST. Starting checkpoint is `69992df2`.

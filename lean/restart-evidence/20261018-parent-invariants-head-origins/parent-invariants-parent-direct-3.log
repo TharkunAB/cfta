@@ -1,0 +1,86 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-3.source.lean:380:2: error: Type mismatch
+  raw_edge before good (SourceEqualityMkEdgeAllocation.emptyField before.operations) valid growth symbol
+    SourceEqualityConstraintConstructors.top [Value.empty] field fun value member =>
+    Eq.casesOn (motive := fun a t =>
+      Value.empty = a → List.mem_singleton.mp member ≍ t → Available before.native.machine.heap value)
+      (List.mem_singleton.mp member)
+      (fun h =>
+        Eq.ndrec (motive := fun value =>
+          value ∈ [Value.empty] →
+            ∀ (x : value = Value.empty), x ≍ Eq.refl value → Available before.native.machine.heap value)
+          (fun member x h => empty_available before.native.machine.heap) h member (List.mem_singleton.mp member))
+      (Eq.refl Value.empty) (HEq.refl (List.mem_singleton.mp member))
+has type
+  have built := run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty]) before.native.machine.heap;
+  Effect before
+      (advancePhysical before
+        { heap := built.snd, equality := SourceEqualityMkEdgeAllocation.emptyField before.operations }) ∧
+    EdgeResident built.snd built.fst
+but is expected to have type
+  Effect before (SourceCurrentAllocatedMkEdge.reject symbol before).snd ∧
+    EdgeResident (SourceCurrentAllocatedMkEdge.reject symbol before).snd.native.machine.heap
+      (SourceCurrentAllocatedMkEdge.reject symbol before).fst
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-3.source.lean:409:4: error: Type mismatch
+  effects
+has type
+  have built :=
+    run (makeEdge symbol (SourceEqualityConjoinAllocation.readback loaded) children) before.native.machine.heap;
+  Effect before
+      (advancePhysical before
+        { heap := built.snd,
+          equality :=
+            (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length before.operations).snd }) ∧
+    EdgeResident built.snd built.fst
+but is expected to have type
+  Effect before
+      (advancePhysical before
+        {
+          heap :=
+            (run (makeEdge symbol (SourceEqualityConjoinAllocation.readback loaded) children)
+                before.native.machine.heap).snd,
+          equality :=
+            (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length before.operations).snd }) ∧
+    EdgeResident
+      (advancePhysical before
+              {
+                heap :=
+                  (run (makeEdge symbol (SourceEqualityConjoinAllocation.readback loaded) children)
+                      before.native.machine.heap).snd,
+                equality :=
+                  (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                      before.operations).snd }).native.machine.heap
+      (run (makeEdge symbol (SourceEqualityConjoinAllocation.readback loaded) children) before.native.machine.heap).fst
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-3.source.lean:426:4: error: Type mismatch
+  effects
+has type
+  have built := run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty]) before.native.machine.heap;
+  Effect before
+      (advancePhysical before
+        { heap := built.snd,
+          equality :=
+            SourceEqualityMkEdgeAllocation.emptyField
+              (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                  before.operations).snd }) ∧
+    EdgeResident built.snd built.fst
+but is expected to have type
+  Effect before
+      (advancePhysical before
+        {
+          heap :=
+            (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+                before.native.machine.heap).snd,
+          equality :=
+            SourceEqualityMkEdgeAllocation.emptyField
+              (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                  before.operations).snd }) ∧
+    EdgeResident
+      (advancePhysical before
+              {
+                heap :=
+                  (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+                      before.native.machine.heap).snd,
+                equality :=
+                  SourceEqualityMkEdgeAllocation.emptyField
+                    (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                        before.operations).snd }).native.machine.heap
+      (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty]) before.native.machine.heap).fst

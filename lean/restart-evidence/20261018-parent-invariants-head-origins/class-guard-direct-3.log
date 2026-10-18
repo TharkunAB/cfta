@@ -1,0 +1,85 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/class-guard-direct-3.source.lean:137:18: error: don't know how to synthesize implicit argument `head`
+  @NodeEvent.recursive inst✝¹ inst✝ width formulas solver row.entry.key.constraint record originals entries original
+    before exposed heap value after recursive ?m.800 body event
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List (Value Symbol Guard)
+edits : Edits EqualityNormalize.Path
+input : Value Symbol Guard
+before✝ : SharedState width
+result : Value Symbol Guard
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : Record
+originals : List (Value Symbol Guard)
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+original : Value Symbol Guard
+before : SharedState width
+exposed : Value Symbol Guard
+heap : Heap
+value : Value Symbol Guard
+after : SharedState width
+recursive : SourceEqualityRequiredGraph.Recursive original
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after
+headRead : SourceCurrentRequiredQueryMemos.HeadReads head memos current
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current
+bodyRead : NodeReads formulas solver base body current saved
+ih : NodeLaw formulas solver base body current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap original
+safe : Safe (Edits.editBelow entries) original
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+row : EdgeValue Symbol Guard
+selected : row ∈ nodeEdges value
+closed : original.free = []
+first :
+  SharedReady formulas solver inventory record originals base (advanceHeap before heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap).checked) ∧
+      Available heap exposed
+checked :
+  SourceEqualityRequiredCache.Keeps before.checked.native.machine.heap heap ∧
+    Available heap exposed ∧ exposed.free = [] ∧ SourceEqualityRequiredCache.Ordinary exposed
+event : NodeEvent formulas solver row.entry.key.constraint body
+⊢ SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/class-guard-direct-3.source.lean:170:53: error: Type mismatch
+  offset + 1
+has type
+  Int
+but is expected to have type
+  Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/class-guard-direct-3.source.lean:171:101: error: Application type mismatch: The argument
+  offset
+has type
+  Int
+but is expected to have type
+  Nat
+in the application
+  EditChildren.selected offset
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/class-guard-direct-3.source.lean:199:52: error: Function expected at
+  ChildEvent
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  formulas
+
+Hint: The identifier `ChildEvent` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/class-guard-direct-3.source.lean:200:2: error: The `induction` tactic does not support the type `MicroCFTA.SourceCurrentAllocatedSharedEditGraph.ChildrenReads` because it is mutually inductive
+
+Hint: Consider using the `cases` tactic instead

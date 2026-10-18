@@ -1,0 +1,80 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-1.source.lean:73:34: warning: Variable name `A` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _A
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-1.source.lean:104:37: error: don't know how to synthesize implicit argument `A`
+  @seeded_bind_done width ?m.113 (SourceCurrentAllocatedSeededWorker.fold p h n values seed paths middle)
+    (fun tail later => SourceCurrentAllocatedSeededWorker.leaf n head tail later) result after later
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h n : Nat
+values : List Node
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ {before : SourceCurrentAllocatedSeededWorker.Checked width} {result : Node}
+    {after : SourceCurrentAllocatedSeededWorker.Checked width},
+    SourceCurrentAllocatedSeededWorker.fold p h n values seed paths before =
+        SourceCurrentAllocatedSeededWorker.Outcome.done result after →
+      Good before →
+        Values before.native.machine.heap values → Effect before after ∧ Available after.native.machine.heap result
+before : SourceCurrentAllocatedSeededWorker.Checked width
+result : Node
+after : SourceCurrentAllocatedSeededWorker.Checked width
+actual :
+  SourceCurrentAllocatedSeededWorker.fold p h n values seed (path :: paths) before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done result after
+good : Good before
+available : Values before.native.machine.heap values
+head : Node
+middle : SourceCurrentAllocatedSeededWorker.Checked width
+first :
+  SourceCurrentAllocatedSeededWorker.operand p h path values before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done head middle
+later :
+  ((SourceCurrentAllocatedSeededWorker.fold p h n values seed paths middle).bind fun tail later =>
+      SourceCurrentAllocatedSeededWorker.leaf n head tail later) =
+    SourceCurrentAllocatedSeededWorker.Outcome.done result after
+headEffect : Effect before middle
+known : Available middle.native.machine.heap head
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-1.source.lean:102:40: error: don't know how to synthesize implicit argument `A`
+  @seeded_bind_done width ?m.64 (SourceCurrentAllocatedSeededWorker.operand p h path values before)
+    (fun head middle =>
+      (SourceCurrentAllocatedSeededWorker.fold p h n values seed paths middle).bind fun tail later =>
+        SourceCurrentAllocatedSeededWorker.leaf n head tail later)
+    result after actual
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h n : Nat
+values : List Node
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ {before : SourceCurrentAllocatedSeededWorker.Checked width} {result : Node}
+    {after : SourceCurrentAllocatedSeededWorker.Checked width},
+    SourceCurrentAllocatedSeededWorker.fold p h n values seed paths before =
+        SourceCurrentAllocatedSeededWorker.Outcome.done result after →
+      Good before →
+        Values before.native.machine.heap values → Effect before after ∧ Available after.native.machine.heap result
+before : SourceCurrentAllocatedSeededWorker.Checked width
+result : Node
+after : SourceCurrentAllocatedSeededWorker.Checked width
+actual :
+  SourceCurrentAllocatedSeededWorker.fold p h n values seed (path :: paths) before =
+    SourceCurrentAllocatedSeededWorker.Outcome.done result after
+good : Good before
+available : Values before.native.machine.heap values
+⊢ Type
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/parent-invariants-parent-direct-1.source.lean:146:0: warning: `scan_query` does not use the following hypothesis in its type:
+  • [DecidableEq Node] (#4)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`

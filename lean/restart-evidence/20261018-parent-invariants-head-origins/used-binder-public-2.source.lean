@@ -1,0 +1,35 @@
+import MicroCFTA.SourceCurrentUsedBinderRootAlternatives
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch
+#print MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch
+#print axioms MicroCFTA.SourceCurrentUsedBinderRootAlternatives.AtomMatch
+
+#check @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.RootMatch
+#print MicroCFTA.SourceCurrentUsedBinderRootAlternatives.RootMatch
+#print axioms MicroCFTA.SourceCurrentUsedBinderRootAlternatives.RootMatch
+
+#check @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.union
+#print MicroCFTA.SourceCurrentUsedBinderRootAlternatives.union
+#print axioms MicroCFTA.SourceCurrentUsedBinderRootAlternatives.union
+
+#check @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.union_ordered
+#print MicroCFTA.SourceCurrentUsedBinderRootAlternatives.union_ordered
+#print axioms MicroCFTA.SourceCurrentUsedBinderRootAlternatives.union_ordered
+
+#check @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.erased_filter
+#print MicroCFTA.SourceCurrentUsedBinderRootAlternatives.erased_filter
+#print axioms MicroCFTA.SourceCurrentUsedBinderRootAlternatives.erased_filter
+
+#check @MicroCFTA.SourceCurrentUsedBinderRootAlternatives.filter
+#print MicroCFTA.SourceCurrentUsedBinderRootAlternatives.filter
+#print axioms MicroCFTA.SourceCurrentUsedBinderRootAlternatives.filter
+

@@ -1,0 +1,52 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-direct-1.source.lean:106:58: error: unsolved goals
+case reference.reference
+Symbol Guard : Type
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+own other : Reference
+compatible : ∀ (first second : Reference), references first second → (first = own ↔ second = other)
+name✝¹ name✝ : Reference
+matched : references name✝¹ name✝
+⊢ name✝¹ = own ↔ name✝ = other
+
+case mu.mu
+Symbol Guard : Type
+references : Reference → Reference → Prop
+values : Value Symbol Guard → Value Symbol Guard → Prop
+own other : Reference
+compatible : ∀ (first second : Reference), references first second → (first = own ↔ second = other)
+entry✝¹ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝¹ depthShape✝¹ ordinaryShape✝¹ : Value Symbol Guard
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+matched :
+  values (Value.mu entry✝¹ body✝¹ depthShape✝¹ ordinaryShape✝¹) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+⊢ Value.mu entry✝¹ body✝¹ depthShape✝¹ ordinaryShape✝¹ = Value.reference own ↔
+    Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ = Value.reference other
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-direct-1.source.lean:108:4: warning: This simp argument is unused:
+  Value.noConfusion
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all only [AtomMatch, Value.reference.injEq, not_false_eq_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-direct-1.source.lean:108:22: warning: This simp argument is unused:
+  not_false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all only [AtomMatch, Value.reference.injEq, Value.noConfusion]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-direct-1.source.lean:129:46: error: unsolved goals
+case union.union
+Symbol Guard : Type
+name : Reference
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+different : ¬(Value.union entry✝ members✝ depth✝ free✝).referenceOf = InternedBinderProtocol.NodeRef.ref name
+value✝ : Value Symbol Guard
+member✝ : value✝ ∈ members✝
+found✝ : Literal value✝ (Value.reference name)
+⊢ Value.union entry✝ members✝ depth✝ free✝ = Value.reference name

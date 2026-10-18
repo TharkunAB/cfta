@@ -1,0 +1,20 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-explore-4.source.lean:48:2: error: 'change' tactic failed, pattern
+  second.free.isEmpty = false ∧
+    ∀ (argument : Value Nat Bool),
+      SourceCurrentStoredNormalizedPlans.Related [Reference.interned firstEntry.identity]
+        [Reference.interned secondEntry.identity] [argument] [argument] environment environment firstBody secondBody
+is not definitionally equal to target
+  second.free.isEmpty = false ∧
+    match first, second with
+    | Value.reference a, Value.reference b =>
+      InternedStoredSubstitutionRebind.resolve [] [] environment a =
+        InternedStoredSubstitutionRebind.resolve [] [] environment b
+    | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.RowsRelated [] [] [] [] environment environment edges other
+    | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.ManyRelated [] [] [] [] environment environment members other
+    | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+      ∀ (argument : Value Nat Bool),
+        SourceCurrentStoredNormalizedPlans.Related [Reference.interned entry.identity]
+          [Reference.interned other.identity] [argument] [argument] environment environment body later
+    | x, x_1 => False

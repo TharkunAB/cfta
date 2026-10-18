@@ -1,0 +1,37 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-explore-3.source.lean:48:17: error: Function expected at
+  related.right
+but this term has type
+  match first, second with
+  | Value.reference a, Value.reference b =>
+    InternedStoredSubstitutionRebind.resolve [] [] environment a =
+      InternedStoredSubstitutionRebind.resolve [] [] environment b
+  | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+    SourceCurrentStoredNormalizedPlans.RowsRelated [] [] [] [] environment environment edges other
+  | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+    SourceCurrentStoredNormalizedPlans.ManyRelated [] [] [] [] environment environment members other
+  | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+    ∀ (argument : Value Nat Bool),
+      SourceCurrentStoredNormalizedPlans.Related [Reference.interned entry.identity] [Reference.interned other.identity]
+        [argument] [argument] environment environment body later
+  | x, x_1 => False
+
+Note: Expected a function because this term is being applied to the argument
+  (.empty : Value Nat Bool)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-explore-3.source.lean:43:101: error: unsolved goals
+opened : first.free.isEmpty = false
+related :
+  second.free.isEmpty = false ∧
+    match first, second with
+    | Value.reference a, Value.reference b =>
+      InternedStoredSubstitutionRebind.resolve [] [] environment a =
+        InternedStoredSubstitutionRebind.resolve [] [] environment b
+    | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.RowsRelated [] [] [] [] environment environment edges other
+    | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.ManyRelated [] [] [] [] environment environment members other
+    | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+      ∀ (argument : Value Nat Bool),
+        SourceCurrentStoredNormalizedPlans.Related [Reference.interned entry.identity]
+          [Reference.interned other.identity] [argument] [argument] environment environment body later
+    | x, x_1 => False
+⊢ False

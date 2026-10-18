@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 02:21 CEST. Proof checkpoint is `445e5a73`.
+Full pinned Audit passes 3190 jobs and 70310 dependency checks.
+Completed lower and Parent calls derive physical operation invariants from
+initial facts. Closed recursive Head exposure is constructed. Actual class
+folds retain full guard occurrences. These results do not prove general
+recursive progress or complete recursive language preservation. General
+used-local binder induction, all-ancestor key exclusion, fresh-call bounds,
+convergence and public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. A checked unrestricted
+capture-alias relation boundary does not refute actual fresh publication.
+Repair `b9219b9e` remains merged and validated in source `c0cc8a05`.
+Read `lean/notes-current-parent-invariants-head-origins.md`. Keep this registry
+first. Record every later repair with its failure, executable reproducer,
+affected paths, commit, checks and upstream status for external work.
+
 Current proof update: 2026-10-18 01:56 CEST. Proof checkpoint is `381a4115`.
 Full pinned Audit passes 3183 jobs and 70163 dependency checks. Completed
 native calls derive full operation validity and new descended Ready from initial

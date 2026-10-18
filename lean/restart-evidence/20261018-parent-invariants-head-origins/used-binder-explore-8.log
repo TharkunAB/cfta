@@ -1,0 +1,74 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-explore-8.source.lean:83:19: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  matched
+has type
+  match firstRow, secondRow with
+  | EdgeValue.mk entry children, EdgeValue.mk other later =>
+    entry.key.symbol = other.key.symbol ∧
+      entry.key.constraint = other.key.constraint ∧
+        SourceCurrentStoredNormalizedPlans.ManyRelated [Reference.interned firstEntry.identity]
+          [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment children later
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/used-binder-explore-8.source.lean:63:101: error: unsolved goals
+opened : first.free.isEmpty = false
+related :
+  (Value.mu secondEntry secondBody secondDepth secondOrdinary).free.isEmpty = false ∧
+    match Value.mu firstEntry firstBody firstDepth firstOrdinary,
+      Value.mu secondEntry secondBody secondDepth secondOrdinary with
+    | Value.reference a, Value.reference b =>
+      InternedStoredSubstitutionRebind.resolve [] [] environment a =
+        InternedStoredSubstitutionRebind.resolve [] [] environment b
+    | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.RowsRelated [] [] [] [] environment environment edges other
+    | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.ManyRelated [] [] [] [] environment environment members other
+    | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+      ∀ (argument : Value Nat Bool),
+        SourceCurrentStoredNormalizedPlans.Related [Reference.interned entry.identity]
+          [Reference.interned other.identity] [argument] [argument] environment environment body later
+    | x, x_1 => False
+openedBody : firstBody.free.isEmpty = false
+bodies :
+  (Value.node (nodeParts secondBody).fst secondRows (nodeParts secondBody).snd.snd.fst
+            (nodeParts secondBody).snd.snd.snd).free.isEmpty =
+      false ∧
+    match
+      Value.node (nodeParts firstBody).fst firstRows (nodeParts firstBody).snd.snd.fst
+        (nodeParts firstBody).snd.snd.snd,
+      Value.node (nodeParts secondBody).fst secondRows (nodeParts secondBody).snd.snd.fst
+        (nodeParts secondBody).snd.snd.snd with
+    | Value.reference a, Value.reference b =>
+      InternedStoredSubstitutionRebind.resolve [Reference.interned firstEntry.identity] [Value.empty] environment a =
+        InternedStoredSubstitutionRebind.resolve [Reference.interned secondEntry.identity] [Value.empty] environment b
+    | Value.node entry edges depth free, Value.node entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.RowsRelated [Reference.interned firstEntry.identity]
+        [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment edges other
+    | Value.union entry members depth free, Value.union entry_1 other depth_1 free_1 =>
+      SourceCurrentStoredNormalizedPlans.ManyRelated [Reference.interned firstEntry.identity]
+        [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment members other
+    | Value.mu entry body depthShape ordinaryShape, Value.mu other later depthShape_1 ordinaryShape_1 =>
+      ∀ (argument : Value Nat Bool),
+        SourceCurrentStoredNormalizedPlans.Related
+          [Reference.interned entry.identity, Reference.interned firstEntry.identity]
+          [Reference.interned other.identity, Reference.interned secondEntry.identity] [argument, Value.empty]
+          [argument, Value.empty] environment environment body later
+    | x, x_1 => False
+rows :
+  (∀ (row : EdgeValue Nat Bool),
+      row ∈ [firstRow] →
+        ∃ other x,
+          SourceCurrentStoredNormalizedPlans.RowRelated [Reference.interned firstEntry.identity]
+            [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment row other) ∧
+    ∀ (row : EdgeValue Nat Bool),
+      row ∈ [secondRow] →
+        ∃ other x,
+          SourceCurrentStoredNormalizedPlans.RowRelated [Reference.interned firstEntry.identity]
+            [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment other row
+present : secondRow ∈ [secondRow]
+matched :
+  match firstRow, secondRow with
+  | EdgeValue.mk entry children, EdgeValue.mk other later =>
+    entry.key.symbol = other.key.symbol ∧
+      entry.key.constraint = other.key.constraint ∧
+        SourceCurrentStoredNormalizedPlans.ManyRelated [Reference.interned firstEntry.identity]
+          [Reference.interned secondEntry.identity] [Value.empty] [Value.empty] environment environment children later
+⊢ False

@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-invariants-head-origins/class-guard-direct-4.source.lean:250:8: error: don't know how to synthesize implicit argument `found`
+  @ChildrenReads.selected inst✝¹ inst✝ width formulas solver base record originals memos current current entries edits
+    original before result middle [] [] middle offset ?m.678 first EditChildren.nil firstRead ChildrenReads.nil
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List (Value Symbol Guard)
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+offset✝ : Nat
+inputs : List (Value Symbol Guard)
+before✝ : SharedState width
+results✝ : List (Value Symbol Guard)
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditChildren record✝ originals✝ entries✝ offset✝ inputs before✝ results✝ after✝
+reads : ChildrenReads formulas solver base actual memos✝ final
+record : Record
+originals : List (Value Symbol Guard)
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+edits : Edits EqualityNormalize.Path
+original : Value Symbol Guard
+before : SharedState width
+result : Value Symbol Guard
+middle : SharedState width
+values results : List (Value Symbol Guard)
+after : SharedState width
+offset : Nat
+found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits
+first : EditNode record originals edits original before result middle
+rest : EditChildren record originals entries (offset + 1) values middle results after
+firstRead : NodeReads formulas solver base first memos current
+restRead : ChildrenReads formulas solver base rest current saved
+firstIH : True
+ih : ChildrenLaw formulas solver base rest current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Values before.checked.native.machine.heap (original :: values)
+safe : ChildrenSafe entries offset (original :: values)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+value : Value Symbol Guard
+row : EdgeValue Symbol Guard
+member : row ∈ nodeEdges value
+present : (↑offset, edits) ∈ entries
+childSupport : Populated edits ∧ HasLeaf edits
+childAllowed : Allowed record edits
+childSafe : Safe edits original
+index : Nat
+selected : (result :: results)[index + 1]? = some value
+next : Inventory
+firstReceipt : NodeReceipt formulas solver next record originals base original before result middle memos current
+⊢ SourceEqualityNeededMap.lookup (↑offset) entries = some edits

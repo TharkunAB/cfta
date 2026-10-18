@@ -1,0 +1,160 @@
+import MicroCFTA.SourceCurrentParentOperationInvariants
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.mk
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.mk
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.mk
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.native
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.native
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.native
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.heap
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.heap
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.heap
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.operations
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.operations
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.operations
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.fields
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.fields
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.fields
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.semantic
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.semantic
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.semantic
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.costs
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.costs
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.costs
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.of_native
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.of_native
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.of_native
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.native_good
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.native_good
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.native_good
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.code
+#print MicroCFTA.SourceCurrentNativeOperationHeap.code
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.code
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.node
+#print MicroCFTA.SourceCurrentNativeOperationHeap.node
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.node
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.edge
+#print MicroCFTA.SourceCurrentNativeOperationHeap.edge
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.edge
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.physical
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.physical
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.physical
+#check @MicroCFTA.SourceCurrentNativeOperationHeap.Good.advance
+#print MicroCFTA.SourceCurrentNativeOperationHeap.Good.advance
+#print axioms MicroCFTA.SourceCurrentNativeOperationHeap.Good.advance
+#check @MicroCFTA.SourceCurrentOpenProjectionFields.read
+#print MicroCFTA.SourceCurrentOpenProjectionFields.read
+#print axioms MicroCFTA.SourceCurrentOpenProjectionFields.read
+#check @MicroCFTA.SourceCurrentOpenProjectionFields.readAll
+#print MicroCFTA.SourceCurrentOpenProjectionFields.readAll
+#print axioms MicroCFTA.SourceCurrentOpenProjectionFields.readAll
+#check @MicroCFTA.SourceCurrentOpenProjectionFields.union
+#print MicroCFTA.SourceCurrentOpenProjectionFields.union
+#print axioms MicroCFTA.SourceCurrentOpenProjectionFields.union
+#check @MicroCFTA.SourceCurrentOpenProjectionFields.node
+#print MicroCFTA.SourceCurrentOpenProjectionFields.node
+#print axioms MicroCFTA.SourceCurrentOpenProjectionFields.node
+#check @MicroCFTA.SourceCurrentOpenProjectionFields.rows
+#print MicroCFTA.SourceCurrentOpenProjectionFields.rows
+#print axioms MicroCFTA.SourceCurrentOpenProjectionFields.rows
+#check @MicroCFTA.SourceCurrentOpenProjectionFields.forest
+#print MicroCFTA.SourceCurrentOpenProjectionFields.forest
+#print axioms MicroCFTA.SourceCurrentOpenProjectionFields.forest
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.mk
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.mk
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.mk
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.good
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.good
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.good
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.keeps
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.keeps
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.keeps
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.operations
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.operations
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.operations
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.refl
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.refl
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.refl
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.trans
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.trans
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.Effect.trans
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.operand
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.operand
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.operand
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.target
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.target
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.target
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.mk
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.mk
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.mk
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.checked
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.checked
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.checked
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.stored
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.stored
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.stored
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.slots
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.slots
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.slots
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.initial
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.initial
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.SharedGood.initial
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.force
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.force
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.force
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.leaf
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.leaf
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.leaf
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.edit
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.edit
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.edit
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.edit_list
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.edit_list
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.edit_list
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.run_class
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.run_class
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.run_class
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.class_fold
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.class_fold
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.class_fold
+#check @MicroCFTA.SourceCurrentLowerOperationInvariants.class_pass
+#print MicroCFTA.SourceCurrentLowerOperationInvariants.class_pass
+#print axioms MicroCFTA.SourceCurrentLowerOperationInvariants.class_pass
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.seeded
+#print MicroCFTA.SourceCurrentParentOperationInvariants.seeded
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.seeded
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.scan
+#print MicroCFTA.SourceCurrentParentOperationInvariants.scan
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.scan
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.classes
+#print MicroCFTA.SourceCurrentParentOperationInvariants.classes
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.classes
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.reduce
+#print MicroCFTA.SourceCurrentParentOperationInvariants.reduce
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.reduce
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.reject
+#print MicroCFTA.SourceCurrentParentOperationInvariants.reject
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.reject
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.build
+#print MicroCFTA.SourceCurrentParentOperationInvariants.build
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.build
+#check @MicroCFTA.SourceCurrentParentOperationInvariants.parent
+#print MicroCFTA.SourceCurrentParentOperationInvariants.parent
+#print axioms MicroCFTA.SourceCurrentParentOperationInvariants.parent
