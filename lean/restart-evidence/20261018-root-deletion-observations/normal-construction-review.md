@@ -1,0 +1,17 @@
+# Ordinary profile construction from Normal
+
+Recorded: 2026-10-18 19:49 CEST.
+
+The two selected production modules expose five public theorems. `SourceCurrentProfileFold` exposes `combine_empty_right`, `fold_append`, and `fold_equiv`. These pure laws preserve profile opacity and root-reference membership. The proof needs no heap. `fold_none`, `fold_member`, and associativity remain private.
+
+`SourceCurrentStoredProfileNormalConstruction` exposes `makeNode` and `makeUnion`. Both start at an actual current `Normal` heap. Node inputs must be resident full edges. Union inputs must be available actual values. Neither theorem takes Ready, recursive profile/free/depth heap laws, a future callback, or a future result relation.
+
+The node proof retains the exact future live-row test on original edges and ordered child denotations. A future live row is originally live. Canonical sorting and deduplication preserve that complete row. Direct ordinary preservation constructs the five fields of Normal at the result: facts, live rows, flat unions, proper records, and nonempty union members. The existing literal node theorem then interprets the actual complete result. Its closed-original shortcut remains justified by exact free-name metadata.
+
+The union theorem concludes profile Equivalent with `combineMany` over the ORIGINAL supplied values. It does not stop at an intermediate canonical list. Exact literal union interpretation proves the flatten equation. The reusable fold law handles sorting and identity deduplication; canonical identity retention uses available resident values. The all-ordinary branch invokes the new Normal-only node theorem and ordered ordinary-row fold. The general union branch derives all five Normal fields directly, reads the exact stored member list, and invokes the existing literal union theorem. No stronger semantic state is constructed from Normal.
+
+The focused constructed witness builds a closed USED Mu from source. Its body has an open ordinary child `node7[self]` and a closed nullary child `node8[]`. It derives Normal directly from repaired `closed_normal`, actual availability from build verification, and resident edges from exact linked records. Duplicate first-child rows normalize to one physical nonempty row. Assigning Empty profiles to references makes its stored profile Empty. The actual union of the first child, the second child, a repeated first child, and Empty normalizes to two ordinary rows; the nullary row retains the opaque assigned profile. The fixture calls both new Normal-only endpoints. It has no Ready premise or supplied future execution schedule.
+
+All selected strict logs are literally empty. Both canonical builds are clean and terminal. All public and constructed groups print complete statements, proofs, and standard-three axiom reports with all eight required options. Every check uses a separate recorded 4 GiB memory/high and zero-swap scope, with a five-minute limit. Earlier node-only successful snapshots remain retained and unselected. No failed proof attempt occurred in this component.
+
+The new pure fold module repeats only the old private algebra so the old frozen source remains unchanged and later root-deletion proofs can reuse the laws. The specific flatten/ordinary lemmas remain private. This component does not derive a general semantic cache contract, source binder comparison, filtering law, recursive completion, or Haskell correspondence. It permits arbitrary assigned reference profiles and nested Mu inputs through their existing stored denotations.

@@ -1,0 +1,218 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:27:13: error: Type mismatch: After simplification, term
+  Eq.symm (SourceCurrentStoredProfileFunction.empty assignment)
+ has type
+  @Eq Profile (some []) (denote Value.empty assignment)
+but is expected to have type
+  @Eq Profile (some [])
+    (if (InternedBinderProtocol.NodeRef.empty == InternedBinderProtocol.NodeRef.ref own) = true then some []
+    else denote Value.empty assignment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:33:17: error: Tactic `rfl` failed: The left-hand side
+  deleted (fun name => name == own) (Value.node entry✝ edges✝ depth✝ free✝) assignment
+is not definitionally equal to the right-hand side
+  if ((Value.node entry✝ edges✝ depth✝ free✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) = true then some []
+  else denote (Value.node entry✝ edges✝ depth✝ free✝) assignment
+
+case node
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+flat : Atomic (Value.node entry✝ edges✝ depth✝ free✝)
+⊢ deleted (fun name => name == own) (Value.node entry✝ edges✝ depth✝ free✝) assignment =
+    if ((Value.node entry✝ edges✝ depth✝ free✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) = true then
+      some []
+    else denote (Value.node entry✝ edges✝ depth✝ free✝) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:33:17: error: Tactic `rfl` failed: The left-hand side
+  deleted (fun name => name == own) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+is not definitionally equal to the right-hand side
+  if
+      ((Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) =
+        true then
+    some []
+  else denote (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+
+case mu
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+flat : Atomic (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+⊢ deleted (fun name => name == own) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment =
+    if
+        ((Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) =
+          true then
+      some []
+    else denote (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:31:40: warning: This simp argument is unused:
+  SourceCurrentStoredProfileFunction.reference
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [deleted, Value.referenceOf]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:41:11: error: Tactic `rfl` failed: The left-hand side
+  deletedMany (fun name => name == own) [] assignment
+is not definitionally equal to the right-hand side
+  combineMany
+    (List.map (fun value => denote value assignment)
+      (List.filter (fun value => value.referenceOf != InternedBinderProtocol.NodeRef.ref own) []))
+
+case nil
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+flat : ∀ (value : Value Symbol Guard), value ∈ [] → Atomic value
+⊢ deletedMany (fun name => name == own) [] assignment =
+    combineMany
+      (List.map (fun value => denote value assignment)
+        (List.filter (fun value => value.referenceOf != InternedBinderProtocol.NodeRef.ref own) []))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:47:134: error: Tactic `rfl` failed: The left-hand side
+  combine (some [])
+    (combineMany
+      (List.map (fun value => denote value assignment)
+        (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest)))
+is not definitionally equal to the right-hand side
+  combineMany
+    (List.map (fun value => denote value assignment)
+      (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest))
+
+case pos.none
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+first : Value Symbol Guard
+rest : List (Value Symbol Guard)
+flat : ∀ (value : Value Symbol Guard), value ∈ first :: rest → Atomic value
+cut : (first.referenceOf == InternedBinderProtocol.NodeRef.ref own) = true
+⊢ combine (some [])
+      (combineMany
+        (List.map (fun value => denote value assignment)
+          (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest))) =
+    combineMany
+      (List.map (fun value => denote value assignment)
+        (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:47:134: error: Tactic `rfl` failed: The left-hand side
+  combine (some [])
+    (combineMany
+      (List.map (fun value => denote value assignment)
+        (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest)))
+is not definitionally equal to the right-hand side
+  combineMany
+    (List.map (fun value => denote value assignment)
+      (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest))
+
+case pos.some
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+first : Value Symbol Guard
+rest : List (Value Symbol Guard)
+flat : ∀ (value : Value Symbol Guard), value ∈ first :: rest → Atomic value
+cut : (first.referenceOf == InternedBinderProtocol.NodeRef.ref own) = true
+val✝ : List Reference
+⊢ combine (some [])
+      (combineMany
+        (List.map (fun value => denote value assignment)
+          (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest))) =
+    combineMany
+      (List.map (fun value => denote value assignment)
+        (List.filter (fun value => !value.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:59:6: error: Type mismatch: After simplification, term
+  SourceCurrentStoredProfileFunction.empty assignment
+ has type
+  @Eq Profile (denote Value.empty assignment) (some [])
+but is expected to have type
+  @Eq Profile (denote Value.empty assignment)
+    (if (InternedBinderProtocol.NodeRef.empty == InternedBinderProtocol.NodeRef.ref own) = true then assignment own
+    else some [])
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:65:17: error: Tactic `rfl` failed: The left-hand side
+  filtered own (Value.node entry✝ edges✝ depth✝ free✝) assignment
+is not definitionally equal to the right-hand side
+  if ((Value.node entry✝ edges✝ depth✝ free✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) = true then
+    assignment own
+  else deleted (fun name => name == own) (Value.node entry✝ edges✝ depth✝ free✝) assignment
+
+case node
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+state : State Symbol Guard
+normal : Normal state
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+available : Available state (Value.node entry✝ edges✝ depth✝ free✝)
+⊢ filtered own (Value.node entry✝ edges✝ depth✝ free✝) assignment =
+    if ((Value.node entry✝ edges✝ depth✝ free✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) = true then
+      assignment own
+    else deleted (fun name => name == own) (Value.node entry✝ edges✝ depth✝ free✝) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:65:17: error: Tactic `rfl` failed: The left-hand side
+  filtered own (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+is not definitionally equal to the right-hand side
+  if
+      ((Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) =
+        true then
+    assignment own
+  else deleted (fun name => name == own) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+
+case mu
+Symbol Guard : Type
+own : Reference
+assignment : Reference → Profile
+state : State Symbol Guard
+normal : Normal state
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+available : Available state (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+⊢ filtered own (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment =
+    if
+        ((Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝).referenceOf == InternedBinderProtocol.NodeRef.ref own) =
+          true then
+      assignment own
+    else deleted (fun name => name == own) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:68:6: error: Type mismatch: After simplification, term
+  Eq.symm (members own values assignment flat)
+ has type
+  @Eq Profile
+    (combineMany
+      (List.map (fun value => denote value assignment)
+        (List.filter
+          (fun value =>
+            (match value with
+              | Value.empty => InternedBinderProtocol.NodeRef.empty
+              | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+              | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+              | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+              | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) !=
+              InternedBinderProtocol.NodeRef.ref own)
+          values)))
+    (deletedMany (fun name => name == own) values assignment)
+but is expected to have type
+  @Eq Profile
+    (combineMany
+      (List.map (fun member => denote member assignment)
+        (List.filter
+          (fun member =>
+            (match member with
+              | Value.empty => InternedBinderProtocol.NodeRef.empty
+              | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+              | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+              | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+              | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) !=
+              InternedBinderProtocol.NodeRef.ref own)
+          values)))
+    (if (InternedBinderProtocol.NodeRef.union entry.identity == InternedBinderProtocol.NodeRef.ref own) = true then
+      assignment own
+    else deletedMany (fun name => name == own) values assignment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-filter-direct-1.source.lean:63:23: warning: This simp argument is unused:
+  deleted
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [filtered, Value.referenceOf, SourceCurrentStoredProfileFunction.reference]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

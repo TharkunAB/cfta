@@ -1,0 +1,55 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-contract-strict-1.source.lean:50:13: error: Application type mismatch: The argument
+  tag_injective own
+has type
+  Function.Injective (tag own)
+but is expected to have type
+  tag own selected = tag own name → selected = name
+in the application
+  Iff.intro (tag_injective own)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-contract-strict-1.source.lean:58:9: error: Application type mismatch: The argument
+  tag_injective own
+has type
+  Function.Injective (tag own)
+but is expected to have type
+  tag own name = tag own selected → name = selected
+in the application
+  Iff.intro (tag_injective own)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-contract-strict-1.source.lean:96:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun name => tag firstOwn name == tag firstOwn firstName
+in the target expression
+  Equivalent
+    (deleted (fun name => tag firstOwn name == tag (Reference.uninterned (ordinaryLevel depth)) secondName) body
+      (shadow (Reference.interned entry.identity) replacement assignment))
+    (deleted (fun name => tag secondOwn name == tag (Reference.uninterned (ordinaryLevel depth)) secondName) ordinary
+      (shadow (Reference.uninterned (ordinaryLevel depth)) replacement assignment))
+
+Symbol Guard : Type
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+correct : Correct entry body depth ordinary
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+bodyAvailable : Available state body
+ordinaryAvailable : Available state ordinary
+firstName secondName : Reference
+aligned :
+  tag (Reference.interned entry.identity) firstName = tag (Reference.uninterned (ordinaryLevel depth)) secondName
+assignment : Reference → Profile
+replacement : Profile
+firstOwn : Reference := Reference.interned entry.identity
+secondOwn : Reference := Reference.uninterned (ordinaryLevel depth)
+sameBare : body = Value.reference firstName ↔ ordinary = Value.reference secondName
+sameTest :
+  (body.referenceOf == InternedBinderProtocol.NodeRef.ref firstName) =
+    (ordinary.referenceOf == InternedBinderProtocol.NodeRef.ref secondName)
+cut :
+  Equivalent
+    (deleted (fun name => tag firstOwn name == tag (Reference.uninterned (ordinaryLevel depth)) secondName) body
+      (shadow (Reference.interned entry.identity) replacement assignment))
+    (deleted (fun name => tag secondOwn name == tag (Reference.uninterned (ordinaryLevel depth)) secondName) ordinary
+      (shadow (Reference.uninterned (ordinaryLevel depth)) replacement assignment))
+⊢ Equivalent
+    (SourceCurrentStoredFilteredProfile.filtered firstName body
+      (shadow (Reference.interned entry.identity) replacement assignment))
+    (SourceCurrentStoredFilteredProfile.filtered secondName ordinary
+      (shadow (Reference.uninterned (ordinaryLevel depth)) replacement assignment))

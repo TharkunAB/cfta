@@ -1,0 +1,70 @@
+import MicroCFTA.SourceCurrentStoredMuRootContract
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.deleted
+#print MicroCFTA.SourceCurrentStoredRootDeletion.deleted
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.deleted
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany
+#print MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.uncut
+#print MicroCFTA.SourceCurrentStoredRootDeletion.uncut
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.uncut
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.uncut_many
+#print MicroCFTA.SourceCurrentStoredRootDeletion.uncut_many
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.uncut_many
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.congr
+#print MicroCFTA.SourceCurrentStoredRootDeletion.congr
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.congr
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.congr_many
+#print MicroCFTA.SourceCurrentStoredRootDeletion.congr_many
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.congr_many
+
+#check @MicroCFTA.SourceCurrentStoredRootDeletion.absent
+#print MicroCFTA.SourceCurrentStoredRootDeletion.absent
+#print axioms MicroCFTA.SourceCurrentStoredRootDeletion.absent
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.tag
+#print MicroCFTA.SourceCurrentStoredMuRootContract.tag
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.tag
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.bare
+#print MicroCFTA.SourceCurrentStoredMuRootContract.bare
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.bare
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.Correct
+#print MicroCFTA.SourceCurrentStoredMuRootContract.Correct
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.Correct
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.tag_injective
+#print MicroCFTA.SourceCurrentStoredMuRootContract.tag_injective
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.tag_injective
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.profiles
+#print MicroCFTA.SourceCurrentStoredMuRootContract.profiles
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.profiles
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.filtered_profiles
+#print MicroCFTA.SourceCurrentStoredMuRootContract.filtered_profiles
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.filtered_profiles
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.heap_profiles
+#print MicroCFTA.SourceCurrentStoredMuRootContract.heap_profiles
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.heap_profiles
+
+#check @MicroCFTA.SourceCurrentStoredMuRootContract.actual_filtered_profiles
+#print MicroCFTA.SourceCurrentStoredMuRootContract.actual_filtered_profiles
+#print axioms MicroCFTA.SourceCurrentStoredMuRootContract.actual_filtered_profiles
+

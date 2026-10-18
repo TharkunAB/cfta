@@ -1,7 +1,13 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-The root-filter proof checkpoint is `9ed6c398`.
+The root-deletion proof checkpoint is `2e24eca5`.
+
+In simple technical English: a completed modeled reduction adds no tree
+outside the input language. It retains every input tree that satisfies its inherited
+constraints. Its initial cache, guard and resource assumptions remain
+explicit. A returned size-query API has exact enumeration, counts and
+rank/unrank laws under its separate construction assumptions.
 
 ## Broad reduction guarantee
 
@@ -57,12 +63,14 @@ General completion still needs active-owner exclusion, fresh-call bounds,
 and repeated-pass convergence. Haskell correspondence still needs demand
 and cache behavior, machine-integer adequacy, and the external interfaces.
 
-The current root-filter work makes one missing observation explicit.
-Filtering tests original bare root references before substitution.
-Equal assigned profiles alone do not preserve that test. The next cache
-invariant must retain the relevant original root structure.
-See `notes-current-filtered-source-comparison.md` for checked evidence and
-the next proof step.
+Original root filtering tests bare references before substitution.
+Equal assigned profiles alone do not preserve that test. The checked
+stronger root contract retains it. A separate causal route now derives
+actual smart-unused deletion from a later reader's history, without an
+assumed payload contract. The remaining source induction must also cover
+retained open Mu and establish each actual publication's payload law.
+See `notes-current-root-deletion-observations.md` for checked evidence and
+the next proof step. The broad guarantee above has not changed.
 
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains the
 external repair registry first. The full-library goal remains active.

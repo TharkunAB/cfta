@@ -1,0 +1,56 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-deletion-strict-1.source.lean:45:13: error: Type mismatch
+  Eq.symm (SourceCurrentStoredProfileFunction.empty assignment)
+has type
+  some [] = denote Value.empty assignment
+but is expected to have type
+  deleted (fun x => false) Value.empty assignment = denote Value.empty assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-deletion-strict-1.source.lean:46:22: error: Type mismatch
+  Eq.symm (SourceCurrentStoredProfileFunction.reference name assignment)
+has type
+  assignment name = denote (Value.reference name) assignment
+but is expected to have type
+  deleted (fun x => false) (Value.reference name) assignment = denote (Value.reference name) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-deletion-strict-1.source.lean:47:17: error: Tactic `rfl` failed: The left-hand side
+  deleted (fun x => false) (Value.node entry✝ edges✝ depth✝ free✝) assignment
+is not definitionally equal to the right-hand side
+  denote (Value.node entry✝ edges✝ depth✝ free✝) assignment
+
+case node
+Symbol Guard : Type
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+available : Available state (Value.node entry✝ edges✝ depth✝ free✝)
+⊢ deleted (fun x => false) (Value.node entry✝ edges✝ depth✝ free✝) assignment =
+    denote (Value.node entry✝ edges✝ depth✝ free✝) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-deletion-strict-1.source.lean:47:17: error: Tactic `rfl` failed: The left-hand side
+  deleted (fun x => false) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+is not definitionally equal to the right-hand side
+  denote (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+
+case mu
+Symbol Guard : Type
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Guard
+available : Available state (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+⊢ deleted (fun x => false) (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment =
+    denote (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/root-deletion-strict-1.source.lean:58:11: error: Tactic `rfl` failed: The left-hand side
+  deletedMany (fun x => false) [] assignment
+is not definitionally equal to the right-hand side
+  combineMany (List.map (fun value => denote value assignment) [])
+
+case nil
+Symbol Guard : Type
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+available : Values state []
+⊢ deletedMany (fun x => false) [] assignment = combineMany (List.map (fun value => denote value assignment) [])

@@ -1,0 +1,1964 @@
+@MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton : ∀ {Symbol Guard : Type}
+  (own : MicroCFTA.InternedBinderProtocol.Reference) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedStoredMuOrigins.Normal Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+      @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+        (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (assignment own)
+          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+            (fun name =>
+              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                name own)
+            value assignment))
+theorem MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton : ∀ {Symbol Guard : Type}
+  (own : MicroCFTA.InternedBinderProtocol.Reference) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedStoredMuOrigins.Normal Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+      @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+        (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (assignment own)
+          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+            (fun name =>
+              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                name own)
+            value assignment)) :=
+fun {Symbol Guard} own value assignment state normal available =>
+  @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+    (fun t =>
+      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value t →
+        @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+          (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+          (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+            (@Eq.{1} Bool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+              Bool.true)
+            (instDecidableEqBool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+              Bool.true)
+            (assignment own)
+            (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+              (fun name =>
+                @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                  name own)
+              value assignment)))
+    value
+    (fun h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+        (fun value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+            @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  value assignment)))
+        (fun available =>
+          @Eq.mpr.{0}
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)))
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)
+              (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)))
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)
+                  (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))
+              (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment))
+                (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment))
+                (@Eq.trans.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment))
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile False instDecidableFalse (assignment own)
+                    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                  (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  (@ite.congr_simp.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    False
+                    (@Eq.trans.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      False
+                      (@MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton._simp_1_1.{0}
+                        MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      (@eq_false'
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        fun h =>
+                        @False.elim.{0} False
+                          (@noConfusion_of_Nat.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.NodeRef.ctorIdx
+                            MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own) h)))
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    instDecidableFalse (assignment own) (assignment own)
+                    (@Eq.refl.{1} MicroCFTA.InternedRootProfile.Profile (assignment own))
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) assignment)
+                    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted.eq_1 Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      assignment))
+                  (@ite_false.{1} MicroCFTA.InternedRootProfile.Profile instDecidableFalse (assignment own)
+                    (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))))))
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.empty Symbol Guard assignment))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+        available)
+    (fun name h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+        (fun value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+            @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  value assignment)))
+        (fun available =>
+          @dite.{0}
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)))
+            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name own)
+            (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name own)
+            (fun same =>
+              @Eq.ndrec.{0, 1} MicroCFTA.InternedBinderProtocol.Reference own
+                (fun name =>
+                  @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) →
+                    @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                      (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                          Bool.true)
+                        (instDecidableEqBool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                          Bool.true)
+                        (assignment own)
+                        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                          (fun name =>
+                            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name own)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)))
+                (fun available =>
+                  @of_eq_true
+                    (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment)
+                      (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                          Bool.true)
+                        (instDecidableEqBool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                          Bool.true)
+                        (assignment own)
+                        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                          (fun name =>
+                            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name own)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment)))
+                    (@Eq.trans.{1} Prop
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment)
+                        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                            Bool.true)
+                          (assignment own)
+                          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                            (fun name =>
+                              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name own)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment)))
+                      (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (assignment own) (assignment own)) True
+                      (@congr.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment))
+                        (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (assignment own))
+                        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                            Bool.true)
+                          (assignment own)
+                          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                            (fun name =>
+                              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name own)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment))
+                        (assignment own)
+                        (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile
+                          (MicroCFTA.InternedRootProfile.Profile → Prop)
+                          (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment)
+                          (assignment own) (@Eq.{1} MicroCFTA.InternedRootProfile.Profile)
+                          (@MicroCFTA.SourceCurrentStoredProfileFunction.reference Symbol Guard own assignment))
+                        (@ite_eq_left_of_eq_true.{1} MicroCFTA.InternedRootProfile.Profile
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                            Bool.true)
+                          (instDecidableEqBool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                            Bool.true)
+                          (assignment own)
+                          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                            (fun name =>
+                              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                                name own)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own) assignment)
+                          (@Eq.trans.{1} Prop
+                            (@Eq.{1} Bool
+                              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                              Bool.true)
+                            (@Eq.{1} Bool Bool.true Bool.true) True
+                            (@congrFun'.{1, 1} Bool Prop
+                              (@Eq.{1} Bool
+                                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                                  (MicroCFTA.InternedBinderProtocol.NodeRef.ref own)))
+                              (@Eq.{1} Bool Bool.true)
+                              (@congrArg.{1, 1} Bool (Bool → Prop)
+                                (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard own))
+                                  (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                                Bool.true (@Eq.{1} Bool)
+                                (@BEq.rfl.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                  (@EquivBEq.toReflBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                    (@instEquivBEqOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)))
+                                  (MicroCFTA.InternedBinderProtocol.NodeRef.ref own)))
+                              Bool.true)
+                            (@eq_self.{1} Bool Bool.true))))
+                      (@eq_self.{1} MicroCFTA.InternedRootProfile.Profile (assignment own))))
+                name (@Eq.symm.{1} MicroCFTA.InternedBinderProtocol.Reference name own same) available)
+            fun same =>
+            @of_eq_true
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)))
+              (@Eq.trans.{1} Prop
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)))
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (assignment name) (assignment name)) True
+                (@congr.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                  (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment))
+                  (@Eq.{1} MicroCFTA.InternedRootProfile.Profile (assignment name))
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment))
+                  (assignment name)
+                  (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile (MicroCFTA.InternedRootProfile.Profile → Prop)
+                    (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                    (assignment name) (@Eq.{1} MicroCFTA.InternedRootProfile.Profile)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.reference Symbol Guard name assignment))
+                  (@Eq.trans.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (instDecidableEqBool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (assignment own)
+                      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                        (fun name =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment))
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                    (assignment name)
+                    (@ite_eq_right_of_eq_false.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (instDecidableEqBool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (assignment own)
+                      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                        (fun name =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                      (@Eq.trans.{1} Prop
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                          Bool.true)
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        False
+                        (@beq_iff_eq._simp_1.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        (@Eq.trans.{1} Prop
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name own) False
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref.injEq name own)
+                          (@eq_false (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name own) same))))
+                    (@Eq.trans.{1} MicroCFTA.InternedRootProfile.Profile
+                      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                        (fun name =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) assignment)
+                      (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                          Bool.true)
+                        (instDecidableEqBool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                          Bool.true)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        (assignment name))
+                      (assignment name)
+                      (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted.eq_2 Symbol Guard
+                        (fun name =>
+                          @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                        assignment name)
+                      (@ite_eq_right_of_eq_false.{1} MicroCFTA.InternedRootProfile.Profile
+                        (@Eq.{1} Bool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                          Bool.true)
+                        (instDecidableEqBool
+                          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                          Bool.true)
+                        (@Option.some.{0} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                        (assignment name)
+                        (@Eq.trans.{1} Prop
+                          (@Eq.{1} Bool
+                            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                              name own)
+                            Bool.true)
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name own) False
+                          (@beq_iff_eq._simp_1.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                            name own)
+                          (@eq_false (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name own) same))))))
+                (@eq_self.{1} MicroCFTA.InternedRootProfile.Profile (assignment name))))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+        available)
+    (fun entry edges depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+        (fun value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+            @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  value assignment)))
+        (fun available =>
+          @of_eq_true
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment)))
+            (@Eq.trans.{1} Prop
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment)
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                    assignment)))
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment))
+              True
+              (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                    assignment))
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment)
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                    assignment))
+                (@Eq.trans.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      assignment))
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile False instDecidableFalse (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      assignment))
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) assignment)
+                  (@ite.congr_simp.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    False
+                    (@Eq.trans.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.node
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.node
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      False
+                      (@MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton._simp_1_1.{0}
+                        MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.node
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      (@eq_false'
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.node
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        fun h =>
+                        @False.elim.{0} False
+                          (@noConfusion_of_Nat.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.NodeRef.ctorIdx
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.node
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own) h)))
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    instDecidableFalse (assignment own) (assignment own)
+                    (@Eq.refl.{1} MicroCFTA.InternedRootProfile.Profile (assignment own))
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      assignment)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      assignment)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted.eq_4 Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      assignment entry edges depth free))
+                  (@ite_false.{1} MicroCFTA.InternedRootProfile.Profile instDecidableFalse (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                      assignment))))
+              (@eq_self.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+                  assignment))))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h)
+        available)
+    (fun entry values depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+        (fun value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+            @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  value assignment)))
+        (fun available =>
+          have flat :=
+            @MicroCFTA.InternedUnionNormalForm.resident_flat Symbol Guard state
+              (@MicroCFTA.InternedStoredMuOrigins.Normal.flat Symbol Guard state normal)
+              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+              (@MicroCFTA.InternedProbeProvenance.Available.resident Symbol Guard state
+                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free) available);
+          @Eq.mpr.{0}
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free) assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+                  assignment)))
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.InternedProfileSemantics.combineMany MicroCFTA.InternedBinderProtocol.Reference
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun member => @MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard member assignment)
+                  (@List.filter.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun member =>
+                      @bne.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf.match_1.{1} Symbol Guard
+                          (fun x => MicroCFTA.InternedBinderProtocol.NodeRef) member
+                          (fun _ => MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                          (fun name => MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                          (fun entry edges depth free =>
+                            MicroCFTA.InternedBinderProtocol.NodeRef.node
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (fun entry members depth free =>
+                            MicroCFTA.InternedBinderProtocol.NodeRef.union
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          fun entry body depthShape ordinaryShape =>
+                          MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    values)))
+              (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                (fun name =>
+                  @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    name own)
+                values assignment))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+                    assignment)
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+                      assignment)))
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.InternedProfileSemantics.combineMany MicroCFTA.InternedBinderProtocol.Reference
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (fun member =>
+                        @MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard member assignment)
+                      (@List.filter.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun member =>
+                          @bne.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf.match_1.{1} Symbol Guard
+                              (fun x => MicroCFTA.InternedBinderProtocol.NodeRef) member
+                              (fun _ => MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                              (fun name => MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                              (fun entry edges depth free =>
+                                MicroCFTA.InternedBinderProtocol.NodeRef.node
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              (fun entry members depth free =>
+                                MicroCFTA.InternedBinderProtocol.NodeRef.union
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              fun entry body depthShape ordinaryShape =>
+                              MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        values)))
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    values assignment)))
+              (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+                    assignment))
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  values assignment)
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.InternedProfileSemantics.combineMany MicroCFTA.InternedBinderProtocol.Reference
+                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                      (fun member =>
+                        @MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard member assignment)
+                      (@List.filter.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun member =>
+                          @bne.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf.match_1.{1} Symbol Guard
+                              (fun x => MicroCFTA.InternedBinderProtocol.NodeRef) member
+                              (fun _ => MicroCFTA.InternedBinderProtocol.NodeRef.empty)
+                              (fun name => MicroCFTA.InternedBinderProtocol.NodeRef.ref name)
+                              (fun entry edges depth free =>
+                                MicroCFTA.InternedBinderProtocol.NodeRef.node
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              (fun entry members depth free =>
+                                MicroCFTA.InternedBinderProtocol.NodeRef.union
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                              fun entry body depthShape ordinaryShape =>
+                              MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        values))))
+                (@Eq.trans.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+                      assignment))
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile False instDecidableFalse (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      values assignment))
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    values assignment)
+                  (@ite.congr_simp.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    False
+                    (@Eq.trans.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.union
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.union
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      False
+                      (@MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton._simp_1_1.{0}
+                        MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.union
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      (@eq_false'
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.union
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        fun h =>
+                        @False.elim.{0} False
+                          (@noConfusion_of_Nat.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.NodeRef.ctorIdx
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.union
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own) h)))
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    instDecidableFalse (assignment own) (assignment own)
+                    (@Eq.refl.{1} MicroCFTA.InternedRootProfile.Profile (assignment own))
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free)
+                      assignment)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      values assignment)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted.eq_3 Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      assignment entry values depth free))
+                  (@ite_false.{1} MicroCFTA.InternedRootProfile.Profile instDecidableFalse (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      values assignment)))))
+            (@Eq.symm.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredRootDeletion.deletedMany Symbol Guard
+                (fun name =>
+                  @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    name own)
+                values assignment)
+              (@MicroCFTA.InternedProfileSemantics.combineMany MicroCFTA.InternedBinderProtocol.Reference
+                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedProfileSemantics.Abstract MicroCFTA.InternedBinderProtocol.Reference)
+                  (fun value => @MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard value assignment)
+                  (@List.filter.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun value =>
+                      @bne.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    values)))
+              (@MicroCFTA.SourceCurrentStoredRootDeletionFilter.members✝ Symbol Guard own values assignment flat)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry values depth free) h)
+        available)
+    (fun entry body depthShape ordinaryShape h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+        (fun value =>
+          @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+            @Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  value assignment)))
+        (fun available =>
+          @of_eq_true
+            (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+              (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                assignment)
+              (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                (@Eq.{1} Bool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (instDecidableEqBool
+                  (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape))
+                    (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                  Bool.true)
+                (assignment own)
+                (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                  (fun name =>
+                    @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      name own)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  assignment)))
+            (@Eq.trans.{1} Prop
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  assignment)
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    assignment)))
+              (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  assignment)
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  assignment))
+              True
+              (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+                (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@Eq.{1} Bool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (instDecidableEqBool
+                    (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                    Bool.true)
+                  (assignment own)
+                  (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                    (fun name =>
+                      @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        name own)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    assignment))
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  assignment)
+                (@Eq.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    assignment))
+                (@Eq.trans.{1} MicroCFTA.InternedRootProfile.Profile
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      assignment))
+                  (@ite.{1} MicroCFTA.InternedRootProfile.Profile False instDecidableFalse (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      assignment))
+                  (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                    assignment)
+                  (@ite.congr_simp.{1} MicroCFTA.InternedRootProfile.Profile
+                    (@Eq.{1} Bool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    False
+                    (@Eq.trans.{1} Prop
+                      (@Eq.{1} Bool
+                        (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        Bool.true)
+                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      False
+                      (@MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton._simp_1_1.{0}
+                        MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                          (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      (@eq_false'
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                          (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                        fun h =>
+                        @False.elim.{0} False
+                          (@noConfusion_of_Nat.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                            MicroCFTA.InternedBinderProtocol.NodeRef.ctorIdx
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.mu
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry))
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own) h)))
+                    (instDecidableEqBool
+                      (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+                      Bool.true)
+                    instDecidableFalse (assignment own) (assignment own)
+                    (@Eq.refl.{1} MicroCFTA.InternedRootProfile.Profile (assignment own))
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      assignment)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      assignment)
+                    (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted.eq_5 Symbol Guard
+                      (fun name =>
+                        @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          name own)
+                      assignment entry body depthShape ordinaryShape))
+                  (@ite_false.{1} MicroCFTA.InternedRootProfile.Profile instDecidableFalse (assignment own)
+                    (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape)
+                      assignment))))
+              (@eq_self.{1} MicroCFTA.InternedRootProfile.Profile
+                (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                  assignment))))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape) h)
+        available)
+    (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value)
+'MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentStoredRootDeletionFilter.filter_profile : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (own : MicroCFTA.InternedBinderProtocol.Reference) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+      MicroCFTA.InternedRootProfile.Equivalent
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+          assignment)
+        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (assignment own)
+          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+            (fun name =>
+              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                name own)
+            value assignment))
+theorem MicroCFTA.SourceCurrentStoredRootDeletionFilter.filter_profile : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (own : MicroCFTA.InternedBinderProtocol.Reference) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (assignment : MicroCFTA.InternedBinderProtocol.Reference → MicroCFTA.InternedRootProfile.Profile)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+      MicroCFTA.InternedRootProfile.Equivalent
+        (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+          (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+          assignment)
+        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (assignment own)
+          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+            (fun name =>
+              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                name own)
+            value assignment)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] own value
+    assignment state ready available =>
+  @Eq.mpr.{0}
+    (MicroCFTA.InternedRootProfile.Equivalent
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+        (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+        assignment)
+      (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+        (@Eq.{1} Bool
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+          Bool.true)
+        (instDecidableEqBool
+          (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+            (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+            (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+          Bool.true)
+        (assignment own)
+        (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+          (fun name =>
+            @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+              name own)
+          value assignment)))
+    (MicroCFTA.InternedRootProfile.Equivalent
+      (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+        (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+        assignment)
+      (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (MicroCFTA.InternedRootProfile.Equivalent
+          (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+            assignment)
+          (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+            (@Eq.{1} Bool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+              Bool.true)
+            (instDecidableEqBool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+              Bool.true)
+            (assignment own)
+            (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+              (fun name =>
+                @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                  name own)
+              value assignment)))
+        (MicroCFTA.InternedRootProfile.Equivalent
+          (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+            assignment)
+          (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)))
+      (@congrArg.{1, 1} MicroCFTA.InternedRootProfile.Profile Prop
+        (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+          (@Eq.{1} Bool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (instDecidableEqBool
+            (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+              (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+              (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+            Bool.true)
+          (assignment own)
+          (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+            (fun name =>
+              @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                name own)
+            value assignment))
+        (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+        (fun _a =>
+          MicroCFTA.InternedRootProfile.Equivalent
+            (@MicroCFTA.SourceCurrentStoredProfileFunction.denote Symbol Guard
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.withoutSelfReference Symbol Guard own value) state))
+              assignment)
+            _a)
+        (@Eq.symm.{1} MicroCFTA.InternedRootProfile.Profile
+          (@MicroCFTA.SourceCurrentStoredFilteredProfile.filtered Symbol Guard own value assignment)
+          (@ite.{1} MicroCFTA.InternedRootProfile.Profile
+            (@Eq.{1} Bool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+              Bool.true)
+            (instDecidableEqBool
+              (@BEq.beq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                  MicroCFTA.InternedBinderProtocol.instDecidableEqNodeRef)
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                (MicroCFTA.InternedBinderProtocol.NodeRef.ref own))
+              Bool.true)
+            (assignment own)
+            (@MicroCFTA.SourceCurrentStoredRootDeletion.deleted Symbol Guard
+              (fun name =>
+                @BEq.beq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                  (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                  name own)
+              value assignment))
+          (@MicroCFTA.SourceCurrentStoredRootDeletionFilter.singleton Symbol Guard own value assignment state
+            (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard state
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@And.left
+                (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard state
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard state)
+                (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard state ready)))
+            available))))
+    (@MicroCFTA.SourceCurrentStoredFilteredProfile.filter_profile Symbol Guard inst own value assignment state ready
+      available)
+'MicroCFTA.SourceCurrentStoredRootDeletionFilter.filter_profile' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

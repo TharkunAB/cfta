@@ -1,0 +1,119 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:32:56: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.InternedBinderProtocol.Reference.ref.injEq`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:32:6: error: unsolved goals
+case neg
+Symbol Guard : Type
+cuts : Reference → Bool
+own : Reference
+assignment : Reference → Profile
+name : Reference
+flat : Atomic (Value.reference name)
+same : ¬name = own
+⊢ (if (cuts name || name == own) = true then some [] else assignment name) =
+    if InternedBinderProtocol.NodeRef.ref name = InternedBinderProtocol.NodeRef.ref own then some []
+    else if cuts name = true then some [] else assignment name
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:32:76: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [deleted, Value.referenceOf, beq_iff_eq, Reference.ref.injEq, Bool.or_false, ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:32:81: warning: This simp argument is unused:
+  Bool.or_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [deleted, Value.referenceOf, beq_iff_eq, Reference.ref.injEq, same, ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:32:95: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [deleted, Value.referenceOf, beq_iff_eq, Reference.ref.injEq, same, Bool.or_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:48:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  deletedMany cuts (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) rest)
+    assignment
+in the target expression
+  deletedMany cuts (List.filter (fun member => !member.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest)
+      assignment =
+    combine (some []) (deletedMany (fun name => cuts name || name == own) rest assignment)
+
+case pos
+Symbol Guard : Type
+cuts : Reference → Bool
+own : Reference
+assignment : Reference → Profile
+first : Value Symbol Guard
+rest : List (Value Symbol Guard)
+ih :
+  (∀ (value : Value Symbol Guard), value ∈ rest → Atomic value) →
+    deletedMany cuts (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) rest)
+        assignment =
+      deletedMany (fun name => cuts name || name == own) rest assignment
+flat : ∀ (value : Value Symbol Guard), value ∈ first :: rest → Atomic value
+tail :
+  deletedMany cuts (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) rest)
+      assignment =
+    deletedMany (fun name => cuts name || name == own) rest assignment
+selected : (first.referenceOf == InternedBinderProtocol.NodeRef.ref own) = true
+⊢ deletedMany cuts (List.filter (fun member => !member.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest)
+      assignment =
+    combine (some []) (deletedMany (fun name => cuts name || name == own) rest assignment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:52:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  deletedMany cuts (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) rest)
+    assignment
+in the target expression
+  combine (deleted cuts first assignment)
+      (deletedMany cuts (List.filter (fun member => !member.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest)
+        assignment) =
+    combine (deleted cuts first assignment) (deletedMany (fun name => cuts name || name == own) rest assignment)
+
+case neg
+Symbol Guard : Type
+cuts : Reference → Bool
+own : Reference
+assignment : Reference → Profile
+first : Value Symbol Guard
+rest : List (Value Symbol Guard)
+ih :
+  (∀ (value : Value Symbol Guard), value ∈ rest → Atomic value) →
+    deletedMany cuts (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) rest)
+        assignment =
+      deletedMany (fun name => cuts name || name == own) rest assignment
+flat : ∀ (value : Value Symbol Guard), value ∈ first :: rest → Atomic value
+tail :
+  deletedMany cuts (List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) rest)
+      assignment =
+    deletedMany (fun name => cuts name || name == own) rest assignment
+selected : ¬(first.referenceOf == InternedBinderProtocol.NodeRef.ref own) = true
+kept : (first.referenceOf == InternedBinderProtocol.NodeRef.ref own) = false
+⊢ combine (deleted cuts first assignment)
+      (deletedMany cuts (List.filter (fun member => !member.referenceOf == InternedBinderProtocol.NodeRef.ref own) rest)
+        assignment) =
+    combine (deleted cuts first assignment) (deletedMany (fun name => cuts name || name == own) rest assignment)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:73:32: error: Type mismatch
+  Iff.rfl
+has type
+  ?m.102 ↔ ?m.102
+but is expected to have type
+  x✝ ∈ Option.getD (if cuts name = true then some [] else assignment name) [] ↔
+    x✝ ∈ Option.getD (if (cuts name || name == own) = true then some [] else assignment name) []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:84:20: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:72:33: warning: This simp argument is unused:
+  beq_iff_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [withoutSelfReference, run, eraseSelf, Value.referenceOf, InternedBinderProtocol.NodeRef.ref.injEq,
+    same, ite_false, deleted, Bool.or_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-erasure-direct-1.source.lean:72:44: warning: This simp argument is unused:
+  Bool.or_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [withoutSelfReference, run, eraseSelf, Value.referenceOf, InternedBinderProtocol.NodeRef.ref.injEq,
+    same, ite_false, deleted, beq_iff_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

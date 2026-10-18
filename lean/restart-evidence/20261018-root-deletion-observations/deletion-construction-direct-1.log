@@ -1,0 +1,31 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-construction-direct-1.source.lean:38:6: error: Tactic `rfl` failed: The left-hand side
+  deleted cuts (identifyNode (first :: rest) entry) assignment
+is not definitionally equal to the right-hand side
+  denote (identifyNode (first :: rest) entry) assignment
+
+case cons
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+cuts : Reference → Bool
+edges : List (EdgeValue Symbol Guard)
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+resident : Edges state edges
+first : EdgeValue Symbol Guard
+rest : List (EdgeValue Symbol Guard)
+selected : canonicalEdges (surviving edges) = first :: rest
+entry : Interned InternedBinderProtocol.NodeKey
+exactValue :
+  (nodeStep (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) state).fst =
+    identifyNode (first :: rest) entry
+⊢ deleted cuts (identifyNode (first :: rest) entry) assignment = denote (identifyNode (first :: rest) entry) assignment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-construction-direct-1.source.lean:61:38: error: Type mismatch
+  Eq.symm (folded cuts members assignment)
+has type
+  combineMany (List.map (fun value => deleted cuts value assignment) members) = deletedMany cuts members assignment
+but is expected to have type
+  combineMany
+      (List.map (fun child => deleted cuts child assignment) (unionMembers (Value.union entry members depth free))) =
+    deleted cuts (Value.union entry members depth free) assignment

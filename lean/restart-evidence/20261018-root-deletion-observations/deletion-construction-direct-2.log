@@ -1,0 +1,23 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-root-deletion-observations/deletion-construction-direct-2.source.lean:30:20: error: unsolved goals
+case cons
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+cuts : Reference → Bool
+edges : List (EdgeValue Symbol Guard)
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+normal : Normal state
+resident : Edges state edges
+first : EdgeValue Symbol Guard
+rest : List (EdgeValue Symbol Guard)
+selected : canonicalEdges (surviving edges) = first :: rest
+entry : Interned InternedBinderProtocol.NodeKey
+exactValue :
+  (nodeStep (InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) (first :: rest)))
+        (identifyNode (first :: rest)) state).fst =
+    identifyNode (first :: rest) entry
+⊢ denote
+      (Value.node entry (first :: rest) (maximumDepth (List.flatMap EdgeValue.children (first :: rest)))
+        (childFree (List.flatMap EdgeValue.children (first :: rest))))
+      assignment =
+    denote (identifyNode (first :: rest) entry) assignment
