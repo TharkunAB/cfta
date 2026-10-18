@@ -1,0 +1,795 @@
+MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent : ∀ (paths : List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+  (forestIndex : Nat),
+  (∀ (path : MicroCFTA.SourceEqualityNeeded.Path),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path →
+        Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path)) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths)
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+theorem MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent : ∀
+  (paths : List.{0} MicroCFTA.SourceEqualityNeeded.Path) (forestIndex : Nat),
+  (∀ (path : MicroCFTA.SourceEqualityNeeded.Path),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path →
+        Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path)) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths)
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed) :=
+fun paths forestIndex excluded {entries} built =>
+  @Option.casesOn.{0, 0} MicroCFTA.SourceEqualityNeeded.Needed
+    (fun t =>
+      @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          t →
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+    (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+      (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+    (fun h =>
+      @Eq.ndrec.{0, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+        (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+        (fun x =>
+          @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+              (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+              x →
+            @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) x
+              (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+        (fun found =>
+          @Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+            (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+          (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+        (@Eq.symm.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed) h)
+        (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)))
+    (fun needed h =>
+      @Eq.ndrec.{0, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+        (fun x =>
+          @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+              (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+              x →
+            @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) x
+              (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+        (fun found =>
+          have demanded :=
+            @of_eq_true
+              (@Eq.{1} Bool
+                (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                  (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)))
+                Bool.true)
+              (@Eq.trans.{1} Prop
+                (@Eq.{1} Bool
+                  (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                    (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)))
+                  Bool.true)
+                (@Eq.{1} Bool Bool.true Bool.true) True
+                (@congrFun'.{1, 1} Bool Prop
+                  (@Eq.{1} Bool
+                    (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                      (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int))))
+                  (@Eq.{1} Bool Bool.true)
+                  (@congrArg.{1, 1} Bool (Bool → Prop)
+                    (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                      (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)))
+                    Bool.true (@Eq.{1} Bool)
+                    (@Eq.trans.{1} Bool
+                      (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                        (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex) (@List.nil.{0} Int)))
+                      (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                          (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                        (fun _ => Bool.false) fun child =>
+                        MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                      (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed) (fun _ => Bool.false)
+                        fun child => MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                      (@Eq.trans.{1} Bool
+                        (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex) (@List.nil.{0} Int)))
+                        (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex) (@List.nil.{0} Int)))
+                        (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                          (fun _ => Bool.false) fun child =>
+                          MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                        (@congrFun'.{1, 1} (List.{0} Int) Bool
+                          (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths))
+                          (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+                          (@congrArg.{1, 1} MicroCFTA.SourceEqualityNeeded.Needed
+                            (MicroCFTA.SourceEqualityNeeded.Path → Bool) (MicroCFTA.SourceEqualityNeeded.build paths)
+                            (MicroCFTA.SourceEqualityNeeded.Needed.node entries) MicroCFTA.SourceEqualityNeeded.demands
+                            built)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex) (@List.nil.{0} Int)))
+                        (MicroCFTA.SourceEqualityNeeded.demands.eq_2 entries
+                          (@Nat.cast.{0} Int instNatCastInt forestIndex) (@List.nil.{0} Int)))
+                      (@congrArg.{1, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) Bool
+                        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                          (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                        (fun x =>
+                          MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool) x (fun _ => Bool.false)
+                            fun child => MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                        found)))
+                  Bool.true)
+                (@eq_self.{1} Bool Bool.true));
+          @Or.casesOn
+            (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+              (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) (@List.nil.{0} Int))
+            (@Exists.{1} MicroCFTA.SourceEqualityNeeded.Path fun path =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                  (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                  (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+            (fun x =>
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+            (@Iff.mp
+              (@Eq.{1} Bool
+                (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                  (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)))
+                Bool.true)
+              (Or
+                (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                  (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) (@List.nil.{0} Int))
+                (@Exists.{1} MicroCFTA.SourceEqualityNeeded.Path fun path =>
+                  And
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                      (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                    (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path)))
+              (MicroCFTA.SourceEqualityNeeded.demands_build paths
+                (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)))
+              demanded)
+            (fun empty =>
+              @Eq.casesOn.{0, 1} (List.{0} Int) (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int))
+                (fun a t =>
+                  @Eq.{1} (List.{0} Int) (@List.nil.{0} Int) a →
+                    @HEq.{0}
+                        (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                          (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) (@List.nil.{0} Int))
+                        empty
+                        (@Eq.{1} (List.{0} Int) (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) a) t →
+                      @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                        (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                (@List.nil.{0} Int) empty
+                (fun h =>
+                  @False.elim.{0}
+                    (@HEq.{0}
+                        (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                          (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) (@List.nil.{0} Int))
+                        empty
+                        (@Eq.{1} (List.{0} Int) (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int))
+                          (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)))
+                        (@Eq.refl.{1} (List.{0} Int) (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int))) →
+                      @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                        (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                    (@noConfusion_of_Nat.{1} (List.{0} Int) (@List.ctorIdx.{0} Int) (@List.nil.{0} Int)
+                      (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) h))
+                (@Eq.refl.{1} (List.{0} Int) (@List.nil.{0} Int))
+                (@HEq.refl.{0}
+                  (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                    (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) (@List.nil.{0} Int))
+                  empty))
+            fun h =>
+            @Exists.casesOn.{1} MicroCFTA.SourceEqualityNeeded.Path
+              (fun path =>
+                And
+                  (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                    (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                  (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+              (fun x =>
+                @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                  (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+              h fun path h =>
+              @And.casesOn.{0}
+                (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                  (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                  (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path)
+                (fun x =>
+                  @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                    (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                h fun member initial =>
+                @False.elim.{0}
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                    (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                  (excluded path member initial))
+        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+          (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+        (@Eq.symm.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed) h)
+        (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)))
+    (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+      (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+        (@Nat.cast.{0} Int instNatCastInt forestIndex) entries))
+'MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected : ∀
+  (paths : List.{0} MicroCFTA.SourceEqualityNeeded.Path) (forestIndex childIndex : Nat),
+  (∀ (path : MicroCFTA.SourceEqualityNeeded.Path),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path →
+        Not
+          (@List.IsPrefix.{0} Int
+            (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+            path)) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths)
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected entries forestIndex childIndex
+theorem MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected : ∀
+  (paths : List.{0} MicroCFTA.SourceEqualityNeeded.Path) (forestIndex childIndex : Nat),
+  (∀ (path : MicroCFTA.SourceEqualityNeeded.Path),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path →
+        Not
+          (@List.IsPrefix.{0} Int
+            (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+            path)) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed (MicroCFTA.SourceEqualityNeeded.build paths)
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected entries forestIndex childIndex :=
+fun paths forestIndex childIndex excluded {entries} built needed found children shape =>
+  @Option.casesOn.{0, 0} MicroCFTA.SourceEqualityNeeded.Needed
+    (fun t =>
+      @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+          t →
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+    (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+      (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+    (fun h =>
+      @Eq.ndrec.{0, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+        (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+        (fun x =>
+          @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+              (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+              x →
+            @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) x
+              (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+        (fun next =>
+          @Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+            (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+          (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+        (@Eq.symm.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed) h)
+        (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt childIndex) children)))
+    (fun child h =>
+      @Eq.ndrec.{0, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+        (fun x =>
+          @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+              (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+              x →
+            @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) x
+              (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+        (fun next =>
+          have demanded :=
+            @of_eq_true
+              (@Eq.{1} Bool
+                (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                  (@List.cons.{0} Int (Int.ofNat forestIndex)
+                    (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int))))
+                Bool.true)
+              (@Eq.trans.{1} Prop
+                (@Eq.{1} Bool
+                  (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                    (@List.cons.{0} Int (Int.ofNat forestIndex)
+                      (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int))))
+                  Bool.true)
+                (@Eq.{1} Bool Bool.true Bool.true) True
+                (@congrFun'.{1, 1} Bool Prop
+                  (@Eq.{1} Bool
+                    (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                      (@List.cons.{0} Int (Int.ofNat forestIndex)
+                        (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))))
+                  (@Eq.{1} Bool Bool.true)
+                  (@congrArg.{1, 1} Bool (Bool → Prop)
+                    (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                      (@List.cons.{0} Int (Int.ofNat forestIndex)
+                        (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int))))
+                    Bool.true (@Eq.{1} Bool)
+                    (@Eq.trans.{1} Bool
+                      (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                        (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int))))
+                      (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                          (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                        (fun _ => Bool.false) fun child =>
+                        MicroCFTA.SourceEqualityNeeded.demands child
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int)))
+                      (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child) (fun _ => Bool.false)
+                        fun child => MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                      (@Eq.trans.{1} Bool
+                        (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex)
+                            (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int))))
+                        (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.Needed.node entries)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex)
+                            (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int))))
+                        (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                          (fun _ => Bool.false) fun child =>
+                          MicroCFTA.SourceEqualityNeeded.demands child
+                            (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int)))
+                        (@congrFun'.{1, 1} (List.{0} Int) Bool
+                          (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths))
+                          (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.Needed.node entries))
+                          (@congrArg.{1, 1} MicroCFTA.SourceEqualityNeeded.Needed
+                            (MicroCFTA.SourceEqualityNeeded.Path → Bool) (MicroCFTA.SourceEqualityNeeded.build paths)
+                            (MicroCFTA.SourceEqualityNeeded.Needed.node entries) MicroCFTA.SourceEqualityNeeded.demands
+                            built)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt forestIndex)
+                            (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int))))
+                        (MicroCFTA.SourceEqualityNeeded.demands.eq_2 entries
+                          (@Nat.cast.{0} Int instNatCastInt forestIndex)
+                          (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int))))
+                      (@Eq.trans.{1} Bool
+                        (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                          (fun _ => Bool.false) fun child =>
+                          MicroCFTA.SourceEqualityNeeded.demands child
+                            (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int)))
+                        (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                          (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (MicroCFTA.SourceEqualityNeeded.Needed.node children))
+                          (fun _ => Bool.false) fun child =>
+                          MicroCFTA.SourceEqualityNeeded.demands child
+                            (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int)))
+                        (MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool)
+                          (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child) (fun _ => Bool.false)
+                          fun child => MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                        (@congrArg.{1, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) Bool
+                          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                          (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (MicroCFTA.SourceEqualityNeeded.Needed.node children))
+                          (fun x =>
+                            MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool) x (fun _ => Bool.false)
+                              fun child =>
+                              MicroCFTA.SourceEqualityNeeded.demands child
+                                (@List.cons.{0} Int (@Nat.cast.{0} Int instNatCastInt childIndex) (@List.nil.{0} Int)))
+                          (@Eq.trans.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                            (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                              (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed needed)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                              (MicroCFTA.SourceEqualityNeeded.Needed.node children))
+                            found
+                            (@congrArg.{1, 1} MicroCFTA.SourceEqualityNeeded.Needed
+                              (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) needed
+                              (MicroCFTA.SourceEqualityNeeded.Needed.node children)
+                              (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed) shape)))
+                        (@congrArg.{1, 1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed) Bool
+                          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+                            (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+                          (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                          (fun x =>
+                            MicroCFTA.SourceEqualityNeeded.demands.match_1.{1} (fun x => Bool) x (fun _ => Bool.false)
+                              fun child => MicroCFTA.SourceEqualityNeeded.demands child (@List.nil.{0} Int))
+                          next))))
+                  Bool.true)
+                (@eq_self.{1} Bool Bool.true));
+          @Or.casesOn
+            (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+              (@List.cons.{0} Int (Int.ofNat forestIndex)
+                (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+              (@List.nil.{0} Int))
+            (@Exists.{1} MicroCFTA.SourceEqualityNeeded.Path fun path =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                  (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                  (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                (@List.IsPrefix.{0} Int
+                  (@List.cons.{0} Int (Int.ofNat forestIndex)
+                    (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                  path))
+            (fun x =>
+              @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+            (@Iff.mp
+              (@Eq.{1} Bool
+                (MicroCFTA.SourceEqualityNeeded.demands (MicroCFTA.SourceEqualityNeeded.build paths)
+                  (@List.cons.{0} Int (Int.ofNat forestIndex)
+                    (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int))))
+                Bool.true)
+              (Or
+                (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                  (@List.cons.{0} Int (Int.ofNat forestIndex)
+                    (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                  (@List.nil.{0} Int))
+                (@Exists.{1} MicroCFTA.SourceEqualityNeeded.Path fun path =>
+                  And
+                    (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                      (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                    (@List.IsPrefix.{0} Int
+                      (@List.cons.{0} Int (Int.ofNat forestIndex)
+                        (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                      path)))
+              (MicroCFTA.SourceEqualityNeeded.demands_build paths
+                (@List.cons.{0} Int (Int.ofNat forestIndex)
+                  (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int))))
+              demanded)
+            (fun empty =>
+              @Eq.casesOn.{0, 1} (List.{0} Int)
+                (@List.cons.{0} Int (Int.ofNat forestIndex)
+                  (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                (fun a t =>
+                  @Eq.{1} (List.{0} Int) (@List.nil.{0} Int) a →
+                    @HEq.{0}
+                        (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                          (@List.cons.{0} Int (Int.ofNat forestIndex)
+                            (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                          (@List.nil.{0} Int))
+                        empty
+                        (@Eq.{1} (List.{0} Int)
+                          (@List.cons.{0} Int (Int.ofNat forestIndex)
+                            (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                          a)
+                        t →
+                      @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                        (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                (@List.nil.{0} Int) empty
+                (fun h =>
+                  @False.elim.{0}
+                    (@HEq.{0}
+                        (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                          (@List.cons.{0} Int (Int.ofNat forestIndex)
+                            (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                          (@List.nil.{0} Int))
+                        empty
+                        (@Eq.{1} (List.{0} Int)
+                          (@List.cons.{0} Int (Int.ofNat forestIndex)
+                            (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                          (@List.cons.{0} Int (Int.ofNat forestIndex)
+                            (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int))))
+                        (@Eq.refl.{1} (List.{0} Int)
+                          (@List.cons.{0} Int (Int.ofNat forestIndex)
+                            (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))) →
+                      @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                        (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                    (@noConfusion_of_Nat.{1} (List.{0} Int) (@List.ctorIdx.{0} Int) (@List.nil.{0} Int)
+                      (@List.cons.{0} Int (Int.ofNat forestIndex)
+                        (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                      h))
+                (@Eq.refl.{1} (List.{0} Int) (@List.nil.{0} Int))
+                (@HEq.refl.{0}
+                  (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path
+                    (@List.cons.{0} Int (Int.ofNat forestIndex)
+                      (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                    (@List.nil.{0} Int))
+                  empty))
+            fun h =>
+            @Exists.casesOn.{1} MicroCFTA.SourceEqualityNeeded.Path
+              (fun path =>
+                And
+                  (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                    (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                  (@List.IsPrefix.{0} Int
+                    (@List.cons.{0} Int (Int.ofNat forestIndex)
+                      (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                    path))
+              (fun x =>
+                @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                  (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                  (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+              h fun path h =>
+              @And.casesOn.{0}
+                (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                  (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                  (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path) paths path)
+                (@List.IsPrefix.{0} Int
+                  (@List.cons.{0} Int (Int.ofNat forestIndex)
+                    (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                  path)
+                (fun x =>
+                  @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                    (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                h fun member initial =>
+                @False.elim.{0}
+                  (@Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+                    (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child)
+                    (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed))
+                  (excluded path member initial))
+        (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+          (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+        (@Eq.symm.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt childIndex) children)
+          (@Option.some.{0} MicroCFTA.SourceEqualityNeeded.Needed child) h)
+        (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt childIndex) children)))
+    (@Eq.refl.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+      (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+        (@Nat.cast.{0} Int instNatCastInt childIndex) children))
+'MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (forestIndex childIndex : Nat),
+  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+        MicroCFTA.SourceCurrentClassPositionalFootprints.Unselected record forestIndex childIndex) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed
+          (MicroCFTA.SourceEqualityNeeded.build
+            (MicroCFTA.SourceEqualitySelectedRequired.paths
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected entries forestIndex childIndex
+theorem MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (forestIndex childIndex : Nat),
+  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+        MicroCFTA.SourceCurrentClassPositionalFootprints.Unselected record forestIndex childIndex) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed
+          (MicroCFTA.SourceEqualityNeeded.build
+            (MicroCFTA.SourceEqualitySelectedRequired.paths
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        MicroCFTA.SourceCurrentActualRequiredRowOrigins.Unselected entries forestIndex childIndex :=
+fun records forestIndex childIndex unselected {entries} built =>
+  @MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected
+    (MicroCFTA.SourceEqualitySelectedRequired.paths
+      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+        MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+    forestIndex childIndex
+    (fun path member =>
+      @Exists.casesOn.{1} MicroCFTA.SourceEqualityClassOrder.Record
+        (fun record =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record)
+            (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+                (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural))))
+        (fun x =>
+          Not
+            (@List.IsPrefix.{0} Int
+              (@List.cons.{0} Int (Int.ofNat forestIndex)
+                (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+              path))
+        (MicroCFTA.SourceCurrentRequiredPathFootprints.selected_member✝ records path member) fun record h =>
+        @And.casesOn.{0}
+          (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record)
+          (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+              (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural)))
+          (fun x =>
+            Not
+              (@List.IsPrefix.{0} Int
+                (@List.cons.{0} Int (Int.ofNat forestIndex)
+                  (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                path))
+          h fun retained right =>
+          @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+            (fun natural =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+                (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural)))
+            (fun x =>
+              Not
+                (@List.IsPrefix.{0} Int
+                  (@List.cons.{0} Int (Int.ofNat forestIndex)
+                    (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                  path))
+            right fun natural h =>
+            @And.casesOn.{0}
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+              (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural))
+              (fun x =>
+                Not
+                  (@List.IsPrefix.{0} Int
+                    (@List.cons.{0} Int (Int.ofNat forestIndex)
+                      (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                    path))
+              h fun included right =>
+              @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityNeeded.Path (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                (fun path =>
+                  @Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                      (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                      (MicroCFTA.SourceEqualitySelectedRequired.paths
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                      path →
+                    Not
+                      (@List.IsPrefix.{0} Int
+                        (@List.cons.{0} Int (Int.ofNat forestIndex)
+                          (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                        path))
+                (fun member =>
+                  @And.right
+                    (Not
+                      (@List.IsPrefix.{0} Int (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                        (@List.cons.{0} Int (Int.ofNat forestIndex)
+                          (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))))
+                    (Not
+                      (@List.IsPrefix.{0} Int
+                        (@List.cons.{0} Int (Int.ofNat forestIndex)
+                          (@List.cons.{0} Int (Int.ofNat childIndex) (@List.nil.{0} Int)))
+                        (@List.map.{0, 0} Nat Int Int.ofNat natural)))
+                    (unselected record retained natural included))
+                path
+                (@Eq.symm.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                  right)
+                member)
+    entries built
+'MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records_absent : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (forestIndex : Nat),
+  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+        ∀ (path : MicroCFTA.EqualityNormalize.Path),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+            Not
+              (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat path))) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed
+          (MicroCFTA.SourceEqualityNeeded.build
+            (MicroCFTA.SourceEqualitySelectedRequired.paths
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+theorem MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records_absent : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (forestIndex : Nat),
+  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+        ∀ (path : MicroCFTA.EqualityNormalize.Path),
+          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+            Not
+              (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat path))) →
+    ∀ {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)},
+      @Eq.{1} MicroCFTA.SourceEqualityNeeded.Needed
+          (MicroCFTA.SourceEqualityNeeded.build
+            (MicroCFTA.SourceEqualitySelectedRequired.paths
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+          (MicroCFTA.SourceEqualityNeeded.Needed.node entries) →
+        @Eq.{1} (Option.{0} MicroCFTA.SourceEqualityNeeded.Needed)
+          (@MicroCFTA.SourceEqualityNeededMap.lookup.{0} MicroCFTA.SourceEqualityNeeded.Needed
+            (@Nat.cast.{0} Int instNatCastInt forestIndex) entries)
+          (@Option.none.{0} MicroCFTA.SourceEqualityNeeded.Needed) :=
+fun records forestIndex excluded {entries} built =>
+  @MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent
+    (MicroCFTA.SourceEqualitySelectedRequired.paths
+      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+        MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+    forestIndex
+    (fun path member =>
+      @Exists.casesOn.{1} MicroCFTA.SourceEqualityClassOrder.Record
+        (fun record =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record)
+            (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+                (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural))))
+        (fun x => Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+        (MicroCFTA.SourceCurrentRequiredPathFootprints.selected_member✝ records path member) fun record h =>
+        @And.casesOn.{0}
+          (@Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record)
+          (@Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+              (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural)))
+          (fun x => Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+          h fun retained right =>
+          @Exists.casesOn.{1} MicroCFTA.EqualityNormalize.Path
+            (fun natural =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+                (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural)))
+            (fun x =>
+              Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+            right fun natural h =>
+            @And.casesOn.{0}
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+              (@Eq.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural))
+              (fun x =>
+                Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+              h fun included right =>
+              @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityNeeded.Path (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                (fun path =>
+                  @Membership.mem.{0, 0} MicroCFTA.SourceEqualityNeeded.Path
+                      (List.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                      (@List.instMembership.{0} MicroCFTA.SourceEqualityNeeded.Path)
+                      (MicroCFTA.SourceEqualitySelectedRequired.paths
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                      path →
+                    Not (@List.IsPrefix.{0} Int (@List.cons.{0} Int (Int.ofNat forestIndex) (@List.nil.{0} Int)) path))
+                (fun member => excluded record retained natural included) path
+                (@Eq.symm.{1} MicroCFTA.SourceEqualityNeeded.Path path (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                  right)
+                member)
+    entries built
+'MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records_absent' depends on axioms: [propext, Quot.sound.{u}]

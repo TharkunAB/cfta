@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentRequiredPathFootprints
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent
+#print MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent
+#print axioms MicroCFTA.SourceCurrentRequiredPathFootprints.build_absent
+
+#check @MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected
+#print MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected
+#print axioms MicroCFTA.SourceCurrentRequiredPathFootprints.build_unselected
+
+#check @MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records
+#print MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records
+#print axioms MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records
+
+#check @MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records_absent
+#print MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records_absent
+#print axioms MicroCFTA.SourceCurrentRequiredPathFootprints.selected_records_absent
+
