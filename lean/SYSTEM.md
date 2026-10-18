@@ -1,5 +1,32 @@
 # Constrained languages, indexing, and distributions
 
+## Current Required projection and structural class sources
+
+Updated: 2026-10-19 00:58 CEST. Proof checkpoint: `fb6abfd9a`.
+Start: `c6b1c479`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-required-projection.md` and the current system claim.
+Actual Required followed immediately by a literal target operand now
+retains original row fields and ordered child origins. Any recursive Merge
+Run uses the prepared children. The prepared gate need not remain false.
+Original source children have smaller source mass. Generated prepared
+children have no asserted mass bound. Initial Merge history stays explicit.
+A source-built raw-path example checks unequal child lists. It is not a
+normalized active-class example and asserts no finite-language productivity.
+
+A completed node edit now retains descendant structural row sources or
+actual native/Head events with residual occurrences and indexed child slices.
+This does not yet compose an entire class fold or observational Mu read.
+Full default library build passes 3440 jobs. Audit checks 73626 axiom
+dependencies. Six public declarations and one constructed head pass full
+proof checks. All four selected strict logs are empty. Three public heads
+are event types; the other three are theorems. General outer completion,
+renewal bounds, empty-owner exclusion, convergence and Haskell refinement
+remain open. The strongest conditional root-language claim is unchanged.
+No Haskell bytes change or repair request is added. FINDINGS retains every
+repair first. Field-pool fix `b9219b9e` remains in main `c0cc8a05`.
+Publication awaits direct approval. No push or board write is attempted.
+The full-library objective remains active.
+
 ## Current open native and Required source handoffs
 
 Updated: 2026-10-19 00:31 CEST. Proof checkpoint: `8985a90ac`.

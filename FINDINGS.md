@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 00:58 CEST. Proof checkpoint: `fb6abfd9a`.
+Actual Required-to-target provenance now retains original row fields and
+ordered child origins through changed children. Actual completed class
+node edits retain structural sources or native/Head event occurrences.
+General fold/observation composition, renewal and termination remain open.
+The source-built changed-child check uses raw prefix paths. It establishes
+no Haskell defect, language failure or normalized active-class obstruction.
+No Haskell repair request is added. No Haskell bytes change. The full default
+library build passes 3440 jobs; Audit checks 73626 axiom dependencies.
+Field-pool repair `b9219b9e` remains fixed in main `c0cc8a05`.
+Read `lean/notes-current-required-projection.md`. Keep this registry first.
+Record every repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-19 00:31 CEST. Proof checkpoint: `8985a90ac`.
 Open native union/reference calls and Mu source handoffs now retain exact
 historical child calls at their original reader. Opaque Mu sources retain

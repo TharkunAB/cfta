@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-mu-source-handoff.md` for the latest checkpoint.
+Read `notes-current-required-projection.md` for the latest checkpoint.
 
 In simple technical English: completed modeled construction represents
 exactly the trees specified by its expression. A completed modeled root
@@ -143,10 +143,21 @@ A normalized active class with paths [[0,0],[0,1]] can change from a false
 to a true primary gate after actual Required. The source is the closed used
 Mu `mu x. outer[union[x,leaf],leaf]`, with plain row guards. The prepared
 endpoint union makes the gate true. Both selected endpoints remain closed.
-The next source producer must carry original row fields and ordered child
-origins through actual Required and subsequent projection. It cannot assume
-a false primary gate for the prepared forest. The existing full structural
-Required origin results remain valid. No Haskell defect is established.
+The direct Required-to-projection source handoff now retains original row
+fields and ordered child Origins. The actual caller derives those Origins
+from literal Required execution. Its target heap equals the Required return
+heap. Any recursive Merge Run uses actual prepared children. Only original
+source children have the stated source mass bound. No false prepared gate
+is assumed. Initial Merge writer history remains explicit.
+
+A completed class node edit now retains descendant structural RowAt sources
+or actual native/Head events with residual structural occurrences. Indexed
+ordinary event lifts retain separate canonical output and raw row indices
+and exact child slices. This does not yet cover whole-fold provenance or
+observational Mu reads. Earlier class phases can change their forests, and
+their native joins do not satisfy the Required Origin grammar in general.
+The root-row FoldFlow must be reused in that remaining composition. No
+Haskell defect is established.
 
 An accepted opaque-guard conjunction can lose an accessor equality pair
 while retaining its Same atom. Whole-operand effective coverage therefore
