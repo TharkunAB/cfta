@@ -13,6 +13,41 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current initial bounds exclude outer Parent faults
+
+Updated: 2026-10-18 08:01 CEST. Proof checkpoint is `6c0e42bc`.
+Starting local checkpoint is `b5df6a39`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-parent-failure.md` for exact boundaries.
+
+Every reported Parent fault now constructs its exact reached row entry
+and failing edge call. Initial semantic facts, one scheduled Room condition
+and nine lower-fuel bounds exclude all such faults in every outer phase.
+The proof completes the actual captured edge owner. It needs no successful
+outcome of the enclosing run, future semantic read or reached-entry oracle.
+
+A source-built constrained recursive example fails in Parent at zero lower
+fuel. At the same root, initial computed bounds exclude every Parent fault.
+The example derives its own initial Context and physical facts. Its recursive
+child lies outside every finite Plain Cap. No full successful run is claimed.
+
+Outer fuel exhaustion, node and edge memo faults, domain errors and binder
+outcomes remain separate diagnostics. General recursive completion still
+needs all-owner collision exclusion and a bound on fresh recursive calls.
+Used-writer alignment, repeated convergence, equality-operation resources,
+host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3262 jobs and 71302 checks. Three production strict logs
+and the actual integration strict log are empty. All 3 public, 1 constructed
+and 1 private statement pairs pass in 5 groups, with full proofs, all eight
+settings and standard axioms. All jobs use 4 GiB maximum/high and zero swap.
+The closing Audit and integration jobs peak at no more than 376 MiB.
+Evidence is in `lean/restart-evidence/20261018-outer-parent-failure/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS retains the external repair
+registry first. The full-library goal stays active. Publication awaits the
+existing direct approval. No push is attempted or retried.
+
 ## Current semantic and fuel bounds at unfinished outer prefixes
 
 Updated: 2026-10-18 07:49 CEST. Proof checkpoint is `2f5e5209`.

@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `2f5e5209`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `6c0e42bc`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -181,6 +181,14 @@ collision or cover arbitrary interior lower-worker fault states. The whole
 call need not succeed. General recursive completion remains open. Read
 [the current checkpoint](notes-current-outer-prefix-schedule.md).
 
+Initial scheduled capacity and nine lower-fuel bounds now exclude every
+Parent fault from all six outer phases. A literal failure constructs its
+own reached row entry. Initial prefix semantics and its exact seed derive
+the current Parent reservation and fuel bounds. Completion uses the actual
+captured edge owner. No successful enclosing call is assumed. Outer memo
+faults, outer exhaustion and general completion remain open. Read
+[the current checkpoint](notes-current-outer-parent-failure.md).
+
 ## Strongest current claim in plain technical English
 
 For a validated finite graph, the checked exact-size model lists exactly
@@ -212,6 +220,11 @@ semantic state and the initial scheduled allocation bounds. Its exact
 phase history bounds the remaining lower-worker fuel ceiling. A reported
 node-busy fault derives its own such prefix and complete colliding request.
 These facts do not require success of the enclosing call.
+
+With enough initial scheduled capacity and lower fuel, no outer phase can
+report a Parent fault. This excludes errors in the lower reduction and
+constructor as well as lower fuel exhaustion. It does not exclude outer
+memo collisions, outer exhaustion, domain errors or binder outcomes.
 
 These are separate checked results for the implementation model. They do
 not establish that every valid public Haskell call terminates and satisfies

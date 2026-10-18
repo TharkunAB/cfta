@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 08:01 CEST. Proof checkpoint is `6c0e42bc`.
+Initial scheduled capacity and nine lower-fuel bounds now exclude every
+Parent diagnostic from all six outer phases. An actual reported Parent
+fault supplies its own reached row entry and captured-owner call. No
+successful enclosing run is assumed. Outer exhaustion and memo faults,
+general recursive progress and concrete Haskell correspondence remain open.
+Full Audit passes 3262 jobs and 71302 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-outer-parent-failure.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 07:49 CEST. Proof checkpoint is `2f5e5209`.
 Actual unfinished outer phase prefixes now derive full semantic Context,
 Post, Frame, physical bounds and guard carriers from initial facts. Exact
