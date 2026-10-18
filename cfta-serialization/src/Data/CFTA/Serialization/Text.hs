@@ -17,16 +17,22 @@ module Data.CFTA.Serialization.Text (
     parseLanguage,
     printLanguageWith,
     parseLanguageWith,
+
+    -- * Graph quotes
+    parseGraphQuote,
+    graphQuoteNames,
 ) where
 
 import Control.Applicative ((<|>))
-import Control.Monad (foldM_, unless, when)
+import Control.Monad (foldM_, forM_, unless, when)
 import Data.Attoparsec.Combinator (lookAhead, (<?>))
 import qualified Data.Attoparsec.Text as A
 import Data.Bifunctor (first)
 import Data.Char (chr, isAsciiLower, isAsciiUpper, isDigit, ord)
+import Data.Either (lefts)
 import Data.Functor (($>))
 import Data.List (intersperse)
+import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -341,14 +347,81 @@ built = Lazy.toStrict . toLazyText
 readGraph ::
     (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
 readGraph decode input = do
-    (initial, rows) <- runParser (graphParser "graph" decode $ graphTransitionParser decode) input
+    (initial, rows) <-
+        runParser (graphParser "graph" decode $ graphTransitionParser symbolParser constraintParser C.noConstraint decode) input
     first InvalidDefinition $ do
-        foldM_ distinct Set.empty $ map fst rows
+        distinctStates rows
         first D.InvalidGraph $ FTA.mkFTA initial rows
+
+-- | Reject a second row for a state.
+distinctStates :: (Ord state) => [(state, rows)] -> Either (D.DocumentError state) ()
+distinctStates = foldM_ distinct Set.empty . map fst
   where
     distinct seen state
         | Set.member state seen = Left $ D.DuplicateState state
         | otherwise = Right $ Set.insert state seen
+
+{- | Read a graph quote: the graph format without its @graph 1;@ line. In a
+quote, @\$name@ can take the place of a symbol, and @where \$name@ the place
+of a constraint. The maps give the values of these names. 'FTA.mkFTA' checks
+the graph, so two names for one symbol must agree on its arity.
+-}
+parseGraphQuote ::
+    Map Text Symbol -> Map Text C.Constraint -> Text -> Either (TextError String) (FTA.PlainFTA String Symbol)
+parseGraphQuote symbols constraints input = do
+    (initial, rows) <- readQuote (escape "symbol" symbols) id (escape "constraint" constraints) id input
+    first (InvalidDefinition . D.InvalidGraph) $ FTA.mkFTA initial rows
+  where
+    escape kind values name = maybe (Left $ "unknown " <> kind <> " $" <> Text.unpack name) Right $ Map.lookup name values
+
+{- | Check the syntax and the state rows of a graph quote. Give the names of
+its symbols and of its constraints that are written as @\$name@. The symbol
+arities are checked when 'parseGraphQuote' reads the quote with the values.
+-}
+graphQuoteNames :: Text -> Either (TextError String) ([Text], [Text])
+graphQuoteNames input = do
+    (initial, rows) <- readQuote (Right . Left) Right (Right . Left) Right input
+    let transitions = concatMap snd rows
+        states = Set.fromList $ map fst rows
+    first InvalidDefinition $ do
+        unless (Set.member initial states) $ Left $ D.InvalidGraph $ FTA.MissingInitialState initial
+        forM_ (concatMap FTA.transitionChildren transitions) $ \child ->
+            unless (Set.member child states) $ Left $ D.InvalidGraph $ FTA.DanglingState child
+    pure
+        ( names $ map FTA.transitionSymbol transitions
+        , names $ map FTA.transitionConstraint transitions
+        )
+  where
+    names = Set.toAscList . Set.fromList . lefts
+
+-- | Read the rows of a graph quote, with the given meaning for written and escaped symbols and constraints.
+readQuote ::
+    (Text -> Either String symbol) ->
+    (Symbol -> symbol) ->
+    (Text -> Either String constraint) ->
+    (C.Constraint -> constraint) ->
+    Text ->
+    Either (TextError String) (String, [(String, [FTA.Transition String symbol constraint])])
+readQuote symbolEscape symbol constraintEscape constraint input = do
+    (initial, rows) <-
+        runParser (rowsParser state $ graphTransitionParser symbols constraints (constraint C.noConstraint) state) input
+    first InvalidDefinition $ distinctStates rows
+    pure (initial, rows)
+  where
+    state = Right . Text.unpack
+    symbols = escapable symbolEscape symbol symbolParser
+    constraints = escapable constraintEscape constraint constraintParser
+
+-- | Read @\$name@ and give its value, or read a written value.
+escapable :: (Text -> Either String value) -> (written -> value) -> A.Parser written -> A.Parser value
+escapable escape written parser = do
+    next <- A.peekChar
+    if next == Just '$'
+        then token "$" *> (escapeName >>= either fail pure . escape)
+        else written <$> parser
+  where
+    escapeName = lexeme (A.takeWhile1 haskellName) <?> "a Haskell name"
+    haskellName character = isAsciiLower character || isAsciiUpper character || isDigit character || character `elem` ("_'." :: String)
 
 -- | Read source syntax and validate names and graph structure together.
 readDocument :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (D.Document state)
@@ -385,13 +458,21 @@ runParser parser input = finish $ A.parse (spaces *> parser <* A.endOfInput) inp
 graphParser ::
     Text ->
     (Text -> Either String state) ->
-    A.Parser (FTA.Transition state Symbol annotation) ->
-    A.Parser (state, [(state, [FTA.Transition state Symbol annotation])])
+    A.Parser (FTA.Transition state symbol annotation) ->
+    A.Parser (state, [(state, [FTA.Transition state symbol annotation])])
 graphParser format decode transition = do
     keyword format
     version <- integerParser
     unless (version == 1) $ fail "unsupported snapshot version; expected 1"
     token ";"
+    rowsParser decode transition
+
+-- | Read the initial state and the finite rows, preserving duplicates for validation.
+rowsParser ::
+    (Text -> Either String state) ->
+    A.Parser (FTA.Transition state symbol annotation) ->
+    A.Parser (state, [(state, [FTA.Transition state symbol annotation])])
+rowsParser decode transition = do
     keyword "start"
     initial <- stateParser decode
     token ";"
@@ -413,12 +494,17 @@ stateParser decode = do
     label <- nameParser
     either (\message -> fail $ "invalid state " <> show label <> ": " <> message) pure $ decode label
 
--- | Read a graph transition with an optional complete constraint.
-graphTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transition state Symbol C.Constraint)
-graphTransitionParser decode = do
-    (symbol, children) <- edgeParser decode
+-- | Read a graph transition with an optional constraint. Without @where@, the constraint is the given default.
+graphTransitionParser ::
+    A.Parser symbol ->
+    A.Parser constraint ->
+    constraint ->
+    (Text -> Either String state) ->
+    A.Parser (FTA.Transition state symbol constraint)
+graphTransitionParser symbolRead constraintRead none decode = do
+    (symbol, children) <- edgeParser symbolRead decode
     present <- startsKeyword "where"
-    constraint <- if present then keyword "where" *> constraintParser else pure C.noConstraint
+    constraint <- if present then keyword "where" *> constraintRead else pure none
     token ";"
     pure $ FTA.Transition symbol children constraint
 
@@ -427,7 +513,7 @@ sourceTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transit
 sourceTransitionParser decode = do
     name <- nameParser
     token "="
-    (symbol, children) <- edgeParser decode
+    (symbol, children) <- edgeParser symbolParser decode
     facts <- ifNext '{' (token "{" *> untilClose '}' fact <* token "}") []
     namedFacts <- namedMap "fact" facts
     token ";"
@@ -441,8 +527,8 @@ sourceTransitionParser decode = do
         pure (name, constraint)
 
 -- | Read a symbol and ordered child state references.
-edgeParser :: (Text -> Either String state) -> A.Parser (Symbol, [state])
-edgeParser decode = (,) <$> symbolParser <*> ifNext '(' (arguments $ stateParser decode) []
+edgeParser :: A.Parser symbol -> (Text -> Either String state) -> A.Parser (symbol, [state])
+edgeParser symbol decode = (,) <$> symbol <*> ifNext '(' (arguments $ stateParser decode) []
 
 -- | Read a complete symbol with an optional explicit refinement.
 symbolParser :: A.Parser Symbol
