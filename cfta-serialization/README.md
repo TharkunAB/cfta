@@ -170,6 +170,15 @@ complete symbol refinements, so a term printed after `eraseRefinements` does not
 select the same terms. See [editable languages](../docs/editable-languages.md)
 for the updates that change a language before you save it.
 
+## Graph quotes
+
+A graph quote is the graph format without its `graph 1;` line. In a quote,
+`$name` can take the place of a symbol, and `where $name` the place of a
+constraint. `parseGraphQuote symbols constraints text` reads a quote with the
+values of the names in two maps. `graphQuoteNames text` checks the syntax and
+the state rows of a quote, and gives the names. The `automaton` quasiquoter of
+[cfta-th](../cfta-th/README.md) uses these two functions.
+
 ## Updates
 
 `printUpdate` and `parseUpdate` store a `Language.Update`, so that a list of
