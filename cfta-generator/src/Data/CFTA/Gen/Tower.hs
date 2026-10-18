@@ -32,6 +32,8 @@ module Data.CFTA.Gen.Tower (
 
     -- * The loop
     Step (..),
+    Outcome (..),
+    Result (..),
     refine,
 
     -- * The measure
@@ -174,14 +176,29 @@ data Step response
     | Update !(Term Symbol) !response
     deriving (Eq, Show)
 
+-- | How 'refine' ended: the spec agrees with every test, or no candidate separates a conflict.
+data Outcome response
+    = Agreed
+    | Stuck !(Term Symbol) ![Observation response]
+    deriving (Eq, Show)
+
+-- | The vocabulary and the spec at the end of 'refine', the steps in order, and how the loop ended.
+data Result response = Result
+    { resultVocabulary :: ![F.Formula]
+    , resultSpec :: !(Map.Map (Term Symbol) response)
+    , resultSteps :: ![Step response]
+    , resultOutcome :: !(Outcome response)
+    }
+    deriving (Eq, Show)
+
 {- | Apply the rule to a log until the spec agrees with every test, and give
 the steps. The spec maps abstract terms to responses; a term without an entry
 has the default response. For each test that the spec mispredicts, the
 experiment uses another test of the log with the same abstract term. If the
 vocabulary is too coarse, add the predicate from 'separate', and start the
 spec again, because the new predicate splits the terms. Otherwise give the
-term the response of the model. Stop without agreement if no candidate
-separates a conflict.
+term the response of the model. If no candidate separates a conflict, stop
+with 'Stuck' and the tests of that abstract term.
 -}
 refine ::
     (Ord response) =>
@@ -190,18 +207,18 @@ refine ::
     [F.Formula] ->
     Map.Map (Term Symbol) response ->
     [Observation response] ->
-    ([F.Formula], Map.Map (Term Symbol) response, [Step response])
+    Result response
 refine templates fallback = go []
   where
     go steps vocabulary spec observations = case mispredictions of
-        [] -> (vocabulary, spec, reverse steps)
+        [] -> Result vocabulary spec (reverse steps) Agreed
         (term, mispredicted) : _ ->
             let others = filter (/= mispredicted) $ Map.findWithDefault [] term grouped
                 coarse = any ((== TooCoarse) . classify mispredicted) others
              in if coarse
                     then case separate templates vocabulary observations of
                         Just predicate -> go (Extend predicate : steps) (vocabulary <> [predicate]) Map.empty observations
-                        Nothing -> (vocabulary, spec, reverse steps)
+                        Nothing -> Result vocabulary spec (reverse steps) $ Stuck term $ Map.findWithDefault [] term grouped
                     else
                         let response = observedResponse mispredicted
                          in go (Update term response : steps) vocabulary (Map.insert term response spec) observations

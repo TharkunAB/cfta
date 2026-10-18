@@ -9,7 +9,7 @@ import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Gen.Tower (Observation (..), Step (..), Verdict (..))
+import Data.CFTA.Gen.Tower (Observation (..), Outcome (..), Result (..), Step (..), Verdict (..))
 import qualified Data.CFTA.Gen.Tower as Tower
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==))
 import Data.CFTA.Symbol (Symbol (RefinedSymbol), valueName)
@@ -42,22 +42,31 @@ spec = describe "Data.CFTA.Gen.Tower" $ do
         Tower.classify (observe 7 2) (observe 3 2) `shouldBe` TooCoarse
 
     it "extends the vocabulary twice and then only updates the spec" $ do
-        let (vocabulary, final, steps) = Tower.refine templates fallback [] Map.empty observations
+        let Result vocabulary final steps outcome = Tower.refine templates fallback [] Map.empty observations
         Set.fromList vocabulary `shouldBe` Set.fromList [greaterThan 4, divisibleBy 2]
         [predicate | Extend predicate <- steps] `shouldBe` vocabulary
         length [() | Update _ _ <- steps] `shouldBe` Map.size final
         agrees vocabulary final `shouldBe` True
+        outcome `shouldBe` Agreed
+
+    it "stops with the conflict when no candidate separates it" $ do
+        let Result vocabulary _ steps outcome = Tower.refine [] fallback [] Map.empty observations
+        vocabulary `shouldBe` []
+        [() | Extend _ <- steps] `shouldBe` []
+        case outcome of
+            Stuck _ tests -> length tests `shouldBe` length observations
+            Agreed -> fail "expected a stop"
 
     it "only updates a spec that is wrong for one term" $ do
-        let (vocabulary, final, _) = Tower.refine templates fallback [] Map.empty observations
+        let Result vocabulary final _ _ = Tower.refine templates fallback [] Map.empty observations
             (term, response) = Map.findMin final
             broken = Map.insert term fallback final
-            (vocabulary', repaired, steps) = Tower.refine templates fallback vocabulary broken observations
+            Result vocabulary' repaired steps _ = Tower.refine templates fallback vocabulary broken observations
         steps `shouldBe` [Update term response]
         vocabulary' `shouldBe` vocabulary
         repaired `shouldBe` final
     it "gives a shorter spec than the table of concrete tests" $ do
-        let (vocabulary, final, _) = Tower.refine templates fallback [] Map.empty observations
+        let Result vocabulary final _ _ = Tower.refine templates fallback [] Map.empty observations
             concrete =
                 Map.fromList
                     [ (observedTest observation, observedResponse observation)
