@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 07:49 CEST. Proof checkpoint is `2f5e5209`.
+Actual unfinished outer phase prefixes now derive full semantic Context,
+Post, Frame, physical bounds and guard carriers from initial facts. Exact
+seed traces also bound each reached lower-fuel ceiling by its initial
+ceiling. An actual node-busy failure derives these facts at its exact
+fault caller and identifies the complete evaluating request. This does
+not exclude busy or cover interior states of failing lower instructions.
+Equality-operation and host Int adequacy bounds remain separate obligations.
+Full Audit passes 3259 jobs and 71290 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-outer-prefix-schedule.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 07:24 CEST. Proof checkpoint is `fdd5c553`.
 Successful recursive outer runs now derive full semantic Reads, Post,
 Frame, physical Fits and finite raw guard carriers from initial facts.

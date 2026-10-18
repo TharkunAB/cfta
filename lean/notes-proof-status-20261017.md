@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `fdd5c553`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `2f5e5209`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -169,7 +169,17 @@ covers reached Parent reservations. Each row and child suffix receives
 the actual returned context. No future-result or reached-check oracle is
 supplied. Initial semantic and physical facts and literal bounded success
 remain explicit. General recursive completion stays open. Read
-[the current checkpoint](notes-current-outer-initial-schedule.md).
+[the earlier checkpoint](notes-current-outer-initial-schedule.md).
+
+Literal unfinished outer phase prefixes now derive semantic Post, current
+Context, Frame, scheduled physical bounds, guard carriers and ready inputs
+from their initial facts. Exact seed traces bound the remaining lower-fuel
+ceiling without forecast monotonicity. Actual node-busy failures construct
+their own dispatch prefix and derive those same facts at the fault caller.
+This identifies the complete colliding request. It does not exclude the
+collision or cover arbitrary interior lower-worker fault states. The whole
+call need not succeed. General recursive completion remains open. Read
+[the current checkpoint](notes-current-outer-prefix-schedule.md).
 
 ## Strongest current claim in plain technical English
 
@@ -196,6 +206,12 @@ constraints, the returned and input languages are exactly equal. The
 proof also derives the semantic state invariant and scheduled physical
 allocation bounds at that same return. It does not assume a future callee
 result or semantic trace. It still assumes that this bounded run succeeds.
+
+Every literal unfinished outer phase prefix also retains the required
+semantic state and the initial scheduled allocation bounds. Its exact
+phase history bounds the remaining lower-worker fuel ceiling. A reported
+node-busy fault derives its own such prefix and complete colliding request.
+These facts do not require success of the enclosing call.
 
 These are separate checked results for the implementation model. They do
 not establish that every valid public Haskell call terminates and satisfies

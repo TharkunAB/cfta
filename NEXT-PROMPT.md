@@ -13,6 +13,60 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current semantic and fuel bounds at unfinished outer prefixes
+
+Updated: 2026-10-18 07:49 CEST. Proof checkpoint is `2f5e5209`.
+Starting local checkpoint is `91642bc6`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-prefix-schedule.md` for exact boundaries.
+
+Literal unfinished outer prefixes now derive their semantic Post, current
+Context, Frame, physical Fits, raw guard carrier and ready inputs from
+initial facts. The proof needs no successful outcome of the whole call.
+Each completed earlier sibling supplies its own graph, strict Reads and
+semantic result through the existing successful-call theorem.
+
+The proof retains an exact seed trace at the same literal Reached witness.
+Each original row or child suffix uses its preceding actual returned
+context and its exact predicted resource seed. The remaining phase forecast
+fits the original forecast. One initial scheduled Room condition therefore
+covers every reached phase. No future entry or semantic read oracle is used.
+
+Six pure lower-fuel recurrences follow that same exact phase order. Parent
+contributes its uniform nine-stage ceiling. Raw reconstruction and inherited
+operations consume no lower-worker fuel. The exact seed trace derives the
+current phase ceiling below the initial ceiling. No monotonicity in profile
+or alphabet is assumed. This is a fuel bound, not a successful-run producer.
+
+An actual node-busy failure constructs its own reached dispatch. The new
+prefix theorem supplies full semantic and resource facts at that exact
+fault caller. Current key links, inherited readiness and resident identity
+injectivity identify the complete evaluating request. This does not exclude
+the collision. Semantic Context permits evaluating cells.
+
+The scope is outer phase entries and actual completed earlier summaries.
+It does not cover arbitrary interior states of a failing Parent or native
+instruction. Initial Context, Frame, Fits, raw carrier, ready inputs and
+the initial Room condition remain explicit. Equality-operation resource
+accounting and host Int identity adequacy remain separate obligations.
+
+Full Audit passes 3259 jobs and 71290 checks.
+Three production and two constructed strict logs are empty. All
+23 public, 3 constructed and 2 private statement pairs pass in 6 groups.
+The constructed pairs cover two actual calls and one pure schedule example.
+All eight settings and standard axioms pass. Audit peak is
+376 MiB under 4 GiB maximum/high and zero swap.
+Four selected component manifests pin 278 entries. Evidence is in
+`lean/restart-evidence/20261018-outer-prefix-schedule/`.
+
+General recursive completion, all-owner collision exclusion, fresh-call
+bounds, lower-worker failure classification, equality-operation accounting,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The strongest complete ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
 ## Current recursive outer correctness at successful returns
 
 Updated: 2026-10-18 07:24 CEST. Proof checkpoint is `fdd5c553`.
