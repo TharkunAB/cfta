@@ -13,6 +13,50 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current semantic context at actual Parent and outer edge returns
+
+Updated: 2026-10-18 05:52 CEST. Proof checkpoint is `b82efb10`.
+Starting local checkpoint is `002f0a7d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-semantic-reads.md` for exact boundaries.
+
+Initial numeric Parent support now derives the full semantic receipt at
+any literal successful Parent return. Uniqueness identifies the complete
+edge Value, Checked state, fourth memo and Merge memo. The outer body
+adapter also derives strict Reads on its supplied actual graph.
+
+An actual successful outer edge call now derives its complete old receipt,
+Post, returned Frame/Fits, language law and strict Reads from initial entry
+support. The observed success excludes the initial busy alternative.
+No notBusy or observed-fuel lower-bound premise is supplied. Both cold
+captured-owner evaluation and warm returned cells are included.
+
+Parent numeric completion already derives the internal precheck, Scan,
+Required and class contexts and selected domains. No future class Reads,
+whole-forest closure, finite ordinary domain or finite Cap is added.
+Initial full semantic Context, Frame/Fits, warm laws and pure numeric
+reservation remain explicit. Weak physical Good does not imply these laws.
+
+This supplies the semantic endpoint for one actual rows_edge summary.
+The general induction across rows_tail and walk_tail remains open.
+Mu cleanup already returns at the unchanged complete caller. It is not
+the first missing Frame transition. A future-entry range callback does
+not establish a genuinely initial general recursive resource schedule.
+
+Full Audit passes 3234 jobs and 70904 checks. Two production and one
+constructed strict logs are empty. All 3 public and 1 constructed full
+pairs pass in 3 groups with all eight settings and standard axioms.
+Audit peak is 360 MiB under 4 GiB maximum/high and zero swap.
+Four component manifests pin 171 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-semantic-reads/`.
+
+General recursive progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current semantic reads at actual target and class returns
 
 Updated: 2026-10-18 05:38 CEST. Proof checkpoint is `af9a413d`.
